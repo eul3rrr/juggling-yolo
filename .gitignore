@@ -1,6 +1,7 @@
 # Keep this repository intentionally minimal.
 *
 !.gitignore
+!README.md
 !scripts/
 scripts/*
 !scripts/detect_video.py
