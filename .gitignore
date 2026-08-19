@@ -5,3 +5,12 @@
 !scripts/
 scripts/*
 !scripts/detect_video.py
+!videos/
+videos/*
+!videos/.gitkeep
+!outputs/
+outputs/*
+!outputs/.gitkeep
+!detections/
+detections/*
+!detections/.gitkeep
