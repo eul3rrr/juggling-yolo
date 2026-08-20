@@ -43,6 +43,23 @@ MANIFEST_FIELDS = (
 )
 
 
+def _stored_path(path: Path) -> str:
+    """Use a repository-relative path when possible, avoiding local usernames."""
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        return str(resolved)
+
+
+def _resolve_stored_path(value: str) -> Path:
+    """Resolve repository-relative paths while accepting legacy absolute paths."""
+    path = Path(value)
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
+    return path.resolve()
+
+
 @dataclass(frozen=True)
 class Candidate:
     source_tracklet: int
@@ -142,7 +159,7 @@ def _key(video: str, candidate: Candidate) -> tuple[str, str, str]:
 
 
 def _key_parts(video: str, source_tracklet: object, candidate_tracklet: object) -> tuple[str, str, str]:
-    return str(video), str(source_tracklet), str(candidate_tracklet)
+    return str(_resolve_stored_path(video)), str(source_tracklet), str(candidate_tracklet)
 
 
 def _read_labels(path: Path) -> dict[tuple[str, str, str], dict[str, str]]:
@@ -230,7 +247,7 @@ def prepare(video: Path, tracklets_csv: Path, stitches_csv: Path, output_dir: Pa
     fps = float(capture.get(cv2.CAP_PROP_FPS)); frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH)); height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)); capture.release()
     start_rows = _read_labels(labels_csv)
-    video_name = str(video.resolve())
+    video_name = _stored_path(video)
     manifest_rows = []
     label_rows = []
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -245,7 +262,7 @@ def prepare(video: Path, tracklets_csv: Path, stitches_csv: Path, output_dir: Pa
                     f"gap-{_safe(candidate.gap_frames)}_rank-{_safe(candidate.candidate_rank)}_error-{_safe(f'{candidate.prediction_error:.2f}')}.mp4")
         clip_path = output_dir / filename
         render_clip(video, clip_path, tracklets, candidate, start, end, fps, width, height)
-        manifest = {"clip_index": str(index), "video": video_name, "clip_path": str(clip_path.resolve()),
+        manifest = {"clip_index": str(index), "video": video_name, "clip_path": _stored_path(clip_path),
                     "source_tracklet": str(candidate.source_tracklet), "candidate_tracklet": str(candidate.candidate_tracklet),
                     "gap_frames": str(candidate.gap_frames), "prediction_error": str(candidate.prediction_error),
                     "source_end_frame": str(candidate.source_end_frame), "candidate_start_frame": str(candidate.candidate_start_frame),
@@ -268,14 +285,15 @@ def review(labels_csv: Path, start_index: int, only_video: str | None, window_na
         for row in rows: row["clip_path"] = clips.get(row.get("clip_index", ""), "")
     items = [row for row in rows if (only_video is None or row.get("video") == only_video) and (include_labeled or not row.get("label"))]
     for position, row in enumerate(items[start_index:], start=start_index):
-        clip = row.get("clip_path", "")
-        if not clip or not Path(clip).is_file():
-            raise FileNotFoundError(f"Clip path is missing or does not exist: {clip}")
+        stored_clip = row.get("clip_path", "")
+        clip = _resolve_stored_path(stored_clip) if stored_clip else Path()
+        if not stored_clip or not clip.is_file():
+            raise FileNotFoundError(f"Clip path is missing or does not exist: {stored_clip}")
         key = None
         while True:
-            video = cv2.VideoCapture(clip)
+            video = cv2.VideoCapture(str(clip))
             if not video.isOpened():
-                raise RuntimeError(f"Could not open review clip: {clip}")
+                raise RuntimeError(f"Could not open review clip: {stored_clip}")
             decision = None
             while True:
                 ok, frame = video.read()

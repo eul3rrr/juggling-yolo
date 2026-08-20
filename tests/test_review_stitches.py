@@ -48,6 +48,13 @@ def test_clip_bounds_convert_seconds_and_clamp() -> None:
     assert module.clip_bounds(50, 52, 30, 100, 1, 1) == (20, 82)
 
 
+def test_stored_paths_are_relative_to_project_root() -> None:
+    module = load_script()
+    stored = module._stored_path(module.PROJECT_ROOT / "outputs" / "review.mp4")
+    assert stored == "outputs/review.mp4"
+    assert module._resolve_stored_path(stored) == module.PROJECT_ROOT / "outputs" / "review.mp4"
+
+
 def test_interpolation_is_linear_and_clamped() -> None:
     module = load_script()
     candidate = module.Candidate(**candidate_row())

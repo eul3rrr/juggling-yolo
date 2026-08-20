@@ -157,6 +157,8 @@ existing labels and does not duplicate candidates. Review unlabeled clips with
 `c` (correct), `w` (wrong), `u` (unclear), `s` (skip), or `q` (quit):
 each clip repeats from the beginning until you choose one of those keys.
 The labels CSV stores the full values `correct`, `wrong`, or `unclear`.
+Manifest and label paths are stored relative to the repository when generated
+inside it.
 
 ```bash
 .venv/bin/python scripts/review_stitches.py review \
