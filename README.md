@@ -190,6 +190,10 @@ The trajectory fit is `x=a+b*t`, `y=c+d*t+e*t^2` with pixel RMSE over the
 last/first ten tracklet points. Wrist distances use only wrist keypoints at or
 above the configured confidence and are left unavailable otherwise. These
 features are descriptive only; they are not used as acceptance thresholds.
+The `pose` command also writes a local annotated overlay video under
+`outputs/pose_overlay/` by default. It shows Ultralytics person boxes, confidence
+labels, and the full pose skeleton/keypoints. Override the location with
+`--output-video`; these MP4s remain ignored by Git.
 
 ```bash
 .venv/bin/python scripts/review_stitches.py review \

@@ -47,3 +47,11 @@ def test_hand_features_use_confident_wrists_and_report_unavailable_when_missing(
     missing = module.hand_features(candidate, (2.0, 2.0), {}, 0.3)
     assert missing["nearest_hand"] == "unavailable"
     assert missing["nearest_hand_distance"] == ""
+
+
+def test_pose_overlay_default_is_under_ignored_outputs_directory() -> None:
+    module = load_script()
+    path = module.pose_overlay_default(
+        module.PROJECT_ROOT / "videos" / "example.mp4", module.PROJECT_ROOT / "outputs"
+    )
+    assert path == module.PROJECT_ROOT / "outputs" / "pose_overlay" / "example_yolo26s-pose_overlay.mp4"

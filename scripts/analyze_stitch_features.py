@@ -65,6 +65,10 @@ def pose_csv_default(video: Path, detections_dir: Path) -> Path:
     return detections_dir / f"{video.stem}_yolo26s-pose.csv"
 
 
+def pose_overlay_default(video: Path, outputs_dir: Path) -> Path:
+    return outputs_dir / "pose_overlay" / f"{video.stem}_yolo26s-pose_overlay.mp4"
+
+
 def parse_float(value: str | None) -> float | None:
     if value in (None, ""):
         return None
@@ -212,14 +216,18 @@ def hand_features(
     }
 
 
-def run_pose(video: Path, output_csv: Path, model: str, imgsz: int, device: str, conf: float) -> None:
+def run_pose(video: Path, output_csv: Path, output_video: Path, model: str, imgsz: int, device: str, conf: float) -> None:
     video = video.resolve()
     output_csv.parent.mkdir(parents=True, exist_ok=True)
     capture = cv2.VideoCapture(str(video))
     if not capture.isOpened():
         raise RuntimeError(f"Could not open input video: {video}")
     fps = float(capture.get(cv2.CAP_PROP_FPS))
+    width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
     capture.release()
+    if fps <= 0 or width <= 0 or height <= 0:
+        raise RuntimeError(f"Invalid video metadata: fps={fps}, width={width}, height={height}")
     resolved_device = resolve_device(device)
     model_ref = model_reference(model)
     pose_model = YOLO(model_ref)
@@ -229,35 +237,52 @@ def run_pose(video: Path, output_csv: Path, model: str, imgsz: int, device: str,
     print(f"Pose model: {model_ref} (task={pose_model.task})")
     print(f"Requested device: {device}; resolved device: {resolved_device}")
     rows = 0
-    with output_csv.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=POSE_FIELDS, lineterminator="\n")
-        writer.writeheader()
-        results = pose_model.predict(
-            source=str(video), stream=True, conf=conf, imgsz=imgsz,
-            device=resolved_device, vid_stride=1, save=False, verbose=False,
-        )
-        for frame, result in enumerate(results):
-            keypoints = result.keypoints
-            if keypoints is None or keypoints.data is None:
-                continue
-            data = keypoints.data.detach().cpu().numpy()
-            person_conf = result.boxes.conf.detach().cpu().numpy() if result.boxes is not None else np.full(len(data), np.nan)
-            for person_index, person in enumerate(data):
-                def value(index: int, coordinate: int) -> str:
-                    return f"{float(person[index, coordinate]):.6f}" if person.shape[0] > index else ""
-                def confidence(index: int) -> str:
-                    return f"{float(person[index, 2]):.6f}" if person.shape[0] > index and person.shape[1] > 2 else ""
-                writer.writerow({
-                    "video": stored_path(video), "frame": frame,
-                    "time_seconds": f"{frame / fps:.6f}" if fps > 0 else "",
-                    "person_index": person_index,
-                    "person_confidence": f"{float(person_conf[person_index]):.6f}" if person_index < len(person_conf) and math.isfinite(float(person_conf[person_index])) else "",
-                    "left_wrist_x": value(9, 0), "left_wrist_y": value(9, 1), "left_wrist_confidence": confidence(9),
-                    "right_wrist_x": value(10, 0), "right_wrist_y": value(10, 1), "right_wrist_confidence": confidence(10),
-                })
-                rows += 1
+    output_video.parent.mkdir(parents=True, exist_ok=True)
+    writer = cv2.VideoWriter(
+        str(output_video), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height)
+    )
+    if not writer.isOpened():
+        raise RuntimeError(f"Could not create pose overlay video: {output_video}")
+    rendered_frames = 0
+    try:
+        with output_csv.open("w", newline="", encoding="utf-8") as handle:
+            csv_writer = csv.DictWriter(handle, fieldnames=POSE_FIELDS, lineterminator="\n")
+            csv_writer.writeheader()
+            results = pose_model.predict(
+                source=str(video), stream=True, conf=conf, imgsz=imgsz,
+                device=resolved_device, vid_stride=1, save=False, verbose=False,
+            )
+            for frame, result in enumerate(results):
+                plotted = result.plot(boxes=True, labels=True, conf=True, kpt_radius=4, kpt_line=True)
+                if plotted.shape[1] != width or plotted.shape[0] != height:
+                    plotted = cv2.resize(plotted, (width, height))
+                writer.write(plotted)
+                rendered_frames += 1
+                keypoints = result.keypoints
+                if keypoints is None or keypoints.data is None:
+                    continue
+                data = keypoints.data.detach().cpu().numpy()
+                person_conf = result.boxes.conf.detach().cpu().numpy() if result.boxes is not None else np.full(len(data), np.nan)
+                for person_index, person in enumerate(data):
+                    def value(index: int, coordinate: int) -> str:
+                        return f"{float(person[index, coordinate]):.6f}" if person.shape[0] > index else ""
+                    def confidence(index: int) -> str:
+                        return f"{float(person[index, 2]):.6f}" if person.shape[0] > index and person.shape[1] > 2 else ""
+                    csv_writer.writerow({
+                        "video": stored_path(video), "frame": frame,
+                        "time_seconds": f"{frame / fps:.6f}" if fps > 0 else "",
+                        "person_index": person_index,
+                        "person_confidence": f"{float(person_conf[person_index]):.6f}" if person_index < len(person_conf) and math.isfinite(float(person_conf[person_index])) else "",
+                        "left_wrist_x": value(9, 0), "left_wrist_y": value(9, 1), "left_wrist_confidence": confidence(9),
+                        "right_wrist_x": value(10, 0), "right_wrist_y": value(10, 1), "right_wrist_confidence": confidence(10),
+                    })
+                    rows += 1
+    finally:
+        writer.release()
     print(f"Pose rows: {rows}")
     print(f"Pose CSV: {output_csv}")
+    print(f"Pose overlay frames: {rendered_frames}")
+    print(f"Pose overlay video: {output_video}")
 
 
 def enrich(
@@ -480,6 +505,7 @@ def parse_args() -> argparse.Namespace:
     pose.add_argument("video", type=Path)
     pose.add_argument("--model", default="yolo26s-pose.pt")
     pose.add_argument("--output-csv", type=Path, default=None)
+    pose.add_argument("--output-video", type=Path, default=None)
     pose.add_argument("--imgsz", type=int, default=960)
     pose.add_argument("--conf", type=float, default=0.15)
     pose.add_argument("--device", default="auto")
@@ -499,7 +525,8 @@ def main() -> None:
     if args.command == "pose":
         video = args.video.resolve()
         output = (args.output_csv or pose_csv_default(video, PROJECT_ROOT / "detections")).resolve()
-        run_pose(video, output, args.model, args.imgsz, args.device, args.conf)
+        output_video = (args.output_video or pose_overlay_default(video, PROJECT_ROOT / "outputs")).resolve()
+        run_pose(video, output, output_video, args.model, args.imgsz, args.device, args.conf)
     else:
         if args.points_per_side < 1:
             raise ValueError("--points-per-side must be positive")
