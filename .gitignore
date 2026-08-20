@@ -9,6 +9,7 @@ scripts/*
 !scripts/track_norfair.py
 !scripts/stitch_tracklets.py
 !scripts/review_stitches.py
+!scripts/analyze_stitch_features.py
 !configs/
 configs/*
 !configs/bytetrack.yaml
@@ -29,9 +30,11 @@ detections/*
 !detections/.gitkeep
 !detections/*.csv
 !detections/*.json
+!detections/*.md
 *.pt
 .venv/
 tests/
 !tests/
 !tests/test_stitch_tracklets.py
 !tests/test_review_stitches.py
+!tests/test_analyze_stitch_features.py

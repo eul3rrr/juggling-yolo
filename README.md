@@ -160,6 +160,37 @@ The labels CSV stores the full values `correct`, `wrong`, or `unclear`.
 Manifest and label paths are stored relative to the repository when generated
 inside it.
 
+## Analyze reviewed stitches
+
+The analysis layer can fit a free projectile-like curve to the reviewed source
+and candidate fragments and measure proximity to pretrained pose wrists. It does
+not modify Norfair, candidate generation, or tracklet IDs. First run the pose
+model on each reviewed source video:
+
+```bash
+.venv/bin/python scripts/analyze_stitch_features.py pose \
+  videos/identical_balls_trick_000_018.mp4 \
+  --model yolo26s-pose.pt
+
+.venv/bin/python scripts/analyze_stitch_features.py pose \
+  videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4 \
+  --model yolo26s-pose.pt
+```
+
+Then enrich the existing manually reviewed labels:
+
+```bash
+.venv/bin/python scripts/analyze_stitch_features.py enrich \
+  detections/stitch_review_labels.csv \
+  --output-csv detections/stitch_review_features.csv \
+  --summary-json detections/stitch_review_feature_summary.json
+```
+
+The trajectory fit is `x=a+b*t`, `y=c+d*t+e*t^2` with pixel RMSE over the
+last/first ten tracklet points. Wrist distances use only wrist keypoints at or
+above the configured confidence and are left unavailable otherwise. These
+features are descriptive only; they are not used as acceptance thresholds.
+
 ```bash
 .venv/bin/python scripts/review_stitches.py review \
   detections/stitch_review_labels.csv
