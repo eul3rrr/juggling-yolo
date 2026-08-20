@@ -8,6 +8,7 @@ scripts/*
 !scripts/track_video.py
 !scripts/track_norfair.py
 !scripts/stitch_tracklets.py
+!scripts/review_stitches.py
 !configs/
 configs/*
 !configs/bytetrack.yaml
@@ -19,11 +20,18 @@ videos/*
 !outputs/
 outputs/*
 !outputs/.gitkeep
+!outputs/stitch_review/
+!outputs/stitch_review/*/
+!outputs/stitch_review/*/*.csv
+!outputs/stitch_review/*/*.json
 !detections/
 detections/*
 !detections/.gitkeep
+!detections/*.csv
+!detections/*.json
 *.pt
 .venv/
 tests/
 !tests/
 !tests/test_stitch_tracklets.py
+!tests/test_review_stitches.py

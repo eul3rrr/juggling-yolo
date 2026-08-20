@@ -139,3 +139,29 @@ Tracklets disappear 15 frames after their final CSV point. Bridges are thick
 yellow/orange lines with endpoint markers and labels; their moving markers are
 hypothetical interpolations during missing frames, clamped at the candidate
 endpoint briefly afterward, and never observed tracklet points.
+
+## Review proposed stitches
+
+Prepare one short review clip per row in a stitch candidate CSV:
+
+```bash
+.venv/bin/python scripts/review_stitches.py prepare \
+  videos/identical_balls_trick_000_018.mp4 \
+  detections/identical_balls_trick_000_018_norfair_dt50_hc5.csv \
+  detections/identical_balls_trick_000_018_norfair_dt50_hc5_stitches.csv
+```
+
+Clips are written under `outputs/stitch_review/<video-stem>` and labels under
+`detections/stitch_review_labels.csv` by default. Preparing again preserves
+existing labels and does not duplicate candidates. Review unlabeled clips with
+`c` (correct), `w` (wrong), `u` (unclear), `s` (skip), or `q` (quit):
+each clip repeats from the beginning until you choose one of those keys.
+The labels CSV stores the full values `correct`, `wrong`, or `unclear`.
+
+```bash
+.venv/bin/python scripts/review_stitches.py review \
+  detections/stitch_review_labels.csv
+```
+
+Use `--include-labeled` to revisit completed rows, `--start-index` to begin at
+an item, or `--only-video` to filter the combined labels file.
