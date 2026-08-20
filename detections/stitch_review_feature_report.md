@@ -33,6 +33,40 @@ Rank-1 candidates are the top-ranked stitch hypotheses from the unchanged candid
 | rank-1 | wrong | 15 | 46.14 |
 | rank-2/3 | correct | 3 | 41.29 |
 | rank-2/3 | wrong | 27 | 51.66 |
+
+## Rank-1 candidate ambiguity
+
+Margins are best-alternative error minus rank-1 error. Ratios are rank-1 error divided by best-alternative error; ratios closer to 1 indicate less relative separation, while lower ratios indicate a stronger relative preference. The best alternative is selected separately for prediction and trajectory fit when computing each metric.
+
+| label | n | prediction margin median | trajectory-fit margin median | prediction ratio median | trajectory-fit ratio median |
+|---|---:|---:|---:|---:|---:|
+| correct | 23 | 146.13 px | 25.52 px | 0.42 | 0.27 |
+| wrong | 3 | 74.87 px | 2.11 px | 0.65 | 0.95 |
+
+- 26 of 83 reviewed rank-1 rows had both margins available; prediction margins are higher for correct rank-1 stitches in this sample.
+- Trajectory-fit margins are higher for correct rank-1 stitches in this sample.
+These are descriptive comparisons only; no threshold or classifier was selected.
+
+### Confidently correct examples
+
+- `videos/identical_balls_trick_000_018.mp4 source=39 candidate=47 prediction_alternative=48 trajectory_alternative=48 prediction_margin=609.766593 trajectory_margin=79.553154 prediction_ratio=0.023555 trajectory_ratio=0.016808`
+- `videos/identical_balls_trick_000_018.mp4 source=4 candidate=7 prediction_alternative=8 trajectory_alternative=8 prediction_margin=470.682934 trajectory_margin=34.740729 prediction_ratio=0.185774 trajectory_ratio=0.642537`
+- `videos/identical_balls_trick_000_018.mp4 source=31 candidate=36 prediction_alternative=38 trajectory_alternative=38 prediction_margin=410.726358 trajectory_margin=30.376437 prediction_ratio=0.031155 trajectory_ratio=0.040673`
+- `videos/identical_balls_trick_000_018.mp4 source=41 candidate=43 prediction_alternative=44 trajectory_alternative=44 prediction_margin=270.232089 trajectory_margin=45.142732 prediction_ratio=0.032263 trajectory_ratio=0.026989`
+- `videos/identical_balls_trick_000_018.mp4 source=64 candidate=68 prediction_alternative=69 trajectory_alternative=69 prediction_margin=264.823302 trajectory_margin=51.370532 prediction_ratio=0.353342 trajectory_ratio=0.297249`
+
+### Ambiguous wrong examples
+
+- `videos/identical_balls_trick_000_018.mp4 source=63 candidate=66 prediction_alternative=65 trajectory_alternative=65 prediction_margin=8.279594 trajectory_margin=-6.340612 prediction_ratio=0.977660 trajectory_ratio=1.115545`
+- `videos/identical_balls_trick_000_018.mp4 source=15 candidate=17 prediction_alternative=16 trajectory_alternative=16 prediction_margin=74.870756 trajectory_margin=2.111431 prediction_ratio=0.648899 trajectory_ratio=0.948858`
+- `videos/identical_balls_trick_000_018.mp4 source=18 candidate=21 prediction_alternative=22 trajectory_alternative=22 prediction_margin=163.022415 trajectory_margin=10.948259 prediction_ratio=0.593570 trajectory_ratio=0.788065`
+
+### Wrong rank-1 stitches that still look confident
+
+- `videos/identical_balls_trick_000_018.mp4 source=18 candidate=21 prediction_alternative=22 trajectory_alternative=22 prediction_margin=163.022415 trajectory_margin=10.948259 prediction_ratio=0.593570 trajectory_ratio=0.788065`
+- `videos/identical_balls_trick_000_018.mp4 source=15 candidate=17 prediction_alternative=16 trajectory_alternative=16 prediction_margin=74.870756 trajectory_margin=2.111431 prediction_ratio=0.648899 trajectory_ratio=0.948858`
+- `videos/identical_balls_trick_000_018.mp4 source=63 candidate=66 prediction_alternative=65 trajectory_alternative=65 prediction_margin=8.279594 trajectory_margin=-6.340612 prediction_ratio=0.977660 trajectory_ratio=1.115545`
+
 ## Per-video comparison
 
 ### `videos/identical_balls_trick_000_018.mp4`

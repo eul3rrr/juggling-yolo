@@ -10,7 +10,11 @@
       "nearest_hand_distance_mean": 50.31012554929577,
       "nearest_hand_distance_median": 22.180144,
       "nearest_hand_available_n": 71,
-      "nearest_hand_available_fraction": 1.0
+      "nearest_hand_available_fraction": 1.0,
+      "prediction_margin_median": 146.13299,
+      "trajectory_fit_margin_median": 25.521049,
+      "prediction_ratio_median": 0.417768,
+      "trajectory_fit_ratio_median": 0.268018
     },
     "wrong": {
       "n": 42,
@@ -21,7 +25,11 @@
       "nearest_hand_distance_mean": 34.87089783333334,
       "nearest_hand_distance_median": 23.220225499999998,
       "nearest_hand_available_n": 42,
-      "nearest_hand_available_fraction": 1.0
+      "nearest_hand_available_fraction": 1.0,
+      "prediction_margin_median": 74.870756,
+      "trajectory_fit_margin_median": 2.111431,
+      "prediction_ratio_median": 0.648899,
+      "trajectory_fit_ratio_median": 0.948858
     }
   },
   "by_video": {
@@ -35,7 +43,11 @@
         "nearest_hand_distance_mean": 57.00513976470587,
         "nearest_hand_distance_median": 32.116091,
         "nearest_hand_available_n": 85,
-        "nearest_hand_available_fraction": 1.0
+        "nearest_hand_available_fraction": 1.0,
+        "prediction_margin_median": 117.959316,
+        "trajectory_fit_margin_median": 25.243011,
+        "prediction_ratio_median": 0.552121,
+        "trajectory_fit_ratio_median": 0.297249
       },
       "by_label": {
         "correct": {
@@ -47,7 +59,11 @@
           "nearest_hand_distance_mean": 76.09542964444447,
           "nearest_hand_distance_median": 34.117568,
           "nearest_hand_available_n": 45,
-          "nearest_hand_available_fraction": 1.0
+          "nearest_hand_available_fraction": 1.0,
+          "prediction_margin_median": 132.046153,
+          "trajectory_fit_margin_median": 27.914994,
+          "prediction_ratio_median": 0.42822649999999995,
+          "trajectory_fit_ratio_median": 0.254517
         },
         "wrong": {
           "n": 40,
@@ -58,7 +74,11 @@
           "nearest_hand_distance_mean": 35.52856365,
           "nearest_hand_distance_median": 23.220225499999998,
           "nearest_hand_available_n": 40,
-          "nearest_hand_available_fraction": 1.0
+          "nearest_hand_available_fraction": 1.0,
+          "prediction_margin_median": 74.870756,
+          "trajectory_fit_margin_median": 2.111431,
+          "prediction_ratio_median": 0.648899,
+          "trajectory_fit_ratio_median": 0.948858
         }
       }
     },
@@ -72,7 +92,11 @@
         "nearest_hand_distance_mean": 6.827133678571429,
         "nearest_hand_distance_median": 4.8159025,
         "nearest_hand_available_n": 28,
-        "nearest_hand_available_fraction": 1.0
+        "nearest_hand_available_fraction": 1.0,
+        "prediction_margin_median": 197.756745,
+        "trajectory_fit_margin_median": -3.947381,
+        "prediction_ratio_median": 0.17054,
+        "trajectory_fit_ratio_median": 1.312528
       },
       "by_label": {
         "correct": {
@@ -84,7 +108,11 @@
           "nearest_hand_distance_mean": 5.681714615384616,
           "nearest_hand_distance_median": 4.2664615,
           "nearest_hand_available_n": 26,
-          "nearest_hand_available_fraction": 1.0
+          "nearest_hand_available_fraction": 1.0,
+          "prediction_margin_median": 197.756745,
+          "trajectory_fit_margin_median": -3.947381,
+          "prediction_ratio_median": 0.17054,
+          "trajectory_fit_ratio_median": 1.312528
         },
         "wrong": {
           "n": 2,
@@ -95,7 +123,11 @@
           "nearest_hand_distance_mean": 21.7175815,
           "nearest_hand_distance_median": 21.7175815,
           "nearest_hand_available_n": 2,
-          "nearest_hand_available_fraction": 1.0
+          "nearest_hand_available_fraction": 1.0,
+          "prediction_margin_median": null,
+          "trajectory_fit_margin_median": null,
+          "prediction_ratio_median": null,
+          "trajectory_fit_ratio_median": null
         }
       }
     }
@@ -106,6 +138,8 @@
     "trajectory_model": "x=a+b*t; y=c+d*t+e*t^2",
     "trajectory_rmse_units": "pixels",
     "hand_distance_units": "pixels",
-    "hand_gap_position": "linear interpolation between source endpoint and candidate start"
+    "hand_gap_position": "linear interpolation between source endpoint and candidate start",
+    "ambiguity_margins": "best alternative error minus rank-1 error, computed separately for prediction and observed-only trajectory fit",
+    "ambiguity_ratios": "rank-1 error divided by best alternative error; lower means stronger relative preference"
   }
 }

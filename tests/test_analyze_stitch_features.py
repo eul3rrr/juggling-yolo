@@ -38,6 +38,22 @@ def test_observed_velocity_uses_only_observed_points() -> None:
     assert module.observed_velocity(points) == pytest.approx((2.0, 3.0))
 
 
+def test_ambiguity_features_compare_rank_one_with_best_alternative() -> None:
+    module = load_script()
+    candidates = [
+        {"candidate_tracklet": "10", "candidate_rank": "1", "prediction_error": "20"},
+        {"candidate_tracklet": "11", "candidate_rank": "2", "prediction_error": "35"},
+        {"candidate_tracklet": "12", "candidate_rank": "3", "prediction_error": "80"},
+    ]
+    features = module.ambiguity_features(candidates, "10", {10: 4.0, 11: 9.0, 12: 20.0})
+    assert features["alternative_candidate_count"] == 2
+    assert features["best_alternative_candidate"] == 11
+    assert features["prediction_margin"] == pytest.approx(15.0)
+    assert features["trajectory_fit_margin"] == pytest.approx(5.0)
+    assert features["prediction_ratio"] == pytest.approx(20 / 35)
+    assert features["trajectory_fit_ratio"] == pytest.approx(4 / 9)
+
+
 def test_hand_features_use_confident_wrists_and_report_unavailable_when_missing() -> None:
     module = load_script()
     candidate = {

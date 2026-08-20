@@ -39,7 +39,9 @@ OUTPUT_FIELDS = (
     "prediction_error", "trajectory_fit_error", "source_end_hand_distance",
     "candidate_start_hand_distance", "gap_hand_distance", "nearest_hand_distance",
     "nearest_hand", "nearest_hand_frame", "source_observed_points", "candidate_observed_points",
-    "source_observed_velocity_x", "source_observed_velocity_y", "trajectory_fit_status", "label",
+    "source_observed_velocity_x", "source_observed_velocity_y", "trajectory_fit_status",
+    "alternative_candidate_count", "best_alternative_candidate", "best_trajectory_alternative", "prediction_margin",
+    "trajectory_fit_margin", "prediction_ratio", "trajectory_fit_ratio", "label",
 )
 
 
@@ -139,6 +141,49 @@ def observed_velocity(points: list[tuple]) -> tuple[float, float] | None:
 
 def observed_points(points: list[tuple]) -> list[tuple]:
     return [point for point in points if len(point) < 4 or point[3] == 1]
+
+
+def ambiguity_features(
+    candidates: list[dict[str, str]],
+    rank_one_candidate: str,
+    trajectory_errors: dict[int, float],
+) -> dict[str, float | int | None]:
+    """Compare a rank-1 candidate with the closest alternative under each feature."""
+    rank_one = next(row for row in candidates if row["candidate_tracklet"] == rank_one_candidate)
+    alternatives = [row for row in candidates if row["candidate_tracklet"] != rank_one_candidate]
+    valid_prediction = [row for row in alternatives if parse_float(row.get("prediction_error")) is not None]
+    rank_one_prediction = parse_float(rank_one.get("prediction_error"))
+    rank_one_trajectory = trajectory_errors.get(int(rank_one_candidate))
+    valid_trajectory = [
+        (row, trajectory_errors[int(row["candidate_tracklet"])])
+        for row in alternatives
+        if int(row["candidate_tracklet"]) in trajectory_errors and math.isfinite(trajectory_errors[int(row["candidate_tracklet"])])
+    ]
+    if not valid_prediction or rank_one_prediction is None:
+        return {"alternative_candidate_count": len(alternatives), "best_alternative_candidate": None,
+                "best_trajectory_alternative": None,
+                "prediction_margin": None, "trajectory_fit_margin": None,
+                "prediction_ratio": None, "trajectory_fit_ratio": None}
+    best_prediction = min(valid_prediction, key=lambda row: float(row["prediction_error"]))
+    best_prediction_error = float(best_prediction["prediction_error"])
+    trajectory_margin = None
+    trajectory_ratio = None
+    best_trajectory_candidate = None
+    if rank_one_trajectory is not None and valid_trajectory:
+        best_trajectory_row, best_trajectory_error = min(valid_trajectory, key=lambda item: item[1])
+        best_trajectory_candidate = int(best_trajectory_row["candidate_tracklet"])
+        trajectory_margin = best_trajectory_error - rank_one_trajectory
+        if best_trajectory_error > 0:
+            trajectory_ratio = rank_one_trajectory / best_trajectory_error
+    return {
+        "alternative_candidate_count": len(alternatives),
+        "best_alternative_candidate": int(best_prediction["candidate_tracklet"]),
+        "best_trajectory_alternative": best_trajectory_candidate,
+        "prediction_margin": best_prediction_error - rank_one_prediction,
+        "trajectory_fit_margin": trajectory_margin,
+        "prediction_ratio": rank_one_prediction / best_prediction_error if best_prediction_error > 0 else None,
+        "trajectory_fit_ratio": trajectory_ratio,
+    }
 
 
 def load_pose(path: Path) -> dict[int, list[dict[str, float | str | None]]]:
@@ -328,6 +373,21 @@ def enrich(
         source_id = int(label["source_tracklet"])
         candidate_id = int(label["candidate_tracklet"])
         stitch = stitches[(source_id, candidate_id)]
+        source_candidates = [row for (candidate_source, _), row in stitches.items() if candidate_source == source_id]
+        candidate_fit_errors = {
+            int(candidate["candidate_tracklet"]): fit_trajectory_error(
+                tracklets[source_id], tracklets[int(candidate["candidate_tracklet"])], points_per_side
+            )
+            for candidate in source_candidates
+        }
+        ambiguity = (
+            ambiguity_features(source_candidates, str(candidate_id), candidate_fit_errors)
+            if stitch["candidate_rank"] == "1" else
+            {"alternative_candidate_count": None, "best_alternative_candidate": None,
+            "best_trajectory_alternative": None,
+            "prediction_margin": None, "trajectory_fit_margin": None,
+             "prediction_ratio": None, "trajectory_fit_ratio": None}
+        )
         source_observed = observed_points(tracklets[source_id])
         candidate_observed = observed_points(tracklets[candidate_id])
         trajectory_error = fit_trajectory_error(tracklets[source_id], tracklets[candidate_id], points_per_side)
@@ -351,6 +411,13 @@ def enrich(
             "source_observed_velocity_x": f"{source_velocity[0]:.6f}" if source_velocity else "",
             "source_observed_velocity_y": f"{source_velocity[1]:.6f}" if source_velocity else "",
             "trajectory_fit_status": "ok" if len(source_observed) + len(candidate_observed) >= 3 else "too_few_observed_points",
+            "alternative_candidate_count": str(ambiguity["alternative_candidate_count"]) if ambiguity["alternative_candidate_count"] is not None else "",
+            "best_alternative_candidate": str(ambiguity["best_alternative_candidate"]) if ambiguity["best_alternative_candidate"] is not None else "",
+            "best_trajectory_alternative": str(ambiguity["best_trajectory_alternative"]) if ambiguity["best_trajectory_alternative"] is not None else "",
+            "prediction_margin": f"{ambiguity['prediction_margin']:.6f}" if ambiguity["prediction_margin"] is not None else "",
+            "trajectory_fit_margin": f"{ambiguity['trajectory_fit_margin']:.6f}" if ambiguity["trajectory_fit_margin"] is not None else "",
+            "prediction_ratio": f"{ambiguity['prediction_ratio']:.6f}" if ambiguity["prediction_ratio"] is not None else "",
+            "trajectory_fit_ratio": f"{ambiguity['trajectory_fit_ratio']:.6f}" if ambiguity["trajectory_fit_ratio"] is not None else "",
             "label": label.get("label", ""),
         }
         source_point = (source_observed[-1][1], source_observed[-1][2]) if source_observed else (float(stitch["predicted_x"]), float(stitch["predicted_y"]))
@@ -370,6 +437,8 @@ def enrich(
         "trajectory_rmse_units": "pixels",
         "hand_distance_units": "pixels",
         "hand_gap_position": "linear interpolation between source endpoint and candidate start",
+        "ambiguity_margins": "best alternative error minus rank-1 error, computed separately for prediction and observed-only trajectory fit",
+        "ambiguity_ratios": "rank-1 error divided by best alternative error; lower means stronger relative preference",
     }
     summary_json.parent.mkdir(parents=True, exist_ok=True)
     summary_json.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
@@ -392,6 +461,10 @@ def numeric(rows: Iterable[dict[str, str]], field: str) -> list[float]:
 def stats(rows: list[dict[str, str]]) -> dict[str, float | int | None]:
     values = numeric(rows, "trajectory_fit_error")
     hand = numeric(rows, "nearest_hand_distance")
+    prediction_margin = numeric(rows, "prediction_margin")
+    trajectory_margin = numeric(rows, "trajectory_fit_margin")
+    prediction_ratio = numeric(rows, "prediction_ratio")
+    trajectory_ratio = numeric(rows, "trajectory_fit_ratio")
     def median(values: list[float]) -> float | None:
         return float(np.median(values)) if values else None
     return {
@@ -402,6 +475,10 @@ def stats(rows: list[dict[str, str]]) -> dict[str, float | int | None]:
         "nearest_hand_distance_median": median(hand),
         "nearest_hand_available_n": len(hand),
         "nearest_hand_available_fraction": len(hand) / len(rows) if rows else None,
+        "prediction_margin_median": median(prediction_margin),
+        "trajectory_fit_margin_median": median(trajectory_margin),
+        "prediction_ratio_median": median(prediction_ratio),
+        "trajectory_fit_ratio_median": median(trajectory_ratio),
     }
 
 
@@ -429,6 +506,16 @@ def _row_ref(row: dict[str, str]) -> str:
             f"candidate={row['candidate_tracklet']} gap={row['gap_frames']} "
             f"fit={row['trajectory_fit_error']} px hand={row['nearest_hand_distance'] or 'unavailable'} px "
             f"({row['nearest_hand']})")
+
+
+def _ambiguity_ref(row: dict[str, str]) -> str:
+    return (f"{row['video']} source={row['source_tracklet']} candidate={row['candidate_tracklet']} "
+            f"prediction_alternative={row['best_alternative_candidate'] or 'unavailable'} "
+            f"trajectory_alternative={row['best_trajectory_alternative'] or 'unavailable'} "
+            f"prediction_margin={row['prediction_margin'] or 'unavailable'} "
+            f"trajectory_margin={row['trajectory_fit_margin'] or 'unavailable'} "
+            f"prediction_ratio={row['prediction_ratio'] or 'unavailable'} "
+            f"trajectory_ratio={row['trajectory_fit_ratio'] or 'unavailable'}")
 
 
 def write_report(rows: list[dict[str, str]], output: Path) -> None:
@@ -497,7 +584,42 @@ def write_report(rows: list[dict[str, str]], output: Path) -> None:
         for label in ("correct", "wrong"):
             subset = [row for row in rows if row.get("label") == label and int(row["rank"]) in rank_values]
             report.append(f"| {rank_name} | {label} | {len(subset)} | {_fmt(stats(subset)['trajectory_fit_error_median'])} |")
+    rank_one = [row for row in rows if row.get("rank") == "1" and row.get("prediction_margin") and row.get("trajectory_fit_margin")]
+    rank_one_correct = [row for row in rank_one if row.get("label") == "correct"]
+    rank_one_wrong = [row for row in rank_one if row.get("label") == "wrong"]
+    correct_ambiguity = stats(rank_one_correct)
+    wrong_ambiguity = stats(rank_one_wrong)
     report.extend([
+        "",
+        "## Rank-1 candidate ambiguity",
+        "",
+        "Margins are best-alternative error minus rank-1 error. Ratios are rank-1 error divided by "
+        "best-alternative error; ratios closer to 1 indicate less relative separation, while lower "
+        "ratios indicate a stronger relative preference. The best alternative is selected separately "
+        "for prediction and trajectory fit when computing each metric.",
+        "",
+        "| label | n | prediction margin median | trajectory-fit margin median | prediction ratio median | trajectory-fit ratio median |",
+        "|---|---:|---:|---:|---:|---:|",
+        f"| correct | {len(rank_one_correct)} | {_fmt(correct_ambiguity['prediction_margin_median'])} px | {_fmt(correct_ambiguity['trajectory_fit_margin_median'])} px | {_fmt(correct_ambiguity['prediction_ratio_median'])} | {_fmt(correct_ambiguity['trajectory_fit_ratio_median'])} |",
+        f"| wrong | {len(rank_one_wrong)} | {_fmt(wrong_ambiguity['prediction_margin_median'])} px | {_fmt(wrong_ambiguity['trajectory_fit_margin_median'])} px | {_fmt(wrong_ambiguity['prediction_ratio_median'])} | {_fmt(wrong_ambiguity['trajectory_fit_ratio_median'])} |",
+        "",
+        f"- {len(rank_one)} of {len([row for row in rows if row.get('rank') == '1'])} reviewed rank-1 rows had both margins available; prediction margins are {'higher' if (correct_ambiguity['prediction_margin_median'] or -math.inf) > (wrong_ambiguity['prediction_margin_median'] or -math.inf) else 'not higher'} for correct rank-1 stitches in this sample.",
+        f"- Trajectory-fit margins are {'higher' if (correct_ambiguity['trajectory_fit_margin_median'] or -math.inf) > (wrong_ambiguity['trajectory_fit_margin_median'] or -math.inf) else 'not higher'} for correct rank-1 stitches in this sample.",
+        "These are descriptive comparisons only; no threshold or classifier was selected.",
+        "",
+        "### Confidently correct examples",
+        "",
+    ])
+    for row in sorted(rank_one_correct, key=lambda item: (float(item["prediction_margin"]), float(item["trajectory_fit_margin"])), reverse=True)[:5]:
+        report.append(f"- `{_ambiguity_ref(row)}`")
+    report.extend(["", "### Ambiguous wrong examples", ""])
+    for row in sorted(rank_one_wrong, key=lambda item: (float(item["prediction_margin"]), float(item["trajectory_fit_margin"])))[:5]:
+        report.append(f"- `{_ambiguity_ref(row)}`")
+    report.extend(["", "### Wrong rank-1 stitches that still look confident", ""])
+    for row in sorted(rank_one_wrong, key=lambda item: (float(item["prediction_margin"]), float(item["trajectory_fit_margin"])), reverse=True)[:5]:
+        report.append(f"- `{_ambiguity_ref(row)}`")
+    report.extend([
+        "",
         "## Per-video comparison",
         "",
     ])
