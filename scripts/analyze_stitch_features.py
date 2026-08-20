@@ -448,6 +448,16 @@ def write_report(rows: list[dict[str, str]], output: Path) -> None:
     correct_with_hand = [row for row in correct if row["nearest_hand_distance"]]
     wrong_with_hand = [row for row in wrong if row["nearest_hand_distance"]]
     examples("Correct stitches with poor fit and an available wrist", correct_with_hand, True)
+    correct_fit_median = stats(correct)["trajectory_fit_error_median"]
+    correct_poor_fit_near_hand = [
+        row for row in correct_with_hand
+        if correct_fit_median is not None and float(row["trajectory_fit_error"]) > correct_fit_median
+    ]
+    report.append("## Correct poor-fit stitches closest to a wrist")
+    report.append("")
+    for row in sorted(correct_poor_fit_near_hand, key=lambda item: float(item["nearest_hand_distance"]))[:5]:
+        report.append(f"- `{_row_ref(row)}`")
+    report.append("")
     examples("Wrong stitches with good trajectory fit", wrong_with_hand, False)
     report.extend([
         "## Failure-mode question",

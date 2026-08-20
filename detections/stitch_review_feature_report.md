@@ -61,6 +61,14 @@ This is descriptive analysis only. It does not modify Norfair, candidate generat
 - `videos/identical_balls_trick_000_018.mp4 source=63 candidate=65 gap=5 fit=52.676112 px hand=39.895231 px (left)`
 - `videos/identical_balls_trick_000_018.mp4 source=1 candidate=6 gap=4 fit=49.404224 px hand=42.937736 px (right)`
 
+## Correct poor-fit stitches closest to a wrist
+
+- `videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4 source=9 candidate=13 gap=5 fit=21.350311 px hand=3.506962 px (left)`
+- `videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4 source=22 candidate=26 gap=6 fit=17.145463 px hand=5.371684 px (right)`
+- `videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4 source=31 candidate=35 gap=5 fit=18.409638 px hand=7.269105 px (right)`
+- `videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4 source=19 candidate=22 gap=6 fit=17.846956 px hand=8.058926 px (right)`
+- `videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4 source=2 candidate=8 gap=5 fit=19.367558 px hand=8.839860 px (right)`
+
 ## Wrong stitches with good trajectory fit
 
 - `videos/identical_balls_trick_000_018.mp4 source=22 candidate=27 gap=5 fit=11.985217 px hand=18.763693 px (right)`
