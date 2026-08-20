@@ -84,3 +84,33 @@ def test_pose_overlay_default_is_under_ignored_outputs_directory() -> None:
         module.PROJECT_ROOT / "videos" / "example.mp4", module.PROJECT_ROOT / "outputs"
     )
     assert path == module.PROJECT_ROOT / "outputs" / "pose_overlay" / "example_yolo26s-pose_overlay.mp4"
+
+
+def test_reconstruction_accepts_only_rank_one_stitches_under_fit_threshold() -> None:
+    spec = importlib.util.spec_from_file_location(
+        "reconstruct_stitched_video", PROJECT_ROOT / "scripts" / "reconstruct_stitched_video.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    rows = [
+        {"source_tracklet": "1", "candidate_tracklet": "2", "rank": "1", "trajectory_fit_error": "21.9"},
+        {"source_tracklet": "2", "candidate_tracklet": "3", "rank": "2", "trajectory_fit_error": "1.0"},
+        {"source_tracklet": "4", "candidate_tracklet": "5", "rank": "1", "trajectory_fit_error": "22.1"},
+    ]
+    accepted = module.select_accepted_stitches(rows, 22.0)
+    assert [(row["source_tracklet"], row["candidate_tracklet"]) for row in accepted] == [("1", "2")]
+
+
+def test_reconstruction_propagates_chain_ids_through_accepted_stitches() -> None:
+    spec = importlib.util.spec_from_file_location(
+        "reconstruct_stitched_video", PROJECT_ROOT / "scripts" / "reconstruct_stitched_video.py"
+    )
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    mapping = module.build_chain_mapping({1, 2, 3, 4}, [(1, 2), (2, 3)])
+    assert mapping[1] == mapping[2] == mapping[3]
+    assert mapping[4] != mapping[1]
