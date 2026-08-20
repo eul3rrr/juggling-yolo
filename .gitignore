@@ -5,6 +5,14 @@
 !scripts/
 scripts/*
 !scripts/detect_video.py
+!scripts/track_video.py
+!scripts/track_norfair.py
+!scripts/stitch_tracklets.py
+!configs/
+configs/*
+!configs/bytetrack.yaml
+!configs/botsort.yaml
+!configs/botsort_reid.yaml
 !videos/
 videos/*
 !videos/.gitkeep
@@ -14,3 +22,8 @@ outputs/*
 !detections/
 detections/*
 !detections/.gitkeep
+*.pt
+.venv/
+tests/
+!tests/
+!tests/test_stitch_tracklets.py
