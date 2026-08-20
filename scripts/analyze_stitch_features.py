@@ -38,7 +38,8 @@ OUTPUT_FIELDS = (
     "video", "source_tracklet", "candidate_tracklet", "rank", "gap_frames",
     "prediction_error", "trajectory_fit_error", "source_end_hand_distance",
     "candidate_start_hand_distance", "gap_hand_distance", "nearest_hand_distance",
-    "nearest_hand", "nearest_hand_frame", "label",
+    "nearest_hand", "nearest_hand_frame", "source_observed_points", "candidate_observed_points",
+    "source_observed_velocity_x", "source_observed_velocity_y", "trajectory_fit_status", "label",
 )
 
 
@@ -76,12 +77,12 @@ def parse_float(value: str | None) -> float | None:
     return number if math.isfinite(number) else None
 
 
-def load_tracklets(path: Path) -> dict[int, list[tuple[int, float, float]]]:
-    tracklets: dict[int, list[tuple[int, float, float]]] = defaultdict(list)
+def load_tracklets(path: Path) -> dict[int, list[tuple[int, float, float, int]]]:
+    tracklets: dict[int, list[tuple[int, float, float, int]]] = defaultdict(list)
     with path.open(newline="", encoding="utf-8") as handle:
         for row in csv.DictReader(handle):
             tracklets[int(row["track_id"])].append(
-                (int(row["frame"]), float(row["center_x"]), float(row["center_y"]))
+                (int(row["frame"]), float(row["center_x"]), float(row["center_y"]), int(row.get("observed", "1")))
             )
     for points in tracklets.values():
         points.sort(key=lambda point: point[0])
@@ -102,11 +103,13 @@ def load_labels(path: Path) -> list[dict[str, str]]:
 
 
 def fit_trajectory_error(
-    source: list[tuple[int, float, float]],
-    candidate: list[tuple[int, float, float]],
+    source: list[tuple],
+    candidate: list[tuple],
     points_per_side: int,
 ) -> float:
-    points = source[-points_per_side:] + candidate[:points_per_side]
+    observed_source = [point for point in source if len(point) < 4 or point[3] == 1]
+    observed_candidate = [point for point in candidate if len(point) < 4 or point[3] == 1]
+    points = observed_source[-points_per_side:] + observed_candidate[:points_per_side]
     if len(points) < 3:
         return math.nan
     time = np.asarray([point[0] for point in points], dtype=float)
@@ -120,6 +123,22 @@ def fit_trajectory_error(
     x_residual = x_design @ x_coefficients - x
     y_residual = y_design @ y_coefficients - y
     return float(np.sqrt(np.mean(x_residual * x_residual + y_residual * y_residual)))
+
+
+def observed_velocity(points: list[tuple]) -> tuple[float, float] | None:
+    """Estimate endpoint velocity from the last two actual observations."""
+    observed = [point for point in points if len(point) < 4 or point[3] == 1]
+    if len(observed) < 2:
+        return None
+    previous, current = observed[-2], observed[-1]
+    delta_frame = current[0] - previous[0]
+    if delta_frame <= 0:
+        return None
+    return ((current[1] - previous[1]) / delta_frame, (current[2] - previous[2]) / delta_frame)
+
+
+def observed_points(points: list[tuple]) -> list[tuple]:
+    return [point for point in points if len(point) < 4 or point[3] == 1]
 
 
 def load_pose(path: Path) -> dict[int, list[dict[str, float | str | None]]]:
@@ -309,15 +328,33 @@ def enrich(
         source_id = int(label["source_tracklet"])
         candidate_id = int(label["candidate_tracklet"])
         stitch = stitches[(source_id, candidate_id)]
+        source_observed = observed_points(tracklets[source_id])
+        candidate_observed = observed_points(tracklets[candidate_id])
         trajectory_error = fit_trajectory_error(tracklets[source_id], tracklets[candidate_id], points_per_side)
+        source_velocity = observed_velocity(tracklets[source_id])
+        analysis_stitch = dict(stitch)
+        if source_observed:
+            analysis_stitch["source_end_frame"] = str(source_observed[-1][0])
+        if candidate_observed:
+            analysis_stitch.update({
+                "candidate_start_frame": str(candidate_observed[0][0]),
+                "candidate_start_x": str(candidate_observed[0][1]),
+                "candidate_start_y": str(candidate_observed[0][2]),
+            })
         row = {
             "video": label["video"], "source_tracklet": str(source_id), "candidate_tracklet": str(candidate_id),
             "rank": stitch["candidate_rank"], "gap_frames": stitch["gap_frames"],
             "prediction_error": stitch["prediction_error"],
             "trajectory_fit_error": f"{trajectory_error:.6f}" if math.isfinite(trajectory_error) else "",
+            "source_observed_points": str(len(source_observed)),
+            "candidate_observed_points": str(len(candidate_observed)),
+            "source_observed_velocity_x": f"{source_velocity[0]:.6f}" if source_velocity else "",
+            "source_observed_velocity_y": f"{source_velocity[1]:.6f}" if source_velocity else "",
+            "trajectory_fit_status": "ok" if len(source_observed) + len(candidate_observed) >= 3 else "too_few_observed_points",
             "label": label.get("label", ""),
         }
-        row.update(hand_features(stitch, (tracklets[source_id][-1][1], tracklets[source_id][-1][2]), pose_by_frame, wrist_confidence))
+        source_point = (source_observed[-1][1], source_observed[-1][2]) if source_observed else (float(stitch["predicted_x"]), float(stitch["predicted_y"]))
+        row.update(hand_features(analysis_stitch, source_point, pose_by_frame, wrist_confidence))
         output_rows.append(row)
 
     output_csv.parent.mkdir(parents=True, exist_ok=True)
@@ -406,7 +443,10 @@ def write_report(rows: list[dict[str, str]], output: Path) -> None:
         "## Features",
         "",
         "- `trajectory_fit_error`: pixel RMSE from fitting `x=a+b*t` and `y=c+d*t+e*t^2` "
-        "to the last/first ten available tracklet points.",
+        "to the last ten observed source points and first ten observed candidate points. "
+        "Norfair-only predicted rows are retained in the track CSV but excluded from this fit.",
+        "- Source endpoints, candidate starts, and source endpoint velocity estimates use actual "
+        "observed points; `prediction_error` remains the original stitch-candidate feature.",
         "- Wrist distances: minimum Euclidean distance from the source endpoint, candidate "
         "start, and linearly interpolated gap positions to confident COCO wrists. Wrist "
         "confidence threshold was 0.30.",
@@ -440,9 +480,24 @@ def write_report(rows: list[dict[str, str]], output: Path) -> None:
         f"{_fmt(stats(correct)['nearest_hand_distance_mean'])}/"
         f"{_fmt(stats(correct)['nearest_hand_distance_median'])} px for correct, but the "
         "per-video breakdown is strongly affected by the label balance and scene composition.",
-        "- All 113 reviewed rows had at least one wrist available at the configured confidence "
-        "threshold; this result should not be generalized beyond these videos.",
+        f"- {len(rows)} reviewed rows were enriched; "
+        f"{sum(bool(row.get('trajectory_fit_error')) for row in rows)} had enough observed points "
+        "for a trajectory fit. This result should not be generalized beyond these videos.",
         "",
+        "## Rank-stratified comparison",
+        "",
+        "Rank-1 candidates are the top-ranked stitch hypotheses from the unchanged candidate generator; "
+        "rank-2/3 rows are alternate candidates reviewed under the same labels.",
+        "",
+        "| candidate ranks | label | n | fit median px |",
+        "|---|---:|---:|---:|",
+        "",
+    ])
+    for rank_name, rank_values in (("rank-1", {1}), ("rank-2/3", {2, 3})):
+        for label in ("correct", "wrong"):
+            subset = [row for row in rows if row.get("label") == label and int(row["rank"]) in rank_values]
+            report.append(f"| {rank_name} | {label} | {len(subset)} | {_fmt(stats(subset)['trajectory_fit_error_median'])} |")
+    report.extend([
         "## Per-video comparison",
         "",
     ])

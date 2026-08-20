@@ -21,7 +21,7 @@ import cv2
 import numpy as np
 from norfair import Detection, Tracker
 
-CSV_FIELDS = ["frame", "time_seconds", "track_id", "confidence", "center_x", "center_y"]
+CSV_FIELDS = ["frame", "time_seconds", "track_id", "confidence", "center_x", "center_y", "observed"]
 REQUIRED_DETECTION_FIELDS = ("frame", "confidence", "center_x", "center_y")
 TRAIL_LENGTH = 30
 
@@ -159,7 +159,8 @@ def video_metadata(path: Path) -> tuple[float, int, int, int]:
     return fps, width, height, frame_count
 
 
-def _track_rows(tracks, frame_index: int, fps: float):
+def _track_rows(tracks, frame_index: int, fps: float, current_detections=None):
+    current_detections = current_detections or []
     for track in tracks:
         if track.is_initializing or track.id is None or track.last_detection is None:
             continue
@@ -177,6 +178,7 @@ def _track_rows(tracks, frame_index: int, fps: float):
             "confidence": f"{float(score[0]):.6f}",
             "center_x": f"{center_x:.3f}",
             "center_y": f"{center_y:.3f}",
+            "observed": int(any(track.last_detection is detection for detection in current_detections)),
         }, (round(center_x), round(center_y))
 
 
@@ -220,7 +222,7 @@ def main() -> None:
     row_count = 0
     try:
         with out_csv.open("w", newline="", encoding="utf-8") as csv_file:
-            csv_writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS)
+            csv_writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS, lineterminator="\n")
             csv_writer.writeheader()
             while True:
                 ok, frame = capture.read()
@@ -228,7 +230,7 @@ def main() -> None:
                     break
                 current = to_norfair_detections(detections.get(frame_count, []))
                 tracks = tracker.update(current)
-                for output_row, center in _track_rows(tracks, frame_count, fps):
+                for output_row, center in _track_rows(tracks, frame_count, fps, current):
                     track_id = output_row["track_id"]
                     trail = trails[track_id]
                     trail.append(center)
@@ -260,7 +262,7 @@ def main() -> None:
     print(f"Track rows written: {row_count}")
     print(f"Annotated video: {out_video}")
     print(f"Track CSV: {out_csv}")
-    print("CSV points are current Norfair estimates; confidence is from each track's last YOLO detection.")
+    print("CSV points are current Norfair estimates; observed=1 marks a track matched to a YOLO detection on that frame.")
 
 
 if __name__ == "__main__":

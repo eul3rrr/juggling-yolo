@@ -25,6 +25,19 @@ def test_trajectory_fit_error_is_low_for_matching_linear_quadratic_fragments() -
     assert error == pytest.approx(0.0, abs=1e-9)
 
 
+def test_trajectory_fit_ignores_norfair_predictions_and_requires_observed_endpoints() -> None:
+    module = load_script()
+    source = [(0, 0.0, 0.0, 1), (1, 100.0, 100.0, 0), (2, 4.0, 6.0, 1)]
+    candidate = [(3, 6.0, 9.0, 1), (4, 200.0, 200.0, 0), (5, 10.0, 15.0, 1)]
+    assert module.fit_trajectory_error(source, candidate, 3) == pytest.approx(0.0, abs=1e-9)
+
+
+def test_observed_velocity_uses_only_observed_points() -> None:
+    module = load_script()
+    points = [(0, 0.0, 0.0, 1), (1, 100.0, 100.0, 0), (3, 6.0, 9.0, 1)]
+    assert module.observed_velocity(points) == pytest.approx((2.0, 3.0))
+
+
 def test_hand_features_use_confident_wrists_and_report_unavailable_when_missing() -> None:
     module = load_script()
     candidate = {
