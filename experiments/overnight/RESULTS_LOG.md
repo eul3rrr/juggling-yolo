@@ -98,3 +98,24 @@ Results (bal8 costs, gates = error percentiles):
   uncertainty growth), not better scoring of existing candidates.
 
 Artifacts: scripts/e6_chain_flow.py, data/e6_chains.json, reports/e6_report.md.
+
+## 2026-08-26 08:10 — E4: synthetic occlusion benchmark (KEY RESULT)
+
+4180 cuts (clean observed runs >=12f, all gap sizes tested per site, competitors =
+all observed points at re-entry frame). Top1 rank of TRUE continuation:
+- gap<=10: cv2 and bal8 both ~94-100% (confirms current regime is easy)
+- gap 15: bal8 86.6% vs cv2 71.2%
+- gap 20: bal8 85.4% vs cv2 52.8%
+- gap 30: bal8 61.8% (top3 91.8%) vs cv2 23.5% (67.7%)
+Kalman CA far worse than LS fits everywhere (err q90 up to 5945px @k=30) -
+simple direct fitting beats the hand-tuned filter; consistent with E1.
+
+Calibration for gap-dependent gates (bal8): median err 0.9/1.9/3.4/7.7/14.5/23.2/60.3 px
+and q90 6.9/16.5/31.0/65.6/108.6/210.1/453.1 px at k=2/4/6/10/15/20/30.
+
+ACTIONABLE: raise max_gap_frames 10->30 with bal8 scoring + k-dependent gate.
+Caveat: synthetic cuts do not model contact-induced velocity breaks; expect worse
+near hands/catches (which the 113 labels already flag as failure zone).
+
+Artifacts: scripts/e4_synthetic_occlusion.py, data/e4_synthetic_occlusion.json,
+reports/e4_report.md.
