@@ -77,3 +77,24 @@ Still ceiling-limited: even perfect assignment of THIS candidate universe caps
 at ~71 correct of 113 (candidates missing where fragmentation exceeded gap<=10).
 
 Artifacts: scripts/e2_global_assignment.py, data/e2_sweep.json, reports/e2_report.md.
+
+## 2026-08-26 07:55 — E6: chain-level global stitching (successor assignment)
+
+Formulation: each tracklet gets <=1 successor via Hungarian on N x (N+N) matrix;
+eligibility edges strictly increase time so result is cycle-free disjoint paths.
+Dummy no-successor columns priced AT THE GATE (first attempt priced them at 0 ->
+solver correctly refused all real edges; formulation bug caught immediately).
+
+Results (bal8 costs, gates = error percentiles):
+- identical-balls clip: global cuts FP hard at matched gates (g4: TP39/FP4 vs
+  greedy TP42/FP11; conflicts 12 -> 0) while keeping corrConn 39/45 vs 43/45.
+- youtube clip: global dominates outright (g5: TP23/FP0/conflicts0 vs greedy
+  TP25/FP2/conflicts2).
+- Chain stats: fewer, longer chains under global (ident-balls g5: 21 chains,
+  mean len 3.14 vs greedy 27 @ 2.56).
+- CEILING CONFIRMED: even optimal chaining leaves ~20 chains for 3 balls in
+  clip 1. The gap<=10 candidate universe misses most true re-links. Next gains
+  must come from WIDER candidate generation (longer gaps w/ ballistic prediction
+  uncertainty growth), not better scoring of existing candidates.
+
+Artifacts: scripts/e6_chain_flow.py, data/e6_chains.json, reports/e6_report.md.
