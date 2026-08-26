@@ -1,0 +1,20 @@
+{
+  "identical_balls_trick_000_018": {
+    "window": 8,
+    "n_windows": 2261,
+    "g_px_per_f2": 0.1284,
+    "g_px_per_s2": 461.4,
+    "g_obs_only_px_per_f2": 0.1361,
+    "g_q25": -0.1764,
+    "g_q75": 1.4348
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "window": 8,
+    "n_windows": 4066,
+    "g_px_per_f2": 0.506,
+    "g_px_per_s2": 1818.0,
+    "g_obs_only_px_per_f2": 0.5333,
+    "g_q25": -0.0016,
+    "g_q75": 0.597
+  }
+}

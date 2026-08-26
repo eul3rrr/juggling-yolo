@@ -190,13 +190,14 @@ def score_all() -> list[dict]:
     return rows
 
 
-def evaluate(rows: list[dict]) -> dict:
+def evaluate(rows: list[dict], models: list[str] | None = None) -> dict:
+    models = models if models is not None else MODELS + ["kalman"]
     by_source: dict[tuple[str, int], list[dict]] = defaultdict(list)
     for row in rows:
         by_source[(row["stem"], row["source_tracklet"])].append(row)
 
     summary: dict[str, dict] = {}
-    for model in MODELS + ["kalman"]:
+    for model in models:
         for group in by_source.values():
             ranked = sorted(group, key=lambda r: (
                 r[model] if r[model] is not None else float("inf"),

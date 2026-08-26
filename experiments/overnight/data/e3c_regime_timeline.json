@@ -1,0 +1,638 @@
+{
+  "stem": "identical_balls_trick_000_018",
+  "window": 8,
+  "slow_max_threshold": 0.9,
+  "boundary_vote_frac": 0.25,
+  "g_slow_px_f2": 0.1172,
+  "g_normal_px_f2": 1.9966,
+  "ratio": 17.037,
+  "playback_factor": 4.128,
+  "boundaries": [
+    263,
+    764
+  ],
+  "segments": [
+    {
+      "start": 0,
+      "end": 263,
+      "regime": "normal"
+    },
+    {
+      "start": 263,
+      "end": 764,
+      "regime": "slow"
+    },
+    {
+      "start": 764,
+      "end": 1079,
+      "regime": "normal"
+    }
+  ],
+  "pair_stats": {
+    "cross": {
+      "correct": 1,
+      "wrong": 1
+    },
+    "same": {
+      "correct": 44,
+      "wrong": 39
+    }
+  },
+  "pairs": [
+    {
+      "src": 1,
+      "cand": 6,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 2,
+      "cand": 6,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 3,
+      "cand": 8,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 3,
+      "cand": 7,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 4,
+      "cand": 7,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 4,
+      "cand": 8,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 5,
+      "cand": 6,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 6,
+      "cand": 15,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 7,
+      "cand": 10,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 9,
+      "cand": 12,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 9,
+      "cand": 13,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 10,
+      "cand": 11,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 11,
+      "cand": 13,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 11,
+      "cand": 12,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 12,
+      "cand": 17,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 12,
+      "cand": 16,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 14,
+      "cand": 19,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 14,
+      "cand": 18,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 15,
+      "cand": 17,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 15,
+      "cand": 16,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 16,
+      "cand": 19,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 17,
+      "cand": 22,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 18,
+      "cand": 21,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 18,
+      "cand": 22,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 19,
+      "cand": 20,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 20,
+      "cand": 22,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 21,
+      "cand": 22,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 22,
+      "cand": 27,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 23,
+      "cand": 25,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 25,
+      "cand": 27,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 25,
+      "cand": 26,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 28,
+      "cand": 29,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 29,
+      "cand": 34,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 30,
+      "cand": 33,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 31,
+      "cand": 36,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 31,
+      "cand": 38,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 31,
+      "cand": 37,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 35,
+      "cand": 37,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 35,
+      "cand": 38,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 35,
+      "cand": 36,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 36,
+      "cand": 41,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 37,
+      "cand": 40,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 37,
+      "cand": 39,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 38,
+      "cand": 39,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 38,
+      "cand": 40,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 39,
+      "cand": 47,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 39,
+      "cand": 48,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 40,
+      "cand": 41,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 40,
+      "cand": 42,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 41,
+      "cand": 43,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 41,
+      "cand": 44,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 43,
+      "cand": 45,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 44,
+      "cand": 53,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 45,
+      "cand": 46,
+      "label": "correct",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 45,
+      "cand": 47,
+      "label": "wrong",
+      "source_seg": "slow",
+      "candidate_seg": "slow"
+    },
+    {
+      "src": 47,
+      "cand": 52,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 50,
+      "cand": 55,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 50,
+      "cand": 56,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 51,
+      "cand": 52,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 52,
+      "cand": 53,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 53,
+      "cand": 58,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 54,
+      "cand": 57,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 56,
+      "cand": 57,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 57,
+      "cand": 63,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 59,
+      "cand": 61,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 59,
+      "cand": 62,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 60,
+      "cand": 64,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 62,
+      "cand": 66,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 62,
+      "cand": 65,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 63,
+      "cand": 66,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 63,
+      "cand": 65,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 64,
+      "cand": 68,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 64,
+      "cand": 69,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 65,
+      "cand": 69,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 66,
+      "cand": 69,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 66,
+      "cand": 68,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 67,
+      "cand": 70,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 67,
+      "cand": 72,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 67,
+      "cand": 71,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 68,
+      "cand": 71,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 68,
+      "cand": 72,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 68,
+      "cand": 70,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 70,
+      "cand": 74,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 72,
+      "cand": 74,
+      "label": "wrong",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    },
+    {
+      "src": 73,
+      "cand": 75,
+      "label": "correct",
+      "source_seg": "normal",
+      "candidate_seg": "normal"
+    }
+  ]
+}

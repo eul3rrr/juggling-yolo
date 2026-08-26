@@ -29,3 +29,27 @@ data/e1_pair_scores.csv, data/e1_metrics.json, reports/e1_report.md.
 Methodological bug found+fixed during E1: initial _fit_predict measured distance from
 origin instead of query point; caught via hand-computed probe (src=43: expected ~6px,
 got 699). All numbers above are post-fix, validated against shipped errors.
+
+## 2026-08-26 07:25 — E3: shared-gravity constrained stitching + regime discovery
+
+E3 (shared-g scoring): estimating one image-space gravity per video and fixing it
+inside candidate y-fits changed NOTHING vs free ballistic fits (<1px inside short
+windows/horizons; metrics identical). Negative result: constraint has no leverage
+at gap<=10 frames with 6-12 point windows.
+
+E3b (gravity distribution): per-window y-accelerations (dt==1 8-pt windows,
+observed-only join between legacy+regenerated CSVs: kept=2178/2774) are sharply
+BIMODAL in clip 1: mode A ~ +0.12..0.25 px/f^2 (n~550) and mode B ~ +1.8..2.0
+px/f^2 (n~390), plus negative tail (hand-propelled/held segments).
+
+E3c (regime timeline): classifying windows by accel mode + rolling vote recovers
+the clip edit structure EXACTLY, unsupervised, physics-only:
+  [0-263 normal][263-764 SLOW][764-1079 normal], playback factor sqrt(gN/gS)=4.13x.
+Matches the documented normal/slow/normal edit. Cross-referencing reviewed pairs:
+only 2 pairs cross regime boundaries (1 correct/1 wrong) -> no label conclusion,
+but the timeline enables per-regime time-base normalization for future gating/
+prediction (a slow-mo segment inflates pixel velocities 4x otherwise).
+
+Artifacts: scripts/e3_shared_gravity.py, scripts/e3b_gravity_hist.py,
+scripts/e3c_regime_timeline.py, data/e3_pair_scores.csv, data/e3_gravity.json,
+data/e3c_regime_timeline.json/.csv, reports/e3_report.md.
