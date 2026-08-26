@@ -206,3 +206,23 @@ YouTube: no demotions needed, results unchanged (17/3/0).
 
 Artifacts: scripts/e9a_tracklet_census.py, scripts/e9b_physics_filter.py,
 scripts/e9c_hand_aware_filter.py, data/e9b_filter.json, data/e9c_hand_aware.json.
+
+## 2026-08-26 09:30 — E10/E11: hand mutual exclusion + regime-split acceptance
+
+E10: hand-inventory mutual exclusion on (source, hand) events, v2 keeps only
+TIME-OVERLAPPING duplicates (sequential catch->carry->throw hops are legitimate):
+ident-balls drops exactly 1 wrong, 0 correct. YouTube: nothing to drop.
+
+E11 regime-split (air=calibrated gates, contact=hand-event arbitration):
+- identical-balls: 38 accepts (21 air + 17 contact) -> 18 correct, 1 wrong.
+- youtube: 15 accepts -> 3 correct, 0 wrong.
+- Pooled: precision 0.955, recall 21/71.
+vs E6c gate-only (44 accepts, 22 correct, 0 wrong): regime-split adds accepts
+but LOSES one precision point and misses some correct gate-caught pairs; the
+contact path's hand-start requirement (NEAR_HAND=110) is too strict and its
+arbitration too permissive. MIXED result - keep gate-only as primary; contact
+arbitration needs the full state machine (hand inventories + siteswap counts)
+before it can beat error gates.
+
+Artifacts: scripts/e10_mutual_exclusion.py, scripts/e11_regime_split.py,
+data/e10_mutual_exclusion.json, data/e11_regime_split.json.
