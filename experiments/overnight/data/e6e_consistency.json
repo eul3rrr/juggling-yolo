@@ -1,0 +1,54 @@
+{
+  "identical_balls_trick_000_018": {
+    "scale0.8": {
+      "links": 25,
+      "chains": 14,
+      "violating_chains": 0,
+      "labeled_tp": 17,
+      "labeled_fp": 0,
+      "worst": []
+    },
+    "scale1.0": {
+      "links": 31,
+      "chains": 16,
+      "violating_chains": 0,
+      "labeled_tp": 20,
+      "labeled_fp": 0,
+      "worst": []
+    },
+    "scale1.3": {
+      "links": 31,
+      "chains": 16,
+      "violating_chains": 0,
+      "labeled_tp": 20,
+      "labeled_fp": 0,
+      "worst": []
+    }
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "scale0.8": {
+      "links": 16,
+      "chains": 10,
+      "violating_chains": 0,
+      "labeled_tp": 2,
+      "labeled_fp": 0,
+      "worst": []
+    },
+    "scale1.0": {
+      "links": 17,
+      "chains": 10,
+      "violating_chains": 0,
+      "labeled_tp": 3,
+      "labeled_fp": 0,
+      "worst": []
+    },
+    "scale1.3": {
+      "links": 17,
+      "chains": 10,
+      "violating_chains": 0,
+      "labeled_tp": 3,
+      "labeled_fp": 0,
+      "worst": []
+    }
+  }
+}

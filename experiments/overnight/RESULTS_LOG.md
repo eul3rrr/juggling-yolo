@@ -146,3 +146,22 @@ tight gates on fast footage (future: per-regime calibration via E3c timeline).
 
 Artifacts: scripts/e6b_wide_universe.py, scripts/e6c_wide_universe_v2.py,
 data/e6c_wide_v2.json, reports/e6b_report.md, reports/e6c_report.md.
+
+## 2026-08-26 08:45 — E6d/E6e: visual QA + physical consistency check
+
+E6d rendered calibrated chains over the identical-balls video (reports/e6d_chains_*.mp4,
+sample frames in reports/frames/). Vision inspection findings:
+- Parabolic trails render correctly; long-gap bridges visible with labels.
+- obs=1 frames confirm detector misses hand-held balls; obs=0 at f950 shows TOTAL
+  detector dropout with 3 balls visible -> wide-gap bridges are essential.
+- FALSE-POSITIVE tracklets exist: static blobs on background objects (white eggs,
+  c49) and non-ballistic horizontal trails (shirt/arm). They pollute candidates.
+  NEXT: physics-based tracklet filter (static/low-dynamics demotion).
+
+E6e same-frame violation check: 0 violating chains at gate scales 0.8/1.0/1.3 on
+both videos. Structurally guaranteed by successor formulation (candidate starts
+strictly after source ends) - kept as regression test. Labels: tp 17/20/20 at
+scales .8/1/1.3 with fp=0 everywhere (ident-balls); youtube stable at 2/3/3 fp=0.
+
+Artifacts: scripts/e6d_render_chains.py, scripts/e6e_consistency.py,
+reports/e6d_chains_identical_balls_trick_000_018.mp4, data/e6e_consistency.json.
