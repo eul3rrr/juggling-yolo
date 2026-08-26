@@ -1,0 +1,130 @@
+{
+  "identical_balls_trick_000_018": {
+    "counts": {
+      "gate_accept_correct": 21,
+      "gate_accept_wrong": 2,
+      "gate_reject_correct": 18,
+      "gate_reject_wrong": 36,
+      "hand_rescued_correct": 2,
+      "hand_rescued_wrong": 5
+    },
+    "rescued": [
+      {
+        "pair": [
+          4,
+          7
+        ],
+        "label": "correct",
+        "err": 122.6,
+        "gap": 5,
+        "src_slope": -11.96,
+        "cand_slope": 2.16,
+        "src_dist": 56.0,
+        "cand_dist": 66.2
+      },
+      {
+        "pair": [
+          6,
+          15
+        ],
+        "label": "wrong",
+        "err": 993.7,
+        "gap": 15,
+        "src_slope": -4.3,
+        "cand_slope": 3.79,
+        "src_dist": 47.3,
+        "cand_dist": 15.2
+      },
+      {
+        "pair": [
+          40,
+          42
+        ],
+        "label": "wrong",
+        "err": 203.8,
+        "gap": 10,
+        "src_slope": -1.39,
+        "cand_slope": 0.58,
+        "src_dist": 63.0,
+        "cand_dist": 40.0
+      },
+      {
+        "pair": [
+          59,
+          62
+        ],
+        "label": "wrong",
+        "err": 481.6,
+        "gap": 12,
+        "src_slope": -6.07,
+        "cand_slope": 16.92,
+        "src_dist": 46.1,
+        "cand_dist": 1.8
+      },
+      {
+        "pair": [
+          66,
+          68
+        ],
+        "label": "wrong",
+        "err": 277.2,
+        "gap": 4,
+        "src_slope": -2.9,
+        "cand_slope": 2.48,
+        "src_dist": 32.6,
+        "cand_dist": 36.2
+      },
+      {
+        "pair": [
+          68,
+          71
+        ],
+        "label": "correct",
+        "err": 665.8,
+        "gap": 13,
+        "src_slope": -22.0,
+        "cand_slope": 18.08,
+        "src_dist": 12.2,
+        "cand_dist": 18.6
+      },
+      {
+        "pair": [
+          68,
+          72
+        ],
+        "label": "wrong",
+        "err": 762.6,
+        "gap": 13,
+        "src_slope": -22.0,
+        "cand_slope": 21.58,
+        "src_dist": 12.2,
+        "cand_dist": 17.0
+      }
+    ]
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "counts": {
+      "gate_accept_correct": 5,
+      "gate_accept_wrong": 0,
+      "gate_reject_correct": 19,
+      "gate_reject_wrong": 2,
+      "hand_rescued_correct": 1,
+      "hand_rescued_wrong": 0
+    },
+    "rescued": [
+      {
+        "pair": [
+          17,
+          24
+        ],
+        "label": "correct",
+        "err": 60.9,
+        "gap": 8,
+        "src_slope": -4.91,
+        "cand_slope": 5.28,
+        "src_dist": 6.7,
+        "cand_dist": 13.9
+      }
+    ]
+  }
+}

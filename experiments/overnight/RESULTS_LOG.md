@@ -165,3 +165,25 @@ scales .8/1/1.3 with fp=0 everywhere (ident-balls); youtube stable at 2/3/3 fp=0
 
 Artifacts: scripts/e6d_render_chains.py, scripts/e6e_consistency.py,
 reports/e6d_chains_identical_balls_trick_000_018.mp4, data/e6e_consistency.json.
+
+## 2026-08-26 09:00 — E7a/E7b: hand-event analysis
+
+E7a: wrist-approach slopes on reviewed stitches (pose CSVs, conf>=0.5):
+- WRONG pairs approach a hand much steeper at source end (median slope -4.9 px/f
+  vs -0.2 for correct) -> wrong stitches concentrate at CATCH boundaries.
+- Candidates mostly start receding (throw-like) in both classes.
+
+E7b: naive catch+throw rescue of gate-rejected pairs HURTS: +3 correct but +5
+wrong (precision 0.929 -> 0.806). Mechanism: one catch signature matches MULTIPLE
+candidate throws (src 68 -> both correct 71 AND wrong 72 with identical source
+signature). Hand events are necessary, not sufficient; need hand-inventory
+mutual exclusion (one ball per hand) - future siteswap-style constraint layer.
+
+Two-regime insight: synthetic-calibrated gates give 26/71 recall on labeled pairs
+because contact occlusions produce large TRUE errors (e.g. 665px correct pair).
+Mid-air occlusions (tight calibrated gates, 0 fp) vs contact occlusions (need
+event logic, not error gates) are different regimes.
+
+Artifacts: scripts/e7a_hand_events.py, scripts/e7b_hand_rescue.py,
+data/e7a_hand_events.csv, data/e7b_hand_rescue.json, reports/e7a_report.md,
+reports/e7b_report.md.
