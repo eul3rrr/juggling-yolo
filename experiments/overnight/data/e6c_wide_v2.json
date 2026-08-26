@@ -1,0 +1,301 @@
+{
+  "identical_balls_trick_000_018": {
+    "calibration": {
+      "2": 15.8,
+      "4": 41.7,
+      "6": 74.8,
+      "10": 147.7,
+      "15": 225.1,
+      "20": 507.2,
+      "30": 540.4
+    },
+    "rank1_accepted": {
+      "n": 29,
+      "correct": 19,
+      "wrong": 0
+    },
+    "thefts": {
+      "demoted": 22,
+      "of_which_wrong": 17,
+      "detail": [
+        {
+          "pair": [
+            1,
+            6
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 3,
+          "top_thief_err": 18.4
+        },
+        {
+          "pair": [
+            2,
+            6
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 3,
+          "top_thief_gap": 3,
+          "top_thief_err": 136.4
+        },
+        {
+          "pair": [
+            6,
+            15
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 3,
+          "top_thief_err": 37.2
+        },
+        {
+          "pair": [
+            12,
+            17
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 3,
+          "top_thief_gap": 7,
+          "top_thief_err": 198.5
+        },
+        {
+          "pair": [
+            14,
+            19
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 3,
+          "top_thief_gap": 4,
+          "top_thief_err": 313.9
+        },
+        {
+          "pair": [
+            15,
+            17
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 3,
+          "top_thief_gap": 7,
+          "top_thief_err": 166.0
+        },
+        {
+          "pair": [
+            17,
+            22
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 4,
+          "top_thief_err": 32.3
+        },
+        {
+          "pair": [
+            20,
+            22
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 3,
+          "top_thief_err": 117.2
+        },
+        {
+          "pair": [
+            22,
+            27
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 4,
+          "top_thief_err": 135.3
+        },
+        {
+          "pair": [
+            31,
+            38
+          ],
+          "label": "wrong",
+          "old": 2,
+          "new": 4,
+          "top_thief_gap": 10,
+          "top_thief_err": 10.8
+        },
+        {
+          "pair": [
+            31,
+            37
+          ],
+          "label": "wrong",
+          "old": 3,
+          "new": 5,
+          "top_thief_gap": 10,
+          "top_thief_err": 10.8
+        },
+        {
+          "pair": [
+            35,
+            36
+          ],
+          "label": "wrong",
+          "old": 3,
+          "new": 5,
+          "top_thief_gap": 10,
+          "top_thief_err": 31.3
+        },
+        {
+          "pair": [
+            36,
+            41
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 14,
+          "top_thief_err": 70.8
+        },
+        {
+          "pair": [
+            39,
+            48
+          ],
+          "label": "wrong",
+          "old": 2,
+          "new": 4,
+          "top_thief_gap": 8,
+          "top_thief_err": 12.3
+        },
+        {
+          "pair": [
+            41,
+            44
+          ],
+          "label": "wrong",
+          "old": 2,
+          "new": 3,
+          "top_thief_gap": 12,
+          "top_thief_err": 8.2
+        }
+      ]
+    },
+    "global": {
+      "links": 31,
+      "conflicts": 0,
+      "labeled_tp": 20,
+      "labeled_fp": 0,
+      "new_vs_shipped": 11
+    },
+    "chains": {
+      "n": 16,
+      "max": 6,
+      "mean": 2.94
+    }
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "calibration": {
+      "2": 4.8,
+      "4": 13.5,
+      "6": 24.5,
+      "10": 47.4,
+      "15": 82.4,
+      "20": 155.9,
+      "30": 398.4
+    },
+    "rank1_accepted": {
+      "n": 14,
+      "correct": 5,
+      "wrong": 0
+    },
+    "thefts": {
+      "demoted": 6,
+      "of_which_wrong": 1,
+      "detail": [
+        {
+          "pair": [
+            10,
+            11
+          ],
+          "label": "wrong",
+          "old": 1,
+          "new": 3,
+          "top_thief_gap": 16,
+          "top_thief_err": 207.5
+        },
+        {
+          "pair": [
+            22,
+            26
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 25,
+          "top_thief_err": 74.7
+        },
+        {
+          "pair": [
+            25,
+            33
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 19,
+          "top_thief_err": 38.1
+        },
+        {
+          "pair": [
+            26,
+            31
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 25,
+          "top_thief_err": 78.4
+        },
+        {
+          "pair": [
+            30,
+            37
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 23,
+          "top_thief_err": 57.2
+        },
+        {
+          "pair": [
+            35,
+            38
+          ],
+          "label": "correct",
+          "old": 1,
+          "new": 2,
+          "top_thief_gap": 20,
+          "top_thief_err": 10.4
+        }
+      ]
+    },
+    "global": {
+      "links": 17,
+      "conflicts": 0,
+      "labeled_tp": 3,
+      "labeled_fp": 0,
+      "new_vs_shipped": 14
+    },
+    "chains": {
+      "n": 10,
+      "max": 6,
+      "mean": 2.7
+    }
+  }
+}

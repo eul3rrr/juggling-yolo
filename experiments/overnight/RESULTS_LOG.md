@@ -119,3 +119,30 @@ near hands/catches (which the 113 labels already flag as failure zone).
 
 Artifacts: scripts/e4_synthetic_occlusion.py, data/e4_synthetic_occlusion.json,
 reports/e4_report.md.
+
+## 2026-08-26 08:30 — E6b/E6c: widened candidate universe (gap<=30)
+
+E6b (raw widening): exposed PHANTOM TRACKLET problem - legacy CSVs contain Norfair
+Kalman estimates during occlusions; long-gap 'thieves' with tiny errors were often
+predictions, not observations. Also pooled E4 calibration misfit the youtube clip
+(0 accepts at short gaps).
+
+E6c v2 fixes: observed-only join (drop 596+547 phantom rows), per-video synthetic-
+cut calibration (ident-balls q90@g10=147.7px vs youtube 47.4px - 3x difference!),
+gap-normalized assignment costs err/q90(gap).
+
+Results:
+- ident-balls: rank1 accepts 29 (19 correct, 0 wrong); global 31 links,
+  conflicts 0, labeled fp 0, 11 new links; chains 27->16, max len 6.
+- youtube: rank1 accepts 14 (5 correct, 0 wrong); global 17 links, fp 0.
+- Demotions when widening: 22 labeled pairs drop rank (17 of them human-labeled
+  WRONG) -> widening actively dethrones greedy's mistakes.
+- Per-video calibration matters enormously (motion scale differs 3x).
+
+CONFIG TO ADOPT (experiment-land): observed-only points + bal8 scoring +
+per-video q90(gap) gates + normalized-cost successor assignment.
+Precision-first: zero wrong accepts on both labeled videos; recall limited by
+tight gates on fast footage (future: per-regime calibration via E3c timeline).
+
+Artifacts: scripts/e6b_wide_universe.py, scripts/e6c_wide_universe_v2.py,
+data/e6c_wide_v2.json, reports/e6b_report.md, reports/e6c_report.md.
