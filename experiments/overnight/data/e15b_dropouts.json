@@ -1,0 +1,110 @@
+[
+  {
+    "frame": 0,
+    "observed_in_run": 0,
+    "yolo_c32": {
+      "conf0.05": 5,
+      "conf0.15": 3
+    },
+    "image": "reports/frames/dropouts/dropout_f0.png"
+  },
+  {
+    "frame": 124,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 6,
+      "conf0.15": 4
+    },
+    "image": "reports/frames/dropouts/dropout_f124.png"
+  },
+  {
+    "frame": 217,
+    "observed_in_run": 0,
+    "yolo_c32": {
+      "conf0.05": 3,
+      "conf0.15": 1
+    },
+    "image": "reports/frames/dropouts/dropout_f217.png"
+  },
+  {
+    "frame": 317,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 5,
+      "conf0.15": 2
+    },
+    "image": "reports/frames/dropouts/dropout_f317.png"
+  },
+  {
+    "frame": 371,
+    "observed_in_run": 1,
+    "yolo_c32": {
+      "conf0.05": 3,
+      "conf0.15": 1
+    },
+    "image": "reports/frames/dropouts/dropout_f371.png"
+  },
+  {
+    "frame": 453,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 6,
+      "conf0.15": 3
+    },
+    "image": "reports/frames/dropouts/dropout_f453.png"
+  },
+  {
+    "frame": 509,
+    "observed_in_run": 1,
+    "yolo_c32": {
+      "conf0.05": 5,
+      "conf0.15": 2
+    },
+    "image": "reports/frames/dropouts/dropout_f509.png"
+  },
+  {
+    "frame": 590,
+    "observed_in_run": 1,
+    "yolo_c32": {
+      "conf0.05": 5,
+      "conf0.15": 3
+    },
+    "image": "reports/frames/dropouts/dropout_f590.png"
+  },
+  {
+    "frame": 690,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 6,
+      "conf0.15": 3
+    },
+    "image": "reports/frames/dropouts/dropout_f690.png"
+  },
+  {
+    "frame": 793,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 5,
+      "conf0.15": 2
+    },
+    "image": "reports/frames/dropouts/dropout_f793.png"
+  },
+  {
+    "frame": 879,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 6,
+      "conf0.15": 2
+    },
+    "image": "reports/frames/dropouts/dropout_f879.png"
+  },
+  {
+    "frame": 973,
+    "observed_in_run": 2,
+    "yolo_c32": {
+      "conf0.05": 3,
+      "conf0.15": 2
+    },
+    "image": "reports/frames/dropouts/dropout_f973.png"
+  }
+]

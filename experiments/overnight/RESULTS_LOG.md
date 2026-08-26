@@ -249,3 +249,29 @@ Best of both: 30% fewer fragments AND nofilter-level stitch recovery.
 
 Artifacts: scripts/e8_norfair_models.py, scripts/e8b_model_recovery.py,
 scripts/e8c_raw_vs_est.py, data/e8/*.csv+json.
+
+## 2026-08-26 08:20 — E15: detector headroom probe
+
+E15 grid (relaxed conf/imgsz on sampled frames): conf0.05/sz960 reaches 100%
+recall vs Norfair-kept points but 4.86 dets/frame (FP flood); conf0.15/sz960
+(= current settings) 0.988 recall, 2.57 dets/frame. GT is circular (Norfair's
+own kept points), so treat as consistency check only.
+
+E15b dropout forensics (651 frames with obs<3 in tracked run):
+- Vision on dropout_f590: 3 balls clearly visible (1 air + 2 held); raw YOLO
+  detection CSV at f590 contains 2 class-32 detections (conf 0.25/0.21) - the
+  held balls WERE detected by the raw detector.
+- Root cause of dropouts is NOT raw-detector blindness: it is the conf=0.15
+  threshold + association losses. 771/2456 detections (31%) sit below conf 0.3;
+  ByteTrack-style two-tier association could recover them.
+- 486/1029 frames have <3 raw detections; 543 have >=3.
+- FP sources for class 32: white eggs on the table (bottom-left) and lamp/
+  bottle shapes - visible in dropout frames.
+
+IMPLICATION: detector upgrade priority is (1) low-conf tier in association
+(ByteTrack-style), (2) fine-tune/heatmap detector for held-ball states, not a
+new backbone. Held balls near faces/hands are the systematic blind spot.
+
+Artifacts: scripts/e15_detector_headroom.py, scripts/e15b_dropout_probe.py,
+data/e15_detector_headroom.json, data/e15b_dropouts.json,
+reports/frames/dropouts/*.png.
