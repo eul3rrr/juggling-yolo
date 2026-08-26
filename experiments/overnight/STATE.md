@@ -1,39 +1,42 @@
 # Overnight Session State (updated continuously)
 
-LAST_UPDATE: 2026-08-26 07:40 CEST
+LAST_UPDATE: 2026-08-26 08:07 CEST
 SESSION_ID: 20260826_061301_ccfd81
-RESUME_CMD: cd /home/it-admin/projects/crl-analyzer/data/processed && /home/it-admin/.hermes/hermes-agent/venv/bin/python /home/it-admin/.hermes/hermes-agent/hermes -p juggling-tracker chat --query-file /home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/experiments/overnight/nudge.txt --resume 20260826_061301_ccfd81 --yolo --no-restore-cwd
 
-## Status: E1+E3(+b,c)+E2 COMPLETE -> starting E5 literature sweep, then E4 synthetic occlusion benchmark
+## Status: E1-E11 + E8 family COMPLETE -> E15 detector headroom probe, then
+## E12 integration run + E13 siteswap validation, then final REPORT.md
 
-## Completed so far
-- Setup: PLAN.md queue, watchdog live (tmux ox-keepalive), resume mechanics validated.
-- E1 ballistic rescoring: bal8 top1 97.2% H2H 23/24 (baseline 95.8%, 22/24); Kalman no
-  better than LS; scoring model NOT the bottleneck. Harness reproduces all 113 shipped
-  candidate rows exactly from legacy pre-a77cc5d CSVs (data/legacy_csv/).
-- E3 shared-g scoring: NO effect (<1px at these horizons). Negative result.
-- E3c gravity-mode timeline: UNSUPERVISED recovery of clip edit structure
-  [0-263 normal][263-764 slow 4.13x][764-1079 normal] from per-window y-accel modes.
-  Bimodal histogram = physics-only regime segmentation works. Tool for future gating.
-- E2 global assignment: Hungarian beats greedy rank-1 (conflicts 1-11 -> 0; precision
-  up at matched gates; F1 +0.01-0.03). Adopt global+ballistic when leaving experiment-land.
+## Key results so far (details in RESULTS_LOG.md)
+- E1: ballistic scoring bal8 small real gain (top1 95.8->97.2%); Kalman filter no better.
+- E2: global assignment kills greedy conflicts (1-11 -> 0), precision up.
+- E3: shared-g scoring no effect; E3c: UNSUPERVISED playback-regime timeline from
+  gravity modes (bimodal histogram; slow-mo segment [263,764] factor 4.13x).
+- E4: KEY - synthetic occlusion benchmark (4180 cuts): bal8 keeps 85%+ top1 to gap 20
+  (cv2 collapses to 53%); calibrated sigma(gap) curves extracted.
+- E5: lit survey (reports/e5_papers_survey.md): TrackNet V4/V5 for detector upgrade;
+  min-cost-flow chaining; microscopy intermittent-particles analogy.
+- E6/E6b/E6c: chain-level global stitching; phantom-tracklet discovery (legacy CSVs
+  contain Norfair estimates); observed-only join + per-video calibration + normalized
+  costs => 31 links, 0 conflicts, 0 labeled-fp (ident-balls).
+- E6d/E6e: visual QA (vision) found FP tracklets + detector dropouts (obs=0 frames);
+  physical consistency check: 0 same-frame violations (structural guarantee).
+- E7: wrong stitches concentrate at catches (slope -4.9 vs -0.2); naive hand-rescue
+  HURTS (one catch matches many throws); needs hand inventories (future).
+- E9: hand-aware tracklet states AIRBORNE/HELD/BACKGROUND/SWEEP; demote only
+  BACKGROUND+SWEEP; metrics unchanged, interpretability up.
+- E10: hand mutual exclusion with time-overlap-only dropping: removes 1 wrong, 0 correct.
+- E11: regime-split acceptance MIXED (38 accepts 18 correct 1 wrong vs gate-only
+  29/19/0) - keep gate-only primary; contact path needs full state machine.
+- E8: constacc association cuts fragmentation 77->55 tracklets; RAW centers beat
+  Kalman estimates as exported observations (+4-8pts recovery). ADOPT BOTH.
 
-## Current: E5 arxiv/lit sweep (physics-informed MOT, ball tracking, min-cost-flow,
-   PMBM filters, TrackNet). Then:
-- E4 synthetic occlusion benchmark on clean tracklets (controlled curves).
-- E6 implement best paper idea (likely min-cost-flow stitching w/ appearance-free costs).
-- E7 hand-event layer using existing pose CSVs (catch/throw state transitions).
-- E8 Norfair motion-model comparison (constant-position vs velocity vs accel) fragmentation.
+## Config to adopt (experiment-land consensus)
+observed-only points + bal8 scoring + per-video q90(gap) calibration +
+gap-normalized costs + successor assignment + CA Norfair motion model +
+raw-center export. Precision-first: 0 wrong accepts on labeled videos.
 
-## Key facts to remember
-- Labels: detections/stitch_review_labels.csv (113 rows; 85 identical-balls + 28 youtube).
-- Candidate universe gap<=10 caps max achievable correct accepts at ~71.
-- Legacy CSVs (pre-a77cc5d semantics incl. Norfair estimates) in experiments/overnight/data/legacy_csv/.
-- venv python path: workspace/juggling-yolo/.venv/bin/python; run scripts with cwd=repo root.
-- e1_ballistic_rescore.evaluate(rows, models) reusable for any scorer table.
-- DO NOT touch anything outside experiments/overnight/.
-- Commits so far: b70f4c9 setup, e71f730 E1, eb732cd E3, dad693b E2 (all pushed).
-
-## Next actions
-1. E5: batched arxiv searches -> reports/e5_papers_survey.md
-2. E4 synthetic occlusion benchmark -> scripts/e4_synthetic_occlusion.py
+## Remaining queue
+- E15: detector headroom (low-conf/high-imgsz rerun on dropout frames).
+- E12: integration run (full recommended config end-to-end, render chains).
+- E13: siteswap validation (flight-time histogram should show period-3 cascade).
+- REPORT.md: consolidated what-worked/what-didnt for the user.

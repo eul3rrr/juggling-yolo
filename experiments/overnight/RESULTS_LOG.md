@@ -226,3 +226,26 @@ before it can beat error gates.
 
 Artifacts: scripts/e10_mutual_exclusion.py, scripts/e11_regime_split.py,
 data/e10_mutual_exclusion.json, data/e11_regime_split.json.
+
+## 2026-08-26 08:05 — E8 family: Norfair motion-model comparison
+
+E8 (association-level, dt50/hc5 fixed, existing YOLO detections):
+- nofilter: 92 tracklets / med 23 pts (ident-balls)
+- optvel (current default): 77 / 23
+- optvel Q=1.0: 54 / 35.5
+- constacc (custom CA Kalman, [pos,vel]-layout-compatible wrapper): 55 / 42
+CA cuts fragmentation ~30% at the source. (Norfair 2.x API: string motion models
+gone; must subclass FilterFactory; internals assume [pos,vel] x-layout.)
+
+E8b synthetic recovery per variant: nofilter raw positions recover BEST
+(0.987@20) -> suspicion: Kalman-smoothed stored points bias fits.
+
+E8c raw-vs-estimate export: CONFIRMED - raw detection centers beat estimates
+for observed rows everywhere (ident-balls ca: 0.905->0.964@20; vel: 0.949->0.987@20;
+youtube vel: 0.821->0.895@20).
+
+ADOPT: constant-acceleration association + export RAW centers for observed rows.
+Best of both: 30% fewer fragments AND nofilter-level stitch recovery.
+
+Artifacts: scripts/e8_norfair_models.py, scripts/e8b_model_recovery.py,
+scripts/e8c_raw_vs_est.py, data/e8/*.csv+json.

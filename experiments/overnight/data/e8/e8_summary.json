@@ -1,0 +1,50 @@
+{
+  "identical_balls_trick_000_018|nofilter": {
+    "n_tracklets": 92,
+    "median_points": 23.0,
+    "max_points": 161,
+    "total_rows": 2750
+  },
+  "identical_balls_trick_000_018|optvel": {
+    "n_tracklets": 77,
+    "median_points": 23.0,
+    "max_points": 159,
+    "total_rows": 2755
+  },
+  "identical_balls_trick_000_018|optvel_looseQ": {
+    "n_tracklets": 54,
+    "median_points": 35.5,
+    "max_points": 167,
+    "total_rows": 2761
+  },
+  "identical_balls_trick_000_018|constacc": {
+    "n_tracklets": 55,
+    "median_points": 42.0,
+    "max_points": 167,
+    "total_rows": 2759
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|nofilter": {
+    "n_tracklets": 42,
+    "median_points": 67.0,
+    "max_points": 353,
+    "total_rows": 4370
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|optvel": {
+    "n_tracklets": 40,
+    "median_points": 68.5,
+    "max_points": 414,
+    "total_rows": 4332
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|optvel_looseQ": {
+    "n_tracklets": 35,
+    "median_points": 68.0,
+    "max_points": 430,
+    "total_rows": 4348
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|constacc": {
+    "n_tracklets": 38,
+    "median_points": 66.5,
+    "max_points": 430,
+    "total_rows": 4356
+  }
+}
