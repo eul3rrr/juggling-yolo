@@ -1,0 +1,24 @@
+[2510.20126v1] Physics-Guided Fusion for Robust 3D Tracking of Fast Moving Small Objects
+  2025-10-23 | cs.CV | Prithvi Raj Singh, Raju Gottumukkala, Anthony S. Maida
+  While computer vision has advanced considerably for general object detection and tracking, the specific problem of fast-moving tiny objects remains underexplored. This paper addresses the significant challenge of detecting and tracking rapidly moving small objects using an RGB-D camera. Our novel system combines deep learning-based detection with physics-based tracking to overcome the limitations 
+
+[2502.17822v3] Easy-Poly: An Easy Polyhedral Framework For 3D Multi-Object Tracking
+  2025-02-25 | cs.CV | Peng Zhang, Xin Li, Xin Lin
+  Recent 3D multi-object tracking (3D MOT) methods mainly follow tracking-by-detection pipelines, but often suffer from high false positives, missed detections, and identity switches, especially in crowded and small-object scenarios. To address these challenges, we propose Easy-Poly, a filter-based 3D MOT framework with four key innovations: (1) CNMSMM, a novel Camera-LiDAR fusion detection method c
+
+[2505.21049v1] Robust Video-Based Pothole Detection and Area Estimation for Intelligent Vehicles with Depth Map and Kalman Smoothing
+  2025-05-27 | cs.CV | Dehao Wang, Haohang Zhu, Yiwen Xu
+  Road potholes pose a serious threat to driving safety and comfort, making their detection and assessment a critical task in fields such as autonomous driving. When driving vehicles, the operators usually avoid large potholes and approach smaller ones at reduced speeds to ensure safety. Therefore, accurately estimating pothole area is of vital importance. Most existing vision-based methods rely on 
+
+[2503.04322v1] A Modular Pipeline for 3D Object Tracking Using RGB Cameras
+  2025-03-06 | cs.CV | Lars Bredereke, Yale Hartmann, Tanja Schultz
+  Object tracking is a key challenge of computer vision with various applications that all require different architectures. Most tracking systems have limitations such as constraining all movement to a 2D plane and they often track only one object. In this paper, we present a new modular pipeline that calculates 3D trajectories of multiple objects. It is adaptable to various settings where multiple 
+
+[2110.02044v1] Multi-Object Tracking with Deep Learning Ensemble for Unmanned Aerial System Applications
+  2021-10-05 | cs.CV,cs.LG,cs.RO | Wanlin Xie, Jaime Ide, Daniel Izadi
+  Multi-object tracking (MOT) is a crucial component of situational awareness in military defense applications. With the growing use of unmanned aerial systems (UASs), MOT methods for aerial surveillance is in high demand. Application of MOT in UAS presents specific challenges such as moving sensor, changing zoom levels, dynamic background, illumination changes, obscurations and small objects. In th
+
+[nucl-ex/0307015v1] STAR Integrated Tracker
+  2003-07-16 | nucl-ex | A. Rose
+  We present the design and performance analysis of a new integrated track reconstruction code developed for the STAR experiment at RHIC. The code is meant to replace multiple previous tracking codes written in FORTRAN many years ago, and to readily enable the integration of new and varied detector components. The new tracker is written from the ground up in C++ using a strong object-oriented model.
+

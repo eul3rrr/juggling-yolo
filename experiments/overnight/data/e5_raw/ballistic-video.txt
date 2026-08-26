@@ -1,0 +1,12 @@
+[2001.10220v1] Learning to Catch Piglets in Flight
+  2020-01-28 | cs.RO,cs.CV,cs.LG | Ozan Çatal, Lawrence De Mol, Tim Verbelen
+  Catching objects in-flight is an outstanding challenge in robotics. In this paper, we present a closed-loop control system fusing data from two sensor modalities: an RGB-D camera and a radar. To develop and test our method, we start with an easy to identify object: a stuffed Piglet. We implement and compare two approaches to detect and track the object, and to predict the interception point. A bas
+
+[1502.07743v1] Tracking an Object with Unknown Accelerations using a Shadowing Filter
+  2015-01-21 | eess.SY,cs.CV,math.OC | Kevin Judd
+  A commonly encountered problem is the tracking of a physical object, like a maneuvering ship, aircraft, land vehicle, spacecraft or animate creature carrying a wireless device. The sensor data is often limited and inaccurate observations of range or bearing. This problem is more difficult than tracking a ballistic trajectory, because an operative affects unknown and arbitrarily changing accelerati
+
+[2204.00003v3] Ball 3D Localization From A Single Calibrated Image
+  2022-03-30 | cs.CV,eess.IV | Gabriel Van Zandycke, Christophe De Vleeschouwer
+  Ball 3D localization in team sports has various applications including automatic offside detection in soccer, or shot release localization in basketball. Today, this task is either resolved by using expensive multi-views setups, or by restricting the analysis to ballistic trajectories. In this work, we propose to address the task on a single image from a calibrated monocular camera by estimating b
+

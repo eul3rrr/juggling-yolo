@@ -1,0 +1,48 @@
+[2111.05620v2] Tracking multiple spawning targets using Poisson multi-Bernoulli mixtures on sets of tree trajectories
+  2021-11-10 | stat.ME,eess.SY,stat.AP | Ángel F. García-Fernández, Lennart Svensson
+  This paper proposes a Poisson multi-Bernoulli mixture (PMBM) filter on the space of sets of tree trajectories for multiple target tracking with spawning targets. A tree trajectory contains all trajectory information of a target and its descendants, which appear due to the spawning process. Each tree contains a set of branches, where each branch has trajectory information of a target or one of the 
+
+[1901.04518v2] Decentralized Poisson Multi-Bernoulli Filtering for Vehicle Tracking
+  2019-01-14 | cs.MA,eess.SY | Markus Fröhle, Karl Granström, Henk Wymeersch
+  A decentralized Poisson multi-Bernoulli filter is proposed to track multiple vehicles using multiple high-resolution sensors. Independent filters estimate the vehicles' presence, state, and shape using a Gaussian process extent model; a decentralized filter is realized through fusion of the filters posterior densities. An efficient implementation is achieved by parametric state representation, uti
+
+[2003.12767v3] Trajectory Poisson multi-Bernoulli filters
+  2020-03-28 | cs.CV,stat.AP | Ángel F. García-Fernández, Lennart Svensson, Jason L. Williams
+  This paper presents two trajectory Poisson multi-Bernoulli (TPMB) filters for multi-target tracking: one to estimate the set of alive trajectories at each time step and another to estimate the set of all trajectories, which includes alive and dead trajectories, at each time step. The filters are based on propagating a Poisson multi-Bernoulli (PMB) density on the corresponding set of trajectories t
+
+[1712.08146v3] Multisensor Poisson Multi-Bernoulli Filter for Joint Target-Sensor State Tracking
+  2017-12-21 | eess.SY,eess.SP | Markus Fröhle, Christopher Lindberg, Karl Granström
+  In a typical multitarget tracking (MTT) scenario, the sensor state is either assumed known, or tracking is performed in the sensor's (relative) coordinate frame. This assumption does not hold when the sensor, e.g., an automotive radar, is mounted on a vehicle, and the target state should be represented in a global (absolute) coordinate frame. Then it is important to consider the uncertain location
+
+[2503.12968v2] OptiPMB: Enhancing 3D Multi-Object Tracking with Optimized Poisson Multi-Bernoulli Filtering
+  2025-03-17 | cs.CV,cs.RO | Guanhua Ding, Yuxuan Xia, Runwei Guan
+  Accurate 3D multi-object tracking (MOT) is crucial for autonomous driving, as it enables robust perception, navigation, and planning in complex environments. While deep learning-based solutions have demonstrated impressive 3D MOT performance, model-based approaches remain appealing for their simplicity, interpretability, and data efficiency. Conventional model-based trackers typically rely on rand
+
+[2103.07783v1] Multi-Object Tracking using Poisson Multi-Bernoulli Mixture Filtering for Autonomous Vehicles
+  2021-03-13 | cs.RO,cs.CV,eess.SP | Su Pang, Hayder Radha
+  The ability of an autonomous vehicle to perform 3D tracking is essential for safe planing and navigation in cluttered environments. The main challenges for multi-object tracking (MOT) in autonomous driving applications reside in the inherent uncertainties regarding the number of objects, when and where the objects may appear and disappear, and uncertainties regarding objects' states. Random finite
+
+[1912.01748v2] Multi-Scan Implementation of the Trajectory Poisson Multi-Bernoulli Mixture Filter
+  2019-12-04 | eess.SP | Yuxuan Xia, Karl Granström, Lennart Svensson
+  The Poisson multi-Bernoulli mixture (PMBM) and the multi-Bernoulli mixture (MBM) are two multi-target distributions for which closed-form filtering recursions exist. The PMBM has a Poisson birth process, whereas the MBM has a multi-Bernoulli birth process. This paper considers a recently developed formulation of the multi-target tracking problem using a random finite set of trajectories, through w
+
+[2109.01490v1] A Scalable Track-Before-Detect Method With Poisson/Multi-Bernoulli Model
+  2021-09-03 | eess.SP | Thomas Kropfreiter, Jason L. Williams, Florian Meyer
+  We propose a scalable track-before-detect (TBD) tracking method based on a Poisson/multi-Bernoulli model. To limit computational complexity, we approximate the exact multi-Bernoulli mixture posterior probability density function (pdf) by a multi-Bernoulli pdf. Data association based on the sum-product algorithm and recycling of Bernoulli components enable the detection and tracking of low-observab
+
+[1801.01353v5] Poisson Multi-Bernoulli Approximations for Multiple Extended Object Filtering
+  2018-01-04 | eess.SP | Yuxuan Xia, Karl Granström, Lennart Svensson
+  The Poisson multi-Bernoulli mixture (PMBM) is a multi-object conjugate prior for the closed-form Bayes random finite sets filter. The extended object PMBM filter provides a closed-form solution for multiple extended object filtering with standard models. This paper considers computationally lighter alternatives to the extended object PMBM filter by propagating a Poisson multi-Bernoulli (PMB) densi
+
+[2011.04464v2] A Poisson multi-Bernoulli mixture filter for coexisting point and extended targets
+  2020-11-09 | stat.ME,cs.CV,stat.AP | Ángel F. García-Fernández, Jason L. Williams, Lennart Svensson
+  This paper proposes a Poisson multi-Bernoulli mixture (PMBM) filter for coexisting point and extended targets, i.e., for scenarios where there may be simultaneous point and extended targets. The PMBM filter provides a recursion to compute the multi-target filtering posterior based on probabilistic information on data associations, and single-target predictions and updates. In this paper, we first 
+
+[1911.09025v1] Extended target Poisson multi-Bernoulli mixture trackers based on sets of trajectories
+  2019-11-19 | eess.SP | Yuxuan Xia, Karl Granström, Lennart Svensson
+  The Poisson multi-Bernoulli mixture (PMBM) is a multi-target distribution for which the prediction and update are closed. By applying the random finite set (RFS) framework to multi-target tracking with sets of trajectories as the variable of interest, the PMBM trackers can efficiently estimate the set of target trajectories. This paper derives two trajectory RFS filters for extended target trackin
+
+[1703.04264v4] Poisson multi-Bernoulli mixture filter: direct derivation and implementation
+  2017-03-13 | cs.CV,stat.ME | Ángel F. García-Fernández, Jason L. Williams, Karl Granström
+  We provide a derivation of the Poisson multi-Bernoulli mixture (PMBM) filter for multi-target tracking with the standard point target measurements without using probability generating functionals or functional derivatives. We also establish the connection with the δ-generalised labelled multi-Bernoulli (δ-GLMB) filter, showing that a δ-GLMB density represents a multi-Bernoulli mixture with labelle
+

@@ -1,0 +1,4 @@
+[2110.09881v2] HM-Net: A Regression Network for Object Center Detection and Tracking on Wide Area Motion Imagery
+  2021-10-19 | cs.CV | Hakki Motorcu, Hasan F. Ates, H. Fatih Ugurdag
+  Wide Area Motion Imagery (WAMI) yields high-resolution images with a large number of extremely small objects. Target objects have large spatial displacements throughout consecutive frames. This nature of WAMI images makes object tracking and detection challenging. In this paper, we present our deep neural network-based combined object detection and tracking model, namely, Heat Map Network (HM-Net)
+

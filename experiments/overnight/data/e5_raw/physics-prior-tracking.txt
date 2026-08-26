@@ -1,0 +1,40 @@
+[2407.15727v2] Inferring turbulent velocity and temperature fields and their statistics from Lagrangian velocity measurements using physics-informed Kolmogorov-Arnold Networks
+  2024-07-22 | physics.flu-dyn,cs.LG,physics.comp-ph | Juan Diego Toscano, Theo Käufer, Zhibo Wang
+  We propose the Artificial Intelligence Velocimetry-Thermometry (AIVT) method to infer hidden temperature fields from experimental turbulent velocity data. This physics-informed machine learning method enables us to infer continuous temperature fields using only sparse velocity data, hence eliminating the need for direct temperature measurements. Specifically, AIVT is based on physics-informed Kolm
+
+[2507.18150v2] Physics-Informed Unit Commitment Framework for Nuclear Reactors
+  2025-07-24 | eess.SY | Shiny Choudhury, Michael Davidson, George Tynan
+  Nuclear reactors are often modeled as inflexible baseload generators with fixed downtimes and restrictive ramping constraints. In practice, however, a reactor's operational flexibility is closely tied to its fuel cycle and associated reactivity margin. A key physical constraint for power maneuverability is xenon poisoning, caused from the transient buildup of neutron-absorbing xenon following a po
+
+[2404.09212v2] Physics-informed tracking of qubit fluctuations
+  2024-04-14 | cond-mat.mes-hall,quant-ph | Fabrizio Berritta, Jan A. Krzywda, Jacob Benestad
+  Environmental fluctuations degrade the performance of solid-state qubits but can in principle be mitigated by real-time Hamiltonian estimation down to time scales set by the estimation efficiency. We implement a physics-informed and an adaptive Bayesian estimation strategy and apply them in real time to a semiconductor spin qubit. The physics-informed strategy propagates a probability distribution
+
+[2604.16895v1] Physics-Informed Tracking (PIT)
+  2026-04-18 | cs.CV,cs.AI | Emil Hovad, Allan Peter Engsig-Karup
+  We propose Physics-Informed Tracking (PIT), a video-based framework for tracking a single particle from video, where a neural network autoencoder localizes a particle as a heatmap peak (landmark) and a differentiable physics module embedded in the autoencoder constrains several landmarks over time (a trajectory) to satisfy known dynamics. The novel Physics-Informed Landmark Loss (PILL) compares th
+
+[2307.15243v1] TROPHY: A Topologically Robust Physics-Informed Tracking Framework for Tropical Cyclones
+  2023-07-28 | physics.ao-ph,cs.CV | Lin Yan, Hanqi Guo, Thomas Peterka
+  Tropical cyclones (TCs) are among the most destructive weather systems. Realistically and efficiently detecting and tracking TCs are critical for assessing their impacts and risks. Recently, a multilevel robustness framework has been introduced to study the critical points of time-varying vector fields. The framework quantifies the robustness of critical points across varying neighborhoods. By rel
+
+[2511.23405v1] MANTA: Physics-Informed Generalized Underwater Object Tracking
+  2025-11-28 | cs.CV | Suhas Srinath, Hemang Jamadagni, Aditya Chadrasekar
+  Underwater object tracking is challenging due to wavelength dependent attenuation and scattering, which severely distort appearance across depths and water conditions. Existing trackers trained on terrestrial data fail to generalize to these physics-driven degradations. We present MANTA, a physics-informed framework integrating representation learning with tracking design for underwater scenarios.
+
+[2604.25310v1] Rapid tracking through strongly scattering media with physics-informed neuromorphic speckle analysis
+  2026-04-28 | cs.CV,eess.IV | Yuqing Cao, Shuo Zhu, Rongzhou Chen
+  This work addresses the critical problem of tracking fast-moving objects through strongly scattering media in a low-light environment. Different from existing approaches that use frame-based cameras with fixed exposure times, which trade off signal-to-noise ratio for temporal resolution, we introduce computational neuromorphic tracking (CNT), a physics-informed framework that combines asynchronous
+
+[2505.01569v1] Physics-informed Learning for Passivity-based Tracking Control
+  2025-05-02 | eess.SY | Thomas Beckers, Leonardo Colombo
+  Passivity-based control ensures system stability by leveraging dissipative properties and is widely applied in electrical and mechanical systems. Port-Hamiltonian systems (PHS), in particular, are well-suited for interconnection and damping assignment passivity-based control (IDA-PBC) due to their structured, energy-centric modeling approach. However, current IDA-PBC faces two key challenges: (i) 
+
+[2509.21123v1] Physics Informed Neural Networks for design optimisation of diamond particle detectors for charged particle fast-tracking at high luminosity hadron colliders
+  2025-09-25 | physics.ins-det,cs.LG,hep-ex,physics.comp-ph | Alessandro Bombini, Alessandro Rosa, Clarissa Buti
+  Future high-luminosity hadron colliders demand tracking detectors with extreme radiation tolerance, high spatial precision, and sub-nanosecond timing. 3D diamond pixel sensors offer these capabilities due to diamond's radiation hardness and high carrier mobility. Conductive electrodes, produced via femtosecond IR laser pulses, exhibit high resistivity that delays signal propagation. This effect ne
+
+[2210.04849v1] Reconstructing velocity and pressure from sparse noisy particle tracks using Physics-Informed Neural Networks
+  2022-10-10 | physics.flu-dyn | Patricio Clark Di Leoni, Karuna Agarwal, Tamer Zaki
+  Volume-resolving imaging techniques are rapidly advancing progress in experimental fluid mechanics. However, reconstructing the full and structured Eulerian velocity and pressure fields from sparse and noisy particle tracks obtained experimentally remains a significant challenge. We introduce a new method for this reconstruction, based on Physics-Informed Neural Networks (PINNs). The method uses a
+

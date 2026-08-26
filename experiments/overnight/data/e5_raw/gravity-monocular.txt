@@ -1,0 +1,28 @@
+[2108.08844v1] Gravity-Aware Monocular 3D Human-Object Reconstruction
+  2021-08-19 | cs.CV | Rishabh Dabral, Soshi Shimada, Arjun Jain
+  This paper proposes GraviCap, i.e., a new approach for joint markerless 3D human motion capture and object trajectory estimation from monocular RGB videos. We focus on scenes with objects partially observed during a free flight. In contrast to existing monocular methods, we can recover scale, object trajectories as well as human bone lengths in meters and the ground plane's orientation, thanks to 
+
+[2603.26740v1] Motion as a Sensing Modality for Metric Scale in Monocular Visual-Inertial Odometry
+  2026-03-22 | cs.RO | Hadush Hailu, Bruk Gebregziabher
+  Monocular visual-inertial odometry (VIO) cannot recover metric scale from vision alone; scale must be resolved through inertial measurements. We present a trajectory-dependent observability analysis showing that translational acceleration, produced by curvature, not constant-speed straight-line travel, is the fundamental source that couples scale to the inertial state. This relationship is formali
+
+[1610.05949v2] Visual-Inertial Monocular SLAM with Map Reuse
+  2016-10-19 | cs.RO,cs.CV | Raul Mur-Artal, Juan D. Tardos
+  In recent years there have been excellent results in Visual-Inertial Odometry techniques, which aim to compute the incremental motion of the sensor with high accuracy and robustness. However these approaches lack the capability to close loops, and trajectory estimation accumulates drift even if the sensor is continually revisiting the same place. In this work we present a novel tightly-coupled Vis
+
+[2511.20496v3] Metric, inertially aligned monocular state estimation via kinetodynamic priors
+  2025-11-25 | cs.RO | Jiaxin Liu, Min Li, Wanting Xu
+  Accurate state estimation for flexible robotic systems poses significant challenges, particularly for platforms with dynamically deforming structures that invalidate rigid-body assumptions. This paper addresses this problem and enables the extension of existing rigid-body pose estimation methods to non-rigid systems. Our approach integrates two core components: first, we capture elastic properties
+
+[2204.09171v2] Learned Monocular Depth Priors in Visual-Inertial Initialization
+  2022-04-20 | cs.RO,cs.CV | Yunwen Zhou, Abhishek Kar, Eric Turner
+  Visual-inertial odometry (VIO) is the pose estimation backbone for most AR/VR and autonomous robotic systems today, in both academia and industry. However, these systems are highly sensitive to the initialization of key parameters such as sensor biases, gravity direction, and metric scale. In practical scenarios where high-parallax or variable acceleration assumptions are rarely met (e.g. hovering
+
+[1909.02211v2] Gravity as a Reference for Estimating a Person's Height from Video
+  2019-09-05 | cs.CV | Didier Bieler, Semih Günel, Pascal Fua
+  Estimating the metric height of a person from monocular imagery without additional assumptions is ill-posed. Existing solutions either require manual calibration of ground plane and camera geometry, special cameras, or reference objects of known size. We focus on motion cues and exploit gravity on earth as an omnipresent reference 'object' to translate acceleration, and subsequently height, measur
+
+[2601.19526v1] A Non-Invasive 3D Gait Analysis Framework for Quantifying Psychomotor Retardation in Major Depressive Disorder
+  2026-01-27 | cs.CV | Fouad Boutaleb, Emery Pierson, Mohamed Daoudi
+  Predicting the status of Major Depressive Disorder (MDD) from objective, non-invasive methods is an active research field. Yet, extracting automatically objective, interpretable features for a detailed analysis of the patient state remains largely unexplored. Among MDD's symptoms, Psychomotor retardation (PMR) is a core item, yet its clinical assessment remains largely subjective. While 3D motion 
+

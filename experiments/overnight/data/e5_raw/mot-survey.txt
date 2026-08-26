@@ -1,0 +1,16 @@
+[2209.04796v2] In Pursuit of Many: A Review of Modern Multiple Object Tracking Systems
+  2022-09-11 | cs.CV | Mk Bashar, Samia Islam, Kashifa Kawaakib Hussain
+  Multiple Object Tracking (MOT) is a core capability in modern computer vision, essential to autonomous driving, surveillance, sports analytics, robotics, and biomedical imaging. Persistent identity assignment across frames remains challenging in real scenes because of occlusion, dense crowds, appearance ambiguity, scale variation, camera motion, and identity switching. In this survey we synthesize
+
+[1907.12740v4] Deep Learning in Video Multi-Object Tracking: A Survey
+  2019-07-18 | cs.CV,cs.LG,stat.ML | Gioele Ciaparrone, Francisco Luque Sánchez, Siham Tabik
+  The problem of Multiple Object Tracking (MOT) consists in following the trajectory of different objects in a sequence, usually a video. In recent years, with the rise of Deep Learning, the algorithms that provide a solution to this problem have benefited from the representational power of deep models. This paper provides a comprehensive survey on works that employ Deep Learning models to solve the
+
+[2408.11571v2] CHOTA: A Higher Order Accuracy Metric for Cell Tracking
+  2024-08-21 | cs.CV | Timo Kaiser, Vladimir Ulman, Bodo Rosenhahn
+  The evaluation of cell tracking results steers the development of tracking methods, significantly impacting biomedical research. This is quantitatively achieved by means of evaluation metrics. Unfortunately, current metrics favor local correctness and weakly reward global coherence, impeding high-level biological analysis. To also foster global coherence, we propose the CHOTA metric (Cell-specific
+
+[1804.06748v3] State-Space Abstractions for Probabilistic Inference: A Systematic Review
+  2018-04-18 | cs.AI | Stefan Lüdtke, Max Schröder, Frank Krüger
+  Tasks such as social network analysis, human behavior recognition, or modeling biochemical reactions, can be solved elegantly by using the probabilistic inference framework. However, standard probabilistic inference algorithms work at a propositional level, and thus cannot capture the symmetries and redundancies that are present in these tasks. Algorithms that exploit those symmetries have been de
+

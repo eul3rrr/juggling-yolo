@@ -1,0 +1,40 @@
+[2607.15129v1] Catch, Throw, Repeat: Planning for Human-Robot Partner Juggling
+  2026-07-16 | cs.RO,cs.HC,eess.SY | Jonathan Rainer Lippert, Kai Ploeger, Abir Chowdhury
+  Dynamic object exchange between humans and robots remains a challenging problem due to uncertainty in perception, timing, and contact-rich interaction. Human-robot juggling represents a particularly demanding instance of this problem, requiring precise real-time coordination, predictive motion planning with feedback control, and robustness to variability in human motion. Enabling such skills is of
+
+[2102.10421v2] Robotic Contact Juggling
+  2021-02-20 | cs.RO | J. Zachary Woodruff, Kevin M. Lynch
+  We define "robotic contact juggling" to be the purposeful control of the motion of a three-dimensional smooth object as it rolls freely on a motion-controlled robot manipulator, or "hand." While specific examples of robotic contact juggling have been studied before, in this paper we provide the first general formulation and solution method for the case of an arbitrary smooth object in single-point
+
+[2010.13483v3] High Acceleration Reinforcement Learning for Real-World Juggling with Binary Rewards
+  2020-10-26 | cs.RO,cs.LG,stat.ML | Kai Ploeger, Michael Lutter, Jan Peters
+  Robots that can learn in the physical world will be important to en-able robots to escape their stiff and pre-programmed movements. For dynamic high-acceleration tasks, such as juggling, learning in the real-world is particularly challenging as one must push the limits of the robot and its actuation without harming the system, amplifying the necessity of sample efficiency and safety for robot lear
+
+[2410.19591v1] Beyond the Cascade: Juggling Vanilla Siteswap Patterns
+  2024-10-25 | cs.RO,eess.SY | Mario Gomez Andreu, Kai Ploeger, Jan Peters
+  Being widespread in human motor behavior, dynamic movements demonstrate higher efficiency and greater capacity to address a broader range of skill domains compared to their quasi-static counterparts. Among the frequently studied dynamic manipulation problems, robotic juggling tasks stand out due to their inherent ability to scale their difficulty levels to arbitrary extents, making them an excelle
+
+[2207.01414v2] Controlling the Cascade: Kinematic Planning for N-ball Toss Juggling
+  2022-07-04 | cs.RO,eess.SY | Kai Ploeger, Jan Peters
+  Dynamic movements are ubiquitous in human motor behavior as they tend to be more efficient and can solve a broader range of skill domains than their quasi-static counterparts. For decades, robotic juggling tasks have been among the most frequently studied dynamic manipulation problems since the required dynamic dexterity can be scaled to arbitrarily high difficulty. However, successful approaches 
+
+[2606.06704v1] Optimal Control Approach for Non-prehensile Ball Juggling Using a 7-DoF Manipulator
+  2026-06-04 | cs.RO | Joel Ramadani, Vasilije Rakčević, Riddhiman Laha
+  Non-prehensile object manipulation skills are important for real-world robot interactions, enabling highly dynamic tasks such as balancing a glass on a tray or the controlled sliding of items on a table. Among such tasks, those characterised by high-speed manipulation requirements and general sensitivity of the resulting hybrid dynamics are particularly hard to accomplish. Within these, juggling c
+
+[2606.16978v1] Task-Error Residual Learning for Real-Robot Five-Ball Juggling
+  2026-06-15 | cs.RO,cs.LG,eess.SY | Kai Ploeger, Jan Peters
+  For residual learning that refines existing behavior, sample efficiency depends on two things: how much information each rollout returns, and how efficiently the learner uses that information. Reinforcement learning's standard scalar reward carries far less information than the directional task error that defines the task. Random exploration further discards whatever information each rollout retur
+
+[2509.24892v2] JuggleRL: Mastering Ball Juggling with a Quadrotor via Deep Reinforcement Learning
+  2025-09-29 | cs.RO | Shilong Ji, Yinuo Chen, Chuqi Wang
+  Aerial robots interacting with objects must perform precise, contact-rich maneuvers under uncertainty. In this paper, we study the problem of aerial ball juggling using a quadrotor equipped with a racket, a task that demands accurate timing, stable control, and continuous adaptation. We propose JuggleRL, the first reinforcement learning-based system for aerial juggling. It learns closed-loop polic
+
+[1910.13584v1] A Tunably Compliant Origami Mechanism for Dynamically Dexterous Robots
+  2019-10-29 | cs.RO | Wei-Hsi Chen, Shivangi Misra, Yuchong Gao
+  We present an approach to overcoming challenges in dynamical dexterity for robots through tunable origami structures. Our work leverages a one-parameter family of flat sheet crease patterns that folds into origami bellows, whose axial compliance can be tuned to select desired stiffness. Concentrically arranged cylinder pairs reliably manifest additive stiffness, extending the tunable range by near
+
+[2110.01123v4] Hybrid Event Shaping to Stabilize Periodic Hybrid Orbits
+  2021-10-03 | cs.RO | James Zhu, Nathan J. Kong, George Council
+  Many controllers for legged robotic systems leverage open- or closed-loop control at discrete hybrid events to enhance stability. These controllers appear in several well studied phenomena such as the Raibert stepping controller, paddle juggling and swing leg retraction. This work introduces hybrid event shaping (HES): a generalized method for analyzing and producing stable hybrid event controller
+

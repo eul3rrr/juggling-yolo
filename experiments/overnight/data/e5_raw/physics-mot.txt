@@ -1,0 +1,48 @@
+[2403.10826v2] MambaMOT: State-Space Model as Motion Predictor for Multi-Object Tracking
+  2024-03-16 | cs.CV | Hsiang-Wei Huang, Cheng-Yen Yang, Wenhao Chai
+  In the field of multi-object tracking (MOT), traditional methods often rely on the Kalman filter for motion prediction, leveraging its strengths in linear motion scenarios. However, the inherent limitations of these methods become evident when confronted with complex, nonlinear motions and occlusions prevalent in dynamic environments like sports and dance. This paper explores the possibilities of 
+
+[2505.07254v2] Towards Accurate State Estimation: Motion Dynamics Kalman Filter for 3D Multi-Object Tracking
+  2025-05-12 | cs.CV,cs.RO | Mohamed Nagy, Naoufel Werghi, Bilal Hassan
+  Precise 3D state estimation in multi-object tracking (MOT) is critical for self-driving cars, particularly for objects occluded. Motion modeling in the Kalman filter with a constant motion assumption is widely used in MOT methods, but it neglects the continuous changes in objects' motion caused by traffic in urban environments. Although recent research introduces a multimodel Kalman filter that in
+
+[2608.15688v1] Training-Free Long-Term Multi-Object Tracking for Sports Video Analytics
+  2026-08-16 | cs.CV | Tomasz Stanczyk, Seongro Yoon, Francois Bremond
+  Long-term multi-object tracking in sports remains challenging due to frequent occlusions, rapid camera motion, and repeated player reappearances. We introduce McByte++, a training-free tracking-by-detection framework that integrates lightweight mask propagation, conditional camera motion compensation, and online re-identification within a unified pipeline. Compared to its predecessor, McByte++ sub
+
+[2509.17323v1] DepTR-MOT: Unveiling the Potential of Depth-Informed Trajectory Refinement for Multi-Object Tracking
+  2025-09-22 | cs.CV,cs.RO,eess.IV | Buyin Deng, Lingxin Huang, Kai Luo
+  Visual Multi-Object Tracking (MOT) is a crucial component of robotic perception, yet existing Tracking-By-Detection (TBD) methods often rely on 2D cues, such as bounding boxes and motion modeling, which struggle under occlusions and close-proximity interactions. Trackers relying on these 2D cues are particularly unreliable in robotic environments, where dense targets and frequent occlusions are co
+
+[2502.17822v3] Easy-Poly: An Easy Polyhedral Framework For 3D Multi-Object Tracking
+  2025-02-25 | cs.CV | Peng Zhang, Xin Li, Xin Lin
+  Recent 3D multi-object tracking (3D MOT) methods mainly follow tracking-by-detection pipelines, but often suffer from high false positives, missed detections, and identity switches, especially in crowded and small-object scenarios. To address these challenges, we propose Easy-Poly, a filter-based 3D MOT framework with four key innovations: (1) CNMSMM, a novel Camera-LiDAR fusion detection method c
+
+[2607.17120v1] The generator is the tracker: Multi-object tracking by painting persistent identity colours
+  2026-07-19 | cs.CV | Haiyu Yang, Miel Hostens
+  Multi-object tracking (MOT) is conventionally decomposed into detection followed by association, with object identity maintained as external state: track buffers, motion models, and appearance embeddings. We ask whether a video generator can maintain that state in pixels. We fine-tune a 22B text-to-video diffusion model (LTX-2.3) with a lightweight in-context LoRA to translate an RGB clip into an 
+
+[2510.17860v1] DMTrack: Deformable State-Space Modeling for UAV Multi-Object Tracking with Kalman Fusion and Uncertainty-Aware Association
+  2025-10-15 | eess.SY,cs.CV | Zenghuang Fu, Xiaofeng Han, Mingda Jia
+  Multi-object tracking (MOT) from unmanned aerial vehicles (UAVs) presents unique challenges due to unpredictable object motion, frequent occlusions, and limited appearance cues inherent to aerial viewpoints. These issues are further exacerbated by abrupt UAV movements, leading to unreliable trajectory estimation and identity switches. Conventional motion models, such as Kalman filters or static se
+
+[2508.05514v1] Head Anchor Enhanced Detection and Association for Crowded Pedestrian Tracking
+  2025-08-07 | cs.CV | Zewei Wu, César Teixeira, Wei Ke
+  Visual pedestrian tracking represents a promising research field, with extensive applications in intelligent surveillance, behavior analysis, and human-computer interaction. However, real-world applications face significant occlusion challenges. When multiple pedestrians interact or overlap, the loss of target features severely compromises the tracker's ability to maintain stable trajectories. Tra
+
+[2402.12968v1] MapTrack: Tracking in the Map
+  2024-02-20 | cs.CV | Fei Wang, Ruohui Zhang, Chenglin Chen
+  Multi-Object Tracking (MOT) aims to maintain stable and uninterrupted trajectories for each target. Most state-of-the-art approaches first detect objects in each frame and then implement data association between new detections and existing tracks using motion models and appearance similarities. Despite achieving satisfactory results, occlusion and crowds can easily lead to missing and distorted de
+
+[2408.09178v1] MambaTrack: A Simple Baseline for Multiple Object Tracking with State Space Model
+  2024-08-17 | cs.CV | Changcheng Xiao, Qiong Cao, Zhigang Luo
+  Tracking by detection has been the prevailing paradigm in the field of Multi-object Tracking (MOT). These methods typically rely on the Kalman Filter to estimate the future locations of objects, assuming linear object motion. However, they fall short when tracking objects exhibiting nonlinear and diverse motion in scenarios like dancing and sports. In addition, there has been limited focus on util
+
+[2508.09796v1] MeMoSORT: Memory-Assisted Filtering and Motion-Adaptive Association Metric for Multi-Person Tracking
+  2025-08-13 | cs.CV | Yingjie Wang, Zhixing Wang, Le Zheng
+  Multi-object tracking (MOT) in human-dominant scenarios, which involves continuously tracking multiple people within video sequences, remains a significant challenge in computer vision due to targets' complex motion and severe occlusions. Conventional tracking-by-detection methods are fundamentally limited by their reliance on Kalman filter (KF) and rigid Intersection over Union (IoU)-based associ
+
+[2510.19981v2] FutrTrack: A Camera-LiDAR Fusion Transformer for 3D Multiple Object Tracking
+  2025-10-22 | cs.CV | Martha Teiko Teye, Ori Maoz, Matthias Rottmann
+  We propose FutrTrack, a modular camera-LiDAR multi-object tracking framework that builds on existing 3D detectors by introducing a transformer-based smoother and a fusion-driven tracker. Inspired by query-based tracking frameworks, FutrTrack employs a multimodal two-stage transformer refinement and tracking pipeline. Our fusion tracker integrates bounding boxes with multimodal bird's-eye-view (BEV
+

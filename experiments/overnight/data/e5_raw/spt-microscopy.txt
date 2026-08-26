@@ -1,0 +1,12 @@
+[2001.07841v1] Simultaneous Localization and Parameter Estimation for Single Particle Tracking via Sigma Points based EM
+  2020-01-22 | q-bio.BM,math.OC | Ye Lin, Sean B. Andersson
+  Single Particle Tracking (SPT) is a powerful class of tools for analyzing the dynamics of individual biological macromolecules moving inside living cells. The acquired data is typically in the form of a sequence of camera images that are then post-processed to reveal details about the motion. In this work, we develop an algorithm for jointly estimating both particle trajectory and motion model par
+
+[2507.05599v3] How Easy Is It to Learn Motion Models from Widefield Fluorescence Single Particle Tracks?
+  2025-07-08 | physics.bio-ph,physics.data-an | Zachary H. Hendrix, Lance W. Q. Xu, Steve Pressé
+  Motion models (i.e., transition probability densities) are often deduced from fluorescence widefield tracking experiments by analyzing single-particle trajectories post-processed from data. This analysis immediately raises the question: To what degree is our ability to learn motion models impacted by analyzing post-processed trajectories versus raw measurements? To answer this question, we mathema
+
+[2608.07975v1] Turning angle analysis reveals hidden anisotropies in the anomalous diffusion of molecules in live cells
+  2026-08-08 | cond-mat.stat-mech,math.PR,physics.data-an | Michał Balcerek, Adrian Pacheco-Pozo, Agnieszka Wyłomańska
+  Molecular motion within living cells provides a window into the physical principles underlying intracellular organization and transport. Yet a fundamental limitation remains: measured trajectories are often short, noisy, and randomly oriented, rendering spatial anisotropies inaccessible to conventional analyses. We show that turning-angle statistics provide a robust approach for uncovering anisotr
+

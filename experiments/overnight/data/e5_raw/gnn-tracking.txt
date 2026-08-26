@@ -1,0 +1,48 @@
+[2604.01696v1] A Graph Neural Network Approach for Solving the Ranked Assignment Problem in Multi-Object Tracking
+  2026-04-02 | cs.RO | Robin Dehler, Martin Herrmann, Jan Strohbeck
+  Associating measurements with tracks is a crucial step in Multi-Object Tracking (MOT) to guarantee the safety of autonomous vehicles. To manage the exponentially growing number of track hypotheses, truncation becomes necessary. In the $δ$-Generalized Labeled Multi-Bernoulli ($δ$-GLMB) filter application, this truncation typically involves the ranked assignment problem, solved by Murty's algorithm 
+
+[2008.09506v1] Graph Neural Networks for 3D Multi-Object Tracking
+  2020-08-20 | cs.CV,cs.LG,cs.MA,cs.MM,cs.RO | Xinshuo Weng, Yongxin Wang, Yunze Man
+  3D Multi-object tracking (MOT) is crucial to autonomous systems. Recent work often uses a tracking-by-detection pipeline, where the feature of each object is extracted independently to compute an affinity matrix. Then, the affinity matrix is passed to the Hungarian algorithm for data association. A key process of this pipeline is to learn discriminative features for different objects in order to r
+
+[2203.10926v2] 3D Multi-Object Tracking Using Graph Neural Networks with Cross-Edge Modality Attention
+  2022-03-21 | cs.CV,cs.LG,cs.RO | Martin Buchner, Abhinav Valada
+  Online 3D multi-object tracking (MOT) has witnessed significant research interest in recent years, largely driven by demand from the autonomous systems community. However, 3D offline MOT is relatively less explored. Labeling 3D trajectory scene data at a large scale while not relying on high-cost human experts is still an open research question. In this work, we propose Batch3DMOT which follows th
+
+[2006.07327v1] GNN3DMOT: Graph Neural Network for 3D Multi-Object Tracking with Multi-Feature Learning
+  2020-06-12 | cs.CV,cs.LG,eess.IV | Xinshuo Weng, Yongxin Wang, Yunze Man
+  3D Multi-object tracking (MOT) is crucial to autonomous systems. Recent work uses a standard tracking-by-detection pipeline, where feature extraction is first performed independently for each object in order to compute an affinity matrix. Then the affinity matrix is passed to the Hungarian algorithm for data association. A key process of this standard pipeline is to learn discriminative features f
+
+[2606.05587v1] HDST-GNN: Heterogeneous Dynamic Spatiotemporal Graph Neural Networks for Multi-Object Tracking in UAV Aerial Imagery
+  2026-06-04 | cs.CV,cs.AI,cs.LG | Phillip Jiang
+  Multi-object tracking (MOT) from UAV imagery presents unique challenges: altitude varies across sequences, objects are small and densely packed, and frequent occlusion causes identity switches. Existing graph-based trackers assume fixed spatial context and treat all objects uniformly, ignoring the heterogeneous lifecycle states of detections, active tracklets, and lost targets. We propose HDST-GNN
+
+[2006.13164v3] Joint Object Detection and Multi-Object Tracking with Graph Neural Networks
+  2020-06-23 | cs.CV,cs.LG,cs.MA,cs.RO | Yongxin Wang, Kris Kitani, Xinshuo Weng
+  Object detection and data association are critical components in multi-object tracking (MOT) systems. Despite the fact that the two components are dependent on each other, prior works often design detection and data association modules separately which are trained with separate objectives. As a result, one cannot back-propagate the gradients and optimize the entire MOT system, which leads to sub-o
+
+[2206.13785v1] 3D Multi-Object Tracking with Differentiable Pose Estimation
+  2022-06-28 | cs.CV | Dominik Schmauser, Zeju Qiu, Norman Müller
+  We propose a novel approach for joint 3D multi-object tracking and reconstruction from RGB-D sequences in indoor environments. To this end, we detect and reconstruct objects in each frame while predicting dense correspondences mappings into a normalized object space. We leverage those correspondences to inform a graph neural network to solve for the optimal, temporally-consistent 7-DoF pose trajec
+
+[2509.02111v2] NOOUGAT: Towards Unified Online and Offline Multi-Object Tracking
+  2025-09-02 | cs.CV | Benjamin Missaoui, Orcun Cetintas, Guillem Brasó
+  The long-standing division between \textit{online} and \textit{offline} Multi-Object Tracking (MOT) has led to fragmented solutions that fail to address the flexible temporal requirements of real-world deployment scenarios. Current \textit{online} trackers rely on frame-by-frame hand-crafted association strategies and struggle with long-term occlusions, whereas \textit{offline} approaches can cove
+
+[2101.04206v4] TrackMPNN: A Message Passing Graph Neural Architecture for Multi-Object Tracking
+  2021-01-11 | cs.CV,cs.RO | Akshay Rangesh, Pranav Maheshwari, Mez Gebre
+  This study follows many classical approaches to multi-object tracking (MOT) that model the problem using dynamic graphical data structures, and adapts this formulation to make it amenable to modern neural networks. Our main contributions in this work are the creation of a framework based on dynamic undirected graphs that represent the data association problem over multiple timesteps, and a message
+
+[2008.11598v1] End-to-End 3D Multi-Object Tracking and Trajectory Forecasting
+  2020-08-25 | cs.CV,cs.LG,cs.MA,cs.RO | Xinshuo Weng, Ye Yuan, Kris Kitani
+  3D multi-object tracking (MOT) and trajectory forecasting are two critical components in modern 3D perception systems. We hypothesize that it is beneficial to unify both tasks under one framework to learn a shared feature representation of agent interaction. To evaluate this hypothesis, we propose a unified solution for 3D MOT and trajectory forecasting which also incorporates two additional novel
+
+[2208.01957v1] PolarMOT: How Far Can Geometric Relations Take Us in 3D Multi-Object Tracking?
+  2022-08-03 | cs.CV,cs.LG | Aleksandr Kim, Guillem Brasó, Aljoša Ošep
+  Most (3D) multi-object tracking methods rely on appearance-based cues for data association. By contrast, we investigate how far we can get by only encoding geometric relationships between objects in 3D space as cues for data-driven data association. We encode 3D detections as nodes in a graph, where spatial and temporal pairwise relations among objects are encoded via localized polar coordinates o
+
+[2003.07847v2] PTP: Parallelized Tracking and Prediction with Graph Neural Networks and Diversity Sampling
+  2020-03-17 | cs.CV,cs.LG,cs.RO | Xinshuo Weng, Ye Yuan, Kris Kitani
+  Multi-object tracking (MOT) and trajectory prediction are two critical components in modern 3D perception systems that require accurate modeling of multi-agent interaction. We hypothesize that it is beneficial to unify both tasks under one framework in order to learn a shared feature representation of agent interaction. Furthermore, instead of performing tracking and prediction sequentially which 
+

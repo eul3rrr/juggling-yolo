@@ -1,0 +1,12 @@
+[2607.09829v1] Tracking Intermittent Particles with Self-Learned Visual Features
+  2026-07-10 | eess.IV,cs.CV | Raphael Reme, Victor Piriou, Alison Hanson
+  In time-lapse fluorescence imaging, single-particle-tracking is a powerful tool to monitor the dynamics of objects of interest, and extract information about biological processes. However, tracked particles can be subject to occlusion and intermittent detectability. When these phenomena persist over a few frames, tracking algorithms tend to produce multiple tracklets for the same particle. In this
+
+[2608.07579v1] Geometry Beats Estimated Depth: RGB-Only Multi-Camera 3D Tracking under Sim2Real
+  2026-08-04 | cs.CV,cs.AI | Abdullah Naeem, Anav Katwal, Ayon Dey
+  The AI City Challenge 2026 Track 1 evaluates multi-camera 3D perception in large indoor warehouses under a synthetic-to-real (Sim2Real) setting; depth is available only for training and validation, so inference is RGB-only. We use two RGB-only routes as a controlled test of one hypothesis: that cross-view geometric consistency, not monocular depth accuracy, governs performance under Sim2Real. The 
+
+[2607.08729v2] WaspMOT: A Benchmark for Long-Term Multi-Object Tracking of Trichogramma Wasps
+  2026-07-09 | cs.CV | Tomasz Stanczyk, Yuan Gao, Hardik Agarwal
+  Multi-object tracking (MOT) has achieved strong performance on benchmarks dominated by short video sequences. However, such datasets do not adequately evaluate long-term identity preservation, where objects must be tracked consistently over extended durations. We introduce WaspMOT, a benchmark designed to address this gap through long-duration tracking of Trichogramma wasps in controlled ecologica
+

@@ -1,0 +1,12 @@
+[2407.19436v1] X-Fake: Juggling Utility Evaluation and Explanation of Simulated SAR Images
+  2024-07-28 | cs.CV,eess.IV | Zhongling Huang, Yihan Zhuang, Zipei Zhong
+  SAR image simulation has attracted much attention due to its great potential to supplement the scarce training data for deep learning algorithms. Consequently, evaluating the quality of the simulated SAR image is crucial for practical applications. The current literature primarily uses image quality assessment techniques for evaluation that rely on human observers' perceptions. However, because of
+
+[2103.07348v1] Juggling With Representations: On the Information Transfer Between Imagery, Point Clouds, and Meshes for Multi-Modal Semantics
+  2021-03-12 | cs.CV | Dominik Laupheimer, Norbert Haala
+  The automatic semantic segmentation of the huge amount of acquired remote sensing data has become an important task in the last decade. Images and Point Clouds (PCs) are fundamental data representations, particularly in urban mapping applications. Textured 3D meshes integrate both data representations geometrically by wiring the PC and texturing the surface elements with available imagery. We pres
+
+[1901.03162v2] Motion Perception in Reinforcement Learning with Dynamic Objects
+  2019-01-10 | cs.LG,cs.AI,cs.CV,stat.ML | Artemij Amiranashvili, Alexey Dosovitskiy, Vladlen Koltun
+  In dynamic environments, learned controllers are supposed to take motion into account when selecting the action to be taken. However, in existing reinforcement learning works motion is rarely treated explicitly; it is rather assumed that the controller learns the necessary motion representation from temporal stacks of frames implicitly. In this paper, we show that for continuous control tasks lear
+

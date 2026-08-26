@@ -1,0 +1,8 @@
+[2311.04749v1] Online Min Cost Circulation for Multi-Object Tracking on Fragments
+  2023-11-08 | cs.DS | Yanbing Wang, Junyi Ji, William Barbour
+  Multi-object tracking (MOT) or global data association problem is commonly approached as a minimum-cost-flow or minimum-cost-circulation problem on a graph. While there have been numerous studies aimed at enhancing algorithm efficiency, most of them focus on the batch problem, where all the data must be available simultaneously to construct a static graph. However, with the growing number of appli
+
+[1911.00796v2] Efficient Global Multi-object Tracking Under Minimum-cost Circulation Framework
+  2019-11-02 | cs.CV | Congchao Wang, Yizhi Wang, Guoqiang Yu
+  We developed a minimum-cost circulation framework for solving the global data association problem, which plays a key role in the tracking-by-detection paradigm of multi-object tracking. The global data association problem was extensively studied under the minimum-cost flow framework, which is theoretically attractive as being flexible and globally solvable. However, the high computational burden h
+

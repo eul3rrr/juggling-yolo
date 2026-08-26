@@ -1,0 +1,16 @@
+[2512.04883v2] SDG-Track: A Heterogeneous Observer-Follower Framework for High-Resolution UAV Tracking on Embedded Platforms
+  2025-12-04 | cs.CV | Jiawen Wen, Yu Hu, Suixuan Qiu
+  Real-time tracking of small unmanned aerial vehicles (UAVs) on edge devices faces a fundamental resolution-speed conflict. Downsampling high-resolution imagery to standard detector input sizes causes small target features to collapse below detectable thresholds. Yet processing native 1080p frames on resource-constrained platforms yields insufficient throughput for smooth gimbal control. We propose
+
+[2607.01556v1] Mind the Gap: Standard 3DGS Evaluation Primarily Measures Near-Trajectory Interpolation
+  2026-07-02 | cs.CV | Gaoxiang Jia, Vikram Appia
+  Standard MipNeRF360-style 3D Gaussian Splatting (3DGS) evaluation holds out every N-th frame -- but these frames have trained neighbors on both sides, so the metric measures near-trajectory interpolation rather than spatial generalization. We introduce a fair matched-count protocol that isolates this effect: both arms train on the same number of images and differ only in whether the holdout is spr
+
+[2512.05808v1] Real-time Remote Tracking and Autonomous Planning for Whale Rendezvous using Robots
+  2025-12-05 | cs.RO | Sushmita Bhattacharya, Ninad Jadhav, Hammad Izhar
+  We introduce a system for real-time sperm whale rendezvous at sea using an autonomous uncrewed aerial vehicle. Our system employs model-based reinforcement learning that combines in situ sensor data with an empirical whale dive model to guide navigation decisions. Key challenges include (i) real-time acoustic tracking in the presence of multiple whales, (ii) distributed communication and decision-
+
+[1912.04458v1] A Dynamic Motion Planning Framework for Autonomous Driving in Urban Environments
+  2019-12-10 | eess.SY | Yuncheng Jiang, Xiaofeng Jin, Yanfei Xiong
+  Abstract: we present a framework for robust autonomous driving motion planning system in urban environments which includes trajectory refinement, trajectory interpolation, avoidance of static and dynamic obstacles, and trajectory tracking. Given road centerline, our approach smoother the original line via cubic spline. Fifth order Bezier curve is then used to generate more human-like trajectories 
+

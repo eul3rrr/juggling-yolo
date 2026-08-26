@@ -1,0 +1,32 @@
+[1907.03698v1] TrackNet: A Deep Learning Network for Tracking High-speed and Tiny Objects in Sports Applications
+  2019-07-08 | cs.LG,cs.CV,cs.MM,stat.ML | Yu-Chuan Huang, I-No Liao, Ching-Hsuan Chen
+  Ball trajectory data are one of the most fundamental and useful information in the evaluation of players' performance and analysis of game strategies. Although vision-based object tracking techniques have been developed to analyze sport competition videos, it is still challenging to recognize and position a high-speed and tiny ball accurately. In this paper, we develop a deep learning network, cal
+
+[2205.13857v1] TrackNet: A Triplet metric-based method for Multi-Target Multi-Camera Vehicle Tracking
+  2022-05-27 | cs.CV | David Serrano, Francesc Net, Juan Antonio Rodríguez
+  We present TrackNet, a method for Multi-Target Multi-Camera (MTMC) vehicle tracking from traffic video sequences. Cross-camera vehicle tracking has proved to be a challenging task due to perspective, scale and speed variance, as well occlusions and noise conditions. Our method is based on a modular approach that first detects vehicles frame-by-frame using Faster R-CNN, then tracks detections throu
+
+[1902.01466v1] TrackNet: Simultaneous Object Detection and Tracking and Its Application in Traffic Video Analysis
+  2019-02-04 | cs.CV | Chenge Li, Gregory Dobler, Xin Feng
+  Object detection and object tracking are usually treated as two separate processes. Significant progress has been made for object detection in 2D images using deep learning networks. The usual tracking-by-detection pipeline for object tracking requires that the object is successfully detected in the first frame and all subsequent frames, and tracking is done by associating detection results. Perfo
+
+[2409.14543v1] TrackNetV4: Enhancing Fast Sports Object Tracking with Motion Attention Maps
+  2024-09-22 | cs.CV,cs.AI,cs.LG | Arjun Raj, Lei Wang, Tom Gedeon
+  Accurately detecting and tracking high-speed, small objects, such as balls in sports videos, is challenging due to factors like motion blur and occlusion. Although recent deep learning frameworks like TrackNetV1, V2, and V3 have advanced tennis ball and shuttlecock tracking, they often struggle in scenarios with partial occlusion or low visibility. This is primarily because these models rely heavi
+
+[2308.12645v2] An All Deep System for Badminton Game Analysis
+  2023-08-24 | cs.CV | Po-Yung Chou, Yu-Chun Lo, Bo-Zheng Xie
+  The CoachAI Badminton 2023 Track1 initiative aim to automatically detect events within badminton match videos. Detecting small objects, especially the shuttlecock, is of quite importance and demands high precision within the challenge. Such detection is crucial for tasks like hit count, hitting time, and hitting location. However, even after revising the well-regarded shuttlecock detecting model, 
+
+[2512.02789v4] TrackNetV5: Residual-Driven Spatio-Temporal Refinement and Motion Direction Decoupling for Fast Object Tracking
+  2025-12-02 | cs.CV | Haonan Tang, Yanjun Chen, Lezhi Jiang
+  The TrackNet series has established a strong baseline for fast-moving small object tracking in sports. However, existing iterations face significant limitations: V1-V3 struggle with occlusions due to a reliance on purely visual cues, while TrackNetV4, despite introducing motion inputs, suffers from directional ambiguity as its absolute difference method discards motion polarity. To overcome these 
+
+[2105.14391v2] Data-driven 6D Pose Tracking by Calibrating Image Residuals in Synthetic Domains
+  2021-05-29 | cs.CV,cs.RO | Bowen Wen, Chaitanya Mitash, Kostas Bekris
+  Tracking the 6D pose of objects in video sequences is important for robot manipulation. This work presents se(3)-TrackNet, a data-driven optimization approach for long term, 6D pose tracking. It aims to identify the optimal relative pose given the current RGB-D observation and a synthetic image conditioned on the previous best estimate and the object's model. The key contribution in this context i
+
+[2007.13866v1] se(3)-TrackNet: Data-driven 6D Pose Tracking by Calibrating Image Residuals in Synthetic Domains
+  2020-07-27 | cs.CV,cs.GR,cs.LG,cs.RO,eess.IV | Bowen Wen, Chaitanya Mitash, Baozhang Ren
+  Tracking the 6D pose of objects in video sequences is important for robot manipulation. This task, however, introduces multiple challenges: (i) robot manipulation involves significant occlusions; (ii) data and annotations are troublesome and difficult to collect for 6D poses, which complicates machine learning solutions, and (iii) incremental error drift often accumulates in long term tracking to 
+

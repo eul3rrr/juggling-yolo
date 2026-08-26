@@ -1,0 +1,48 @@
+[2511.04126v1] Automated Tennis Player and Ball Tracking with Court Keypoints Detection (Hawk Eye System)
+  2025-11-06 | cs.CV,cs.AI | Venkata Manikanta Desu, Syed Fawaz Ali
+  This study presents a complete pipeline for automated tennis match analysis. Our framework integrates multiple deep learning models to detect and track players and the tennis ball in real time, while also identifying court keypoints for spatial reference. Using YOLOv8 for player detection, a custom-trained YOLOv5 model for ball tracking, and a ResNet50-based architecture for court keypoint detecti
+
+[2504.10035v2] TT3D: Table Tennis 3D Reconstruction
+  2025-04-14 | cs.CV | Thomas Gossard, Andreas Ziegler, Andreas Zell
+  Sports analysis requires processing large amounts of data, which is time-consuming and costly. Advancements in neural networks have significantly alleviated this burden, enabling highly accurate ball tracking in sports broadcasts. However, relying solely on 2D ball tracking is limiting, as it depends on the camera's viewpoint and falls short of supporting comprehensive game analysis. To address th
+
+[2509.18387v3] BlurBall: Joint Ball and Motion Blur Estimation for Table Tennis Ball Tracking
+  2025-09-22 | cs.CV | Thomas Gossard, Filip Radovic, Andreas Ziegler
+  Motion blur reduces the clarity of fast-moving objects, posing challenges for detection systems, especially in racket sports, where balls often appear as streaks rather than distinct points. Existing labeling conventions mark the ball at the leading edge of the blur, introducing asymmetry and ignoring valuable motion cues correlated with velocity. This paper introduces a new labeling strategy that
+
+[2209.09987v1] MARIO: Modular and Extensible Architecture for Computing Visual Statistics in RoboCup SPL
+  2022-09-20 | cs.CV | Domenico D. Bloisi, Andrea Pennisi, Cristian Zampino
+  This technical report describes a modular and extensible architecture for computing visual statistics in RoboCup SPL (MARIO), presented during the SPL Open Research Challenge at RoboCup 2022, held in Bangkok (Thailand). MARIO is an open-source, ready-to-use software application whose final goal is to contribute to the growth of the RoboCup SPL community. MARIO comes with a GUI that integrates mult
+
+[1410.3970v1] Shape and Color Object Tracking for Real-Time Robotic Navigation
+  2014-10-15 | cs.CV | Haythem Ghazouani
+  This paper presents a real-time approach for single-colored ball detection and tracking. The approach consists of two main phases. In a first offline calibration phase, the intrinsic parameters of the camera and the radial distortion are estimated, and a classification of colors is learned from a sample image of colored balls. The second phase consists of four main steps: (1) color segmentation of
+
+[2506.07981v1] Real-time Localization of a Soccer Ball from a Single Camera
+  2025-06-09 | cs.CV,cs.LG | Dmitrii Vorobev, Artem Prosvetov, Karim Elhadji Daou
+  We propose a computationally efficient method for real-time three-dimensional football trajectory reconstruction from a single broadcast camera. In contrast to previous work, our approach introduces a multi-mode state model with $W$ discrete modes to significantly accelerate optimization while preserving centimeter-level accuracy -- even in cases of severe occlusion, motion blur, and complex backg
+
+[2308.16651v1] SoccerNet 2023 Tracking Challenge -- 3rd place MOT4MOT Team Technical Report
+  2023-08-31 | cs.CV | Gal Shitrit, Ishay Be'ery, Ido Yerhushalmy
+  The SoccerNet 2023 tracking challenge requires the detection and tracking of soccer players and the ball. In this work, we present our approach to tackle these tasks separately. We employ a state-of-the-art online multi-object tracker and a contemporary object detector for player tracking. To overcome the limitations of our online approach, we incorporate a post-processing stage using interpolatio
+
+[2204.04143v1] Optical tracking in team sports
+  2022-04-08 | cs.CV,cs.AI | Pegah Rahimian, Laszlo Toka
+  Sports analysis has gained paramount importance for coaches, scouts, and fans. Recently, computer vision researchers have taken on the challenge of collecting the necessary data by proposing several methods of automatic player and ball tracking. Building on the gathered tracking data, data miners are able to perform quantitative analysis on the performance of players and teams. With this survey, o
+
+[2508.09650v1] TOTNet: Occlusion-Aware Temporal Tracking for Robust Ball Detection in Sports Videos
+  2025-08-13 | cs.CV | Hao Xu, Arbind Agrahari Baniya, Sam Wells
+  Robust ball tracking under occlusion remains a key challenge in sports video analysis, affecting tasks like event detection and officiating. We present TOTNet, a Temporal Occlusion Tracking Network that leverages 3D convolutions, visibility-weighted loss, and occlusion augmentation to improve performance under partial and full occlusions. Developed in collaboration with Paralympics Australia, TOTN
+
+[2511.17045v3] RacketVision: A Multiple Racket Sports Benchmark for Unified Ball and Racket Analysis
+  2025-11-21 | cs.CV,cs.AI,cs.MM | Linfeng Dong, Yuchen Yang, Hao Wu
+  We introduce RacketVision, a novel dataset and benchmark for advancing computer vision in sports analytics, covering table tennis, tennis, and badminton. The dataset is the first to provide large-scale, fine-grained annotations for racket pose alongside traditional ball positions, enabling research into complex human-object interactions. It is designed to tackle three interconnected tasks: fine-gr
+
+[1608.03793v2] Applying Deep Learning to Basketball Trajectories
+  2016-08-12 | cs.NE,cs.CV,cs.LG | Rajiv Shah, Rob Romijnders
+  One of the emerging trends for sports analytics is the growing use of player and ball tracking data. A parallel development is deep learning predictive approaches that use vast quantities of data with less reliance on feature engineering. This paper applies recurrent neural networks in the form of sequence modeling to predict whether a three-point shot is successful. The models are capable of lear
+
+[2101.03541v1] Heatmap-based Object Detection and Tracking with a Fully Convolutional Neural Network
+  2021-01-10 | cs.CV,cs.AI,cs.LG | Fabian Amherd, Elias Rodriguez
+  The main topic of this paper is a brief overview of the field of Artificial Intelligence. The core of this paper is a practical implementation of an algorithm for object detection and tracking. The ability to detect and track fast-moving objects is crucial for various applications of Artificial Intelligence like autonomous driving, ball tracking in sports, robotics or object counting. As part of t
+
