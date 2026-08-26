@@ -187,3 +187,22 @@ event logic, not error gates) are different regimes.
 Artifacts: scripts/e7a_hand_events.py, scripts/e7b_hand_rescue.py,
 data/e7a_hand_events.csv, data/e7b_hand_rescue.json, reports/e7a_report.md,
 reports/e7b_report.md.
+
+## 2026-08-26 09:15 — E9: physics/hand-aware tracklet filtering
+
+E9a census: tracklet dynamics (speed, displacement, gravity-mode fraction).
+Static background blobs cleanly identifiable (disp<15px, e.g. eggs tid48/41).
+
+E9b naive filter (static + non-ballistic demotion): WRONG - kills held-ball
+stubs (a held ball is static in image but is a real ball at a hand). Metrics
+dropped (19 links/tp10). Lesson: cannot separate background from HELD balls
+without hand context.
+
+E9c hand-aware classification (AIRBORNE >=10% g-mode windows; HELD if near
+wrist <110px; BACKGROUND static+far; SWEEP moving+far): identical-balls
+states 45 AIRBORNE / 27 HELD / 2 SWEEP / 2 BACKGROUND; demote only [16,32,48,49];
+global assignment UNCHANGED (31 links, tp20, fp0) - filter is free interpretability.
+YouTube: no demotions needed, results unchanged (17/3/0).
+
+Artifacts: scripts/e9a_tracklet_census.py, scripts/e9b_physics_filter.py,
+scripts/e9c_hand_aware_filter.py, data/e9b_filter.json, data/e9c_hand_aware.json.

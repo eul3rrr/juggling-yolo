@@ -1,0 +1,201 @@
+{
+  "identical_balls_trick_000_018": {
+    "n_demoted": 18,
+    "demoted": {
+      "11": "static",
+      "15": "dynamics(gfrac=0.00)",
+      "23": "static",
+      "27": "dynamics(gfrac=0.00)",
+      "34": "static",
+      "37": "static",
+      "38": "static",
+      "41": "static",
+      "42": "static",
+      "43": "static",
+      "47": "dynamics(gfrac=0.02)",
+      "48": "static",
+      "49": "static",
+      "51": "static",
+      "55": "static",
+      "56": "dynamics(gfrac=0.00)",
+      "75": "dynamics(gfrac=0.00)",
+      "76": "static"
+    },
+    "demote_hits": {
+      "wrong": [
+        [
+          15,
+          "dynamics(gfrac=0.00)"
+        ],
+        [
+          11,
+          "static"
+        ],
+        [
+          15,
+          "dynamics(gfrac=0.00)"
+        ],
+        [
+          27,
+          "dynamics(gfrac=0.00)"
+        ],
+        [
+          38,
+          "static"
+        ],
+        [
+          37,
+          "static"
+        ],
+        [
+          38,
+          "static"
+        ],
+        [
+          41,
+          "static"
+        ],
+        [
+          37,
+          "static"
+        ],
+        [
+          38,
+          "static"
+        ],
+        [
+          48,
+          "static"
+        ],
+        [
+          42,
+          "static"
+        ],
+        [
+          41,
+          "static"
+        ],
+        [
+          47,
+          "dynamics(gfrac=0.02)"
+        ],
+        [
+          56,
+          "dynamics(gfrac=0.00)"
+        ]
+      ],
+      "correct": [
+        [
+          11,
+          "static"
+        ],
+        [
+          11,
+          "static"
+        ],
+        [
+          15,
+          "dynamics(gfrac=0.00)"
+        ],
+        [
+          23,
+          "static"
+        ],
+        [
+          27,
+          "dynamics(gfrac=0.00)"
+        ],
+        [
+          34,
+          "static"
+        ],
+        [
+          37,
+          "static"
+        ],
+        [
+          37,
+          "static"
+        ],
+        [
+          38,
+          "static"
+        ],
+        [
+          47,
+          "dynamics(gfrac=0.02)"
+        ],
+        [
+          41,
+          "static"
+        ],
+        [
+          41,
+          "static"
+        ],
+        [
+          43,
+          "static"
+        ],
+        [
+          43,
+          "static"
+        ],
+        [
+          47,
+          "dynamics(gfrac=0.02)"
+        ],
+        [
+          55,
+          "static"
+        ],
+        [
+          56,
+          "dynamics(gfrac=0.00)"
+        ],
+        [
+          51,
+          "static"
+        ],
+        [
+          75,
+          "dynamics(gfrac=0.00)"
+        ]
+      ]
+    },
+    "filtered_links": 19,
+    "labeled_tp": 10,
+    "labeled_fp": 0
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "n_demoted": 3,
+    "demoted": {
+      "9": "static",
+      "23": "static",
+      "27": "static"
+    },
+    "demote_hits": {
+      "correct": [
+        [
+          9,
+          "static"
+        ],
+        [
+          9,
+          "static"
+        ],
+        [
+          23,
+          "static"
+        ],
+        [
+          27,
+          "static"
+        ]
+      ]
+    },
+    "filtered_links": 16,
+    "labeled_tp": 3,
+    "labeled_fp": 0
+  }
+}
