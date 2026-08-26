@@ -53,3 +53,27 @@ prediction (a slow-mo segment inflates pixel velocities 4x otherwise).
 Artifacts: scripts/e3_shared_gravity.py, scripts/e3b_gravity_hist.py,
 scripts/e3c_regime_timeline.py, data/e3_pair_scores.csv, data/e3_gravity.json,
 data/e3c_regime_timeline.json/.csv, reports/e3_report.md.
+
+## 2026-08-26 07:35 — E2: global one-to-one assignment vs greedy rank-1
+
+Hungarian (scipy linear_sum_assignment) over source x candidate cost matrices
+(bal8/bal12/cv2 costs from E1), no-match dummy columns priced at gate; compared
+against shipped-style greedy accept-rank-1-under-gate across 6 percentile gates,
+per video, scored against 113 labels as an acceptance classifier.
+
+Findings:
+- Greedy conflicts are REAL and frequent: 1-11 candidate tracklets claimed by
+  2+ sources per setting. Shipped reconstruction pipeline silently resolves
+  these by union-find chain merging.
+- Global assignment: conflicts=0 always; at matched gates it trades ~2-5 TP
+  for ~5-7 fewer FP. Best pooled F1 points move from .84-.86 (greedy) to
+  .85-.89 (global), consistently higher precision at similar recall.
+- All remaining FP at loose gates concentrate in the identical-balls clip;
+  the YouTube clip's wrong candidates are already excluded by error gates.
+
+Verdict: adopt global assignment over greedy when this leaves experiment-land;
+combined with bal8/bal12 costs it is the best known automatic acceptance rule.
+Still ceiling-limited: even perfect assignment of THIS candidate universe caps
+at ~71 correct of 113 (candidates missing where fragmentation exceeded gap<=10).
+
+Artifacts: scripts/e2_global_assignment.py, data/e2_sweep.json, reports/e2_report.md.
