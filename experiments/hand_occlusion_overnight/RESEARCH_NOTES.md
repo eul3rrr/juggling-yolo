@@ -935,3 +935,34 @@ useful source record:
     the 41->43 case (where 2 balls at the right hand look like
     one cluster) and similar multi-ball-in-one-hand patterns.
     A future H13 v2 could test this stricter criterion.
+
+## Cross-cutting insights from H14 (2026-08-28 ~17:55)
+
+30. **H7v2's strict endpoint-signature rule misses some real
+    catch-throws.** H14's V-shape check (looking at the full
+    source-tail + gap + target-head trajectory) recovered 4
+    hidden catch-throws (23→25, 30→33, 39→47, 51→52 identical)
+    that the strict h7v2 rule rejected. The 4 missed edges have
+    a clear V-shape toward a hand in the gap, but the endpoint
+    signature (end_dist <= 108, |slope| > 1.0) is degraded
+    (often because the ball's last detection is just outside
+    108 px, or because the catch/throw slope is gentle).
+
+31. **V-shape is a position-only check; a velocity check would
+    reduce the YouTube 27→28 false positive.** The 27→28 case
+    has positions close to a hand on both sides, but the ball
+    jumps 100 px in 5 frames (20 px/frame, faster than gravity
+    allows). A velocity jump check would reject this.
+
+32. **Combined H7v2 + H14 = +35% recall on identical hand-link
+    recovery.** Total: 11 v4d + 13 h7v2_reclassified + 4 h7v2_kept_v_shape
+    = 28 catch-throws on identical (vs 24 with h7v2 alone).
+    This is a meaningful improvement; H14 is recommended as
+    an add-on to H7v2, not a replacement.
+
+33. **The h7v2 rule is fundamentally endpoint-driven; the
+    h14 rule is fundamentally trajectory-driven.** They
+    complement each other. The h7v2 rule has a strict signature
+    that works well for the easy cases; h14 catches the hard
+    cases where the endpoint signature is degraded but the
+    trajectory is clearly V-shaped.

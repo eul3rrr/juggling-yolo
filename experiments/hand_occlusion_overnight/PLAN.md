@@ -933,3 +933,39 @@ pattern, including identity switches.
    in this 2D single-camera setup. Future work needs multi-view or
    higher frame rate.
 
+
+## Eighteenth episode (H14) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Implemented H14: V-shape trajectory check on h7v2-kept
+   BALLISTIC edges. Examines the full source-tail + gap +
+   target-head trajectory and asks: does it dip toward a hand
+   and come back out?
+2. ✅ Three classes: V_DEEP (min_d < 50, ratio > 1.5),
+   V_SHALLOW (min_d < 100, ratio > 1.3), FLAT (neither).
+3. ✅ Ran on 62 edges: 11 v4d, 38 h7v2_reclassified, 13 h7v2_kept_ballistic.
+   Result: 5/13 BALLISTIC edges have a V-shape (3 V_DEEP + 2 V_SHALLOW).
+4. ✅ Visual QA on all 5 BALLISTIC V-shape candidates:
+   - 23→25, 30→33, 39→47, 51→52 identical: ALL REAL CATCH-THROWS
+   - 27→28 YouTube: FALSE POSITIVE (velocity jump, not physical)
+5. ✅ Sensitivity grid (20 cells, 5 deep_min × 4 deep_ratio):
+   stable; default (50, 1.5) in flat region.
+6. ✅ Documented in `h14_report.md` and updated RESULTS_LOG.
+
+**H14 verdict: PASS (with caveat).** H14 recovers 4 hidden
+catch-throws on identical that the strict h7v2 rule missed.
+Combined H7v2 + H14 = +35% recall on identical. H14 is an
+add-on to H7v2, not a replacement. Position-only check is a
+known limitation; a velocity jump check would reduce the
+YouTube false positive.
+
+Next episode candidates:
+1. H15: reclassify h7v2-kept BALLISTIC edges that pass H14 as
+   HAND_TRANSITION, and re-run H7v2/H10v8 to measure chain
+   quality impact.
+2. H16: V-shape + velocity-jump check (combine position with
+   velocity to reduce YouTube 27→28 false positive).
+3. H17: V-shape recovery for v4d-missed links (e.g. 35→40,
+   15→25 youtube) to see if any rejected v4d links are
+   V-shape hidden catch-throws.

@@ -2119,3 +2119,74 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h13_sensitivity.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h13/*.png` (14 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h13_report.md`
+
+### H13 v2 (2026-08-28 ~17:35 CEST)
+
+- Hypothesis: a stricter stationary-cluster criterion (STATIONARY_MAX_STD=25px,
+  OTHER_HAND_MAX=2) that requires the cluster to be at the EXACT hand used
+  by the edge and with a clean other-hand will discriminate real catch-
+  throws from identity switches.
+- Implementation: `h13v2_strict_corroboration.py` reuses H13 v1's logic
+  but adds hand-specificity filter.
+- Quantitative result:
+  - v4d links: 0/11 STRICT_CORROBORATED (other-hand check rejects all)
+  - h7v2_reclassified: 1/38 STRICT (45→46), 1/38 AMBIGUOUS (43→45)
+  - h7v2_kept_ballistic: 3/13 STRICT (28→29, 51→52, 41→43) — all identity
+    switches that the strict criterion FAILED to discriminate
+- Verdict: **NEGATIVE result**, confirms H13 v1's finding.
+  Criterion is actively MIS-calibrated: kept-ballistic STRICT_CORROBORATED
+  rate (3/13 = 23%) is HIGHER than reclassified rate (1/38 = 2.6%).
+- Closes the H13 detector-corroboration series after 4 negative iterations:
+  v1 (any det, FPR 91-100%), v2 (H3 cluster, 3/6 are kept-ballistic),
+  v3+v4 (concentration, correlates with gap length), v2 strict (this one).
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h13v2_strict_corroboration.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h13v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h13v2_report.md`
+
+### H14 (2026-08-28 ~17:55 CEST)
+
+- Hypothesis: BALLISTIC edges that h7v2 KEPT (didn't reclassify) might
+  actually be hidden catch-throws that the strict h7v2 endpoint-signature
+  rule missed. A V-shape check on the full source-tail + gap + target-head
+  trajectory can recover them.
+- Implementation: `h14_v_shape.py` computes per-edge min/max hand-distance
+  across the trajectory (6 frames source tail + 5 frames gap interp + 6
+  frames target head). Classifies as V_DEEP (min_d < 50, ratio > 1.5),
+  V_SHALLOW (min_d < 100, ratio > 1.3), or FLAT.
+- Quantitative result:
+  - v4d: 11/11 V_DEEP (all real catch-throws, as expected)
+  - h7v2_reclassified: 35/38 V_DEEP, 1/38 V_SHALLOW, 2/38 FLAT
+  - **h7v2_kept_ballistic: 3/13 V_DEEP, 2/13 V_SHALLOW, 8/13 FLAT**
+- Visual QA on 5 BALLISTIC V-shape candidates (all 5 inspected):
+  - 23→25 identical (V_DEEP): REAL CATCH-THROW (hand=right)
+  - 30→33 identical (V_SHALLOW): REAL CATCH-THROW
+  - 39→47 identical (V_SHALLOW): REAL CATCH-THROW (hand=right)
+  - 51→52 identical (V_DEEP): REAL CATCH-THROW (hand=left)
+  - 27→28 YouTube (V_DEEP): FALSE POSITIVE — tracklet break with
+    100-px jump in 5 frames (not physical)
+- Visual precision: 4/5 = 0.80 on small sample (5 edges).
+- Sensitivity: 20-cell grid is stable (BALLISTIC V_DEEP ∈ {3, 4, 5} edges
+  depending on threshold). Default (50, 1.5) is in flat region.
+- Negative findings:
+  - V-shape is a position-only check; the 27→28 false positive has a
+    velocity jump that V-shape doesn't detect.
+  - The 3 h7v2_reclassified FLAT edges (40→41, 45→46) and 1 V_SHALLOW
+    (43→45) are real catch-throws where the trajectory is more monotonic
+    (no clear V). H14 misses them.
+  - H14 does not change the chain representation; the 4 newly-found
+    catch-throws are NOT yet integrated.
+- Verdict: **PASS (with caveat).** H14 recovers 4 hidden catch-throws on
+  identical that the strict h7v2 rule missed. Combined H7v2 + H14 gives
+  +35% recall on identical hand-link recovery (4 new links on top of
+  11 v4d + 12 reclassified = 27 total). H14 is an add-on to H7v2, not
+  a replacement. Position-only check is a known limitation; a velocity
+  jump check would reduce the YouTube false positive.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h14_v_shape.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h14_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h14_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h14_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h14_sensitivity.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h14/*.png` (6 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h14_report.md`

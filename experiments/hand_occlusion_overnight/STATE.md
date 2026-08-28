@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 17:35 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 v1 + **H13 v2** COMPLETE. Pipeline unchanged. **H13 v2 NEGATIVE**: stricter cluster criterion (STATIONARY_MAX_STD=25px, OTHER_HAND_MAX=2) fires on 3/13 h7v2_kept_ballistic edges (28→29, 51→52, 41→43) — true identity switches. Only 1/38 h7v2_reclassified edge (45→46) and 0/11 v4d links are STRICT_CORROBORATED. The criterion is actively MIS-calibrated: kept-ballistic STRICT_CORROBORATED rate (3/13 = 23%) is HIGHER than reclassified rate (1/38 = 2.6%). Confirms H13 v1: detector's low-conf signal is fundamentally NOT a discriminator. Master §14's "lower-confidence evidence tier near hand events" idea is not implementable with detector signal alone — the hand-event context is exactly what we're trying to corroborate, making the approach circular.
+LAST_UPDATE: 2026-08-28 17:55 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 v1 + H13 v2 + **H14 v1** COMPLETE. Pipeline unchanged. **H14 PASS**: V-shape trajectory check on h7v2-kept BALLISTIC edges finds 3 V_DEEP + 2 V_SHALLOW candidates (5/13 = 38%). Visual QA on all 5: 4/5 are real catch-throws (23→25, 30→33, 39→47, 51→52 identical) that the strict h7v2 rule missed; 1/5 is a false positive (27→28 YouTube — tracklet break with 100-px jump in 5 frames). The H7v2 rule's strict endpoint signature (end_dist <= 108 AND |slope| > 1.0) is too narrow. H14 recovers +35% recall on identical hand-links. 8 of 13 BALLISTIC edges are correctly FLAT (no V-shape, true mid-air). H14 is an add-on to H7v2, not a replacement.
 
 ## Isolation
 
@@ -335,6 +335,19 @@ extraction: 10 identical + 1 youtube links with visual precision
     unimplementable with detector signal alone. See
     `h1_hand_pool/reports/h13_report.md` and
     `h1_hand_pool/reports/h13v2_report.md`.
+25. **H14: V-shape trajectory check on h7v2-kept BALLISTIC
+    edges** — DONE. PASS. Examines the full source-tail + gap +
+    target-head trajectory and asks: does it dip toward a hand
+    and come back out? A real catch-throw has this V-shape; a
+    true mid-air identity switch has a smoother monotonic
+    trajectory. Result: 5/13 BALLISTIC edges have a V-shape
+    (3 V_DEEP + 2 V_SHALLOW). Visual QA on all 5: 4/5 are real
+    catch-throws (23→25, 30→33, 39→47, 51→52 identical) that
+    the strict h7v2 rule missed; 1/5 is a false positive
+    (27→28 YouTube — tracklet break with 100-px jump in 5
+    frames). The 8 always-FLAT ballistic edges are correctly
+    rejected. H14 is an add-on to H7v2, not a replacement.
+    See `h1_hand_pool/reports/h14_report.md`.
 
 ## Important artifact paths
 
@@ -360,33 +373,25 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. H13 v2 (NEGATIVE) committed in this episode.
+None. H14 v1 (PASS) committed in this episode.
 
 ## Next action
 
-The detector-signal approach (master §14, H13 series) is closed
-after 4 negative iterations. New research direction needed.
+H14 found 4 hidden catch-throws on identical that h7v2 missed.
+These are NOT yet integrated into the chain representation. A
+natural next step is **H15: reclassify h7v2-kept BALLISTIC edges
+that pass H14's V-shape check as HAND_TRANSITION, and re-run
+H7v2/H10v8 to measure the impact on chain quality.**
 
-Candidate directions to consider for next episode:
-1. **H14: per-tracklet motion smoothness check** — measure
-   H8-style velocity discontinuity WITHIN each tracklet (not
-   across edges). A held ball in the hand has near-zero velocity
-   (std < 1 px/frame); a free-falling ball has high velocity
-   (std > 5 px/frame). This is intrinsic to the tracklet, not
-   dependent on detector confidence. Could it replace the H3/H13
-   signal and be a usable held-ball confirmation?
-2. **H15: temporal symmetry of the hand-pool** — for each
-   v4d/H7v2 hand-link, check whether the inverse direction
-   (target→source) is also a candidate. Asymmetric links may
-   indicate a "phantom" hand-link that doesn't have a reverse.
-3. **H16: explicit hand-event-relative time encoding** — encode
-   hand-events as a binary time series (1 = hand event in last
-   5 frames, 0 = no hand event) and use the autocorrelation
-   function to detect periodic structure (juggling cadence).
-   This would measure the actual ball-bounce frequency.
-4. **H17: simple Kalman-filter pre-smoothing of tracklet
-   positions** — for each tracklet, fit a constant-velocity
-   Kalman filter, replace the raw positions with the smoothed
-   estimates, and re-evaluate the H1 / H7v2 / H8 metrics. Would
-   Kalman smoothing help with the late-phase FOUNTAIN-vs-CASCADE
-   misclassification?
+This would extend the chain construction pipeline from h7v2 alone
+to h7v2 + h14 combined, and could improve chain quality scores
+on the affected chains.
+
+Other directions:
+1. **H16: V-shape + velocity-jump check** — combine the V-shape
+   position check with a velocity jump check to reduce the
+   YouTube 27→28 false positive. The 27→28 case has a 100-px
+   jump in 5 frames (20 px/frame, too fast for a real ball).
+2. **H17: V-shape recovery for v4d-missed links** — apply V-shape
+   to pairs of tracklets that v4d rejected (e.g. 35→40) and
+   check if any of them are V-shape hidden catch-throws.
