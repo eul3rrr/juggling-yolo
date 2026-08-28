@@ -1,0 +1,138 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_substantial_fountain_phases": 4,
+      "sheets": [
+        {
+          "phase_start": 631,
+          "phase_end": 669,
+          "n_frames": 39,
+          "mean_confidence": 0.714,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_identical_balls_trick_000_018_f631-669_n39.png",
+          "frames_picked": [
+            631,
+            640,
+            650,
+            669
+          ],
+          "zone": "POST_F240_FOUNTAIN_ZONE"
+        },
+        {
+          "phase_start": 890,
+          "phase_end": 936,
+          "n_frames": 47,
+          "mean_confidence": 0.571,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_identical_balls_trick_000_018_f890-936_n47.png",
+          "frames_picked": [
+            890,
+            901,
+            913,
+            936
+          ],
+          "zone": "POST_F240_FOUNTAIN_ZONE"
+        },
+        {
+          "phase_start": 977,
+          "phase_end": 1011,
+          "n_frames": 35,
+          "mean_confidence": 0.565,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_identical_balls_trick_000_018_f977-1011_n35.png",
+          "frames_picked": [
+            977,
+            985,
+            994,
+            1011
+          ],
+          "zone": "POST_F240_FOUNTAIN_ZONE"
+        },
+        {
+          "phase_start": 1029,
+          "phase_end": 1049,
+          "n_frames": 21,
+          "mean_confidence": 0.463,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_identical_balls_trick_000_018_f1029-1049_n21.png",
+          "frames_picked": [
+            1029,
+            1034,
+            1039,
+            1049
+          ],
+          "zone": "POST_F240_FOUNTAIN_ZONE"
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_substantial_fountain_phases": 3,
+      "sheets": [
+        {
+          "phase_start": 339,
+          "phase_end": 374,
+          "n_frames": 36,
+          "mean_confidence": 0.646,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f339-374_n36.png",
+          "frames_picked": [
+            339,
+            348,
+            357,
+            374
+          ],
+          "zone": "OUTSIDE_KNOWN_SHOWER"
+        },
+        {
+          "phase_start": 482,
+          "phase_end": 594,
+          "n_frames": 113,
+          "mean_confidence": 0.653,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f482-594_n113.png",
+          "frames_picked": [
+            482,
+            510,
+            538,
+            594
+          ],
+          "zone": "OUTSIDE_KNOWN_SHOWER"
+        },
+        {
+          "phase_start": 800,
+          "phase_end": 861,
+          "n_frames": 62,
+          "mean_confidence": 0.651,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/fountain_phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f800-861_n62.png",
+          "frames_picked": [
+            800,
+            815,
+            831,
+            861
+          ],
+          "zone": "NEAR_SHOWER_BURST_769-825"
+        }
+      ]
+    }
+  },
+  "methodology": {
+    "filter": "H50 (10-frame flight-time filter on H12 v8 event log)",
+    "min_phase_frames": 20,
+    "n_frames_per_sheet": 4,
+    "zone_classification": {
+      "identical": "post-f=240 is FOUNTAIN-rich (H64)",
+      "youtube": "SHOWER bursts at f=420-510, f=769-825 (H63)"
+    },
+    "comparison_to_h39": {
+      "h39_n_phases_qa": 11,
+      "h39_visual_precision": "30% (3/10 confirmed FOUNTAIN)",
+      "h39_video": "H37 crossref, 6-frame contact sheets",
+      "h65_differences": [
+        "H50-filtered pattern data (latest validated)",
+        "Min phase 20 frames (vs H39's 10 frames)",
+        "4-frame sheets (vs H39's 6-frame)",
+        "Explicit zone classification (POST_F240_FOUNTAIN_ZONE etc.)"
+      ]
+    }
+  },
+  "n_total_phases": 7,
+  "phases_by_zone": {
+    "OUTSIDE_KNOWN_SHOWER": 2,
+    "POST_F240_FOUNTAIN_ZONE": 4,
+    "NEAR_SHOWER_BURST_769-825": 1
+  }
+}

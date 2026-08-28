@@ -1,0 +1,8 @@
+video,phase_start,phase_end,n_frames,mean_confidence,zone,h12_label,vision_verdict,verdict_agrees_with_h12,notes
+identical_balls_trick_000_018,631,669,39,0.714,POST_F240_FOUNTAIN_ZONE,FOUNTAIN_3+,FOUNTAIN,yes,crossed-arm synchronized 3-ball pattern; balls thrown from both hands in parallel arcs
+identical_balls_trick_000_018,890,936,47,0.571,POST_F240_FOUNTAIN_ZONE,FOUNTAIN_3+,OTHER,no,crossed-arm trick / hold; static body, balls gathered close
+identical_balls_trick_000_018,977,1011,35,0.565,POST_F240_FOUNTAIN_ZONE,FOUNTAIN_3+,FOUNTAIN,yes,symmetric bilateral hand positions; synchronized release with parallel arcs
+identical_balls_trick_000_018,1029,1049,21,0.463,POST_F240_FOUNTAIN_ZONE,FOUNTAIN_3+,OTHER,no,static hold with 2 balls in palms and 1 aloft; not actively juggling
+youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,339,374,36,0.646,OUTSIDE_KNOWN_SHOWER,FOUNTAIN_3+,FOUNTAIN,yes,symmetric hand positions at f=374; 3-up-2-held structure consistent with 5-ball fountain
+youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,482,594,113,0.653,OUTSIDE_KNOWN_SHOWER,FOUNTAIN_3+,OTHER,no,static body position; only 4 of 5 balls visible; balls appear to be falling or resting not actively juggled
+youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,800,861,62,0.651,NEAR_SHOWER_BURST_769-825,FOUNTAIN_3+,CASCADE,no,alternating hand throws with crossing arcs; consistent with 5-ball cascade not fountain
