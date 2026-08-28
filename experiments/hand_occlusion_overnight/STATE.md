@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:35 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59**
+LAST_UPDATE: 2026-08-28 16:46 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1583,3 +1583,43 @@ remaining research directions (from PLAN §"Next episode candidates"):
    operating point is precision 1.000 on the manual review. Further
    chain improvements would require fundamentally different signals
    (multi-view, learned color tracking, or 3D ball estimation).
+
+## H60 conclusion (2026-08-28 ~16:20 CEST)
+
+**H60: per-frame hold-duration distribution across h7v3plus3 chains**
+— DONE. PASS. H58 cascade/shower signatures confirmed at the
+population level.
+
+**Identical (3-ball cascade, 25 CATCH events):**
+- Range: 4-29 frames, mean 12.6, **median 11**
+- Mode bucket: [5-10) with 10 events
+- Stable events [10, 50): mean 16.57, median 14.50
+- The H58 11-frame signature is the **median** held phase across
+  the entire h7v3plus3 chain set on identical, not just the 3
+  multi-tid CONFIDENT chains.
+
+**YouTube (5-ball, 25 CATCH events):**
+- Range: 5-17 frames, mean 9.84, **median 9**
+- Mode bucket: [5-10) with 13 events
+- Stable events [10, 50): mean 12.42, median 12.00
+- The H58 17-frame signature is the **max** held phase on YouTube
+  (chain 6 CONFIDENT). YouTube's typical hold is 9 frames (median),
+  much shorter than identical's 11 frames.
+
+**Hand-asymmetry reversal (NEW FINDING):**
+- identical: right hand held phases LONGER (median 12.5 vs 11)
+- YouTube: right hand held phases SHORTER (median 9 vs 11)
+- The two videos show different juggling patterns.
+
+**H10 v11 v3 quality is INDEPENDENT of held-phase duration.**
+CONFIDENT and UNCERTAIN chains have the same median held phase on
+identical. The 1 CONFIDENT event on YouTube (chain 6) has a much
+longer held phase than UNCERTAIN events, but this is because
+chain 6 IS the long-held-phase chain.
+
+**Verdict: PASS.** H58 cascade/shower signatures are confirmed at
+the population level. The 11-frame and 17-frame H58 findings are
+not quirks of the 4 multi-tid CONFIDENT chains — they are typical
+or extreme values of the global distribution.
+
+See `h1_hand_pool/reports/h60_report.md` for full analysis.

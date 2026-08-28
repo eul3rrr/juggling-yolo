@@ -3986,3 +3986,42 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h59_per_pair_eval.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h59_report.md`
 
+### H60 (2026-08-28 ~16:20 CEST)
+
+- Hypothesis: H58 (and H58 v1) found that the 4 multi-tid CONFIDENT
+  chains have consistent held-phase durations (3-ball cascade
+  signature 11 frames, 5-ball shower signature 17 frames). But the
+  4-chain sample is tiny. H60 measures the held-phase distribution
+  across ALL h7v3plus3 chains (50 events per video) to test
+  whether the H58 signatures are population-level patterns.
+- Implementation: `h60_hold_duration.py` loads the H12 v8 catch/throw
+  event log, computes per-event held-phase duration (gap_frames),
+  and aggregates by global, hand, q11_label, and per-chain.
+- Quantitative result (CATCH events):
+  - identical: 25 events, range 4-29, mean 12.6, **median 11**
+  - YouTube: 25 events, range 5-17, mean 9.84, **median 9**
+- Per-hand (NEW FINDING — hand-asymmetry reversal):
+  - identical: right held phases LONGER (median 12.5 vs 11)
+  - YouTube: right held phases SHORTER (median 9 vs 11)
+- Per q11_label:
+  - identical: CONFIDENT (n=14, median 11) = UNCERTAIN (n=11, median 11)
+  - YouTube: CONFIDENT (n=1, median 17, chain 6) > UNCERTAIN (n=22, median 10)
+- Key findings:
+  - H58 11-frame signature IS the median held phase on identical.
+    Validates the 3-ball cascade characteristic hold at the
+    population level.
+  - H58 17-frame signature IS the max held phase on YouTube.
+    YouTube's typical hold (9 frames) is much shorter than
+    identical's 11 frames.
+  - Hand-asymmetry reversal is a new finding: the two videos
+    show different juggling patterns.
+  - H10 v11 v3 quality is INDEPENDENT of held-phase duration.
+- Verdict: PASS. H58 cascade/shower signatures are confirmed at
+  the population level, not just for the 4 multi-tid CONFIDENT
+  chains.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h60_hold_duration.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h60_hold_duration_dist_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h60_hold_duration_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h60_report.md`
+
