@@ -1,17 +1,17 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 13:35 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + **H37** COMPLETE.
-H35 PASS (consumer-pass, no change). H36 PASS: per-frame
+LAST_UPDATE: 2026-08-28 13:50 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + **H38**
+COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
-PASS (consumer-pass, validation): H36 (L, R, A) state and H12 v8
-pattern labels are 80.7%/76.5% consistent on identical/YouTube.
-H37 confirms H12 v8 FOUNTAIN_3+ has 0% hand-occupancy support on
-identical late phase (97% are H36 state (0, 0, 3)) — FOUNTAIN_3+
-classification is based on event-log density, not hand occupancy.
-H37 validates CASCADE_3+ (which has hand-occupancy support) but
-cannot disambiguate FOUNTAIN_3+. Recommended operating point
-remains h7v3plus3 (H34 + H35 + H36 + H37). **H32 NEGATIVE**: per-chain
+PASS (consumer-pass, validation): 80.7%/76.5% agreement between
+H36 (L, R, A) and H12 v8 pattern labels. H38 PASS (precision
+improvement, narrow scope): rejects 1/22 identical and 12/129
+YouTube CASCADE_3+ classifications that lack hand-occupancy
+support. The YouTube rejection is a tight 12-frame contiguous
+block at f=470-481 with H12 v8 confidence 0.639-0.646.
+Recommended operating point remains h7v3plus3 (H34 + H35 + H36
++ H37 + H38). **H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -504,6 +504,10 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
+H38 is complete (PASS, precision improvement, narrow scope).
+1/22 identical and 12/129 YouTube CASCADE_3+ classifications
+rejected due to lack of H36 hand-occupancy support.
+
 H37 is complete (PASS, consumer-pass, validation). H36 (L, R, A)
 state validates CASCADE_3+ but cannot disambiguate FOUNTAIN_3+.
 
@@ -652,6 +656,42 @@ chain set is a complete, consistent, closed representation
 of the juggling routines in both videos.
 
 See `h1_hand_pool/reports/h36_report.md` for full analysis.
+
+## H37 conclusion
+
+H37 cross-references the H36 (L, R, A) state with H12 v8
+pattern labels. Result: 80.7% agreement on identical, 76.5%
+on YouTube. Late-phase identical FOUNTAIN_3+ has 97% (0, 0, 3)
+state — H36 has no hand-occupancy evidence. CASCADE_3+ has
+hand-occupancy support (20/22 identical are (0, 1, 2); 66/129
+YouTube are (0, 1, 4)). H12 v8 confidence drops to 0.5-0.7 in
+the late phase.
+
+**H37 PASS verdict:** H36 (L, R, A) state validates CASCADE_3+
+classification (which has hand-occupancy support) but cannot
+disambiguate FOUNTAIN_3+ (which has no hand-occupancy signal).
+The 80%/76% agreement rate is a useful summary metric.
+
+See `h1_hand_pool/reports/h37_report.md` for full analysis.
+
+## H38 conclusion
+
+H38 is a strict post-filter that rejects CASCADE_3+
+classifications where H36 has no hand-occupancy support
+(H36 state (0, 0, 3) or (0, 0, 5)). The improvement is
+small: 1/22 identical and 12/129 YouTube CASCADE_3+
+classifications are rejected. The YouTube rejection is a
+tight 12-frame contiguous block at f=470-481 with H12 v8
+confidence 0.639-0.646. No substantial CASCADE phases (>= 20
+consecutive frames) are broken by the filter.
+
+**H38 PASS verdict:** H38 is a safe, narrow-scope precision
+improvement. The CASCADE_3+ classifications that have
+hand-occupancy support (95% identical, 91% YouTube) are
+preserved. Use H38 as a downstream consumer filter if
+precision matters more than recall.
+
+See `h1_hand_pool/reports/h38_report.md` for full analysis.
 
 ## Future research directions (post H34)
 

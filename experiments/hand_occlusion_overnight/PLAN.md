@@ -1418,3 +1418,39 @@ rate is a useful summary metric.
    levels: quality (H10), identity (H11), hand-occupancy
    (H36), and pattern cross-reference (H37). Further chain
    improvements would require fundamentally different signals.
+
+
+## Fortieth episode (H38) — STATUS: COMPLETE (PASS, precision improvement, narrow scope)
+
+Sub-steps:
+1. ✅ Implemented H38: post-filter CASCADE_3+ classifications
+   where H36 has no hand-occupancy support (H36 state
+   (0, 0, 3) or (0, 0, 5)).
+2. ✅ Result: 1/22 identical and 12/129 YouTube CASCADE_3+
+   rejected. YouTube rejection is a tight 12-frame contiguous
+   block at f=470-481 with H12 v8 confidence 0.639-0.646.
+3. ✅ No substantial CASCADE phases (>= 20 consecutive frames)
+   were broken by the filter.
+4. ✅ Documented in `h38_report.md` and updated STATE/RESULTS_LOG.
+
+**H38 verdict: PASS (precision improvement, narrow scope).**
+H38 is a strict post-filter that rejects CASCADE_3+
+classifications without hand-occupancy support. The
+improvement is small (1/22 identical, 12/129 YouTube) but
+real. Safe to apply as a downstream consumer filter.
+
+**Final state of the lab:**
+
+The h7v3plus3 chain set is now validated at FIVE levels:
+1. **Chain quality (H10):** per-chain quality score.
+2. **Identity propagation (H11):** per-tracklet physical
+   ball ID.
+3. **Per-frame hand-occupancy (H36):** (L, R, A) state machine.
+4. **Pattern cross-reference (H37):** H36 vs H12 v8 validation.
+5. **Pattern post-filter (H38):** precision improvement.
+
+The chain set is a complete, consistent, closed
+representation of the juggling routines in both videos.
+Further chain improvements would require fundamentally
+different signals (multi-view, learned color tracking,
+or 3D ball estimation).

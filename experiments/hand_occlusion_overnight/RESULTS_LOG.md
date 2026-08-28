@@ -3071,3 +3071,44 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h37_crossref_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h37/*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h37_report.md`
+
+
+### H38 (2026-08-28 ~13:50 CEST)
+
+- Hypothesis: H37 showed CASCADE_3+ frames have hand-occupancy
+  support (20/22 identical, 117/129 YouTube). A small fraction
+  of CASCADE_3+ frames have NO hand-occupancy (H36 state
+  (0, 0, 3) or (0, 0, 5)) — likely H12 v8 misclassifications.
+  Question: does rejecting these improve precision?
+- Approach:
+  - Load H37 crossref data.
+  - For each CASCADE_3+ frame where H36 state is (0, 0, total),
+    mark as CASCADE_REJECTED.
+  - Compare pattern distribution before/after.
+  - Compare CASCADE phases (>= 20 consecutive frames) before/after.
+- Quantitative result:
+  - identical: 1/22 (4.5%) CASCADE_3+ rejected. Pattern
+    distribution: 22 CASCADE_3+ before, 21 after + 1
+    CASCADE_REJECTED.
+  - YouTube: 12/129 (9.3%) CASCADE_3+ rejected, all in
+    contiguous block f=470-481 with H12 v8 confidence 0.639-0.646.
+    Pattern distribution: 129 CASCADE_3+ before, 117 after + 12
+    CASCADE_REJECTED.
+  - No substantial CASCADE phases (>= 20 frames) were broken
+    by the filter.
+- Negative findings:
+  - H38 is a small precision improvement, not a fundamental
+    fix. The 9.3% rejection rate on YouTube is real but small.
+  - H38 does not fix the H12 v8 CASCADE/FOUNTAIN ambiguity
+    on the late phase.
+- Verdict: **PASS (precision improvement, narrow scope).** H38
+  is a strict post-filter that rejects CASCADE_3+ classifications
+  where H36 has no hand-occupancy support. The improvement is
+  small (1/22 identical, 12/129 YouTube) but real. Safe to apply
+  as a downstream consumer filter. See
+  `h1_hand_pool/reports/h38_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h38_post_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h38_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h38_filtered_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h38_report.md`

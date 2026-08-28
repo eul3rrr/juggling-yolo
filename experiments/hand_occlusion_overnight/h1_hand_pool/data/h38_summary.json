@@ -1,0 +1,20 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_cascade_before": 22,
+      "n_cascade_rejected": 1,
+      "n_cascade_after": 21,
+      "pct_rejected": 4.5,
+      "before_cascade_phases": 0,
+      "after_cascade_phases": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_cascade_before": 129,
+      "n_cascade_rejected": 12,
+      "n_cascade_after": 117,
+      "pct_rejected": 9.3,
+      "before_cascade_phases": 0,
+      "after_cascade_phases": 0
+    }
+  }
+}
