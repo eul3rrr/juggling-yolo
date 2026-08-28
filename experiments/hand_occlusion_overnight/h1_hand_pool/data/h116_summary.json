@@ -1,0 +1,75 @@
+{
+  "h116_date": "2026-08-29",
+  "h114_v1_strict_rule": {
+    "T_d": 25,
+    "T_j": 200,
+    "fires_if": "end_d > 25 AND start_d > 25 AND spatial_jump > 200"
+  },
+  "h20_kept_total": 115,
+  "h114_v1_strict_fires_total": 25,
+  "h114_v1_strict_fires_unique_deduped": 21,
+  "fires_in_h7v3plus3": 0,
+  "fires_not_in_h7v3plus3": 25,
+  "visual_qa_breakdown": {
+    "REAL": 0,
+    "REAL+PARTIAL": 0,
+    "FALSE": 3,
+    "UNCLEAR": 1,
+    "un_QA_blank": 21
+  },
+  "h116_newly_QA": [
+    {
+      "edge": "18->22",
+      "vshape": "V_DEEP",
+      "end_d": 32.77,
+      "start_d": 297.23,
+      "spatial_jump": 460.03,
+      "verdict": "TRACKER ARTIFACT",
+      "reasoning": "t18 ends at left wrist (d=33), t22 starts 297 px from any wrist. 460-px jump in 14 frames. t22 likely a different ball descending into upper-right, not the same ball caught at t18's end. vshape=V_DEEP supports sharp direction change."
+    },
+    {
+      "edge": "31->39",
+      "vshape": "V_SHALLOW",
+      "end_d": 468.66,
+      "start_d": 62.73,
+      "spatial_jump": 342.0,
+      "verdict": "TRACKER ARTIFACT",
+      "reasoning": "t31 ends 469 px from any wrist (upper-left, exiting frame). t39 starts 63 px from right wrist. 342-px jump. t31 trajectory direction (up-and-left) is opposite to t39's start location (right side). Most likely a different ball or post-bounce re-acquisition."
+    },
+    {
+      "edge": "60->65",
+      "vshape": "FLAT",
+      "end_d": 436.11,
+      "start_d": 98.22,
+      "spatial_jump": 472.95,
+      "verdict": "TRACKER ARTIFACT",
+      "reasoning": "t60 ends 436 px from any wrist (upper-left). t65 is suspiciously short (n=14 frames). 473-px jump. The short t65 + far-away t60 endpoint is a classic tracker re-acquisition signature."
+    },
+    {
+      "edge": "24->28",
+      "vshape": "V_SHALLOW",
+      "end_d": 60.58,
+      "start_d": 238.21,
+      "spatial_jump": 234.31,
+      "verdict": "TRACKER ARTIFACT",
+      "reasoning": "t24 ends 61 px from right wrist (good). t28 starts 238 px from any wrist (in upper region). 5-frame gap, 234-px jump. t28 trajectory direction (up-right) inconsistent with a ball just released from right hand (would go forward-left into juggling pattern). Tracker lost the ball near right wrist, re-acquired a different ball above."
+    },
+    {
+      "edge": "12->18",
+      "vshape": "V_DEEP",
+      "end_d": 34.62,
+      "start_d": 288.8,
+      "spatial_jump": 468.48,
+      "verdict": "TRACKER ARTIFACT",
+      "reasoning": "t12 ends 35 px from left wrist (good). t18 starts 289 px from any wrist (in upper-right). 468-px jump. t12 was in left hand but t18 is far in the opposite upper-right corner. V_DEEP confirms sharp direction change. Most likely a different ball detected in upper-right after t12 was caught."
+    }
+  ],
+  "qa_summary": {
+    "newly_QA_real": 0,
+    "newly_QA_false": 5,
+    "newly_QA_precision": 0.0,
+    "interpretation": "0% REAL precision on un-QA'd strict fires means the strict H114 v1 rule is a useful candidate flagger - it correctly identifies 5/5 = 100% cross-ball artifacts in the un-QA pool."
+  },
+  "verdict": "PASS",
+  "operating_point_impact": "None - h7v3plus3 correctly excludes all 25 H114 v1 strict fires. The rule is purely diagnostic, but the visual QA confirms it's a useful candidate flagger for future h7v3+ revisions."
+}

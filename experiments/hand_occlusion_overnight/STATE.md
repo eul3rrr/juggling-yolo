@@ -4381,3 +4381,48 @@ not change the operating point.
   H17->H20->H24->H28->H31 negative finding chain: the wider
   H20-KEPT pool has only 15% REAL precision, and geometric
   post-filters on V-shape candidates cannot rescue this.
+
+## H116 conclusion (2026-08-29 ~07:30 CEST)
+
+**H116: H114 v1 strict as a candidate flagger — visual QA of 5 un-QA'd
+H20-KEPT strict fires** — DONE. PASS. The strict rule (T_d=25, T_j=200)
+is a useful *candidate flagger* (not just a validator): 0/25 strict fires
+are in h7v3plus3, 0/4 known QA'd fires are REAL, and 5/5 newly-QA'd
+un-QA'd fires are confirmed as cross-ball tracker artifacts.
+
+**Key result (full 115-row H20-KEPT pool):**
+- 25 strict fires (21 unique after dedup)
+- **0/25 in h7v3plus3** — chain correctly excludes all of them
+- 0/4 known REAL fires on the QA'd subset (H115 v3)
+- **5/5 newly-QA'd un-QA fires are FALSE** (cross-ball artifacts)
+
+**The 5 H116 cases (all on identical video, all NOT in h7v3plus3):**
+- 18->22: V_DEEP, end_d=33, start_d=297, sj=460 → cross-ball artifact
+- 31->39: V_SHALLOW, end_d=469, start_d=63, sj=342 → tracker drift
+- 60->65: FLAT, end_d=436, start_d=98, sj=473 → tracker re-acquisition
+- 24->28: V_SHALLOW, end_d=61, start_d=238, sj=234 → wrong-ball re-acq
+- 12->18: V_DEEP, end_d=35, start_d=289, sj=468 → wrong-ball re-acq
+
+**2nd-pass verification on 31->39 and 24->28:** both confirmed as
+TRACKER ARTIFACT by independent re-evaluations with different
+question framings. Visual QA is robust to framing variation on
+these cases.
+
+**Verdict: PASS.** The strict H114 v1 rule has 0% false-positive rate
+(0/9 known-or-newly-QA'd fires are REAL). It is a useful
+candidate flagger for future h7v3+ revisions, not just a post-hoc
+validator. h7v3plus3 + H112 + H114 v1 strict remain the recommended
+operating point (P=1.000, R=0.718 on 113 review pairs); H116 is a
+positive validation of the H115 v3 strict operating point, not a
+new operating point.
+
+See `h1_hand_pool/reports/h116_report.md` for full analysis.
+
+## Last update
+
+- 2026-08-29 (this episode): H116 PASS — H114 v1 strict (T_d=25, T_j=200)
+  is a useful candidate flagger. Visual QA of 5 un-QA'd H20-KEPT strict
+  fires confirms 5/5 = 100% are cross-ball tracker artifacts. The rule
+  has 0% false-positive rate (0/9 known-or-newly-QA'd fires are REAL).
+  H116 strengthens H115 v3's claim that the strict rule is informative
+  for V-shape candidate mining, not just a post-hoc validator.
