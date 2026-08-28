@@ -1,0 +1,78 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": [
+      {
+        "chain_id": 22,
+        "h32_verdict": "CASCADE_LIKE",
+        "vision_verdict": "MULTI_BALL_MERGE",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": true,
+        "agree": false
+      },
+      {
+        "chain_id": 30,
+        "h32_verdict": "FOUNTAIN_LIKE",
+        "vision_verdict": "MULTI_BALL_MERGE",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": true,
+        "agree": false
+      },
+      {
+        "chain_id": 29,
+        "h32_verdict": "UNKNOWN",
+        "vision_verdict": "UNKNOWN_OK",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": false,
+        "agree": true
+      },
+      {
+        "chain_id": 15,
+        "h32_verdict": "SINGLE_CATCH",
+        "vision_verdict": "SINGLE_CATCH_WRONG",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": false,
+        "agree": true
+      }
+    ],
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": [
+      {
+        "chain_id": 0,
+        "h32_verdict": "CASCADE_LIKE",
+        "vision_verdict": "MULTI_BALL_MERGE",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": true,
+        "agree": false
+      },
+      {
+        "chain_id": 3,
+        "h32_verdict": "FOUNTAIN_LIKE",
+        "vision_verdict": "MULTI_BALL_MERGE",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": true,
+        "agree": false
+      },
+      {
+        "chain_id": 1,
+        "h32_verdict": "SINGLE_CATCH",
+        "vision_verdict": "MULTI_BALL_MERGE",
+        "h33_verdict": "SINGLE_BALL_CANDIDATE",
+        "h33_max_overlap": 0,
+        "h33_says_multi": false,
+        "vision_says_multi": true,
+        "agree": false
+      }
+    ]
+  }
+}

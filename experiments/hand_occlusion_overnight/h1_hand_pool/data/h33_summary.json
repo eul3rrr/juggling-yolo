@@ -1,0 +1,20 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 42,
+      "n_multi_tracklet": 18,
+      "n_multi_ball_high": 0,
+      "n_multi_ball_low": 0,
+      "n_single_ball_candidate": 18,
+      "n_singleton": 24
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_multi_tracklet": 9,
+      "n_multi_ball_high": 0,
+      "n_multi_ball_low": 0,
+      "n_single_ball_candidate": 9,
+      "n_singleton": 6
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 12:30 CEST
-STATUS: H30 + H31 + **H32** COMPLETE. **H32 NEGATIVE**: per-chain
+LAST_UPDATE: 2026-08-28 12:35 CEST
+STATUS: H30 + H31 + H32 + **H33** COMPLETE. **H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -12,8 +12,12 @@ edges that all have hand-region support, but the chain is not a
 single-ball trajectory. H32 confirms H10/H11: the chain set is mostly
 multi-ball merges. The CASCADE/FOUNTAIN problem is now understood to
 be a single-ball-vs-multi-ball identification problem, not a
-cascade-vs-fountain classification problem. Recommended operating
-point remains h7v3plus2 (H26).
+cascade-vs-fountain classification problem. **H33 NEGATIVE**:
+tracklet-time overlap is not a useful signal for multi-ball
+detection — the h7v3plus2 chain construction produces temporally
+sequential tracklets by design, so even multi-ball-merge chains
+have NO tracklet overlap. Recommended operating point remains
+h7v3plus2 (H26).
 
 ## Isolation
 
@@ -541,6 +545,14 @@ Remaining research directions (priorities):
     understood to be a single-ball-vs-multi-ball identification
     problem. Recommended operating point remains h7v3plus2 (H26).
     See `h1_hand_pool/reports/h32_report.md`.
+
+42. **H33: tracklet-time overlap multi-ball detector** — DONE.
+    NEGATIVE. The h7v3plus2 chain construction produces
+    temporally sequential tracklets by design, so even
+    multi-ball-merge chains have NO tracklet-time overlap. H33
+    misses ALL 5 vision-confirmed MULTI_BALL_MERGE chains from
+    H32. Tracklet-time overlap is not a useful signal. See
+    `h1_hand_pool/reports/h33_report.md`.
 
 ## H32 conclusion
 

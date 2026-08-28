@@ -1254,3 +1254,46 @@ should focus on:
    veto on top of H26's 2 NEW REAL H24 edges.
 3. **Stop here.** The h7v3plus2 chain set is well-validated. Further
    chain improvements would require fundamentally different signals.
+
+## Thirty-sixth episode (H33) — STATUS: COMPLETE (NEGATIVE)
+
+Sub-steps:
+1. ✅ Designed H33: tracklet-time overlap multi-ball detector on
+   h7v3plus2 chains.
+2. ✅ Implemented `h33_chain_overlap.py` that computes per-chain
+   tracklet-time overlap (max_overlap, total_overlap, n_overlap_pairs)
+   and emits a verdict (MULTI_BALL_HIGH if overlap >= 5, MULTI_BALL_LOW
+   if 0 < overlap < 5, SINGLE_BALL_CANDIDATE if overlap == 0 and
+   n_tids >= 2, SINGLE_BALL if n_tids == 1).
+3. ✅ Ran on both videos. Result:
+   - identical: 0/18 multi-tracklet chains have any overlap
+   - YouTube: 0/9 multi-tracklet chains have any overlap
+4. ✅ Cross-checked with H32 visual QA: H33 misses ALL 5
+   vision-confirmed MULTI_BALL_MERGE chains.
+5. ✅ Documented in `h33_report.md` and updated STATE/RESULTS_LOG.
+
+**H33 verdict: NEGATIVE.** Tracklet-time overlap is not a useful
+signal for multi-ball detection. The h7v3plus2 chain construction
+produces temporally sequential tracklets by design, so even
+multi-ball-merge chains have NO tracklet overlap.
+
+**Key insight:** Multi-ball merges happen because the *physical
+ball identity* of each tracklet doesn't match the chain's
+structure, NOT because the tracklets overlap in time. The chain
+construction (H7v2 + H15v2 + H21 + H26) ensures all edges are
+temporally sequential (hand-edges require catch-throw; BALLISTIC
+edges link adjacent tracklets). Detecting multi-ball merges
+requires fundamentally different signals (e.g., per-point color
+tracking, multi-view 3D reconstruction).
+
+**Next episode candidates:**
+1. **H34: H22+H26 combined chain set** — apply H22's YouTube 20→21
+   veto on top of H26's 2 NEW REAL H24 edges. (Low priority — small
+   improvement, +0.0034 + +0.0061.)
+2. **Stop here.** The h7v3plus2 chain set is well-validated. The
+   single-ball-vs-multi-ball identification problem requires
+   fundamentally different signals not available with current data.
+3. **H35: pattern inference on h7v3plus2** — apply H12's per-frame
+   pattern inference to the recommended chain set. (Likely produces
+   similar CASCADE/FOUNTAIN ambiguity as H12 v8 because the
+   underlying multi-ball-merge problem is the same.)

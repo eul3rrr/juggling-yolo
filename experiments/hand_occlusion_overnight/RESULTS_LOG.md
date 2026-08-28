@@ -2776,3 +2776,57 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h32_contact_sheet_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h32/*.png` (7 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h32_report.md`
+
+### H33 (2026-08-28 ~12:35 CEST)
+
+- Hypothesis: tracklet-time overlap within a chain is a
+  deterministic multi-ball signal. A single physical ball cannot
+  be at two positions at the same time, so overlapping tracklets
+  in the same chain must be from different physical balls.
+- Approach: for each h7v3plus2 chain, sorted tracklets by
+  first_frame and computed overlap between consecutive pairs.
+  Verdict: MULTI_BALL_HIGH (overlap >= 5 frames), MULTI_BALL_LOW
+  (0 < overlap < 5), SINGLE_BALL_CANDIDATE (overlap == 0,
+  n_tids >= 2), or SINGLE_BALL (n_tids == 1).
+- Quantitative result:
+  - identical: 18 multi-tracklet chains, **0 MULTI_BALL_HIGH,
+    0 MULTI_BALL_LOW, 18 SINGLE_BALL_CANDIDATE**
+  - YouTube: 9 multi-tracklet chains, **0 MULTI_BALL_HIGH,
+    0 MULTI_BALL_LOW, 9 SINGLE_BALL_CANDIDATE**
+- Cross-check with H32 visual QA: H33 misses ALL 5
+  vision-confirmed MULTI_BALL_MERGE chains (chains 22, 30, 0, 3, 1).
+  H33 correctly identifies chains 29, 15 as not-multi (both
+  vision-confirmed not-multi).
+- Negative findings:
+  - **H33's tracklet-time overlap is not a useful signal.** The
+    h7v3plus2 chain construction (H7v2 + H15v2 + H21 + H26) is
+    by design temporally sequential: hand-edges require catch-throw
+    (source ends before target starts); BALLISTIC edges link
+    adjacent tracklets.
+  - Multi-ball merges happen because the *physical ball identity*
+    of each tracklet doesn't match the chain's structure, not
+    because the tracklets overlap in time.
+  - The tracklet_features.csv only has first_frame and last_frame
+    per tracklet (no per-point data), so a tracklet's "duration"
+    might span many frames while only having 2-3 detection points
+    — the actual visible ball at any given frame could be
+    different from the tracklet ID.
+- Verdict: **NEGATIVE.** H33 is not a useful signal. The chain
+  construction produces temporally sequential tracklets by
+  design, so tracklet-time overlap is structurally absent.
+- Recommendation:
+  - H33 is not a useful signal
+  - H10 v10 quality is the most reliable chain-level single-ball
+    signal we have
+  - H11 v7 CONFIDENT is the most reliable per-chain single-ball
+    filter
+  - Future single-ball detection would require fundamentally
+    different signals (e.g., per-point color tracking, multi-view
+    3D reconstruction)
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h33_chain_overlap.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h33_chain_overlap_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h33_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h33_visual_qa_check.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h33_report.md`
+
