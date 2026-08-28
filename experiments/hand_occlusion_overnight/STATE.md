@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 06:50 CEST
-STATUS: H7 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible).
+LAST_UPDATE: 2026-08-28 07:10 CEST
+STATUS: H7 + H8 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted.
 
 ## Isolation
 
@@ -179,12 +179,20 @@ extraction: 10 identical + 1 youtube links with visual precision
    (48 settings, identical results). Longest chain 7 on identical,
    6 on YouTube. H7 resolves the H2 conflict the same way H6 does
    (hand-edge wins on cost) but adds strict DAG-path semantics.
-3. **H8: learned "ball-ness" classifier** to filter
-   out non-ball stationary features (the H4 failure
-   mode). Would require a small training set.
+3. ~~**H8: physics consistency check on H7 chains**~~ **DONE.**
+   Per-edge y-velocity discontinuity. Identifies 2 confirmed E6c
+   false positives on identical (5→6, 50→55). Most useful as a
+   post-hoc quality signal. Limitation: unreliable on long
+   tracklets (YouTube video).
 4. **H9: explicit object permanence** to bridge
-   detector dropouts in H2/H7 chains.
-5. **H10: literature search** for new ideas from web.
+   detector dropouts in H7 chains (e.g. extend
+   each tracklet by ±5 frames using a constant
+   velocity model when the detector is silent).
+5. **H10: chain quality assessment** — given a
+   chain, how confident should downstream consumers
+   be in its physical-ball identity? H3 + H8 +
+   h3 confirmations could be combined into a
+   per-chain confidence score.
 
 ## Important artifact paths
 

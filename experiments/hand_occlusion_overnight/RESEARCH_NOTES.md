@@ -140,17 +140,71 @@ useful source record:
   H2 by handling the tracklet-3 conflict optimally (instead
   of recording it).
 
-### Topic: object permanence / handoff tracking
+### Where Is The Ball: 3D Ball Trajectory Estimation From 2D Monocular Tracking (2025)
 
-- **Internal reference:** None directly.
-- **Next:** A v5 hand-pool could explicitly model "object
-  permanence" — once a ball is held in the hand, the model
-  maintains a belief that the ball still exists even when
-  no detection is present. The current v4d model is
-  *implicitly* object-permanent (it creates a token on
-  entry and the token persists for 60 frames), but a v5
-  could make this explicit and use it to fill detector
-  dropouts.
+- **Title:** Where Is The Ball: 3D Ball Trajectory Estimation From 2D Monocular Tracking
+- **URL:** https://arxiv.org/abs/2506.05763
+- **Authors:** Puntawat Ponglertnapakorn, Supasorn Suwajanakorn (VISTEC)
+- **Venue:** CVsports workshop at CVPR 2025
+- **Idea:** LSTM-based pipeline for 3D ball trajectory estimation
+  from 2D tracking sequences. Uses a canonical 3D representation
+  independent of camera location, with intermediate representations
+  for invariance and reprojection consistency. Trained on simulation,
+  generalizes to real-world multiple-trajectory scenarios.
+- **Why it applies here:** Our H7 chains are 2D-only (image
+  coordinates). The Ponglertnapakorn paper validates the broader
+  approach: estimate physical parameters that best explain the
+  observed trajectory. H8 implements a hand-crafted version of
+  this for our 2D-only setup: y-velocity should be continuous
+  across ballistic edges (gravity changes it slowly).
+- **Why it might fail here:** Ponglertnapakorn uses a learned
+  LSTM trained on simulation. Our H8 is a hand-crafted metric
+  (y-velocity discontinuity). H8 is simpler and less expressive
+  but doesn't require a training set.
+- **Smallest experiment inspired:** H8 — per-edge physics
+  consistency check on H7 chains. For each BALLISTIC edge,
+  compare y-velocity at source-tracklet tail vs target-tracklet
+  head. Flag edges with large discontinuity as likely identity
+  switches. H8 successfully identified 2 confirmed E6c false
+  positives (edges 5→6 and 50→55 on identical video) that
+  H2/H6/H7 all accepted.
+
+### Physics-based ball tracking and 3D trajectory reconstruction (2009)
+
+- **Title:** Physics-based ball tracking and 3D trajectory
+  reconstruction with applications to shooting location estimation
+  in basketball video
+- **URL:** https://www.researchgate.net/publication/222568476
+- **Idea:** Physics-based ball tracking using 3D marker positions
+  to coregister 2D video and 3D motion, applied to three-ball
+  cascade juggling. Physics constraints (gravity, momentum) help
+  disambiguate occluded or noisy detections.
+- **Why it applies here:** Validates the long-standing idea that
+  physics constraints improve ball tracking. H8's velocity
+  discontinuity check is a simple version of this principle.
+- **Why it might fail here:** Requires 3D ground truth (marker
+  positions) for calibration. Our setup is monocular 2D only.
+- **Smallest experiment inspired:** H8 itself.
+
+### Cooperative Trajectory Matching (2024)
+
+- **Title:** Ball Tracking Based on Multiscale Feature Enhancement
+  and Cooperative Trajectory Matching
+- **URL:** https://doi.org/10.3390/app14041376
+- **Idea:** Multiscale feature enhancement + multilevel
+  collaborative matching using Kalman filter for trajectory
+  matching and automatic trajectory correction.
+- **Why it applies here:** Their "automatic trajectory correction"
+  step is similar to our H8: post-hoc validation of trajectory
+  edges. They use Kalman filter predictions; we use direct
+  y-velocity discontinuity.
+- **Why it might fail here:** Requires training a multiscale
+  feature extractor. Our approach is unsupervised.
+- **Smallest experiment inspired:** Future v4 of H8 could use
+  Kalman filter prediction (assuming constant gravity) to predict
+  the expected velocity at the target tracklet's start, and
+  compare to the actual velocity. This would be a stricter
+  test than the simple discontinuity.
 
 ---
 

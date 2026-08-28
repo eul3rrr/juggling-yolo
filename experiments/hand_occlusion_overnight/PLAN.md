@@ -271,16 +271,19 @@ The lab is well-progressed on hand-occlusion work
 and the chain representation is now in good shape.
 Remaining ideas:
 
-1. **H8: literature search** for new ideas from
-   web. Most likely candidates: factor graphs,
-   physics-informed tracking, multi-hypothesis
-   tracking, learned appearance embeddings.
-2. **H9: explicit object permanence** to bridge
+1. **H9: explicit object permanence** to bridge
    detector dropouts in H7 chains (e.g. extend
    each tracklet by ±5 frames using a constant
    velocity model when the detector is silent).
-3. **H10: chain quality assessment** — given a
+2. **H10: chain quality assessment** — given a
    chain, how confident should downstream consumers
-   be in its physical-ball identity? H3 + h3
-   confirmations could be combined with chain
-   length to produce a per-chain confidence score.
+   be in its physical-ball identity? H3 + H8 +
+   h3 confirmations could be combined into a
+   per-chain confidence score.
+3. **H8 v2: physics-based Kalman filter** for
+   stricter physics consistency. Predict the
+   expected velocity at the target tracklet's
+   start using a Kalman filter with constant
+   gravity, and compare to the actual velocity.
+   This would be more rigorous than the simple
+   discontinuity check.

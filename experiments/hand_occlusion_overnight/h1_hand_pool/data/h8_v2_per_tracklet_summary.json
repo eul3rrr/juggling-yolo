@@ -1,0 +1,1647 @@
+{
+  "h8_thresholds": {
+    "RESIDUAL_THRESHOLD_PX": 5.0,
+    "MIN_A_ABS": 0.1,
+    "MIN_POINTS": 5
+  },
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "video_key": "videos/identical_balls_trick_000_018.mp4",
+      "n_tracklets": 76,
+      "class_counts": {
+        "NOISY": 36,
+        "HELD": 19,
+        "BALLISTIC": 18,
+        "TOO_FEW_POINTS": 3
+      },
+      "n_chains": 43,
+      "n_pure_ballistic_chains": 7,
+      "n_noisy_chains": 28,
+      "chain_results": [
+        {
+          "chain_id": "0",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "1",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD"
+          ]
+        },
+        {
+          "chain_id": "2",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 2,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "3",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "4",
+          "n_tracklets": 2,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.5,
+          "classifications": [
+            "BALLISTIC",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "5",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "6",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "7",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "8",
+          "n_tracklets": 2,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.5,
+          "classifications": [
+            "BALLISTIC",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "9",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "10",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "11",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "12",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "13",
+          "n_tracklets": 4,
+          "n_ballistic": 1,
+          "n_held": 1,
+          "n_noisy": 2,
+          "ballistic_frac": 0.25,
+          "classifications": [
+            "NOISY",
+            "HELD",
+            "BALLISTIC",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "14",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "15",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "HELD"
+          ]
+        },
+        {
+          "chain_id": "16",
+          "n_tracklets": 2,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.5,
+          "classifications": [
+            "BALLISTIC",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "17",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "18",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "19",
+          "n_tracklets": 3,
+          "n_ballistic": 1,
+          "n_held": 2,
+          "n_noisy": 0,
+          "ballistic_frac": 0.3333333333333333,
+          "classifications": [
+            "HELD",
+            "HELD",
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "20",
+          "n_tracklets": 2,
+          "n_ballistic": 1,
+          "n_held": 1,
+          "n_noisy": 0,
+          "ballistic_frac": 0.5,
+          "classifications": [
+            "HELD",
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "21",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 2,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD",
+            "HELD"
+          ]
+        },
+        {
+          "chain_id": "22",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "23",
+          "n_tracklets": 7,
+          "n_ballistic": 0,
+          "n_held": 6,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD",
+            "HELD",
+            "HELD",
+            "HELD",
+            "HELD",
+            "HELD",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "24",
+          "n_tracklets": 3,
+          "n_ballistic": 1,
+          "n_held": 1,
+          "n_noisy": 1,
+          "ballistic_frac": 0.3333333333333333,
+          "classifications": [
+            "BALLISTIC",
+            "HELD",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "25",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD"
+          ]
+        },
+        {
+          "chain_id": "26",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "27",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD"
+          ]
+        },
+        {
+          "chain_id": "28",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "TOO_FEW_POINTS"
+          ]
+        },
+        {
+          "chain_id": "29",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "TOO_FEW_POINTS"
+          ]
+        },
+        {
+          "chain_id": "30",
+          "n_tracklets": 5,
+          "n_ballistic": 2,
+          "n_held": 1,
+          "n_noisy": 2,
+          "ballistic_frac": 0.4,
+          "classifications": [
+            "HELD",
+            "BALLISTIC",
+            "NOISY",
+            "BALLISTIC",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "31",
+          "n_tracklets": 5,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 5,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "32",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "33",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "34",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "35",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "36",
+          "n_tracklets": 2,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.5,
+          "classifications": [
+            "NOISY",
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "37",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "38",
+          "n_tracklets": 3,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 2,
+          "ballistic_frac": 0.3333333333333333,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "39",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "40",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "HELD"
+          ]
+        },
+        {
+          "chain_id": "41",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "42",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "TOO_FEW_POINTS"
+          ]
+        }
+      ],
+      "per_tracklet": {
+        "1": {
+          "classification": "NOISY",
+          "n_pts": 21,
+          "a": -1.0678282266932064,
+          "b": 38.198232066331656,
+          "c": 330.99210841332643,
+          "mean_residual_px": 8.904413136171895
+        },
+        "2": {
+          "classification": "HELD",
+          "n_pts": 21,
+          "a": -0.03865285744003271,
+          "b": 7.7210389669824675,
+          "c": 431.6462151326941,
+          "mean_residual_px": 3.5835017351396914
+        },
+        "3": {
+          "classification": "NOISY",
+          "n_pts": 34,
+          "a": 0.8961027661064467,
+          "b": -24.97116179335385,
+          "c": 358.21688851540705,
+          "mean_residual_px": 6.710106186057265
+        },
+        "4": {
+          "classification": "BALLISTIC",
+          "n_pts": 18,
+          "a": 0.5019471749225907,
+          "b": -13.043052438080318,
+          "c": 498.8235175438591,
+          "mean_residual_px": 3.9142510606582355
+        },
+        "5": {
+          "classification": "BALLISTIC",
+          "n_pts": 6,
+          "a": 1.1074107142856415,
+          "b": -19.971453571428185,
+          "c": 562.1340357142853,
+          "mean_residual_px": 1.7720095238094966
+        },
+        "6": {
+          "classification": "NOISY",
+          "n_pts": 101,
+          "a": 0.016839027375039176,
+          "b": 0.4014058472369065,
+          "c": 321.93108474365465,
+          "mean_residual_px": 116.549902406361
+        },
+        "7": {
+          "classification": "NOISY",
+          "n_pts": 23,
+          "a": 0.12121245059288739,
+          "b": -5.48642193675894,
+          "c": 482.4091956521741,
+          "mean_residual_px": 9.147272555421878
+        },
+        "8": {
+          "classification": "BALLISTIC",
+          "n_pts": 9,
+          "a": 0.30809956709952313,
+          "b": -10.303929870129487,
+          "c": 604.7816848484842,
+          "mean_residual_px": 1.6875949975949425
+        },
+        "9": {
+          "classification": "NOISY",
+          "n_pts": 53,
+          "a": 0.05631030573816522,
+          "b": 3.243293629110973,
+          "c": 282.67993081761074,
+          "mean_residual_px": 81.12108608740023
+        },
+        "10": {
+          "classification": "NOISY",
+          "n_pts": 21,
+          "a": 0.044547787452816436,
+          "b": -6.73220120360177,
+          "c": 538.179195369847,
+          "mean_residual_px": 8.699401105813717
+        },
+        "11": {
+          "classification": "BALLISTIC",
+          "n_pts": 16,
+          "a": -0.4640633753501423,
+          "b": 5.779315336134495,
+          "c": 474.40892156862736,
+          "mean_residual_px": 3.4889211659663744
+        },
+        "12": {
+          "classification": "NOISY",
+          "n_pts": 51,
+          "a": 0.05178417927403177,
+          "b": 6.616650855302933,
+          "c": 197.70398557158725,
+          "mean_residual_px": 73.55065021866068
+        },
+        "13": {
+          "classification": "NOISY",
+          "n_pts": 35,
+          "a": -0.12638075967487275,
+          "b": 4.347287005416254,
+          "c": 418.73228365508464,
+          "mean_residual_px": 15.357053670490323
+        },
+        "14": {
+          "classification": "NOISY",
+          "n_pts": 40,
+          "a": 0.9306910010721052,
+          "b": -32.056605420798995,
+          "c": 445.82955165505444,
+          "mean_residual_px": 5.131361878517645
+        },
+        "15": {
+          "classification": "NOISY",
+          "n_pts": 17,
+          "a": -1.4676889834881306,
+          "b": 24.46074187306499,
+          "c": 492.704754385965,
+          "mean_residual_px": 10.708370515388832
+        },
+        "16": {
+          "classification": "BALLISTIC",
+          "n_pts": 15,
+          "a": 0.3659682449902962,
+          "b": -24.272566144149852,
+          "c": 305.4209117647056,
+          "mean_residual_px": 3.300600288730841
+        },
+        "17": {
+          "classification": "NOISY",
+          "n_pts": 48,
+          "a": -0.2917699770148597,
+          "b": 19.251539603588984,
+          "c": 261.3737063775504,
+          "mean_residual_px": 55.68359791236972
+        },
+        "18": {
+          "classification": "NOISY",
+          "n_pts": 46,
+          "a": -0.19057069071846772,
+          "b": 22.39461484736342,
+          "c": -3.1413159111923634,
+          "mean_residual_px": 57.59662023086515
+        },
+        "19": {
+          "classification": "NOISY",
+          "n_pts": 27,
+          "a": 0.7585902404109234,
+          "b": -39.58527543261318,
+          "c": 547.1669480021885,
+          "mean_residual_px": 6.609738239793461
+        },
+        "20": {
+          "classification": "HELD",
+          "n_pts": 12,
+          "a": 0.09868181818182024,
+          "b": 15.978597902097883,
+          "c": 94.40096153846154,
+          "mean_residual_px": 2.561239510489506
+        },
+        "21": {
+          "classification": "BALLISTIC",
+          "n_pts": 6,
+          "a": 1.3421428571428369,
+          "b": -25.55488571428559,
+          "c": 341.1905714285713,
+          "mean_residual_px": 2.1476380952380936
+        },
+        "22": {
+          "classification": "NOISY",
+          "n_pts": 38,
+          "a": 0.84828941441441,
+          "b": -16.71561412171263,
+          "c": 106.04648076922958,
+          "mean_residual_px": 11.752100412153098
+        },
+        "24": {
+          "classification": "NOISY",
+          "n_pts": 102,
+          "a": 0.1303581818223334,
+          "b": -11.573823705603079,
+          "c": 323.09875760005224,
+          "mean_residual_px": 44.76564725059808
+        },
+        "23": {
+          "classification": "HELD",
+          "n_pts": 9,
+          "a": -0.03463744588748434,
+          "b": 2.0148495670999234,
+          "c": 365.08027272727213,
+          "mean_residual_px": 0.5471476671475936
+        },
+        "25": {
+          "classification": "BALLISTIC",
+          "n_pts": 14,
+          "a": -0.262037087912086,
+          "b": 18.765194230769215,
+          "c": 468.2596928571428,
+          "mean_residual_px": 3.261963265306146
+        },
+        "26": {
+          "classification": "NOISY",
+          "n_pts": 83,
+          "a": -0.010766262792053845,
+          "b": -3.0642698472146312,
+          "c": 583.5416128379054,
+          "mean_residual_px": 16.768122720423257
+        },
+        "27": {
+          "classification": "NOISY",
+          "n_pts": 55,
+          "a": -0.04564438755551149,
+          "b": -5.610433230732531,
+          "c": 664.2957505126442,
+          "mean_residual_px": 9.330797261045994
+        },
+        "28": {
+          "classification": "HELD",
+          "n_pts": 55,
+          "a": 0.06724740883082449,
+          "b": -5.897633525637969,
+          "c": 144.50701531100452,
+          "mean_residual_px": 1.1707839153578288
+        },
+        "29": {
+          "classification": "HELD",
+          "n_pts": 75,
+          "a": 0.05905863775928621,
+          "b": 1.4587062681172325,
+          "c": 15.928964757347421,
+          "mean_residual_px": 1.8821382174820531
+        },
+        "30": {
+          "classification": "HELD",
+          "n_pts": 57,
+          "a": 0.05208065588630191,
+          "b": 0.8895556711967546,
+          "c": 261.9486568334922,
+          "mean_residual_px": 0.6833588522843909
+        },
+        "31": {
+          "classification": "HELD",
+          "n_pts": 117,
+          "a": 0.056034491423336316,
+          "b": -10.1392825094005,
+          "c": 508.581731128958,
+          "mean_residual_px": 2.316501291180322
+        },
+        "32": {
+          "classification": "BALLISTIC",
+          "n_pts": 9,
+          "a": -0.1190313852813912,
+          "b": 5.7057677489178,
+          "c": 131.24641818181811,
+          "mean_residual_px": 0.511283597883603
+        },
+        "33": {
+          "classification": "BALLISTIC",
+          "n_pts": 17,
+          "a": -0.16350528895768643,
+          "b": 7.7947488390092365,
+          "c": 514.2711805985555,
+          "mean_residual_px": 1.5753826868208574
+        },
+        "34": {
+          "classification": "BALLISTIC",
+          "n_pts": 6,
+          "a": -0.11248214285712675,
+          "b": 3.203496428571353,
+          "c": 466.50967857142865,
+          "mean_residual_px": 0.17981904761904843
+        },
+        "35": {
+          "classification": "HELD",
+          "n_pts": 21,
+          "a": -0.05506194834912458,
+          "b": -0.9716116823681704,
+          "c": 548.363345002824,
+          "mean_residual_px": 0.5805255317853104
+        },
+        "36": {
+          "classification": "HELD",
+          "n_pts": 49,
+          "a": 0.05698074250976933,
+          "b": 4.60898191055148,
+          "c": 111.26203102040799,
+          "mean_residual_px": 1.1870621274823385
+        },
+        "37": {
+          "classification": "HELD",
+          "n_pts": 6,
+          "a": 0.09544642857163145,
+          "b": -2.659403571429636,
+          "c": 480.6982500000008,
+          "mean_residual_px": 0.15263809523810323
+        },
+        "38": {
+          "classification": "BALLISTIC",
+          "n_pts": 6,
+          "a": 0.1840178571429729,
+          "b": -5.238775000000616,
+          "c": 507.70710714285764,
+          "mean_residual_px": 0.2943428571429365
+        },
+        "39": {
+          "classification": "HELD",
+          "n_pts": 137,
+          "a": 0.06187867205442252,
+          "b": -9.759601668522379,
+          "c": 409.5312309327406,
+          "mean_residual_px": 2.716961171029848
+        },
+        "40": {
+          "classification": "HELD",
+          "n_pts": 39,
+          "a": 0.05367796551365154,
+          "b": -3.6277339445794916,
+          "c": 405.23499043151963,
+          "mean_residual_px": 0.5936514285894109
+        },
+        "41": {
+          "classification": "HELD",
+          "n_pts": 23,
+          "a": -0.012694692264253278,
+          "b": -0.21282546583860273,
+          "c": 342.90983478260904,
+          "mean_residual_px": 0.3722249478309782
+        },
+        "42": {
+          "classification": "HELD",
+          "n_pts": 10,
+          "a": 0.06448484848490223,
+          "b": 1.6072424242419092,
+          "c": 518.8946909090917,
+          "mean_residual_px": 0.6261406060606987
+        },
+        "43": {
+          "classification": "HELD",
+          "n_pts": 6,
+          "a": 0.016946428571430097,
+          "b": -0.4759607142856951,
+          "c": 322.14839285714277,
+          "mean_residual_px": 0.026961904761899785
+        },
+        "44": {
+          "classification": "NOISY",
+          "n_pts": 163,
+          "a": 0.07275436883631597,
+          "b": -12.362897411815377,
+          "c": 639.1489443091704,
+          "mean_residual_px": 33.404192024485994
+        },
+        "45": {
+          "classification": "HELD",
+          "n_pts": 45,
+          "a": 0.054342869240560684,
+          "b": -0.16138519256621917,
+          "c": 311.84909491211755,
+          "mean_residual_px": 0.6576256391769296
+        },
+        "46": {
+          "classification": "NOISY",
+          "n_pts": 43,
+          "a": -0.11411663388606351,
+          "b": 9.209868571870675,
+          "c": 416.8188548273422,
+          "mean_residual_px": 6.605856306681917
+        },
+        "47": {
+          "classification": "NOISY",
+          "n_pts": 87,
+          "a": -0.09937304234242,
+          "b": 11.30186435632747,
+          "c": 254.5386234546154,
+          "mean_residual_px": 9.106657048740207
+        },
+        "48": {
+          "classification": "HELD",
+          "n_pts": 15,
+          "a": -0.0022878151260859263,
+          "b": 0.04906512605098441,
+          "c": 674.7253529411748,
+          "mean_residual_px": 0.020693557422964658
+        },
+        "49": {
+          "classification": "TOO_FEW_POINTS",
+          "n_pts": 4
+        },
+        "50": {
+          "classification": "NOISY",
+          "n_pts": 78,
+          "a": 0.000257392549157431,
+          "b": -10.646348848561589,
+          "c": 780.1364083495632,
+          "mean_residual_px": 85.33695189077616
+        },
+        "51": {
+          "classification": "HELD",
+          "n_pts": 6,
+          "a": 0.08901785714277491,
+          "b": -2.3875178571424036,
+          "c": 513.7609642857138,
+          "mean_residual_px": 0.1424285714285721
+        },
+        "52": {
+          "classification": "BALLISTIC",
+          "n_pts": 11,
+          "a": 0.20627622377624338,
+          "b": -11.26748041958063,
+          "c": 437.3661888111892,
+          "mean_residual_px": 1.1613635092180525
+        },
+        "53": {
+          "classification": "NOISY",
+          "n_pts": 54,
+          "a": 0.8871696728324082,
+          "b": -49.57197649850148,
+          "c": 758.0233599567097,
+          "mean_residual_px": 23.696266513768133
+        },
+        "54": {
+          "classification": "NOISY",
+          "n_pts": 39,
+          "a": -0.7041210658421785,
+          "b": 32.373680056658635,
+          "c": 237.7470930581627,
+          "mean_residual_px": 36.32723333041144
+        },
+        "55": {
+          "classification": "TOO_FEW_POINTS",
+          "n_pts": 4
+        },
+        "56": {
+          "classification": "NOISY",
+          "n_pts": 21,
+          "a": -1.4801524562394033,
+          "b": 31.48278678712573,
+          "c": 417.5432535290801,
+          "mean_residual_px": 9.927994579333747
+        },
+        "57": {
+          "classification": "NOISY",
+          "n_pts": 47,
+          "a": 0.8993196744007486,
+          "b": -24.176514689409455,
+          "c": 166.41086745549237,
+          "mean_residual_px": 20.054418923540126
+        },
+        "58": {
+          "classification": "BALLISTIC",
+          "n_pts": 6,
+          "a": 0.7569821428571549,
+          "b": -13.158425000000047,
+          "c": 526.1828928571429,
+          "mean_residual_px": 1.2112571428571737
+        },
+        "59": {
+          "classification": "BALLISTIC",
+          "n_pts": 19,
+          "a": 0.581425475453347,
+          "b": 6.978622143594138,
+          "c": 336.89385714285754,
+          "mean_residual_px": 3.8771445486782157
+        },
+        "60": {
+          "classification": "NOISY",
+          "n_pts": 82,
+          "a": -0.27288047612439564,
+          "b": 21.2520358090316,
+          "c": 59.07919598253814,
+          "mean_residual_px": 119.98361394932442
+        },
+        "61": {
+          "classification": "BALLISTIC",
+          "n_pts": 8,
+          "a": 0.8290476190476215,
+          "b": -25.7561666666667,
+          "c": 648.7105000000001,
+          "mean_residual_px": 1.878113095238092
+        },
+        "62": {
+          "classification": "NOISY",
+          "n_pts": 69,
+          "a": 0.11713366556555892,
+          "b": -4.115671757544603,
+          "c": 409.9218234275225,
+          "mean_residual_px": 63.736056737751774
+        },
+        "63": {
+          "classification": "NOISY",
+          "n_pts": 61,
+          "a": 0.3981751965151598,
+          "b": -14.259686460396631,
+          "c": 268.58034373347357,
+          "mean_residual_px": 68.76010668889897
+        },
+        "64": {
+          "classification": "NOISY",
+          "n_pts": 26,
+          "a": -0.6483819291819327,
+          "b": 42.90491575091584,
+          "c": 143.67125152625107,
+          "mean_residual_px": 22.223073184934684
+        },
+        "65": {
+          "classification": "NOISY",
+          "n_pts": 20,
+          "a": 0.7061640464798273,
+          "b": -22.688088311688137,
+          "c": 451.32257922077866,
+          "mean_residual_px": 5.640064196855818
+        },
+        "66": {
+          "classification": "BALLISTIC",
+          "n_pts": 13,
+          "a": -0.17779670329669375,
+          "b": 1.7682692307691228,
+          "c": 506.79291208791227,
+          "mean_residual_px": 0.983146238377025
+        },
+        "67": {
+          "classification": "NOISY",
+          "n_pts": 58,
+          "a": -0.5281839842153601,
+          "b": 27.387134551750506,
+          "c": 219.16039216832246,
+          "mean_residual_px": 58.36451680284975
+        },
+        "68": {
+          "classification": "NOISY",
+          "n_pts": 51,
+          "a": 0.9371891862695726,
+          "b": -44.999468544247854,
+          "c": 691.8038151626395,
+          "mean_residual_px": 10.557056135205398
+        },
+        "69": {
+          "classification": "NOISY",
+          "n_pts": 40,
+          "a": -0.26706308983058163,
+          "b": 8.849124199452723,
+          "c": 484.21379973867556,
+          "mean_residual_px": 11.949720503710033
+        },
+        "70": {
+          "classification": "NOISY",
+          "n_pts": 27,
+          "a": -1.1676081175529454,
+          "b": 39.80837271693826,
+          "c": 253.83296715927722,
+          "mean_residual_px": 19.352062172197044
+        },
+        "72": {
+          "classification": "NOISY",
+          "n_pts": 27,
+          "a": -0.15272127910403566,
+          "b": 5.811869862321537,
+          "c": 444.64571592775053,
+          "mean_residual_px": 11.839796244680565
+        },
+        "71": {
+          "classification": "NOISY",
+          "n_pts": 50,
+          "a": 0.6228839066395748,
+          "b": -23.723129528580447,
+          "c": 477.5755949321248,
+          "mean_residual_px": 43.10433454645874
+        },
+        "73": {
+          "classification": "HELD",
+          "n_pts": 12,
+          "a": 0.047769980019974616,
+          "b": -1.403990759240679,
+          "c": 459.5828983516481,
+          "mean_residual_px": 0.6796144272394002
+        },
+        "74": {
+          "classification": "BALLISTIC",
+          "n_pts": 23,
+          "a": 1.0211146245059242,
+          "b": -25.501652173912934,
+          "c": 387.81139130434735,
+          "mean_residual_px": 1.18384430314487
+        },
+        "75": {
+          "classification": "BALLISTIC",
+          "n_pts": 9,
+          "a": -0.533479437229423,
+          "b": -3.9527145021646057,
+          "c": 512.1548363636364,
+          "mean_residual_px": 1.1734197210197155
+        },
+        "76": {
+          "classification": "TOO_FEW_POINTS",
+          "n_pts": 2
+        }
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+      "n_tracklets": 40,
+      "class_counts": {
+        "HELD": 2,
+        "NOISY": 31,
+        "BALLISTIC": 5,
+        "TOO_FEW_POINTS": 2
+      },
+      "n_chains": 15,
+      "n_pure_ballistic_chains": 3,
+      "n_noisy_chains": 11,
+      "chain_results": [
+        {
+          "chain_id": "0",
+          "n_tracklets": 4,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 4,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "1",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 2,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "2",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "3",
+          "n_tracklets": 4,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 3,
+          "ballistic_frac": 0.25,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "4",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 1,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "5",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "6",
+          "n_tracklets": 2,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 2,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "7",
+          "n_tracklets": 4,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 4,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "8",
+          "n_tracklets": 4,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 4,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "9",
+          "n_tracklets": 6,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 5,
+          "ballistic_frac": 0.16666666666666666,
+          "classifications": [
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "NOISY",
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "10",
+          "n_tracklets": 4,
+          "n_ballistic": 0,
+          "n_held": 1,
+          "n_noisy": 3,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "HELD",
+            "NOISY",
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "11",
+          "n_tracklets": 1,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "TOO_FEW_POINTS"
+          ]
+        },
+        {
+          "chain_id": "12",
+          "n_tracklets": 3,
+          "n_ballistic": 0,
+          "n_held": 0,
+          "n_noisy": 2,
+          "ballistic_frac": 0.0,
+          "classifications": [
+            "TOO_FEW_POINTS",
+            "NOISY",
+            "NOISY"
+          ]
+        },
+        {
+          "chain_id": "13",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        },
+        {
+          "chain_id": "14",
+          "n_tracklets": 1,
+          "n_ballistic": 1,
+          "n_held": 0,
+          "n_noisy": 0,
+          "ballistic_frac": 1.0,
+          "classifications": [
+            "BALLISTIC"
+          ]
+        }
+      ],
+      "per_tracklet": {
+        "3": {
+          "classification": "HELD",
+          "n_pts": 26,
+          "a": 0.07042793040293753,
+          "b": 8.465215244200056,
+          "c": 229.85322039072125,
+          "mean_residual_px": 4.008608827838848
+        },
+        "4": {
+          "classification": "NOISY",
+          "n_pts": 415,
+          "a": -0.0002462427886846209,
+          "b": 0.1913953343499559,
+          "c": 292.37354773787916,
+          "mean_residual_px": 83.40580158702386
+        },
+        "5": {
+          "classification": "NOISY",
+          "n_pts": 230,
+          "a": 0.007081037490638946,
+          "b": -1.7035236973153667,
+          "c": 401.72329067154675,
+          "mean_residual_px": 81.11863510095502
+        },
+        "1": {
+          "classification": "NOISY",
+          "n_pts": 106,
+          "a": -0.036449052992012995,
+          "b": 4.021160030871696,
+          "c": 238.82221711828169,
+          "mean_residual_px": 71.73884670381788
+        },
+        "2": {
+          "classification": "NOISY",
+          "n_pts": 76,
+          "a": 0.21966211420158732,
+          "b": -15.093634354592734,
+          "c": 471.5687714259419,
+          "mean_residual_px": 16.198813924634976
+        },
+        "6": {
+          "classification": "NOISY",
+          "n_pts": 69,
+          "a": 0.2490968903085271,
+          "b": -15.498267897940018,
+          "c": 447.7057571341094,
+          "mean_residual_px": 7.739346212124969
+        },
+        "7": {
+          "classification": "BALLISTIC",
+          "n_pts": 6,
+          "a": -2.2784642857143376,
+          "b": 7.050378571428865,
+          "c": 331.20964285714257,
+          "mean_residual_px": 2.7692761904762526
+        },
+        "8": {
+          "classification": "NOISY",
+          "n_pts": 349,
+          "a": 0.00029038587422519055,
+          "b": -0.006014849109613204,
+          "c": 306.722627774734,
+          "mean_residual_px": 82.469832349318
+        },
+        "9": {
+          "classification": "NOISY",
+          "n_pts": 148,
+          "a": 0.01726366906370841,
+          "b": -2.3413540321017146,
+          "c": 370.9414072555776,
+          "mean_residual_px": 82.40454757153698
+        },
+        "10": {
+          "classification": "NOISY",
+          "n_pts": 125,
+          "a": -0.003255262450966298,
+          "b": 0.9184480830903291,
+          "c": 265.1839194210721,
+          "mean_residual_px": 73.50407826448217
+        },
+        "11": {
+          "classification": "NOISY",
+          "n_pts": 58,
+          "a": 0.17863147348206984,
+          "b": -5.0019506158734774,
+          "c": 260.99374225599144,
+          "mean_residual_px": 14.978530570617243
+        },
+        "12": {
+          "classification": "NOISY",
+          "n_pts": 60,
+          "a": 0.23793109444256122,
+          "b": -11.217412260357849,
+          "c": 350.42265933368617,
+          "mean_residual_px": 7.757861971130064
+        },
+        "13": {
+          "classification": "NOISY",
+          "n_pts": 64,
+          "a": 0.22165732352325174,
+          "b": -11.132080154858638,
+          "c": 371.172858959791,
+          "mean_residual_px": 12.15132722358283
+        },
+        "14": {
+          "classification": "NOISY",
+          "n_pts": 72,
+          "a": 0.17902048484290867,
+          "b": -9.788055025171358,
+          "c": 369.4664701807968,
+          "mean_residual_px": 25.28569986066199
+        },
+        "15": {
+          "classification": "NOISY",
+          "n_pts": 272,
+          "a": -0.0014914007070507495,
+          "b": 0.5251299359386639,
+          "c": 281.87234098579006,
+          "mean_residual_px": 81.67417648407472
+        },
+        "16": {
+          "classification": "NOISY",
+          "n_pts": 135,
+          "a": 0.007381656683101204,
+          "b": -0.4323271774690312,
+          "c": 299.15126957206223,
+          "mean_residual_px": 76.31034097271848
+        },
+        "17": {
+          "classification": "NOISY",
+          "n_pts": 205,
+          "a": -0.002159927599325129,
+          "b": 0.5103362455706535,
+          "c": 293.3442561480086,
+          "mean_residual_px": 80.3095120489513
+        },
+        "18": {
+          "classification": "NOISY",
+          "n_pts": 294,
+          "a": 0.0008034056392976169,
+          "b": -0.08768681877832504,
+          "c": 318.07840321594506,
+          "mean_residual_px": 84.4796550960931
+        },
+        "19": {
+          "classification": "NOISY",
+          "n_pts": 59,
+          "a": 0.18597491186551707,
+          "b": -6.090340212571709,
+          "c": 289.5459696582391,
+          "mean_residual_px": 14.92466042978447
+        },
+        "20": {
+          "classification": "HELD",
+          "n_pts": 8,
+          "a": 0.06419642857144625,
+          "b": 6.459541666666545,
+          "c": 436.3722916666668,
+          "mean_residual_px": 1.1133556547619108
+        },
+        "21": {
+          "classification": "NOISY",
+          "n_pts": 217,
+          "a": 0.0033982255075460143,
+          "b": -0.4355339085288348,
+          "c": 315.51665747169886,
+          "mean_residual_px": 82.75595658114834
+        },
+        "22": {
+          "classification": "NOISY",
+          "n_pts": 140,
+          "a": 0.008346938692296477,
+          "b": -0.5994237784850528,
+          "c": 305.0556143670529,
+          "mean_residual_px": 79.33357317646406
+        },
+        "23": {
+          "classification": "TOO_FEW_POINTS",
+          "n_pts": 4
+        },
+        "24": {
+          "classification": "NOISY",
+          "n_pts": 68,
+          "a": 0.257479620076453,
+          "b": -16.867385508973168,
+          "c": 485.40090199123057,
+          "mean_residual_px": 8.130229924131744
+        },
+        "25": {
+          "classification": "NOISY",
+          "n_pts": 149,
+          "a": 0.012585989738294778,
+          "b": -1.3087550392215532,
+          "c": 321.48881811991583,
+          "mean_residual_px": 83.76855028579051
+        },
+        "26": {
+          "classification": "NOISY",
+          "n_pts": 67,
+          "a": 0.20382442299083622,
+          "b": -10.505585155482832,
+          "c": 369.2056718326535,
+          "mean_residual_px": 15.095270735993672
+        },
+        "27": {
+          "classification": "TOO_FEW_POINTS",
+          "n_pts": 4
+        },
+        "28": {
+          "classification": "NOISY",
+          "n_pts": 65,
+          "a": 0.12476072714598883,
+          "b": -3.231114859021611,
+          "c": 256.5438226281186,
+          "mean_residual_px": 28.32163862141874
+        },
+        "29": {
+          "classification": "NOISY",
+          "n_pts": 66,
+          "a": 0.21168528600186015,
+          "b": -10.426000014293754,
+          "c": 355.4225260196344,
+          "mean_residual_px": 16.130733509894593
+        },
+        "30": {
+          "classification": "NOISY",
+          "n_pts": 136,
+          "a": 0.007994983007594754,
+          "b": -0.3275382229376538,
+          "c": 299.1591785124238,
+          "mean_residual_px": 74.30135390886625
+        },
+        "31": {
+          "classification": "NOISY",
+          "n_pts": 64,
+          "a": 0.22659605851138234,
+          "b": -10.650999534202443,
+          "c": 332.2197350524486,
+          "mean_residual_px": 10.428293811778705
+        },
+        "32": {
+          "classification": "NOISY",
+          "n_pts": 141,
+          "a": 0.01112726522749096,
+          "b": -0.6332600103966178,
+          "c": 294.4565664712872,
+          "mean_residual_px": 75.34173849864185
+        },
+        "33": {
+          "classification": "NOISY",
+          "n_pts": 66,
+          "a": 0.23501269420329468,
+          "b": -13.01605695705196,
+          "c": 404.7376692473464,
+          "mean_residual_px": 11.53410163553423
+        },
+        "34": {
+          "classification": "NOISY",
+          "n_pts": 131,
+          "a": 0.004976198435068687,
+          "b": -0.4282601178101976,
+          "c": 317.8010016905555,
+          "mean_residual_px": 72.61504302293844
+        },
+        "35": {
+          "classification": "NOISY",
+          "n_pts": 67,
+          "a": 0.20689430928273247,
+          "b": -10.810152555369257,
+          "c": 379.8502568614732,
+          "mean_residual_px": 16.967986654679944
+        },
+        "36": {
+          "classification": "NOISY",
+          "n_pts": 75,
+          "a": 0.14702138563904915,
+          "b": -8.707546036578398,
+          "c": 388.0489436773748,
+          "mean_residual_px": 34.591105537525806
+        },
+        "37": {
+          "classification": "BALLISTIC",
+          "n_pts": 46,
+          "a": 0.2815180213326601,
+          "b": -15.663582992038771,
+          "c": 434.14482863089717,
+          "mean_residual_px": 1.7345564383731644
+        },
+        "38": {
+          "classification": "BALLISTIC",
+          "n_pts": 31,
+          "a": 0.3017292825361535,
+          "b": -15.336262347052347,
+          "c": 404.44043951612935,
+          "mean_residual_px": 1.0259746797517055
+        },
+        "39": {
+          "classification": "BALLISTIC",
+          "n_pts": 8,
+          "a": 0.41697619047619805,
+          "b": 5.629619047618991,
+          "c": 382.7825000000001,
+          "mean_residual_px": 2.474636904761894
+        },
+        "40": {
+          "classification": "BALLISTIC",
+          "n_pts": 17,
+          "a": 0.37583023735809235,
+          "b": -17.459332817337316,
+          "c": 418.3881310629511,
+          "mean_residual_px": 0.7151790202149454
+        }
+      }
+    }
+  }
+}

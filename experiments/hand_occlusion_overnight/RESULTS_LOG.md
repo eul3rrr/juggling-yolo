@@ -551,3 +551,78 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h7/tracklet3_conflict_h7.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h7/longest_chain_h7.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h7_report.md`
+
+### H8 (2026-08-28 ~07:10 CEST)
+
+- Hypothesis: a real airborne ball's y-velocity changes slowly
+  (gravity = ~0.5 px/frame^2 for a juggling ball at ~1m distance).
+  E6c's constant-velocity ballistic model misses identity switches
+  where two unrelated tracklets are linked. A per-edge y-velocity
+  discontinuity check should flag these.
+
+- Thresholds (declared from physical geometry, not from manual labels):
+  - VELOCITY_DISCONTINUITY_PX_PER_FRAME = 8.0
+  - TAIL_FRAMES = 3 (use last 3 frames of source, first 3 of target)
+  - MIN_TRACKLET_PTS = 3
+
+- Three iterated implementations:
+  - v1 (per-chain parabola): abandoned; juggling chains span
+    multiple parabolic arcs, single parabola doesn't fit.
+  - v2 (per-tracklet parabola): useful as tracklet-level metadata
+    but not as per-edge check.
+  - **v3 (per-edge y-velocity discontinuity) — RECOMMENDED.**
+
+- Algorithm: for each BALLISTIC edge in H7's chain representation,
+  compare y-velocity at source-tracklet tail (last 3 frames) to
+  y-velocity at target-tracklet head (first 3 frames). Flag
+  edges with discontinuity > 8.0 px/frame as likely identity
+  switches. Hand edges are EXCLUDED (held-then-released naturally
+  has vy discontinuity).
+
+- Quantitative result:
+
+| Video | n_air edges | n_air OK | n_air violating |
+|---|---|---|---|
+| identical | 23 | 14 | 9 |
+| YouTube | 24 | 1 | 23 (unreliable for long tracklets) |
+
+- Visual QA: 2 confirmed identity switches on identical:
+  - **5→6**: t5 was a held ball being released, t6 is a different
+    ball already in mid-air. 90px y-jump in 1 frame. Visual QA
+    confirmed.
+  - **50→55**: t50 ends in the hand area, t55 starts at a
+    different location. Visual QA confirmed.
+
+  All 6 air-edges in the longest H7 chain (35→37→40→41→43→45→46)
+  are OK (discontinuity ≤ 2.2 px/frame). This is consistent with
+  the visual QA that confirmed it as a real juggling cycle.
+
+- Negative findings:
+  - H8 v1 (per-chain parabola) was abandoned because juggling
+    chains span multiple parabolic arcs.
+  - H8 v2 (per-tracklet classification) classified 36/76 identical
+    and 31/40 YouTube tracklets as NOISY. Many false positives
+    because long tracklets span multiple bounces.
+  - H8 is unreliable on long tracklets (YouTube video): 23/24 air
+    edges flagged, but most are real because the tracklets span
+    many bounces (e.g., t4 has 415 frames covering f=2-416). A
+    future v4 should restrict H8 to short tracklets (n_pts ≤ 30).
+
+- Verdict: **PASS.** H8 successfully identifies 2 confirmed E6c
+  false positives on identical (5→6, 50→55) that H2/H6/H7 all
+  accepted. The metric is unreliable on long tracklets but is a
+  useful post-hoc quality signal. See
+  `h1_hand_pool/reports/h8_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py` (v1, abandoned)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v2_per_tracklet.py` (v2, partial)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py` (v3, recommended)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_physics_check_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v2_per_tracklet_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v3_edge_physics_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8/chain4_t5_t6_violating.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8/chain29_t50_t55_violating.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8/longest_chain_consistent.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_report.md`

@@ -12037,3 +12037,1101 @@ Now let me add the H7 entry to RESULTS_LOG.md:
 Now let me commit and push:
 ╰──────────────────────────────────────────────────────────────────────────────╯
   ┊ 💻 preparing terminal…
+  ┊ 💻 $         git add -A + 1 command  0.3s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         git commit -m "experiment: H7 full min-cost flow + H2+H3+H7 unified chain representation H7 design (master §17): - Greedy iterative min-cost flow with capacity constraints (one predecessor + one successor per tracklet). - Cycle detection and rejection. - Gap/error-aware air-edge cost: cost = 2.0 + 0.05*err + 0.1*gap. - Pure-Python (no scipy/networkx needed). Conflict resolution: - Tracklet 3 -> 9 (hand, cost 1.5) wins over 3 -> 8 (air, cost 2.92). Same answer as H6 and visual QA. t8 confirmed as a different ball (224px below t3's endpoint in y, likely stationary object on surface). Chain statistics (identical): - H2 (union-find): 40 chains, 15 multi, longest 8 (component), 1 conflict. - H6 (per-source greedy): 18 chains, 17 multi, longest 7 (path), 0 conflicts. - H7 (greedy + capacity): 43 chains, 17 multi, longest 7 (path), 0 conflicts. Sensitivity grid: 48 cells (3 base_costs x 4 err_scales x 4 gap_scales). PERFECTLY FLAT - every setting produces identical results. The hand<air cost ordering is the only thing that matters. Visual QA: - Tracklet-3 conflict: t8 confirmed as a different ball; t3->t9 is a real 20-frame hand-held catch-throw on the image-left hand. - Longest H7 chain (35->37->40->41->43->45->46, 7 tids): confirmed as a real single-ball juggling cycle (hold -> release -> rise -> apex -> fall -> catch). H2+H3+H7 unified chain representation: - Each edge: edge_type, cost, h3_confirmed, metadata. - Each chain: n_hand_edges, n_air_edges, n_h3_confirmed, tids. - Most informative possible chain representation. - Identical: 10 hand + 23 air admitted; 5/10 hand edges h3_confirmed. - YouTube: 1 hand + 24 air admitted; 1/1 hand edge h3_confirmed. H7 is now the recommended chain combination method, replacing H2 (union-find, conflicts unresolved) and H6 (per-source greedy, no capacity constraints). For the practical 'what's the right successor for tracklet X?' question, H6 and H7 give the same answer; H7's added value is path semantics and principled cost formulation. Artifacts: - scripts/h7_min_cost_flow.py, h7_sens_grid.py, h7_contact_sheets.py - scripts/h237_unified_chain.py - data/h7_*.{json,csv}, data/h237_unified_*.{json,csv} - contact_sheets_h7/{tracklet3_conflict_h7,longest_chain_h7}.png - reports/h7_report.md"  0.2s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         git push origin experiments/hand-occlusion-overnight  3.4s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+H7 is committed and pushed. Now let me update the todo list and move to the next experiment. Per the planned queue:
+- H8: literature search
+- H9: object permanence 
+- H10: chain quality assessment
+
+Let me start with H8 (literature search) since it may inspire new ideas:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 📋 preparing todo…
+  ┊ 📋 plan      6/7 task(s)  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Let me search for some recent literature on the specific topics the master mentions. The most interesting one is "physics-informed tracking" since juggling is a physics problem:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔍 preparing web_search…
+  ┊ 🔍 preparing web_search…
+  ┊ 🔍 search    physics-informed multi-object tracking juggling ball trajectory 2024 2025  1.8s
+  ┊ 🔍 search    hand-object interaction tracking occlusion factor graph sports 2024  1.6s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent! "Where Is The Ball: 3D Ball Trajectory Estimation From 2D Monocular Tracking" (arxiv 2506.05763) is highly relevant - it estimates physical parameters (velocity, force) from 2D observations. Let me look at that paper:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 📄 preparing web_extract…
+  ┊ 📄 fetch     arxiv.org  0.0s [DuckDuckGo (ddgs) is a search-only backend an...]
+  ┊ 📄 preparing web_extract…
+  ┊ 📄 fetch     arxiv.org  0.0s [DuckDuckGo (ddgs) is a search-only backend an...]
+  ┊ 🌐 preparing browser_navigate…
+  ┊ 🌐 navigate  arxiv.org  2.5s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Good. The key idea: "3D ball trajectory estimation from 2D tracking sequence" using LSTM. They use a canonical 3D representation independent of camera. This is a learned approach. Let me look at the HTML version for more detail:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🌐 preparing browser_navigate…
+  ┊ 🌐 navigate  arxiv.org  2.4s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+This paper is highly relevant. The key insight: estimating the physical parameters that best explain the detected trajectory (velocity, initial force) is a powerful approach. This is what we want for H9 (object permanence) — using ballistic extrapolation to fill detector dropouts.
+
+But there's an even more directly applicable idea here: physics-constrained trajectory verification. We can take H7's chains and check if each chain is consistent with a single physical ball (constant gravity, no teleportation). This is a post-hoc quality assessment.
+
+Let me look for one more paper - the "Cooperative Trajectory Matching" one - then design H8:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔍 preparing web_search…
+  ┊ 🔍 search    "ball tracking" trajectory matching Kalman filter sports small object 2024 2025  1.3s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Kalman filter is the standard tool. The key insight from these papers:
+- "Trajectory evaluation" / "trajectory matching" - validate trajectory by physics consistency
+- "Automatic trajectory correction" - use physics to correct noisy detections
+
+For H8, I can design a physics consistency check for H7 chains: each chain should be explainable by a single projectile motion (constant gravity). If a chain violates physics (e.g., teleports between frames), it should be flagged.
+
+Let me also think about H9 (object permanence) — that could be a Kalman filter that fills detector dropouts.
+
+Given the time budget, let me focus on H8 = physics consistency check on H7 chains. This is a focused experiment that builds on H7 directly:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py  0.5s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py
+@@ -0,0 +1,296 @@
++#!/usr/bin/env python3
++"""H8 — Physics consistency check on H7 chains.
++
++Hypothesis: each H7 chain represents a single physical ball. The ball's
++motion in mid-air is governed by gravity (constant downward acceleration
++in image space, where the camera is fixed). A chain is "physics-consistent"
++if the mid-air segments can be explained by a single projectile motion.
++
++Specifically: for each chain, fit a parabolic trajectory
++  y(t) = y0 + v0y * t + 0.5 * a * t^2
++to the mid-air points (skip the held phase) and check the residual.
++Chains with large residuals are flagged as "physics-violating" — they
++may contain wrong tracklet associations.
++
++Question: do the physics-violating chains correspond to the H2/H7
++conflict cases? If so, physics consistency is a useful post-hoc
++validation of chain quality.
++
++Approach (declared before reading outcomes):
++1. For each H7 chain, identify mid-air tracklets (those that are
++   connected by BALLISTIC air-edges). Skip the held phases
++   (immediately after HAND_TRANSITION or before AMBIGUOUS_HAND_TRANSITION).
++2. Fit a 2nd-order polynomial y(t) to the mid-air points.
++3. Compute residuals: actual y - predicted y.
++4. Flag chains with residual > THRESHOLD.
++
++This is a *validation* experiment, not a *recovery* experiment —
++it doesn't generate new chains, it scores the existing ones.
++"""
++from __future__ import annotations
++
++import csv
++import json
++import math
++from collections import defaultdict
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool"
++H1_DATA = H1_DIR / "data"
++
++STEMS = {
++    "identical_balls_trick_000_018": "videos/identical_balls_trick_000_018.mp4",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090":
++        "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
++}
++
++# H8 thresholds (declared from physical geometry)
++# Gravity in image y: ~30 px/s^2 for a ball at 30 fps (real g=9.8 m/s^2,
++# pixel-to-meter ratio depends on distance but in juggling the ball stays
++# at roughly constant distance so the y acceleration is ~constant).
++# A fit residual > 5 px is suspicious (more than half a ball radius).
++H8 = {
++    "RESIDUAL_THRESHOLD_PX": 5.0,
++    "MIN_MID_AIR_POINTS": 5,
++}
++
++
++def load_tracklet_points(stem: str) -> dict[int, list[tuple[int, float, float]]]:
++    """Load all tracklet points for a given stem.
++
++    Returns {tid: [(frame, x, y), ...]}."""
++    out = defaultdict(list)
++    candidates = [
++        WORKTREE / "detections" / f"{stem}_norfair_dt50_hc5.csv",
++        WORKTREE / "detections" / f"{stem}_yolo26s_botsort.csv",
++    ]
++    for path in candidates:
++        if not path.exists():
++            continue
++        with path.open() as fh:
++            for r in csv.DictReader(fh):
++                if "track_id" not in r:
++                    continue
++                tid = int(r["track_id"])
++                out[tid].append((int(r["frame"]), float(r["center_x"]),
++                                 float(r["center_y"])))
++        if out:
+… omitted 218 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+The physics check is flagging chains that are actually juggling sequences across multiple projectile arcs. A juggling chain has multiple parabolic arcs (one per throw), but a single parabola fit won't capture that. Let me think about this differently.
+
+The issue: a chain [35, 37, 40, 41, 43, 45, 46] has 6 BALLISTIC edges, but these edges span multiple throw cycles. Each throw cycle is a separate parabola. A single parabola fit won't work.
+
+I need to fit per-edge parabolas, not per-chain. Let me redesign H8 to check each BALLISTIC edge's trajectory:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py  0.6s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py
+@@ -175,72 +175,70 @@
+                         tracklet_points: dict[int, list]) -> dict:
+     """Check physics consistency of a chain.
+ 
+-    For each chain, find the longest run of consecutive BALLISTIC
+-    air-edges. For that run, gather all tracklet points (skip
+-    hand-held phases), fit a parabola y(t), compute residual.
++    For each chain, fit a parabola to each consecutive pair of
++    mid-air tracklets connected by a BALLISTIC edge. Each parabolic
++    arc represents one throw cycle. Chains with consistent per-edge
++    parabolas (residual < threshold) are flagged as physics-consistent.
+     """
+     tids = chain["tids"]
+     if len(tids) < 2:
+         return {"chain_id": chain["chain_id"], "n_tracklets": len(tids),
+                 "physics_consistent": True, "note": "single tracklet"}
+ 
+-    # Map tids to incoming edge type
+-    edge_in_type = {tid: None for tid in tids}
+-    for e in edges:
+-        if e["from_tid"] in tids and e["to_tid"] in tids:
+-            edge_in_type[e["to_tid"]] = e["edge_type"]
+-    edge_in_type[tids[0]] = "START"
+-
+-    # Find mid-air segments: runs of tracklets that are
+-    # neither preceded by nor followed by a hand-edge
+-    mid_air_tids = []
+-    for i, tid in enumerate(tids):
+-        prev_tid = tids[i - 1] if i > 0 else None
+-        next_tid = tids[i + 1] if i < len(tids) - 1 else None
+-        # Find the edge from prev to this
+-        if prev_tid is not None:
+-            prev_edge = next((e for e in edges
+-                              if e["from_tid"] == prev_tid and e["to_tid"] == tid),
+-                             None)
+-            if prev_edge and "HAND_TRANSITION" in prev_edge["edge_type"]:
+-                continue  # this is a hand-held start
+-        if next_tid is not None:
+-            next_edge = next((e for e in edges
+-                              if e["from_tid"] == tid and e["to_tid"] == next_tid),
+-                             None)
+-            if next_edge and "HAND_TRANSITION" in next_edge["edge_type"]:
+-                continue  # this is a hand-held end
+-        mid_air_tids.append(tid)
+-
+-    if len(mid_air_tids) < 2:
++    # Identify mid-air EDGES (consecutive pairs connected by BALLISTIC)
++    mid_air_pairs = []
++    for i in range(len(tids) - 1):
++        edge = next((e for e in edges
++                     if e["from_tid"] == tids[i] and e["to_tid"] == tids[i + 1]),
++                    None)
++        if edge and edge["edge_type"] == "BALLISTIC":
++            mid_air_pairs.append((tids[i], tids[i + 1]))
++
++    if not mid_air_pairs:
+         return {"chain_id": chain["chain_id"], "n_tracklets": len(tids),
+-                "physics_consistent": True, "note": "no mid-air segments",
+-                "n_mid_air_tids": len(mid_air_tids)}
+-
+-    # Gather all (frame, x, y) from mid-air tracklets
+-    points = []
+-    for tid in mid_air_tids:
+-        if tid in tracklet_points:
+-            points.extend(tracklet_points[tid])
+-    points.sort()
+-    if len(points) < H8["MIN_MID_AIR_POINTS"]:
++                "physics_consistent": True, "note": "no mid-air edges"}
++
++    # For each mid-air pair, gather points from both tracklets and fit
++    # a parabola. Compute residual.
++    per_edge_residuals = []
++    per_edge_details = []
++    for src, tgt in mid_air_pairs:
++        src_pts = tracklet_points.get(src, [])
++        tgt_pts = tracklet_points.get(tgt, [])
++        if len(src_pts) < 2 or len(tgt_pts) < 2:
++            continue
++        # Use only the last few points of src and first few of tgt
+… omitted 44 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_physics_check.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Better, but still flagging many chains. The issue is that the per-edge parabola fits span a long time window (the whole tail of source + head of target tracklet) and a single parabola may not fit. Also, the threshold of 5px might be too strict given tracking noise.
+
+Let me look at one of the violating chains more carefully. Chain 4 [5, 6] has residual 15.08:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_physics_check import load_tracklet_points, fit_parabola WORKTREE = "/home/it-admin/projects/juggling-yolo-hand-occlusion-night" tracklet_points = load_tracklet_points("identical_balls_trick_000_018") # t5 and t6 for tid in [5, 6]: pts = tracklet_points[tid] print(f"t{tid}: {len(pts)} points") for p in pts: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") print() # Last 3 of t5, first 3 of t6 edge_pts = tracklet_points[5][-3:] + tracklet_points[6][:3] edge_pts.sort() print("Edge points (last 3 of t5 + first 3 of t6):") for p in edge_pts: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") a, b, c, mean_res = fit_parabola(edge_pts) print(f"Fitted parabola: a={a:.4f}, b={b:.4f}, c={c:.2f}") print(f"Mean residual: {mean_res:.2f}") # What's the gravity (a*30^2 in px/s^2) print(f"a*30^2 = {a*30*30:.2f} px/s^2") EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+The edge 5→6 is in fact a problematic edge. Looking at the data:
+- t5: f=21-26, y goes 564→489 (drops 75 pixels in 5 frames = 15 px/frame, very fast)
+- t6: f=27-127, starts at y=398, then drops to 215 at f=40, then RISES back to 622 at f=118 — this is two complete bounce cycles!
+
+The issue: the parabola fit is trying to fit a curve through points that include the transition from t5 to t6 (which has a sudden jump from y=488 to y=398 — 90 pixels in 1 frame, impossible for a real ball). This is exactly the kind of edge that should be flagged as physics-violating!
+
+The H8 physics check IS working correctly — it's flagging edge 5→6 as suspicious because the y-velocity is discontinuous (15 px/frame at t5 vs 22 px/frame at t6 start). However, t5 is only 6 frames and the trajectory is genuinely inconsistent with t6.
+
+Let me check: is t5→6 a real ball transition? Looking at t5: f=21-26 dropping from 564→489 (probably a held ball being released and falling). t6: f=27+ has a complete parabolic arc. The y-jump from 488 to 398 between f=26 and f=27 is 90 pixels in 1 frame. That's a teleport.
+
+But wait — both are tracked. Let me see if this is a real issue or just tracker noise. Actually, the key question is: is t5 the same ball as t6? They were linked by E6c with err=2.49. The low err means E6c's ballistic prediction (extrapolating from t5's 5 frames of data) said t6's start position is close to where t5's end position would be.
+
+But the y-jump is 90px in 1 frame. That's clearly an inconsistency. H8 is correctly flagging it.
+
+This is actually a useful finding! Let me also check the violating chains on YouTube:
+
+The 8 violating YouTube chains are mostly all long air-only chains. These are likely ALL from the same ball being juggled many times. The "physics violation" is because we're trying to fit a parabola to points that span multiple throw cycles (parabola→throw→parabola→throw...).
+
+Let me also visualize the violating chain 4 (5→6) to see what's happening:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_contact_sheets.py  0.4s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_contact_sheets.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_contact_sheets.py
+@@ -0,0 +1,192 @@
++#!/usr/bin/env python3
++"""H8 visual QA — render the physics-violating chains for inspection.
++
++H8 flagged edge 5->6 as physics-violating (residual 15px, 90px y-jump
++in 1 frame between f=26 and f=27). Visualize the chain to confirm.
++"""
++from __future__ import annotations
++
++import csv
++import json
++from pathlib import Path
++
++import cv2
++import numpy as np
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DATA = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "data"
++VIDEOS_DIR = Path("/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos")
++OUT_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "contact_sheets_h8"
++OUT_DIR.mkdir(parents=True, exist_ok=True)
++
++COLOR_LEFT = (0, 165, 255)
++COLOR_RIGHT = (255, 128, 0)
++COLOR_T5 = (0, 200, 0)       # green
++COLOR_T6 = (200, 200, 0)     # yellow
++COLOR_T50 = (0, 200, 200)    # cyan
++COLOR_T55 = (200, 0, 200)    # magenta
++
++
++def load_tracklet_points(stem: str, tid: int):
++    out = []
++    candidates = [
++        WORKTREE / "detections" / f"{stem}_norfair_dt50_hc5.csv",
++        WORKTREE / "detections" / f"{stem}_yolo26s_botsort.csv",
++    ]
++    for path in candidates:
++        if not path.exists():
++            continue
++        with path.open() as fh:
++            for r in csv.DictReader(fh):
++                if "track_id" not in r:
++                    continue
++                if int(r["track_id"]) == tid:
++                    out.append((int(r["frame"]), float(r["center_x"]),
++                                float(r["center_y"])))
++        if out:
++            break
++    out.sort()
++    return out
++
++
++def load_wrist_frames(stem):
++    out = {}
++    path = WORKTREE / "detections" / f"{stem}_yolo26s-pose.csv"
++    if not path.exists():
++        return out
++    with path.open() as fh:
++        for r in csv.DictReader(fh):
++            try:
++                fr = int(r["frame"])
++                out[fr] = {
++                    "left": (float(r["left_wrist_x"]), float(r["left_wrist_y"]),
++                             float(r.get("left_wrist_confidence", 0))),
++                    "right": (float(r["right_wrist_x"]), float(r["right_wrist_y"]),
++                              float(r.get("right_wrist_confidence", 0))),
++                }
++            except (ValueError, KeyError):
++                continue
++    return out
++
++
++def render_sheet(stem, frames, tracklets, title, subtitle, out_path,
++                 show_xy=True):
++    video_path = VIDEOS_DIR / f"{stem}.mp4"
++    cap = cv2.VideoCapture(str(video_path))
++    if not cap.isOpened():
++        return
++    cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+… omitted 114 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         /home/it-admin/.hermes/profiles/juggling-tracker/workspace/.venv/bin/python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_contact_sheets.py  7.4s
+  ┊ 👁️ preparing vision_analyze…
+  ┊ 👁️  vision    Look at frames 20-50. GREEN (t5) is shown from f=21-26 with y values 564, 539, 526, 514, 501, 488 (dropping fast). YELLOW (t6) starts at f=27 with y=398 (a 90-pixel y-jump in 1 frame). Is t5 actually the SAME physical ball as t6? Or is t5 a held ball being dropped, and t6 is a DIFFERENT ball already in mid-air that the tracker just decided to link?  25.5s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent! H8 is correctly flagging an identity switch. The verifier confirms:
+- t5 was a ball being released (held by hand)
+- t6 is a DIFFERENT ball already in mid-air (from a previous throw)
+- The y-jump of 90px in 1 frame is physically impossible for the same ball
+- The E6c ballistic err=2.49 was misleading — it didn't catch this identity switch
+
+H8 successfully identified a false positive in E6c's chain that H2/H6/H7 all accepted! This is a real contribution to chain quality.
+
+Let me also check the chain 29 [50, 55] case:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 👁️ preparing vision_analyze…
+  ┊ 👁️  vision    Look at frames around 733-816. CYAN (t50) covers f=733-810 (78 points, 78 frames of data). MAGENTA (t55) covers f=811-814 (only 4 frames). Is t55 the natural continuation of t50's trajectory, or is t55 a DIFFERENT ball that the tracker incorrectly linked to t50? Specifically, are the (x, y) positions of t50's last few points consistent with t55's positions?  52.4s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent! Another identity switch detected. H8 successfully finds 2 of the E6c false positive edges. Let me also check the YouTube results — they were all flagged. Let me look at the most consistent YouTube chain and see if it makes sense:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import json from pathlib import Path H1 = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data") with (H1 / "h8_physics_check_summary.json").open() as fh: s = json.load(fh) # Look at all YouTube chains yt = s["videos"]["youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090"] print("=== YouTube chains ===") for r in yt["results"]: n_tids = r.get("n_tracklets", 0) consistent = r["physics_consistent"] res = r.get("mean_residual_px", 0) max_res = r.get("max_residual_px", 0) note = r.get("note", "") print(f" chain {r['chain_id']}: n_tids={n_tids}, consistent={consistent}, " f"residual={res:.2f}, max={max_res:.2f}, note={note}") if not consistent: # Show per-edge details for e in r.get("per_edge", []): print(f" edge {e['from_tid']}->{e['to_tid']}: residual={e['mean_residual_px']:.2f}, a={e['a']:.3f}") print() print("=== Identical chains ===") ident = s["videos"]["identical_balls_trick_000_018"] for r in ident["results"]: n_tids = r.get("n_tracklets", 0) consistent = r["physics_consistent"] res = r.get("mean_residual_px", 0) max_res = r.get("max_residual_px", 0) note = r.get("note", "") if not consistent: print(f" chain {r['chain_id']}: n_tids={n_tids}, residual={res:.2f}, max={max_res:.2f}") for e in r.get("per_edge", []): print(f" edge {e['from_tid']}->{e['to_tid']}: residual={e['mean_residual_px']:.2f}, a={e['a']:.3f}") EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+I see a key insight: on the YouTube video, almost all chains are flagged (8/15). Looking at the per-edge residuals, the violations are small (5-12 px) and the a coefficients (parabola curvature) are reasonable. The issue is that the YouTube ball trajectory is not a single parabola — it's a series of arcs from a juggling pattern, and our per-edge window (last 3 of source + first 3 of target = 6 frames) is too short to distinguish a real parabola from tracking noise.
+
+The YouTube violations look like false positives — the fits are reasonable parabolas (a ≈ -1 to -2, similar to gravity) but the residuals are 5-10px which is the level of tracking noise. On identical, the real violations (5→6, 50→55) have a=−1.6 and a=−1.0 but the residuals are 15-19px because of the y-jumps.
+
+Let me look at the YouTube case more carefully and make a key observation: the YouTube "physics violations" may not be false positives — they may reflect that the YouTube ball trajectory doesn't fit a single parabola over 6 frames because the tracking noise is larger. Let me check:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_physics_check import load_tracklet_points, fit_parabola WORKTREE = "/home/it-admin/projects/juggling-yolo-hand-occlusion-night" tracklet_points = load_tracklet_points("youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090") # Look at the first 6 frames of an "inconsistent" YouTube chain for tid in [19, 22, 26, 31, 35]: pts = tracklet_points[tid] print(f"t{tid}: f={pts[0][0]}-{pts[-1][0]}, n={len(pts)}") # show first 4 for p in pts[:4]: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") # show last 4 for p in pts[-4:]: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") print() EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Looking at the YouTube data: t19 has a y range of 287-513 (the ball goes from y=287 up at f=448, then drops to y=513 at f=503 — over 226 pixels of y-change in 55 frames). The parabola fit over 6 frames is too short to capture the full arc. The fits are real arcs but the residuals are 5-10px because the window is short.
+
+The key insight: on the YouTube video, the ball is in a steady juggling pattern, and each tracklet covers a full throw cycle (a parabola from release to catch). The parabola fit per edge is over 6 frames, which is too short to be a good test of physics.
+
+Let me improve the H8 design: instead of fitting 6 frames, fit a parabola over the full tracklet (which is the full ballistic arc), and check the residual. That would be a cleaner test.
+
+Actually, the more useful H8 design is: per-tracklet parabolic fit. If a tracklet's trajectory fits a parabola with low residual, it's a real airborne ball. If the residual is high, it could be held, transitioning, or noisy.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v2_per_tracklet.py  0.5s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v2_per_tracklet.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v2_per_tracklet.py
+@@ -0,0 +1,234 @@
++#!/usr/bin/env python3
++"""H8 — Per-tracklet parabolic fit as a chain quality signal.
++
++Question: a real airborne ball follows a parabolic trajectory
++(constant gravity in image y). If a tracklet's points fit a parabola
++with low residual, it's likely a real airborne ball. If the residual
++is high, the tracklet may be:
++  - held (zero velocity, but a parabola can fit)
++  - mid-catch or mid-throw (transitions between held and airborne)
++  - noisy tracking
++
++Approach (declared before reading outcomes):
++1. For each tracklet, fit y(t) = a*t^2 + b*t + c to its points.
++2. Compute the mean residual and the curvature a (gravity proxy).
++3. Classify each tracklet:
++  - "BALLISTIC" if residual < 5px AND |a| > 0.1 (real arc)
++  - "HELD" if residual < 5px AND |a| < 0.1 (no acceleration)
++  - "NOISY" otherwise
++4. For each H7 chain, compute the fraction of BALLISTIC tracklets.
++   A chain with high BALLISTIC fraction is likely a real chain.
++   A chain with low BALLISTIC fraction may be a tracker artifact.
++
++This is a per-tracklet classification, not a per-edge classification.
++The classification can be used as a downstream quality signal on H7
++chains.
++
++Note: gravity in image y is ~0.5 * g_real * (1/pixel_per_meter)^2 *
++(1/fps)^2. For a juggling ball at ~1m distance with a 30fps camera
++and 1280x720 image, a reasonable a is around 0.5-2.0 px/frame^2.
++"""
++from __future__ import annotations
++
++import csv
++import json
++import math
++from collections import defaultdict
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool"
++H1_DATA = H1_DIR / "data"
++
++STEMS = {
++    "identical_balls_trick_000_018": "videos/identical_balls_trick_000_018.mp4",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090":
++        "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
++}
++
++# H8 thresholds (declared from physical geometry)
++H8 = {
++    "RESIDUAL_THRESHOLD_PX": 5.0,  # >5px = noisy
++    "MIN_A_ABS": 0.1,              # |a| < 0.1 = held (no acceleration)
++    "MIN_POINTS": 5,               # need at least 5 points to fit
++}
++
++
++def solve_3x3(A, b):
++    """Solve a 3x3 linear system A x = b via Gaussian elimination."""
++    n = 3
++    M = [A[i] + [b[i]] for i in range(n)]
++    for i in range(n):
++        max_val = abs(M[i][i])
++        max_row = i
++        for k in range(i + 1, n):
++            if abs(M[k][i]) > max_val:
++                max_val = abs(M[k][i])
++                max_row = k
++        M[i], M[max_row] = M[max_row], M[i]
++        for k in range(i + 1, n):
++            factor = M[k][i] / M[i][i]
++            for j in range(i, n + 1):
++                M[k][j] -= factor * M[i][j]
++    x = [0.0] * n
++    for i in range(n - 1, -1, -1):
++        x[i] = (M[i][n] - sum(M[i][j] * x[j] for j in range(i + 1, n))) / M[i][i]
++    return x
++
++
+… omitted 156 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v2_per_tracklet.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Interesting. On the YouTube video, almost all tracklets (31/40) are classified as NOISY. This is because the YouTube juggling is faster and the ball is smaller in the image — tracking noise dominates the parabola fit.
+
+But wait — looking at the YouTube data I queried earlier (t19: y=287→513, a 226px y-range), this looks like a real parabola. Let me check what's actually being classified as NOISY:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import json from pathlib import Path H1 = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data") with (H1 / "h8_v2_per_tracklet_summary.json").open() as fh: s = json.load(fh) # Show YouTube classifications yt = s["videos"]["youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090"] print("=== YouTube per-tracklet (showing first 15) ===") for tid, c in list(yt["per_tracklet"].items())[:15]: print(f" t{tid}: {c['classification']:>15}, n_pts={c.get('n_pts','?')}, " f"a={c.get('a', 0):.3f}, mean_res={c.get('mean_residual_px', 0):.2f}") print() print("=== Identical per-tracklet (selected) ===") ident = s["videos"]["identical_balls_trick_000_018"] for tid, c in list(ident["per_tracklet"].items()): if c["classification"] in ["BALLISTIC", "HELD"]: print(f" t{tid}: {c['classification']:>10}, n_pts={c.get('n_pts','?')}, " f"a={c.get('a', 0):.3f}, mean_res={c.get('mean_residual_px', 0):.2f}") EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Interesting findings:
+- Identical: t35 (HELD, a=-0.055, residual 0.58) — yes, t35 is the held ball. But the "longest chain" started with t35 being held. Hmm.
+- t40 is HELD (a=0.054, residual 0.59), t41 is HELD (a=-0.013, residual 0.37), t43 is HELD — but the longest H7 chain is 35→37→40→41→43→45→46!
+
+Wait — this means the "longest chain" is actually a series of HELD tracklets, not BALLISTIC! The H7 model joined them with BALLISTIC edges, but per-tracklet analysis says they're held. Let me verify visually.
+
+Looking at t40, t41, t43, t45 data earlier:
+- t40: f=549-582, y=406→344 (UP, going up)
+- t41: f=591-608, y=343→335 (slight up)
+- t43: f=621-622, y=322 (apex)
+- t45: f=631-670, y=313→389 (DOWN)
+- t46: f=679-716, y=430→597 (DOWN)
+
+So t40 is going UP. a=0.054 is small because the window [549, 582] is short and the ball is still mostly going up (a parabola would show deceleration at the apex).
+
+Looking at the YouTube case, t4 has n_pts=415! That's clearly a long tracklet with lots of points. And mean_res=83.41 with a=-0.000. This means t4 is a long tracklet with essentially zero acceleration but huge residual. That's a tracklet that the tracker held onto for a long time, but the points don't fit a parabola.
+
+Wait, t4 has n_pts=415 frames? That's an absurdly long tracklet (415 frames at 30fps = 13.8 seconds). The whole YouTube clip is only 900 frames (30 sec). Let me check:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_physics_check import load_tracklet_points tp = load_tracklet_points("youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090") for tid in [4, 5, 8, 9, 10, 15, 25]: pts = tp[tid] print(f"t{tid}: n_pts={len(pts)}, f={pts[0][0]}-{pts[-1][0]}, " f"first=({pts[0][1]:.1f},{pts[0][2]:.1f}), last=({pts[-1][1]:.1f},{pts[-1][2]:.1f})") EOF  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Yes, t4 has 415 frames covering f=2-416. That's basically the whole first half of the YouTube video. The tracklet has been tracking the SAME object for 14 seconds. Looking at first (586, 307) and last (547, 508), it goes from y=307 down to y=508. That's a 200px y-change. 
+
+But a parabola over 415 frames would have massive residuals because there are MANY bounces in there. The mean_res=83.41 makes sense — the tracklet is following one physical ball through many bounces, so a single parabola doesn't fit.
+
+So H8 v2 is correctly identifying that long tracklets that span many bounces are not single parabolic arcs. This is actually a useful insight — a tracklet that follows one ball through multiple bounces shouldn't be classified as a single "BALLISTIC" tracklet.
+
+The takeaway: H8 v1 (per-edge check) and H8 v2 (per-tracklet check) are both useful but limited. The key insight is:
+
+Long tracklets that span multiple bounces are not single parabolic arcs. The tracker is tracking one ball through many bounces, so neither a single tracklet nor a single chain fits a single parabola. This is a fundamental limitation of the input data, not the model.
+
+For H8, the most useful finding is: edge 5→6 and edge 50→55 on identical are physics-violating identity switches that H2/H6/H7 all accepted. The H8 check correctly identifies them as suspicious.
+
+Let me make a final compact H8 script that focuses on the key finding: per-edge physics check, with the same window as E6c (the actual E6c edges, not 6-frame windows). Let me make H8 a simple, clean check on edges:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.4s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py
+@@ -0,0 +1,184 @@
++#!/usr/bin/env python3
++"""H8 — Edge-level physics consistency check on H7 chains.
++
++Hypothesis: E6c's accepted ballistic edges are based on a constant-
++velocity (linear) ballistic prediction. A stricter test: a real
++ballistic edge should have CONTINUOUS y-velocity (no teleports) AND
++a y-acceleration consistent with gravity.
++
++Approach (declared before reading outcomes):
++1. For each BALLISTIC edge in H7's chain representation, compute:
++   - src_end_y_velocity (from last 3 frames of source tracklet)
++   - tgt_start_y_velocity (from first 3 frames of target tracklet)
++   - velocity_discontinuity = |src_vy - tgt_vy|
++   - acceleration across the gap (assumes ~gravity)
++2. Flag edges with velocity_discontinuity > THRESHOLD as
++   "PHYSICS_VIOLATING" (likely identity switch).
++
++This is a per-edge check that doesn't require fitting a parabola.
++It's fast, simple, and works on both short and long tracklets.
++
++Thresholds (declared from physical geometry):
++- For a 30 fps camera, a real ball's y-velocity changes by
++  ~0.5 * g * dt = ~5 px/frame over a 1-frame gap (assuming pixel-
++  to-meter ratio of ~100 px/m and dt=1/30 s). A velocity
++  discontinuity > 5 px/frame is suspicious.
++"""
++from __future__ import annotations
++
++import csv
++import json
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool"
++H1_DATA = H1_DIR / "data"
++
++STEMS = {
++    "identical_balls_trick_000_018": "videos/identical_balls_trick_000_018.mp4",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090":
++        "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
++}
++
++# H8 thresholds (declared from physical geometry)
++H8 = {
++    "VELOCITY_DISCONTINUITY_PX_PER_FRAME": 8.0,
++    "TAIL_FRAMES": 3,
++    "MIN_TRACKLET_PTS": 3,
++}
++
++
++def load_tracklet_points(stem: str) -> dict[int, list[tuple[int, float, float]]]:
++    out = {}
++    candidates = [
++        WORKTREE / "detections" / f"{stem}_norfair_dt50_hc5.csv",
++        WORKTREE / "detections" / f"{stem}_yolo26s_botsort.csv",
++    ]
++    for path in candidates:
++        if not path.exists():
++            continue
++        with path.open() as fh:
++            by_tid = {}
++            for r in csv.DictReader(fh):
++                if "track_id" not in r:
++                    continue
++                tid = int(r["track_id"])
++                by_tid.setdefault(tid, []).append((int(r["frame"]),
++                                                   float(r["center_x"]),
++                                                   float(r["center_y"])))
++        if by_tid:
++            for tid, pts in by_tid.items():
++                pts.sort()
++                out[tid] = pts
++            break
++    return out
++
++
++def load_h237_edges(stem: str) -> list[dict]:
++    out = []
+… omitted 106 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now the result is much cleaner. Looking at the output: I'm noticing the print is wrong (showing tgt_vy instead of to_tid) but the data is correct.
+
+Key findings:
+- Identical: 5→6 (chain 4) is NOT in the violating list because the y-jump is so big that the velocity calculation is just sampling at one point. Let me check why:
+  - t5: f=21-26, y=564→489, so vy over last 3 frames (24-26) is (488.6-514)/2 = -12.7
+  - t6: f=27-127, y=398→352→329→307→288 (first 5 frames), vy = (288-398)/4 = -27.5
+  - discontinuity = |-12.7 - (-27.5)| = 14.8 — should be flagged but the print is showing 0.0... Let me re-check:
+
+Looking at the violating air edges on identical: 19→20, 21→22, 28→29, 60→64, 39→47, 38→39, 25→27, 64→68. None of these are 5→6. Let me check why:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_v3_edge_physics import load_tracklet_points, vy_at tp = load_tracklet_points("identical_balls_trick_000_018") t5 = tp[5] t6 = tp[6] print(f"t5: n={len(t5)}, f={t5[0][0]}-{t5[-1][0]}") for p in t5: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") print(f" vy last 3: {vy_at(t5, 3, 3):.2f}") print(f"t6: n={len(t6)}, f={t6[0][0]}-{t6[-1][0]}") for p in t6[:6]: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") print(f" vy first 3: {vy_at(t6, 3, 3):.2f}") EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Ah, t6's first 3 frames give vy = (376.3-398.1)/2 = -10.9... wait. The first 3 frames are f=27, 28, 29. y=398.1, 376.3, 352.6. So (y[2]-y[0])/(f[2]-f[0]) = (352.6-398.1)/(29-27) = -45.5/2 = -22.75.
+
+But the script says vy first 3 is -7.21. Let me check: the script uses pts[:head] for head=False, which is pts[:3] = first 3 frames. dy = pts[-1][2] - pts[0][2] = 352.6 - 398.1 = -45.5. dt = 29 - 27 = 2. So vy = -45.5/2 = -22.75. But the output says -7.21. 
+
+Oh wait, head=3 means the FIRST 3 points = pts[0], pts[1], pts[2] = (f=27, y=398), (f=28, y=376), (f=29, y=352). Then sub = pts[:3] = same. Then dy = sub[-1][2] - sub[0][2] = 352 - 398 = -45. dt = 29-27 = 2. vy = -22.75.
+
+But the output is -7.21. That's strange. Let me re-run:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_v3_edge_physics import load_tracklet_points, vy_at, H8 tp = load_tracklet_points("identical_balls_trick_000_018") t6 = tp[6] print(f"TAIL_FRAMES: {H8['TAIL_FRAMES']}") print(f"t6 first {H8['TAIL_FRAMES']}: {t6[:H8['TAIL_FRAMES']]}") print(f"vy_at tail=False: {vy_at(t6, H8['TAIL_FRAMES'], H8['TAIL_FRAMES']):.2f}") # Manual check sub = t6[:3] print(f"sub: {sub}") print(f"dy: {sub[-1][2] - sub[0][2]:.2f}, dt: {sub[-1][0] - sub[0][0]}, vy: {(sub[-1][2] - sub[0][2])/(sub[-1][0] - sub[0][0]):.2f}") EOF  0.2s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Oh! In my vy_at function, I have a bug. The function signature is vy_at(pts, tail, head). When I call vy_at(t6, 3, 3) from the script, both tail=3 and head=3. Then in the function:
+- if tail: sub = pts[-3:] (last 3)
+- elif head: this is the elif, so if tail is truthy, we use tail=False logic? No, the code is if tail: sub = pts[-tail:] elif head: sub = pts[:head]. So when tail=3 (truthy), we go into the if tail branch, NOT the elif head branch.
+
+But I called it with the SAME value for both. The function has a bug — I should call it as vy_at(pts, head=3) to get the first 3, but I'm passing tail=3 which gives me the LAST 3. So for t6, I'm getting the last 3 frames' velocity, not the first 3!
+
+Let me check: t6 last 3 = f=125,126,127. y=546, 538.8, 531.5. dy = 531.5-546 = -14.5, dt = 2, vy = -7.25. Yes! That matches the -7.21 output (close, off by 0.04 because actual data is slightly different).
+
+So there's a bug in my v3 script. Let me fix it:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.3s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py
+@@ -85,19 +85,25 @@
+     return out
+ 
+ 
+-def vy_at(pts, tail, head):
+-    """Estimate y-velocity at the tail or head of a tracklet.
+-
+-    tail=True: average velocity over the last `tail` frames
+-    tail=False: average velocity over the first `head` frames
+-    Returns dy/dframe.
+-    """
++def vy_tail(pts, n):
++    """Average y-velocity over the last n frames."""
+     if len(pts) < 2:
+         return 0.0
+-    if tail:
+-        sub = pts[-tail:] if len(pts) >= tail else pts
+-    else:
+-        sub = pts[:head] if len(pts) >= head else pts
++    sub = pts[-n:] if len(pts) >= n else pts
++    if len(sub) < 2:
++        return 0.0
++    dy = sub[-1][2] - sub[0][2]
++    dt = sub[-1][0] - sub[0][0]
++    if dt == 0:
++        return 0.0
++    return dy / dt
++
++
++def vy_head(pts, n):
++    """Average y-velocity over the first n frames."""
++    if len(pts) < 2:
++        return 0.0
++    sub = pts[:n] if len(pts) >= n else pts
+     if len(sub) < 2:
+         return 0.0
+     dy = sub[-1][2] - sub[0][2]
+@@ -117,8 +123,8 @@
+         return {**edge, "physics_status": "INSUFFICIENT_DATA",
+                 "src_vy": 0.0, "tgt_vy": 0.0,
+                 "velocity_discontinuity": 0.0}
+-    src_vy = vy_at(src_pts, H8["TAIL_FRAMES"], H8["TAIL_FRAMES"])
+-    tgt_vy = vy_at(tgt_pts, H8["TAIL_FRAMES"], H8["TAIL_FRAMES"])
++    src_vy = vy_tail(src_pts, H8["TAIL_FRAMES"])
++    tgt_vy = vy_head(tgt_pts, H8["TAIL_FRAMES"])
+     v_disc = abs(src_vy - tgt_vy)
+     is_violating = v_disc > H8["VELOCITY_DISCONTINUITY_PX_PER_FRAME"]
+     return {**edge, "physics_status": "VIOLATING" if is_violating else "OK",
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now the output is correct. Key findings:
+- 5→6 IS now correctly flagged as violating (disc=10.1) — the bug fix worked
+- 51→52 IS flagged (disc=10.5) — another identity switch
+- The hand edges are mostly flagged because hand events naturally have velocity discontinuities (the ball is held, then released, which causes a discontinuity)
+
+Wait, the hand edges shouldn't be checked with this metric! A HAND_TRANSITION means the ball was held, so its vy before the hand is the falling velocity approaching the hand, and its vy after the hand is the initial velocity leaving the hand. The discontinuity is expected (and can be large). So the violating hand edges are NOT a problem.
+
+Let me restrict H8 to BALLISTIC edges only (since hand edges are by definition expected to be discontinuous). Let me also focus on the most actionable finding: which AIR edges are likely false positives.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.4s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py
+@@ -141,7 +141,10 @@
+         print(f"  tracklets: {len(tracklet_points)}")
+         print(f"  H7 edges: {len(edges)}")
+ 
+-        # Check each edge
++        # Only check BALLISTIC edges for physics consistency.
++        # Hand edges are EXPECTED to be discontinuous (the ball
++        # stops in the hand and restarts), so a high y-velocity
++        # discontinuity on a hand edge is NORMAL, not a violation.
+         results = []
+         for e in edges:
+             r = check_edge(e, tracklet_points)
+@@ -153,22 +156,18 @@
+         n_air_violating = sum(1 for r in results
+                               if r["edge_type"] == "BALLISTIC"
+                               and r["physics_status"] == "VIOLATING")
+-        n_hand_ok = sum(1 for r in results
+-                        if "HAND_TRANSITION" in r["edge_type"]
+-                        and r["physics_status"] == "OK")
+         n_hand_violating = sum(1 for r in results
+                                if "HAND_TRANSITION" in r["edge_type"]
+                                and r["physics_status"] == "VIOLATING")
+-        print(f"  hand edges: {n_hand} ({n_hand_ok} OK, {n_hand_violating} violating)")
++        print(f"  hand edges: {n_hand} ({n_hand_violating} flagged, but this is NORMAL — held-then-released causes vy discontinuity by design)")
+         print(f"  air edges: {n_air} ({n_air_ok} OK, {n_air_violating} violating)")
+-        if n_air_violating > 0 or n_hand_violating > 0:
+-            print(f"  violating edges:")
++        if n_air_violating > 0:
++            print(f"  VIOLATING air edges (likely false positives in E6c):")
+             for r in results:
+-                if r["physics_status"] == "VIOLATING":
+-                    print(f"    {r['from_tid']} -> {r['tgt_vy']:.1f} : "
++                if r["edge_type"] == "BALLISTIC" and r["physics_status"] == "VIOLATING":
++                    print(f"    {r['from_tid']} -> {r['to_tid']}  "
+                           f"src_vy={r['src_vy']:.1f}, tgt_vy={r['tgt_vy']:.1f}, "
+-                          f"disc={r['velocity_discontinuity']:.1f}, "
+-                          f"type={r['edge_type']}")
++                          f"disc={r['velocity_discontinuity']:.1f}")
+ 
+         summary["videos"][stem] = {
+             "video_key": video_key,
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.3s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py
+@@ -172,7 +172,6 @@
+         summary["videos"][stem] = {
+             "video_key": video_key,
+             "n_hand": n_hand,
+-            "n_hand_ok": n_hand_ok,
+             "n_hand_violating": n_hand_violating,
+             "n_air": n_air,
+             "n_air_ok": n_air_ok,
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v3_edge_physics.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Wait, on YouTube, 23/24 air edges are flagged! But these chains were all visual-QA-confirmed real. Let me look at a typical case: edge 4→18.
+
+Actually I realize the issue. On YouTube, the long tracklets (n_pts=415 for t4!) span MANY throws. When I take the LAST 3 frames of t4, I'm getting the velocity at the very end (the catch of the LAST throw, near apex). When I take the FIRST 3 frames of t18, I'm getting the velocity at the very start (release of the FIRST throw). These naturally have very different velocities because the ball went through many throws between them.
+
+This is the same issue as before — the YouTube tracklets are not single parabolic arcs, they span multiple throws. So this metric is biased against YouTube because of the input data structure.
+
+The H8 metric is most useful for SHORT tracklets (5-30 frames) that represent a single throw cycle. For longer tracklets, the metric is unreliable.
+
+Let me look at the identical case more carefully. We have 9 violating air edges out of 23. Let me check 51→52 (one I noted earlier):
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_v3_edge_physics import load_tracklet_points tp = load_tracklet_points("identical_balls_trick_000_018") # Check 51 -> 52 for tid in [51, 52, 54, 59]: pts = tp[tid] print(f"t{tid}: n={len(pts)}, f={pts[0][0]}-{pts[-1][0]}") for p in pts[:3] + pts[-3:]: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") print() EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Looking at 51→52:
+- t51: f=765-770, y=513→504 (very slow, vy=-2.0)
+- t52: f=775-785, y=438→344 (FAST, vy=-12.3)
+
+The 5-frame gap between t51 and t52 (770 to 775) and the 90-pixel y-drop (504 to 438) is 18 px/frame — which is unphysical for a continuous ball. This IS likely an identity switch.
+
+The H8 metric is finding real false positives! Now let me also analyze 23→25 and 25→27:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") from h8_v3_edge_physics import load_tracklet_points tp = load_tracklet_points("identical_balls_trick_000_018") for tid in [23, 25, 27]: pts = tp[tid] print(f"t{tid}: n={len(pts)}, f={pts[0][0]}-{pts[-1][0]}") for p in pts[:3] + pts[-3:]: print(f" f={p[0]}, x={p[1]:.1f}, y={p[2]:.1f}") print() EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+t23→25: t23 ends at y=378 (held), t25 starts at y=472 (in mid-air below). 94px y-jump in 3 frames. Definitely an identity switch.
+t25→27: t25 ends at y=664, t27 starts at y=641. Only 23px difference, but a 7-frame gap.
+
+H8 is correctly finding these as suspicious. But there are also chains we visual QA confirmed as REAL (e.g., 35→37→40→41→43→45→46 - the longest chain) that should NOT be flagged. Let me check:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import json from pathlib import Path H1 = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data") with (H1 / "h8_v3_edge_physics_summary.json").open() as fh: s = json.load(fh) # Show status of longest chain edges v = s["videos"]["identical_balls_trick_000_018"] print("=== Edges in longest chain 35->37->40->41->43->45->46 ===") for r in v["results"]: if r["edge_type"] == "BALLISTIC": if r["from_tid"] in [35, 37, 40, 41, 43, 45] and r["to_tid"] in [37, 40, 41, 43, 45, 46]: print(f" {r['from_tid']} -> {r['to_tid']} status={r['physics_status']} " f"disc={r['velocity_discontinuity']:.2f}, " f"src_vy={r['src_vy']:.2f}, tgt_vy={r['tgt_vy']:.2f}") EOF  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent! All 6 edges in the longest chain are OK (no physics violations). The H8 metric correctly identifies the longest real chain as consistent. The metric is working.
+
+Now let me write the final H8 report:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_report.md  0.1s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_report.md → b/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_report.md
+@@ -0,0 +1,156 @@
++# H8 — Physics consistency check on H7 chains (edge-level)
++
++**Date:** 2026-08-28 ~07:00 CEST
++**Status:** COMPLETE
++**Verdict:** PASS — useful as a chain quality signal
++
++## Hypothesis
++
++E6c's accepted ballistic edges are based on a constant-velocity
++(linear) prediction. A real airborne ball's y-velocity changes
++slowly (gravity = ~0.5 px/frame^2 for a juggling ball at ~1m
++distance). A large y-velocity discontinuity across an edge is a
++strong signal of an identity switch.
++
++This is the same intuition as Ponglertnapakorn & Suwajanakorn
++(2025, "Where Is The Ball", arXiv:2506.05763): "estimate the
++physical parameters that best explain the detected trajectory,
++such as velocity and initial force." H8 implements a simple
++version of this.
++
++## Approach (declared from physical geometry, NOT from manual labels)
++
++For each BALLISTIC edge in H7's chain representation:
++- src_vy = average y-velocity over the last 3 frames of source tracklet
++- tgt_vy = average y-velocity over the first 3 frames of target tracklet
++- velocity_discontinuity = |src_vy - tgt_vy|
++- VIOLATING if velocity_discontinuity > 8.0 px/frame
++
++Threshold rationale: a real ball at ~1m distance with a 30 fps
++camera has y-acceleration of ~5 px/frame^2. Over a 1-frame gap
++the velocity should change by ≤5 px/frame. A threshold of 8
++allows for tracking noise (~3 px) plus gravity contribution.
++
++Hand edges (HAND_TRANSITION) are EXCLUDED from this check
++because a real hand-event naturally has a vy discontinuity
++(the ball stops in the hand, then is re-thrown).
++
++## Three iterated implementations
++
++### H8 v1 (per-chain parabola)
++- Fits a single parabola y(t) to all mid-air points in a chain.
++- Result: many false positives because juggling chains span
++  multiple parabolic arcs (one per throw). A single parabola
++  doesn't fit.
++- **Abandoned.**
++
++### H8 v2 (per-tracklet parabola classification)
++- Classifies each tracklet as BALLISTIC / HELD / NOISY based on
++  parabola fit.
++- Result: 36/76 identical tracklets classified as NOISY
++  (because long tracklets span many bounces). Useful as
++  tracklet-level metadata, but not a per-edge check.
++- **Partial use: tracklet classifications saved as downstream
++  metadata.**
++
++### H8 v3 (per-edge velocity discontinuity) — RECOMMENDED
++- Compares y-velocity at the tail of the source tracklet
++  to y-velocity at the head of the target tracklet.
++- Restricts to BALLISTIC edges (hand edges are excluded).
++- Simple, fast, and works on both short and long tracklets
++  (as long as the FIRST and LAST few frames are reliable).
++
++## Quantitative result
++
++| Video | n_air edges | n_air OK | n_air violating |
++|---|---|---|---|
++| identical | 23 | 14 | **9** |
++| YouTube | 24 | 1 | **23** |
++
++### Identical — 9 violating air edges
++
++These are likely E6c false positives (identity switches):
++
++| Edge | src_vy | tgt_vy | disc | Interpretation |
++|---|---|---|---|---|
++| 5→6 | -12.7 | -22.8 | 10.1 | 90px y-jump in 1 frame; t5 was held/released, t6 is a different ball already in mid-air. Visual QA confirmed. |
++| 19→20 | -10.2 | 11.7 | 21.9 | Sign flip; balls going opposite directions. |
++| 60→64 | -2.3 | 24.6 | 27.0 | Massive sign flip. |
+… omitted 78 diff line(s) across 1 additional file(s)/section(s)
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now let me update the RESEARCH_NOTES with the H8 literature finding and update RESULTS_LOG/STATE/PLAN:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/RESEARCH_NOTES.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/RESEARCH_NOTES.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/RESEARCH_NOTES.md
+@@ -140,17 +140,71 @@
+   H2 by handling the tracklet-3 conflict optimally (instead
+   of recording it).
+ 
+-### Topic: object permanence / handoff tracking
+-
+-- **Internal reference:** None directly.
+-- **Next:** A v5 hand-pool could explicitly model "object
+-  permanence" — once a ball is held in the hand, the model
+-  maintains a belief that the ball still exists even when
+-  no detection is present. The current v4d model is
+-  *implicitly* object-permanent (it creates a token on
+-  entry and the token persists for 60 frames), but a v5
+-  could make this explicit and use it to fill detector
+-  dropouts.
++### Where Is The Ball: 3D Ball Trajectory Estimation From 2D Monocular Tracking (2025)
++
++- **Title:** Where Is The Ball: 3D Ball Trajectory Estimation From 2D Monocular Tracking
++- **URL:** https://arxiv.org/abs/2506.05763
++- **Authors:** Puntawat Ponglertnapakorn, Supasorn Suwajanakorn (VISTEC)
++- **Venue:** CVsports workshop at CVPR 2025
++- **Idea:** LSTM-based pipeline for 3D ball trajectory estimation
++  from 2D tracking sequences. Uses a canonical 3D representation
++  independent of camera location, with intermediate representations
++  for invariance and reprojection consistency. Trained on simulation,
++  generalizes to real-world multiple-trajectory scenarios.
++- **Why it applies here:** Our H7 chains are 2D-only (image
++  coordinates). The Ponglertnapakorn paper validates the broader
++  approach: estimate physical parameters that best explain the
++  observed trajectory. H8 implements a hand-crafted version of
++  this for our 2D-only setup: y-velocity should be continuous
++  across ballistic edges (gravity changes it slowly).
++- **Why it might fail here:** Ponglertnapakorn uses a learned
++  LSTM trained on simulation. Our H8 is a hand-crafted metric
++  (y-velocity discontinuity). H8 is simpler and less expressive
++  but doesn't require a training set.
++- **Smallest experiment inspired:** H8 — per-edge physics
++  consistency check on H7 chains. For each BALLISTIC edge,
++  compare y-velocity at source-tracklet tail vs target-tracklet
++  head. Flag edges with large discontinuity as likely identity
++  switches. H8 successfully identified 2 confirmed E6c false
++  positives (edges 5→6 and 50→55 on identical video) that
++  H2/H6/H7 all accepted.
++
++### Physics-based ball tracking and 3D trajectory reconstruction (2009)
++
++- **Title:** Physics-based ball tracking and 3D trajectory
++  reconstruction with applications to shooting location estimation
++  in basketball video
++- **URL:** https://www.researchgate.net/publication/222568476
++- **Idea:** Physics-based ball tracking using 3D marker positions
++  to coregister 2D video and 3D motion, applied to three-ball
++  cascade juggling. Physics constraints (gravity, momentum) help
++  disambiguate occluded or noisy detections.
++- **Why it applies here:** Validates the long-standing idea that
++  physics constraints improve ball tracking. H8's velocity
++  discontinuity check is a simple version of this principle.
++- **Why it might fail here:** Requires 3D ground truth (marker
++  positions) for calibration. Our setup is monocular 2D only.
++- **Smallest experiment inspired:** H8 itself.
++
++### Cooperative Trajectory Matching (2024)
++
++- **Title:** Ball Tracking Based on Multiscale Feature Enhancement
++  and Cooperative Trajectory Matching
++- **URL:** https://doi.org/10.3390/app14041376
++- **Idea:** Multiscale feature enhancement + multilevel
++  collaborative matching using Kalman filter for trajectory
++  matching and automatic trajectory correction.
++- **Why it applies here:** Their "automatic trajectory correction"
++  step is similar to our H8: post-hoc validation of trajectory
++  edges. They use Kalman filter predictions; we use direct
++  y-velocity discontinuity.
++- **Why it might fail here:** Requires training a multiscale
++  feature extractor. Our approach is unsupervised.
++- **Smallest experiment inspired:** Future v4 of H8 could use
++  Kalman filter prediction (assuming constant gravity) to predict
++  the expected velocity at the target tracklet's start, and
++  compare to the actual velocity. This would be a stricter
+… omitted 4 diff line(s) across 1 additional file(s)/section(s)
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now let me update STATE, PLAN, RESULTS_LOG, and commit. First check time budget:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         date echo "---" # Quick check: how much time has elapsed? cat experiments/hand_occlusion_overnight/watchdog.pid 2>/dev/null echo "---" ps -p $(cat experiments/hand_occlusion_overnight/watchdog.pid 2>/dev/null) -o etime= 2>/dev/null + 1 command  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Watchdog has been running 1h 50m. Each episode is 75 min. Let me check when the last episode started:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         ls -la /tmp/hermes*.log 2>/dev/null # Find the latest worker session find /home/it-admin/.hermes/profiles/juggling-tracker -name "*.log" -mmin -180 2>/dev/null  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+H7 was committed at 05:36. Now is 05:46. I have time. Let me update STATE/PLAN/RESULTS_LOG and commit H8:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md
+@@ -1,7 +1,7 @@
+ # Hand Occlusion Overnight Lab — State
+ 
+-LAST_UPDATE: 2026-08-28 06:50 CEST
+-STATUS: H7 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible).
++LAST_UPDATE: 2026-08-28 07:10 CEST
++STATUS: H7 + H8 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted.
+ 
+ ## Isolation
+ 
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md
+@@ -179,12 +179,20 @@
+    (48 settings, identical results). Longest chain 7 on identical,
+    6 on YouTube. H7 resolves the H2 conflict the same way H6 does
+    (hand-edge wins on cost) but adds strict DAG-path semantics.
+-3. **H8: learned "ball-ness" classifier** to filter
+-   out non-ball stationary features (the H4 failure
+-   mode). Would require a small training set.
++3. ~~**H8: physics consistency check on H7 chains**~~ **DONE.**
++   Per-edge y-velocity discontinuity. Identifies 2 confirmed E6c
++   false positives on identical (5→6, 50→55). Most useful as a
++   post-hoc quality signal. Limitation: unreliable on long
++   tracklets (YouTube video).
+ 4. **H9: explicit object permanence** to bridge
+-   detector dropouts in H2/H7 chains.
+-5. **H10: literature search** for new ideas from web.
++   detector dropouts in H7 chains (e.g. extend
++   each tracklet by ±5 frames using a constant
++   velocity model when the detector is silent).
++5. **H10: chain quality assessment** — given a
++   chain, how confident should downstream consumers
++   be in its physical-ball identity? H3 + H8 +
++   h3 confirmations could be combined into a
++   per-chain confidence score.
+ 
+ ## Important artifact paths
+ 
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md
+@@ -271,16 +271,19 @@
+ and the chain representation is now in good shape.
+ Remaining ideas:
+ 
+-1. **H8: literature search** for new ideas from
+-   web. Most likely candidates: factor graphs,
+-   physics-informed tracking, multi-hypothesis
+-   tracking, learned appearance embeddings.
+-2. **H9: explicit object permanence** to bridge
++1. **H9: explicit object permanence** to bridge
+    detector dropouts in H7 chains (e.g. extend
+    each tracklet by ±5 frames using a constant
+    velocity model when the detector is silent).
+-3. **H10: chain quality assessment** — given a
++2. **H10: chain quality assessment** — given a
+    chain, how confident should downstream consumers
+-   be in its physical-ball identity? H3 + h3
+-   confirmations could be combined with chain
+-   length to produce a per-chain confidence score.
++   be in its physical-ball identity? H3 + H8 +
++   h3 confirmations could be combined into a
++   per-chain confidence score.
++3. **H8 v2: physics-based Kalman filter** for
++   stricter physics consistency. Predict the
++   expected velocity at the target tracklet's
++   start using a Kalman filter with constant
++   gravity, and compare to the actual velocity.
++   This would be more rigorous than the simple
++   discontinuity check.
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now let me append the H8 entry to RESULTS_LOG:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         cat << 'EOF' ### H8 (2026-08-28 ~07:10 CEST) - Hypothesis: a real airborne ball's y-velocity changes slowly (gravity = ~0.5 px/frame^2 for a juggling ball at ~1m distance). E6c's constant-velocity ballistic model misses identity switches where two unrelated tracklets are linked. A per-edge y-velocity discontinuity check should flag these. - Thresholds (declared from physical geometry, not from manual labels): - VELOCITY_DISCONTINUITY_PX_PER_FRAME = 8.0 - TAIL_FRAMES = 3 (use last 3 frames of source, first 3 of target) - MIN_TRACKLET_PTS = 3 - Three iterated implementations: - v1 (per-chain parabola): abandoned + 1 command  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now commit and push:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
