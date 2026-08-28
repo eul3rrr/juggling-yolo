@@ -1,0 +1,238 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_phases": 4,
+      "phases": [
+        {
+          "stem": "identical_balls_trick_000_018",
+          "start": 631,
+          "end": 669,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.714,
+          "spec_conc": 0.411,
+          "lr_variance": 0.621,
+          "h43_reject": false,
+          "h69_reject": false,
+          "h74_reject": false,
+          "stacked_reject": false,
+          "gt_verdict": "REAL_FOUNTAIN",
+          "correct": true
+        },
+        {
+          "stem": "identical_balls_trick_000_018",
+          "start": 890,
+          "end": 936,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.571,
+          "spec_conc": 0.308,
+          "lr_variance": 0.586,
+          "h43_reject": false,
+          "h69_reject": false,
+          "h74_reject": false,
+          "stacked_reject": false,
+          "gt_verdict": "OTHER_NOT_FOUNTAIN",
+          "correct": false
+        },
+        {
+          "stem": "identical_balls_trick_000_018",
+          "start": 977,
+          "end": 1011,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.565,
+          "spec_conc": 0.326,
+          "lr_variance": 0.296,
+          "h43_reject": false,
+          "h69_reject": false,
+          "h74_reject": false,
+          "stacked_reject": false,
+          "gt_verdict": "REAL_FOUNTAIN",
+          "correct": true
+        },
+        {
+          "stem": "identical_balls_trick_000_018",
+          "start": 1029,
+          "end": 1049,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.463,
+          "spec_conc": 0.361,
+          "lr_variance": 0.374,
+          "h43_reject": true,
+          "h69_reject": false,
+          "h74_reject": false,
+          "stacked_reject": true,
+          "gt_verdict": "OTHER_NOT_FOUNTAIN",
+          "correct": true
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_phases": 3,
+      "phases": [
+        {
+          "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+          "start": 339,
+          "end": 374,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.646,
+          "spec_conc": 0.164,
+          "lr_variance": 0.218,
+          "h43_reject": false,
+          "h69_reject": false,
+          "h74_reject": false,
+          "stacked_reject": false,
+          "gt_verdict": "REAL_FOUNTAIN",
+          "correct": true
+        },
+        {
+          "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+          "start": 482,
+          "end": 594,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.653,
+          "spec_conc": 0.14,
+          "lr_variance": 0.135,
+          "h43_reject": false,
+          "h69_reject": true,
+          "h74_reject": true,
+          "stacked_reject": true,
+          "gt_verdict": "OTHER_NOT_FOUNTAIN",
+          "correct": true
+        },
+        {
+          "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+          "start": 800,
+          "end": 861,
+          "pattern": "FOUNTAIN_3+",
+          "conf": 0.651,
+          "spec_conc": 0.088,
+          "lr_variance": 0.202,
+          "h43_reject": false,
+          "h69_reject": true,
+          "h74_reject": false,
+          "stacked_reject": true,
+          "gt_verdict": "OTHER_NOT_FOUNTAIN",
+          "correct": true
+        }
+      ]
+    }
+  },
+  "all_phases": [
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 631,
+      "end": 669,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.714,
+      "spec_conc": 0.411,
+      "lr_variance": 0.621,
+      "h43_reject": false,
+      "h69_reject": false,
+      "h74_reject": false,
+      "stacked_reject": false,
+      "gt_verdict": "REAL_FOUNTAIN",
+      "correct": true
+    },
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 890,
+      "end": 936,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.571,
+      "spec_conc": 0.308,
+      "lr_variance": 0.586,
+      "h43_reject": false,
+      "h69_reject": false,
+      "h74_reject": false,
+      "stacked_reject": false,
+      "gt_verdict": "OTHER_NOT_FOUNTAIN",
+      "correct": false
+    },
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 977,
+      "end": 1011,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.565,
+      "spec_conc": 0.326,
+      "lr_variance": 0.296,
+      "h43_reject": false,
+      "h69_reject": false,
+      "h74_reject": false,
+      "stacked_reject": false,
+      "gt_verdict": "REAL_FOUNTAIN",
+      "correct": true
+    },
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 1029,
+      "end": 1049,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.463,
+      "spec_conc": 0.361,
+      "lr_variance": 0.374,
+      "h43_reject": true,
+      "h69_reject": false,
+      "h74_reject": false,
+      "stacked_reject": true,
+      "gt_verdict": "OTHER_NOT_FOUNTAIN",
+      "correct": true
+    },
+    {
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "start": 339,
+      "end": 374,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.646,
+      "spec_conc": 0.164,
+      "lr_variance": 0.218,
+      "h43_reject": false,
+      "h69_reject": false,
+      "h74_reject": false,
+      "stacked_reject": false,
+      "gt_verdict": "REAL_FOUNTAIN",
+      "correct": true
+    },
+    {
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "start": 482,
+      "end": 594,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.653,
+      "spec_conc": 0.14,
+      "lr_variance": 0.135,
+      "h43_reject": false,
+      "h69_reject": true,
+      "h74_reject": true,
+      "stacked_reject": true,
+      "gt_verdict": "OTHER_NOT_FOUNTAIN",
+      "correct": true
+    },
+    {
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "start": 800,
+      "end": 861,
+      "pattern": "FOUNTAIN_3+",
+      "conf": 0.651,
+      "spec_conc": 0.088,
+      "lr_variance": 0.202,
+      "h43_reject": false,
+      "h69_reject": true,
+      "h74_reject": false,
+      "stacked_reject": true,
+      "gt_verdict": "OTHER_NOT_FOUNTAIN",
+      "correct": true
+    }
+  ],
+  "stats": {
+    "n_total": 7,
+    "n_real_kept": 3,
+    "n_real_rejected": 0,
+    "n_misclass_caught": 3,
+    "n_misclass_missed": 1,
+    "thresholds": {
+      "H43_conf": 0.55,
+      "H69_spec_conc": 0.15,
+      "H74_lr_var": 0.2
+    }
+  }
+}

@@ -2417,3 +2417,67 @@ For MIXED_3+ post-filter (unchanged from H71):
 3. H77: re-run H59 precision/recall on FULL H70 sample
 
 See `h1_hand_pool/reports/h74_report.md` for full analysis.
+
+## H75 conclusion (2026-08-28 ~22:00 CEST)
+
+**H75: H43 + H69 + H74 stacked FOUNTAIN_3+ post-filter** — DONE.
+MIXED. H75 stack is equivalent to H43+H69 on FOUNTAIN_3+ (3/3 real
+kept, 3/4 misclassified caught) but adds CASCADE_3+ static-hold
+detection (1/2 misclassifications caught via H74).
+
+**Stack formula:** REJECT if H43 (conf < 0.55) OR H69 (spec_conc < 0.15)
+OR H74 (LR_variance < 0.20).
+
+**Key findings:**
+
+1. **H75 stack = H43 + H69 on FOUNTAIN_3+.** No new FOUNTAIN_3+
+   catches on the H65 sample. H74 is redundant on FOUNTAIN_3+.
+
+2. **H74 adds value on CASCADE_3+ side.** Catches 1/2 CASCADE_3+
+   misclassifications (f=733-766 STATIC_HOLD, var=0.157). The other
+   1/2 (f=685-716 MANIPULATION_TRICK, var=0.386) has high variance
+   due to actual ball motion and is NOT caught.
+
+3. **H74 threshold sensitivity (flat region 0.15-0.20).** At thr=0.20,
+   catches 2/6 misclassified (STATIC_HOLD + f=482-594) while keeping
+   3/3 real FOUNTAIN. Above 0.20, real FOUNTAIN starts being rejected.
+
+4. **H74 catches transient 1-frame FOUNTAIN_3+ labels (side effect).**
+   On identical, H74 rejects 4 short FOUNTAIN_3+ phases (1-2 frames
+   each) between substantial FOUNTAIN phases. Useful for noise
+   reduction.
+
+5. **Per-frame impact:** identical 26/168 (15.5%) FOUNTAIN_3+ frames
+   rejected (vs 21/168 = 12.5% with H43+H69); YouTube 175/211
+   (82.9%) rejected (same as H43+H69).
+
+**Recommended operating point (post-H75, final):**
+
+For FOUNTAIN_3+ post-filter (H43 OR H69 OR H74):
+- H43: conf < 0.55
+- H69: spec_conc < 0.15
+- H74: LR_variance < 0.20 (catches static holds, redundant with H69
+  for FOUNTAIN_3+ but useful for CASCADE_3+)
+- On H65 sample: 3/3 real kept, 3/4 misclassified caught
+
+For CASCADE_3+ post-filter:
+- H74 catches 1/2 misclassifications (STATIC_HOLD)
+- 0/2 real CASCADE_3+ in dataset (recall unmeasurable)
+- Recommended: H74 alone for CASCADE_3+
+
+For MIXED_3+ post-filter (unchanged from H71):
+- KEEP at spec_conc >= 0.15 (91% precision)
+- REJECT at spec_conc < 0.10 (1/1 correct on H71)
+
+**Negative findings:**
+- H74 does not add new FOUNTAIN_3+ catches on H65 sample
+- MANIPULATION_TRICK (f=685-716) not caught by any of 3 filters
+- f=890-936 (crossed-arm trick) not caught by any of 3 filters
+- H74 threshold 0.20 is in a narrow flat region (0.15-0.20)
+
+**Future research (post-H75):**
+1. H76: CASCADE_3+ as research signal
+2. H77: re-run H59 precision/recall on FULL H70 sample
+3. H78: novel signals for MANIPULATION_TRICK / crossed-arm trick
+
+See `h1_hand_pool/reports/h75_report.md` for full analysis.

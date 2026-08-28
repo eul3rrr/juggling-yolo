@@ -4775,3 +4775,75 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h74_lr_variance_static_hold.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h74_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h74_report.md`
+
+### H75 (2026-08-28 ~22:00 CEST)
+
+- Hypothesis: H43 + H69 + H74 stacked FOUNTAIN_3+ post-filter should
+  catch all 4 misclassified FOUNTAIN_3+ on H65 while preserving
+  3/3 real FOUNTAIN. H74 adds CASCADE_3+ static-hold detection.
+
+- Method: for each substantial FOUNTAIN_3+ / CASCADE_3+ phase, compute
+  3 filter decisions and combine with OR. Per-phase evaluation against
+  H65/H72/H73 ground truth + per-frame end-to-end impact.
+
+- Quantitative result (H75 v1, per-phase):
+
+| Phase | Pattern | conf | conc | var | H43 | H69 | H74 | Stacked | gt |
+|-------|---------|------|------|-----|-----|-----|-----|---------|-----|
+| f631-669 id | FOUNTAIN_3+ | 0.714 | 0.411 | 0.621 | . | . | . | KEEP | REAL |
+| f890-936 id | FOUNTAIN_3+ | 0.571 | 0.308 | 0.586 | . | . | . | KEEP | OTHER |
+| f977-1011 id | FOUNTAIN_3+ | 0.565 | 0.326 | 0.296 | . | . | . | KEEP | REAL |
+| f1029-1049 id | FOUNTAIN_3+ | 0.463 | 0.361 | 0.374 | X | . | . | REJECT | OTHER |
+| f339-374 yt | FOUNTAIN_3+ | 0.646 | 0.164 | 0.218 | . | . | . | KEEP | REAL |
+| f482-594 yt | FOUNTAIN_3+ | 0.653 | 0.140 | 0.135 | . | X | X | REJECT | OTHER |
+| f800-861 yt | FOUNTAIN_3+ | 0.651 | 0.088 | 0.202 | . | X | . | REJECT | OTHER |
+| f685-716 id | CASCADE_3+ | 0.738 | 0.498 | 0.386 | . | . | . | KEEP | MANIP |
+| f733-766 id | CASCADE_3+ | 0.738 | 0.498 | 0.157 | . | . | X | REJECT | STATIC |
+
+- FOUNTAIN_3+ stack performance:
+  - 3/3 real FOUNTAIN kept (100% recall)
+  - 3/4 misclassified FOUNTAIN_3+ caught (75% precision)
+  - 1/4 missed (f=890-936 crossed-arm trick)
+
+- CASCADE_3+ stack performance:
+  - 0/0 real CASCADE_3+ in dataset (recall unmeasurable)
+  - 1/2 misclassified CASCADE_3+ caught (50% precision)
+  - 1/2 missed (f=685-716 manipulation trick)
+
+- H74 threshold sensitivity (flat region 0.15-0.20):
+  - 0.20: catches 2/6 misclassified, keeps 3/3 real (optimal)
+  - 0.25: catches 3/6 misclassified, drops 1 real (over-aggressive)
+  - 0.30+: drops 2/3 real (bad)
+
+- Per-frame impact (H75 v2):
+  - identical: 26/168 FOUNTAIN_3+ frames rejected (15.5%)
+    (vs 21/168 = 12.5% with H43+H69; +5 from H74 catching 1-2 frame
+    transient misclassifications)
+  - YouTube: 175/211 FOUNTAIN_3+ frames rejected (82.9%)
+    (same as H43+H69; H74 adds nothing because H69 already catches
+    f=482-594 and f=800-861)
+
+- Key findings:
+  - H75 stack is EQUIVALENT to H43+H69 on FOUNTAIN_3+ (no new catches)
+  - H74 adds value on CASCADE_3+ (catches 1/2 misclassifications)
+  - H74 catches transient 1-frame FOUNTAIN_3+ labels (useful side
+    effect)
+  - H74 threshold 0.20 is in a narrow flat region (0.15-0.20)
+
+- Negative findings:
+  - MANIPULATION_TRICK (f=685-716) not caught by any of 3 filters
+  - f=890-936 (crossed-arm trick) not caught by any of 3 filters
+  - H74 does not add new FOUNTAIN_3+ catches on H65 sample
+
+- Verdict: **MIXED.** H75 stack is the new recommended operating
+  point for FOUNTAIN_3+ post-filter (equivalent to H43+H69 on FOUNTAIN_3+,
+  adds CASCADE_3+ static-hold detection). On H65 sample: 3/3 real
+  kept, 3/4 misclassified caught. Per-frame impact: 26/168 identical
+  (15.5%) and 175/211 YouTube (82.9%) FOUNTAIN_3+ frames rejected.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h75_stacked_fountain_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h75v2_per_frame_impact.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h75_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h75v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h75_report.md`
