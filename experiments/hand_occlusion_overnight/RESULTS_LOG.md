@@ -1107,3 +1107,97 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_sensitivity.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h11/*.png` (8 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_report.md`
+
+---
+
+### H11 v4 (2026-08-28 ~09:00 CEST)
+
+- Hypothesis: H11 v2's identity-merge algorithm (temporal
+  proximity only) is too permissive. It flagged chain 36 ↔
+  chain 30 as a CONFIDENT-merge candidate, but visual QA
+  showed t62 and t63 are 73 pixels apart at f=890 (two
+  different physical balls). H11 v4 adds spatial proximity
+  (chain_start's first position within 80px of the wrist at
+  the event frame) and velocity coherence (initial velocity
+  of new chain consistent with final velocity of previous
+  tracklet).
+- Thresholds (declared from physical geometry, not from
+  manual labels):
+  - TEMPORAL_RADIUS = 30 frames (unchanged from v2)
+  - SPATIAL_RADIUS = 80 pixels (conservative; reach is 108)
+  - VELOCITY_COHERENCE = 5.0 px/frame (tolerance for
+    velocity direction; * sqrt(2) for 2D)
+- Quantitative result:
+
+| Video | v2 n | v4 n | v4 CONFIDENT | v4 velocity-coherent |
+|---|---|---|---|---|
+| identical | 42 | 6 | 0 | 0 |
+| youtube | 2 | 0 | 0 | 0 |
+
+  H11 v4 reduces the candidate count by **85.7%** on
+  identical and **100%** on YouTube. The v2 chain 36 ↔
+  chain 30 CONFIDENT-merge candidate is correctly removed
+  (t62's first position is > 80px from the right wrist at
+  the event frame).
+
+- Sensitivity grid (5×4 = 20 cells of SPATIAL_RADIUS ×
+  VELOCITY_COHERENCE):
+  - (50, 3-10): 2 candidates, 0 confident, 0 coherent
+  - (60, 3-10): 4 candidates, 0 confident, 0 coherent
+  - (80, 3-10): 6 candidates, 0 confident, 0-1 coherent
+  - (100, 3-10): 6 candidates, 0 confident, 0-1 coherent
+  - (108, 3-10): 7 candidates, 1 confident, 0-1 coherent
+
+  The (80, 5) operating point is in a flat region. SPATIAL
+  = 108 (reach radius) admits the v2 false positive again.
+
+- Visual QA on the 6 v4 candidates: all are likely false
+  positives:
+  - chain6→chain2 (t8 → t9): 95px apart in y, two different
+    balls
+  - chain11→chain8 (t15 → t14): t15 starts 12 frames AFTER
+    t14 starts
+  - chain32→chain30 (t56 → t54 / t59): t56 starts 26-29
+    frames after t54/t59 events
+  - chain35→chain30 (t61 → t63): t61 starts 2 frames after
+    t63 event, vel_diff=49.9 (not coherent)
+  - chain42→chain40 (t76 → t73): t76 is 98 pixels below
+    t73's last point
+
+- Negative findings:
+  - **None of the v4 candidates pass the velocity
+    coherence test.** This suggests there are NO real
+    missed-merge opportunities on identical or YouTube
+    within the v2's 30-frame temporal window. The H7
+    chain algorithm's splits are largely correct.
+  - **The v2 chain 36 ↔ chain 30 CONFIDENT-merge was a
+    false positive.** Visual QA showed t62 (chain 36) and
+    t63 (chain 30) are 73 pixels apart at f=890, not
+    co-located. They are two different balls that are
+    visible simultaneously during a multi-ball juggling
+    phase.
+  - **The H11 v4 spatial criterion (2D distance to wrist
+    within 80px) is a useful filter but is not a perfect
+    proxy for "at the hand."** A ball at the right side
+    of the frame at the same y as the wrist is "near"
+    the wrist in 2D distance but is NOT at the hand. A
+    future H11 v5 could use a more sophisticated
+    "hand-relative" coordinate system.
+
+- Verdict: **PASS.** H11 v4 is the new recommended
+  identity-merge algorithm, replacing H11 v2. The 85.7%
+  reduction in candidates on identical (42 → 6) and 100%
+  on YouTube (2 → 0) is a substantial improvement. The v2
+  chain 36 ↔ chain 30 false positive is correctly removed.
+  The 6 remaining v4 candidates all fail the velocity
+  coherence test, suggesting they are also false positives.
+
+  See `h1_hand_pool/reports/h11_v4_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v4_merge_spatial.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v4_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/merge_candidates_v4_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v4_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v4_sensitivity.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v4_sensitivity_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_v4_report.md`

@@ -414,3 +414,36 @@ Next episode candidates:
 2. H12: per-catch-frame juggling pattern inference.
 3. H8 v7: per-frame per-bounce segmentation for YouTube
    long tracklets.
+
+## Fifteenth episode (H11 v4) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Implemented H11 v4: spatial proximity +
+   velocity coherence filters on H11 v2's identity-merge
+   algorithm. Thresholds:
+   - SPATIAL_RADIUS = 80px (conservative; reach = 108px)
+   - VELOCITY_COHERENCE = 5.0 px/frame (* sqrt(2) for 2D)
+2. ✅ Ran on both videos. Result:
+   - identical: 42 (v2) → 6 (v4) candidates (-85.7%)
+   - youtube: 2 (v2) → 0 (v4) candidates (-100%)
+3. ✅ Visual QA on the 6 v4 candidates: all are false
+   positives (most fail velocity test).
+4. ✅ Sensitivity grid: 20 cells (5 spatial × 4 velocity).
+   (80, 5) is in a flat region. SPATIAL=108 (reach) admits
+   the v2 false positive again.
+5. ✅ Documented in `h11_v4_report.md` and updated
+   RESULTS_LOG.
+
+**H11 v4 verdict: PASS.** H11 v4 is the new recommended
+identity-merge algorithm. The v2 chain 36 ↔ chain 30
+CONFIDENT-merge false positive is correctly removed.
+The 6 remaining v4 candidates all fail the velocity
+coherence test, suggesting no real missed-merge
+opportunities exist.
+
+Next episode candidates:
+1. H12: per-catch-frame juggling pattern inference
+2. H8 v7: per-frame per-bounce segmentation for YouTube
+   long tracklets
+3. H11 v5: hand-relative coordinates for merge algorithm

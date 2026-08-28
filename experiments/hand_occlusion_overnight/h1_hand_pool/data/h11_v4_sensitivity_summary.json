@@ -1,0 +1,148 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "grid": [
+        {
+          "spatial_radius": 50,
+          "velocity_coherence": 3.0,
+          "n_total": 2,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 50,
+          "velocity_coherence": 5.0,
+          "n_total": 2,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 50,
+          "velocity_coherence": 7.0,
+          "n_total": 2,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 50,
+          "velocity_coherence": 10.0,
+          "n_total": 2,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 60,
+          "velocity_coherence": 3.0,
+          "n_total": 4,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 60,
+          "velocity_coherence": 5.0,
+          "n_total": 4,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 60,
+          "velocity_coherence": 7.0,
+          "n_total": 4,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 60,
+          "velocity_coherence": 10.0,
+          "n_total": 4,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 80,
+          "velocity_coherence": 3.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 80,
+          "velocity_coherence": 5.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 80,
+          "velocity_coherence": 7.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 1
+        },
+        {
+          "spatial_radius": 80,
+          "velocity_coherence": 10.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 1
+        },
+        {
+          "spatial_radius": 100,
+          "velocity_coherence": 3.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 100,
+          "velocity_coherence": 5.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 100,
+          "velocity_coherence": 7.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 1
+        },
+        {
+          "spatial_radius": 100,
+          "velocity_coherence": 10.0,
+          "n_total": 6,
+          "n_confident": 0,
+          "n_coherent": 1
+        },
+        {
+          "spatial_radius": 108,
+          "velocity_coherence": 3.0,
+          "n_total": 7,
+          "n_confident": 1,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 108,
+          "velocity_coherence": 5.0,
+          "n_total": 7,
+          "n_confident": 1,
+          "n_coherent": 0
+        },
+        {
+          "spatial_radius": 108,
+          "velocity_coherence": 7.0,
+          "n_total": 7,
+          "n_confident": 1,
+          "n_coherent": 1
+        },
+        {
+          "spatial_radius": 108,
+          "velocity_coherence": 10.0,
+          "n_total": 7,
+          "n_confident": 1,
+          "n_coherent": 1
+        }
+      ]
+    }
+  }
+}

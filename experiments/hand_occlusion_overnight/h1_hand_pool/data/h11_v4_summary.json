@@ -1,0 +1,16 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_v2_candidates": 42,
+      "n_v4_candidates": 6,
+      "n_v4_confident": 0,
+      "n_v4_velocity_coherent": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_v2_candidates": 2,
+      "n_v4_candidates": 0,
+      "n_v4_confident": 0,
+      "n_v4_velocity_coherent": 0
+    }
+  }
+}

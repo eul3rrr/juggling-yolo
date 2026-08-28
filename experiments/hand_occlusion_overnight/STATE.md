@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 08:55 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge). H8v4 (short-tracklet-only) NEGATIVE: trades false positives on YouTube long-tracklets for false negatives on identical long-tracklet identity switches (5→6). H8v5 (parabolic fit + gravity) MIXED: catches 2 NEW identity switches on identical that v3 missed (60→64, 21→22). YouTube limitation persists (long-tracklet phase changes look like identity switches to v5). H10v5 (H8 v5 instead of v3 in H10) PASS: v5 correctly demotes 2 v3-false-positives (chains 24, 29) and promotes 1 v3-false-negative (chain 36). H10 v5 is the new recommended chain quality score. H237v5 enriches unified chain representation with H10 v5 quality. H8v6 (per-bounce segmentation) NEGATIVE: apex detection too coarse for YouTube long tracklets. H11 (tracklet-level identity propagation) PASS: assigns physical ball IDs to 9 CONFIDENT identical + 1 CONFIDENT YouTube chains, extracts 8 catch/throw events on identical + 1 on YouTube, builds per-frame census (51% cascade time on identical, 100% on YouTube = over-counting artifact). H11 v2 identity-merge candidate (chain 36 ↔ chain 30) is a FALSE POSITIVE (t62 and t63 are 73 pixels apart at f=890, not co-located) — algorithm needs stricter spatial proximity. H11 v3 quality-filtered census confirms YouTube over-counting is caused by H10 v5 quality being mostly UNCERTAIN (q < 0.6) on YouTube long tracklets.
+LAST_UPDATE: 2026-08-28 09:00 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge). H8v4 (short-tracklet-only) NEGATIVE: trades false positives on YouTube long-tracklets for false negatives on identical long-tracklet identity switches (5→6). H8v5 (parabolic fit + gravity) MIXED: catches 2 NEW identity switches on identical that v3 missed (60→64, 21→22). YouTube limitation persists (long-tracklet phase changes look like identity switches to v5). H10v5 (H8 v5 instead of v3 in H10) PASS: v5 correctly demotes 2 v3-false-positives (chains 24, 29) and promotes 1 v3-false-negative (chain 36). H10 v5 is the new recommended chain quality score. H237v5 enriches unified chain representation with H10 v5 quality. H8v6 (per-bounce segmentation) NEGATIVE: apex detection too coarse for YouTube long tracklets. H11 (tracklet-level identity propagation) PASS: assigns physical ball IDs to 9 CONFIDENT identical + 1 CONFIDENT YouTube chains, extracts 8 catch/throw events on identical + 1 on YouTube, builds per-frame census (51% cascade time on identical, 100% on YouTube = over-counting artifact). H11 v2 identity-merge candidate (chain 36 ↔ chain 30) is a FALSE POSITIVE (t62 and t63 are 73 pixels apart at f=890, not co-located). H11 v3 quality-filtered census confirms YouTube over-counting is caused by H10 v5 quality being mostly UNCERTAIN (q < 0.6) on YouTube long tracklets. H11 v4 (stricter spatial proximity) PASS: 85.7% reduction in merge candidates on identical (42 → 6), 100% on YouTube (2 → 0). The chain 36 ↔ chain 30 false positive is correctly removed. None of the 6 remaining v4 candidates pass the velocity coherence test, suggesting NO real missed-merge opportunities within the v2's 30-frame window.
 
 ## Isolation
 
@@ -235,18 +235,34 @@ extraction: 10 identical + 1 youtube links with visual precision
     or accept the limitation and use H8 only for short
     tracklets. H8 v6's apex-level segmentation was too
     coarse.
-12. **H11 v4: stricter spatial proximity for identity-merge
-    candidates** — extend H11 v2's merge algorithm with
-    explicit ball-position spatial proximity (e.g., within
-    30 px of the hand at merge time). The H11 v2 chain 36
-    ↔ chain 30 false positive shows the current temporal-
-    only criterion is insufficient.
+12. ~~**H11 v4: stricter spatial proximity for identity-merge
+    candidates**~~ **DONE. PASS.** Adds SPATIAL_RADIUS=80px
+    and VELOCITY_COHERENCE=5.0 px/frame filters to H11 v2.
+    85.7% reduction in candidates on identical (42 → 6),
+    100% on YouTube (2 → 0). The v2 chain 36 ↔ chain 30
+    CONFIDENT-merge false positive is correctly removed.
+    None of the 6 remaining v4 candidates pass the
+    velocity coherence test, suggesting there are NO real
+    missed-merge opportunities on identical or YouTube
+    within the v2's 30-frame window. Sensitivity grid:
+    (80, 5) is in a flat region. H11 v4 is the new
+    recommended identity-merge algorithm, replacing H11 v2.
+    See `h1_hand_pool/reports/h11_v4_report.md`.
 13. **H12: per-catch-frame juggling pattern inference** —
     use H11's catch/throw events to infer the juggling
     pattern at each frame (3-ball cascade, 2-ball,
     shower, etc.). Combined with H11 v3's quality-filtered
     census, this could distinguish true cascade phases
-    from detector artifacts.
+    from detector artifacts. With H11 v4's merge
+    candidates all rejected, H12 would have to handle
+    the "no real merge found" case explicitly.
+14. **H8 v7: fundamentally different approach for YouTube
+    long tracklets** — per-bounce segmentation at frame
+    level (not just apexes), or 3D ball trajectory
+    estimation (Ponglertnapakorn & Suwajanakorn 2025),
+    or accept the limitation and use H8 only for short
+    tracklets. H8 v6's apex-level segmentation was too
+    coarse.
 
 ## Important artifact paths
 

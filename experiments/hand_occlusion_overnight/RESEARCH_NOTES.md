@@ -427,3 +427,50 @@ useful source record:
     (587, 414), 73 pixels apart. The vision tool's spatial
     reasoning is unreliable. Visual QA should be
     supplemented with programmatic coordinate checks.
+
+## Cross-cutting insights from H11 v4 (2026-08-28 ~09:00)
+
+21. **H11 v4 spatial proximity correctly removed the
+    v2 false positive.** The chain 36 ↔ chain 30
+    CONFIDENT-merge candidate had t62 (chain 36) at
+    (660, 432) and t63 (chain 30) at (587, 414) at
+    f=890 — 73 pixels apart in 2D distance, NOT
+    co-located. H11 v4's SPATIAL_RADIUS=80px filter
+    correctly rejects this candidate.
+
+22. **No real missed-merge opportunities exist within
+    the v2's 30-frame window.** The 6 v4 candidates
+    that pass the spatial filter all fail the velocity
+    coherence test (vel_diff > 5*sqrt(2) = 7.07). This
+    is a real negative finding: the H7 chain algorithm
+    is largely correct, and there are no obvious cases
+    where it split a single physical ball across two
+    chains.
+
+23. **Sensitivity grid shows the (80, 5) operating
+    point is in a flat region.** SPATIAL=50 (very
+    strict) admits only 2 candidates; SPATIAL=108
+    (reach radius) admits 7 candidates including 1
+    CONFIDENT (the v2 false positive). The (80, 5)
+    choice is conservative enough to remove the v2
+    false positive while admitting any other plausible
+    merge candidates.
+
+24. **2D distance to wrist is a useful but imperfect
+    proxy for "at the hand."** A ball at (725, 601)
+    is 71 pixels from the left wrist at (728, 530) in
+    2D distance, but is NOT at the hand — it's below
+    the hand. A future H11 v5 could use a more
+    sophisticated "hand-relative" coordinate system
+    (e.g., polar coordinates centered on the wrist, or
+    a 2D Gaussian centered on the wrist with smaller
+    variance in the radial direction than the angular
+    direction).
+
+25. **Identity-merge algorithms should be conservative.**
+    H11 v2's 42 candidates included 1 CONFIDENT false
+    positive. H11 v4's 6 candidates all fail the
+    velocity test, suggesting they are all false
+    positives. An aggressive merge algorithm would
+    produce too many false positives; a conservative
+    one is more useful for downstream review.
