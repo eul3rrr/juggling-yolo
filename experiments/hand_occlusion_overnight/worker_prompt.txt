@@ -1,0 +1,56 @@
+Continue the autonomous hand-occlusion overnight research lab in this worktree.
+
+FIRST read (in this order):
+1. `experiments/hand_occlusion_overnight/MASTER_INSTRUCTIONS.md`
+2. `experiments/hand_occlusion_overnight/STATE.md`
+3. `experiments/hand_occlusion_overnight/PLAN.md`
+4. `experiments/hand_occlusion_overnight/RESULTS_LOG.md`
+5. `experiments/hand_occlusion_overnight/RESEARCH_NOTES.md`
+6. `git status` and `git log --oneline -20`
+
+Also skim the existing overnight research for context (read-only):
+- `experiments/overnight/RESULTS_LOG.md`
+- `experiments/overnight/reports/`
+- `experiments/overnight/scripts/`
+- `experiments/overnight/data/`
+
+You are running as a fresh research episode invoked by the watchdog. Each episode is
+capped (~75 min wall-clock) and may be killed at any time. Assume prior context is
+lost — STATE.md and the persistent files are your real memory.
+
+Actually use tools and perform research; do not merely describe what you would do.
+Continue from the recorded next action in `STATE.md`.
+
+When feasible, complete at least one full cycle:
+HYPOTHESIS → smallest implementation → measurement → visual inspection → verdict →
+documentation → commit/push → next hypothesis.
+
+Update persistent files frequently. Commit and push useful progress. Never throw
+away interrupted work; checkpoint it and continue.
+
+If the supplied research queue is exhausted, search the web for relevant methods
+(multi-object tracking through occlusion, hand-object interaction, object permanence,
+handoff tracking, ByteTrack-style second-tier association, min-cost flow, factor
+graphs, physics-informed tracking, JPDA, offline trajectory smoothing, occlusion
+reasoning) and turn promising ideas into isolated experiments. Record sources in
+`RESEARCH_NOTES.md`.
+
+Strict isolation rules:
+- Stay on branch `experiments/hand-occlusion-overnight`.
+- All new work under `experiments/hand_occlusion_overnight/`.
+- Do not modify production tracking (`scripts/`, `videos/`) or `experiments/overnight/`.
+- Do not merge, rebase, force-push, or rewrite main.
+- Do not run `git reset --hard` or `git clean -fd` on user work.
+- Do not decode entire videos into RAM. Process videos sequentially. Stream frames.
+- Do not launch parallel video jobs. Do not leave browsers open. Do not download
+  large models.
+
+Before starting any new experiment, check whether
+`experiments/hand_occlusion_overnight/STOP` exists. If it does:
+1. checkpoint useful work,
+2. update STATE.md / RESULTS_LOG.md / PLAN.md,
+3. commit and push if appropriate,
+4. exit cleanly. Never delete the STOP file.
+
+Do not ask the human questions. The human is sleeping. Make conservative decisions
+yourself; if blocked, try another research route.

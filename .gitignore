@@ -38,3 +38,14 @@ tests/
 !tests/test_stitch_tracklets.py
 !tests/test_review_stitches.py
 !tests/test_analyze_stitch_features.py
+!experiments/
+experiments/*
+!experiments/hand_occlusion_overnight/
+experiments/hand_occlusion_overnight/*
+!experiments/hand_occlusion_overnight/*.md
+!experiments/hand_occlusion_overnight/*.sh
+!experiments/hand_occlusion_overnight/*.log
+!experiments/hand_occlusion_overnight/*.pid
+!experiments/hand_occlusion_overnight/*.txt
+!experiments/hand_occlusion_overnight/.gitkeep
+!experiments/hand_occlusion_overnight/*/
