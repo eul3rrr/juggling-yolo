@@ -1,0 +1,641 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 13,
+      "chains": [
+        {
+          "chain_id": "2",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 12,
+          "hold_median": 12,
+          "hold_max": 12,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 31,
+          "fmax": 43,
+          "dominant_pattern": "TWO_BALL",
+          "mean_pattern_conf": 0.714,
+          "all_patterns": {
+            "CASCADE_3+": 1,
+            "TWO_BALL": 6,
+            "SINGLE_BALL": 5,
+            "MIXED_3+": 1
+          }
+        },
+        {
+          "chain_id": "4",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 5,
+          "hold_median": 5,
+          "hold_max": 5,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 22,
+          "fmax": 27,
+          "dominant_pattern": "MIXED_3+_UNCONFIRMED",
+          "mean_pattern_conf": 0.453,
+          "all_patterns": {
+            "MIXED_3+_UNCONFIRMED": 6
+          }
+        },
+        {
+          "chain_id": "5",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 8,
+          "hold_median": 8,
+          "hold_max": 8,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 56,
+          "fmax": 64,
+          "dominant_pattern": "TWO_BALL",
+          "mean_pattern_conf": 0.816,
+          "all_patterns": {
+            "CASCADE_3+": 1,
+            "TWO_BALL": 7,
+            "MIXED_3+": 1
+          }
+        },
+        {
+          "chain_id": "7",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 29,
+          "hold_median": 29,
+          "hold_max": 29,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 97,
+          "fmax": 126,
+          "dominant_pattern": "CASCADE_3+",
+          "mean_pattern_conf": 0.843,
+          "all_patterns": {
+            "CASCADE_3+": 20,
+            "TWO_BALL": 4,
+            "SINGLE_BALL": 5,
+            "MIXED_3+": 1
+          }
+        },
+        {
+          "chain_id": "12",
+          "n_tracklets": 2,
+          "n_flights": 1,
+          "hold_min": 8,
+          "hold_median": 16.5,
+          "hold_max": 25,
+          "flight_min": 3,
+          "flight_median": 3,
+          "flight_max": 3,
+          "flight_mean": 3,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 207,
+          "fmax": 243,
+          "dominant_pattern": "SINGLE_BALL",
+          "mean_pattern_conf": 0.325,
+          "all_patterns": {
+            "TWO_BALL_ONE_HAND": 1,
+            "SINGLE_BALL": 15,
+            "FOUNTAIN_3+": 5,
+            "TWO_BALL": 7
+          }
+        },
+        {
+          "chain_id": "18",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 11,
+          "hold_median": 11,
+          "hold_max": 11,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 460,
+          "fmax": 471,
+          "dominant_pattern": "TWO_BALL",
+          "mean_pattern_conf": 0.887,
+          "all_patterns": {
+            "TWO_BALL_ONE_HAND": 2,
+            "TWO_BALL": 9,
+            "FOUNTAIN_3+": 1
+          }
+        },
+        {
+          "chain_id": "19",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 11,
+          "hold_median": 11,
+          "hold_max": 11,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 450,
+          "fmax": 461,
+          "dominant_pattern": "TWO_BALL",
+          "mean_pattern_conf": 0.755,
+          "all_patterns": {
+            "MIXED_3+": 1,
+            "TWO_BALL": 9,
+            "TWO_BALL_ONE_HAND": 2
+          }
+        },
+        {
+          "chain_id": "22",
+          "n_tracklets": 5,
+          "n_flights": 4,
+          "hold_min": 9,
+          "hold_median": 9,
+          "hold_max": 15,
+          "flight_min": 1,
+          "flight_median": 32.0,
+          "flight_max": 39,
+          "flight_mean": 26,
+          "flight_std": 17.009801096230763,
+          "flight_cv": 0.6542231190857986,
+          "uniform": false,
+          "fmin": 522,
+          "fmax": 679,
+          "dominant_pattern": "FOUNTAIN_3+",
+          "mean_pattern_conf": 0.714,
+          "all_patterns": {
+            "TWO_BALL_ONE_HAND": 7,
+            "FOUNTAIN_3+": 40,
+            "MIXED_3+": 38,
+            "SINGLE_BALL": 32,
+            "TWO_BALL": 31
+          }
+        },
+        {
+          "chain_id": "23",
+          "n_tracklets": 2,
+          "n_flights": 1,
+          "hold_min": 9,
+          "hold_median": 10.0,
+          "hold_max": 11,
+          "flight_min": 131,
+          "flight_median": 131,
+          "flight_max": 131,
+          "flight_mean": 131,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 534,
+          "fmax": 685,
+          "dominant_pattern": "FOUNTAIN_3+",
+          "mean_pattern_conf": 0.714,
+          "all_patterns": {
+            "MIXED_3+": 38,
+            "SINGLE_BALL": 32,
+            "TWO_BALL_ONE_HAND": 6,
+            "TWO_BALL": 36,
+            "FOUNTAIN_3+": 40
+          }
+        },
+        {
+          "chain_id": "29",
+          "n_tracklets": 4,
+          "n_flights": 3,
+          "hold_min": 9,
+          "hold_median": 14.0,
+          "hold_max": 26,
+          "flight_min": 5,
+          "flight_median": 16,
+          "flight_max": 33,
+          "flight_mean": 18,
+          "flight_std": 14.106735979665885,
+          "flight_cv": 0.7837075544258825,
+          "uniform": false,
+          "fmin": 766,
+          "fmax": 883,
+          "dominant_pattern": "SINGLE_BALL",
+          "mean_pattern_conf": 0.711,
+          "all_patterns": {
+            "FOUNTAIN_3+": 19,
+            "TWO_BALL": 34,
+            "MIXED_3+": 28,
+            "SINGLE_BALL": 35,
+            "TWO_BALL_ONE_HAND": 2
+          }
+        },
+        {
+          "chain_id": "30",
+          "n_tracklets": 3,
+          "n_flights": 2,
+          "hold_min": 6,
+          "hold_median": 14,
+          "hold_max": 21,
+          "flight_min": 45,
+          "flight_median": 74.5,
+          "flight_max": 104,
+          "flight_mean": 74.5,
+          "flight_std": 41.71930009000631,
+          "flight_cv": 0.559990605234984,
+          "uniform": false,
+          "fmin": 839,
+          "fmax": 1029,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.65,
+          "all_patterns": {
+            "TWO_BALL_ONE_HAND": 3,
+            "SINGLE_BALL": 31,
+            "TWO_BALL": 40,
+            "FOUNTAIN_3+": 50,
+            "MIXED_3+": 59
+          }
+        },
+        {
+          "chain_id": "34",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 9,
+          "hold_median": 9,
+          "hold_max": 9,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 948,
+          "fmax": 957,
+          "dominant_pattern": "SINGLE_BALL",
+          "mean_pattern_conf": 0.405,
+          "all_patterns": {
+            "TWO_BALL_ONE_HAND": 1,
+            "SINGLE_BALL": 7,
+            "TWO_BALL": 1,
+            "MIXED_3+": 1
+          }
+        },
+        {
+          "chain_id": "39",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 4,
+          "hold_median": 4,
+          "hold_max": 4,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 1050,
+          "fmax": 1054,
+          "dominant_pattern": "TWO_BALL_ONE_HAND",
+          "mean_pattern_conf": 0.533,
+          "all_patterns": {
+            "FOUNTAIN_3+": 1,
+            "TWO_BALL_ONE_HAND": 4
+          }
+        }
+      ],
+      "per_pattern_summary": {
+        "FOUNTAIN_3+": {
+          "n_chains": 1,
+          "n_uniform": 0,
+          "median_flight_cv": 0.6542231190857986,
+          "median_flight_median": 32.0
+        },
+        "SINGLE_BALL": {
+          "n_chains": 1,
+          "n_uniform": 0,
+          "median_flight_cv": 0.7837075544258825,
+          "median_flight_median": 16
+        },
+        "MIXED_3+": {
+          "n_chains": 1,
+          "n_uniform": 0,
+          "median_flight_cv": 0.559990605234984,
+          "median_flight_median": 74.5
+        }
+      },
+      "sparsity": {
+        "n_events": 48,
+        "n_catches": 24,
+        "n_throws": 24,
+        "n_chains": 13,
+        "n_chains_with_flights": 5,
+        "n_chains_with_3plus_flights": 2,
+        "event_rate": 0.046511627906976744,
+        "duration_frames": 1032
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 10,
+      "chains": [
+        {
+          "chain_id": "0",
+          "n_tracklets": 3,
+          "n_flights": 2,
+          "hold_min": 11,
+          "hold_median": 12,
+          "hold_max": 12,
+          "flight_min": 60,
+          "flight_median": 101.0,
+          "flight_max": 142,
+          "flight_mean": 101,
+          "flight_std": 57.982756057296896,
+          "flight_cv": 0.5740866936366029,
+          "uniform": false,
+          "fmin": 102,
+          "fmax": 339,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.694,
+          "all_patterns": {
+            "CASCADE_3+": 32,
+            "MIXED_3+": 205,
+            "FOUNTAIN_3+": 1
+          }
+        },
+        {
+          "chain_id": "1",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 11,
+          "hold_median": 11,
+          "hold_max": 11,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 72,
+          "fmax": 83,
+          "dominant_pattern": "CASCADE_3+",
+          "mean_pattern_conf": 0.682,
+          "all_patterns": {
+            "CASCADE_3+": 11,
+            "MIXED_3+": 1
+          }
+        },
+        {
+          "chain_id": "2",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 12,
+          "hold_median": 12,
+          "hold_max": 12,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 22,
+          "fmax": 34,
+          "dominant_pattern": "MIXED_3+_UNCONFIRMED",
+          "mean_pattern_conf": 0.352,
+          "all_patterns": {
+            "MIXED_3+_UNCONFIRMED": 13
+          }
+        },
+        {
+          "chain_id": "3",
+          "n_tracklets": 3,
+          "n_flights": 2,
+          "hold_min": 6,
+          "hold_median": 9,
+          "hold_max": 9,
+          "flight_min": 130,
+          "flight_median": 209.5,
+          "flight_max": 289,
+          "flight_mean": 209.5,
+          "flight_std": 112.42997820866105,
+          "flight_cv": 0.5366586072012461,
+          "uniform": false,
+          "fmin": 411,
+          "fmax": 854,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.642,
+          "all_patterns": {
+            "CASCADE_3+": 86,
+            "MIXED_3+": 291,
+            "FOUNTAIN_3+": 67
+          }
+        },
+        {
+          "chain_id": "6",
+          "n_tracklets": 1,
+          "n_flights": 0,
+          "hold_min": 17,
+          "hold_median": 17,
+          "hold_max": 17,
+          "flight_min": null,
+          "flight_median": null,
+          "flight_max": null,
+          "flight_mean": null,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 238,
+          "fmax": 255,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.651,
+          "all_patterns": {
+            "MIXED_3+": 18
+          }
+        },
+        {
+          "chain_id": "7",
+          "n_tracklets": 3,
+          "n_flights": 2,
+          "hold_min": 6,
+          "hold_median": 9,
+          "hold_max": 9,
+          "flight_min": 67,
+          "flight_median": 134.0,
+          "flight_max": 201,
+          "flight_mean": 134,
+          "flight_std": 94.75230867899737,
+          "flight_cv": 0.7071067811865475,
+          "uniform": false,
+          "fmin": 299,
+          "fmax": 591,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.646,
+          "all_patterns": {
+            "CASCADE_3+": 42,
+            "MIXED_3+": 214,
+            "FOUNTAIN_3+": 37
+          }
+        },
+        {
+          "chain_id": "8",
+          "n_tracklets": 3,
+          "n_flights": 2,
+          "hold_min": 6,
+          "hold_median": 7,
+          "hold_max": 11,
+          "flight_min": 63,
+          "flight_median": 103.0,
+          "flight_max": 143,
+          "flight_mean": 103,
+          "flight_std": 56.568542494923804,
+          "flight_cv": 0.5492091504361535,
+          "uniform": false,
+          "fmin": 595,
+          "fmax": 825,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.639,
+          "all_patterns": {
+            "MIXED_3+": 144,
+            "CASCADE_3+": 53,
+            "FOUNTAIN_3+": 34
+          }
+        },
+        {
+          "chain_id": "9",
+          "n_tracklets": 5,
+          "n_flights": 4,
+          "hold_min": 7,
+          "hold_median": 12,
+          "hold_max": 14,
+          "flight_min": 58,
+          "flight_median": 61.5,
+          "flight_max": 134,
+          "flight_mean": 78.75,
+          "flight_std": 36.87252816574059,
+          "flight_cv": 0.46822257988242016,
+          "uniform": true,
+          "fmin": 498,
+          "fmax": 869,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.64,
+          "all_patterns": {
+            "CASCADE_3+": 65,
+            "MIXED_3+": 233,
+            "FOUNTAIN_3+": 74
+          }
+        },
+        {
+          "chain_id": "10",
+          "n_tracklets": 3,
+          "n_flights": 2,
+          "hold_min": 8,
+          "hold_median": 8,
+          "hold_max": 12,
+          "flight_min": 60,
+          "flight_median": 135.5,
+          "flight_max": 211,
+          "flight_mean": 135.5,
+          "flight_std": 106.77312395916867,
+          "flight_cv": 0.7879935347540123,
+          "uniform": false,
+          "fmin": 470,
+          "fmax": 769,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.639,
+          "all_patterns": {
+            "CASCADE_3+": 77,
+            "MIXED_3+": 211,
+            "FOUNTAIN_3+": 12
+          }
+        },
+        {
+          "chain_id": "12",
+          "n_tracklets": 2,
+          "n_flights": 1,
+          "hold_min": 5,
+          "hold_median": 6.5,
+          "hold_max": 8,
+          "flight_min": 60,
+          "flight_median": 60,
+          "flight_max": 60,
+          "flight_mean": 60,
+          "flight_std": null,
+          "flight_cv": null,
+          "uniform": null,
+          "fmin": 670,
+          "fmax": 743,
+          "dominant_pattern": "MIXED_3+",
+          "mean_pattern_conf": 0.639,
+          "all_patterns": {
+            "CASCADE_3+": 27,
+            "MIXED_3+": 39,
+            "FOUNTAIN_3+": 8
+          }
+        }
+      ],
+      "per_pattern_summary": {
+        "MIXED_3+": {
+          "n_chains": 6,
+          "n_uniform": 1,
+          "median_flight_cv": 0.5616479220363781,
+          "median_flight_median": 118.5
+        }
+      },
+      "sparsity": {
+        "n_events": 50,
+        "n_catches": 25,
+        "n_throws": 25,
+        "n_chains": 10,
+        "n_chains_with_flights": 7,
+        "n_chains_with_3plus_flights": 1,
+        "event_rate": 0.0590318772136954,
+        "duration_frames": 847
+      }
+    }
+  },
+  "config": {
+    "uniform_cv_threshold": 0.5
+  },
+  "cross_pattern_cv": {
+    "FOUNTAIN_3+": {
+      "n": 1,
+      "mean": 0.6542231190857986,
+      "median": 0.6542231190857986,
+      "stdev": null
+    },
+    "SINGLE_BALL": {
+      "n": 1,
+      "mean": 0.7837075544258825,
+      "median": 0.7837075544258825,
+      "stdev": null
+    },
+    "MIXED_3+": {
+      "n": 7,
+      "mean": 0.5976097074759952,
+      "median": 0.559990605234984,
+      "stdev": 0.11030474393477178
+    }
+  }
+}

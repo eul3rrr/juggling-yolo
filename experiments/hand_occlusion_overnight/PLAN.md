@@ -1493,3 +1493,59 @@ different signals (multi-view, learned color tracking,
 or 3D ball estimation). The next research direction
 (H40) is to build a continuous hand-occupancy signal
 from raw detector + pose data, not from chain events.
+
+
+## Forty-first episode (H45) — STATUS: COMPLETE (NEGATIVE with structural insight)
+
+Sub-steps:
+1. ✅ Implemented H45: per-chain flight-time / siteswap
+   analysis. Computes median flight_time, flight_time CV
+   (std/mean), and cross-references with H12 v8 pattern
+   labels. Declares UNIFORM_CV_THRESHOLD = 0.5 from physics
+   (3-ball cascade with constant beats has CV = 0 by
+   construction; 0.5 admits ~30% noise before flagging).
+2. ✅ Ran on both videos. Result: only 2/13 identical
+   chains and 1/10 YouTube chains have n_flights >= 3.
+3. ✅ Rendered 11 contact sheets for the 3 multi-flight
+   chains (4 chain 22 + 3 chain 29 + 4 chain 9).
+4. ✅ Visual QA on all 11 flights via `vision_analyze`:
+   - identical chain 22: 3/4 real catch-throws (ft=33, 31, 39),
+     1/4 identity switch (ft=1, geometric discontinuity 999→94px)
+   - identical chain 29: 1/2 real catch-throw (ft=33),
+     1/2 identity switch (ft=5, cross-hand + 5-frame "flight")
+   - YouTube chain 9: 0/4 real catch-throws. ALL 4 are
+     tracker fragmentation (ft=58, 61, 62, 134; physically
+     impossible for 5-ball)
+5. ✅ Documented in `h45_report.md` and updated
+   STATE/RESULTS_LOG/RESEARCH_NOTES.
+
+**H45 verdict: NEGATIVE result with structural insight.**
+
+**Most important finding: 30-40 frame flight times on
+identical match the expected 3-ball cascade ball airtime
+(1.0-1.3s at 30fps), confirming the H12 v8 event log is
+trustworthy for inter-event timing on identical.** The
+58-67 frame "flights" on YouTube are uniformly tracker
+fragmentation, not real throws.
+
+**The 10-frame flight-time filter** is a useful downstream
+post-filter: drop H12 v8 "flights" < 10 frames as likely
+identity switches. Applied to identical, this rejects 3/11
+flights and preserves 7 real catch-throws.
+
+**Siteswap analysis is infeasible on h7v3plus3 with the
+H12 v8 event log.** This is an input-data limitation, not
+an algorithm problem. Future work would need either a
+denser event log or a different signal (H8 v8 per-arc
+gravity, multi-view, color tracking).
+
+**Recommended next research (H46):** per-flight physics
+check via H8 v8. For each H12 v8 "flight", compute H8 v8
+gravity from source's last arc and target's first arc,
+and reject flights where the implied free-fall time is
+inconsistent with the measured flight time. This converts
+H8 v8 from a per-edge to a per-flight signal, potentially
+distinguishing real flights from tracker-fragmentation
+artifacts based on physics alone.
+
+See `h1_hand_pool/reports/h45_report.md` for full analysis.

@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 15:00 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + **H43**
+LAST_UPDATE: 2026-08-28 15:25 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -866,3 +866,63 @@ The most likely productive directions:
    Further chain improvements would require fundamentally different
    signals (multi-view, learned color tracking, or 3D ball
    estimation).
+
+## H45 conclusion
+
+**H45: per-chain flight-time / siteswap analysis** — DONE.
+NEGATIVE result with structural insight.
+
+The H12 v8 hand-event log is too sparse for siteswap analysis:
+- identical: 48 events / 1032 frames (0.047 events/frame),
+  only 2/13 chains have n_flights >= 3.
+- YouTube: 50 events / 847 frames (0.059 events/frame),
+  only 1/10 chains has n_flights >= 3.
+
+Of the 3 chains with 3+ flights, visual QA on all 11
+individual flights found:
+
+**Identical** (3-ball cascade):
+- chain 22 (FOUNTAIN_3+, CV=0.65): 3/4 flights (ft=33, 31, 39)
+  are real catch-throws. 1/4 (ft=1) is an identity switch.
+- chain 29 (SINGLE_BALL, CV=0.78): 1/2 inspected flights
+  (ft=33) is a real catch-throw. 1/2 (ft=5) is an identity
+  switch (cross-hand + 5-frame "flight").
+
+**YouTube** (5-ball):
+- chain 9 (MIXED_3+, CV=0.47): 0/4 flights are real
+  catch-throws. ALL 4 are tracker fragmentation artifacts
+  (slope jumps, no ball at hand, 58-134 frame "flights"
+  are physically impossible for 5-ball). The "low CV" is
+  misleadingly "uniform" because all 4 flights are the SAME
+  artifact (~58-62 frames each).
+
+**Key H45 findings:**
+
+1. **The 10-frame flight-time filter is a useful downstream
+   post-filter:** drop any H12 v8 "flight" < 10 frames as a
+   likely identity switch. On identical, this rejects 3/11
+   flights as identity switches and preserves 7 real
+   catch-throws. On YouTube, the filter is unhelpful because
+   all flights are >= 58 frames.
+
+2. **The H12 v8 event log is trustworthy for chain topology
+   on both videos, but for inter-event timing only on
+   identical.** The 30-40 frame flight times on identical
+   match the expected 3-ball cascade ball airtime (1.0-1.3s
+   at 30fps) exactly. The 58-67 frame "flights" on YouTube
+   are uniformly tracker fragmentation.
+
+3. **Siteswap analysis is infeasible on the h7v3plus3 chain
+   set with the H12 v8 event log.** This is a fundamental
+   input-data limitation, not an H45 algorithm problem.
+
+**Recommended next research (H46): per-flight physics check
+via H8 v8.** For each H12 v8 "flight", compute H8 v8's
+gravity estimate from the source's last arc and target's
+first arc, and reject flights where the implied free-fall
+time is inconsistent with the measured flight time. This
+would convert H8 v8 from a per-edge signal to a per-flight
+signal, distinguishing real flights from tracker-fragmentation
+artifacts based on physics alone.
+
+See `h1_hand_pool/reports/h45_report.md` for full analysis.

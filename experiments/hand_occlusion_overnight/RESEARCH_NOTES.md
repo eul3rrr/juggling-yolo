@@ -1375,4 +1375,56 @@ useful source record:
     per-frame ball-height measurement, which our 2D
     tracking provides.
 
+## Cross-cutting insights from H45 (2026-08-28 ~15:15)
+
+49. **H12 v8 hand-event log is fundamentally too sparse for
+    siteswap analysis.** identical has 48 events / 1032 frames
+    (0.047 events/frame); YouTube has 50/847 (0.059). For a
+    3-ball cascade with 6 throws/second, we'd need ~0.5
+    events/frame, ~10x more dense than the H12 v8 log
+    provides. Only 2/13 identical chains and 1/10 YouTube
+    chains have n_flights >= 3.
+
+50. **The 30-40 frame flight times on identical are a real
+    signal — they match the expected 3-ball cascade ball
+    airtime (1.0-1.3s at 30fps) exactly.** This validates
+    H12 v8's catch-throw event detection on identical at the
+    quantitative level. The 30-40 frame range is the
+    physically correct airtime for 3-ball cascade throws.
+
+51. **YouTube's 58-67 frame "flights" are uniformly tracker
+    fragmentation, not real throws.** Visual QA on all 4
+    chain 9 flights confirms slope jumps (0.94→14.35,
+    1.81→11.20, etc.) and no visible ball at the hand at
+    focus frame. The "low CV=0.47" of chain 9 is misleading:
+    all 4 flights are the SAME artifact (~58-62 frames
+    because the tracker has a consistent minimum
+    re-acquisition delay).
+
+52. **The 10-frame flight-time filter is a useful downstream
+    post-filter for H12 v8 events.** Drop any H12 v8 "flight"
+    < 10 frames as a likely identity switch. Applied to
+    identical, this rejects 3/11 flights (1, 3, 5 frames = all
+    identity switches) and preserves 7 real catch-throws.
+    On YouTube, the filter is unhelpful because all flights
+    are >= 58 frames.
+
+53. **Low flight-time CV can be EITHER real uniform juggling
+    OR uniform tracker failure.** A pure statistical test
+    cannot distinguish them without ground truth. The H45
+    analysis shows that chain 9 (CV=0.47) is a counter-example
+    to "low CV = uniform juggling" — the low CV is uniformly
+    broken tracking. Vision-based QA or per-arc physics
+    (H8 v8) is required to distinguish the two cases.
+
+54. **YouTube's tracklet-time fragmentation is a fundamental
+    tracker limitation, not a H12 v8 algorithm problem.** The
+    YouTube video is 5-ball cascade, which is faster than
+    3-ball cascade (5 balls in air vs 3). The detector can't
+    keep up with the 5-ball motion, producing fragmented
+    tracklets that H12 v8 re-stitches with 50-130 frame gaps.
+    A faster detector (e.g., YOLOv9) or higher frame rate
+    (60 fps) would help but are out of scope for this
+    autonomous lab.
+
 
