@@ -1,0 +1,59 @@
+{
+  "experiment": "H28",
+  "date": "2026-08-28 12:00 CEST",
+  "status": "COMPLETE - NEGATIVE (low precision)",
+  "hypothesis": "The 88 H20-KEPT 'adjacent' candidates (NOT in E6c, NOT in h7v2, NOT in H17's V-shape strict set for the e6c_not_in_h7v2 subset) represent a pool of TRULY novel catch+throw candidates. H20's in-hand + vel-jump + apex filters suggest these are not held-ball artifacts. H24's methodology applied here to characterize the adjacent pool's precision.",
+  "approach": {
+    "selection": "sort by gap ascending, take first 8 identical + first 4 youtube",
+    "sample_size": 12,
+    "tools": "vision_analyze for visual QA, programmatic contact sheets for the 6-panel grid"
+  },
+  "quantitative_results": {
+    "n_total_h17_strict": 151,
+    "n_h20_kept_adjacent": 88,
+    "n_h28_qa_sample": 12,
+    "real": 2,
+    "partial": 4,
+    "unclear": 2,
+    "false": 4,
+    "precision_real_only": 0.167,
+    "precision_real_plus_partial": 0.500
+  },
+  "per_stem": {
+    "identical_balls_trick_000_018": {"n": 8, "real": 1, "partial": 2, "unclear": 2, "false": 3, "precision_real": 0.125, "precision_real_plus_partial": 0.375},
+    "youtube": {"n": 4, "real": 1, "partial": 2, "unclear": 0, "false": 1, "precision_real": 0.250, "precision_real_plus_partial": 0.750}
+  },
+  "per_vshape": {
+    "V_DEEP": {"n": 10, "real": 2, "partial": 4, "unclear": 2, "false": 2, "precision_real": 0.200, "precision_real_plus_partial": 0.600},
+    "V_SHALLOW": {"n": 2, "real": 0, "partial": 0, "unclear": 0, "false": 2, "precision_real": 0.000, "precision_real_plus_partial": 0.000}
+  },
+  "per_verdict_breakdown": [
+    {"idx": 1, "edge": "29->33 identical L", "verdict": "UNCLEAR", "reason": "Source ball at L hand; target ball 92px away moving away. Color confusion possible."},
+    {"idx": 2, "edge": "66->67 identical L", "verdict": "UNCLEAR", "reason": "No source ball detection in source frames; target ball stationary high above. Pose issue."},
+    {"idx": 3, "edge": "39->46 identical L", "verdict": "FALSE", "reason": "Source ball high descending above L hand; target ball 90px right of L hand. Different positions."},
+    {"idx": 4, "edge": "70->73 identical L", "verdict": "PARTIAL", "reason": "Source ball rising into L hand; target ball still approaching. min_d=21.5 close."},
+    {"idx": 5, "edge": "58->60 identical R", "verdict": "FALSE", "reason": "Source ball below R hand moving up; target ball moving up through hand region. Continuous upward path - not V."},
+    {"idx": 6, "edge": "6->14 identical R", "verdict": "FALSE", "reason": "Source ball below R hand moving away; target ball above R hand moving up. No V."},
+    {"idx": 7, "edge": "13->15 identical R", "verdict": "REAL", "reason": "Clear V at R hand. source approaches; target leaves. V-apex (527,527) at R hand."},
+    {"idx": 8, "edge": "8->9 identical L", "verdict": "PARTIAL", "reason": "Throw visible at L hand; source ball already at L hand no descent."},
+    {"idx": 9, "edge": "39->40 youtube R", "verdict": "PARTIAL", "reason": "Throw visible at R hand; source ball already on R hand no descent."},
+    {"idx": 10, "edge": "24->26 youtube L", "verdict": "FALSE", "reason": "Source ball at L hand; target ball at R hand. Cross-hand artifact."},
+    {"idx": 11, "edge": "32->40 youtube R", "verdict": "PARTIAL", "reason": "Throw visible at R hand; source ball below R hand no descent."},
+    {"idx": 12, "edge": "10->11 youtube R", "verdict": "REAL", "reason": "Clear V at R hand. source descending into R hand; target rising from R hand. 9-frame gap."}
+  ],
+  "h28_vs_h24_vs_h20": {
+    "H20 e6c_not_in_h7v2": {"n": 8, "real": 5, "partial": 3, "false": 0, "precision_real": 0.625, "precision_real_plus_partial": 1.000},
+    "H24 e6c_not_in_h7v2 (new)": {"n": 9, "real": 2, "partial": 2, "false": 5, "precision_real": 0.222, "precision_real_plus_partial": 0.444},
+    "H20+H24 combined e6c_not_in_h7v2": {"n": 17, "real": 7, "partial": 5, "false": 5, "precision_real": 0.412, "precision_real_plus_partial": 0.706},
+    "H28 adjacent (new)": {"n": 12, "real": 2, "partial": 4, "false": 4, "unclear": 2, "precision_real": 0.167, "precision_real_plus_partial": 0.500}
+  },
+  "conclusion": "The H20-KEPT 'adjacent' pool is even lower precision than the H20-KEPT 'e6c_not_in_h7v2' pool (P_real 17% vs 22-62%). 4/12 candidates are clearly FALSE, dominated by (a) cross-hand artifacts where source is at one hand and target at the other, and (b) continuous upward paths that look like V-shapes but are actually a single ball passing through the hand region without reversing. V_SHALLOW candidates in the adjacent pool are 0/2 = 0% REAL, opposite to H24's finding that V_SHALLOW is more reliable than V_DEEP. The H28 finding is consistent with H20+H24's main insight: H17's V-shape strict pool has many false positives that the in-hand + vel-jump + apex filters cannot fully reject. The 88 H20-KEPT adjacent candidates should NOT be auto-incorporated into the chain set. H28 confirms the H17->H20->H24 finding chain: the V-shape strict pool is a candidate-mining tool, not a chain-set replacement.",
+  "negative_findings": [
+    "H28's 17% REAL precision is the lowest of any H20-KEPT subset QA'd so far. H17/H20's V-shape + in-hand + vel-jump + apex filter combination admits too many false positives in the 'adjacent' pool (where neither source nor target is in E6c or h7v2).",
+    "V_SHALLOW precision is 0/2 = 0% on the H28 sample. This is opposite to H24's V_SHALLOW=1/1=100% finding. The H24 V_SHALLOW sample was too small (n=1) to characterize reliability.",
+    "The dominant failure pattern (4/12 = 33%) is not 'held ball' (which H20's in-hand filter is designed for) but rather 'continuous upward path through hand region' (3/4 FALSE) and 'cross-hand pairing' (1/4 FALSE). The H20 filters do not address these failure modes.",
+    "The 'throw' half of the V-shape is more frequently visible than the 'catch' half. 6/12 candidates have a real throw visible, but only 2/12 have a real catch+throw pair. This suggests the source-end of the V-shape is the noisier part: the source's last frames often show a ball already on the hand (no descent), while the target's first frames often show a ball moving away (clear throw). The H17 V-shape logic is biased toward throwing evidence.",
+    "vision_analyze is unreliable on ball color (marker blue/orange confused with actual ball color) - this is a known issue from previous H20/H24 work. The color signal should be ignored or replaced with actual HSV histograms in future work."
+  ],
+  "recommendation": "The 88 H20-KEPT adjacent candidates should NOT be auto-incorporated into the chain set. H28 confirms that the H17->H20 V-shape + filter pipeline has substantial false-positive rates in this pool (REAL precision 17%, REAL+PARTIAL precision 50%). The 2 H28 REAL candidates (13->15 identical, 10->11 youtube) and 4 H28 PARTIAL candidates may be useful for human review, but they are not high-confidence chain-set augmentations. The recommended operating point remains h7v3plus2 (H26) for hand-aware chain construction."
+}

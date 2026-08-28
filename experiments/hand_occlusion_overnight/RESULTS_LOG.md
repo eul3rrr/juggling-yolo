@@ -2559,3 +2559,73 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus2_h26_kept_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v10_chain_quality_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h26_report.md`
+
+### H28 (2026-08-28 ~12:00 CEST)
+
+- Hypothesis: the 88 H20-KEPT `adjacent` candidates (NOT in E6c, NOT
+  in h7v2, NOT in H17's `e6c_not_in_h7v2` subset) represent a pool
+  of TRULY novel catch+throw candidates. H24's methodology (visual
+  QA of 8+1 candidates) found REAL precision 22% on the
+  `e6c_not_in_h7v2` pool. H28 applies the same methodology to the
+  adjacent pool, hypothesizing the precision is similar or different.
+- Quantitative result:
+
+  | Metric | Value |
+  |---|---|
+  | Total H17 strict positives | 151 |
+  | H20-KEPT adjacent candidates | 88 |
+  | H28 sample (selected for QA) | 12 (8 identical + 4 YouTube) |
+  | Verdicts: REAL | 2 |
+  | Verdicts: PARTIAL | 4 |
+  | Verdicts: FALSE | 4 |
+  | Verdicts: UNCLEAR | 2 |
+  | Precision (REAL+PARTIAL=TP) | **0.500** (6/12) |
+  | Precision (REAL only) | **0.167** (2/12) |
+
+  Per-stem: identical 1 REAL/2 PARTIAL/3 FALSE/2 UNCLEAR (P_real=0.125);
+  youtube 1 REAL/2 PARTIAL/1 FALSE (P_real=0.250).
+  Per-V-shape: V_DEEP 2 REAL/4 PARTIAL/2 FALSE/2 UNCLEAR (P_real=0.200);
+  V_SHALLOW 0/2 = 0% REAL.
+
+- H28 vs H20 vs H24 (combined e6c_not_in_h7v2 + adjacent precision):
+  - H20 (e6c_not_in_h7v2, n=8): 5 REAL, 3 PARTIAL, 0 FALSE, P_real=0.625
+  - H24 (e6c_not_in_h7v2 new, n=9): 2 REAL, 2 PARTIAL, 5 FALSE, P_real=0.222
+  - H28 (adjacent, n=12): 2 REAL, 4 PARTIAL, 4 FALSE, 2 UNCLEAR, P_real=0.167
+  - H28 has the LOWEST precision of any H20-KEPT subset QA'd so far.
+
+- Negative findings:
+  - H28 fails the hypothesis: REAL precision 17% is much lower than
+    H24's 22% and H20's 62.5%. The "adjacent" pool is the noisiest.
+  - Dominant failure pattern (3/4 FALSE): "continuous upward path
+    through hand region" — the V-shape + min_d criterion finds
+    V-shaped trajectories but the source and target are a single
+    ball in continuous upward motion through the hand region, NOT
+    a catch+throw that reverses direction.
+  - Cross-hand pairing (1/4 FALSE): 24→26 YouTube pairs source at L
+    hand with target at R hand. min_d=1.06 is misleading.
+  - V_SHALLOW precision is 0/2 = 0%, opposite to H24's V_SHALLOW
+    1/1=100% (H24 sample was too small).
+  - 6/12 candidates have a real throw visible but only 2/12 have a
+    real catch+throw pair. The H17 V-shape criterion is biased
+    toward throwing evidence: the source-end often shows a ball
+    already at the hand, while the target-end often shows a clear
+    "ball leaving hand" trajectory.
+  - vision_analyze is unreliable on ball color (marker blue/orange
+    confused with actual ball color) - this is a known issue from
+    previous H20/H24 work and does not affect H28's geometric
+    analysis.
+
+- Verdict: **NEGATIVE.** H28 confirms the H17→H20→H24 negative
+  finding chain: the V-shape + in-hand + vel-jump + apex filter
+  combination admits too many false positives in the noisiest
+  pools. The 88 H20-KEPT adjacent candidates should NOT be
+  auto-incorporated into the chain set. Recommended operating
+  point remains h7v3plus2 (H26). See
+  `h1_hand_pool/reports/h28_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h28_candidate_qa_at_scale.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h28/*.png` (12 sheets)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h28_selected_candidates.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h28_visual_qa_verdicts.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h28_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h28_report.md`

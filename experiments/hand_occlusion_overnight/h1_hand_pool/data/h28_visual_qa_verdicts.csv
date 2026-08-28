@@ -1,0 +1,13 @@
+h28_idx,stem,from_tid,to_tid,gap,vshape,which_hand,min_d,vision_verdict,visual_reason
+1,identical_balls_trick_000_018,29,33,1,V_DEEP,left,5.63,UNCLEAR,source ball at L hand; target ball 92px away moving away. Color confusion possible.
+2,identical_balls_trick_000_018,66,67,3,V_DEEP,left,38.32,UNCLEAR,no source ball detection in source frames; target ball stationary high above. Pose issue.
+3,identical_balls_trick_000_018,39,46,3,V_SHALLOW,left,51.9,FALSE,source ball high descending above L hand; target ball 90px right of L hand. Different positions.
+4,identical_balls_trick_000_018,70,73,4,V_DEEP,left,21.49,PARTIAL,source ball rising into L hand; target ball still approaching. min_d=21.5 close.
+5,identical_balls_trick_000_018,58,60,4,V_DEEP,right,40.46,FALSE,source ball below R hand moving up; target ball moving up through hand region. Continuous upward path - not V.
+6,identical_balls_trick_000_018,6,14,4,V_SHALLOW,right,54.75,FALSE,source ball below R hand moving away; target ball above R hand moving up. No V.
+7,identical_balls_trick_000_018,13,15,5,V_DEEP,right,2.1,REAL,clear V at R hand. source approaches; target leaves. V-apex (527,527) at R hand.
+8,identical_balls_trick_000_018,8,9,5,V_DEEP,left,10.13,PARTIAL,throw visible at L hand; source ball already at L hand no descent.
+9,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,39,40,1,V_DEEP,right,21.28,PARTIAL,throw visible at R hand; source ball already on R hand no descent.
+10,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,24,26,3,V_DEEP,left,1.06,FALSE,source ball at L hand; target ball at R hand. Cross-hand artifact.
+11,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,32,40,5,V_DEEP,right,21.28,PARTIAL,throw visible at R hand; source ball below R hand no descent.
+12,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,10,11,9,V_DEEP,right,4.69,REAL,clear V at R hand. source descending into R hand; target rising from R hand. 9-frame gap.

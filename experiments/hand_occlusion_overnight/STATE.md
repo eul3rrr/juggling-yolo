@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 20:50 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + H22 v1+v2 + H24 + **H26** COMPLETE. **H26 PASS (incremental improvement)**: integrates the 2 H24 NEW REAL H20-KEPT-not-in-h7v2 edges (7→10 and 59→61 identical) into the h7v3pure chain set. Both admitted with cost=1.0. identical chains 43→42. Mean quality H21 v2 0.8044 → H26 v10 0.8105 (+0.0061). H26-KEPT edges are HAND_TRANSITION so they don't trigger h8 v5 physics penalty. H24 negative finding (cross-ball dominant failure) still applies. H21+H26 together cover 7 visually-confirmed REAL H20-KEPT edges (5 from H20 + 2 from H24). H22+H26 quality: H22 0.828 vs H26 0.8105 — H22's YouTube-only improvement is different in mechanism from H26's identical-only improvement; they could be combined in a future experiment.
+LAST_UPDATE: 2026-08-28 12:05 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + H22 v1+v2 + H24 + H26 + **H28** COMPLETE. **H28 NEGATIVE**: 12-candidate visual QA of H20-KEPT `adjacent` pool (NOT in E6c, NOT in h7v2, NOT in H17's e6c_not_in_h7v2 set) finds REAL precision 17% (2/12), REAL+PARTIAL precision 50% (6/12). 4/12 FALSE positives dominated by "continuous upward path through hand region" (3) and "cross-hand pairing" (1). V_SHALLOW 0/2 = 0% (opposite of H24's 1/1=100%, which was too small). The H17 V-shape criterion is biased toward throwing evidence: 6/12 candidates have a real throw visible but only 2/12 have a real catch+throw pair. The 88 H20-KEPT adjacent candidates should NOT be auto-incorporated into the chain set. Recommended operating point remains h7v3plus2 (H26). H28 confirms the H17→H20→H24 negative finding chain: V-shape + in-hand + vel-jump + apex filters admit too many false positives in the noisiest pool.
 
 ## Isolation
 
@@ -441,37 +441,52 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
     7 visually-confirmed REAL H20-KEPT edges (5 from H20 + 2
     from H24). h7v3plus2 is the new recommended chain set for
     H20-KEPT-augmented analyses.
+38. **H28: H20-KEPT adjacent candidate review at scale** —
+    DONE. NEGATIVE. 12-candidate visual QA (8 identical + 4
+    YouTube) of the 88 H20-KEPT `adjacent` pool finds REAL
+    precision 17% (2/12) and REAL+PARTIAL precision 50% (6/12).
+    4/12 FALSE positives dominated by "continuous upward path
+    through hand region" (3/4) and "cross-hand pairing" (1/4).
+    V_SHALLOW 0/2 = 0% on the H28 sample, opposite to H24's
+    V_SHALLOW 1/1=100% (which was too small to characterize).
+    The 88 H20-KEPT adjacent candidates should NOT be
+    auto-incorporated. H28 confirms H17→H20→H24 negative
+    finding chain: V-shape + in-hand + vel-jump + apex filters
+    admit too many false positives in the noisiest pool.
+    See `h1_hand_pool/reports/h28_report.md`.
 
 ## Next action
 
-H26 is complete (PASS, incremental). The 2 H24 NEW REAL H20-KEPT
-edges (7→10, 59→61 identical) are integrated into the h7v3plus2
-chain set. h7v3plus2 mean quality is 0.8105 on identical
-(+0.0061 vs H21, -0.0170 vs H22's 0.828 because H22 doesn't
-include the 2 NEW REAL edges that have n_h26=1 hand-edge each
-without the full benefit of being in a longer juggling cycle).
+H28 is complete (NEGATIVE). All three H20-KEPT subset QA campaigns
+(H20, H24, H28) have been conducted; the conclusion is that the
+H20-KEPT `e6c_not_in_h7v2` pool is the only reliable augmentation
+source (H21, H26 used it). The H20-KEPT `adjacent` pool (H28) and
+the H17 strict pool beyond the 5 H20-KEPT REAL candidates should
+NOT be auto-incorporated.
 
-Remaining research directions:
+Recommended operating point remains h7v3plus2 (H26).
 
+Remaining research directions (priorities):
 1. **H25: cross-ball artifact rejection filter** — add a
    color-continuity check (source-end and target-start ball
    color histogram should match) or trajectory-overlap check
    (source and target tracklets should intersect spatially
    within the gap region). If H25 can reject the 4 cross-ball
-   FALSE positives from H24, the H20+H24 combined pool would
-   reach 7/7 = 100% REAL precision (5 from H20 + 2 from H24).
+   FALSE positives from H24 and the "continuous upward path"
+   FALSE positives from H28, the H17→H20→H25 combined pool
+   would have much higher precision. Implementation requires
+   either re-running the detector with color output, or using
+   the existing tracklet's bbox color statistics if available.
 2. **H27: H22+H26 combined chain set** — apply H22's YouTube
    20→21 veto on top of H26's 2 NEW REAL H24 edges. This tests
    whether H22's YouTube improvement and H26's identical
-   improvement are additive.
-3. **H28: H20-KEPT adjacent candidate pool review at scale** —
-   the H20 report found 88 H20-KEPT adjacent candidates. H24's
-   methodology (sort by gap, take first 8+4) could be applied
-   to characterize the adjacent pool's precision. The adjacent
-   pool was NOT in h7v2's input (it's outside E6c's accepted
-   set), so it represents TRULY novel candidates.
-4. **H29: 2D ball-color-histogram per-detection check** — the
-   cross-ball artifacts are characterized by color mismatch
-   between source and target. A simple HSV-histogram check on
-   the source-tail and target-head detections could reject
-   cross-ball artifacts automatically.
+   improvement are additive. (Lower priority — H22's
+   improvement is small +0.0034 and H26's is +0.0061, so the
+   combined improvement is likely ≤ +0.01.)
+3. **H29: 2D ball-color-histogram per-detection check** — the
+   cross-ball artifacts (H24, H28) are characterized by color
+   mismatch between source and target. A simple HSV-histogram
+   check on the source-tail and target-head detections could
+   reject cross-ball artifacts automatically. Could be done
+   with the existing tracklet data if color info is in the
+   tracklet_features.csv.

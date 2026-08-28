@@ -1,0 +1,13 @@
+h28_idx,stem,from_tid,to_tid,gap,vshape,which_hand,min_hand_dist,ratio,gap_vel,apex_src_dist
+1,identical_balls_trick_000_018,29,33,1,V_DEEP,left,5.63,16.183,,58.62
+2,identical_balls_trick_000_018,66,67,3,V_DEEP,left,38.32,6.048,,15.63
+3,identical_balls_trick_000_018,39,46,3,V_SHALLOW,left,51.9,3.355,,138.22
+4,identical_balls_trick_000_018,70,73,4,V_DEEP,left,21.49,8.735,,35.07
+5,identical_balls_trick_000_018,58,60,4,V_DEEP,right,40.46,7.031,,14.21
+6,identical_balls_trick_000_018,6,14,4,V_SHALLOW,right,54.75,2.998,,97.11
+7,identical_balls_trick_000_018,13,15,5,V_DEEP,right,2.1,56.641,,133.22
+8,identical_balls_trick_000_018,8,9,5,V_DEEP,left,10.13,15.36,,65.45
+9,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,39,40,1,V_DEEP,right,21.28,6.222,,105.64
+10,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,24,26,3,V_DEEP,left,1.06,133.217,,40.87
+11,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,32,40,5,V_DEEP,right,21.28,4.026,,84.73
+12,youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,10,11,9,V_DEEP,right,4.69,38.56,34.51,51.42
