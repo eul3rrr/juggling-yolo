@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:53 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62**
+LAST_UPDATE: 2026-08-28 16:55 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1699,3 +1699,43 @@ The H58 v1 vision tool was misled by the chain 6 anomaly.
 H62 uses the full 24-event dataset to characterize the pattern.
 
 See `h1_hand_pool/reports/h62_report.md` for full analysis.
+
+## H63 conclusion (2026-08-28 ~17:10 CEST)
+
+**H63: YouTube 5-ball CASCADE-SHOWER mix** — DONE. PASS. H62
+refined.
+
+H62 found the YouTube 5-ball pattern is CASCADE (70% alt-hand)
+with 7 same-hand events (30%), all on the right hand. H63 asks:
+are these 7 same-hand events random, or do they form coherent
+SHOWER-like bursts?
+
+Cluster analysis (threshold=100 frames):
+- Cluster 1: singleton f=308 (chain 7)
+- Cluster 2: 3 events f=420-510, span 90, chains 0+3+9
+- Cluster 3: 3 events f=769-825, span 56, chains 0+8+9
+
+**Verdict: CASCADE-SHOWER MIX.** The YouTube pattern is
+CASCADE (70%) WITH SHOWER bursts (30%), not pure CASCADE and
+not pure SHOWER.
+
+Key findings:
+1. The 7 same-hand events form 2 SHOWER-like clusters of 3
+   events each, separated by ~250 frames of CASCADE activity.
+   Each cluster spans 3 different chains (true pattern feature,
+   not single-chain artifact).
+2. The right hand is the "lead" hand for SHOWER events (7/7 on
+   the right). Consistent with a right-handed juggler.
+3. Same-hand gaps are LONGER (median 20 vs 13.5 alt-hand).
+   SHOWER requires the dominant hand to throw, wait for peak,
+   then catch.
+4. Cluster 1 (f=308) is an isolated singleton — a pattern
+   transition or one-off trick element.
+5. The H10 v11 v3 quality doesn't privilege CASCADE over SHOWER
+   events (all 7 same-hand events are UNCERTAIN).
+
+Refines H62: from "CASCADE" to "CASCADE-SHOWER mix". The
+h7v3plus3 chain set correctly captures both CASCADE and SHOWER
+events.
+
+See `h1_hand_pool/reports/h63_report.md` for full analysis.

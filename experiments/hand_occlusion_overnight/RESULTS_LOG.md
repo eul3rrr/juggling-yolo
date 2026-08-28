@@ -4100,3 +4100,40 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h62_youtube_pattern.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h62_report.md`
 
+### H63 (2026-08-28 ~17:10 CEST)
+
+- Hypothesis: H62 found that the YouTube 5-ball pattern is
+  dominantly CASCADE (70% alt-hand, 30% same-hand) and that
+  ALL 7 same-hand events are on the right hand. H63 asks:
+  are these 7 same-hand events random, or do they form
+  coherent SHOWER-like bursts?
+- Implementation: `h63_youtube_samehand_clusters.py` clusters
+  the 7 same-hand events by temporal proximity (intervals
+  < 100 frames = same cluster).
+- Cluster analysis:
+  - Cluster 1: singleton f=308 (chain 7)
+  - Cluster 2: 3 events f=420-510, span 90, chains 0+3+9
+  - Cluster 3: 3 events f=769-825, span 56, chains 0+8+9
+- Verdict: CASCADE-SHOWER MIX. The YouTube pattern is CASCADE
+  (70%) WITH SHOWER bursts (30%), not pure CASCADE.
+- Key findings:
+  1. The 7 same-hand events form 2 SHOWER-like clusters of 3
+     events each.
+  2. Each cluster spans 3 different chains (true pattern
+     feature, not single-chain artifact).
+  3. The right hand is the "lead" hand for SHOWER events
+     (7/7 on the right). Consistent with a right-handed juggler.
+  4. Same-hand gaps are LONGER (median 20 vs 13.5 alt-hand).
+  5. Cluster 1 (f=308) is an isolated singleton — a pattern
+     transition or one-off trick element.
+  6. The H10 v11 v3 quality doesn't privilege CASCADE over
+     SHOWER events (all 7 same-hand events are UNCERTAIN).
+- Implication: H62 finding refined from "CASCADE" to
+  "CASCADE-SHOWER mix". The h7v3plus3 chain set correctly
+  captures both pattern types.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h63_youtube_samehand_clusters.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h63_youtube_samehand_clusters.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h63_samehand_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h63_report.md`
+
