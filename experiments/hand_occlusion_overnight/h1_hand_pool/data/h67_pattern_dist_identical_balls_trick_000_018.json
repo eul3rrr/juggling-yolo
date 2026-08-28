@@ -1,0 +1,21 @@
+{
+  "H50_baseline": {
+    "TWO_BALL": 269,
+    "MIXED_3+_UNCONFIRMED": 21,
+    "SINGLE_BALL": 216,
+    "CASCADE_3+": 77,
+    "MIXED_3+": 283,
+    "TWO_BALL_ONE_HAND": 8,
+    "FOUNTAIN_3+": 168
+  },
+  "H67_stacked": {
+    "TWO_BALL": 269,
+    "MIXED_3+_UNCONFIRMED": 21,
+    "SINGLE_BALL": 216,
+    "CASCADE_3+": 77,
+    "MIXED_3+": 283,
+    "TWO_BALL_ONE_HAND": 8,
+    "FOUNTAIN_3+": 112,
+    "FOUNTAIN_LOW_CONF": 56
+  }
+}

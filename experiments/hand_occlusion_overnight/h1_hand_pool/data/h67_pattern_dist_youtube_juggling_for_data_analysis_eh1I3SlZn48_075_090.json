@@ -1,0 +1,14 @@
+{
+  "H50_baseline": {
+    "MIXED_3+_UNCONFIRMED": 70,
+    "CASCADE_3+": 119,
+    "MIXED_3+": 498,
+    "FOUNTAIN_3+": 211
+  },
+  "H67_stacked": {
+    "MIXED_3+_UNCONFIRMED": 70,
+    "CASCADE_3+": 119,
+    "MIXED_3+": 498,
+    "FOUNTAIN_3+": 211
+  }
+}

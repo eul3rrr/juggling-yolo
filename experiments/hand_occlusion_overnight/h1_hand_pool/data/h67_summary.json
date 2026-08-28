@@ -1,0 +1,57 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_frames": 1042,
+      "n_changed": 56,
+      "pct_changed": 5.37,
+      "h50_dist": {
+        "TWO_BALL": 269,
+        "MIXED_3+_UNCONFIRMED": 21,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 77,
+        "MIXED_3+": 283,
+        "TWO_BALL_ONE_HAND": 8,
+        "FOUNTAIN_3+": 168,
+        "FOUNTAIN_LOW_CONF": 0
+      },
+      "h67_dist": {
+        "TWO_BALL": 269,
+        "MIXED_3+_UNCONFIRMED": 21,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 77,
+        "MIXED_3+": 283,
+        "TWO_BALL_ONE_HAND": 8,
+        "FOUNTAIN_3+": 112,
+        "FOUNTAIN_LOW_CONF": 56
+      },
+      "per_pattern_delta": {
+        "FOUNTAIN_3+": -56,
+        "FOUNTAIN_LOW_CONF": 56
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_frames": 898,
+      "n_changed": 0,
+      "pct_changed": 0.0,
+      "h50_dist": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 119,
+        "MIXED_3+": 498,
+        "FOUNTAIN_3+": 211
+      },
+      "h67_dist": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 119,
+        "MIXED_3+": 498,
+        "FOUNTAIN_3+": 211
+      },
+      "per_pattern_delta": {}
+    }
+  },
+  "methodology": {
+    "input": "H50-filtered per-frame pattern data",
+    "filters_stacked": "H43 (conf < 0.55) + H66 (pct_A_ge2 < 0.30)",
+    "H43_threshold": 0.55,
+    "H66_threshold": 0.3
+  }
+}
