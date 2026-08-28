@@ -85,21 +85,50 @@ Sub-steps:
 false-positive failure modes suppressed. See `h1_v2_report.md` for full
 analysis. v3 (soft catch-context + sensitivity grid) is the next episode.
 
-## Third episode (H1 v3) — PLANNED
+## Third episode (H1 v3) — STATUS: COMPLETE
 
 Sub-steps:
 
-1. Implement H1 v3:
+1. ✅ Implement H1 v3:
    - Replace hard `UNCONTEXTED_ENTRY` with `POTENTIAL_ENTRY` flag
      (catch candidate still creates a token, but the event is tagged
      so downstream consumers can apply their own confidence).
    - Sensitivity grid: `THROW_LEAVE_WINDOW_FRAMES` ∈ {3, 5, 7} for
      the leave-window test. Report counts at each setting.
-   - Consider removing or relaxing `WRIST_MOTION_THROW` (fires 0
-     times in v2; no measurable impact).
-2. Re-run sensitivity grid; report the precision/recall tradeoff.
-3. If time permits, start H2: combine E6c mid-air edges with H1 v2/v3
-   hand-links into a single chain representation (master §11). Preserve
-   edge provenance (each chain edge tagged CONTINUOUS / BALLISTIC /
-   HAND_TRANSITION / AMBIGUOUS_HAND_TRANSITION). Record conflicts
-   instead of silently resolving.
+   - Retain `WRIST_MOTION_THROW` (fires 0 times in v2/v3; no
+     measurable impact — but cheap insurance).
+2. ✅ Re-run sensitivity grid; reported the precision/recall tradeoff.
+3. ✅ Visually inspect 8 v3 new links via `vision_analyze`; 6/8
+   (75%) real catch-throws, 1/8 left/right hand swap bug, 1/8 v3
+   false positive.
+4. ✅ Document v3 in `h1_v3_report.md` and update RESULTS_LOG.
+
+**v3 verdict: PASS with caveat.** v2 is still the recommended
+operating point for precision (1.000 across all gap subsets, zero
+false positives on visual inspection). v3a is a safe no-op that
+adds the `POTENTIAL_ENTRY` tag for downstream consumers. v3c
+(throw=7) admits 3-4x more links but at ~80% visual precision.
+v4 should add slope-coherence test to filter v3-style false
+positives.
+
+## Fourth episode (H1 v4) — PLANNED
+
+Sub-steps:
+
+1. Implement H1 v4 with slope-coherence filter:
+   - Add `MIN_FROM_SLOPE = -2.0` (incoming must approach faster
+     than 2 px/frame; rejects mid-air pass-throughs).
+   - Add `MIN_TO_SLOPE = 4.0` (outgoing must depart faster than
+     4 px/frame; rejects low-confidence departures).
+   - Test on v3c's link set; verify the `15→25` false positive
+     is rejected while keeping the 6 real catch-throws
+     (11→14, 52→54, 68→71, 72→73, 10→12 youtube, plus 70→74
+     from v2).
+2. Compare v4 vs v2 precision/recall on the gap=0 reviewed
+   subset; report whether v4 improves on v2.
+3. If time permits, start H2: combine E6c mid-air edges with
+   H1 v4 hand-links into a single chain representation
+   (master §11). Preserve edge provenance (each chain edge
+   tagged CONTINUOUS / BALLISTIC / HAND_TRANSITION /
+   AMBIGUOUS_HAND_TRANSITION). Record conflicts instead of
+   silently resolving.

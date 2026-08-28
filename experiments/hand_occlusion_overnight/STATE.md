@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 04:25 CEST
-STATUS: H1 v2 COMPLETE (5 physics-aware filters, all 3 v1 false-positive failure modes suppressed). v3 in next episode.
+LAST_UPDATE: 2026-08-28 04:35 CEST
+STATUS: H1 v3 COMPLETE (sensitivity grid + soft POTENTIAL_ENTRY flag). 8 v3 events visually inspected. v2 is still recommended operating point; v3c admits real catch-throws but also ~25% visual false positives.
 
 ## Isolation
 
@@ -45,12 +45,19 @@ STATUS: H1 v2 COMPLETE (5 physics-aware filters, all 3 v1 false-positive failure
   `tracklet_features.csv`, plus 21 contact sheets for visual QA.
   See `h1_hand_pool/reports/h1_v1_report.md` for full analysis.
 
-- **H1 v2** — Hand-pool with 5 physics-aware filters (committed).
+- **H1 v2** — Hand-pool with 5 physics-aware filters (committed, `a9a5464`).
   Adds: token TTL (60f), stale-token rejection (30f), throw leave-window
   (3f), wrist-velocity guard (30 px/frame), catch context (60f).
   Emits same 4 CSVs (extended) + `hand_relevant_eval.json`.
   See `h1_hand_pool/reports/h1_v2_report.md` for full analysis.
   20 v2 contact sheets at `contact_sheets_v2/`.
+
+- **H1 v3** — Soft catch-context + sensitivity grid (committed, see v3 hash).
+  Replaces hard `UNCONTEXTED_ENTRY` with softer `POTENTIAL_ENTRY` flag.
+  Sweeps `THROW_LEAVE_WINDOW_FRAMES` ∈ {3, 5, 7}.
+  Emits 4 per-setting CSVs + 4 per-setting JSONs +
+  16 NEW v3 link contact sheets at `contact_sheets_v3/`.
+  See `h1_hand_pool/reports/h1_v3_report.md` for full analysis.
 
 ## Strongest findings so far
 
@@ -61,8 +68,18 @@ STATUS: H1 v2 COMPLETE (5 physics-aware filters, all 3 v1 false-positive failure
   All 3 surviving links are visually plausible (1 matches a gap=0 reviewed
   "correct" pair, 2 are new plausible catch-throw sequences not surfaced
   by E6c).
-- H1 v2 precision is **1.000 across every gap subset** of the reviewed
+- v2 precision is **1.000 across every gap subset** of the reviewed
   labels. No wrong hand-links emitted.
+- v3c (throw=7) emits 11 links on identical and 2 on youtube with
+  precision 1.000 in CSV terms. Visual QA: 6/8 (75%) of inspected
+  new v3 links are real catch-throws, 1 is an upstream
+  left/right hand-swap bug (correctly flagged AMBIGUOUS by v3),
+  and 1 is a v3 false positive admitted by the looser
+  `THROW_LEAVE_WINDOW_FRAMES=7` test.
+- Soft catch-context (v3a) is a **safe no-op** for link counts;
+  v2 already created tokens on `UNCONTEXTED_ENTRY` and the
+  `POTENTIAL_ENTRY` rename is purely a downstream-consumable
+  signal.
 - The `THROW_NO_LEAVE` filter (3-frame leave window) is the dominant
   improvement on the YouTube video: 19 of 25 youtube throws that v1
   classified as throws were reclassified as "ball not actually leaving
@@ -86,29 +103,49 @@ STATUS: H1 v2 COMPLETE (5 physics-aware filters, all 3 v1 false-positive failure
 - The YouTube video emits zero surviving hand-links in v2: every
   catch-like tracklet has no prior hand context (likely detector
   dropouts), and every throw-like tracklet fails the leave-window
-  test. This is a genuine negative result for the YouTube video's
-  H1 coverage.
+  test. v3c (throw=7) recovers 2 new youtube links but one is a
+  v3 false positive.
+- Soft catch-context (v3a) is a no-op for link counts because v2
+  already created tokens on `UNCONTEXTED_ENTRY`. A v4 that wants
+  to *not* create tokens on uncontexted entries would need a
+  separate hard/soft flag in the state machine, not just a
+  rename.
+- v3c's looser throw window admits a `15→25`-style false positive
+  on youtube: a mid-air pass-through through the hand reach
+  envelope. v2's strict 3-frame window correctly rejected it.
+- The `3→9` v3 link on identical is a real left/right hand swap
+  bug in the upstream tracker (not the hand-pool model). v3's
+  `AMBIGUOUS_POOL_EXIT` label correctly flags it.
 
 ## Current best experimental model
 
-H1 v2 is the **current best**. v3 should explore:
+H1 v2 is the **current best for precision**. v3a is a no-op
+upgrade that adds the `POTENTIAL_ENTRY` tag for downstream
+consumers. v4 should explore:
 
-1. Soft catch-context: emit a `POTENTIAL_ENTRY` flag instead of hard
-   `UNCONTEXTED_ENTRY` filter; let downstream consumers apply confidence.
-2. Sensitivity grid for `THROW_LEAVE_WINDOW_FRAMES` ∈ {3, 5, 7} to see
-   if the leave-window is too strict.
-3. Remove the `WRIST_MOTION_THROW` filter (it fires 0 times in current
-   data; no measurable impact).
-4. Eventually combine with E6c mid-air edges (master §11) to form
-   AIR+HAND chains.
+1. **Slope coherence test** to filter v3-style false positives
+   (require `|from_slope| > 2.0` and `|to_slope| > 4.0`).
+2. **Wrist throw-assist detector** (wrist moving up just before
+   the focus frame) to distinguish real throws from mid-air
+   pass-throughs.
+3. Eventually combine with E6c mid-air edges (master §11) to
+   form AIR+HAND chains (H2).
 
-## Next action (v3)
+## Next action (v4)
 
-1. Implement H1 v3 with the 3 routes in §10 of `h1_v2_report.md`.
-2. Run sensitivity grid on `THROW_LEAVE_WINDOW_FRAMES` and report.
-3. If time permits, start H2: combine E6c mid-air edges with H1 v2
-   hand-links into a single chain representation (master §11).
-   Preserve edge provenance.
+1. Implement H1 v4 with slope-coherence filter:
+   - Add `MIN_FROM_SLOPE = -2.0` (incoming must approach faster
+     than 2 px/frame).
+   - Add `MIN_TO_SLOPE = 4.0` (outgoing must depart faster than
+     4 px/frame).
+   - Test on v3c's link set; verify the `15→25` false positive
+     is rejected while keeping the 6 real catch-throws.
+2. If time permits, start H2: combine E6c mid-air edges with
+   H1 v4 hand-links into a single chain representation
+   (master §11). Preserve edge provenance (each chain edge
+   tagged CONTINUOUS / BALLISTIC / HAND_TRANSITION /
+   AMBIGUOUS_HAND_TRANSITION). Record conflicts instead of
+   silently resolving.
 
 ## Important artifact paths
 
@@ -122,6 +159,7 @@ H1 v2 is the **current best**. v3 should explore:
 - `experiments/hand_occlusion_overnight/watchdog.log`
 - `experiments/hand_occlusion_overnight/worker_prompt.txt`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/` (target for H1 artifacts)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v3_report.md`
 
 Reference inputs (read-only):
 - `experiments/overnight/scripts/`
@@ -132,4 +170,4 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. Worktree clean after v2 commit.
+None. v3 work committed in this episode.

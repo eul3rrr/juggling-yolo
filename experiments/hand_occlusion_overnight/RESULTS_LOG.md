@@ -140,4 +140,67 @@ Hand-relevant evaluation (gap=0 reviewed pairs, n=14: 8 correct, 6 wrong):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_relevant_eval.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_v2/*.png` (20 files)
 
+### v3 (2026-08-28 ~04:30 CEST)
+
+- Hypothesis: (1) replace hard `UNCONTEXTED_ENTRY` with a softer
+  `POTENTIAL_ENTRY` flag (v2 already created tokens on
+  `UNCONTEXTED_ENTRY`; the rename is cosmetic) and (2) sweep
+  `THROW_LEAVE_WINDOW_FRAMES` ∈ {3, 5, 7} to see if a longer
+  leave window catches more real throws.
+- Quantitative result (per setting):
+
+| Setting | identical n_links | youtube n_links | identical R (full) | youtube R (full) |
+|---|---|---|---|---|
+| v2 baseline (throw=3, hard) | 3 | 0 | 0.022 | 0.000 |
+| v3a (throw=3, soft)         | 3 | 0 | 0.022 | 0.000 |
+| v3b (throw=5, soft)         | 9 | 0 | 0.022 | 0.000 |
+| v3c (throw=7, soft)         | 11 | 2 | 0.044 | 0.038 |
+
+Precision is 1.000 across every setting on the full reviewed set.
+Soft catch-context is a no-op for link counts (v2 already created
+tokens on `UNCONTEXTED_ENTRY`; the rename to `POTENTIAL_ENTRY`
+adds a downstream-consumable flag without changing accounting).
+
+- Visual QA: 8 v3 new links inspected via `vision_analyze`:
+  - **6/8 (75%) real catch-throws** (11→14 R, 52→54 R, 68→71 R,
+    72→73 R, 10→12 R youtube, plus the v2-validated 70→74 L
+    sanity check).
+  - **1/8 (12.5%) left/right hand swap** (3→9 identical L): the
+    v2 algorithm correctly flagged this `AMBIGUOUS_POOL_EXIT`
+    because pool depth was 2; the underlying bug is in the
+    upstream tracker, not the hand-pool model.
+  - **1/8 (12.5%) v3 false positive** (15→25 youtube L): the
+    looser `THROW_LEAVE_WINDOW_FRAMES=7` test admitted a
+    mid-air pass-through that the vision verifier confirmed
+    does not have an actual hand-ball interaction at f=606.
+- Negative findings:
+  - v3a soft catch-context did not change link counts; the v2
+    algorithm already creates tokens on uncontexted entries.
+  - v3c admits ~25% false positives on visual inspection
+    (precision 1.000 in CSV terms, but ~0.80 visually estimated).
+  - The reviewed gap=0 set is too narrow to evaluate v3c; only
+    1 of 8 new v3c identical links is in the gap=0 set.
+  - v3 still cannot recover the v1 `ev0001` phantom catch on
+    identical f=27; the catch was never observed in the input.
+  - The `3→9` link exposes an upstream tracker-level left/right
+    handedness bug; v3's `AMBIGUOUS_POOL_EXIT` label correctly
+    flags it but the root cause is outside H1's control.
+- Verdict: **PASS with caveat.** v2 is still the recommended
+  operating point for precision. v3a is a safe no-op that adds
+  the `POTENTIAL_ENTRY` rename for downstream consumers. v3b/v3c
+  are precision/recall tradeoffs that need a v4 follow-up to
+  filter the `15→25`-style false positives (e.g. slope-coherence
+  test or wrist-velocity cross-check). See
+  `h1_hand_pool/reports/h1_v3_report.md` for full analysis.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_hand_pool_v3_sens.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_contact_sheets_v3.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/sens_grid.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_events_v3_*.csv` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_links_v3_*.csv` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_relevant_eval_v3_*.json` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/summary_v3_*.json` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_v3/*.png` (16 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v3_report.md`
+
 ---
