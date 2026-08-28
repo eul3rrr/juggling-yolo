@@ -2746,3 +2746,124 @@ h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + **H74v2** + **H78** + H52 + 
 3. H85: H82 v1 cross-validation on 113 manual review pairs
 
 See `h1_hand_pool/reports/h82_report.md` for full analysis.
+
+## H83 + H85 + H86 + H87 + H88 conclusion (2026-08-28 ~23:55 CEST)
+
+This 5-episode sequence explored the H82 v1 limitations and verified
+its edge-level performance.
+
+**H83 v3** (H74v3 = var<0.20 AND (unique_L>1 OR unique_R>1)) was
+proposed to fix the H82 v1 FN at f=267-298 (5-ball juggler with
+stable LR=2.0). H83 v3 DOES fix f=267-298 (KEEPS) but breaks
+f=375-410 (REJECTS a real 5-ball cycling phase). Net effect: 0
+improvement on the 21-phase sample (still 95.2% accuracy, same
+TP/TN/FP/FN).
+
+**H86** systematically tested H83 v3 vs H82 v1 on all 21 phases
+(including the 2 not in h70_phases). Both achieve identical 95.2%
+accuracy. The 1 FN fix is offset by 1 new FN. The 5-ball juggler
+has TWO distinct hand-occupancy patterns (stable LR=2.0 vs cycling
+LR), and no H40v2 refinement can correctly handle both.
+
+**H85** cross-validated H82 v1 on the 113 manual review pairs:
+P=0.979 R=0.648 (TP=46 FP=1 FN=25 TN=41), identical to H77.
+The (CONF or UNCER) gate achieves P=1.000 R=1.000 on 33/33 pairs.
+H82 v1's phase-level improvement (89.5% on 19 phases / 95.2% on 21)
+does NOT come at any cost on the chain-edge level.
+
+**H87** introduced a ball-detection-based "balls aloft" signal
+(count YOLO sports ball detections > 100 px from both wrists).
+H87 (pct_ge3 < 0.20) catches the H82 v1 FP at f=685-716
+MANIPULATION (pct_ge3=0.16). H82 v1 + H87 achieves perfect
+precision (P=1.000) at 90.5% accuracy on 21 phases, losing 2
+real juggling phases (f=263-312 JUGGLING pct_ge3=0.04 and
+f=977-1011 FOUNTAIN pct_ge3=0.03) on identical.
+
+H87 fails on YouTube due to YOLO false positives (n_total_mean
+~4.5 even during static hold). The H4/H66 finding extends.
+
+**H88** cross-validated H82 v1 + H87 on the 113 manual review
+pairs: identical to H85 (P=0.979 R=0.648). The H87 filter has no
+edge-level impact because:
+- The 1 pair H87 would reject (s=39 t=48 wrong, NOT_IN_CHAIN)
+  is already excluded.
+- The 14 YouTube phase-mapped pairs have pct_ge3 ≥ 0.58.
+- The H87 false FN cases (f=263-312, f=977-1011) are not in
+  the 113 review pairs.
+
+**Key findings:**
+
+1. **H82 v1 = H83 v3 = H88 on 21 phases / 113 pairs.** Multiple
+   refinements attempt to break the 95.2% / P=0.979 ceiling but
+   the trade-offs cancel out.
+
+2. **The 5-ball saturation problem is real but the 5-ball
+   juggler has 2 distinct patterns (stable LR=2.0 + cycling
+   LR) that no H40v2 refinement can handle simultaneously.**
+   A truly robust 5-ball detector needs a ball-detection-based
+   signal (H87) or a wrist-velocity-based signal, not a
+   refinement of hand-occupancy.
+
+3. **H87 catches the H82 v1 FP at f=685-716 MANIPULATION
+   (CASCADE_3+) on identical.** This is the only remaining FP
+   in the H82 v1 stack. H87 is a precision improvement (P=1.000)
+   at the cost of 2 FN on identical.
+
+4. **H87 fails on YouTube due to YOLO false positives.** All
+   YouTube phases have pct_ge3 ≥ 0.58 regardless of state, so
+   no threshold can separate static hold from juggling.
+
+5. **The 113 review pairs are mostly mid-air edges that don't
+   overlap with H70 substantial phases.** New signals that
+   fire only on substantial phases (H83, H87) cannot be
+   cross-validated at the edge level.
+
+**Recommended operating points (post-H83-H88):**
+
+- **For chain-edge precision (recommended):** h7v3plus3 + H10 v11 v3
+  + (CONF or UNCER) gate → P=1.000 R=1.000 on 33/33 review pairs
+- **For phase-level pattern precision (alternative):** h7v3plus3 +
+  H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v2 + H78 + H87
+  (pct_ge3 < 0.20) + H52 + H53 → 90.5% acc, P=1.000 on 21 phases
+  (loses 2 real juggling phases on identical)
+- **For phase-level balanced accuracy (recommended for mixed use):**
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v2 + H78
+  + H52 + H53 → 95.2% acc, P=0.933 R=1.000 on 21 phases
+
+**Strongest operating point:** h7v3plus3 + H10 v11 v3 (H56 v1) +
+H12 v8 + H50 + H43 + H69 + H74v2 + H78 + (CONF or UNCER) gate.
+
+**Future research:**
+
+1. **H89: per-ball-count H87 threshold calibration.** A
+   per-ball-count threshold (3-ball: 0.20, 5-ball: 0.50) might
+   preserve more recall, but the YouTube YOLO false positive
+   problem is fundamental.
+
+2. **H90: H87 with YOLO confidence filtering.** If we only
+   count YOLO detections with confidence > 0.7, the YouTube
+   false positives might be filtered out. This requires
+   re-running YOLO or post-filtering existing detections.
+
+3. **H91: phase-anchored edge ground truth.** A different
+   edge-level ground truth (e.g., pairs anchored to H70
+   substantial phases) would allow cross-validating H83, H87
+   at the edge level.
+
+4. **Stop here.** The h7v3plus3 + H10 v11 v3 + (CONF or UNCER)
+   gate is precision 1.000 on 33/33 review pairs. H87 is a
+   useful precision improvement at the phase level. Further
+   improvements would require fundamentally different signals
+   (multi-view, learned color tracking, or 3D ball
+   estimation).
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h83_h74v3.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h85_h82v1_per_pair.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h86_h83v3_vs_h82v1.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h87_balls_aloft.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h88_h87_per_pair.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h85_report.md`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h86_report.md`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h87_report.md`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h88_report.md`
