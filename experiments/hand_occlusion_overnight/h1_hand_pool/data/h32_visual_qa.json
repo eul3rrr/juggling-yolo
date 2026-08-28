@@ -1,0 +1,97 @@
+{
+  "h32_visual_qa_verdicts": [
+    {
+      "chain_id": 22,
+      "stem": "identical_balls_trick_000_018",
+      "label": "identical",
+      "h32_verdict": "CASCADE_LIKE",
+      "hand_sequence": "left->left->right->right->left",
+      "alt_rate": 0.5,
+      "n_tids": 7,
+      "ball_estimate": 3,
+      "vision_verdict": "MULTI_BALL_MERGE",
+      "vision_reason": "3 distinct balls visible across frames; tracklets from different balls being linked into one chain. Hand sequence L->L->R->R->L reflects 3 different balls, not 1-ball cascade. Hands stay centrally positioned, no clean L-R alternation."
+    },
+    {
+      "chain_id": 0,
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "label": "youtube",
+      "h32_verdict": "CASCADE_LIKE",
+      "hand_sequence": "left->left->right->right->left->right",
+      "alt_rate": 0.6,
+      "n_tids": 7,
+      "ball_estimate": 3,
+      "vision_verdict": "MULTI_BALL_MERGE",
+      "vision_reason": "2-3 yellow balls visible in multiple frames. Pattern LLL then RRRR is blocky, not alternating. Different tracklet IDs from different physical balls get linked into one chain."
+    },
+    {
+      "chain_id": 30,
+      "stem": "identical_balls_trick_000_018",
+      "label": "identical",
+      "h32_verdict": "FOUNTAIN_LIKE",
+      "hand_sequence": "right->right->right",
+      "alt_rate": 0.0,
+      "n_tids": 5,
+      "ball_estimate": 2,
+      "vision_verdict": "MULTI_BALL_MERGE",
+      "vision_reason": "At least 2 balls visible simultaneously. Frame f=960 and f=1017 show balls on LEFT hand too, not all right as label claims. 2-ball juggling pattern (likely basic exchange) mislabeled as single-hand fountain."
+    },
+    {
+      "chain_id": 3,
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "label": "youtube",
+      "h32_verdict": "FOUNTAIN_LIKE",
+      "hand_sequence": "right->right->right",
+      "alt_rate": 0.0,
+      "n_tids": 4,
+      "ball_estimate": 2,
+      "vision_verdict": "MULTI_BALL_MERGE",
+      "vision_reason": "2 yellow balls visible in most frames (f=2, 181, 360, 540, 719). Right hand dominance is correct, but the pattern is a 2-ball juggling pattern with 4 fragmented tracklets, not a single-ball fountain."
+    },
+    {
+      "chain_id": 29,
+      "stem": "identical_balls_trick_000_018",
+      "label": "identical",
+      "h32_verdict": "UNKNOWN",
+      "hand_sequence": "left->right->right->l->r",
+      "alt_rate": 0.75,
+      "n_tids": 5,
+      "ball_estimate": 2,
+      "vision_verdict": "UNKNOWN_OK",
+      "vision_reason": "Real 2-ball exchange pattern. Hand alternation visible (L->R->R sequence matches f=765(L) -> f=789(R) -> f=837(R)). 2 distinct balls visible (matches ball_estimate=2). The L->R->R same-hand repeat is a legitimate pattern variant, not a tracking artifact."
+    },
+    {
+      "chain_id": 15,
+      "stem": "identical_balls_trick_000_018",
+      "label": "identical",
+      "h32_verdict": "SINGLE_CATCH",
+      "hand_sequence": "left",
+      "alt_rate": 0.0,
+      "n_tids": 3,
+      "ball_estimate": 2,
+      "vision_verdict": "SINGLE_CATCH_WRONG",
+      "vision_reason": "Hand assignment is wrong — visual evidence shows RIGHT hand primary manipulation, not left as labeled. 3 tracklets but only 2 balls visible — fragmented tracking. No clean catch-throw sequence visible."
+    },
+    {
+      "chain_id": 1,
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "label": "youtube",
+      "h32_verdict": "SINGLE_CATCH",
+      "hand_sequence": "right",
+      "alt_rate": 0.0,
+      "n_tids": 2,
+      "ball_estimate": 1,
+      "vision_verdict": "MULTI_BALL_MERGE",
+      "vision_reason": "ball_est=1 is INCORRECT. 2 distinct yellow balls visible in air simultaneously across most frames (f=86, 171, 256, 341, 426). Right hand is correctly tracked, but 2 balls merged into one chain."
+    }
+  ],
+  "summary": {
+    "n_qa": 7,
+    "n_h32_correct": 1,
+    "n_h32_partial_correct": 0,
+    "n_multi_ball_merge": 5,
+    "n_h32_wrong": 1,
+    "precision_h32_cascade_fountain_classification": 0.143,
+    "note": "H32 hand-alternation-based CASCADE/FOUNTAIN classification is fundamentally confounded by multi-ball merges. A CASCADE_LIKE hand sequence (L->L->R->R->L) doesn't reflect a single-ball cascade; it reflects 3 different balls being juggled, each tracklet getting one hand."
+  }
+}

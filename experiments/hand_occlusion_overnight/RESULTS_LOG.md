@@ -2696,3 +2696,83 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_visual_qa_verdicts.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_h31_combined_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h31_report.md`
+
+### H32 (2026-08-28 ~12:30 CEST)
+
+- Hypothesis: at the chain level (not the frame level), hand
+  alternation is a robust discriminator between CASCADE (alternates
+  hands) and FOUNTAIN (single-hand) juggling patterns. The
+  h7v3plus2 chain set is the best-validated chain representation
+  we have. Building a per-chain hand sequence from edge metadata
+  should give a meaningful CASCADE/FOUNTAIN classification.
+- Approach: parsed hand info from each edge type's metadata
+  (HAND_TRANSITION from `tok_age=X,hand=Y`; RECLASSIFIED_HAND_TRANSITION
+  from reclassify_reason side; V_RECLASSIFIED_HAND_TRANSITION from
+  v_reclassify_reason; H26_RECLASSIFIED_HAND_TRANSITION from
+  h26_reason's `R->L hand-off` pattern). For H26 hand-offs, recorded
+  BOTH catch and throw hands. Computed per-chain alternation_rate,
+  unique_hands, catch_rate_hz, pattern_verdict (CASCADE_LIKE,
+  FOUNTAIN_LIKE, MIXED, SINGLE_CATCH, NO_CATCH), and
+  physical_ball_estimate.
+- Quantitative result:
+  - identical: 18 multi-tracklet chains → 9 SINGLE_CATCH, 3 CASCADE_LIKE,
+    2 FOUNTAIN_LIKE, 3 NO_CATCH, 1 UNKNOWN
+  - YouTube: 9 multi-tracklet chains → 5 CASCADE_LIKE, 3 SINGLE_CATCH,
+    1 FOUNTAIN_LIKE
+  - Mean alternation rate: identical 0.181, YouTube 0.428
+  - Mean catch rate: identical 0.474 Hz, YouTube 0.204 Hz
+- Visual QA: 7 contact sheets (1 per verdict per video, picked
+  longest chain) rendered with real video frames via cv2. Each
+  analyzed via vision_analyze with structured verdict.
+  - chain 22 identical CASCADE_LIKE: **MULTI_BALL_MERGE** (3 balls)
+  - chain 0 YouTube CASCADE_LIKE: **MULTI_BALL_MERGE** (3 balls)
+  - chain 30 identical FOUNTAIN_LIKE: **MULTI_BALL_MERGE** (2 balls,
+    both hands used)
+  - chain 3 YouTube FOUNTAIN_LIKE: **MULTI_BALL_MERGE** (2 balls)
+  - chain 29 identical UNKNOWN: **UNKNOWN_OK** (real 2-ball exchange)
+  - chain 15 identical SINGLE_CATCH: **SINGLE_CATCH_WRONG** (wrong hand)
+  - chain 1 YouTube SINGLE_CATCH: **MULTI_BALL_MERGE** (2 balls)
+  - **H32 precision: 1/7 = 14.3% (only chain 29 is correct)**
+- Negative findings:
+  - **H32's per-chain CASCADE/FOUNTAIN classification is
+    fundamentally confounded by multi-ball merges.** A "CASCADE_LIKE"
+    hand sequence (L→L→R→R→L) does NOT mean a single ball did a
+    cascade — it means 3 different balls were juggled, each tracklet
+    happening to be detected near one hand. The chain construction
+    algorithm (min-cost flow) doesn't know which physical ball each
+    tracklet belongs to.
+  - The h7v3plus2 chain set is **valid as "hand-event lists"** but
+    **NOT as "single-ball trajectories."** Multiple physical balls
+    being juggled simultaneously produce a chain with edges that
+    all have hand-region support, but the chain is not a
+    single-ball trajectory.
+  - H32 confirms H10/H11: the chain set is mostly multi-ball merges.
+  - The CASCADE/FOUNTAIN problem is now understood to be a
+    single-ball-vs-multi-ball identification problem, NOT a
+    cascade-vs-fountain classification problem.
+- Verdict: **NEGATIVE.** H32's hand-alternation-based
+  CASCADE/FOUNTAIN classification is unreliable. The h7v3plus2
+  chain set is well-validated as "real hand events" but should not
+  be used as "single-ball trajectories" for downstream cascade/
+  fountain classification.
+- Implications for downstream consumers:
+  - For "single-ball trajectory" claims, use H11 v7 CONFIDENT
+    chains (9 + 1 verified on visual QA), NOT the full h7v3plus2
+    chain set.
+  - For "this catch/throw happened here" claims, use h7v3plus2
+    + H10 v10 quality. The h7v3plus2 chains have real hand events.
+  - For "CASCADE/FOUNTAIN" claims, abandon the classification —
+    the chain is mostly multi-ball merges.
+- Recommended operating point: **h7v3plus2 (H26) remains the
+  recommended chain set.** H32 is a useful diagnostic tool that
+  characterizes the chain set's limitations, not a chain-set
+  replacement.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h32_chain_characterization.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h32_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h32_chain_metrics_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h32_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h32_visual_qa.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h32_contact_sheet_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h32/*.png` (7 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h32_report.md`

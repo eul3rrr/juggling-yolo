@@ -1,0 +1,47 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 42,
+      "n_multi_tracklet_chains": 18,
+      "n_chains_with_catches": 15,
+      "pattern_counts": {
+        "NO_CATCH": 27,
+        "SINGLE_CATCH": 9,
+        "CASCADE_LIKE": 3,
+        "FOUNTAIN_LIKE": 2,
+        "UNKNOWN": 1
+      },
+      "multi_tracklet_pattern_counts": {
+        "SINGLE_CATCH": 9,
+        "CASCADE_LIKE": 3,
+        "FOUNTAIN_LIKE": 2,
+        "NO_CATCH": 3,
+        "UNKNOWN": 1
+      },
+      "multi_mean_alternation_rate": 0.181,
+      "multi_mean_catch_rate_hz": 0.474,
+      "ball_estimate_total": 51,
+      "h10v10_mean_quality": 0.8105
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_multi_tracklet_chains": 9,
+      "n_chains_with_catches": 9,
+      "pattern_counts": {
+        "CASCADE_LIKE": 5,
+        "SINGLE_CATCH": 3,
+        "FOUNTAIN_LIKE": 1,
+        "NO_CATCH": 6
+      },
+      "multi_tracklet_pattern_counts": {
+        "CASCADE_LIKE": 5,
+        "SINGLE_CATCH": 3,
+        "FOUNTAIN_LIKE": 1
+      },
+      "multi_mean_alternation_rate": 0.428,
+      "multi_mean_catch_rate_hz": 0.204,
+      "ball_estimate_total": 23,
+      "h10v10_mean_quality": 0.6852
+    }
+  }
+}

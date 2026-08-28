@@ -1169,3 +1169,54 @@ useful source record:
     veto mechanism. Together, H20 + H21 + H22 form a complete
     pipeline for integrating V-shape-discovered catch+throws into
     the chain set.
+
+## Cross-cutting insights from H32 (2026-08-28 ~12:30)
+
+26. **H32 confirms: h7v3plus2 chains are mostly multi-ball merges.**
+    Per-chain hand-alternation-based CASCADE/FOUNTAIN classification
+    has only 14.3% precision on visual QA. 5/7 visual-QA'd chains are
+    MULTI_BALL_MERGE. The h7v3plus2 chain set is valid as "hand-event
+    lists" but NOT as "single-ball trajectories." Multiple physical
+    balls being juggled simultaneously produce a chain with edges
+    that all have hand-region support, but the chain is not a
+    single-ball trajectory.
+
+27. **The CASCADE/FOUNTAIN problem is a single-ball-vs-multi-ball
+    identification problem.** H12's per-frame CASCADE/FOUNTAIN
+    classification has fundamental limitations because the
+    underlying chain set is mostly multi-ball merges. The
+    "CASCADE/FOUNTAIN" question presupposes a single-ball
+    trajectory, which is not what we have.
+
+28. **Cascade vs. Fountain (Wikipedia):** the canonical definitions
+    validate H12's frame-level criterion:
+    - CASCADE: balls thrown BETWEEN hands (both hands used)
+    - FOUNTAIN: each hand juggles separately (balls don't cross)
+    - FOUNTAIN requires even number of balls; CASCADE requires odd
+    This is the basis for H12's per-frame CASCADE/FOUNTAIN
+    classification. But the chain-level hand sequence is
+    confounded by multi-ball merges.
+
+29. **Realtime perception for catching a flying ball (Birbach 2011,
+    DLR) — https://elib.dlr.de/74466/1/Birbach2011.pdf** — uses
+    stereo camera + Kalman filter + partitioned visual servoing
+    for 3D ball tracking. Validates the idea that physics-based
+    prediction (Kalman filter) is a key signal for ball tracking
+    during occlusion. Our H8 v5 parabolic-fit is a 2D-only
+    hand-crafted version of this principle.
+
+30. **Multi-camera 3D ball tracking (Wu 2020) — https://ietresearch.onlinelibrary.wiley.com/doi/full/10.1049/iet-ipr.2020.0757**
+    uses 2D detection → 2D tracking (ECO-based) → 3D fusion
+    (triangulation) → 3D tracking (Kalman). Multi-view is the
+    standard solution for ball tracking during occlusion. Our
+    single-camera 2D setup is fundamentally limited.
+
+31. **OC-SORT (mentioned in getstream.io/blog/ai-ball-player-tracking)
+    prioritizes visual evidence over predictions during erratic
+    movements.** This is similar to our H32 finding: relying on
+    chain-level predicted evidence (e.g., CASCADE/FOUNTAIN
+    classification) is unreliable when the underlying signal is
+    confounded by multi-ball merges. Visual evidence at the
+    per-frame level (e.g., counting distinct balls) is more
+    reliable.
+

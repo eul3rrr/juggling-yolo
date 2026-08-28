@@ -1207,3 +1207,50 @@ remains the recommended chain set; H22 is a useful diagnostic tool.
    the 20→21 vs 16→21 swap changes the per-tracklet physical ball IDs.
 4. **H26: H12 v8 pattern inference on h7v3plus chains** — analog
    of H12 v7 but with the H21 chains.
+
+## Thirty-fifth episode (H32) — STATUS: COMPLETE (NEGATIVE)
+
+Sub-steps:
+1. ✅ Designed H32: per-chain hand-alternation + ball-count
+   characterization on h7v3plus2 chains.
+2. ✅ Implemented `h32_chain_characterization.py` that parses hand
+   info from each edge type's metadata (HAND_TRANSITION from
+   `tok_age=X,hand=Y`; RECLASSIFIED_HAND_TRANSITION from
+   reclassify_reason; V_RECLASSIFIED_HAND_TRANSITION from
+   v_reclassify_reason; H26_RECLASSIFIED_HAND_TRANSITION from
+   h26_reason). For H26 hand-offs, recorded BOTH catch and throw
+   hands.
+3. ✅ Ran on both videos. Result:
+   - identical: 18 multi-tracklet chains → 9 SINGLE_CATCH, 3
+     CASCADE_LIKE, 2 FOUNTAIN_LIKE, 3 NO_CATCH, 1 UNKNOWN
+   - YouTube: 9 multi-tracklet chains → 5 CASCADE_LIKE, 3
+     SINGLE_CATCH, 1 FOUNTAIN_LIKE
+4. ✅ Rendered 7 contact sheets (1 per verdict per video) with real
+   video frames via cv2.
+5. ✅ Visual QA via vision_analyze: 5/7 chains are MULTI_BALL_MERGE.
+   Only chain 29 (UNKNOWN) is a real 2-ball exchange pattern.
+6. ✅ Documented in `h32_report.md` and updated STATE/RESULTS_LOG.
+
+**H32 verdict: NEGATIVE.** H32's per-chain CASCADE/FOUNTAIN
+classification is fundamentally confounded by multi-ball merges.
+The h7v3plus2 chain set is valid as "hand-event lists" but NOT as
+"single-ball trajectories." H32 confirms H10/H11: the chain set is
+mostly multi-ball merges.
+
+**Key insight:** The CASCADE/FOUNTAIN problem in H12 is now
+understood to be a single-ball-vs-multi-ball identification problem,
+not a cascade-vs-fountain classification problem. Future work
+should focus on:
+- H11 v7 CONFIDENT filter (the most accurate single-ball filter)
+- Cross-tracklet velocity coherence (H8 v5 extended to per-chain)
+- Color tracking (H25 was mentioned but not implemented)
+- Multi-view 3D (out of scope for monocular 2D setup)
+
+**Next episode candidates:**
+1. **H33: literature search for multi-ball juggling tracking
+   methods** — mentioned in STATE.md. Could surface new ideas
+   for single-ball identification.
+2. **H34: H22+H26 combined chain set** — apply H22's YouTube 20→21
+   veto on top of H26's 2 NEW REAL H24 edges.
+3. **Stop here.** The h7v3plus2 chain set is well-validated. Further
+   chain improvements would require fundamentally different signals.

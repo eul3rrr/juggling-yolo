@@ -1,0 +1,16 @@
+chain_id,n_tracklets,first_frame,last_frame,duration_frames,duration_seconds,n_hand_events,n_ballistic,n_pure_hand,hand_sequence,n_hand_edges_total,unique_hands,dominant_hand,alternation_rate,catch_rate_hz,catch_per_frame,pattern_verdict,physical_ball_estimate,h10v10_quality,tids
+0,7,2,899,898,29.93,6,0,1,left->left->right->right->left->right,6,2,mixed,0.6,0.2,0.0067,CASCADE_LIKE,3,0.6714763497372193,"1,9,13,16,21,29,34"
+1,2,2,426,425,14.17,1,0,1,right,1,1,right,0.0,0.071,0.0024,SINGLE_CATCH,1,0.5889150943396226,"2,8"
+2,2,2,97,96,3.2,1,0,1,left,1,1,left,0.0,0.312,0.0104,SINGLE_CATCH,1,0.5776315789473684,"3,6"
+3,4,2,899,898,29.93,3,0,1,right->right->right,3,1,right,0.0,0.1,0.0033,FOUNTAIN_LIKE,2,0.6799540133779265,"4,18,30,37"
+4,1,2,228,227,7.57,0,0,0,,0,0,none,0.0,0.0,0.0,NO_CATCH,1,0.7961651917404129,5
+5,1,58,62,5,0.17,0,0,0,,0,0,none,0.0,0.0,0.0,NO_CATCH,1,0.6333333333333333,7
+6,2,117,309,193,6.43,1,0,1,right,1,1,right,0.0,0.155,0.0052,SINGLE_CATCH,1,0.840625,"10,12"
+7,4,247,653,407,13.57,3,0,1,right->left->right,3,2,mixed,1.0,0.221,0.0074,CASCADE_LIKE,2,0.6156096059113301,"11,14,17,24"
+8,4,329,899,571,19.03,3,0,1,left->left->right,3,2,mixed,0.5,0.158,0.0053,CASCADE_LIKE,2,0.6755921052631579,"15,25,33,36"
+9,6,445,899,455,15.17,5,0,1,right->right->left->right->left,5,2,mixed,0.75,0.33,0.011,CASCADE_LIKE,3,0.6144640234948605,"19,22,26,31,35,38"
+10,1,466,470,5,0.17,0,0,0,,0,0,none,0.0,0.0,0.0,NO_CATCH,1,0.5666666666666667,20
+11,1,578,578,1,0.03,0,0,0,,0,0,none,0.0,0.0,0.0,NO_CATCH,1,0.8333333333333333,23
+12,3,670,878,209,6.97,2,0,1,left->right,2,2,mixed,1.0,0.287,0.0096,CASCADE_LIKE,2,0.6176282051282052,"27,28,32"
+13,1,878,882,5,0.17,0,0,0,,0,0,none,0.0,0.0,0.0,NO_CATCH,1,0.7333333333333333,39
+14,1,883,899,17,0.57,0,0,0,,0,0,none,0.0,0.0,0.0,NO_CATCH,1,0.8333333333333333,40

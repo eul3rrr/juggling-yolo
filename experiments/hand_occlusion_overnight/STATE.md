@@ -1,7 +1,19 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 12:25 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + H22 v1+v2 + H24 + H26 + H28 + **H30 + H31** COMPLETE. **H30/H31 NEGATIVE**: H30 src_above+src_desc directional check had 0/14 FALSE on the deduplicated known-label set (n=30 candidates), suggesting it was a precision-optimized filter. H31 visual QA on 10 NEW H20+H30-AND candidates contradicts this: 0/10 REAL, 2/10 PARTIAL, 8/10 FALSE (REAL+PARTIAL precision 20%). The H30 claim was overfitted to a small biased known-label set. H31 confirms the H17→H20→H24→H28→H31 negative finding chain: every geometric post-filter on the H17 V-shape pool fails to produce a reliable high-precision candidate set. The 5 already-QA'd H20+H30-AND candidates (4 REAL + 1 PARTIAL) were a biased sample. Recommended operating point remains h7v3plus2 (H26).
+LAST_UPDATE: 2026-08-28 12:30 CEST
+STATUS: H30 + H31 + **H32** COMPLETE. **H32 NEGATIVE**: per-chain
+hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
+chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
+chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
+classification: 1/7 = 14.3%). The h7v3plus2 chains are valid as
+"hand-event lists" but NOT as "single-ball trajectories" — multiple
+physical balls being juggled simultaneously produce a chain with
+edges that all have hand-region support, but the chain is not a
+single-ball trajectory. H32 confirms H10/H11: the chain set is mostly
+multi-ball merges. The CASCADE/FOUNTAIN problem is now understood to
+be a single-ball-vs-multi-ball identification problem, not a
+cascade-vs-fountain classification problem. Recommended operating
+point remains h7v3plus2 (H26).
 
 ## Isolation
 
@@ -517,3 +529,52 @@ Remaining research directions (priorities):
 4. **H35: pattern inference on h7v3plus2.** Apply H12's
    per-frame pattern inference to the recommended chain set
    (h7v3plus2) to characterize the final juggling pattern.
+
+41. **H32: per-chain hand-alternation + ball-count characterization
+    on h7v3plus2** — DONE. NEGATIVE. H32's CASCADE/FOUNTAIN
+    classification based on per-chain hand alternation is
+    fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
+    chains are MULTI_BALL_MERGE. The h7v3plus2 chains are valid as
+    "hand-event lists" but NOT as "single-ball trajectories." H32
+    confirms H10/H11's finding that the chain set is mostly
+    multi-ball merges. The CASCADE/FOUNTAIN problem is now
+    understood to be a single-ball-vs-multi-ball identification
+    problem. Recommended operating point remains h7v3plus2 (H26).
+    See `h1_hand_pool/reports/h32_report.md`.
+
+## H32 conclusion
+
+The recommended operating point h7v3plus2 (H26) has been thoroughly
+characterized:
+
+- **H10 v10 chain quality** is a real but imperfect signal for
+  single-ball-ness (1/7 false positive rate on visual QA).
+- **H11 v7 identity propagation** is the most accurate single-ball
+  filter (CONFIDENT chains are 9/9 visually verified on identical).
+- **H32 hand-alternation pattern_verdict** is confounded by
+  multi-ball merges (5/7 MULTI_BALL_MERGE on visual QA).
+
+**For downstream consumers:** the h7v3plus2 chain set is a list of
+"real hand events" with 42 identical + 15 YouTube chains. For
+"single-ball trajectory" claims, use H11 v7 CONFIDENT chains (9 + 1).
+For "this catch/throw happened here" claims, use h7v3plus2 + H10 v10
+quality. For "this chain is CASCADE/FOUNTAIN" claims, abandon the
+classification — the chain is mostly multi-ball merges, not a
+single-ball pattern.
+
+## Future research directions (post H32)
+
+1. **Multi-ball identification** — the fundamental problem is now
+   "is this chain a single physical ball?" not "is this chain a
+   cascade or fountain?". Possible approaches:
+   - Cross-tracklet velocity coherence (H8 v5 already checks
+     per-edge; could extend to per-chain)
+   - Color tracking (H25 was mentioned in H30 but not implemented;
+     would require re-running detector)
+   - Multi-view 3D (out of scope for monocular 2D setup)
+2. **H33 literature search** — multi-ball juggling tracking methods
+   that handle identity and hand-occlusion. See RESEARCH_NOTES for
+   current sources.
+3. **Stop here.** The h7v3plus2 chain set is well-validated. Further
+   chain improvements would require fundamentally different signals
+   (multi-view, learned color tracking, or 3D ball estimation).

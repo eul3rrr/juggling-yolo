@@ -1,0 +1,72 @@
+[
+  {
+    "stem": "identical_balls_trick_000_018",
+    "label": "identical",
+    "chain_id": 22,
+    "verdict": "CASCADE_LIKE",
+    "n_tids": 7,
+    "hand_sequence": "left->left->right->right->left",
+    "h10q": "0.5583732057416269",
+    "png": "identical_chain22_CASCADE_LIKE_H32.png"
+  },
+  {
+    "stem": "identical_balls_trick_000_018",
+    "label": "identical",
+    "chain_id": 30,
+    "verdict": "FOUNTAIN_LIKE",
+    "n_tids": 5,
+    "hand_sequence": "right->right->right",
+    "h10q": "0.40530035335689046",
+    "png": "identical_chain30_FOUNTAIN_LIKE_H32.png"
+  },
+  {
+    "stem": "identical_balls_trick_000_018",
+    "label": "identical",
+    "chain_id": 29,
+    "verdict": "UNKNOWN",
+    "n_tids": 5,
+    "hand_sequence": "left->right->right->l->r",
+    "h10q": "0.5766666666666667",
+    "png": "identical_chain29_UNKNOWN_H32.png"
+  },
+  {
+    "stem": "identical_balls_trick_000_018",
+    "label": "identical",
+    "chain_id": 15,
+    "verdict": "SINGLE_CATCH",
+    "n_tids": 3,
+    "hand_sequence": "left",
+    "h10q": "0.31600000000000006",
+    "png": "identical_chain15_SINGLE_CATCH_H32.png"
+  },
+  {
+    "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+    "label": "youtube",
+    "chain_id": 0,
+    "verdict": "CASCADE_LIKE",
+    "n_tids": 7,
+    "hand_sequence": "left->left->right->right->left->right",
+    "h10q": "0.6714763497372193",
+    "png": "youtube_chain0_CASCADE_LIKE_H32.png"
+  },
+  {
+    "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+    "label": "youtube",
+    "chain_id": 3,
+    "verdict": "FOUNTAIN_LIKE",
+    "n_tids": 4,
+    "hand_sequence": "right->right->right",
+    "h10q": "0.6799540133779265",
+    "png": "youtube_chain3_FOUNTAIN_LIKE_H32.png"
+  },
+  {
+    "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+    "label": "youtube",
+    "chain_id": 1,
+    "verdict": "SINGLE_CATCH",
+    "n_tids": 2,
+    "hand_sequence": "right",
+    "h10q": "0.5889150943396226",
+    "png": "youtube_chain1_SINGLE_CATCH_H32.png"
+  }
+]
