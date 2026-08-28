@@ -1,0 +1,7 @@
+{
+  "n_review_pairs": 113,
+  "n_fires": 51,
+  "n_correct_fires": 30,
+  "n_wrong_fires": 21,
+  "p_when_fire_on_review": 0.4117647058823529
+}

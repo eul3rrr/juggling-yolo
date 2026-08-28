@@ -1,6 +1,6 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 09:00 CEST (current session: 2026-08-29 ~08:00 CEST)
+LAST_UPDATE: 2026-08-29 09:30 CEST (current session: 2026-08-29 ~01:00 CEST)
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
 |+ H94 + H96 + H97 + H98 + H99 + H100 + H101 + H102 + H103 + H104
 |+ H105 + H106 + H107 + H108 + H109 + H110 + H111 + H112 + H114
@@ -4867,3 +4867,73 @@ H114 v1 strict) is unchanged.
   defensible at 80%, not over-applied as H121 initially suggested.
   H123 (re-run H7v2 with raw data) is REJECTED. The chain's
   edge-level precision is preserved.
+
+
+## H123 + H124 conclusion (2026-08-29)
+
+**H123: Stratified 10-case visual QA of un-QA'd H121 RAW_REJECTS** — DONE.
+15 cases total = 8 REAL + 6 TRACKER_ARTIFACT + 1 UNCERTAIN. **REAL precision
+53.3% (Wilson 95% CI: [30.1%, 75.2%])** — refines H122's 80% estimate
+downward on a larger stratified sample. H112 catches 1/6 (17%) of H123
+artifacts, H114 v1 strict catches 0/6 (max sj_raw=152.1, below 200).
+**Geometric post-filters only compensate for ~1/6 of the H7v2 artifacts.**
+
+**H124 v1: compound precision-optimized edge filter** — DONE. NEGATIVE
+result for chain precision improvement.
+
+The H124 v1 rule was derived from the 14 H122+H123 visual-QA'd RAW_REJECTS
+cases and achieved 0% false-reject on REALS in that subset:
+- 8 REAL kept, 0 REAL wrongly rejected
+- 4 ARTIFACTS caught, 2 ARTIFACTS missed (22→27, 33→36)
+- P_when_fire=1.000, R_artifacts=0.667
+
+**Cross-validation on the 113 review pair set (H124 v2) is catastrophic:**
+- Rule fires on 51/113 review pairs (P=0.412 overall)
+- 22 in-chain fires: ALL 22 are "correct" per reviewer (would be wrongly rejected)
+- 0 in-chain wrong edges are caught
+- 29 NOT_IN_CHAIN fires: 21/29 are "wrong" (P=0.724 on this subset)
+
+**Verdict: H124 v1 REJECTED as a chain post-filter.** Applying it would
+drop 22 correct edges to catch 0 wrong edges (precision and recall both DROP).
+
+The H122+H123 sample was too biased to derive a general rule:
+- All 14 cases are H7v2 reclassifications, a specific edge type
+- The "fn<=3" branch flags 2-3 pt source tracklets as artifacts, but
+  real catches often have 1-3 pt sources (e.g., 5→6, 20→21, 21→22, 23→24, 27→28, 43→45)
+- The "sjr>90 + NOT(red>100 OR res>10)" signature has limited discriminative
+  power — real catches (11→13, 12→17, 17→22, 54→57, 66→69, 16→21) and
+  cross-ball handoffs (6→15, 9→13, 11→12, 12→16, 15→17) overlap heavily
+
+**H124 v1 is useful as a post-hoc validator** (P=0.724 on NOT_IN_CHAIN
+fires) but this is redundant with the chain's own min-cost flow logic.
+
+**Key negative finding:** Geometric post-filters cannot recover
+capacity-rejected edges. The 8 NOT_IN_CHAIN + correct review pairs are
+real catches the chain couldn't admit due to its one-successor-per-source
+constraint. Only a different chain construction (multi-hypothesis
+tracking) or fundamentally different signals (color, multi-view 3D)
+could recover them.
+
+**Recommended operating point (unchanged):** h7v3plus3 + H112 + H114 v1
+strict. Edge-level P=1.000 R=0.718 on 113 review pairs. (CONF or UNCER)
+gate: P=1.000 on 33/33 pairs. The 0.282 recall gap is fundamental.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h124_v1_compound_filter.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h124_v2_review_pair_check.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h124_v1_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h124_v1_per_edge.csv`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h124_v2_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h124_v2_per_pair.csv`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h124_report.md`
+
+## Last update
+
+- 2026-08-29 (this episode): H123 + H124 done. H123 stratified 10-case
+  visual QA refines H122 80% → 53.3% REAL precision (Wilson 95% CI
+  [30%, 75%]). H124 v1 compound filter derived from H122+H123 sample
+  fails catastrophically on the 113 review set: 22 in-chain correct
+  edges would be wrongly rejected, 0 wrong edges caught. H124 v1
+  REJECTED. The h7v3plus3 + H112 + H114 v1 strict stack remains the
+  precision-optimized endpoint. The 0.282 recall gap requires
+  fundamentally different signals.

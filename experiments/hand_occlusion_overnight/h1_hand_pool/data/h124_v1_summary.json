@@ -1,0 +1,103 @@
+{
+  "rule": "sjr>90 AND NOT(red>100 OR res>10) OR fn<=3",
+  "parameters": {
+    "sjt": 90,
+    "red_lo": 100,
+    "res_lo": 10,
+    "fnt": 3
+  },
+  "visual_qa_subset": {
+    "n_qa": 14,
+    "n_real": 8,
+    "n_artifact": 6,
+    "tp_real_kept": 8,
+    "fp_real_wrongly_rejected": 0,
+    "fn_artifact_missed": 2,
+    "tn_artifact_caught": 4,
+    "acc": 0.8571428571428571,
+    "p_when_fire": 0.6666666666666666,
+    "r_artifacts": 1.0
+  },
+  "unqa_subset": {
+    "n_total": 11,
+    "n_fires": 8,
+    "fires": [
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "11",
+        "to": "14",
+        "sjr": 92.7346413159613,
+        "red": 58.58749201618201,
+        "res": 6.8489999999999895,
+        "fnp": 50
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "13",
+        "to": "16",
+        "sjr": 102.05635075290509,
+        "red": 36.651429761412736,
+        "res": 7.359499999999997,
+        "fnp": 56
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "18",
+        "to": "30",
+        "sjr": 95.41321879068961,
+        "red": 56.727335947631154,
+        "res": 0.550500000000028,
+        "fnp": 260
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "19",
+        "to": "22",
+        "sjr": 122.64542938079681,
+        "red": 49.94166019564074,
+        "res": 6.603000000000009,
+        "fnp": 51
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "21",
+        "to": "29",
+        "sjr": 105.80157829163042,
+        "red": 60.60576743258566,
+        "res": 2.4225000000000136,
+        "fnp": 191
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "25",
+        "to": "33",
+        "sjr": 93.22584867406673,
+        "red": 75.85985166517902,
+        "res": 6.875999999999976,
+        "fnp": 122
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "31",
+        "to": "35",
+        "sjr": 113.12074894554047,
+        "red": 56.668363827770335,
+        "res": 8.914999999999992,
+        "fnp": 57
+      },
+      {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from": "35",
+        "to": "38",
+        "sjr": 98.00104944846254,
+        "red": 59.495480721227885,
+        "res": 4.9894999999999925,
+        "fnp": 55
+      }
+    ]
+  },
+  "still_reclassified_subset": {
+    "n_total": 8,
+    "n_fires": 3
+  }
+}
