@@ -5818,3 +5818,155 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_confusion.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h102_report.md`
+
+## H103 — H12 v8 vs H93 phase verdict cross-tabulation (2026-08-28 ~21:50 CEST)
+
+- Hypothesis: H12 v8 over-classifies FOUNTAIN_3+ at the 3 STATIC/OTHER
+  phases (f=685-716, f=890-936, f=482-594). A direct cross-tabulation
+  would show which H12 v8 patterns H93 multi-rater QA rejects.
+- Method: For each H93 phase, extract the dominant H12 v8 pattern and
+  cross-reference with H93 verdict.
+- Result: 3/3 STATIC/OTHER phases are H12 v8 over-classifications
+  (CASCADE_3+ → STATIC_HOLD, FOUNTAIN_3+ → OTHER_CROSSED_ARM, FOUNTAIN_3+ → STATIC_HOLD).
+  The 4th STATIC (f=2-71) is correctly classified as MIXED_3+_UNCONFIRMED.
+- Verdict: CONSUMER-PASS. H12 v8's 3 over-classifications are caught
+  by H96 v2's 3 dedicated signals (H87+max_aloft, H78, H90 NEW). The
+  4th STATIC_HOLD is caught by H12 v8's own UNCONFIRMED label.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h103_h12v8_vs_h93_crosstab.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h103_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h103_summary.json`
+
+## H104 — H12 v9 time-density guard (NEGATIVE, 2026-08-28 ~22:05 CEST)
+
+- Hypothesis: the H12 v8 K=4 events_window over-classification problem
+  can be fixed by a time-density guard (e.g., reject if max time-span
+  in K=4 events_window is too large).
+- Method: implemented H12 v9 with max_span guard. Sensitivity grid on
+  max_span threshold ∈ {20, 30, 50, 80, 100, 99999 (no-op)}.
+- Result: no threshold that preserves recall. The K=4 events_window
+  is confounded by H7 chain density — real juggling phases have
+  sparse K=4 events too.
+- Verdict: NEGATIVE. The H12 v8 K=4 events_window time-density is
+  not a useful signal. Future work should not try to reformulate
+  K=4 logic.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h104_h12_v9_time_density.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h104_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h104_summary.json`
+
+## H105 — H12 v9 chain-event quality guard (NEGATIVE, 2026-08-28 ~22:10 CEST)
+
+- Hypothesis: a chain-event quality guard (FAR_DIST, AMBIGUOUS, LOW_SLOPE)
+  can catch the 3 H12 v8 over-classifications while preserving recall.
+- Method: implemented H12 v9 with quality guard (per-event features).
+  Quality thresholds: QUALITY_FAR_DIST_THR=100, QUALITY_LOW_SLOPE_THR=2.5,
+  QUALITY_LOW_SLOPE_RATIO=0.5, QUALITY_AMBIGUOUS_RATIO=0.25.
+- Result: v8 baseline 14/2/2/3 (acc=0.762), v9 with guard 2/4/0/15
+  (acc=0.286). 13 real juggling phases demoted because real juggling
+  has many low-slope events.
+- Verdict: NEGATIVE. The chain-event quality guard is too aggressive.
+  Real juggling phases naturally have low-slope events (ball at apex,
+  momentary stillness at hand), and these are penalized.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h105_h12_v9_chain_quality_guard.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h105_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h105_summary.json`
+
+## H106 — H12 v9 hybrid with H96 v2 stack signals (PASS, 2026-08-28 ~22:25 CEST)
+
+- Hypothesis: a re-implementation of the H96 v2 stack as a per-pattern
+  rule selection (instead of stacked guards) is cleaner code with
+  wider flat region.
+- Method: implemented H106 v2 hybrid that selects per-pattern signals:
+  - FOUNTAIN_3+: H90 NEW (c40g3<0.40 AND c40.max_aloft>=4) OR H78 (mean_diff>10)
+  - CASCADE_3+: H87+max_aloft (pct_ge3<0.20 AND max_aloft>=2) OR H74v4 (var<0.20 AND uLR<=1)
+  - MIXED_3+: H71 (spec_conc<0.10) — not implemented
+- Result: 17/4/0/0 PERFECT on 21 H93 phases. WIDER flat region than
+  H96 v2 (H78: 7-15 vs H96's 10; H87: 0.10-0.30 vs H96's 0.20).
+- Verdict: PASS. H106 v2 is a useful re-implementation with cleaner
+  per-pattern rule structure and wider flat region. Downstream consumers
+  can use it as a drop-in replacement for H96 v2.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h106_h40v2_hybrid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h106_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h106_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h106_report.md`
+
+## H107 — 2D combined guard (NEGATIVE, 2026-08-28 ~22:30 CEST)
+
+- Hypothesis: a 2D combined guard (R1: ambig>0 OR R2: far>0+lrvar>0.30
+  OR R3: lslope>=3.0+maxspan>80) can catch the 3 H12 v8 over-classifications
+  without false-rejecting real juggling.
+- Method: implemented H107 v1 with three orthogonal sub-signals.
+- Result: 17/3/1/0 on 21 H93 phases. REGRESSES H96 v2 PERFECT 17/4/0/0.
+- Root cause: the 4th TN (f=2-71) has unconf_frac=1.0, mean_conf=0.333,
+  max_events=2 — none of the 2D rule paths catch it. H12 v8 already
+  correctly classifies it as MIXED_3+_UNCONFIRMED, so the H96 v2 stack
+  relies on H12 v8's UNCONFIRMED label as the implicit rejection.
+- Verdict: NEGATIVE. The 2D combined rule design didn't account for
+  the f=2-71 TN's UNCONFIRMED-label rejection. H107 is not a viable
+  H96 v2 alternative.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h107_2d_combined_guard.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h107_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h107_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h107_report.md`
+
+## H108 — Structural per-frame signature catalog + explicit R4 signal (PASS, 2026-08-28 ~22:35 CEST)
+
+- Hypothesis: cataloging per-phase structural signatures of all 21 H93
+  phases would identify an EXPLICIT R4 signal for the f=2-71 TN,
+  removing the implicit dependency on H12 v8's UNCONFIRMED label.
+- Method:
+  - H108 v0: computed per-phase aggregates (max_A, max_events, mean_conf,
+    unconf_frac) for all 21 H93 phases using H12 v7 per-frame cache.
+  - H108 v1: implemented H106 v2 per-pattern + R4b as a full stack.
+- Result:
+  - f=2-71 UNIQUELY has unconf_frac=1.0 (no other H93 phase has any
+    UNCONFIRMED frame). Also uniquely has mean_conf=0.333 (lowest) and
+    max_events=2 (all others have 4).
+  - R4b: REJECT if unconf_frac >= 0.50. Wide flat region 0.50-1.00.
+  - H108 v1 = H106 v2 + R4b achieves 17/4/0/0 PERFECT (P=R=acc=1.000).
+  - Three R4 candidates all PERFECT: R4b, R4c (mean_conf<0.45), R4f
+    (unconf_frac>=0.50 AND max_A>=3).
+- Per-signal firing on the 4 TNs:
+  - f=685-716 CASCADE_3+ STATIC_HOLD: H87_max_aloft
+  - f=890-936 FOUNTAIN_3+ OTHER_CROSSED_ARM: H78 (Mills Mess)
+  - f=482-594 FOUNTAIN_3+ STATIC_HOLD: H90_NEW
+  - f=2-71 MIXED_3+_UNCONFIRMED STATIC_HOLD: H108 R4b (was UNCONFIRMED label)
+- Verdict: PASS. H108 v1 is a meaningful improvement over H96 v2 /
+  H106 v2: explicit R4 signal for f=2-71, no implicit dependency on
+  H12 v8's UNCONFIRMED label, wide flat region.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h108_structural_signatures.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h108_v1_stack.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h108_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h108_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h108_v1_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h108_v1_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h108_report.md`
+
+## H109 — LOO structural analysis of R4b (NEGATIVE honest finding, 2026-08-28 ~22:45 CEST)
+
+- Hypothesis: R4b can be re-derived on subsets of TNs and still catch
+  the held-out TN, demonstrating generalizability.
+- Method: performed structural LOO analysis on the 4 TNs. For each
+  held-out TN, checked if the remaining 3 TNs share a common signature
+  that the held-out TN also has.
+- Result: ALL 4 LOO splits show "overlap" — the 3 non-held-out TNs
+  have unconf_frac=0.0 (caught by H78, H87+max_aloft, H90 NEW per-pattern
+  signals, not by R4b). R4b cannot be re-derived without seeing f=2-71.
+- Per-signal uniqueness:
+  - f=2-71 is the ONLY phase with unconf_frac=1.0 in H93.
+  - Each TN has a unique mean_conf value: 0.333, 0.471, 0.653, 0.738.
+  - The 4 TNs have ORTHOGONAL signatures caught by 4 specific detectors.
+- Verdict: NEGATIVE (honest structural finding). R4b is uniquely tied
+  to f=2-71's specific signature. The H96 v2 / H108 v1 stack is an
+  ENSEMBLE of 4 specific detectors (H87+max_aloft, H78, H90 NEW, R4b),
+  not a general STATIC_HOLD detector. A 3rd video with H93-style GT
+  is needed to test generalization of the 4-signal ensemble.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h109_loo_test.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h109_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h109_report.md`

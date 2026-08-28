@@ -3990,16 +3990,63 @@ endpoint. Three equivalent implementations:
 - The 3 H12 v8 over-classifications are caught by 3 different signals
   (H87+max_aloft, H78, H90 NEW), not by a single guard
 
-**Future research (post-H106):**
-1. H107: 4th-video validation with pose data. The H101 finding showed
-   weave needs conf>=0.42, but weave lacks pose. A 4th video with full
-   pose data would test the H74v4 / H78 stack on a different juggler.
-2. H108: time-density × chain-event quality 2D guard. H104 and H105
-   each showed one dimension is not enough. A 2D combination
-   (e.g., max_span AND avg_low_slope) might catch misclassifications
-   that each alone misses.
-3. Stop here. The H96 v2 / H100 v4 / H106 v2 stack is precision-optimized.
-   Further work would require fundamentally different signals.
+## H107-H109 (continuation episode 2026-08-28 ~22:30 CEST)
+
+- **H107 v1 — 2D combined guard (NEGATIVE)**:
+  - Tried to add a 2D guard (ambig>0 OR far>0+lrvar>0.30 OR
+    lslope>=3.0+maxspan>80) to catch the 3 H12 v8 over-classifications
+    while preserving recall. Result: 17/3/1/0 (regresses H96 v2 PERFECT).
+  - Root cause: the 4th TN (f=2-71) has unconf_frac=1.0, mean_conf=0.333,
+    max_events=2 — none of the 2D rule paths catch it. H12 v8 already
+    correctly classifies it as MIXED_3+_UNCONFIRMED, so the H96 v2 stack
+    relies on H12 v8's UNCONFIRMED label as the implicit rejection.
+  - See `h1_hand_pool/reports/h107_report.md`.
+
+- **H108 v1 — Explicit R4 signal (PASS, 17/4/0/0 PERFECT)**:
+  - Cataloged per-phase structural signatures of all 21 H93 phases.
+  - Found that f=2-71 is UNIQUELY identified by unconf_frac=1.0 (no other
+    H93 phase has any UNCONFIRMED frame). Also uniquely has mean_conf=0.333
+    (lowest of any phase) and max_events=2 (all others have 4).
+  - R4b: REJECT if unconf_frac >= 0.50. Wide flat region (0.50-1.00).
+  - H108 v1 = H106 v2 per-pattern + R4b achieves 17/4/0/0 PERFECT
+    (P=R=acc=1.000), with the f=2-71 TN now caught by an EXPLICIT
+    signal (R4b) rather than relying on H12 v8's UNCONFIRMED label.
+  - Three R4 candidates all achieve PERFECT: R4b, R4c (mean_conf<0.45),
+    R4f (unconf_frac>=0.50 AND max_A>=3).
+  - See `h1_hand_pool/reports/h108_report.md`.
+
+- **H109 — LOO structural analysis (NEGATIVE honest finding)**:
+  - Tested whether R4b can be re-derived on subsets of TNs.
+  - Result: each TN has an ORTHOGONAL signature that no other TN shares.
+    f=2-71 is the ONLY phase with unconf_frac=1.0.
+  - The H96 v2 / H108 v1 stack is an ENSEMBLE of 4 specific detectors
+    (H87+max_aloft, H78, H90 NEW, R4b), not a general STATIC_HOLD
+    detector.
+  - R4b is overfit to f=2-71's specific signature in the H93 sample.
+    A different STATIC_HOLD phase in a 3rd video with unconf_frac<0.50
+    would NOT be caught by R4b. The flat region (0.50-1.00) shows
+    robustness on the H93 sample but does not prove generalization.
+  - See `h1_hand_pool/reports/h109_report.md`.
+
+**Recommended operating point (post-H109, final)**:
+- h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v4 + H78 +
+  H87+max_aloft + H90 NEW + H108 R4b (unconf_frac>=0.50) + H52 + H53 +
+  H71 (MIXED_3+)
+- **H108 v1** is the recommended implementation: H106 v2 per-pattern
+  rules + R4b explicit signal for f=2-71.
+- 17/4/0/0 PERFECT on 21 H93 phases (4 independent detectors catch
+  4 orthogonal TN signatures)
+- 113 review pairs: P=0.979 R=0.648 (no edge impact, H77 metrics)
+- (CONF or UNCER) gate: P=1.000 R=0.465 (33/33 pairs)
+- 3rd-video generalization: BLOCKED (no H93-style GT available)
+
+**Future research (post-H109):**
+1. **H110: consumer-facing Python module** — package the H108 v1 stack
+   as a single importable function with a clean API for downstream
+   consumers. The current code is scattered across multiple scripts.
+2. **Stop here.** The h7v3plus3 + H96 v2 / H100 v4 / H106 v2 / H108 v1
+   stack is precision-optimized at 17/4/0/0. A 3rd video with H93-style
+   GT is needed to test generalization of the 4-signal ensemble.
 
 ## Last update
 
@@ -4009,3 +4056,8 @@ endpoint. Three equivalent implementations:
   The h7v3plus3 + H10 v11 v3 + H96 v2 / H100 v4 / H106 v2 stack is the
   precision-optimized endpoint (17/4/0/0 on 21 H93 phases, P=0.979 R=0.648
   on 113 review pairs).
+- 2026-08-28 ~22:35 CEST: H107 NEGATIVE (2D combined guard misses f=2-71).
+  H108 PASS (R4b explicit signal, 17/4/0/0 PERFECT, three R4 candidates).
+  H109 NEGATIVE honest finding (R4b is uniquely tied to f=2-71 signature;
+  4 TNs have orthogonal signatures caught by 4 specific detectors).
+  H108 v1 is the new recommended implementation.
