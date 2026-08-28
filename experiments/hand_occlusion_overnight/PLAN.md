@@ -175,18 +175,38 @@ Sub-steps:
 on identical video). The YouTube false positive is a
 detector limitation, not a criterion failure.
 
-## Seventh episode — PLANNED
+## Seventh episode (H4) — STATUS: COMPLETE (FAIL)
 
 Sub-steps:
 
-1. **Apply H3 as a downstream confidence signal on v4d links.**
-   Add a `h3_confirmed: bool` field to v4d link records when
-   a v3 stationary cluster is found in the held phase.
-2. **Test face-masked H3.** Use a face detector to mask
-   out face-region low-conf detections before clustering.
-3. **H4: min-cost flow formulation of AIR+HAND graph.**
-   Try to resolve the 1 H2 conflict (tracklet 3 → {hand=9,
-   air=8}) optimally instead of recording it.
-4. **H5: explicit object permanence.** A v6 hand-pool that
-   explicitly maintains held-ball state across detector
-   dropouts.
+1. ✅ Implemented H4 face-mask: H3 v3 criterion + exclude
+   candidate detections above the wrist when the hand is
+   near face level.
+2. ✅ Re-ran on all 11 v4d links. Result: 6 identical
+   clusters preserved; 1 youtube cluster NOT removed.
+3. ✅ Located the surviving youtube cluster: x=611-618,
+   y=205-207 — NOT a face feature, just a stuck detection
+   on a stationary high-up object (sign/tree/wall).
+4. ✅ Visual QA confirms the cluster is still in the
+   upper region, not at the hand.
+5. ✅ Documented in `h4_report.md` and updated RESULTS_LOG.
+
+**H4 verdict: FAIL.** The face-mask hypothesis was wrong:
+the YouTube H3 false positive is not a face-feature
+confusion, it's a stuck detection on a stationary high-up
+object. A simple geometric mask cannot solve detector
+confusion on arbitrary stationary features.
+
+## Eighth episode — PLANNED
+
+Sub-steps:
+
+1. **Apply H3 as a downstream confidence signal on v4d
+   links.** Add a `h3_confirmed: bool` field to v4d link
+   records when a v3 stationary cluster is found in the
+   held phase.
+2. **H5: min-cost flow formulation of AIR+HAND graph.**
+   Resolve the 1 H2 conflict (tracklet 3 → {hand=9, air=8})
+   optimally.
+3. **H6: explicit object permanence.** Bridge detector
+   dropouts in the H2 chains.

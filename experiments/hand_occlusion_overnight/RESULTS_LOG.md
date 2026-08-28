@@ -379,4 +379,38 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h3/*.png` (7 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h3_report.md`
 
+### H4 (2026-08-28 ~05:50 CEST)
+
+- Hypothesis: the H3 YouTube false positive (10→12) is caused
+  by YOLO confusing face/head features with sports balls when
+  the hand is near the face. A simple geometric mask that
+  excludes detections ABOVE the wrist when the hand is near
+  face level should eliminate the false positive.
+- Implementation: H3 v3 stationary-cluster criterion +
+  exclude candidate detections where (a) wrist y is within
+  80 px of the minimum wrist y over ±15 frames (hand near
+  face level), AND (b) detection y is more than 20 px above
+  the wrist y.
+- Quantitative result:
+  - 6 identical H3 clusters preserved; 1 youtube H3 cluster
+    NOT removed.
+  - The surviving youtube cluster is at x=611-618, y=205-207
+    (~50-80 px right of wrist, ~200 px above wrist). It is
+    NOT a face feature; it's a stuck detection on a
+    stationary high-up object (sign, tree, or wall feature).
+- Negative findings:
+  - The H3 YouTube false positive is NOT face confusion.
+  - A simple geometric mask cannot solve detector confusion
+    on arbitrary stationary features.
+- Verdict: **FAIL.** H4 face-mask does not solve the H3
+  YouTube false positive. The detector confusion is on a
+  stationary high-up object, not the face. A real fix would
+  require a more discriminating detector or a learned
+  "ball-ness" classifier.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h4_face_masked_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h4_face_masked_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h4/*.png` (7 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h4_report.md`
+
 ---

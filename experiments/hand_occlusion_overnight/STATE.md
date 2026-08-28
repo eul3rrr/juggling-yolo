@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 05:35 CEST
-STATUS: H1 v4 + H2 + v5 sens grid + H3 COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). v5 sens grid confirms v4d's MIN_FROM_SLOPE=2.5 is in a flat region of the precision/recall curve. H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded for review. H3 stationary-cluster criterion correctly confirms 6/6 identical-video v4d hand-links as real held balls, with 1 false positive on the youtube video (stuck on face).
+LAST_UPDATE: 2026-08-28 05:55 CEST
+STATUS: H1 v4 + H2 + v5 sens grid + H3 + H4 COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded. H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls, 1 YouTube false positive (stuck on a stationary high-up object, NOT face). H4 face-mask attempt FAILED — the YouTube H3 false positive is not a face feature; a simple geometric mask cannot solve detector confusion on arbitrary stationary features.
 
 ## Isolation
 
@@ -172,18 +172,17 @@ extraction: 10 identical + 1 youtube links with visual precision
    records when a v3 stationary cluster is found in the
    held phase. This gives consumers a per-link
    corroboration flag.
-2. **Test face-masked H3** to see if a face detector
-   can mask out the YouTube false positive. The hypothesis
-   is that the false positive is a face feature; masking
-   face-region low-conf detections before clustering
-   should eliminate it.
-3. **H4: Literature-derived experiment.** Try a min-cost
-   flow formulation of the AIR+HAND graph as an alternative
-   to H2's union-find. Master §17 lists min-cost flow as
-   a candidate approach; H2 is a simpler union-find that
-   records conflicts; a min-cost flow could resolve the
-   1 conflict optimally.
-4. **H5: Object permanence explicit.** v4d is implicitly
+2. **H4 follow-up: Try a learned "ball-ness" classifier**
+   to filter out non-ball stationary features. The simple
+   geometric mask doesn't work; a learned model on
+   detection features (size, color, shape) might. This
+   would require a small training set.
+3. **H5: min-cost flow formulation of AIR+HAND graph.**
+   Try to resolve the 1 H2 conflict (tracklet 3 → {hand=9,
+   air=8}) optimally instead of recording it. The current
+   H2 union-find records conflicts; a min-cost flow could
+   resolve them by choosing the lowest-cost edge.
+4. **H6: explicit object permanence.** v4d is implicitly
    object-permanent (tokens persist 60 frames), but a v6
    could model this explicitly and use it to bridge
    detector dropouts in the H2 chains.
