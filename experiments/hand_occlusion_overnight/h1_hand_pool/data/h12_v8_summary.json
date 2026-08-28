@@ -1,0 +1,250 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total_frames": 1042,
+      "v7_pattern_counts": {
+        "TWO_BALL": 269,
+        "MIXED_3+_UNCONFIRMED": 21,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 70,
+        "MIXED_3+": 287,
+        "TWO_BALL_ONE_HAND": 8,
+        "FOUNTAIN_3+": 171
+      },
+      "v7_pct_patterns": {
+        "TWO_BALL": 25.8,
+        "MIXED_3+_UNCONFIRMED": 2.0,
+        "SINGLE_BALL": 20.7,
+        "CASCADE_3+": 6.7,
+        "MIXED_3+": 27.5,
+        "TWO_BALL_ONE_HAND": 0.8,
+        "FOUNTAIN_3+": 16.4
+      },
+      "n_total_balls_distribution": {
+        "2": 277,
+        "3": 533,
+        "1": 216,
+        "4": 15,
+        "5": 1
+      },
+      "n_substantial_phases": 15,
+      "sub_phases": [
+        {
+          "start_frame": 174,
+          "end_frame": 195,
+          "pattern": "MIXED_3+",
+          "n_frames": 22,
+          "avg_confidence": 0.643
+        },
+        {
+          "start_frame": 208,
+          "end_frame": 231,
+          "pattern": "SINGLE_BALL",
+          "n_frames": 24,
+          "avg_confidence": 0.325
+        },
+        {
+          "start_frame": 263,
+          "end_frame": 312,
+          "pattern": "MIXED_3+",
+          "n_frames": 50,
+          "avg_confidence": 0.728
+        },
+        {
+          "start_frame": 335,
+          "end_frame": 398,
+          "pattern": "SINGLE_BALL",
+          "n_frames": 64,
+          "avg_confidence": 0.602
+        },
+        {
+          "start_frame": 411,
+          "end_frame": 450,
+          "pattern": "MIXED_3+",
+          "n_frames": 40,
+          "avg_confidence": 0.797
+        },
+        {
+          "start_frame": 451,
+          "end_frame": 470,
+          "pattern": "TWO_BALL",
+          "n_frames": 20,
+          "avg_confidence": 0.821
+        },
+        {
+          "start_frame": 473,
+          "end_frame": 506,
+          "pattern": "SINGLE_BALL",
+          "n_frames": 34,
+          "avg_confidence": 0.908
+        },
+        {
+          "start_frame": 507,
+          "end_frame": 532,
+          "pattern": "TWO_BALL",
+          "n_frames": 26,
+          "avg_confidence": 0.733
+        },
+        {
+          "start_frame": 549,
+          "end_frame": 578,
+          "pattern": "MIXED_3+",
+          "n_frames": 30,
+          "avg_confidence": 0.704
+        },
+        {
+          "start_frame": 631,
+          "end_frame": 669,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 39,
+          "avg_confidence": 0.714
+        },
+        {
+          "start_frame": 685,
+          "end_frame": 716,
+          "pattern": "CASCADE_3+",
+          "n_frames": 32,
+          "avg_confidence": 0.738
+        },
+        {
+          "start_frame": 733,
+          "end_frame": 765,
+          "pattern": "CASCADE_3+",
+          "n_frames": 33,
+          "avg_confidence": 0.751
+        },
+        {
+          "start_frame": 890,
+          "end_frame": 936,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 47,
+          "avg_confidence": 0.571
+        },
+        {
+          "start_frame": 977,
+          "end_frame": 1011,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 35,
+          "avg_confidence": 0.565
+        },
+        {
+          "start_frame": 1029,
+          "end_frame": 1049,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 21,
+          "avg_confidence": 0.463
+        }
+      ],
+      "n_events": 50
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_total_frames": 898,
+      "v7_pattern_counts": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 119,
+        "MIXED_3+": 498,
+        "FOUNTAIN_3+": 211
+      },
+      "v7_pct_patterns": {
+        "MIXED_3+_UNCONFIRMED": 7.8,
+        "CASCADE_3+": 13.3,
+        "MIXED_3+": 55.5,
+        "FOUNTAIN_3+": 23.5
+      },
+      "n_total_balls_distribution": {
+        "5": 601,
+        "4": 265,
+        "6": 10,
+        "3": 22
+      },
+      "n_substantial_phases": 12,
+      "sub_phases": [
+        {
+          "start_frame": 2,
+          "end_frame": 71,
+          "pattern": "MIXED_3+_UNCONFIRMED",
+          "n_frames": 70,
+          "avg_confidence": 0.333
+        },
+        {
+          "start_frame": 114,
+          "end_frame": 255,
+          "pattern": "MIXED_3+",
+          "n_frames": 142,
+          "avg_confidence": 0.705
+        },
+        {
+          "start_frame": 267,
+          "end_frame": 298,
+          "pattern": "MIXED_3+",
+          "n_frames": 32,
+          "avg_confidence": 0.679
+        },
+        {
+          "start_frame": 308,
+          "end_frame": 338,
+          "pattern": "MIXED_3+",
+          "n_frames": 31,
+          "avg_confidence": 0.642
+        },
+        {
+          "start_frame": 339,
+          "end_frame": 374,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 36,
+          "avg_confidence": 0.646
+        },
+        {
+          "start_frame": 375,
+          "end_frame": 410,
+          "pattern": "MIXED_3+",
+          "n_frames": 36,
+          "avg_confidence": 0.647
+        },
+        {
+          "start_frame": 420,
+          "end_frame": 481,
+          "pattern": "MIXED_3+",
+          "n_frames": 62,
+          "avg_confidence": 0.651
+        },
+        {
+          "start_frame": 482,
+          "end_frame": 594,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 113,
+          "avg_confidence": 0.653
+        },
+        {
+          "start_frame": 595,
+          "end_frame": 643,
+          "pattern": "MIXED_3+",
+          "n_frames": 49,
+          "avg_confidence": 0.65
+        },
+        {
+          "start_frame": 769,
+          "end_frame": 799,
+          "pattern": "MIXED_3+",
+          "n_frames": 31,
+          "avg_confidence": 0.655
+        },
+        {
+          "start_frame": 800,
+          "end_frame": 861,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 62,
+          "avg_confidence": 0.651
+        },
+        {
+          "start_frame": 862,
+          "end_frame": 899,
+          "pattern": "MIXED_3+",
+          "n_frames": 38,
+          "avg_confidence": 0.675
+        }
+      ],
+      "n_events": 50
+    }
+  }
+}
