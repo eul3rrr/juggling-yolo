@@ -1,0 +1,28 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 42,
+      "n_penalized": 9,
+      "n_conf": 26,
+      "n_trust": 10,
+      "n_low": 6,
+      "mean_q": 0.7636,
+      "multi_n_conf": 2,
+      "multi_n_total": 18
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_penalized": 11,
+      "n_conf": 4,
+      "n_trust": 8,
+      "n_low": 3,
+      "mean_q": 0.5509,
+      "multi_n_conf": 1,
+      "multi_n_total": 10
+    }
+  },
+  "config": {
+    "MIN_ARCS_FOR_PENALTY": 3,
+    "W54": 0.3
+  }
+}

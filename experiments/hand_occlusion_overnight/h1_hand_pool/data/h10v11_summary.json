@@ -1,0 +1,201 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "w54": 0.3,
+      "n_chains": 42,
+      "n_improved": 16,
+      "n_demoted": 14,
+      "n_unchanged": 12,
+      "mean_q10": 0.8105,
+      "mean_q11": 0.6952,
+      "n_confident_v10": 27,
+      "n_confident_v11": 24,
+      "top_5_improved": [
+        {
+          "chain_id": "35",
+          "rank_v10": 12,
+          "rank_v11": 11,
+          "q10": 0.9688,
+          "q11": 0.9688,
+          "g_cv": null
+        },
+        {
+          "chain_id": "11",
+          "rank_v10": 19,
+          "rank_v11": 12,
+          "q10": 0.9365,
+          "q11": 0.9365,
+          "g_cv": null
+        },
+        {
+          "chain_id": "1",
+          "rank_v10": 20,
+          "rank_v11": 13,
+          "q10": 0.9238,
+          "q11": 0.9238,
+          "g_cv": null
+        },
+        {
+          "chain_id": "17",
+          "rank_v10": 21,
+          "rank_v11": 14,
+          "q10": 0.9109,
+          "q11": 0.9109,
+          "g_cv": null
+        },
+        {
+          "chain_id": "9",
+          "rank_v10": 23,
+          "rank_v11": 15,
+          "q10": 0.9015,
+          "q11": 0.9015,
+          "g_cv": null
+        }
+      ],
+      "top_5_demoted": [
+        {
+          "chain_id": "37",
+          "rank_v10": 40,
+          "rank_v11": 41,
+          "q10": 0.3236,
+          "q11": 0.0689,
+          "g_cv": 0.849
+        },
+        {
+          "chain_id": "14",
+          "rank_v10": 38,
+          "rank_v11": 39,
+          "q10": 0.4538,
+          "q11": 0.1271,
+          "g_cv": 1.089
+        },
+        {
+          "chain_id": "22",
+          "rank_v10": 36,
+          "rank_v11": 40,
+          "q10": 0.5584,
+          "q11": 0.0973,
+          "g_cv": 1.537
+        },
+        {
+          "chain_id": "34",
+          "rank_v10": 34,
+          "rank_v11": 37,
+          "q10": 0.58,
+          "q11": 0.2635,
+          "g_cv": 1.055
+        },
+        {
+          "chain_id": "39",
+          "rank_v10": 29,
+          "rank_v11": 33,
+          "q10": 0.6613,
+          "q11": 0.3571,
+          "g_cv": 1.014
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "w54": 0.2,
+      "n_chains": 15,
+      "n_improved": 8,
+      "n_demoted": 6,
+      "n_unchanged": 1,
+      "mean_q10": 0.6886,
+      "mean_q11": 0.5968,
+      "n_confident_v10": 5,
+      "n_confident_v11": 4,
+      "top_5_improved": [
+        {
+          "chain_id": "11",
+          "rank_v10": 1,
+          "rank_v11": 0,
+          "q10": 0.8333,
+          "q11": 0.8333,
+          "g_cv": null
+        },
+        {
+          "chain_id": "14",
+          "rank_v10": 2,
+          "rank_v11": 1,
+          "q10": 0.8333,
+          "q11": 0.8333,
+          "g_cv": null
+        },
+        {
+          "chain_id": "13",
+          "rank_v10": 4,
+          "rank_v11": 3,
+          "q10": 0.7333,
+          "q11": 0.7333,
+          "g_cv": null
+        },
+        {
+          "chain_id": "5",
+          "rank_v10": 8,
+          "rank_v11": 5,
+          "q10": 0.6333,
+          "q11": 0.6333,
+          "g_cv": null
+        },
+        {
+          "chain_id": "10",
+          "rank_v10": 12,
+          "rank_v11": 8,
+          "q10": 0.6071,
+          "q11": 0.5177,
+          "g_cv": 0.447
+        }
+      ],
+      "top_5_demoted": [
+        {
+          "chain_id": "7",
+          "rank_v10": 10,
+          "rank_v11": 13,
+          "q10": 0.6156,
+          "q11": 0.4452,
+          "g_cv": 0.852
+        },
+        {
+          "chain_id": "12",
+          "rank_v10": 9,
+          "rank_v11": 14,
+          "q10": 0.6176,
+          "q11": 0.3818,
+          "g_cv": 1.179
+        },
+        {
+          "chain_id": "3",
+          "rank_v10": 6,
+          "rank_v11": 9,
+          "q10": 0.68,
+          "q11": 0.5126,
+          "g_cv": 0.837
+        },
+        {
+          "chain_id": "0",
+          "rank_v10": 5,
+          "rank_v11": 6,
+          "q10": 0.6827,
+          "q11": 0.6017,
+          "g_cv": 0.405
+        },
+        {
+          "chain_id": "4",
+          "rank_v10": 3,
+          "rank_v11": 4,
+          "q10": 0.7962,
+          "q11": 0.6858,
+          "g_cv": 0.552
+        }
+      ]
+    }
+  },
+  "config": {
+    "H3_WEIGHT": 0.3,
+    "H8_WEIGHT": 0.3,
+    "H9_WEIGHT": 0.4,
+    "W54_IDENTICAL": 0.3,
+    "W54_YOUTUBE": 0.2
+  }
+}

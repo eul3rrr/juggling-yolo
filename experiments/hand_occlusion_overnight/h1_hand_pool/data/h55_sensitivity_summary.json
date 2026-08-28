@@ -1,0 +1,126 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "w54_0.00": {
+        "n_conf": 27,
+        "n_trust": 13,
+        "n_low": 2,
+        "mean_q": 0.8105,
+        "multi_n": 18,
+        "multi_n_conf": 3,
+        "multi_mean_q": 0.6006
+      },
+      "w54_0.10": {
+        "n_conf": 27,
+        "n_trust": 11,
+        "n_low": 4,
+        "mean_q": 0.7721,
+        "multi_n": 18,
+        "multi_n_conf": 3,
+        "multi_mean_q": 0.5421
+      },
+      "w54_0.20": {
+        "n_conf": 26,
+        "n_trust": 10,
+        "n_low": 6,
+        "mean_q": 0.7337,
+        "multi_n": 18,
+        "multi_n_conf": 2,
+        "multi_mean_q": 0.4836
+      },
+      "w54_0.30": {
+        "n_conf": 24,
+        "n_trust": 9,
+        "n_low": 9,
+        "mean_q": 0.6952,
+        "multi_n": 18,
+        "multi_n_conf": 2,
+        "multi_mean_q": 0.425
+      },
+      "w54_0.40": {
+        "n_conf": 22,
+        "n_trust": 10,
+        "n_low": 10,
+        "mean_q": 0.6585,
+        "multi_n": 18,
+        "multi_n_conf": 2,
+        "multi_mean_q": 0.3705
+      },
+      "w54_0.50": {
+        "n_conf": 20,
+        "n_trust": 10,
+        "n_low": 12,
+        "mean_q": 0.6279,
+        "multi_n": 18,
+        "multi_n_conf": 2,
+        "multi_mean_q": 0.3303
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "w54_0.00": {
+        "n_conf": 5,
+        "n_trust": 10,
+        "n_low": 0,
+        "mean_q": 0.6886,
+        "multi_n": 10,
+        "multi_n_conf": 1,
+        "multi_mean_q": 0.65
+      },
+      "w54_0.10": {
+        "n_conf": 5,
+        "n_trust": 10,
+        "n_low": 0,
+        "mean_q": 0.6427,
+        "multi_n": 10,
+        "multi_n_conf": 1,
+        "multi_mean_q": 0.5867
+      },
+      "w54_0.20": {
+        "n_conf": 4,
+        "n_trust": 10,
+        "n_low": 1,
+        "mean_q": 0.5968,
+        "multi_n": 10,
+        "multi_n_conf": 1,
+        "multi_mean_q": 0.5234
+      },
+      "w54_0.30": {
+        "n_conf": 4,
+        "n_trust": 8,
+        "n_low": 3,
+        "mean_q": 0.5509,
+        "multi_n": 10,
+        "multi_n_conf": 1,
+        "multi_mean_q": 0.46
+      },
+      "w54_0.40": {
+        "n_conf": 3,
+        "n_trust": 6,
+        "n_low": 6,
+        "mean_q": 0.505,
+        "multi_n": 10,
+        "multi_n_conf": 0,
+        "multi_mean_q": 0.3967
+      },
+      "w54_0.50": {
+        "n_conf": 3,
+        "n_trust": 5,
+        "n_low": 7,
+        "mean_q": 0.4591,
+        "multi_n": 10,
+        "multi_n_conf": 0,
+        "multi_mean_q": 0.3334
+      }
+    }
+  },
+  "config": {
+    "W54_VALUES": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5
+    ]
+  }
+}
