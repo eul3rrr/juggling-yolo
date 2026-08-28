@@ -1,0 +1,51 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_events_total": 48,
+      "n_flights_with_time": 11,
+      "n_short_flights": 3,
+      "n_events_dropped": 3,
+      "flight_time_min": 1,
+      "flight_time_max": 131,
+      "flight_time_median": 33,
+      "pattern_dist_filtered": {
+        "UNKNOWN": 10,
+        "FOUNTAIN_3+": 613,
+        "CASCADE_3+": 314,
+        "MIXED_3+": 96
+      },
+      "pattern_dist_baseline": {
+        "TWO_BALL": 255,
+        "MIXED_3+_UNCONFIRMED": 25,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 22,
+        "MIXED_3+": 208,
+        "TWO_BALL_ONE_HAND": 18,
+        "FOUNTAIN_3+": 298
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_events_total": 50,
+      "n_flights_with_time": 15,
+      "n_short_flights": 0,
+      "n_events_dropped": 0,
+      "flight_time_min": 58,
+      "flight_time_max": 289,
+      "flight_time_median": 67,
+      "pattern_dist_filtered": {
+        "UNKNOWN": 51,
+        "FOUNTAIN_3+": 151,
+        "CASCADE_3+": 646
+      },
+      "pattern_dist_baseline": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 129,
+        "MIXED_3+": 589,
+        "FOUNTAIN_3+": 110
+      }
+    }
+  },
+  "config": {
+    "MIN_FLIGHT_TIME": 10
+  }
+}
