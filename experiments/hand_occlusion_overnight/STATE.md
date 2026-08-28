@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 23:00 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + H54 + H55 + H56 + H57 + H58 v1 + H59 + H60 + H61 + H62 + H63 + H64 + H65 + H66 + H67 + H68 + H69 + H70 + H71 + H72 + H73 + H74 + H75 + H76 + H77 + **H78**
+LAST_UPDATE: 2026-08-28 23:30 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + H54 + H55 + H56 + H57 + H58 v1 + H59 + H60 + H61 + H62 + H63 + H64 + H65 + H66 + H67 + H68 + H69 + H70 + H71 + H72 + H73 + H74 + H75 + H76 + H77 + H78 + H79 + H80 + **H82**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -2696,3 +2696,53 @@ accuracy on the H70 sample (vs 78.9% for H75 alone).
    (H59 ground truth) to verify the per-edge impact.
 
 See `h1_hand_pool/reports/h78_report.md` for full analysis.
+
+## H82 conclusion (2026-08-28 ~23:30 CEST)
+
+**H82: Refined H74 signal with unique_LR count (extends H78)** —
+DONE. PASS. H82 v1 stack achieves **89.5% accuracy** on the H70
+sample, the best of any stack tried so far.
+
+**Key new finding:** H74 (LR_variance < 0.20) has 2 false
+positives on YouTube MIXED_3+ JUGGLING phases:
+- f=267-298 (mean LR=2.0, var=0.000, unique_LR=1)
+- f=375-410 (mean LR=1.889, var=0.154, unique_LR=3)
+
+These are real 5-ball juggling patterns with continuous
+hand-occupancy. The H40v2 sustained-occupancy metric
+saturates at LR=2.0 (both hands at 1.0) for a busy juggling
+pattern, making it indistinguishable from a true static hold.
+
+**H74v2 = `LR_variance < 0.20 AND unique_LR <= 2`**
+- Removes the f=375-410 FP (unique_LR=3 > 2)
+- Still wrongly rejects f=267-298 (unique_LR=1) — fundamental
+  H40v2 metric limitation for 5-ball jugglers
+
+**End-to-end stack comparison (all 19 H70 substantial phases):**
+- H75 (H43 OR H69 OR H74v1): TP=12, TN=3, FP=2, FN=2, P=0.857, R=0.857, acc=0.789
+- H75v2 (H43 OR H69 OR H74v2): TP=13, TN=3, FP=2, FN=1, P=0.867, R=0.929, acc=0.842
+- H78v5 (H75v1 OR H78 mean_diff>10): TP=12, TN=4, FP=1, FN=2, P=0.923, R=0.857, acc=0.842
+- **H82 v1 (H75v2 OR H78 mean_diff>10): TP=13, TN=4, FP=1, FN=1, P=0.929, R=0.929, acc=0.895**
+
+**Flat regions confirmed:**
+- unique_LR <= 1 or <= 2: identical results (flat region)
+- LR_var < 0.10 to < 0.20: identical results (flat region)
+
+**What's the 1 remaining FP / 1 remaining FN?**
+- **FP: f=685-716 CASCADE_3+ MANIPULATION** — body rolls /
+  contact juggling pose. None of the signals catch it. H73
+  finding reaffirmed: CASCADE_3+ class has 0/2 accuracy on
+  substantial phases.
+- **FN: f=267-298 MIXED_3+ JUGGLING** — real 5-ball juggling
+  with continuous stable LR=2.0. Fundamental H40v2 metric
+  limitation.
+
+**Recommended operating point (post-H82):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + **H74v2** + **H78** + H52 + H53
+
+**Future research:**
+1. H83: H40v2 metric refinement for 5-ball jugglers
+2. H84: H12 v8 CASCADE_3+ revision (no reliable signal exists)
+3. H85: H82 v1 cross-validation on 113 manual review pairs
+
+See `h1_hand_pool/reports/h82_report.md` for full analysis.

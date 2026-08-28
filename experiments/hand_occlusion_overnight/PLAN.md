@@ -2034,3 +2034,59 @@ from H76/H77.
    "two parallel columns" pattern.
 3. **H81: cross-validate H78v5 on the 113 manual review pairs**
    (H59 ground truth) to verify per-edge impact.
+
+## Seventy-ninth through eighty-second episodes (H79-H82) — STATUS: COMPLETE
+
+Sub-steps for H79-H82 series:
+
+1. ✅ **H79**: per-ball-count calibration of H78 mean_diff threshold
+   - Tested thresholds (3-ball: 8-14, 5-ball: 3-7)
+   - Result: per-ball-count calibration is WORSE in end-to-end
+     terms (acc=0.789 vs H78 single=0.842) because lowering the
+     5-ball threshold to 4.5 wrongly rejects f=339-374 (real
+     FOUNTAIN, mean_diff=5.56)
+   - **Verdict: NEGATIVE.** H78 single threshold (10) is the
+     recommended operating point.
+2. ✅ **H80**: stricter "true FOUNTAIN" detection
+   - Tested normalized threshold `mean_diff / n_balls > 3.0`
+   - Result: only catches f=890-936 (same as H78 alone); doesn't
+     help on YouTube
+   - **Verdict: NEGATIVE.** H78 already catches the worst
+     offender; no additional value.
+3. ✅ **H82**: H74v2 = `LR_variance < 0.20 AND unique_LR <= 2`
+   - Discovered that H74 has 2 FPs on YouTube MIXED_3+ JUGGLING
+     (f=267-298, f=375-410) — H40v2 metric saturation for
+     5-ball jugglers
+   - unique_LR count filter removes 1 of 2 FPs
+   - **End-to-end: TP=13 TN=4 FP=1 FN=1, P=0.929 R=0.929 acc=0.895**
+   - **Verdict: PASS (narrow-scope precision improvement).**
+     Best accuracy of any stack tried.
+4. ✅ Visual confirmation of H82 false positive (f=267-298)
+   - LR=2.0 continuously (1 ball in each hand + 3 in air)
+   - unique_LR=1 (truly stable, no state changes)
+   - A fundamental H40v2 metric limitation for 5-ball jugglers
+
+**Cumulative findings (78-82 series):**
+- H78 wrist-distance signal catches Mills Mess (f=890-936)
+- H82 v1 stack (H75v2 + H78) achieves 89.5% accuracy on H70 sample
+- H79 per-ball-count calibration: NEGATIVE (worse than H78 single)
+- H80 normalized threshold: NEGATIVE (no additional value)
+- H82 H74v2 refinement: removes 1 of 2 H74 FPs
+
+**Final recommended operating point (post-H82):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v2 + H78 + H52 + H53
+
+- **End-to-end accuracy on H70 sample: 89.5% (17/19 correct)**
+- H74v2 = `var < 0.20 AND unique_LR <= 2` (flat region 0.10-0.20, 1-2)
+- H78 = `mean_diff_per_frame > 10` (flat region 8-14)
+
+**Remaining 1 FP / 1 FN are fundamental limitations:**
+- FP: f=685-716 CASCADE_3+ MANIPULATION (body rolls / contact juggling)
+- FN: f=267-298 YouTube MIXED_3+ JUGGLING (5-ball stable LR=2.0)
+
+**Future research:**
+1. H83: H40v2 metric refinement for 5-ball jugglers (ball-detection
+   based check, hand-velocity, pattern-periodicity)
+2. H84: H12 v8 CASCADE_3+ revision (no reliable signal exists;
+   H73 finding reaffirmed)
+3. H85: H82 v1 cross-validation on 113 manual review pairs

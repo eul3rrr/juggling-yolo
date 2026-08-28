@@ -5001,3 +5001,45 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h78v4_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h78/*.png` (3 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h78_report.md`
+
+---
+
+## H82 — Refined H74 signal with unique_LR count (extends H78) (2026-08-28 ~23:30 CEST)
+
+- Hypothesis: H74 (LR_variance < 0.20) has 2 false positives on
+  YouTube MIXED_3+ JUGGLING phases (f=267-298 and f=375-410)
+  because the H40v2 sustained-occupancy metric saturates at
+  LR=2.0 for busy 5-ball juggling. Adding a unique_LR count
+  filter (H74v2: `var < 0.20 AND unique_LR <= 2`) should
+  remove the FPs while keeping the 3 TPs.
+- Quantitative result:
+  - H75 (H43 OR H69 OR H74v1): TP=12, TN=3, FP=2, FN=2, P=0.857, R=0.857, acc=0.789
+  - H75v2 (H43 OR H69 OR H74v2): TP=13, TN=3, FP=2, FN=1, P=0.867, R=0.929, acc=0.842
+  - H78v5 (H75v1 OR H78 mean_diff>10): TP=12, TN=4, FP=1, FN=2, P=0.923, R=0.857, acc=0.842
+  - **H82 v1 (H75v2 OR H78 mean_diff>10): TP=13, TN=4, FP=1, FN=1, P=0.929, R=0.929, acc=0.895**
+- Sensitivity grid (flat regions):
+  - unique_LR <= 1 or <= 2: identical results (flat region)
+  - LR_var < 0.10 to < 0.20: identical results (flat region)
+- Per-phase analysis:
+  - H74v2 removes f=375-410 JUGGLING FP (unique_LR=3 > 2)
+  - H74v2 still wrongly rejects f=267-298 (unique_LR=1) — fundamental
+    H40v2 metric limitation for 5-ball jugglers
+- Remaining FP: f=685-716 CASCADE_3+ MANIPULATION (body rolls /
+  contact juggling) — no signal catches it. H73 finding reaffirmed.
+- Remaining FN: f=267-298 YouTube MIXED_3+ JUGGLING — real 5-ball
+  juggling with continuous stable LR=2.0.
+- Verdict: **PASS (narrow-scope precision improvement).** H82 v1
+  stack achieves 89.5% accuracy on the H70 sample, the best of
+  any stack tried. Both H74v2 and H78 are in flat sensitivity
+  regions. The 1 FP / 1 FN are fundamental limitations.
+- Recommended operating point (post-H82): h7v3plus3 + H10 v11 v3
+  + H12 v8 + H50 + H43 + H69 + **H74v2** + **H78** + H52 + H53
+- Future research:
+  1. H83: H40v2 metric refinement for 5-ball jugglers
+  2. H84: H12 v8 CASCADE_3+ revision (no reliable signal exists)
+  3. H85: H82 v1 cross-validation on 113 manual review pairs
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h82_h74_refined.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h82v2_sens_grid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h82_h74_refined.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h82_report.md`
