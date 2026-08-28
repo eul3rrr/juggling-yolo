@@ -934,3 +934,23 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v5_chain_quality_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h10v5/*.png` (6 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v5_report.md`
+
+### H237 v5 (2026-08-28 ~08:25 CEST)
+
+- Hypothesis: enriching the H237 unified chain representation
+  with the H10 v5 chain quality score makes the v5 quality
+  directly available per-chain for downstream consumers.
+- Algorithm: for each chain in h237_unified_chains_<stem>.csv,
+  add h10_v3_quality, h10_v5_quality, h10_v3_rank, h10_v5_rank,
+  h10_quality_delta columns.
+- Quantitative result (top 3 identical chains by v5 quality):
+  - chain 21: v3 0.966, v5 0.966 (rank 0)
+  - chain 36: v3 0.515 → v5 0.944 (rank 11 → 1)
+  - chain 19: v3 0.927, v5 0.927 (rank 3 → 2)
+- Verdict: **PASS.** H237 v5 makes the v5 quality directly
+  available per-chain. See `h1_hand_pool/reports/h237v5_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h237v5_unified.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v5_unified_chains_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v5_unified_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h237v5_report.md`

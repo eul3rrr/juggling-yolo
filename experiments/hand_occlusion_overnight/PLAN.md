@@ -357,11 +357,12 @@ Remaining ideas:
    — detect parabolic arc boundaries within long tracklets
    and only use the local arc's tail/head for the physics
    check. This would solve the YouTube long-tracklet problem.
-3. **H10 v6: combined H3 + H8 v5 + H9 features into a
+3. ~~**H10 v6: combined H3 + H8 v5 + H9 features into a
    logistic-regression-trained quality classifier** — see
    if a learned model outperforms H10 v5's hand-tuned
-   weights.
-4. **H12: integrate H10 v5 with the unified chain
-   representation** — produce `h237v5_unified_chains_*.csv`
-   with the H10 v5 quality as a per-chain field, so
-   downstream consumers can use it directly.
+   weights.~~ (Not pursued in this episode.)
+4. ~~**H237 v5: integrate H10 v5 with the unified chain
+   representation**~~ **DONE.** Produces
+   `h237v5_unified_chains_*.csv` with the H10 v5 quality
+   as per-chain fields. Downstream consumers can use it
+   directly.

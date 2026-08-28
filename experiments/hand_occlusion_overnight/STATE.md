@@ -211,11 +211,15 @@ extraction: 10 identical + 1 youtube links with visual precision
    promotes 1 v3-false-negative (chain 36). H10 v5 is the new
    recommended chain quality score. 6 chains IMPROVED rank,
    3 WORSENED, 34 unchanged. Mean quality similar (0.539 vs 0.529).
-9. **H11: tracklet-level identity propagation** — given
-   a high-quality H10 v5 chain, propagate identity labels
-   across the chain to enable juggling-pattern analysis.
-   This would be a downstream consumer of the H10 quality
-   score.
+9. ~~**H237 v5: enrich unified chain representation with H10 v5**~~
+   **DONE.** Adds h10_v5_quality, h10_v5_rank columns to
+   h237_unified_chains. Top chain in v5 is now chain 36
+   (real single ball, v3 over-penalized its 33-frame gap).
+10. **H11: tracklet-level identity propagation** — given
+    a high-quality H10 v5 chain, propagate identity labels
+    across the chain to enable juggling-pattern analysis.
+    This would be a downstream consumer of the H10 v5
+    quality score.
 
 ## Important artifact paths
 
