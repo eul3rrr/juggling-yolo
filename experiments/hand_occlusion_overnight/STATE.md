@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 18:10 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65** + **H66** + **H67**
+LAST_UPDATE: 2026-08-28 18:30 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65** + **H66** + **H67** + **H68**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1948,3 +1948,59 @@ serve both. A per-n_total calibration would improve discrimination.
 h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H66 (threshold 0.20) + H52 + H53
 
 See `h1_hand_pool/reports/h67_report.md` for full analysis.
+
+## H68 conclusion (2026-08-28 ~18:30 CEST)
+
+**H68: per-n_total threshold calibration for H66 + H43 stacked** —
+DONE. NEGATIVE result.
+
+**Hypothesis:** A per-n_total threshold (3-ball: 0.20, 5-ball: 0.45)
+should catch 2/4 wrong FOUNTAIN_3+ phases while preserving real
+FOUNTAIN.
+
+**Result on H65 sample:**
+- 3 rejected: 1029-1049 (correct), 977-1011 (wrong, real FOUNTAIN),
+  800-861 (correct, CASCADE).
+- 4 kept: 631-669 (correct), 890-936 (wrong), 339-374 (correct),
+  482-594 (wrong).
+- **Rejection precision: 2/3 = 67%. Same as H67.** No improvement.
+
+**Per-n_total sensitivity:**
+- 3-ball: NO threshold separates 1029-1049 (pct=0.00) from
+  977-1011 (pct=0.12) without false-rejecting one or the other.
+- 5-ball: threshold 0.45 correctly catches 800-861 alone.
+
+**Verdict: NEGATIVE.** H68 confirms the H67 finding: the H66
+"balls aloft" signal cannot safely discriminate 3-ball FOUNTAIN
+from static hold because a 3-ball FOUNTAIN has only 1 ball aloft
+at most times. The 977-1011 (pct=0.12) and 1029-1049 (pct=0.00)
+gap is too narrow.
+
+**Net impact on H65 sample:**
+- H43 alone: 1/1 correct reject (100% precision)
+- H66 + H43 stacked (H67, threshold 0.30): 1/2 correct (50% precision)
+- H68 + H43 stacked (per-n_total): 1/2 correct (50% precision) + 1 NEW correct catch (800-861), but also 1 NEW wrong reject (977-1011) = 2/3 correct (67% precision)
+
+**Wait — let me recompute.** H43 + H68 stacked:
+- 3-ball: H43 catches 1029-1049, H66(0.20) catches 1029 + wrongly 977. Net: 1 correct, 1 wrong.
+- 5-ball: H43 keeps all, H66(0.45) catches 800-861. Net: 1 correct, 0 wrong.
+- Combined: 2 correct, 1 wrong = 67% precision on 3 rejects.
+
+**H43 alone: 1 correct, 0 wrong = 100% precision on 1 reject.**
+
+H43 alone still wins on precision. H68 adds 1 correct catch (800-861)
+but at the cost of 1 wrong reject (977-1011). Net: same as H67.
+
+**Fundamental limit:** H66 cannot reliably separate 3-ball FOUNTAIN
+from static hold. A truly reliable FOUNTAIN_3+ classifier would
+need a different signal — periodicity of ball aloft, ball HAND-OFF
+pattern, or learned "ball-ness" classifier.
+
+**Recommended operating point (REVISED, H68 supersedes H67):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + **H43** + H52 + H53
+
+H66 and H68 are useful as diagnostic signals but should NOT be
+applied as post-filters. H43 alone is the best FOUNTAIN_3+
+post-filter on the H65 sample.
+
+See `h1_hand_pool/reports/h68_report.md` for full analysis.

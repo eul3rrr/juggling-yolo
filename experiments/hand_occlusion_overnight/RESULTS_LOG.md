@@ -4318,3 +4318,45 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h67_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h67_report.md`
 
+### H68 (2026-08-28 ~18:30 CEST)
+
+- Hypothesis: A per-n_total threshold (3-ball: 0.20, 5-ball: 0.45)
+  should catch 2/4 wrong FOUNTAIN_3+ phases while preserving real
+  FOUNTAIN.
+- Method: Apply H43 (conf < 0.55) and H66 (per-n_total pct_A_ge2 <
+  threshold) to the H50-filtered per-frame pattern data. 3-ball
+  threshold: 0.20. 5-ball threshold: 0.45.
+- Quantitative result on H65 sample (7 substantial FOUNTAIN_3+
+  phases):
+  - 3 rejected: 1029-1049 (correct), 977-1011 (wrong, real FOUNTAIN
+    wrongly rejected by 3-ball threshold 0.20), 800-861 (correct,
+    CASCADE caught by 5-ball threshold 0.45).
+  - 4 kept: 631-669 (correct), 890-936 (wrong), 339-374 (correct),
+    482-594 (wrong).
+  - Rejection precision: 2/3 = 67%. Same as H67.
+- Per-n_total sensitivity:
+  - 3-ball: NO threshold separates 1029-1049 (pct=0.00) from
+    977-1011 (pct=0.12) without false-rejecting one or the other.
+  - 5-ball: threshold 0.45 correctly catches 800-861 alone.
+- Negative findings:
+  - H66 cannot reliably separate 3-ball FOUNTAIN from static hold.
+    A 3-ball FOUNTAIN has only 1 ball aloft at most times; a static
+    hold has 0 balls aloft. The 977-1011 (pct=0.12) and 1029-1049
+    (pct=0.00) gap is too narrow.
+  - H68 is the SAME as H67 on identical (H68 still wrongly rejects
+    977-1011) but ADDS 800-861 YouTube rejection. Net: +1 correct
+    catch, +0 wrong rejects on 5-ball; same 1/1 wrong reject on
+    3-ball.
+- Verdict: NEGATIVE. H43 alone remains the best FOUNTAIN_3+ post-
+  filter. H66 and H68 are useful as diagnostic signals but should
+  not be applied as post-filters at current thresholds.
+- Recommended operating point (REVISED, H68 supersedes H67):
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H52 + H53.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h68_per_n_total_calibration.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h68_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h68_rejected_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h68_per_frame_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h68_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h68_report.md`
+

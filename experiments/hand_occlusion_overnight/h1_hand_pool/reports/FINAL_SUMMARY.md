@@ -1,7 +1,7 @@
 # Hand-Occlusion Overnight Lab — Final Summary Report
 
-**Date:** 2026-08-28 ~18:10 CEST
-**Episodes:** H1-H67 (67 research episodes over ~18 hours)
+**Date:** 2026-08-28 ~18:30 CEST
+**Episodes:** H1-H68 (68 research episodes over ~18.5 hours)
 **Status:** COMPLETE — final operating point validated
 **Author:** autonomous hand-occlusion overnight research lab
 
@@ -222,11 +222,10 @@ consistency.
 || Identity propagation | H11 v7 | CONFIDENT chains at q >= 0.7 |
 || Pattern inference | H12 v8 | K=4 events + census + chain quality |
 || Event log filter | H50 10-frame | Drops 3/48 identity switches on identical |
-|| Confidence filter | H43 FOUNTAIN < 0.55 | Rejects 21 FOUNTAIN_3+ frames on identical |
-|| Continuous A filter | **H66 pct_A_ge2 < 0.20** | Rejects 1/4 wrong FOUNTAIN_3+ phases |
-|| Physics check | H52 H8 v5 | Confirms all H50 drops are TRACKER_FRAGMENTATION |
+| Confidence filter | H43 FOUNTAIN < 0.55 | Rejects 21 FOUNTAIN_3+ frames on identical |
+| Physics check | H52 H8 v5 | Confirms all H50 drops are TRACKER_FRAGMENTATION |
 
-**For FOUNTAIN_3+ post-filter:** H43 + H66 (threshold 0.20) stacked.
+**For FOUNTAIN_3+ post-filter:** H43 alone (1/1 correct, 100% precision).
 
 **For maximum precision (production use):**
 - h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000
@@ -421,14 +420,14 @@ that produced 4 experiments) added the following:
    TRACKER_FRAGMENTATION), 0/50 on YouTube.
 3. **H12 v8's FOUNTAIN_3+ classification is 43% accurate** on
    the H50-filtered H65 sample (improved from H39's 30%).
-   H43's confidence-based filter (conf < 0.55) catches 1/4
-   wrong cases; H66's continuous balls-aloft (pct_A_ge2 < 0.20,
-   lowered from H67's threshold sensitivity) catches 1/4 wrong
-   cases. H43 + H66 stacked catches 2/4 wrong cases (the
-   unambiguous static hold and the unambiguous CASCADE-with-
-   extra-ball). 3-ball FOUNTAIN has only 1 ball aloft at a time,
-   so a single threshold cannot serve both 3-ball and 5-ball
-   FOUNTAIN.
+   H43's confidence-based filter (conf < 0.55) is the best
+   FOUNTAIN_3+ post-filter on the H65 sample (1/1 correct
+   reject, 100% precision). H66's continuous balls-aloft
+   (pct_A_ge2) signal is real but cannot reliably separate
+   3-ball FOUNTAIN from static hold (gap is 0.12 vs 0.00,
+   too narrow). H67/H68's stacked rejection precision (50-67%)
+   is WORSE than H43 alone. **H43 alone remains the recommended
+   FOUNTAIN_3+ post-filter.**
 4. **The chain set is mostly multi-ball merges** (H32, H33, H54,
    H55, H56), not single-ball trajectories. The H11 v7 +
    H10 v11 v3 CONFIDENT chains (3 identical + 1 YouTube) are
@@ -544,6 +543,21 @@ CSV/JSON files. All committed and pushed to
   has pct_A_ge2 ≈ 0.50-0.60 (2-3 balls aloft). A single
   threshold cannot serve both. Per-n_total calibration
   needed for future improvement.
+
+### **H68 — per-n_total threshold calibration (NEGATIVE)**
+- H68 tests per-n_total thresholds (3-ball: 0.20, 5-ball: 0.45).
+- Result: 2/3 rejection precision (1029-1049 + 800-861 correct,
+  977-1011 wrong). Same as H67.
+- 5-ball threshold 0.45 correctly catches 800-861 YouTube
+  CASCADE. 3-ball threshold 0.20 wrongly rejects 977-1011
+  (real 3-ball FOUNTAIN, pct_A_ge2=0.12).
+- **H43 alone is the best FOUNTAIN_3+ post-filter on the H65
+  sample.** H66 and H68 are useful as diagnostic signals but
+  should not be applied as post-filters at current thresholds.
+- The fundamental limit: a 3-ball FOUNTAIN has only 1 ball
+  aloft at most times. The gap between 3-ball FOUNTAIN
+  (pct=0.12) and static hold (pct=0.00) is too narrow for
+  safe discrimination.
 
 ## Updated strong findings (post-H65)
 
