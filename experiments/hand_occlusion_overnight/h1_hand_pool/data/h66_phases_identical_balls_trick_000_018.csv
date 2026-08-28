@@ -1,0 +1,5 @@
+phase_start,phase_end,n_frames,mean_confidence,mean_A,max_A,pct_A_ge1,pct_A_ge2,h66_rejected
+631,669,39,0.714,1.795,3,0.949,0.692,False
+890,936,47,0.571,1.306,3,0.917,0.306,False
+977,1011,35,0.565,0.68,2,0.56,0.12,True
+1029,1049,21,0.463,0.846,1,0.846,0.0,True

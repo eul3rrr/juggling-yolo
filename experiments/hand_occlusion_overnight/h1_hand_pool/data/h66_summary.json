@@ -1,0 +1,102 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_phases": 4,
+      "n_rejected": 2,
+      "rejection_rate": 0.5,
+      "phases": [
+        {
+          "phase_start": 631,
+          "phase_end": 669,
+          "n_frames": 39,
+          "mean_confidence": 0.714,
+          "mean_A": 1.795,
+          "max_A": 3,
+          "pct_A_ge1": 0.949,
+          "pct_A_ge2": 0.692,
+          "h66_rejected": false
+        },
+        {
+          "phase_start": 890,
+          "phase_end": 936,
+          "n_frames": 47,
+          "mean_confidence": 0.571,
+          "mean_A": 1.306,
+          "max_A": 3,
+          "pct_A_ge1": 0.917,
+          "pct_A_ge2": 0.306,
+          "h66_rejected": false
+        },
+        {
+          "phase_start": 977,
+          "phase_end": 1011,
+          "n_frames": 35,
+          "mean_confidence": 0.565,
+          "mean_A": 0.68,
+          "max_A": 2,
+          "pct_A_ge1": 0.56,
+          "pct_A_ge2": 0.12,
+          "h66_rejected": true
+        },
+        {
+          "phase_start": 1029,
+          "phase_end": 1049,
+          "n_frames": 21,
+          "mean_confidence": 0.463,
+          "mean_A": 0.846,
+          "max_A": 1,
+          "pct_A_ge1": 0.846,
+          "pct_A_ge2": 0.0,
+          "h66_rejected": true
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_phases": 3,
+      "n_rejected": 0,
+      "rejection_rate": 0.0,
+      "phases": [
+        {
+          "phase_start": 339,
+          "phase_end": 374,
+          "n_frames": 36,
+          "mean_confidence": 0.646,
+          "mean_A": 1.727,
+          "max_A": 3,
+          "pct_A_ge1": 0.909,
+          "pct_A_ge2": 0.576,
+          "h66_rejected": false
+        },
+        {
+          "phase_start": 482,
+          "phase_end": 594,
+          "n_frames": 113,
+          "mean_confidence": 0.653,
+          "mean_A": 1.654,
+          "max_A": 3,
+          "pct_A_ge1": 0.846,
+          "pct_A_ge2": 0.558,
+          "h66_rejected": false
+        },
+        {
+          "phase_start": 800,
+          "phase_end": 861,
+          "n_frames": 62,
+          "mean_confidence": 0.651,
+          "mean_A": 1.298,
+          "max_A": 3,
+          "pct_A_ge1": 0.754,
+          "pct_A_ge2": 0.421,
+          "h66_rejected": false
+        }
+      ]
+    }
+  },
+  "methodology": {
+    "filter": "h66: continuous balls-aloft pct_A_ge2 >= PCT_A_GE2_THRESHOLD",
+    "PCT_A_GE2_THRESHOLD": 0.3,
+    "HAND_REACH": 100.0,
+    "n_total_phases": 7,
+    "n_total_rejected": 2
+  }
+}
