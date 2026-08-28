@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:00 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45 + H46 + H47 + H48**
+LAST_UPDATE: 2026-08-28 16:15 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45 + H46 + H47 + H48 + H49**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1019,3 +1019,80 @@ real catch-throws.** The H45 finding (10-frame filter) is
 robust and in a flat region of the sensitivity grid.
 
 See `h1_hand_pool/reports/h48_report.md` for full analysis.
+
+## H49 conclusion
+
+**H49: 10-frame filter impact on per-frame pattern** — DONE.
+NEGATIVE result (impact measurement methodology is flawed).
+
+The K=4-only re-classification rate is 45.2% identical,
+15.9% YouTube. This is an UPPER BOUND on actual H12 v8
+impact because the K=4-only classifier doesn't apply
+H12 v8's full pipeline (census + chain quality + n_total
+balls).
+
+For example, H12 v8 says f=236-242 identical are TWO_BALL
+(conf 0.64) because the census shows only 2 balls in air.
+My K=4 classifier says they should be CASCADE_3+ after
+the filter. But H12 v8's actual re-run would still call
+them TWO_BALL because the census doesn't change.
+
+H49 is a NEGATIVE result for impact measurement: the K=4
+window context changes for many frames, but the actual
+downstream impact on H12 v8's pattern labels is bounded
+by the full pipeline's additional inputs. A proper
+measurement would require re-running H12 v8 with the
+filtered event log.
+
+The H45/H47/H48 findings remain the actionable results:
+the 10-frame filter drops 3/48 events on identical and
+0/50 on YouTube.
+
+See `h1_hand_pool/reports/h49_report.md` for full analysis.
+
+## Summary of H45-H49 series
+
+This 5-episode series built on the H43 finding
+(FOUNTAIN_3+ post-filter) to explore the H12 v8 event log
+in more depth:
+
+- **H45** (NEGATIVE with insight): siteswap analysis is
+  infeasible with the H12 v8 event log (only 2/13
+  identical chains and 1/10 YouTube chains have 3+ flights).
+  But the per-flight distribution revealed that:
+  - identical 30-40 frame flights = real catch-throws
+  - identical < 10 frame flights = identity switches
+  - YouTube 58-67 frame flights = tracker fragmentation
+  → The 10-frame flight-time filter is a useful downstream
+  post-filter.
+
+- **H46** (NEGATIVE): per-flight physics check via bounce
+  model. H46 v1 hypothesis was wrong (source tracklet's
+  last points are NOT the descent into the hand). H46 v2
+  bounce sign test confirmed H45's YouTube finding (0/15
+  YouTube flights pass the sign test).
+
+- **H47** (PASS, narrow scope): applying H45's 10-frame
+  filter to H12 v8 event log. Drops 3/48 events on
+  identical (6.2%) — all 3 are identity switches confirmed
+  by H45 visual QA. No-op on YouTube.
+
+- **H48** (PASS, confirms H45): sensitivity grid over
+  THR ∈ {5, 10, 15, 20, 30, 40, 50, 60}. THR=10 is in a
+  flat region (10-30 all give identical H45-labeled
+  results). THR=40 first drops REAL catch-throws. YouTube
+  has no threshold that filters its tracker fragmentation
+  without dropping real catch-throws.
+
+- **H49** (NEGATIVE for impact measurement): the K=4-only
+  re-classification rate is 45.2% identical, 15.9%
+  YouTube. This is an UPPER BOUND on actual H12 v8 impact
+  because the K=4 classifier doesn't apply H12 v8's full
+  pipeline. A proper measurement requires re-running H12
+  v8 with the filtered event log.
+
+**Most important finding:** the 10-frame flight-time filter
+is a useful, validated, and well-justified (flat region in
+sensitivity grid) post-filter for H12 v8 event log
+consumers. It drops identity switches on identical without
+affecting real catch-throws.

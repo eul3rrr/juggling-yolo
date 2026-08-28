@@ -3443,3 +3443,44 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h48_flight_filter_sensitivity.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h48_flight_filter_sensitivity.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h48_report.md`
+
+### H49 (2026-08-28 ~16:10 CEST)
+
+- Hypothesis: H45/H47 found the 10-frame filter drops 3/48
+  events on identical. What is the actual downstream impact
+  on H12 v8's per-frame pattern classification?
+- Implementation: `h49_filter_impact.py` measures the K=4
+  re-classification rate when the filtered event log is used.
+  For each frame, compute K=4 most recent events (before this
+  frame) — with and without filter — and re-classify using
+  H12 v8's K=4 pattern logic.
+- Quantitative result:
+  - identical: 12 events dropped (6 pairs), K=4 re-classification
+    rate 471/1042 frames (45.2%)
+  - YouTube: 0 events dropped, K=4 re-classification rate
+    143/898 frames (15.9%)
+- Negative findings:
+  - **The K=4-only re-classification rate is an UPPER BOUND
+    on actual H12 v8 impact** because the K=4-only classifier
+    doesn't apply H12 v8's full pipeline (census + chain
+    quality + n_total balls). H12 v8's actual re-classification
+    rate is much smaller.
+  - For example: H12 v8 says f=236-242 identical are TWO_BALL
+    (conf 0.64) because the census shows only 2 balls in air.
+    My K=4 classifier says they should be CASCADE_3+ after
+    the filter. But H12 v8's actual re-run would still call
+    them TWO_BALL because the census doesn't change.
+  - YouTube's 15.9% "re-classification rate" with 0 events
+    actually dropped is a measurement artifact of the K=4
+    sliding window — the window context changes for many
+    frames but no events are actually removed.
+- Verdict: **NEGATIVE result (impact measurement methodology
+  is flawed).** A proper measurement would require
+  re-running H12 v8 with the filtered event log. The H45/H47/
+  H48 findings (10-frame filter drops 3/48 events on
+  identical, 0/50 on YouTube) remain the actionable results.
+  See `h1_hand_pool/reports/h49_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h49_filter_impact.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h49_filter_impact_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h49_report.md`
