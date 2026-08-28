@@ -1,0 +1,212 @@
+{
+  "identical_balls_trick_000_018_263_312": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.5524,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.66,
+    "mean_R": 0.6
+  },
+  "identical_balls_trick_000_018_411_450": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.7100000000000001,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.45,
+    "mean_R": 0.25
+  },
+  "identical_balls_trick_000_018_549_578": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.5038265306122449,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.14285714285714285,
+    "mean_R": 0.5357142857142857
+  },
+  "identical_balls_trick_000_018_631_669": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "FOUNTAIN",
+    "var": 0.6048652202498357,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8205128205128205,
+    "mean_R": 0.6153846153846154
+  },
+  "identical_balls_trick_000_018_685_716": {
+    "pattern": "CASCADE_3+",
+    "gt_verdict": "MANIPULATION",
+    "var": 0.3740234375,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.84375,
+    "mean_R": 0.625
+  },
+  "identical_balls_trick_000_018_733_766": {
+    "pattern": "CASCADE_3+",
+    "gt_verdict": "STATIC_HOLD",
+    "var": 0.15234375,
+    "unique_LR": 2,
+    "unique_L": 1,
+    "unique_R": 2,
+    "mean_L": 1.0,
+    "mean_R": 0.8125
+  },
+  "identical_balls_trick_000_018_890_936": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "OTHER_CROSSED_ARM",
+    "var": 0.5728395061728394,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.6444444444444445,
+    "mean_R": 0.5777777777777777
+  },
+  "identical_balls_trick_000_018_977_1011": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "FOUNTAIN",
+    "var": 0.28719723183391005,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.4117647058823529,
+    "mean_R": 0.9411764705882353
+  },
+  "identical_balls_trick_000_018_1029_1049": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "OTHER_STATIC_HOLD",
+    "var": 0.3545706371191136,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.5789473684210527,
+    "mean_R": 0.8947368421052632
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": {
+    "pattern": "MIXED_3+_UNCONFIRMED",
+    "gt_verdict": "STATIC_DEMO",
+    "var": 0.12244897959183673,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8714285714285714,
+    "mean_R": 0.9857142857142858
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING_STARTUP",
+    "var": 0.20381268547859765,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8723404255319149,
+    "mean_R": 0.900709219858156
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.0,
+    "unique_LR": 1,
+    "unique_L": 1,
+    "unique_R": 1,
+    "mean_L": 1.0,
+    "mean_R": 1.0
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.5702393340270551,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8064516129032258,
+    "mean_R": 0.7419354838709677
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "FOUNTAIN",
+    "var": 0.21219135802469136,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8611111111111112,
+    "mean_R": 0.9444444444444444
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.15432098765432098,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.9722222222222222,
+    "mean_R": 0.9166666666666666
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.20048374092985755,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8524590163934426,
+    "mean_R": 0.9344262295081968
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "STATIC_HOLD",
+    "var": 0.1339180828569191,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.9911504424778761,
+    "mean_R": 0.8495575221238938
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.21990837151187004,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.7959183673469388,
+    "mean_R": 0.8775510204081632
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.30801248699271594,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.8387096774193549,
+    "mean_R": 0.5806451612903226
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": {
+    "pattern": "FOUNTAIN_3+",
+    "gt_verdict": "CASCADE_REAL",
+    "var": 0.1990114464099896,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.9354838709677419,
+    "mean_R": 0.7903225806451613
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": {
+    "pattern": "MIXED_3+",
+    "gt_verdict": "JUGGLING",
+    "var": 0.2326869806094183,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "mean_L": 0.7631578947368421,
+    "mean_R": 0.868421052631579
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "identical_balls_trick_000_018_631_669": {
+    "verdict": "FOUNTAIN",
+    "var": 0.6049,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_685_716": {
+    "verdict": "MANIPULATION",
+    "var": 0.374,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_733_766": {
+    "verdict": "STATIC_HOLD",
+    "var": 0.1523,
+    "unique_LR": 2,
+    "unique_L": 1,
+    "unique_R": 2,
+    "h74v3_rejects": true
+  },
+  "identical_balls_trick_000_018_890_936": {
+    "verdict": "OTHER_CROSSED_ARM",
+    "var": 0.5728,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_977_1011": {
+    "verdict": "FOUNTAIN",
+    "var": 0.2872,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_1029_1049": {
+    "verdict": "OTHER_STATIC_HOLD",
+    "var": 0.3546,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_263_312": {
+    "verdict": "JUGGLING",
+    "var": 0.5524,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_411_450": {
+    "verdict": "JUGGLING",
+    "var": 0.71,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "identical_balls_trick_000_018_549_578": {
+    "verdict": "JUGGLING",
+    "var": 0.5038,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": {
+    "verdict": "FOUNTAIN",
+    "var": 0.2122,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+    "verdict": "STATIC_HOLD",
+    "var": 0.1339,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": true
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": {
+    "verdict": "CASCADE_REAL",
+    "var": 0.199,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": true
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": {
+    "verdict": "STATIC_DEMO",
+    "var": 0.1224,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": true
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": {
+    "verdict": "JUGGLING_STARTUP",
+    "var": 0.2038,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": {
+    "verdict": "JUGGLING",
+    "var": 0.0,
+    "unique_LR": 1,
+    "unique_L": 1,
+    "unique_R": 1,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": {
+    "verdict": "JUGGLING",
+    "var": 0.5702,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": {
+    "verdict": "JUGGLING",
+    "var": 0.1543,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": true
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": {
+    "verdict": "JUGGLING",
+    "var": 0.2005,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": {
+    "verdict": "JUGGLING",
+    "var": 0.2199,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": {
+    "verdict": "JUGGLING",
+    "var": 0.308,
+    "unique_LR": 3,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": {
+    "verdict": "JUGGLING",
+    "var": 0.2327,
+    "unique_LR": 2,
+    "unique_L": 2,
+    "unique_R": 2,
+    "h74v3_rejects": false
+  }
+}

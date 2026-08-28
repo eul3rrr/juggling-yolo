@@ -1,0 +1,436 @@
+{
+  "n_total": 113,
+  "n_no_tid": 0,
+  "n_no_phase": 98,
+  "full": {
+    "label": "H85 full (113 pairs)",
+    "n_total": 113,
+    "n_correct": 71,
+    "n_wrong": 42,
+    "TP": 46,
+    "FP": 1,
+    "FN": 25,
+    "TN": 41,
+    "precision": 0.9787,
+    "recall": 0.6479,
+    "FPR": 0.0238
+  },
+  "by_gap": {
+    "gap<=0": {
+      "label": "gap<=0",
+      "n_total": 14,
+      "n_correct": 8,
+      "n_wrong": 6,
+      "TP": 6,
+      "FP": 0,
+      "FN": 2,
+      "TN": 6,
+      "precision": 1.0,
+      "recall": 0.75,
+      "FPR": 0.0
+    },
+    "gap<=1": {
+      "label": "gap<=1",
+      "n_total": 20,
+      "n_correct": 12,
+      "n_wrong": 8,
+      "TP": 9,
+      "FP": 0,
+      "FN": 3,
+      "TN": 8,
+      "precision": 1.0,
+      "recall": 0.75,
+      "FPR": 0.0
+    },
+    "gap<=3": {
+      "label": "gap<=3",
+      "n_total": 47,
+      "n_correct": 33,
+      "n_wrong": 14,
+      "TP": 24,
+      "FP": 0,
+      "FN": 9,
+      "TN": 14,
+      "precision": 1.0,
+      "recall": 0.7273,
+      "FPR": 0.0
+    },
+    "gap<=10": {
+      "label": "gap<=10",
+      "n_total": 113,
+      "n_correct": 71,
+      "n_wrong": 42,
+      "TP": 46,
+      "FP": 1,
+      "FN": 25,
+      "TN": 41,
+      "precision": 0.9787,
+      "recall": 0.6479,
+      "FPR": 0.0238
+    }
+  },
+  "per_stem": {
+    "ident": {
+      "label": "ident",
+      "n_total": 85,
+      "n_correct": 45,
+      "n_wrong": 40,
+      "TP": 27,
+      "FP": 1,
+      "FN": 18,
+      "TN": 39,
+      "precision": 0.9643,
+      "recall": 0.6,
+      "FPR": 0.025
+    },
+    "youtu": {
+      "label": "youtu",
+      "n_total": 28,
+      "n_correct": 26,
+      "n_wrong": 2,
+      "TP": 19,
+      "FP": 0,
+      "FN": 7,
+      "TN": 2,
+      "precision": 1.0,
+      "recall": 0.7308,
+      "FPR": 0.0
+    }
+  },
+  "disagreements": {
+    "h77_kept_but_h85_rejects": 0,
+    "h85_keeps_but_h77_rejects": 47,
+    "new_fn": [],
+    "new_tp": [
+      [
+        "identical_balls_trick_000_018",
+        3,
+        8,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        5,
+        6,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        7,
+        10,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        19,
+        20,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        21,
+        22,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        22,
+        27,
+        "wrong",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        23,
+        25,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        28,
+        29,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        29,
+        34,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        30,
+        33,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        31,
+        36,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        35,
+        37,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        37,
+        40,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        38,
+        39,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        39,
+        47,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        40,
+        41,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        41,
+        43,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        43,
+        45,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        45,
+        46,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        50,
+        55,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        51,
+        52,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        59,
+        61,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        60,
+        64,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        62,
+        66,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        64,
+        68,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        67,
+        70,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        68,
+        71,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "identical_balls_trick_000_018",
+        70,
+        74,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        1,
+        9,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        2,
+        8,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        4,
+        18,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        9,
+        13,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        11,
+        14,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        13,
+        16,
+        "correct",
+        "KEPT"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        14,
+        17,
+        "correct",
+        "KEPT"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        15,
+        25,
+        "correct",
+        "KEPT"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        18,
+        30,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        20,
+        21,
+        "correct",
+        "KEPT"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        21,
+        29,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        22,
+        26,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        25,
+        33,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        26,
+        31,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        27,
+        28,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        28,
+        32,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        29,
+        34,
+        "correct",
+        "NO_PHASE"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        31,
+        35,
+        "correct",
+        "KEPT"
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        35,
+        38,
+        "correct",
+        "KEPT"
+      ]
+    ]
+  }
+}
