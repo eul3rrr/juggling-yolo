@@ -1,0 +1,294 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "v2_event_log": {
+        "pct": {
+          "TWO_BALL": 25.069637883008358,
+          "MIXED_3+_UNCONFIRMED": 6.128133704735376,
+          "SINGLE_BALL": 20.33426183844011,
+          "MIXED_3+": 29.340761374187558,
+          "NO_BALL": 3.2497678737233056,
+          "FOUNTAIN_3+": 15.506035283194057,
+          "TWO_BALL_ONE_HAND": 0.3714020427112349
+        },
+        "counts": {
+          "TWO_BALL": 270,
+          "MIXED_3+_UNCONFIRMED": 66,
+          "SINGLE_BALL": 219,
+          "MIXED_3+": 316,
+          "NO_BALL": 35,
+          "FOUNTAIN_3+": 167,
+          "TWO_BALL_ONE_HAND": 4
+        },
+        "n_substantial_phases": 13,
+        "late_pct": {
+          "FOUNTAIN_3+": 71.42857142857143,
+          "TWO_BALL": 14.285714285714286,
+          "SINGLE_BALL": 8.695652173913043,
+          "TWO_BALL_ONE_HAND": 0.6211180124223602,
+          "NO_BALL": 4.968944099378882
+        }
+      },
+      "v4_instantaneous": {
+        "pct": {
+          "TWO_BALL": 25.069637883008358,
+          "FOUNTAIN_3+_DETECTOR": 23.491179201485608,
+          "CASCADE_3+_DETECTOR": 15.877437325905293,
+          "SINGLE_BALL": 20.33426183844011,
+          "NO_BALL": 4.735376044568246,
+          "MIXED_3+": 10.492107706592387
+        },
+        "counts": {
+          "TWO_BALL": 270,
+          "FOUNTAIN_3+_DETECTOR": 253,
+          "CASCADE_3+_DETECTOR": 171,
+          "SINGLE_BALL": 219,
+          "NO_BALL": 51,
+          "MIXED_3+": 113
+        },
+        "n_substantial_phases": 5,
+        "late_pct": {
+          "NO_BALL": 7.453416149068323,
+          "CASCADE_3+_DETECTOR": 31.677018633540374,
+          "FOUNTAIN_3+_DETECTOR": 37.88819875776397,
+          "TWO_BALL": 14.285714285714286,
+          "SINGLE_BALL": 8.695652173913043
+        }
+      },
+      "v5_smoothed_W10": {
+        "pct": {
+          "TWO_BALL": 25.44103992571959,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 25.998142989786444,
+          "SINGLE_BALL": 20.33426183844011,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 13.09192200557103,
+          "NO_BALL": 3.2497678737233056,
+          "MIXED_3+_UNCONFIRMED": 11.884865366759517
+        },
+        "counts": {
+          "TWO_BALL": 274,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 280,
+          "SINGLE_BALL": 219,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 141,
+          "NO_BALL": 35,
+          "MIXED_3+_UNCONFIRMED": 128
+        },
+        "n_substantial_phases": 7,
+        "late_pct": {
+          "CASCADE_3+_DETECTOR_SMOOTHED": 32.91925465838509,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 38.50931677018634,
+          "TWO_BALL": 14.906832298136646,
+          "SINGLE_BALL": 8.695652173913043,
+          "NO_BALL": 4.968944099378882
+        }
+      },
+      "cascade_pct": {
+        "v2": 0,
+        "v4": 15.877437325905293,
+        "v5": 13.09192200557103
+      },
+      "fountain_pct": {
+        "v2": 15.506035283194057,
+        "v4": 23.491179201485608,
+        "v5": 25.998142989786444
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "v2_event_log": {
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "counts": {
+          "MIXED_3+_UNCONFIRMED": 898
+        },
+        "n_substantial_phases": 1,
+        "late_pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        }
+      },
+      "v4_instantaneous": {
+        "pct": {
+          "MIXED_3+": 0.111358574610245,
+          "CASCADE_3+_DETECTOR": 98.10690423162583,
+          "FOUNTAIN_3+_DETECTOR": 1.55902004454343,
+          "NO_BALL": 0.22271714922049
+        },
+        "counts": {
+          "MIXED_3+": 1,
+          "CASCADE_3+_DETECTOR": 881,
+          "FOUNTAIN_3+_DETECTOR": 14,
+          "NO_BALL": 2
+        },
+        "n_substantial_phases": 9,
+        "late_pct": {
+          "CASCADE_3+_DETECTOR": 90.0,
+          "FOUNTAIN_3+_DETECTOR": 10.0
+        }
+      },
+      "v5_smoothed_W10": {
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 0.111358574610245,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 99.77728285077951,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 0.111358574610245
+        },
+        "counts": {
+          "MIXED_3+_UNCONFIRMED": 1,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+        },
+        "n_substantial_phases": 1,
+        "late_pct": {
+          "CASCADE_3+_DETECTOR_SMOOTHED": 90.0,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 10.0
+        }
+      },
+      "cascade_pct": {
+        "v2": 0,
+        "v4": 98.10690423162583,
+        "v5": 99.77728285077951
+      },
+      "fountain_pct": {
+        "v2": 0,
+        "v4": 1.55902004454343,
+        "v5": 0.111358574610245
+      }
+    }
+  },
+  "sensitivity": {
+    "5": {
+      "identical_balls_trick_000_018": {
+        "pct": {
+          "TWO_BALL": 25.44103992571959,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 24.88393686165274,
+          "SINGLE_BALL": 20.33426183844011,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 14.948932219127204,
+          "NO_BALL": 3.2497678737233056,
+          "MIXED_3+_UNCONFIRMED": 11.142061281337048
+        },
+        "counts": {
+          "TWO_BALL": 274,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 268,
+          "SINGLE_BALL": 219,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 161,
+          "NO_BALL": 35,
+          "MIXED_3+_UNCONFIRMED": 120
+        },
+        "n_frames": 1077
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 0.111358574610245,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 99.77728285077951,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 0.111358574610245
+        },
+        "counts": {
+          "MIXED_3+_UNCONFIRMED": 1,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+        },
+        "n_frames": 898
+      }
+    },
+    "10": {
+      "identical_balls_trick_000_018": {
+        "pct": {
+          "TWO_BALL": 25.44103992571959,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 25.998142989786444,
+          "SINGLE_BALL": 20.33426183844011,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 13.09192200557103,
+          "NO_BALL": 3.2497678737233056,
+          "MIXED_3+_UNCONFIRMED": 11.884865366759517
+        },
+        "counts": {
+          "TWO_BALL": 274,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 280,
+          "SINGLE_BALL": 219,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 141,
+          "NO_BALL": 35,
+          "MIXED_3+_UNCONFIRMED": 128
+        },
+        "n_frames": 1077
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 0.111358574610245,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 99.77728285077951,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 0.111358574610245
+        },
+        "counts": {
+          "MIXED_3+_UNCONFIRMED": 1,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+        },
+        "n_frames": 898
+      }
+    },
+    "20": {
+      "identical_balls_trick_000_018": {
+        "pct": {
+          "TWO_BALL": 25.44103992571959,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 29.99071494893222,
+          "SINGLE_BALL": 20.33426183844011,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 10.770659238625813,
+          "NO_BALL": 3.2497678737233056,
+          "MIXED_3+_UNCONFIRMED": 10.21355617455896
+        },
+        "counts": {
+          "TWO_BALL": 274,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 323,
+          "SINGLE_BALL": 219,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 116,
+          "NO_BALL": 35,
+          "MIXED_3+_UNCONFIRMED": 110
+        },
+        "n_frames": 1077
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 0.111358574610245,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 99.77728285077951,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 0.111358574610245
+        },
+        "counts": {
+          "MIXED_3+_UNCONFIRMED": 1,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+        },
+        "n_frames": 898
+      }
+    },
+    "30": {
+      "identical_balls_trick_000_018": {
+        "pct": {
+          "TWO_BALL": 25.44103992571959,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 31.662024141132775,
+          "SINGLE_BALL": 20.33426183844011,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 8.72794800371402,
+          "NO_BALL": 3.2497678737233056,
+          "MIXED_3+_UNCONFIRMED": 10.584958217270195
+        },
+        "counts": {
+          "TWO_BALL": 274,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 341,
+          "SINGLE_BALL": 219,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 94,
+          "NO_BALL": 35,
+          "MIXED_3+_UNCONFIRMED": 114
+        },
+        "n_frames": 1077
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 0.111358574610245,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 99.77728285077951,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 0.111358574610245
+        },
+        "counts": {
+          "MIXED_3+_UNCONFIRMED": 1,
+          "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+          "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+        },
+        "n_frames": 898
+      }
+    }
+  }
+}

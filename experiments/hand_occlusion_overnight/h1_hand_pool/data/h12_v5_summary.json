@@ -1,0 +1,36 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total_frames": 1077,
+      "pattern_counts": {
+        "TWO_BALL": 274,
+        "FOUNTAIN_3+_DETECTOR_SMOOTHED": 280,
+        "SINGLE_BALL": 219,
+        "CASCADE_3+_DETECTOR_SMOOTHED": 141,
+        "NO_BALL": 35,
+        "MIXED_3+_UNCONFIRMED": 128
+      },
+      "pct_patterns": {
+        "TWO_BALL": 25.44103992571959,
+        "FOUNTAIN_3+_DETECTOR_SMOOTHED": 25.998142989786444,
+        "SINGLE_BALL": 20.33426183844011,
+        "CASCADE_3+_DETECTOR_SMOOTHED": 13.09192200557103,
+        "NO_BALL": 3.2497678737233056,
+        "MIXED_3+_UNCONFIRMED": 11.884865366759517
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_total_frames": 898,
+      "pattern_counts": {
+        "MIXED_3+_UNCONFIRMED": 1,
+        "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+        "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+      },
+      "pct_patterns": {
+        "MIXED_3+_UNCONFIRMED": 0.111358574610245,
+        "CASCADE_3+_DETECTOR_SMOOTHED": 99.77728285077951,
+        "FOUNTAIN_3+_DETECTOR_SMOOTHED": 0.111358574610245
+      }
+    }
+  }
+}

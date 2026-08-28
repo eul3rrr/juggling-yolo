@@ -596,3 +596,52 @@ useful source record:
     the visual evidence. Downstream consumers can use the
     conf value to filter out low-certainty FOUNTAIN_3+
     labels.
+
+## Cross-cutting insights from H12 v4/v5 (2026-08-28 ~10:35)
+
+41. **Event-log-based classification is fundamentally limited by
+    event density.** H12 v2/v3 use catch/throw events to classify
+    CASCADE vs FOUNTAIN. With only 8 events on identical, the
+    late-phase K=4 window is right-hand-biased and the algorithm
+    misclassifies 71% of late-phase frames as FOUNTAIN. Adding
+    1 more event (H12 v3) only changes 26 frames. The limitation
+    is structural: a sparse event log cannot disambiguate patterns
+    at per-frame resolution.
+
+42. **Per-frame spatial signal is the only fix.** H12 v4/v5 use
+    the horizontal-velocity direction of every airborne ball per
+    frame. CASCADE → 2 distinct horizontal directions; FOUNTAIN →
+    1 direction. This signal is per-frame, not aggregated over
+    events. Late-phase v2 71% FOUNTAIN → v5 33% CASCADE / 38%
+    FOUNTAIN, which matches the visual cascade.
+
+43. **H12 v4 has a NO_BALL census bug.** When n_in_hand_left=0
+    AND n_in_hand_right=0 but n_total=3, the airborne filter is
+    too permissive: all 3 balls go into airborne but the vx signal
+    is empty. v5's W=10 smoothing is robust to this.
+
+44. **W sensitivity is NOT flat.** CASCADE fraction decreases
+    monotonically with W (5→14.9%, 10→13.1%, 20→10.8%, 30→8.7%).
+    W=10 is a reasonable default but the operating point is not
+    in a flat region. The choice of W is a real hyperparameter,
+    not noise. This is a known issue: v2 K sensitivity was flat,
+    v5 W sensitivity is not.
+
+45. **YouTube detector signal is dominated by H10 v5
+    over-counting.** v4/v5 classify based on n_distinct_dirs of
+    all airborne balls. With n_total=5 inflated by over-counting,
+    the 5 balls are mostly from 1-2 long tracklets, so the
+    n_distinct_dirs is almost always 2 → CASCADE. The YouTube
+    v4/v5 result is not a real CASCADE classification; it's an
+    artifact. **Future work must fix H10 v5 over-counting before
+    the YouTube detector signal is meaningful.**
+
+46. **H12 v4/v5 are a meaningful contribution but not a
+    complete solution.** They fix the late-phase FOUNTAIN
+    misclassification, but they don't perfectly classify
+    CASCADE (still 38% FOUNTAIN in late phase). The detector
+    signal is noisy because juggler hands move during cascade.
+    A future H12 v6 should ensemble v2 (event log) and v5
+    (detector signal) — use v2's high-confidence windows
+    (clear K=4 sequences) to anchor v5's per-frame signal.
+

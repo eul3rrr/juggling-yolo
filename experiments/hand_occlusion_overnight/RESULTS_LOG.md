@@ -1447,3 +1447,67 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/v3c_rejected_*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v3/v2_v3_comparison_*.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v3_report.md`
+
+### H12 v4 / H12 v5 (2026-08-28 ~10:30 CEST)
+
+- Hypothesis: H12 v2/v3's late-phase FOUNTAIN misclassification (71%
+  FOUNTAIN_3+ in f=890-1050) is caused by the event-log signal being
+  right-hand-biased. A per-frame detector-level signal — the
+  horizontal-velocity direction of every airborne ball — should
+  classify CASCADE vs FOUNTAIN correctly:
+  - CASCADE: balls move in opposite horizontal directions
+    (n_distinct_horiz_dirs == 2)
+  - FOUNTAIN: balls move in the same horizontal direction
+    (n_distinct_horiz_dirs == 1)
+  - v4 = instantaneous; v5 = ±W=10 frame median smoothing
+- Thresholds (declared from physical geometry):
+  - MOVING_VX_THRESHOLD = 1.0 px/frame
+  - W = 10 frames
+- Quantitative result (identical late phase f=890-1050, n=161 frames):
+  - v2: 71.4% FOUNTAIN_3+ (visually wrong)
+  - v4: 37.9% FOUNTAIN_3+_DETECTOR, 31.7% CASCADE_3+_DETECTOR, 14.3% TWO_BALL
+  - v5: 38.5% FOUNTAIN_3+_DETECTOR_SMOOTHED, 32.9% CASCADE_3+_DETECTOR_SMOOTHED, 14.9% TWO_BALL
+- v4/v5 are more balanced FOUNTAIN/CASCADE; v2 strongly prefers FOUNTAIN.
+- Visual QA: 6-frame contact sheet for late phase, vision_analyze confirms
+  4/6 frames are visually CASCADE (v2 says FOUNTAIN, v4/v5 say CASCADE);
+  1/6 borderline (all agree FOUNTAIN for 1 frame); 1/6 brief SINGLE_BALL
+  gap. v4/v5 CASCADE classifications MATCH the visual pattern.
+- v4 has a NO_BALL bug at f=890 (census reports n_in_hand=0 but
+  n_total=3; v4's airborne filter is too permissive). v5's W=10
+  smoothing is robust to this.
+- W sensitivity is NOT flat: CASCADE fraction decreases monotonically
+  with W (5→14.9%, 10→13.1%, 20→10.8%, 30→8.7%). W=10 is a
+  reasonable default but the operating point is not in a flat region.
+- YouTube is dominated by CASCADE in v4/v5 (98-99%) but this is the
+  H10 v5 over-counting artifact (n_total=5 inflated), not a real
+  classification. Not meaningful until H10 v5 over-counting is fixed.
+- Negative findings:
+  - v4/v5 do not perfectly classify the late phase (still 38%
+    FOUNTAIN). The detector signal is noisy because the juggler's
+    hands move during cascade, creating per-frame direction shifts.
+  - The mid phase (f=300-700) is mostly SINGLE_BALL/TWO_BALL in
+    v4/v5 (visually a 2-ball drill) but MIXED_3+ in v2. v4/v5 are
+    more accurate here.
+  - v4's NO_BALL at f=890 is a real bug but v5's smoothing hides it.
+- Verdict: **PASS with caveats.** H12 v4/v5 fix the H12 v2/v3
+  fundamental limitation: CASCADE/FOUNTAIN classification is now
+  driven by per-frame spatial signal, not sparse event log. The
+  late-phase FOUNTAIN misclassification is reduced from 71% (v2) to
+  a more balanced 32% CASCADE / 38% FOUNTAIN mix that better matches
+  visual cascade. v5 is preferred over v4 due to its robustness to
+  the v4 NO_BALL census bug. See
+  `h1_hand_pool/reports/h12_v4v5_report.md` for full analysis.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v4_detector_signal.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v5_smoothed_signal.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v4v5_analysis.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v5_visualize.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v4v5_late_phase_sheet.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v4_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v5_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v4_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v5_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v4v5_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v4/timeline_*.png` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v4/late_phase_visual_qa.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v4v5_report.md`

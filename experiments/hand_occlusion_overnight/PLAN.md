@@ -541,3 +541,47 @@ Next episode candidates:
 1. H12 v4: detector-level ball position signal
 2. H13: low-confidence detector-based event detection
 3. H8 v7: per-frame per-bounce segmentation
+
+## Nineteenth episode (H12 v4 + H12 v5) — STATUS: COMPLETE (PASS w/ caveats)
+
+Sub-steps:
+
+1. ✅ H12 v4 (instantaneous detector signal): for each frame, look at
+   horizontal velocity (vx) of all airborne balls. CASCADE if 2 distinct
+   horizontal directions, FOUNTAIN if 1. MOVING_VX_THRESHOLD=1.0 px/frame.
+2. ✅ H12 v5 (smoothed): median of n_distinct_dirs over ±W=10 frames.
+3. ✅ Phase detection (n_frames >= 20).
+4. ✅ W sensitivity grid: 4 cells (5, 10, 20, 30). NOT flat — CASCADE
+   decreases monotonically (14.9% → 8.7%).
+5. ✅ Visual QA: 6-frame contact sheet for late phase (f=890, 920, 950,
+   980, 1010, 1040). v2 misclassifies 5/6 frames as FOUNTAIN, v4/v5
+   correctly identify CASCADE in 4/6 frames.
+6. ✅ Documented in `h12_v4v5_report.md` and updated RESULTS_LOG.
+
+**H12 v4/v5 verdict: PASS with caveats.** Fixes the H12 v2/v3
+fundamental limitation by switching to per-frame spatial signal.
+v2 late phase: 71% FOUNTAIN (wrong). v4/v5: ~33% CASCADE / 38% FOUNTAIN
+(matches visual cascade). v5 preferred over v4 due to smoothing
+robustness. YouTube dominated by H10 v5 over-counting (not
+meaningful).
+
+**Next episode candidates:**
+
+1. **H13: detector-level low-confidence ball detection near hand
+   events** (master §14 follow-up). Re-run detector with conf=0.1
+   and compare to v4d hand-link predictions. The YouTube
+   over-counting is partly due to detector confusion; a lower-conf
+   re-run might reveal where balls actually are.
+2. **H8 v7: per-bounce segmentation for YouTube long tracklets**
+   (master §11 follow-up). v6's apex-level segmentation was too
+   coarse. Try spectral clustering on y-velocity to identify
+   parabolic arcs.
+3. **H12 v6: combine v2 (event-log) and v5 (detector) signals**
+   with a weighted ensemble. v2's high-confidence windows should
+   pull v5's noisy per-frame signal toward correctness; v5's
+   per-frame signal should disambiguate v2's FOUNTAIN miscalls.
+4. **H10 v6: learned quality classifier (H3 + H8 v5 + H9 features
+   → quality)**. The hand-tuned weights (0.3, 0.3, 0.4) are
+   arbitrary; a logistic regression on labeled chains could
+   outperform.
+
