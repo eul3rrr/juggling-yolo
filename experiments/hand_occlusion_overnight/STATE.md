@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 06:00 CEST
-STATUS: H1 v4 + H2 + v5 sens grid + H3 + H4 + H5 + H6 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost).
+LAST_UPDATE: 2026-08-28 06:50 CEST
+STATUS: H7 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible).
 
 ## Isolation
 
@@ -168,20 +168,23 @@ extraction: 10 identical + 1 youtube links with visual precision
 
 ## Next action
 
-1. **Integrate H3 + H2 + H6 into a unified chain
-   representation.** Add h3_confirmed per H2 link and
-   apply H6's conflict resolution. The resulting
-   representation is the most informative possible:
-   v4d hand-links + E6c air-edges + H3 confirmation
-   + H6 conflict resolution.
-2. **H7: full min-cost flow** with capacity
-   constraints (one predecessor + one successor per
-   tracklet) using networkx.
+1. ~~**Integrate H3 + H2 + H6 into a unified chain
+   representation.**~~ **DONE** as `h237_unified_chain.py`. Most
+   informative possible: v4d hand-links + E6c air-edges + H3
+   confirmations + H7 conflict resolution. See
+   `data/h237_unified_chains_*.csv` and
+   `data/h237_unified_edges_*.csv`.
+2. ~~**H7: full min-cost flow**~~ **DONE.** Capacity constraints,
+   cycle detection, gap/error-aware cost. Sensitivity grid is flat
+   (48 settings, identical results). Longest chain 7 on identical,
+   6 on YouTube. H7 resolves the H2 conflict the same way H6 does
+   (hand-edge wins on cost) but adds strict DAG-path semantics.
 3. **H8: learned "ball-ness" classifier** to filter
    out non-ball stationary features (the H4 failure
    mode). Would require a small training set.
 4. **H9: explicit object permanence** to bridge
-   detector dropouts in H2 chains.
+   detector dropouts in H2/H7 chains.
+5. **H10: literature search** for new ideas from web.
 
 ## Important artifact paths
 

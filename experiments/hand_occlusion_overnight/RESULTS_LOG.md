@@ -463,3 +463,91 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h6_report.md`
 
 ---
+
+### H7 (2026-08-28 ~06:50 CEST)
+
+- Hypothesis: a principled min-cost flow with capacity constraints
+  (one predecessor + one successor per tracklet) and a gap/error-aware
+  air-edge cost will resolve the 1 H2 conflict (tracklet 3 → {9, 8})
+  AND produce strict DAG-path-based chains (vs H2's union-find
+  connected components). The cost function should be robust to
+  perturbations of the air-edge penalty terms.
+
+- Thresholds (declared from physical geometry, not from manual labels):
+  - HAND_EDGE_COST = 1.0
+  - AMBIGUOUS_HAND_EDGE_COST = 1.5
+  - AIR_EDGE_BASE_COST = 2.0
+  - AIR_ERR_SCALE = 0.05 (per unit trajectory_fit_error)
+  - AIR_GAP_SCALE = 0.1 (per frame time gap)
+
+- Algorithm: greedy iterative min-cost flow with capacity constraints,
+  cycle detection, and gap/error-aware cost. Pure-Python (no
+  scipy/networkx).
+
+- Quantitative result:
+
+| Video | Method | n_chains | n_multi | longest | conflicts |
+|---|---|---|---|---|---|
+| identical | H2 (union-find) | 40 | 15 | 8 (component) | 1 |
+| identical | H6 (per-source greedy) | 18 | 17 | 7 (path) | 0 |
+| identical | **H7 (greedy + capacity)** | **43** | **17** | **7 (path)** | **0** |
+| YouTube | H2 (union-find) | 13 | 9 | 8 (component) | 0 |
+| YouTube | H6 (per-source greedy) | 11 | 11 | 7 (path) | 0 |
+| YouTube | **H7 (greedy + capacity)** | **15** | **10** | **6 (path)** | **0** |
+
+- Sensitivity grid: 48 cells (3 × 4 × 4) of (AIR_EDGE_BASE_COST,
+  AIR_ERR_SCALE, AIR_GAP_SCALE). **Perfectly flat** — every
+  setting produces identical results. The hand<air cost ordering
+  is the only thing that matters; the exact air-edge penalty is
+  irrelevant.
+
+- Visual QA:
+  - Tracklet-3 conflict: t8 confirmed as a DIFFERENT ball (224
+    pixels below t3's endpoint in y; t8 stays at y≈601 across
+    f=43-46 — likely a stationary object on a surface). t3→t9
+    confirmed as a real 20-frame hand-held catch-throw on the
+    image-left hand.
+  - Longest H7 chain on identical (35→37→40→41→43→45→46,
+    7 tids): confirmed as a real single-ball juggling cycle
+    (hold → release → rise → apex → fall → catch). y-coordinate
+    pattern: t35 y=520-548 (hold) → t40 y=406→344 (rising) →
+    t41/t43 y=343/322 (apex) → t45 y=313→389 (falling) →
+    t46 y=430→597 (caught).
+
+- H2+H3+H7 unified chain representation: built in
+  `h237_unified_chain.py`. Each edge has edge_type, cost,
+  h3_confirmed, metadata. Each chain has n_hand_edges, n_air_edges,
+  n_h3_confirmed, tids. Most informative possible chain
+  representation.
+
+- Negative findings:
+  - H7 doesn't reveal any new information beyond H6 for the
+    conflict resolution question (both pick t3→9 over t3→8).
+  - H7's edge ordering is invariant to the air-edge cost function
+    (sensitivity grid is flat). A future v5 could use a much
+    simpler "hand-edges first, then cheapest air-edge" formulation.
+  - H7's longest chain (7) is shorter than H2's longest (8), but
+    H2's 8 was a union-find connected component, not a strict path.
+
+- Verdict: **PASS.** H7 is the recommended chain combination method,
+  replacing H2 (union-find, conflicts unresolved) and H6 (per-source
+  greedy, no capacity constraints). H7's added value is the
+  *path semantics* (vs H2's connected components) and the
+  *principled cost formulation* (vs H6's per-source greedy).
+  See `h1_hand_pool/reports/h7_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h7_min_cost_flow.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h7_sens_grid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h7_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h237_unified_chain.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7_min_cost_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7_sens_grid.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7_admitted_edges_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7_chains_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237_unified_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237_unified_edges_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237_unified_chains_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h7/tracklet3_conflict_h7.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h7/longest_chain_h7.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h7_report.md`

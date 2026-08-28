@@ -1,0 +1,923 @@
+{
+  "base": {
+    "HAND_EDGE_COST": 1.0,
+    "AMBIGUOUS_HAND_EDGE_COST": 1.5,
+    "AIR_EDGE_BASE_COST": 2.0,
+    "AIR_ERR_SCALE": 0.05,
+    "AIR_GAP_SCALE": 0.1
+  },
+  "grid": [
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 9,
+        "longest": 7,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 1.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 9,
+        "longest": 7,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.0,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 9,
+        "longest": 7,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.0,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 16,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.05,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.1,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.0,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.05,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.1,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    },
+    {
+      "AIR_EDGE_BASE_COST": 2.5,
+      "AIR_ERR_SCALE": 0.2,
+      "AIR_GAP_SCALE": 0.2,
+      "identical_balls_trick_000_018": {
+        "n_admitted": 33,
+        "n_chains": 43,
+        "n_multi": 17,
+        "longest": 7,
+        "tracklet3_succ": 9
+      },
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+        "n_admitted": 25,
+        "n_chains": 15,
+        "n_multi": 10,
+        "longest": 6,
+        "tracklet3_succ": 6
+      }
+    }
+  ]
+}

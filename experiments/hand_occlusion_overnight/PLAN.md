@@ -221,19 +221,66 @@ formulation. A true min-cost flow with capacity
 constraints would be more principled but is
 unnecessary for this dataset (1 conflict).
 
-## Ninth episode — PLANNED
+## Ninth episode (H7 + H237) — STATUS: COMPLETE
 
-Sub-steps (lower priority; the lab is well-progressed
-on hand-occlusion work):
+Sub-steps:
 
-1. **H7: literature search.** If new ideas emerge
-   from web research, design a literature-derived
-   experiment.
-2. **H8: full min-cost flow** with capacity constraints
-   (one predecessor + one successor per tracklet) using
-   `networkx.min_cost_flow` or similar.
-3. **H9: H3 + H2 + H6 integration.** Produce a
-   unified chain representation that includes:
-   - H2's edge list (hand + air)
-   - H3's confirmation flags (h3_confirmed per link)
-   - H6's conflict resolutions (one successor per source)
+1. ✅ Implemented H7: greedy iterative min-cost
+   flow with capacity constraints (one predecessor
+   + one successor per tracklet), cycle detection,
+   and gap/error-aware air-edge cost. Pure-Python
+   (no scipy/networkx needed).
+2. ✅ Ran a 48-cell sensitivity grid sweeping
+   `AIR_EDGE_BASE_COST ∈ {1.5, 2.0, 2.5}` ×
+   `AIR_ERR_SCALE ∈ {0.0, 0.05, 0.10, 0.20}` ×
+   `AIR_GAP_SCALE ∈ {0.0, 0.05, 0.10, 0.20}`.
+   Grid is PERFECTLY FLAT: every setting produces
+   identical results. The hand<air cost ordering
+   is the only thing that matters.
+3. ✅ Built unified H2+H3+H7 chain representation
+   in `h237_unified_chain.py`. Each edge has
+   edge_type, cost, h3_confirmed, metadata. Each
+   chain has n_hand_edges, n_air_edges,
+   n_h3_confirmed, tids.
+4. ✅ Visual QA on the tracklet-3 conflict
+   contact sheet (with explicit (x,y) coordinates
+   on each tracklet point): t8 confirmed as a
+   DIFFERENT ball (224 pixels below t3's endpoint),
+   t3→t9 confirmed as a real 20-frame hand-held
+   catch-throw.
+5. ✅ Visual QA on the longest H7 chain
+   (35→37→40→41→43→45→46, 7 tids): confirmed as
+   a real single-ball juggling cycle (hold →
+   release → rise → apex → fall → catch).
+6. ✅ Documented H7 in `h7_report.md` and updated
+   RESULTS_LOG.
+
+**H7 verdict: PASS.** H7 is the recommended
+chain combination method, replacing H2 (union-find,
+conflicts unresolved) and H6 (per-source greedy,
+no capacity constraints). H7's added value is the
+*path semantics* (vs H2's connected components)
+and the *principled cost formulation* (vs H6's
+per-source greedy). For the practical question
+"what's the right successor for tracklet X?" H6
+and H7 give the same answer.
+
+## Tenth episode — PLANNED
+
+The lab is well-progressed on hand-occlusion work
+and the chain representation is now in good shape.
+Remaining ideas:
+
+1. **H8: literature search** for new ideas from
+   web. Most likely candidates: factor graphs,
+   physics-informed tracking, multi-hypothesis
+   tracking, learned appearance embeddings.
+2. **H9: explicit object permanence** to bridge
+   detector dropouts in H7 chains (e.g. extend
+   each tracklet by ±5 frames using a constant
+   velocity model when the detector is silent).
+3. **H10: chain quality assessment** — given a
+   chain, how confident should downstream consumers
+   be in its physical-ball identity? H3 + h3
+   confirmations could be combined with chain
+   length to produce a per-chain confidence score.
