@@ -1,0 +1,21 @@
+{
+  "n_total": 113,
+  "n_no_phase": 98,
+  "full": {
+    "label": "H88 full (113 pairs)",
+    "n_total": 113,
+    "n_correct": 71,
+    "n_wrong": 42,
+    "TP": 46,
+    "FP": 1,
+    "FN": 25,
+    "TN": 41,
+    "precision": 0.9787,
+    "recall": 0.6479,
+    "FPR": 0.0238
+  },
+  "disagreements": {
+    "h85_kept_but_h88_rejects": 0,
+    "h88_keeps_but_h85_rejects": 47
+  }
+}
