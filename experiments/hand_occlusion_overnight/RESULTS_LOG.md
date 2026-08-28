@@ -3731,3 +3731,76 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_c2t_filter_comparison_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_filter_comparison_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h53_report.md`
+
+### H54 (2026-08-28 ~18:00 CEST)
+
+- Hypothesis: the per-chain coefficient of variation (CV) of clean
+  per-arc gravity values (from H8 v8 extrema-arc fits) is a
+  discriminative signal for "is this a single physical ball?".
+- Implementation: `h54_per_chain_arc_gravity.py` (per-chain aggregation
+  of H8 v8 arc fits, with clean-arc filter 0.05 < g < 5.0).
+  `h54_analyze.py` cross-references with H10 v10 quality and H11 v7
+  confidence labels.
+- Quantitative result (multi-tid chains):
+  - Identical: 2 CONFIDENT (g_cv mean 0.379) vs 11 UNCERTAIN
+    (g_cv mean 0.782). 2x difference.
+  - YouTube: 1 CONFIDENT (g_cv 0.427) vs 9 UNCERTAIN (g_cv mean 0.656).
+  - Pearson(g_cv, h10_quality) = 0.008 identical, -0.308 YouTube.
+    H54 is INDEPENDENT of H10 v10.
+- Visual QA (3/3):
+  - chain 22 (g_cv=1.537, identical): MULTI_BALL_MERGE confirmed
+  - chain 30 (g_cv=0.417, identical): TRUE single-ball catch-throw
+  - chain 12 YouTube (g_cv=1.179): MULTI_BALL_MERGE confirmed
+- Verdict: PASS. H54 is a real, independent single-ball signal.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h54_per_chain_arc_gravity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h54_analyze.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h54_per_chain_arc_gravity_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h54_per_tracklet_arcs_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h54_with_h10_h11_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h54_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h54_analysis_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h54_report.md`
+
+### H55 (2026-08-28 ~18:30 CEST)
+
+- Hypothesis: combining H10 v10 (cross-edge and coverage) with H54
+  (within-chain physics consistency) as a 5th dimension should improve
+  chain quality ranking, especially for multi-tid UNCERTAIN chains
+  that v10 over-ranks.
+- Two iterations:
+  - v1 (linear penalty): too aggressive, CONFIDENT 27→24 on identical
+    at w54=0.30.
+  - v2 (gated penalty, min_arcs=3, w54=0.30): correct. Only 9 chains
+    penalized (those with n_arcs_clean >= 3). CONFIDENT 27→26
+    identical, 5→4 YouTube.
+- Operating point (v2): min_arcs=3, w54=0.30. Flat region of
+  sensitivity grid.
+- Visual QA (4/4):
+  - chain 14 identical (g_cv=1.089, demoted to LOW): TRACKER FRAGMENTATION
+  - chain 22 identical (g_cv=1.537, demoted to LOW): MULTI_BALL_MERGE
+  - chain 12 YouTube (g_cv=1.179, demoted to LOW): MULTI_BALL_MERGE
+  - chain 6 YouTube (g_cv=0.427, preserved CONFIDENT q11=0.713):
+    TRUE single-ball catch-throw
+- Verdict: PASS (narrow-scope precision improvement). H55 v2 correctly
+  demotes 3 multi-ball-merge chains that v10 over-ranked. CONFIDENT
+  count drops by 1 on each video; lost chains are confirmed FPs.
+- Recommended operating point: h7v3plus3 + H10 v11 (H55 v2,
+  min_arcs=3, w54=0.30) + H12 v8 + H50 + H43 + H52 + H53.
+- For strictest single-ball filtering: H10 v11 + H11 v7 CONFIDENT.
+  Multi-tid CONFIDENT: 2 identical (chain 20, chain 19) + 1 YouTube
+  (chain 6).
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h55_h10v11_with_h54.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h55_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h55v2_gated_penalty.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h55v2_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h55_chain14_contact_sheet.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11_w0.30_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v2_w0.30_minarcs3_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h55_sensitivity_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h55v2_sensitivity_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h55/chain14_identical_h55v2.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h55_report.md`

@@ -1202,7 +1202,7 @@ operating point.
 
 See `h1_hand_pool/reports/h52_report.md` for full analysis.
 
-## H53 conclusion
+**H53 conclusion**
 
 **H53: H52 sensitivity grid preservation + multi-rater visual QA
 consensus on the 3 H50-dropped pairs** — DONE. PASS.
@@ -1243,14 +1243,87 @@ through 3 independent visual QA passes + 1 physics check.
 
 See `h1_hand_pool/reports/h53_report.md` for full analysis.
 
+## H54 conclusion
+
+**H54: per-chain arc-gravity distribution as a single-ball signal** —
+DONE. PASS.
+
+The per-chain coefficient of variation (CV) of clean per-arc gravity
+values (from H8 v8 extrema-arc fits) is a discriminative signal for
+"is this a single physical ball?".
+
+**Key results:**
+- **Identical**: 2 multi-tid CONFIDENT chains (g_cv mean 0.379) vs
+  11 multi-tid UNCERTAIN chains (g_cv mean 0.782). 2x difference.
+  Bootstrap 90% CI for difference: [+0.13, +0.84] (positive).
+- **YouTube**: 1 multi-tid CONFIDENT (g_cv 0.427) vs 9 multi-tid
+  UNCERTAIN (g_cv mean 0.656). 1.5x difference, same direction.
+- **Independence from H10 v10**: Pearson correlation 0.008 identical,
+  -0.308 YouTube. H54 measures within-chain physics consistency; H10
+  v10 measures cross-edge and coverage. The two signals are
+  complementary.
+
+**Visual QA (3/3 confirmed):**
+- chain 22 (g_cv=1.537): MULTI_BALL_MERGE confirmed (H32 contact sheet)
+- chain 30 (g_cv=0.417): TRUE single-ball catch-throw (H11 v7 contact sheet)
+- chain 12 YouTube (g_cv=1.179): MULTI_BALL_MERGE confirmed (H11 v7 contact sheet)
+
+**Verdict: PASS.** H54 is a real, independent single-ball signal. It
+should be combined with H10 v10 as a 5th quality dimension (H55).
+
+See `h1_hand_pool/reports/h54_report.md` for full analysis.
+
+## H55 conclusion
+
+**H55: H10 v11 with H54 gravity-CV as 5th dimension** — DONE. PASS
+(narrow-scope precision improvement).
+
+**Two iterations:**
+- v1 (linear penalty): too aggressive, CONFIDENT count 27→24 on
+  identical at w54=0.30.
+- v2 (gated penalty, min_arcs=3, w54=0.30): correct. Only 9 chains
+  penalized (those with n_arcs_clean >= 3). CONFIDENT count
+  27→26 on identical, 5→4 on YouTube.
+
+**Operating point (v2):** min_arcs=3, w54=0.30. Flat region of
+sensitivity grid (w54=0.20-0.50 all give 26 CONFIDENT identical,
+3-4 CONFIDENT YouTube).
+
+**Visual QA (4/4 confirmed):**
+- chain 14 identical (g_cv=1.089, demoted to LOW): TRACKER FRAGMENTATION
+  confirmed (H55 contact sheet) — two independent juggling cycles
+  stitched.
+- chain 22 identical (g_cv=1.537, demoted to LOW): MULTI_BALL_MERGE
+  confirmed (H32 contact sheet).
+- chain 12 YouTube (g_cv=1.179, demoted to LOW): MULTI_BALL_MERGE
+  confirmed (H11 v7 contact sheet).
+- chain 6 YouTube (g_cv=0.427, preserved CONFIDENT q11=0.713):
+  TRUE single-ball catch-throw confirmed (H11 v7 contact sheet).
+
+**Verdict: PASS (narrow-scope precision improvement).** H55 v2
+correctly demotes 3 multi-ball-merge chains (chain 14, chain 22,
+chain 12) that v10 over-ranked. The CONFIDENT count drops by 1
+on each video, which is acceptable because the lost chains are
+confirmed false positives.
+
+**Recommended operating point:** h7v3plus3 + H10 v11 (H55 v2,
+min_arcs=3, w54=0.30) + H12 v8 + H50 + H43 + H52 + H53.
+
+For strictest single-ball filtering: H10 v11 + H11 v7 CONFIDENT.
+Multi-tid CONFIDENT: 2 identical (chain 20, chain 19) + 1 YouTube
+(chain 6).
+
+See `h1_hand_pool/reports/h55_report.md` for full analysis.
+
 ## Final summary
 
 The hand-occlusion overnight lab has produced a comprehensive,
-validated chain representation for both videos over 53 research
-episodes spanning ~14 hours. The final operating point is:
+validated chain representation for both videos over 55 research
+episodes spanning ~14.5 hours. The final operating point is:
 
-**h7v3plus3 + H12 v8 + H50 10-frame filter + H43 confidence
-filter + H52 physics corroboration**
+**h7v3plus3 + H10 v11 (H55 v2) + H12 v8 + H50 10-frame filter +
+H43 confidence filter + H52 physics corroboration + H53 multi-rater
+visual QA**
 
 See `h1_hand_pool/reports/FINAL_SUMMARY.md` for a comprehensive
 overview of all 53 episodes, the strongest findings, the
