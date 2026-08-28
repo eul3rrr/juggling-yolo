@@ -1,0 +1,168 @@
+{
+  "h100v4_methodology": "conf+spec_conc guard (no aloft features)",
+  "perfect_cells": [
+    {
+      "conf_min": 0.3,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.3,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.3,
+      "spec_conc_min": 0.3
+    },
+    {
+      "conf_min": 0.4,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.4,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.4,
+      "spec_conc_min": 0.3
+    },
+    {
+      "conf_min": 0.45,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.45,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.45,
+      "spec_conc_min": 0.3
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.1
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.12
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.13
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.14
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.5,
+      "spec_conc_min": 0.3
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.1
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.12
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.13
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.14
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.55,
+      "spec_conc_min": 0.3
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.1
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.12
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.13
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.14
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.6,
+      "spec_conc_min": 0.3
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.05
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.1
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.12
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.13
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.14
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.15
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.2
+    },
+    {
+      "conf_min": 0.7,
+      "spec_conc_min": 0.3
+    }
+  ],
+  "n_perfect_cells": 38,
+  "flat_region": {
+    "conf_min_range": [
+      0.3,
+      0.7
+    ],
+    "spec_conc_min_range": [
+      0.05,
+      0.3
+    ]
+  }
+}

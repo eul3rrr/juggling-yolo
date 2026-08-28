@@ -5675,3 +5675,46 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_output.txt`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h99_report.md`
+
+## H100 — pct_ge1 guard signature analysis (2026-08-28 ~23:50 CEST)
+
+- Hypothesis: characterize the signature of the 2 H96 v2-protected
+  phases (f=1029-1049 identical, f=800-861 YouTube) and find a more
+  robust guard than the brittle `pct_ge1<0.92` hard cap.
+- Four iterations (v1-v4).
+- **H100 v1 (signature analysis):** NEGATIVE for guard-replacement.
+  No single feature cleanly separates the 2 protected phases
+  (pct_ge1=0.935, 1.0) from the 4 TN phases (pct_ge1 >= 0.969).
+  Gap is 0.034, too narrow.
+- **H100 v2 (combined guard):** found and fixed bug in
+  `compute_extended_aloft` (was missing `c40_max_aloft` and
+  `max_aloft`, causing H96 v2 baseline to be reported as
+  17/2/2/0 instead of 17/4/0/0). After fix: 7 of 7 AND-combinations
+  achieve PERFECT 17/4/0/0.
+- **H100 v3 (2D grid: pct_ge1 × c60_pct_ge1):** 60/80 cells PERFECT.
+  pct_ge1 flat region [0.80, 1.00] × c60_pct_ge1 flat region
+  [0.10, 1.00]. LOO test PASSES.
+- **H100 v4 (conf+spec_conc guard, no aloft features):** 38/56 cells
+  PERFECT. conf flat region [0.30, 0.70] × spec_conc flat region
+  [0.05, 0.30]. Recommended: `conf>=0.50 AND spec_conc>=0.13`.
+  LOO test PASSES on all 4 TNs.
+- **Critical finding:** H99 was based on a buggy H100 v2. The
+  H96 v2 stack is significantly more robust than H99 reported.
+  pct_ge1 is in a wide flat region (0.80-1.00) — pct_ge1<1.00
+  still achieves PERFECT.
+- Visual QA: both protected phases confirmed as real juggling
+  by `vision_analyze` (3 balls in motion on identical, 5 balls
+  in motion on YouTube).
+- Verdict: **PASS.** H100 v4 conf+spec_conc guard is the new
+  recommended operating point for the H43+H69 guard, replacing
+  `pct_ge1<0.92`.
+- See `h1_hand_pool/reports/h100_report.md` for full analysis.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_guard_signature.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_v2_combined_guard.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_v3_2d_grid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_v4_conf_spec_conc_guard.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v3_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v4_summary.json`

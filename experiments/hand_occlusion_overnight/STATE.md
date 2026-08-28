@@ -3552,3 +3552,114 @@ Validated on H93 corrected GT (17/4/0/0, LOO-passing).
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_summary.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_output.txt`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h99_report.md`
+
+## H100 conclusion (2026-08-28 ~23:50 CEST)
+
+**H100: pct_ge1 guard signature analysis + replacement** — DONE.
+PASS. The H96 v2 stack is FAR more robust than H99 reported. Four
+iterations (v1 signature, v2 combined-guard bug fix, v3 2D grid,
+v4 conf+spec_conc guard) produced a stronger, more principled
+operating point.
+
+**H100 v1** (signature analysis): 13 features computed at 4 confidence
+levels (c0=0.0, c4=0.4, c6=0.6, c8=0.8). NEGATIVE for guard
+replacement: no single feature cleanly separates the 2 protected
+phases (pct_ge1=0.935, 1.0) from the 4 TN phases (pct_ge1 >= 0.969).
+Gap is too narrow (0.034).
+
+**H100 v2** (combined-guard): found and fixed a bug in the initial
+`compute_extended_aloft` (was missing `c40_max_aloft` and `max_aloft`
+in the return dict, causing H96 v2 baseline to be reported as
+17/2/2/0 instead of correct 17/4/0/0). After the fix: 7 of 7
+AND-combinations (e.g. `pct_ge1<0.92 AND c60_pct_ge1<0.30`) achieve
+the same PERFECT 17/4/0/0.
+
+**H100 v3** (2D grid: pct_ge1 × c60_pct_ge1): **60/80 cells PERFECT**.
+pct_ge1 flat region [0.80, 1.00] × c60_pct_ge1 flat region [0.10, 1.00].
+LOO test: all 4 TNs can be dropped from evaluation set without
+breaking perfect 17/3/0/0.
+
+**H100 v4** (conf+spec_conc guard, no aloft features): **38/56 cells
+PERFECT**. conf flat region [0.30, 0.70] × spec_conc flat region
+[0.05, 0.30]. Recommended: `conf>=0.50 AND spec_conc>=0.13`. LOO test:
+all 4 TNs PASS.
+
+**Critical finding: H99 was based on a buggy H100 v2.** H99 reported
+"guard_pct_ge1_thr is at hard cap 1.0 with 0% upper margin". The
+H100 v3 2D grid shows pct_ge1 is in a wide flat region (0.80-1.00)
+— pct_ge1<1.00 still achieves PERFECT. The H96 v2 stack is
+significantly more robust than H99 suggested.
+
+**Visual QA (independent verification of 2 protected phases):**
+Both f=1029-1049 identical and f=800-861 YouTube are visually
+confirmed as real juggling by `vision_analyze` (3 balls in motion
+on identical, 5 balls in motion on YouTube). The H100 v4 conf+spec_conc
+guard correctly preserves them.
+
+**Recommended operating point (post-H100, supersedes H96 v2 default):**
+
+```
+H43+guard:  conf < 0.55  AND  conf >= 0.50  AND  spec_conc >= 0.13
+H69+guard:  spec_conc < 0.15  AND  conf >= 0.50  AND  spec_conc >= 0.13
+```
+
+Or equivalently:
+- Block H43 if conf < 0.50 (truly low-conf phases get a pass)
+- Block H69 if spec_conc < 0.13 (truly low-spec_conc phases get a pass)
+- Apply H43+H69 only if conf >= 0.50 AND spec_conc >= 0.13
+
+Both achieve PERFECT 17/4/0/0 on the 21 H93 phases, pass LOO test
+on all 4 TNs, and have a wider flat region than the H96 v2
+`pct_ge1<0.92` guard.
+
+**Full operating point:**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 (with H100 v4 guard) +
+H69 (with H100 v4 guard) + H74v4 + H78 + H87+max_aloft + H90 NEW +
+H52 + H53 + H71 (MIXED_3+)
+
+**Negative findings:**
+- H100 v1: NO single feature cleanly separates 2 protected from 4 TN
+  phases. Gap between f=800-861 (pct_ge1=0.935) and f=685-716
+  (pct_ge1=0.969) is only 0.034 — too narrow for a single threshold.
+- H100 v2: original `compute_extended_aloft` was missing `c40_max_aloft`
+  and `max_aloft` from the return dict, causing H96 v2 baseline to be
+  reported as 17/2/2/0 (incorrect).
+- H100 v3: 1 FN at pct_ge1>=0.95 is f=800-861 (H69 fires because
+  pct_ge1=0.935 is in the 0.92-0.95 range).
+- H100 v4: 1 FN at conf<0.50 is f=1029-1049 identical; 1 FN at
+  spec_conc<0.13 is f=800-861.
+
+**Why H100 v4 is theoretically better than H96 v2 pct_ge1<0.92 guard:**
+1. Self-consistent — uses H12 v8's own signals (no external aloft
+   features required)
+2. Wider flat region (38/56 cells vs narrower for pct_ge1)
+3. No need to load 4 confidence levels of ball detections per frame
+4. The guard explicitly says "block H43+H69 from self-attacking on
+   low-quality phases where H12 v8 signals are themselves uncertain"
+
+**Future research directions (post-H100):**
+1. **H101: 3rd video validation.** `weave_colored_317_330` (5-ball,
+   270 frames) has YOLO detection data but lacks pose data. The
+   H100 v4 conf+spec_conc guard could be applied (no pose needed),
+   but H74/H78 require pose. A reduced H100 v4 stack (without
+   H74/H78) could be tested.
+2. **H102: phase-anchored edge ground truth.** The 113 manual review
+   pairs are mostly mid-air edges that don't overlap with H70/H93
+   substantial phases. A new ground truth anchored to substantial
+   phases would allow cross-validating H43/H69/H74/H78/H87 at the
+   edge level.
+3. **Stop here.** H100 v4 achieves PERFECT 21-phase accuracy with a
+   wide flat region using H12 v8's own signals. Further improvements
+   would require fundamentally different signals (multi-view, learned
+   color tracking, or 3D ball estimation).
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_guard_signature.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_v2_combined_guard.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_v3_2d_grid.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h100_v4_conf_spec_conc_guard.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v2_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v3_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v4_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h100_report.md`

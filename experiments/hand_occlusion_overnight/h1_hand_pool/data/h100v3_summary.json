@@ -1,0 +1,256 @@
+{
+  "h100v3_methodology": "2D guard sensitivity grid (pct_ge1 \u00d7 c60_pct_ge1)",
+  "perfect_cells": [
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.6
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.7
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.8
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 0.9
+    },
+    {
+      "pct_ge1_thr": 0.8,
+      "c60_pct_ge1_thr": 1.0
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.6
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.7
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.8
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 0.9
+    },
+    {
+      "pct_ge1_thr": 0.85,
+      "c60_pct_ge1_thr": 1.0
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.6
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.7
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.8
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 0.9
+    },
+    {
+      "pct_ge1_thr": 0.9,
+      "c60_pct_ge1_thr": 1.0
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.6
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.7
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.8
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 0.9
+    },
+    {
+      "pct_ge1_thr": 0.92,
+      "c60_pct_ge1_thr": 1.0
+    },
+    {
+      "pct_ge1_thr": 0.95,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.95,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.95,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.95,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.95,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 0.97,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.97,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.97,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.97,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.97,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 0.99,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 0.99,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 0.99,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 0.99,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 0.99,
+      "c60_pct_ge1_thr": 0.5
+    },
+    {
+      "pct_ge1_thr": 1.0,
+      "c60_pct_ge1_thr": 0.1
+    },
+    {
+      "pct_ge1_thr": 1.0,
+      "c60_pct_ge1_thr": 0.2
+    },
+    {
+      "pct_ge1_thr": 1.0,
+      "c60_pct_ge1_thr": 0.3
+    },
+    {
+      "pct_ge1_thr": 1.0,
+      "c60_pct_ge1_thr": 0.4
+    },
+    {
+      "pct_ge1_thr": 1.0,
+      "c60_pct_ge1_thr": 0.5
+    }
+  ],
+  "n_perfect_cells": 60,
+  "flat_region": {
+    "pct_ge1_range": [
+      0.8,
+      1.0
+    ],
+    "c60_pct_ge1_range": [
+      0.1,
+      1.0
+    ]
+  }
+}

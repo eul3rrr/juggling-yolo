@@ -1,0 +1,110 @@
+{
+  "h100v2_methodology": "Combined guard signature analysis (FOUNTAIN_3+ features)",
+  "fountain_phases": [
+    {
+      "key": [
+        "identical_balls_trick_000_018",
+        631,
+        669
+      ],
+      "verdict": "JUGGLING",
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.2564102564102564,
+      "c40_pct_ge3": 0.20512820512820512,
+      "c60_pct_ge1": 0.9487179487179487,
+      "c80_pct_ge1": 0.7857142857142857,
+      "conf": 0.714,
+      "spec_conc": 0.411
+    },
+    {
+      "key": [
+        "identical_balls_trick_000_018",
+        890,
+        936
+      ],
+      "verdict": "OTHER_CROSSED_ARM",
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.10869565217391304,
+      "c40_pct_ge3": 0.10256410256410256,
+      "c60_pct_ge1": 0.8846153846153846,
+      "c80_pct_ge1": 1.0,
+      "conf": 0.571,
+      "spec_conc": 0.308
+    },
+    {
+      "key": [
+        "identical_balls_trick_000_018",
+        977,
+        1011
+      ],
+      "verdict": "JUGGLING",
+      "pct_ge1": 0.8285714285714286,
+      "pct_ge3": 0.02857142857142857,
+      "c40_pct_ge3": 0.03333333333333333,
+      "c60_pct_ge1": 0.5625,
+      "c80_pct_ge1": 1.0,
+      "conf": 0.565,
+      "spec_conc": 0.326
+    },
+    {
+      "key": [
+        "identical_balls_trick_000_018",
+        1029,
+        1049
+      ],
+      "verdict": "JUGGLING",
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.0,
+      "c40_pct_ge3": 0.0,
+      "c60_pct_ge1": 0.8571428571428571,
+      "c80_pct_ge1": 0.0,
+      "conf": 0.463,
+      "spec_conc": 0.14
+    },
+    {
+      "key": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        339,
+        374
+      ],
+      "verdict": "JUGGLING",
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.6111111111111112,
+      "c40_pct_ge3": 0.4411764705882353,
+      "c60_pct_ge1": 0.7307692307692307,
+      "c80_pct_ge1": 0.25,
+      "conf": 0.646,
+      "spec_conc": 0.164
+    },
+    {
+      "key": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        482,
+        594
+      ],
+      "verdict": "STATIC_HOLD",
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.6637168141592921,
+      "c40_pct_ge3": 0.36363636363636365,
+      "c60_pct_ge1": 0.6923076923076923,
+      "c80_pct_ge1": 0.25,
+      "conf": 0.653,
+      "spec_conc": 0.14
+    },
+    {
+      "key": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        800,
+        861
+      ],
+      "verdict": "JUGGLING",
+      "pct_ge1": 0.9354838709677419,
+      "pct_ge3": 0.5806451612903226,
+      "c40_pct_ge3": 0.24561403508771928,
+      "c60_pct_ge1": 0.5909090909090909,
+      "c80_pct_ge1": 0.4,
+      "conf": 0.651,
+      "spec_conc": 0.088
+    }
+  ]
+}
