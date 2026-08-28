@@ -1,0 +1,63 @@
+{
+  "n_review_pairs": 113,
+  "stems": {
+    "identical_balls_trick_000_018": {
+      "n_sources": 56,
+      "n_review_pairs": 85,
+      "rank_dist_nic_correct": {
+        "1": 16,
+        "2": 2,
+        "3+": 0
+      },
+      "rank_dist_ic_correct": {
+        "1": 27,
+        "2": 0,
+        "3+": 0
+      },
+      "n_nic_correct": 18,
+      "n_ic_correct": 27,
+      "n_nic_wrong": 39,
+      "n_ic_wrong": 1,
+      "delta_to_top1_stats": {
+        "mean": 1.8859440555555556,
+        "min": 0.0,
+        "max": 31.835561999999996,
+        "median": 0.0
+      },
+      "top1_review_label": {
+        "wrong": 13,
+        "correct": 43,
+        "unreviewed": 0
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_sources": 27,
+      "n_review_pairs": 28,
+      "rank_dist_nic_correct": {
+        "1": 2,
+        "2": 0,
+        "3+": 0
+      },
+      "rank_dist_ic_correct": {
+        "1": 23,
+        "2": 1,
+        "3+": 0
+      },
+      "n_nic_correct": 2,
+      "n_ic_correct": 24,
+      "n_nic_wrong": 2,
+      "n_ic_wrong": 0,
+      "delta_to_top1_stats": {
+        "mean": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "median": 0.0
+      },
+      "top1_review_label": {
+        "wrong": 2,
+        "correct": 25,
+        "unreviewed": 0
+      }
+    }
+  }
+}

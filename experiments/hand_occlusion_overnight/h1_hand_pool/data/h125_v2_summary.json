@@ -1,0 +1,2134 @@
+{
+  "h7_thresholds": {
+    "HAND_EDGE_COST": 1.0,
+    "AMBIGUOUS_HAND_EDGE_COST": 1.5,
+    "AIR_EDGE_BASE_COST": 2.0,
+    "AIR_ERR_SCALE": 0.05,
+    "AIR_GAP_SCALE": 0.1,
+    "NO_SUCCESSOR_COST": 0.0
+  },
+  "variants": {
+    "full_e6c": {
+      "stems": {
+        "identical_balls_trick_000_018": {
+          "n_edges_in": 118,
+          "n_admitted": 48,
+          "n_rejected_capacity": 70,
+          "n_chains": 28,
+          "n_chains_multi": 17,
+          "longest": 7,
+          "longest_chain": [
+            4,
+            7,
+            10,
+            11,
+            14,
+            19,
+            20
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 41,
+            "n_admitted_correct": 36,
+            "n_admitted_wrong": 5,
+            "n_correct_in_review": 45,
+            "n_correct_admitted": 36,
+            "precision": 0.8780487804878049,
+            "recall": 0.8,
+            "F1": 0.8372093023255814
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 17,
+              "to_tid": 23,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 52,
+              "to_tid": 54,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 53,
+              "to_tid": 60,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 68,
+              "to_tid": 71,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 72,
+              "to_tid": 73,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 70,
+              "to_tid": 74,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 8,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 18.31,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 5,
+              "to_tid": 6,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 2.49,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 22,
+              "to_tid": 27,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.85,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 3.49,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 37,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 1.65,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 37,
+              "to_tid": 40,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 0.85,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 38,
+              "to_tid": 39,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 1.39,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 40,
+              "to_tid": 41,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 2.42,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 43,
+              "to_tid": 45,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 0.48,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 45,
+              "to_tid": 46,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 1.03,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 62,
+              "to_tid": 66,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 15.55,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 64,
+              "to_tid": 68,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 21.73,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 14,
+              "edge_type": "AMBIGUOUS_HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.5
+            },
+            {
+              "from_tid": 54,
+              "to_tid": 59,
+              "edge_type": "AMBIGUOUS_HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.5
+            },
+            {
+              "from_tid": 59,
+              "to_tid": 63,
+              "edge_type": "AMBIGUOUS_HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.5
+            },
+            {
+              "from_tid": 50,
+              "to_tid": 55,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.6
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 20,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.7
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 22,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.7
+            },
+            {
+              "from_tid": 60,
+              "to_tid": 64,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.8
+            },
+            {
+              "from_tid": 23,
+              "to_tid": 25,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.8
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 29,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 39,
+              "to_tid": 47,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 51,
+              "to_tid": 52,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 67,
+              "to_tid": 70,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 36,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 3.1
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 33,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 3.1
+            },
+            {
+              "from_tid": 41,
+              "to_tid": 43,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 3.3
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 26,
+              "edge_type": "BALLISTIC",
+              "err": 33.994451,
+              "e6c_accepted": false,
+              "cost": 3.89972255
+            },
+            {
+              "from_tid": 9,
+              "to_tid": 12,
+              "edge_type": "BALLISTIC",
+              "err": 26.223845,
+              "e6c_accepted": false,
+              "cost": 3.9111922500000005
+            },
+            {
+              "from_tid": 66,
+              "to_tid": 69,
+              "edge_type": "BALLISTIC",
+              "err": 28.49481,
+              "e6c_accepted": false,
+              "cost": 4.624740500000001
+            },
+            {
+              "from_tid": 18,
+              "to_tid": 21,
+              "edge_type": "BALLISTIC",
+              "err": 40.710255,
+              "e6c_accepted": false,
+              "cost": 4.63551275
+            },
+            {
+              "from_tid": 15,
+              "to_tid": 16,
+              "edge_type": "BALLISTIC",
+              "err": 41.285722,
+              "e6c_accepted": false,
+              "cost": 4.8642861
+            },
+            {
+              "from_tid": 10,
+              "to_tid": 11,
+              "edge_type": "BALLISTIC",
+              "err": 43.101847,
+              "e6c_accepted": false,
+              "cost": 4.95509235
+            },
+            {
+              "from_tid": 44,
+              "to_tid": 53,
+              "edge_type": "BALLISTIC",
+              "err": 38.866711,
+              "e6c_accepted": false,
+              "cost": 5.04333555
+            },
+            {
+              "from_tid": 14,
+              "to_tid": 19,
+              "edge_type": "BALLISTIC",
+              "err": 33.944457,
+              "e6c_accepted": false,
+              "cost": 5.0972228500000005
+            },
+            {
+              "from_tid": 56,
+              "to_tid": 57,
+              "edge_type": "BALLISTIC",
+              "err": 46.142743,
+              "e6c_accepted": false,
+              "cost": 5.307137150000001
+            },
+            {
+              "from_tid": 6,
+              "to_tid": 15,
+              "edge_type": "BALLISTIC",
+              "err": 34.997267,
+              "e6c_accepted": false,
+              "cost": 5.34986335
+            },
+            {
+              "from_tid": 12,
+              "to_tid": 17,
+              "edge_type": "BALLISTIC",
+              "err": 39.764869,
+              "e6c_accepted": false,
+              "cost": 5.58824345
+            },
+            {
+              "from_tid": 4,
+              "to_tid": 7,
+              "edge_type": "BALLISTIC",
+              "err": 62.446306,
+              "e6c_accepted": false,
+              "cost": 5.7223153
+            },
+            {
+              "from_tid": 63,
+              "to_tid": 65,
+              "edge_type": "BALLISTIC",
+              "err": 54.875807,
+              "e6c_accepted": false,
+              "cost": 5.843790350000001
+            },
+            {
+              "from_tid": 73,
+              "to_tid": 75,
+              "edge_type": "BALLISTIC",
+              "err": 57.704643,
+              "e6c_accepted": false,
+              "cost": 5.88523215
+            },
+            {
+              "from_tid": 7,
+              "to_tid": 10,
+              "edge_type": "BALLISTIC",
+              "err": 65.083367,
+              "e6c_accepted": false,
+              "cost": 6.05416835
+            }
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_edges_in": 53,
+          "n_admitted": 25,
+          "n_rejected_capacity": 28,
+          "n_chains": 15,
+          "n_chains_multi": 9,
+          "longest": 7,
+          "longest_chain": [
+            1,
+            9,
+            13,
+            16,
+            21,
+            29,
+            34
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 24,
+            "n_admitted_correct": 24,
+            "n_admitted_wrong": 0,
+            "n_correct_in_review": 26,
+            "n_correct_admitted": 24,
+            "precision": 1.0,
+            "recall": 0.9230769230769231,
+            "F1": 0.9600000000000001
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 10,
+              "to_tid": 12,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 1,
+              "to_tid": 9,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 16.58,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 2,
+              "to_tid": 8,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 11.56,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 6,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 9.57,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 4,
+              "to_tid": 18,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 7.72,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 9,
+              "to_tid": 13,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.91,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 14,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 9.86,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 13,
+              "to_tid": 16,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 8.54,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 14,
+              "to_tid": 17,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.41,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 15,
+              "to_tid": 25,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 10.73,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 16,
+              "to_tid": 21,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 10.17,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 17,
+              "to_tid": 24,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 11.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 18,
+              "to_tid": 30,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.75,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 22,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 10.31,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 29,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 17.22,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 22,
+              "to_tid": 26,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 8.96,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 33,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.82,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 26,
+              "to_tid": 31,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.35,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 32,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 16.37,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 9.05,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 37,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 8.76,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 35,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.83,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 33,
+              "to_tid": 36,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 11.41,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 38,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.86,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 27,
+              "to_tid": 28,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.8
+            }
+          ]
+        }
+      }
+    },
+    "e6c_accepted_only": {
+      "stems": {
+        "identical_balls_trick_000_018": {
+          "n_edges_in": 60,
+          "n_admitted": 33,
+          "n_rejected_capacity": 27,
+          "n_chains": 43,
+          "n_chains_multi": 17,
+          "longest": 7,
+          "longest_chain": [
+            35,
+            37,
+            40,
+            41,
+            43,
+            45,
+            46
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 26,
+            "n_admitted_correct": 25,
+            "n_admitted_wrong": 1,
+            "n_correct_in_review": 45,
+            "n_correct_admitted": 25,
+            "precision": 0.9615384615384616,
+            "recall": 0.5555555555555556,
+            "F1": 0.7042253521126761
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 17,
+              "to_tid": 23,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 52,
+              "to_tid": 54,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 53,
+              "to_tid": 60,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 68,
+              "to_tid": 71,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 72,
+              "to_tid": 73,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 70,
+              "to_tid": 74,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 8,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 18.31,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 5,
+              "to_tid": 6,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 2.49,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 22,
+              "to_tid": 27,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.85,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 3.49,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 37,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 1.65,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 37,
+              "to_tid": 40,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 0.85,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 38,
+              "to_tid": 39,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 1.39,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 40,
+              "to_tid": 41,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 2.42,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 43,
+              "to_tid": 45,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 0.48,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 45,
+              "to_tid": 46,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 1.03,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 62,
+              "to_tid": 66,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 15.55,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 64,
+              "to_tid": 68,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 21.73,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 14,
+              "edge_type": "AMBIGUOUS_HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.5
+            },
+            {
+              "from_tid": 54,
+              "to_tid": 59,
+              "edge_type": "AMBIGUOUS_HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.5
+            },
+            {
+              "from_tid": 59,
+              "to_tid": 63,
+              "edge_type": "AMBIGUOUS_HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.5
+            },
+            {
+              "from_tid": 50,
+              "to_tid": 55,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.6
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 20,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.7
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 22,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.7
+            },
+            {
+              "from_tid": 60,
+              "to_tid": 64,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.8
+            },
+            {
+              "from_tid": 23,
+              "to_tid": 25,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.8
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 29,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 39,
+              "to_tid": 47,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 51,
+              "to_tid": 52,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 67,
+              "to_tid": 70,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.9
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 36,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 3.1
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 33,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 3.1
+            },
+            {
+              "from_tid": 41,
+              "to_tid": 43,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 3.3
+            }
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_edges_in": 51,
+          "n_admitted": 25,
+          "n_rejected_capacity": 26,
+          "n_chains": 15,
+          "n_chains_multi": 9,
+          "longest": 7,
+          "longest_chain": [
+            1,
+            9,
+            13,
+            16,
+            21,
+            29,
+            34
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 24,
+            "n_admitted_correct": 24,
+            "n_admitted_wrong": 0,
+            "n_correct_in_review": 26,
+            "n_correct_admitted": 24,
+            "precision": 1.0,
+            "recall": 0.9230769230769231,
+            "F1": 0.9600000000000001
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 10,
+              "to_tid": 12,
+              "edge_type": "HAND_TRANSITION",
+              "err": 0.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 1,
+              "to_tid": 9,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 16.58,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 2,
+              "to_tid": 8,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 11.56,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 6,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 9.57,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 4,
+              "to_tid": 18,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 7.72,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 9,
+              "to_tid": 13,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.91,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 14,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 9.86,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 13,
+              "to_tid": 16,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 8.54,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 14,
+              "to_tid": 17,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.41,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 15,
+              "to_tid": 25,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 10.73,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 16,
+              "to_tid": 21,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 10.17,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 17,
+              "to_tid": 24,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 11.0,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 18,
+              "to_tid": 30,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.75,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 22,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 10.31,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 29,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 17.22,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 22,
+              "to_tid": 26,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 8.96,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 33,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.82,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 26,
+              "to_tid": 31,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 14.35,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 32,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 16.37,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 9.05,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 37,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 8.76,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 35,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.83,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 33,
+              "to_tid": 36,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 11.41,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 38,
+              "edge_type": "RECLASSIFIED_HAND_TRANSITION",
+              "err": 12.86,
+              "cost": 1.0
+            },
+            {
+              "from_tid": 27,
+              "to_tid": 28,
+              "edge_type": "BALLISTIC",
+              "err": 0.0,
+              "cost": 2.8
+            }
+          ]
+        }
+      }
+    },
+    "full_e6c_no_h7v2": {
+      "stems": {
+        "identical_balls_trick_000_018": {
+          "n_edges_in": 85,
+          "n_admitted": 44,
+          "n_rejected_capacity": 41,
+          "n_chains": 32,
+          "n_chains_multi": 21,
+          "longest": 7,
+          "longest_chain": [
+            35,
+            37,
+            40,
+            41,
+            43,
+            45,
+            46
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 44,
+            "n_admitted_correct": 41,
+            "n_admitted_wrong": 3,
+            "n_correct_in_review": 45,
+            "n_correct_admitted": 41,
+            "precision": 0.9318181818181818,
+            "recall": 0.9111111111111111,
+            "F1": 0.9213483146067416
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 5,
+              "to_tid": 6,
+              "edge_type": "BALLISTIC",
+              "err": 2.494506,
+              "e6c_accepted": true,
+              "cost": 2.6247253
+            },
+            {
+              "from_tid": 50,
+              "to_tid": 55,
+              "edge_type": "BALLISTIC",
+              "err": 1.227322,
+              "e6c_accepted": true,
+              "cost": 2.6613661
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 20,
+              "edge_type": "BALLISTIC",
+              "err": 1.522498,
+              "e6c_accepted": true,
+              "cost": 2.7761249
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 22,
+              "edge_type": "BALLISTIC",
+              "err": 1.823535,
+              "e6c_accepted": true,
+              "cost": 2.79117675
+            },
+            {
+              "from_tid": 43,
+              "to_tid": 45,
+              "edge_type": "BALLISTIC",
+              "err": 0.483449,
+              "e6c_accepted": true,
+              "cost": 2.92417245
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 29,
+              "edge_type": "BALLISTIC",
+              "err": 0.591355,
+              "e6c_accepted": true,
+              "cost": 2.92956775
+            },
+            {
+              "from_tid": 60,
+              "to_tid": 64,
+              "edge_type": "BALLISTIC",
+              "err": 2.653091,
+              "e6c_accepted": true,
+              "cost": 2.9326545499999996
+            },
+            {
+              "from_tid": 45,
+              "to_tid": 46,
+              "edge_type": "BALLISTIC",
+              "err": 1.031029,
+              "e6c_accepted": true,
+              "cost": 2.9515514499999997
+            },
+            {
+              "from_tid": 39,
+              "to_tid": 47,
+              "edge_type": "BALLISTIC",
+              "err": 1.360009,
+              "e6c_accepted": true,
+              "cost": 2.96800045
+            },
+            {
+              "from_tid": 40,
+              "to_tid": 41,
+              "edge_type": "BALLISTIC",
+              "err": 2.416125,
+              "e6c_accepted": true,
+              "cost": 3.02080625
+            },
+            {
+              "from_tid": 51,
+              "to_tid": 52,
+              "edge_type": "BALLISTIC",
+              "err": 4.2694,
+              "e6c_accepted": true,
+              "cost": 3.11347
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 36,
+              "edge_type": "BALLISTIC",
+              "err": 1.287889,
+              "e6c_accepted": true,
+              "cost": 3.16439445
+            },
+            {
+              "from_tid": 38,
+              "to_tid": 39,
+              "edge_type": "BALLISTIC",
+              "err": 1.38839,
+              "e6c_accepted": true,
+              "cost": 3.1694195
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 37,
+              "edge_type": "BALLISTIC",
+              "err": 1.645284,
+              "e6c_accepted": true,
+              "cost": 3.1822642
+            },
+            {
+              "from_tid": 23,
+              "to_tid": 25,
+              "edge_type": "BALLISTIC",
+              "err": 8.103151,
+              "e6c_accepted": true,
+              "cost": 3.20515755
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 27,
+              "edge_type": "BALLISTIC",
+              "err": 9.111114,
+              "e6c_accepted": true,
+              "cost": 3.2555557000000004
+            },
+            {
+              "from_tid": 67,
+              "to_tid": 70,
+              "edge_type": "BALLISTIC",
+              "err": 7.111206,
+              "e6c_accepted": true,
+              "cost": 3.2555603
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "BALLISTIC",
+              "err": 3.49442,
+              "e6c_accepted": true,
+              "cost": 3.274721
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 33,
+              "edge_type": "BALLISTIC",
+              "err": 4.166562,
+              "e6c_accepted": true,
+              "cost": 3.3083281
+            },
+            {
+              "from_tid": 41,
+              "to_tid": 43,
+              "edge_type": "BALLISTIC",
+              "err": 1.252136,
+              "e6c_accepted": true,
+              "cost": 3.3626068
+            },
+            {
+              "from_tid": 37,
+              "to_tid": 40,
+              "edge_type": "BALLISTIC",
+              "err": 0.846868,
+              "e6c_accepted": true,
+              "cost": 3.5423434
+            },
+            {
+              "from_tid": 62,
+              "to_tid": 66,
+              "edge_type": "BALLISTIC",
+              "err": 15.554923,
+              "e6c_accepted": true,
+              "cost": 3.67774615
+            },
+            {
+              "from_tid": 64,
+              "to_tid": 68,
+              "edge_type": "BALLISTIC",
+              "err": 21.728619,
+              "e6c_accepted": true,
+              "cost": 3.68643095
+            },
+            {
+              "from_tid": 9,
+              "to_tid": 12,
+              "edge_type": "BALLISTIC",
+              "err": 26.223845,
+              "e6c_accepted": false,
+              "cost": 3.9111922500000005
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 8,
+              "edge_type": "BALLISTIC",
+              "err": 18.306459,
+              "e6c_accepted": true,
+              "cost": 4.11532295
+            },
+            {
+              "from_tid": 68,
+              "to_tid": 71,
+              "edge_type": "BALLISTIC",
+              "err": 18.508894,
+              "e6c_accepted": true,
+              "cost": 4.3254447
+            },
+            {
+              "from_tid": 59,
+              "to_tid": 61,
+              "edge_type": "BALLISTIC",
+              "err": 24.647816,
+              "e6c_accepted": false,
+              "cost": 4.332390800000001
+            },
+            {
+              "from_tid": 70,
+              "to_tid": 74,
+              "edge_type": "BALLISTIC",
+              "err": 37.222367,
+              "e6c_accepted": false,
+              "cost": 4.46111835
+            },
+            {
+              "from_tid": 66,
+              "to_tid": 69,
+              "edge_type": "BALLISTIC",
+              "err": 28.49481,
+              "e6c_accepted": false,
+              "cost": 4.624740500000001
+            },
+            {
+              "from_tid": 18,
+              "to_tid": 21,
+              "edge_type": "BALLISTIC",
+              "err": 40.710255,
+              "e6c_accepted": false,
+              "cost": 4.63551275
+            },
+            {
+              "from_tid": 53,
+              "to_tid": 58,
+              "edge_type": "BALLISTIC",
+              "err": 22.344926,
+              "e6c_accepted": false,
+              "cost": 4.7172463
+            },
+            {
+              "from_tid": 54,
+              "to_tid": 57,
+              "edge_type": "BALLISTIC",
+              "err": 37.92608,
+              "e6c_accepted": false,
+              "cost": 4.796304
+            },
+            {
+              "from_tid": 15,
+              "to_tid": 16,
+              "edge_type": "BALLISTIC",
+              "err": 41.285722,
+              "e6c_accepted": false,
+              "cost": 4.8642861
+            },
+            {
+              "from_tid": 10,
+              "to_tid": 11,
+              "edge_type": "BALLISTIC",
+              "err": 43.101847,
+              "e6c_accepted": false,
+              "cost": 4.95509235
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 13,
+              "edge_type": "BALLISTIC",
+              "err": 45.812772,
+              "e6c_accepted": false,
+              "cost": 4.9906386000000005
+            },
+            {
+              "from_tid": 44,
+              "to_tid": 53,
+              "edge_type": "BALLISTIC",
+              "err": 38.866711,
+              "e6c_accepted": false,
+              "cost": 5.04333555
+            },
+            {
+              "from_tid": 14,
+              "to_tid": 19,
+              "edge_type": "BALLISTIC",
+              "err": 33.944457,
+              "e6c_accepted": false,
+              "cost": 5.0972228500000005
+            },
+            {
+              "from_tid": 6,
+              "to_tid": 15,
+              "edge_type": "BALLISTIC",
+              "err": 34.997267,
+              "e6c_accepted": false,
+              "cost": 5.34986335
+            },
+            {
+              "from_tid": 12,
+              "to_tid": 17,
+              "edge_type": "BALLISTIC",
+              "err": 39.764869,
+              "e6c_accepted": false,
+              "cost": 5.58824345
+            },
+            {
+              "from_tid": 57,
+              "to_tid": 63,
+              "edge_type": "BALLISTIC",
+              "err": 52.09238,
+              "e6c_accepted": false,
+              "cost": 5.604619
+            },
+            {
+              "from_tid": 4,
+              "to_tid": 7,
+              "edge_type": "BALLISTIC",
+              "err": 62.446306,
+              "e6c_accepted": false,
+              "cost": 5.7223153
+            },
+            {
+              "from_tid": 63,
+              "to_tid": 65,
+              "edge_type": "BALLISTIC",
+              "err": 54.875807,
+              "e6c_accepted": false,
+              "cost": 5.843790350000001
+            },
+            {
+              "from_tid": 73,
+              "to_tid": 75,
+              "edge_type": "BALLISTIC",
+              "err": 57.704643,
+              "e6c_accepted": false,
+              "cost": 5.88523215
+            },
+            {
+              "from_tid": 7,
+              "to_tid": 10,
+              "edge_type": "BALLISTIC",
+              "err": 65.083367,
+              "e6c_accepted": false,
+              "cost": 6.05416835
+            }
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_edges_in": 28,
+          "n_admitted": 25,
+          "n_rejected_capacity": 3,
+          "n_chains": 15,
+          "n_chains_multi": 9,
+          "longest": 6,
+          "longest_chain": [
+            19,
+            22,
+            26,
+            31,
+            35,
+            38
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 25,
+            "n_admitted_correct": 24,
+            "n_admitted_wrong": 1,
+            "n_correct_in_review": 26,
+            "n_correct_admitted": 24,
+            "precision": 0.96,
+            "recall": 0.9230769230769231,
+            "F1": 0.9411764705882353
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 27,
+              "to_tid": 28,
+              "edge_type": "BALLISTIC",
+              "err": 0.583007,
+              "e6c_accepted": true,
+              "cost": 2.82915035
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 33,
+              "edge_type": "BALLISTIC",
+              "err": 12.815928,
+              "e6c_accepted": true,
+              "cost": 3.2407964000000002
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "BALLISTIC",
+              "err": 9.049449,
+              "e6c_accepted": true,
+              "cost": 3.25247245
+            },
+            {
+              "from_tid": 33,
+              "to_tid": 36,
+              "edge_type": "BALLISTIC",
+              "err": 11.405658,
+              "e6c_accepted": true,
+              "cost": 3.2702829
+            },
+            {
+              "from_tid": 4,
+              "to_tid": 18,
+              "edge_type": "BALLISTIC",
+              "err": 7.717262,
+              "e6c_accepted": true,
+              "cost": 3.2858631
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 32,
+              "edge_type": "BALLISTIC",
+              "err": 16.368602,
+              "e6c_accepted": true,
+              "cost": 3.3184301
+            },
+            {
+              "from_tid": 14,
+              "to_tid": 17,
+              "edge_type": "BALLISTIC",
+              "err": 14.410545,
+              "e6c_accepted": true,
+              "cost": 3.32052725
+            },
+            {
+              "from_tid": 18,
+              "to_tid": 30,
+              "edge_type": "BALLISTIC",
+              "err": 14.754576,
+              "e6c_accepted": true,
+              "cost": 3.3377288000000003
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 37,
+              "edge_type": "BALLISTIC",
+              "err": 8.759993,
+              "e6c_accepted": true,
+              "cost": 3.33799965
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 38,
+              "edge_type": "BALLISTIC",
+              "err": 12.855921,
+              "e6c_accepted": true,
+              "cost": 3.3427960500000005
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 14,
+              "edge_type": "BALLISTIC",
+              "err": 9.858386,
+              "e6c_accepted": true,
+              "cost": 3.3929193
+            },
+            {
+              "from_tid": 17,
+              "to_tid": 24,
+              "edge_type": "BALLISTIC",
+              "err": 10.999779,
+              "e6c_accepted": true,
+              "cost": 3.44998895
+            },
+            {
+              "from_tid": 20,
+              "to_tid": 21,
+              "edge_type": "BALLISTIC",
+              "err": 6.493667,
+              "e6c_accepted": true,
+              "cost": 3.52468335
+            },
+            {
+              "from_tid": 13,
+              "to_tid": 16,
+              "edge_type": "BALLISTIC",
+              "err": 8.54268,
+              "e6c_accepted": true,
+              "cost": 3.6271340000000003
+            },
+            {
+              "from_tid": 15,
+              "to_tid": 25,
+              "edge_type": "BALLISTIC",
+              "err": 10.731772,
+              "e6c_accepted": true,
+              "cost": 3.6365886
+            },
+            {
+              "from_tid": 22,
+              "to_tid": 26,
+              "edge_type": "BALLISTIC",
+              "err": 8.961166,
+              "e6c_accepted": true,
+              "cost": 3.6480583
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 29,
+              "edge_type": "BALLISTIC",
+              "err": 17.224194,
+              "e6c_accepted": true,
+              "cost": 3.6612096999999997
+            },
+            {
+              "from_tid": 2,
+              "to_tid": 8,
+              "edge_type": "BALLISTIC",
+              "err": 11.564336,
+              "e6c_accepted": true,
+              "cost": 3.6782168
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 6,
+              "edge_type": "BALLISTIC",
+              "err": 9.566688,
+              "e6c_accepted": true,
+              "cost": 3.6783344000000002
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 22,
+              "edge_type": "BALLISTIC",
+              "err": 10.312525,
+              "e6c_accepted": true,
+              "cost": 3.71562625
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 35,
+              "edge_type": "BALLISTIC",
+              "err": 12.825241,
+              "e6c_accepted": true,
+              "cost": 3.74126205
+            },
+            {
+              "from_tid": 9,
+              "to_tid": 13,
+              "edge_type": "BALLISTIC",
+              "err": 14.914964,
+              "e6c_accepted": true,
+              "cost": 3.8457482
+            },
+            {
+              "from_tid": 1,
+              "to_tid": 9,
+              "edge_type": "BALLISTIC",
+              "err": 16.577872,
+              "e6c_accepted": true,
+              "cost": 4.0288936
+            },
+            {
+              "from_tid": 26,
+              "to_tid": 31,
+              "edge_type": "BALLISTIC",
+              "err": 14.346053,
+              "e6c_accepted": true,
+              "cost": 4.11730265
+            },
+            {
+              "from_tid": 10,
+              "to_tid": 11,
+              "edge_type": "BALLISTIC",
+              "err": 28.993002,
+              "e6c_accepted": false,
+              "cost": 4.349650100000001
+            }
+          ]
+        }
+      }
+    },
+    "e6c_accepted_no_h7v2": {
+      "stems": {
+        "identical_balls_trick_000_018": {
+          "n_edges_in": 27,
+          "n_admitted": 25,
+          "n_rejected_capacity": 2,
+          "n_chains": 51,
+          "n_chains_multi": 15,
+          "longest": 7,
+          "longest_chain": [
+            35,
+            37,
+            40,
+            41,
+            43,
+            45,
+            46
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 25,
+            "n_admitted_correct": 25,
+            "n_admitted_wrong": 0,
+            "n_correct_in_review": 45,
+            "n_correct_admitted": 25,
+            "precision": 1.0,
+            "recall": 0.5555555555555556,
+            "F1": 0.7142857142857143
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 5,
+              "to_tid": 6,
+              "edge_type": "BALLISTIC",
+              "err": 2.494506,
+              "e6c_accepted": true,
+              "cost": 2.6247253
+            },
+            {
+              "from_tid": 50,
+              "to_tid": 55,
+              "edge_type": "BALLISTIC",
+              "err": 1.227322,
+              "e6c_accepted": true,
+              "cost": 2.6613661
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 20,
+              "edge_type": "BALLISTIC",
+              "err": 1.522498,
+              "e6c_accepted": true,
+              "cost": 2.7761249
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 22,
+              "edge_type": "BALLISTIC",
+              "err": 1.823535,
+              "e6c_accepted": true,
+              "cost": 2.79117675
+            },
+            {
+              "from_tid": 43,
+              "to_tid": 45,
+              "edge_type": "BALLISTIC",
+              "err": 0.483449,
+              "e6c_accepted": true,
+              "cost": 2.92417245
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 29,
+              "edge_type": "BALLISTIC",
+              "err": 0.591355,
+              "e6c_accepted": true,
+              "cost": 2.92956775
+            },
+            {
+              "from_tid": 60,
+              "to_tid": 64,
+              "edge_type": "BALLISTIC",
+              "err": 2.653091,
+              "e6c_accepted": true,
+              "cost": 2.9326545499999996
+            },
+            {
+              "from_tid": 45,
+              "to_tid": 46,
+              "edge_type": "BALLISTIC",
+              "err": 1.031029,
+              "e6c_accepted": true,
+              "cost": 2.9515514499999997
+            },
+            {
+              "from_tid": 39,
+              "to_tid": 47,
+              "edge_type": "BALLISTIC",
+              "err": 1.360009,
+              "e6c_accepted": true,
+              "cost": 2.96800045
+            },
+            {
+              "from_tid": 40,
+              "to_tid": 41,
+              "edge_type": "BALLISTIC",
+              "err": 2.416125,
+              "e6c_accepted": true,
+              "cost": 3.02080625
+            },
+            {
+              "from_tid": 51,
+              "to_tid": 52,
+              "edge_type": "BALLISTIC",
+              "err": 4.2694,
+              "e6c_accepted": true,
+              "cost": 3.11347
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 36,
+              "edge_type": "BALLISTIC",
+              "err": 1.287889,
+              "e6c_accepted": true,
+              "cost": 3.16439445
+            },
+            {
+              "from_tid": 38,
+              "to_tid": 39,
+              "edge_type": "BALLISTIC",
+              "err": 1.38839,
+              "e6c_accepted": true,
+              "cost": 3.1694195
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 37,
+              "edge_type": "BALLISTIC",
+              "err": 1.645284,
+              "e6c_accepted": true,
+              "cost": 3.1822642
+            },
+            {
+              "from_tid": 23,
+              "to_tid": 25,
+              "edge_type": "BALLISTIC",
+              "err": 8.103151,
+              "e6c_accepted": true,
+              "cost": 3.20515755
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 27,
+              "edge_type": "BALLISTIC",
+              "err": 9.111114,
+              "e6c_accepted": true,
+              "cost": 3.2555557000000004
+            },
+            {
+              "from_tid": 67,
+              "to_tid": 70,
+              "edge_type": "BALLISTIC",
+              "err": 7.111206,
+              "e6c_accepted": true,
+              "cost": 3.2555603
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "BALLISTIC",
+              "err": 3.49442,
+              "e6c_accepted": true,
+              "cost": 3.274721
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 33,
+              "edge_type": "BALLISTIC",
+              "err": 4.166562,
+              "e6c_accepted": true,
+              "cost": 3.3083281
+            },
+            {
+              "from_tid": 41,
+              "to_tid": 43,
+              "edge_type": "BALLISTIC",
+              "err": 1.252136,
+              "e6c_accepted": true,
+              "cost": 3.3626068
+            },
+            {
+              "from_tid": 37,
+              "to_tid": 40,
+              "edge_type": "BALLISTIC",
+              "err": 0.846868,
+              "e6c_accepted": true,
+              "cost": 3.5423434
+            },
+            {
+              "from_tid": 62,
+              "to_tid": 66,
+              "edge_type": "BALLISTIC",
+              "err": 15.554923,
+              "e6c_accepted": true,
+              "cost": 3.67774615
+            },
+            {
+              "from_tid": 64,
+              "to_tid": 68,
+              "edge_type": "BALLISTIC",
+              "err": 21.728619,
+              "e6c_accepted": true,
+              "cost": 3.68643095
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 8,
+              "edge_type": "BALLISTIC",
+              "err": 18.306459,
+              "e6c_accepted": true,
+              "cost": 4.11532295
+            },
+            {
+              "from_tid": 68,
+              "to_tid": 71,
+              "edge_type": "BALLISTIC",
+              "err": 18.508894,
+              "e6c_accepted": true,
+              "cost": 4.3254447
+            }
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_edges_in": 26,
+          "n_admitted": 24,
+          "n_rejected_capacity": 2,
+          "n_chains": 16,
+          "n_chains_multi": 9,
+          "longest": 6,
+          "longest_chain": [
+            19,
+            22,
+            26,
+            31,
+            35,
+            38
+          ],
+          "eval": {
+            "n_admitted_with_review_label": 24,
+            "n_admitted_correct": 24,
+            "n_admitted_wrong": 0,
+            "n_correct_in_review": 26,
+            "n_correct_admitted": 24,
+            "precision": 1.0,
+            "recall": 0.9230769230769231,
+            "F1": 0.9600000000000001
+          },
+          "admitted_edges": [
+            {
+              "from_tid": 27,
+              "to_tid": 28,
+              "edge_type": "BALLISTIC",
+              "err": 0.583007,
+              "e6c_accepted": true,
+              "cost": 2.82915035
+            },
+            {
+              "from_tid": 25,
+              "to_tid": 33,
+              "edge_type": "BALLISTIC",
+              "err": 12.815928,
+              "e6c_accepted": true,
+              "cost": 3.2407964000000002
+            },
+            {
+              "from_tid": 29,
+              "to_tid": 34,
+              "edge_type": "BALLISTIC",
+              "err": 9.049449,
+              "e6c_accepted": true,
+              "cost": 3.25247245
+            },
+            {
+              "from_tid": 33,
+              "to_tid": 36,
+              "edge_type": "BALLISTIC",
+              "err": 11.405658,
+              "e6c_accepted": true,
+              "cost": 3.2702829
+            },
+            {
+              "from_tid": 4,
+              "to_tid": 18,
+              "edge_type": "BALLISTIC",
+              "err": 7.717262,
+              "e6c_accepted": true,
+              "cost": 3.2858631
+            },
+            {
+              "from_tid": 28,
+              "to_tid": 32,
+              "edge_type": "BALLISTIC",
+              "err": 16.368602,
+              "e6c_accepted": true,
+              "cost": 3.3184301
+            },
+            {
+              "from_tid": 14,
+              "to_tid": 17,
+              "edge_type": "BALLISTIC",
+              "err": 14.410545,
+              "e6c_accepted": true,
+              "cost": 3.32052725
+            },
+            {
+              "from_tid": 18,
+              "to_tid": 30,
+              "edge_type": "BALLISTIC",
+              "err": 14.754576,
+              "e6c_accepted": true,
+              "cost": 3.3377288000000003
+            },
+            {
+              "from_tid": 30,
+              "to_tid": 37,
+              "edge_type": "BALLISTIC",
+              "err": 8.759993,
+              "e6c_accepted": true,
+              "cost": 3.33799965
+            },
+            {
+              "from_tid": 35,
+              "to_tid": 38,
+              "edge_type": "BALLISTIC",
+              "err": 12.855921,
+              "e6c_accepted": true,
+              "cost": 3.3427960500000005
+            },
+            {
+              "from_tid": 11,
+              "to_tid": 14,
+              "edge_type": "BALLISTIC",
+              "err": 9.858386,
+              "e6c_accepted": true,
+              "cost": 3.3929193
+            },
+            {
+              "from_tid": 17,
+              "to_tid": 24,
+              "edge_type": "BALLISTIC",
+              "err": 10.999779,
+              "e6c_accepted": true,
+              "cost": 3.44998895
+            },
+            {
+              "from_tid": 20,
+              "to_tid": 21,
+              "edge_type": "BALLISTIC",
+              "err": 6.493667,
+              "e6c_accepted": true,
+              "cost": 3.52468335
+            },
+            {
+              "from_tid": 13,
+              "to_tid": 16,
+              "edge_type": "BALLISTIC",
+              "err": 8.54268,
+              "e6c_accepted": true,
+              "cost": 3.6271340000000003
+            },
+            {
+              "from_tid": 15,
+              "to_tid": 25,
+              "edge_type": "BALLISTIC",
+              "err": 10.731772,
+              "e6c_accepted": true,
+              "cost": 3.6365886
+            },
+            {
+              "from_tid": 22,
+              "to_tid": 26,
+              "edge_type": "BALLISTIC",
+              "err": 8.961166,
+              "e6c_accepted": true,
+              "cost": 3.6480583
+            },
+            {
+              "from_tid": 21,
+              "to_tid": 29,
+              "edge_type": "BALLISTIC",
+              "err": 17.224194,
+              "e6c_accepted": true,
+              "cost": 3.6612096999999997
+            },
+            {
+              "from_tid": 2,
+              "to_tid": 8,
+              "edge_type": "BALLISTIC",
+              "err": 11.564336,
+              "e6c_accepted": true,
+              "cost": 3.6782168
+            },
+            {
+              "from_tid": 3,
+              "to_tid": 6,
+              "edge_type": "BALLISTIC",
+              "err": 9.566688,
+              "e6c_accepted": true,
+              "cost": 3.6783344000000002
+            },
+            {
+              "from_tid": 19,
+              "to_tid": 22,
+              "edge_type": "BALLISTIC",
+              "err": 10.312525,
+              "e6c_accepted": true,
+              "cost": 3.71562625
+            },
+            {
+              "from_tid": 31,
+              "to_tid": 35,
+              "edge_type": "BALLISTIC",
+              "err": 12.825241,
+              "e6c_accepted": true,
+              "cost": 3.74126205
+            },
+            {
+              "from_tid": 9,
+              "to_tid": 13,
+              "edge_type": "BALLISTIC",
+              "err": 14.914964,
+              "e6c_accepted": true,
+              "cost": 3.8457482
+            },
+            {
+              "from_tid": 1,
+              "to_tid": 9,
+              "edge_type": "BALLISTIC",
+              "err": 16.577872,
+              "e6c_accepted": true,
+              "cost": 4.0288936
+            },
+            {
+              "from_tid": 26,
+              "to_tid": 31,
+              "edge_type": "BALLISTIC",
+              "err": 14.346053,
+              "e6c_accepted": true,
+              "cost": 4.11730265
+            }
+          ]
+        }
+      }
+    }
+  }
+}

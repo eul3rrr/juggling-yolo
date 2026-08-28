@@ -1,0 +1,854 @@
+{
+  "variants": {
+    "union": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 45,
+          "n_admitted_correct": 41,
+          "n_admitted_wrong": 4,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 41,
+          "precision": 0.9111111111111111,
+          "recall": 0.9111111111111111,
+          "F1": 0.9111111111111111
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 25,
+          "n_admitted_correct": 24,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 24,
+          "precision": 0.96,
+          "recall": 0.9230769230769231,
+          "F1": 0.9411764705882353
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              18,
+              21
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              11,
+              13
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              12,
+              17
+            ],
+            [
+              57,
+              63
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              63,
+              65
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": []
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [
+            [
+              10,
+              11
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": []
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 70,
+        "n_admitted_correct": 65,
+        "n_admitted_wrong": 5,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 65,
+        "precision": 0.9285714285714286,
+        "recall": 0.9154929577464789,
+        "F1": 0.9219858156028369
+      }
+    },
+    "union_h112": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 38,
+          "n_admitted_correct": 35,
+          "n_admitted_wrong": 3,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 35,
+          "precision": 0.9210526315789473,
+          "recall": 0.7777777777777778,
+          "F1": 0.8433734939759038
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 24,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 0.9583333333333334,
+          "recall": 0.8846153846153846,
+          "F1": 0.9199999999999999
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              18,
+              21
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              11,
+              13
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              12,
+              17
+            ],
+            [
+              57,
+              63
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              63,
+              65
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              5,
+              6
+            ],
+            [
+              22,
+              27
+            ],
+            [
+              29,
+              34
+            ],
+            [
+              37,
+              40
+            ],
+            [
+              38,
+              39
+            ],
+            [
+              43,
+              45
+            ],
+            [
+              51,
+              52
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [
+            [
+              10,
+              11
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 62,
+        "n_admitted_correct": 58,
+        "n_admitted_wrong": 4,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 58,
+        "precision": 0.9354838709677419,
+        "recall": 0.8169014084507042,
+        "F1": 0.8721804511278195
+      }
+    },
+    "union_h112_h114_40_250": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 38,
+          "n_admitted_correct": 35,
+          "n_admitted_wrong": 3,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 35,
+          "precision": 0.9210526315789473,
+          "recall": 0.7777777777777778,
+          "F1": 0.8433734939759038
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 24,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 0.9583333333333334,
+          "recall": 0.8846153846153846,
+          "F1": 0.9199999999999999
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              18,
+              21
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              11,
+              13
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              12,
+              17
+            ],
+            [
+              57,
+              63
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              63,
+              65
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              5,
+              6
+            ],
+            [
+              22,
+              27
+            ],
+            [
+              29,
+              34
+            ],
+            [
+              37,
+              40
+            ],
+            [
+              38,
+              39
+            ],
+            [
+              43,
+              45
+            ],
+            [
+              51,
+              52
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [
+            [
+              10,
+              11
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 62,
+        "n_admitted_correct": 58,
+        "n_admitted_wrong": 4,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 58,
+        "precision": 0.9354838709677419,
+        "recall": 0.8169014084507042,
+        "F1": 0.8721804511278195
+      }
+    },
+    "union_h112_h114_25_200": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 32,
+          "n_admitted_correct": 31,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 31,
+          "precision": 0.96875,
+          "recall": 0.6888888888888889,
+          "F1": 0.8051948051948051
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 24,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 0.9583333333333334,
+          "recall": 0.8846153846153846,
+          "F1": 0.9199999999999999
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              63,
+              65
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [
+            [
+              18,
+              21
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              11,
+              13
+            ],
+            [
+              12,
+              17
+            ],
+            [
+              57,
+              63
+            ]
+          ],
+          "h7v3plus3_dropped": [
+            [
+              3,
+              8
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              22,
+              27
+            ],
+            [
+              29,
+              34
+            ],
+            [
+              37,
+              40
+            ],
+            [
+              38,
+              39
+            ],
+            [
+              43,
+              45
+            ],
+            [
+              51,
+              52
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [
+            [
+              10,
+              11
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 56,
+        "n_admitted_correct": 54,
+        "n_admitted_wrong": 2,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 54,
+        "precision": 0.9642857142857143,
+        "recall": 0.7605633802816901,
+        "F1": 0.8503937007874016
+      }
+    },
+    "union_h112_h114_20_150": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 26,
+          "n_admitted_correct": 25,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 25,
+          "precision": 0.9615384615384616,
+          "recall": 0.5555555555555556,
+          "F1": 0.7042253521126761
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 24,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 0.9583333333333334,
+          "recall": 0.8846153846153846,
+          "F1": 0.9199999999999999
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [
+            [
+              18,
+              21
+            ],
+            [
+              15,
+              16
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              11,
+              13
+            ],
+            [
+              12,
+              17
+            ],
+            [
+              57,
+              63
+            ],
+            [
+              63,
+              65
+            ]
+          ],
+          "h7v3plus3_dropped": [
+            [
+              17,
+              23
+            ],
+            [
+              70,
+              74
+            ],
+            [
+              3,
+              8
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              22,
+              27
+            ],
+            [
+              29,
+              34
+            ],
+            [
+              37,
+              40
+            ],
+            [
+              38,
+              39
+            ],
+            [
+              43,
+              45
+            ],
+            [
+              51,
+              52
+            ],
+            [
+              7,
+              10
+            ],
+            [
+              50,
+              55
+            ],
+            [
+              21,
+              22
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [
+            [
+              10,
+              11
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 50,
+        "n_admitted_correct": 48,
+        "n_admitted_wrong": 2,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 48,
+        "precision": 0.96,
+        "recall": 0.676056338028169,
+        "F1": 0.7933884297520661
+      }
+    },
+    "h7v3plus3_only_h112_h114_25_200": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 20,
+          "n_admitted_correct": 20,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 20,
+          "precision": 1.0,
+          "recall": 0.4444444444444444,
+          "F1": 0.6153846153846153
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 23,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 1.0,
+          "recall": 0.8846153846153846,
+          "F1": 0.9387755102040816
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              3,
+              8
+            ],
+            [
+              5,
+              6
+            ],
+            [
+              22,
+              27
+            ],
+            [
+              29,
+              34
+            ],
+            [
+              37,
+              40
+            ],
+            [
+              38,
+              39
+            ],
+            [
+              43,
+              45
+            ],
+            [
+              51,
+              52
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 43,
+        "n_admitted_correct": 43,
+        "n_admitted_wrong": 0,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 43,
+        "precision": 1.0,
+        "recall": 0.6056338028169014,
+        "F1": 0.7543859649122807
+      }
+    }
+  }
+}
