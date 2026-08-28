@@ -1,0 +1,144 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total_frames": 1077,
+      "v6_pattern_counts": {
+        "TWO_BALL": 273,
+        "FOUNTAIN_3+": 280,
+        "SINGLE_BALL": 219,
+        "CASCADE_3+": 73,
+        "NO_BALL": 35,
+        "MIXED_3+": 125,
+        "MIXED_3+_ENSEMBLE": 68,
+        "MIXED_3+_UNCONFIRMED": 3,
+        "TWO_BALL_ONE_HAND": 1
+      },
+      "v6_pct_patterns": {
+        "TWO_BALL": 25.3,
+        "FOUNTAIN_3+": 26.0,
+        "SINGLE_BALL": 20.3,
+        "CASCADE_3+": 6.8,
+        "NO_BALL": 3.2,
+        "MIXED_3+": 11.6,
+        "MIXED_3+_ENSEMBLE": 6.3,
+        "MIXED_3+_UNCONFIRMED": 0.3,
+        "TWO_BALL_ONE_HAND": 0.1
+      },
+      "source_counts": {
+        "agree": 489,
+        "v5_confident": 220,
+        "v2+v5_agree": 133,
+        "no_ball": 35,
+        "v2_confident": 125,
+        "ensemble_disagree": 68,
+        "v5_wins_low_n": 3,
+        "both_unconf": 3,
+        "v2_wins_low_n": 1
+      },
+      "n_substantial_phases": 7,
+      "sub_phases": [
+        {
+          "start_frame": 263,
+          "end_frame": 312,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 50,
+          "avg_confidence": 0.63
+        },
+        {
+          "start_frame": 335,
+          "end_frame": 382,
+          "pattern": "SINGLE_BALL",
+          "n_frames": 48,
+          "avg_confidence": 0.713
+        },
+        {
+          "start_frame": 411,
+          "end_frame": 450,
+          "pattern": "MIXED_3+",
+          "n_frames": 40,
+          "avg_confidence": 0.833
+        },
+        {
+          "start_frame": 451,
+          "end_frame": 470,
+          "pattern": "TWO_BALL",
+          "n_frames": 20,
+          "avg_confidence": 0.722
+        },
+        {
+          "start_frame": 473,
+          "end_frame": 506,
+          "pattern": "SINGLE_BALL",
+          "n_frames": 34,
+          "avg_confidence": 0.733
+        },
+        {
+          "start_frame": 550,
+          "end_frame": 578,
+          "pattern": "FOUNTAIN_3+",
+          "n_frames": 29,
+          "avg_confidence": 0.848
+        },
+        {
+          "start_frame": 631,
+          "end_frame": 670,
+          "pattern": "MIXED_3+",
+          "n_frames": 40,
+          "avg_confidence": 0.602
+        }
+      ],
+      "v2_pattern_counts": {
+        "TWO_BALL": 270,
+        "MIXED_3+_UNCONFIRMED": 66,
+        "SINGLE_BALL": 219,
+        "MIXED_3+": 316,
+        "NO_BALL": 35,
+        "FOUNTAIN_3+": 167,
+        "TWO_BALL_ONE_HAND": 4
+      },
+      "v5_pattern_counts": {
+        "TWO_BALL": 274,
+        "FOUNTAIN_3+_DETECTOR_SMOOTHED": 280,
+        "SINGLE_BALL": 219,
+        "CASCADE_3+_DETECTOR_SMOOTHED": 141,
+        "NO_BALL": 35,
+        "MIXED_3+_UNCONFIRMED": 128
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_total_frames": 898,
+      "v6_pattern_counts": {
+        "MIXED_3+_UNCONFIRMED": 1,
+        "CASCADE_3+": 896,
+        "FOUNTAIN_3+": 1
+      },
+      "v6_pct_patterns": {
+        "MIXED_3+_UNCONFIRMED": 0.1,
+        "CASCADE_3+": 99.8,
+        "FOUNTAIN_3+": 0.1
+      },
+      "source_counts": {
+        "both_unconf": 1,
+        "v5_confident": 897
+      },
+      "n_substantial_phases": 1,
+      "sub_phases": [
+        {
+          "start_frame": 3,
+          "end_frame": 898,
+          "pattern": "CASCADE_3+",
+          "n_frames": 896,
+          "avg_confidence": 0.63
+        }
+      ],
+      "v2_pattern_counts": {
+        "MIXED_3+_UNCONFIRMED": 898
+      },
+      "v5_pattern_counts": {
+        "MIXED_3+_UNCONFIRMED": 1,
+        "CASCADE_3+_DETECTOR_SMOOTHED": 896,
+        "FOUNTAIN_3+_DETECTOR_SMOOTHED": 1
+      }
+    }
+  }
+}

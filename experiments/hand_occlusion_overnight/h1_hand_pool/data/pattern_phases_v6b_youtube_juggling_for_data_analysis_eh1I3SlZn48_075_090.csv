@@ -1,0 +1,4 @@
+start_frame,end_frame,pattern,n_frames,avg_confidence
+2,2,MIXED_3+,1,0.3
+3,898,CASCADE_3+,896,0.7
+899,899,FOUNTAIN_3+,1,0.7
