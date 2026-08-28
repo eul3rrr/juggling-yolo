@@ -2899,3 +2899,66 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus3_chains_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v10_h7v3plus3_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h34_report.md`
+
+### H35 (2026-08-28 ~13:05 CEST)
+
+- Hypothesis: H22 and H26 are chain-topology changes. H11 v7
+  identity propagation and H12 v7 pattern inference were
+  computed on h7v3pure (H7v2 + H15v2 only), NOT on h7v3plus3
+  (H22 + H26). The H22 chain split (7-tid → 4-tid + 4-tid on
+  YouTube) and H26 edge additions (4 events on identical) need
+  to propagate through the downstream consumers. Question:
+  does the new chain topology change the per-frame pattern
+  distribution?
+- Approach:
+  - Re-run H11 v7 identity propagation on h7v3plus3 chains.
+    Extend hand-edge types to include
+    H22_RECLASSIFIED_HAND_TRANSITION. Parse hand from
+    h22_reason and h26_reason fields.
+  - Re-run H12 v7 pattern inference on h7v3plus3 chains. Build
+    per-frame census and pattern distribution.
+  - Render 6 YouTube contact sheets for chain 0 (1,9,13,16) and
+    chain 10 (20,21,29,34) to visually confirm the split.
+- Quantitative result (H11 v7):
+  - identical: 27 CONFIDENT, 3 multi-CONFIDENT, 24 catch + 24 throw,
+    4 h26 events, 8 v_reclass events (matches h7v3plus2)
+  - YouTube: 5 CONFIDENT, 1 multi-CONFIDENT, 25 catch + 25 throw,
+    2 h22 events, 2 v_reclass events
+- Quantitative result (H12 v7):
+  - identical pattern distribution: identical to h7v3plus2
+    (FOUNTAIN_3+ 28.6%, TWO_BALL 24.5%, SINGLE_BALL 20.7%,
+    MIXED_3+ 20.0%, MIXED_3+_UNCONFIRMED 2.4%, CASCADE_3+ 2.1%,
+    TWO_BALL_ONE_HAND 1.7%)
+  - YouTube pattern distribution: identical to h7v3pure
+    (MIXED_3+ 65.6%, CASCADE_3+ 14.4%, FOUNTAIN_3+ 12.2%,
+    MIXED_3+_UNCONFIRMED 7.8%)
+  - YouTube n_total: 5 (67.4%), 4 (29.1%), 6 (1.1%), 3 (2.4%)
+- Visual QA: 6 YouTube contact sheets rendered. The 4+4 chain
+  split is geometrically correct — chain 0 (1,9,13,16) is a
+  sustained sequence, chain 10 (20,21,29,34) is a separate
+  sustained sequence.
+- Negative findings:
+  - H22's chain split does NOT change the per-frame census or
+    pattern distribution. The census is dominated by the 11
+    single-tid YouTube chains (constant n_total=1), not the
+    multi-tid chain topology.
+  - The pattern distribution sensitivity to h7v3 variant is
+    ZERO. This is a useful negative finding: downstream consumers
+    can use h7v3plus3 without affecting H12 pattern inference
+    results.
+  - h26_reason doesn't always contain hand info; H26's 4 events
+    are tagged h26_reclassified=True, hand=unknown. This is a
+    documentation limitation, not a data bug.
+- Verdict: **PASS (consumer-pass, no change).** h7v3plus3 is
+  functionally equivalent to h7v3pure for downstream consumers.
+  Use h7v3plus3 going forward. See
+  `h1_hand_pool/reports/h35_report.md` for full analysis.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h35_h7v3plus3_downstream.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h35_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h35_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/tracklet_identity_h35_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/chain_events_h35_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_h35_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h35/*.png` (6 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h35_report.md`

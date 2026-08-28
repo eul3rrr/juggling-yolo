@@ -1290,10 +1290,47 @@ tracking, multi-view 3D reconstruction).
 1. **H34: H22+H26 combined chain set** — apply H22's YouTube 20→21
    veto on top of H26's 2 NEW REAL H24 edges. (Low priority — small
    improvement, +0.0034 + +0.0061.)
-2. **Stop here.** The h7v3plus2 chain set is well-validated. The
+3. **Stop here.** The h7v3plus2 chain set is well-validated. The
    single-ball-vs-multi-ball identification problem requires
    fundamentally different signals not available with current data.
-3. **H35: pattern inference on h7v3plus2** — apply H12's per-frame
+4. **H35: pattern inference on h7v3plus2** — apply H12's per-frame
    pattern inference to the recommended chain set. (Likely produces
    similar CASCADE/FOUNTAIN ambiguity as H12 v8 because the
    underlying multi-ball-merge problem is the same.)
+
+
+## Thirty-seventh episode (H35) — STATUS: COMPLETE (PASS, consumer-pass)
+
+Sub-steps:
+1. ✅ Re-ran H11 v7 identity propagation on h7v3plus3 chains
+   (h7v3plus3 = h7v3pure + H22 + H26). Extended hand-edge types
+   to include H22_RECLASSIFIED_HAND_TRANSITION. Parsed hand from
+   h22_reason and h26_reason.
+2. ✅ Re-ran H12 v7 pattern inference on h7v3plus3 chains. Built
+   per-frame census and pattern distribution.
+3. ✅ Result: identical is identical to h7v3plus2 (no H22 effect on
+   identical). YouTube pattern distribution is identical to
+   h7v3pure (H12 v8). The H22 chain split does NOT change the
+   per-frame census or pattern distribution.
+4. ✅ 6 YouTube contact sheets rendered for chain 0 (1,9,13,16) and
+   chain 10 (20,21,29,34). Visual inspection confirms the
+   4+4 split is geometrically correct.
+5. ✅ Documented in `h35_report.md` and updated STATE/RESULTS_LOG.
+
+**H35 verdict: PASS (consumer-pass, no change).** The h7v3plus3
+chain set is functionally equivalent to h7v3pure for downstream
+consumers. Pattern distribution, phase detection, and per-frame
+census are all stable across h7v3 variants. Use h7v3plus3 going
+forward.
+
+**Next episode candidates:**
+
+1. **H36: literature search for multi-ball juggling tracking
+   methods** — search the web for the latest juggling-tracking
+   papers, then turn promising ideas into isolated experiments.
+2. **H37: per-frame hand-occupancy state machine** — for each
+   frame, infer (left_occupancy, right_occupancy, n_in_air) from
+   the h7v3plus3 chain set, allowing multi-token states.
+3. **Stop here.** The h7v3plus3 chain set is well-validated and
+   the downstream consumers are stable. Further chain improvements
+   would require fundamentally different signals.

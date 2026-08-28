@@ -1,7 +1,16 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 12:50 CEST
-STATUS: H30 + H31 + H32 + H33 + **H34** COMPLETE. **H32 NEGATIVE**: per-chain
+LAST_UPDATE: 2026-08-28 13:05 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + **H35** COMPLETE. H35 PASS
+(consumer-pass, no change): H11 v7 identity propagation and H12 v7
+pattern inference re-run on h7v3plus3 (H22 + H26 combined) chain set
+produces identical per-frame pattern distribution to h7v3pure (H12 v8)
+on YouTube. The H22 YouTube 7-tid chain split into 4-tid + 4-tid does
+NOT change the per-frame census. H26's 4 identical events propagate
+correctly. H22's 2 YouTube events propagate correctly. h7v3plus3 is
+now confirmed as functionally equivalent to h7v3pure for downstream
+consumers. Recommended operating point remains h7v3plus3 (H34 + H35).
+**H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -494,6 +503,9 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
+H35 is complete (PASS, consumer-pass). The h7v3plus3 chain set
+is functionally equivalent to h7v3pure for downstream consumers.
+
 H31 is complete (NEGATIVE). The H17→H20→H30 pipeline is now
 established as a negative finding chain: every geometric post-filter
 on the H17 V-shape pool fails to produce a reliable high-precision
@@ -594,6 +606,20 @@ For "single-ball trajectory" claims, use H11 v7 CONFIDENT chains
 + H10 v10 quality. For "this chain is CASCADE/FOUNTAIN" claims,
 abandon the classification — the chain is mostly multi-ball merges,
 not a single-ball pattern.
+
+## H35 conclusion
+
+H35 is a **consumer-pass** re-measurement: H11 v7 and H12 v7
+re-run on h7v3plus3 produces identical per-frame pattern
+distribution to h7v3pure (H12 v8). The H22 YouTube 7→4+4 chain
+split is a chain-topology change that does NOT change the
+per-frame census (the census is dominated by the 11 single-tid
+YouTube chains, not the multi-tid chain topology).
+
+**H35 PASS verdict:** h7v3plus3 is functionally equivalent to
+h7v3pure for downstream consumers. Use h7v3plus3 going forward.
+
+See `h1_hand_pool/reports/h35_report.md` for full analysis.
 
 ## Future research directions (post H34)
 

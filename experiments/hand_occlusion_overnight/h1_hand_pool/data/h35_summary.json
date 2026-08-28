@@ -1,0 +1,54 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 42,
+      "n_confident_chains": 27,
+      "n_multi_confident": 3,
+      "n_catches": 24,
+      "n_throws": 24,
+      "n_h22_events": 0,
+      "n_h26_events": 4,
+      "n_v_reclass_events": 8,
+      "pattern_distribution": {
+        "TWO_BALL": 255,
+        "MIXED_3+_UNCONFIRMED": 25,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 22,
+        "MIXED_3+": 208,
+        "TWO_BALL_ONE_HAND": 18,
+        "FOUNTAIN_3+": 298
+      },
+      "n_total_distribution": {
+        "2": 273,
+        "3": 537,
+        "1": 216,
+        "4": 15,
+        "5": 1
+      },
+      "n_substantial_phases": 13
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_confident_chains": 5,
+      "n_multi_confident": 1,
+      "n_catches": 25,
+      "n_throws": 25,
+      "n_h22_events": 2,
+      "n_h26_events": 0,
+      "n_v_reclass_events": 2,
+      "pattern_distribution": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 129,
+        "MIXED_3+": 589,
+        "FOUNTAIN_3+": 110
+      },
+      "n_total_distribution": {
+        "5": 605,
+        "4": 261,
+        "6": 10,
+        "3": 22
+      },
+      "n_substantial_phases": 13
+    }
+  }
+}
