@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 17:30 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + **H13 v1** COMPLETE. Pipeline unchanged. H13 PARTIAL PASS: stationary-cluster criterion (H3 v3) is NOT a discriminator between real catch-throws and identity switches (3/6 v2 corroborated edges are kept-ballistic). Concentration ratio IS a real signal: v4d hand-links have lower mean concentration (0.142) than h7v2-reclassified (0.201) and h7v2-kept-ballistic (0.206) on identical. The difference correlates with gap length (v4d mean gap 18, others 9-10), NOT with event type. Cohen's d (h7v2_reclass vs v4d) = +0.965 (large).
+LAST_UPDATE: 2026-08-28 17:35 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 v1 + **H13 v2** COMPLETE. Pipeline unchanged. **H13 v2 NEGATIVE**: stricter cluster criterion (STATIONARY_MAX_STD=25px, OTHER_HAND_MAX=2) fires on 3/13 h7v2_kept_ballistic edges (28→29, 51→52, 41→43) — true identity switches. Only 1/38 h7v2_reclassified edge (45→46) and 0/11 v4d links are STRICT_CORROBORATED. The criterion is actively MIS-calibrated: kept-ballistic STRICT_CORROBORATED rate (3/13 = 23%) is HIGHER than reclassified rate (1/38 = 2.6%). Confirms H13 v1: detector's low-conf signal is fundamentally NOT a discriminator. Master §14's "lower-confidence evidence tier near hand events" idea is not implementable with detector signal alone — the hand-event context is exactly what we're trying to corroborate, making the approach circular.
 
 ## Isolation
 
@@ -318,19 +318,23 @@ extraction: 10 identical + 1 youtube links with visual precision
     6 hand edges) achieves q=0.671 with h8v8=0.86. See
     `h1_hand_pool/reports/h10v8_report.md`.
 24. **H13: detector-level low-confidence ball evidence at
-    hand events (master §14)** — DONE. PARTIAL PASS.
-    Three iterations: v1 (any single detection, FPR 91-100%
-    — useless), v2 (H3 stationary cluster, 6/62 edges
-    corroborated, 3 are kept-ballistic false positives —
-    NOT a discriminator), v3+v4 (concentration ratio +
-    peak-vs-context). Key finding: v4d hand-links have
-    LOWER concentration (0.142) than h7v2-reclassified
-    (0.201) and h7v2-kept-ballistic (0.206) on identical.
-    The difference correlates with gap length, not event
-    type. Cohen's d = +0.965 (large). Conclusion: H3
-    stationary-cluster is a noisy signal that does NOT
-    discriminate catch-throws from identity switches.
-    See `h1_hand_pool/reports/h13_report.md`.
+    hand events (master §14)** — DONE. NEGATIVE result.
+    Four iterations:
+    - v1 (any single detection, FPR 91-100% — useless)
+    - v2 (H3 stationary cluster, 6/62 edges corroborated, 3
+      are kept-ballistic false positives — NOT a discriminator)
+    - v3+v4 (concentration ratio + peak-vs-context; statistically
+      real signal but correlates with gap length, not event type)
+    - v5 (strict cluster + hand-specificity; 3/13 kept-ballistic
+      edges STRICT_CORROBORATED — actively MIS-calibrated)
+    **Conclusion**: the detector's low-conf signal is fundamentally
+    NOT a discriminator for catch-throws vs identity switches. The
+    hand-event context required to interpret the signal is exactly
+    what we're trying to corroborate, making master §14's
+    "lower-confidence evidence tier near hand events" idea
+    unimplementable with detector signal alone. See
+    `h1_hand_pool/reports/h13_report.md` and
+    `h1_hand_pool/reports/h13v2_report.md`.
 
 ## Important artifact paths
 
@@ -356,4 +360,33 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. H13 v1 (partial pass) committed in this episode.
+None. H13 v2 (NEGATIVE) committed in this episode.
+
+## Next action
+
+The detector-signal approach (master §14, H13 series) is closed
+after 4 negative iterations. New research direction needed.
+
+Candidate directions to consider for next episode:
+1. **H14: per-tracklet motion smoothness check** — measure
+   H8-style velocity discontinuity WITHIN each tracklet (not
+   across edges). A held ball in the hand has near-zero velocity
+   (std < 1 px/frame); a free-falling ball has high velocity
+   (std > 5 px/frame). This is intrinsic to the tracklet, not
+   dependent on detector confidence. Could it replace the H3/H13
+   signal and be a usable held-ball confirmation?
+2. **H15: temporal symmetry of the hand-pool** — for each
+   v4d/H7v2 hand-link, check whether the inverse direction
+   (target→source) is also a candidate. Asymmetric links may
+   indicate a "phantom" hand-link that doesn't have a reverse.
+3. **H16: explicit hand-event-relative time encoding** — encode
+   hand-events as a binary time series (1 = hand event in last
+   5 frames, 0 = no hand event) and use the autocorrelation
+   function to detect periodic structure (juggling cadence).
+   This would measure the actual ball-bounce frequency.
+4. **H17: simple Kalman-filter pre-smoothing of tracklet
+   positions** — for each tracklet, fit a constant-velocity
+   Kalman filter, replace the raw positions with the smoothed
+   estimates, and re-evaluate the H1 / H7v2 / H8 metrics. Would
+   Kalman smoothing help with the late-phase FOUNTAIN-vs-CASCADE
+   misclassification?
