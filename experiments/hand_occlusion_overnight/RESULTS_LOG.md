@@ -3325,3 +3325,82 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h45_siteswap_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h45/*.png` (11 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h45_report.md`
+
+### H46 (2026-08-28 ~15:30 CEST)
+
+- Hypothesis: H12 v8 source tracklet's last arc and target
+  tracklet's first arc should be physically consistent for
+  real catch-throws, and physically disconnected for
+  tracker fragmentations. A per-flight physics check would
+  distinguish the two cases.
+- Implementation: H46 v1 extrapolates source's last-arc
+  parabola across the held-phase gap and compares to
+  target's first position. H46 v2 simplifies to a bounce
+  sign test: v_in < 0 AND v_out < 0 (both post-throw
+  tracklets ascending).
+- Quantitative result:
+
+| Video | n_flights | H46 v1 PHYSICS_OK | H46 v2 BOUNCE_OK |
+|---|---|---|---|
+| identical | 11 | 0 | 2 |
+| YouTube | 15 | 0 | 0 |
+
+- Negative findings:
+  - **H46 v1 hypothesis was wrong.** The source tracklet's
+    last points are NOT the descent into the hand — they
+    are the post-throw ascent (the tracklet starts at the
+    throw frame, not the catch frame). The held phase is
+    not in any tracklet.
+  - **H46 v2 bounce sign test is too restrictive on
+    identical** (rejects 9/11 flights including 3 visually-
+    confirmed real catch-throws in chain 22) and too
+    permissive on YouTube (rejects 0/15 — but H45 visual QA
+    found 0/4 real catch-throws on YouTube chain 9, so
+    rejecting 15/15 is the right answer for YouTube).
+  - **YouTube 0/15 BOUNCE_OK is strong evidence that all
+    YouTube H12 v8 events are tracker fragmentation.**
+    Consistent with H45's 0/4 visual-QA finding.
+  - **The 10-frame flight-time filter (H45) is the only
+    actionable post-filter for H12 v8 event log.**
+- Verdict: **NEGATIVE result.** H46 v1 hypothesis was wrong.
+  H46 v2 confirms H45's YouTube finding but adds no new
+  signal for identical. See `h1_hand_pool/reports/h46_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h46_per_flight_physics.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h46_per_flight_physics.csv` (26 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h46_per_flight_physics_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h46_report.md`
+
+### H47 (2026-08-28 ~15:45 CEST)
+
+- Hypothesis: H45 found that the 10-frame flight-time filter
+  is a useful downstream post-filter for H12 v8 event log.
+  Applying it as a pre-filter for K=4 sliding window inference
+  should produce a slightly cleaner pattern classification.
+- Implementation: `h47_h12v8_flight_time_filter.py` loads
+  H12 v8 event log, computes per-flight flight times, drops
+  (CATCH, THROW) pairs with flight time < 10 frames, then
+  re-runs a simplified K=4 pattern classifier.
+- Quantitative result:
+
+| Video | Total events | Flights w/ time | Short (< 10f) | Dropped |
+|---|---|---|---|---|
+| identical | 48 | 11 | 3 | 3 (6.2%) |
+| YouTube | 50 | 15 | 0 | 0 (0.0%) |
+
+- Negative findings:
+  - The 10-frame filter is a no-op on YouTube (all flights
+    are >= 58 frames due to tracker fragmentation).
+  - The 10-frame filter drops only 3/48 events on identical
+    — a small but real precision improvement.
+- Verdict: **PASS (narrow scope).** The 10-frame filter is
+  a safe, useful downstream post-filter for H12 v8 event
+  log consumers. It can be applied before K=4 sliding window
+  inference as a precision improvement. H47 simplified
+  classifier doesn't use chain quality, so it's NOT a
+  drop-in replacement for H12 v8. See
+  `h1_hand_pool/reports/h47_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h47_h12v8_flight_time_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h47_flight_time_filter_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h47_report.md`

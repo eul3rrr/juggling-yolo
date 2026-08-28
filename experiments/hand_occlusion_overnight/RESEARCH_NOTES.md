@@ -1427,4 +1427,49 @@ useful source record:
     (60 fps) would help but are out of scope for this
     autonomous lab.
 
+## Cross-cutting insights from H46 (2026-08-28 ~15:30)
+
+55. **The source tracklet's last points are NOT the descent
+    into the hand — they are the post-throw ascent.** H46 v1
+    hypothesis (extrapolate source parabola across the held
+    gap) was wrong because the tracklet starts at the THROW
+    frame, not the catch frame. The held phase (typically
+    10-50 frames) is not in any tracklet.
+
+56. **A proper per-flight physics check would need explicit
+    hold-phase interpolation** (the ball is at the hand
+    during the gap) or hand-pose-anchored position. The H12
+    v8 event log does not contain the held position.
+
+57. **The H46 v2 bounce sign test confirms H45's YouTube
+    finding** at a different level: 0/15 YouTube flights
+    pass the sign test, consistent with H45's 0/4
+    visual-QA REAL flights. Two independent methods
+    (H45 visual + H46 sign test) both conclude that all
+    YouTube H12 v8 events are tracker fragmentation.
+
+58. **On identical, the bounce sign test is too restrictive
+    (2/11 BOUNCE_OK)** because source/target tracklets
+    can be in any part of the ball's flight (some past
+    apex, descending). The sign test requires both to be
+    ascending, which is not always true even for real
+    catch-throws.
+
+## Cross-cutting insights from H47 (2026-08-28 ~15:45)
+
+59. **The 10-frame flight-time filter is a useful downstream
+    post-filter for H12 v8 event log consumers.** H47
+    validated H45's most actionable finding by applying the
+    filter at the event-log level. On identical, it drops
+    3/48 events (6.2%), all identity switches. On YouTube,
+    it's a no-op (0/50 events dropped) because all flights
+    are >= 58 frames.
+
+60. **A 50-frame flight-time filter would be the symmetric
+    YouTube-specific filter.** H47 only tested the 10-frame
+    filter. A 50-frame filter (or some higher threshold)
+    would drop YouTube's tracker-fragmentation flights
+    while preserving any rare real catch-throws. This is
+    H48 candidate research.
+
 

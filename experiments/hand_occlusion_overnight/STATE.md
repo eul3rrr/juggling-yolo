@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 15:25 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45**
+LAST_UPDATE: 2026-08-28 15:50 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45 + H46 + H47**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -926,3 +926,66 @@ signal, distinguishing real flights from tracker-fragmentation
 artifacts based on physics alone.
 
 See `h1_hand_pool/reports/h45_report.md` for full analysis.
+
+## H46 conclusion
+
+**H46: per-flight physics check via bounce model** — DONE.
+NEGATIVE result (H46 v1 hypothesis was wrong; H46 v2
+bounce sign test confirms H45's YouTube finding).
+
+**H46 v1** tried to extrapolate source's last-arc parabola
+across the held-phase gap and compare to target's first
+position. ALL 26 flights marked PHYSICS_VIOLATION,
+including visually-confirmed REAL catch-throws. Hypothesis
+was wrong: the source tracklet's last points are NOT the
+descent into the hand — they are the post-throw ascent
+(the tracklet starts at the throw frame, not the catch
+frame).
+
+**H46 v2** (bounce sign test) checks v_in < 0 AND v_out < 0
+(both post-throw tracklets ascending):
+- identical: 2/11 BOUNCE_OK (chain 29's ft=5 and ft=33)
+- YouTube: 0/15 BOUNCE_OK
+
+The YouTube 0/15 result is strong evidence that all YouTube
+H12 v8 events are tracker fragmentation (consistent with
+H45's 0/4 visually-confirmed REAL flights on YouTube chain 9).
+
+**The fundamental issue is that H12 v8's per-tracklet data
+structure is not aligned with held-phase physics.** The held
+phase is not in any tracklet. Per-flight physics would need
+explicit hold-phase interpolation (the ball is at the hand
+during the gap) or hand-pose-anchored position.
+
+**Combined H45 + H46 finding:** the H12 v8 event log is
+fundamentally not a clean signal for flight-time analysis.
+The 10-frame filter (H45) is the only actionable post-filter;
+H46's bounce sign test is too restrictive on identical (rejects
+real catch-throws) and too permissive on YouTube (rejects
+everything).
+
+See `h1_hand_pool/reports/h46_report.md` for full analysis.
+
+## H47 conclusion
+
+**H47: H12 v8 with 10-frame flight-time filter** — DONE.
+PASS (narrow scope).
+
+Applies H45's most actionable finding (the 10-frame
+flight-time filter) to H12 v8's event log. Drops any
+(CATCH, THROW) pair with flight time < 10 frames.
+
+- identical: 3/48 events dropped (6.2%) — all 3 are
+  identity switches (ft=1, 3, 5) confirmed by H45 visual QA
+- YouTube: 0/50 events dropped (all flights are >= 58
+  frames, consistent with H45's tracker-fragmentation
+  finding)
+
+**The 10-frame filter is a safe, useful downstream post-filter
+for H12 v8 event log consumers.** It can be applied before
+K=4 sliding window inference as a precision improvement.
+H47 is NOT a drop-in replacement for H12 v8 (the H47
+simplified classifier doesn't use chain quality); it's a
+measurement of the filter's impact on the event log.
+
+See `h1_hand_pool/reports/h47_report.md` for full analysis.
