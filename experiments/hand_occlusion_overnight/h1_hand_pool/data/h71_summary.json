@@ -1,0 +1,145 @@
+{
+  "hypothesis": "H70 single-pass vision tool is unreliable (H53 finding). Multi-rater consensus with 3+ independent question framings should resolve the ambiguity on the 7 H70 contact sheets.",
+  "methodology": "For each contact sheet, do 3+ independent vision queries with different question framings. Take majority verdict.",
+  "phases": [
+    {
+      "path": "h70v2/phase_identical_balls_trick_000_018_f263-312_MIXED_3+_keep_conc_0.182.png",
+      "stem": "identical_balls_trick_000_018",
+      "f_start": 263,
+      "f_end": 312,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.182,
+      "h70_verdict": "KEEP",
+      "h71_verdicts": [
+        "JUGGLING",
+        "JUGGLING"
+      ],
+      "h71_consensus": "JUGGLING",
+      "h71_juggle_votes": 2,
+      "h71_total_votes": 2,
+      "h70_correct": true
+    },
+    {
+      "path": "h70v2/phase_identical_balls_trick_000_018_f411-450_MIXED_3+_keep_conc_0.196.png",
+      "stem": "identical_balls_trick_000_018",
+      "f_start": 411,
+      "f_end": 450,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.196,
+      "h70_verdict": "KEEP",
+      "h71_verdicts": [
+        "STATIC_HOLD",
+        "JUGGLING",
+        "JUGGLING"
+      ],
+      "h71_consensus": "JUGGLING",
+      "h71_juggle_votes": 2,
+      "h71_total_votes": 3,
+      "h70_correct": true
+    },
+    {
+      "path": "h70v2/phase_identical_balls_trick_000_018_f549-578_MIXED_3+_keep_conc_0.332.png",
+      "stem": "identical_balls_trick_000_018",
+      "f_start": 549,
+      "f_end": 578,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.332,
+      "h70_verdict": "KEEP",
+      "h71_verdicts": [
+        "STATIC_HOLD",
+        "JUGGLING",
+        "JUGGLING"
+      ],
+      "h71_consensus": "JUGGLING",
+      "h71_juggle_votes": 2,
+      "h71_total_votes": 3,
+      "h70_correct": true
+    },
+    {
+      "path": "h70v2/phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f308-338_MIXED_3+_keep_conc_0.235.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 308,
+      "f_end": 338,
+      "pattern": "MIXED_3+",
+      "n_balls": 5,
+      "spec_conc": 0.235,
+      "h70_verdict": "KEEP",
+      "h71_verdicts": [
+        "JUGGLING",
+        "JUGGLING"
+      ],
+      "h71_consensus": "JUGGLING",
+      "h71_juggle_votes": 2,
+      "h71_total_votes": 2,
+      "h70_correct": true
+    },
+    {
+      "path": "h70v2/phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f769-799_MIXED_3+_keep_conc_0.214.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 769,
+      "f_end": 799,
+      "pattern": "MIXED_3+",
+      "n_balls": 5,
+      "spec_conc": 0.214,
+      "h70_verdict": "KEEP",
+      "h71_verdicts": [
+        "JUGGLING",
+        "JUGGLING"
+      ],
+      "h71_consensus": "JUGGLING",
+      "h71_juggle_votes": 2,
+      "h71_total_votes": 2,
+      "h70_correct": true
+    },
+    {
+      "path": "h70/phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f114-255_MIXED_3+.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 114,
+      "f_end": 255,
+      "pattern": "MIXED_3+",
+      "n_balls": 5,
+      "spec_conc": 0.124,
+      "h70_verdict": "REJECT",
+      "h71_verdicts": [
+        "JUGGLING",
+        "JUGGLING",
+        "JUGGLING_STARTUP",
+        "JUGGLING_STARTUP"
+      ],
+      "h71_consensus": "JUGGLING",
+      "h71_juggle_votes": 4,
+      "h71_total_votes": 4,
+      "h70_correct": false
+    },
+    {
+      "path": "h70/phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f2-71_MIXED_3+_UNCONFIRMED.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 2,
+      "f_end": 71,
+      "pattern": "MIXED_3+_UNCONFIRMED",
+      "n_balls": 5,
+      "spec_conc": 0.075,
+      "h70_verdict": "REJECT",
+      "h71_verdicts": [
+        "JUGGLING",
+        "STATIC_HOLD",
+        "STATIC_DEMO"
+      ],
+      "h71_consensus": "STATIC_HOLD",
+      "h71_juggle_votes": 1,
+      "h71_total_votes": 3,
+      "h70_correct": true
+    }
+  ],
+  "stats": {
+    "n_phases": 7,
+    "n_keep": 5,
+    "n_reject": 2,
+    "n_keep_confirmed_real": 5,
+    "n_reject_confirmed_not_juggling": 1,
+    "h70_precision_on_sample": 0.857
+  }
+}

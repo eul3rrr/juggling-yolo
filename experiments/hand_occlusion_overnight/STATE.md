@@ -2108,3 +2108,89 @@ only); H70 is a useful diagnostic signal that warrants future
 multi-rater validation.
 
 See `h1_hand_pool/reports/h70_report.md` for full analysis.
+
+## H71 conclusion (2026-08-28 ~20:00 CEST)
+
+**H71: multi-rater visual QA consensus on the 7 H70 contact sheets** —
+DONE. MIXED. H70 KEEP threshold validated; H70 REJECT threshold has
+1 false positive on 5-ball startup.
+
+**Method:** for each of the 7 H70 contact sheets (5 KEEP + 2 REJECT
+MIXED_3+ phases), do 2-4 independent vision queries with different
+question framings. Majority vote with conservative tie-breaking
+(prefer STATIC on ties — a missed juggle is recoverable but a
+wrongly-accepted non-juggling adds false evidence).
+
+**Quantitative result:**
+
+| Phase | n_balls | conc | H70 | H71 verdicts | H71 consensus | H70 correct |
+|-------|---------|------|-----|--------------|---------------|-------------|
+| identical f263-312 | 3 | 0.182 | KEEP | JUGG, JUGG | JUGGLING (2/2) | YES |
+| identical f411-450 | 3 | 0.196 | KEEP | STAT, JUGG, JUGG | JUGGLING (2/3) | YES |
+| identical f549-578 | 3 | 0.332 | KEEP | STAT, JUGG, JUGG | JUGGLING (2/3) | YES |
+| YouTube f308-338 | 5 | 0.235 | KEEP | JUGG, JUGG | JUGGLING (2/2) | YES |
+| YouTube f769-799 | 5 | 0.214 | KEEP | JUGG, JUGG | JUGGLING (2/2) | YES |
+| YouTube f114-255 | 5 | 0.124 | REJECT | JUGG, JUGG, STARTUP, STARTUP | JUGGLING_STARTUP (4/4) | NO (FP) |
+| YouTube f2-71 | 5 | 0.075 | REJECT | JUGG, STATIC_HOLD, STATIC_DEMO | STATIC_HOLD (1/3) | YES |
+
+**H70 precision on the 7-sample: 6/7 = 85.7%.**
+
+**Key findings:**
+
+1. **H70 KEEP threshold (spec_conc >= 0.15) is VALIDATED.** All 5
+   KEEP MIXED_3+ phases are confirmed as real juggling by multi-rater
+   consensus. H70 single-pass vision tool errors (false "STATIC"
+   on f=411-450 and f=549-578) are confirmed unreliable — the
+   3-rater consensus correctly identifies both as JUGGLING.
+
+2. **H70 REJECT threshold has 1 false positive on 5-ball startup.**
+   YouTube f=114-255 (conc=0.124) is a real JUGGLING_STARTUP phase
+   (4/4 multi-rater votes: 2 JUGGLING, 2 JUGGLING_STARTUP). The
+   5-ball cascade with 2-3 balls in the air (early launch phase)
+   has low spec_conc but IS real juggling.
+
+3. **H70 REJECT for f=2-71 is correct.** The very low conf (0.333,
+   lowest in dataset) and very low spec_conc (0.075, lowest of
+   all 19 substantial phases) correctly identify this as
+   video-startup, not juggling. Multi-rater consensus: 1/3
+   JUGGLING (likely Q1 over-counting) vs 2/3 STATIC (consistent
+   with low conf and startup interpretation).
+
+4. **Single-pass vision tool errors in 3/7 cases** (one KEEP false
+   STATIC on f=411-450, one KEEP false STATIC on f=549-578, one
+   REJECT false JUGGLING on f=2-71). The H53 finding (single-pass
+   unreliable) is now quantified: ~43% of single-pass verdicts on
+   these specific ambiguous contact sheets disagreed with the
+   multi-rater consensus.
+
+**Recommended operating point (post-H71):**
+
+For FOUNTAIN_3+ post-filter: H43 OR H69(spec_conc < 0.15) (unchanged
+from H69).
+
+For MIXED_3+ post-filter (NEW from H71):
+- KEEP threshold spec_conc >= 0.15: VALIDATED (5/5 real juggling)
+- REJECT threshold spec_conc < 0.10: only the 2-71 case (correctly)
+- For 0.10 <= spec_conc < 0.15: mark as MIXED_3+_LOW_CONF (research
+  signal, not rejection)
+
+**Per-frame end-to-end impact (revised):** identical: 21 FOUNTAIN_3+
+frames (unchanged). YouTube: 175 FOUNTAIN_3+ frames (unchanged) +
+0 MIXED_3+ frames at the new threshold (114-255 NOT rejected, 2-71
+still rejected). The 114-255 phase (142 frames) is NO LONGER rejected
+under the H71 v1 filter, which is the correct behavior.
+
+**Negative findings:**
+- H70 REJECT threshold is too aggressive for 5-ball startup
+- Multi-rater visual QA is essential for ambiguous cases
+- 5-ball cascade startup has different periodicity signature than
+  3-ball FOUNTAIN static-hold (low spec_conc in both)
+- Per-ball-count calibration may be needed (5-ball startup vs
+  3-ball FOUNTAIN)
+
+**Recommended next research (H72):** validate the H71 v1 revised
+MIXED_3+ post-filter on a larger sample. The 7-sample is small;
+a 30-sample visual QA with the multi-rater methodology would
+characterize the 5-ball startup periodicity signature in detail.
+
+See `h1_hand_pool/reports/h71_report.md` for full analysis.

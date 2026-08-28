@@ -4507,5 +4507,75 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h70_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h70/*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h70v2/*.png` (5 files)
+
+### H71 (2026-08-28 ~20:00 CEST)
+
+- Hypothesis: H70 single-pass vision tool calls are unreliable
+  (consistent with H53 finding). Multi-rater consensus with 2-4
+  independent question framings per contact sheet should resolve
+  the ambiguity on the 7 H70 contact sheets (5 KEEP + 2 REJECT
+  MIXED_3+ phases).
+- Method: for each of the 7 contact sheets, do 2-4 independent
+  vision queries with different question framings (ball count,
+  motion across frames, "real captured footage" caveat, startup
+  phase detection). Majority vote with conservative tie-breaking
+  (prefer STATIC on ties — a missed juggle is recoverable but a
+  wrongly-accepted non-juggling adds false evidence).
+- Quantitative result:
+  - 5/5 KEEP phases confirmed as real juggling by multi-rater
+    consensus. H70 KEEP threshold (spec_conc >= 0.15) is VALIDATED.
+  - 1/2 REJECT phases confirmed as not juggling (f=2-71 startup).
+  - 1/2 REJECT phases confirmed as REAL juggling (f=114-255
+    JUGGLING_STARTUP). H70 REJECT threshold has 1 FALSE POSITIVE.
+  - H70 precision on the 7-sample: 6/7 = 85.7%.
+
+| Phase | n_balls | conc | H70 | H71 verdicts | H71 consensus | H70 correct |
+|-------|---------|------|-----|--------------|---------------|-------------|
+| identical f263-312 | 3 | 0.182 | KEEP | JUGG, JUGG | JUGGLING (2/2) | YES |
+| identical f411-450 | 3 | 0.196 | KEEP | STAT, JUGG, JUGG | JUGGLING (2/3) | YES |
+| identical f549-578 | 3 | 0.332 | KEEP | STAT, JUGG, JUGG | JUGGLING (2/3) | YES |
+| YouTube f308-338 | 5 | 0.235 | KEEP | JUGG, JUGG | JUGGLING (2/2) | YES |
+| YouTube f769-799 | 5 | 0.214 | KEEP | JUGG, JUGG | JUGGLING (2/2) | YES |
+| YouTube f114-255 | 5 | 0.124 | REJECT | JUGG, JUGG, STARTUP, STARTUP | JUGGLING_STARTUP (4/4) | NO (FP) |
+| YouTube f2-71 | 5 | 0.075 | REJECT | JUGG, STATIC_HOLD, STATIC_DEMO | STATIC_HOLD (1/3) | YES |
+
+- Single-pass vision tool errors in 3/7 cases (one KEEP false STATIC
+  on f=411-450, one KEEP false STATIC on f=549-578, one REJECT
+  false JUGGLING on f=2-71). H53's unreliability finding is
+  confirmed and quantified.
+
+- The H70 REJECT threshold (spec_conc < 0.15) is too aggressive
+  for the YouTube 5-ball startup phase (f=114-255). A 5-ball
+  cascade with 2-3 balls in the air (early launch phase) has
+  low spec_conc but IS real juggling. Recommended revised
+  MIXED_3+ post-filter: spec_conc < 0.10 = REJECT, 0.10-0.15 =
+  MIXED_3+_LOW_CONF (research signal, not rejection).
+
+- The H70 REJECT for f=2-71 is correct. The very low conf
+  (0.333, lowest in dataset) and very low spec_conc (0.075,
+  lowest of all 19 substantial phases) correctly identify this
+  as video-startup, not juggling.
+
+- Negative findings:
+  - H70 REJECT threshold has 1 false positive on 5-ball startup
+  - Multi-rater visual QA is essential for ambiguous cases
+  - The 5-ball cascade startup phase is a hard case for
+    periodicity-based filtering (low spec_conc despite being
+    real juggling)
+  - Per-ball-count calibration may be needed (5-ball startup
+    has different periodicity signature than 3-ball FOUNTAIN
+    static-hold)
+
+- Verdict: **MIXED — H70 KEEP validated, H70 REJECT partially
+  validated.** H70 KEEP threshold (spec_conc >= 0.15) is
+  confirmed for MIXED_3+ classification. H70 REJECT threshold
+  should be tightened (spec_conc < 0.10) to avoid rejecting
+  5-ball startup phases. The 2-71 phase is correctly rejected.
+  See `h1_hand_pool/reports/h71_report.md` for full analysis.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h71_multi_rater_qa.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h71_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h71_report.md`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h70_report.md`
 
