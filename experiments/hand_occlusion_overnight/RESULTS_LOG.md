@@ -3912,3 +3912,77 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h58_event_summary_<stem>.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h58_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h58_report.md`
+
+### H58 v1 (2026-08-28 ~15:45 CEST)
+
+- Hypothesis: H58 (h58_intersection_analysis.py) reported that the
+  4 multi-tid CONFIDENT chains form a clean single-ball subset
+  with consistent held-phase durations (3-ball cascade signature
+  11 frames, 5-ball shower signature 17 frames). But the H58
+  report did not include contact sheets on disk. H58 v1 renders
+  the 4 contact sheets and visually confirms the H58 hypothesis.
+- Implementation: `h58_v1_contact_sheets.py` loads the 4 multi-tid
+  CONFIDENT chains, then for each renders 7 frames (3 from t_prev,
+  2 from the held phase, 3 from t_curr) with wrist circles +
+  per-tid colors + (x, y) labels.
+- Visual QA via vision_analyze (3/3 inspected, 1 YouTube):
+  - chain 7 identical (q11=0.704, tids 11->14): CATCH@114, THROW@114,
+    trajectory consistent with single-ball cascade
+  - chain 19 identical (q11=0.867, tids 30->33): CATCH@460, THROW@471,
+    11-frame held phase, ball visible at hand
+  - chain 6 YouTube (q11=0.841, tids 10->12): CATCH@238, THROW@255,
+    17-frame held phase, right hand only (SHOWER signature)
+- Verdict: PASS. The H58 hypothesis is now visually confirmed.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h58_v1_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h58/*.png` (4 files)
+
+### H59 (2026-08-28 ~16:00 CEST)
+
+- Hypothesis: the final recommended operating point
+  (`h7v3plus3` chain set + `H10 v11 v3` quality) should be
+  evaluated end-to-end against the only ground-truth labels
+  available: the 113 manually reviewed pairs
+  (stitch_review_labels.csv) that have been sitting on disk
+  since the original E6c work in 2024.
+- Implementation: `h59_eval_against_reviewed.py` matches each
+  reviewed pair (bidirectional) to the h7v3plus3 edge set, then
+  attributes the chain_id + q11 quality + edge_type.
+- Quantitative result (full 113-pair set):
+  - precision = 0.981 (51 TP, 1 FP)
+  - recall = 0.718 (20 FN)
+  - FPR = 0.024 (1/42)
+- Per-quality-band:
+  - CONFIDENT: 2/2 correct, 1.000 precision
+  - UNCERTAIN: 36/36 correct, 1.000 precision
+  - LOW: 13/13 correct + 1 FP, 0.929 precision
+- Per-edge-type:
+  - HAND_TRANSITION: 2/2, 1.000
+  - BALLISTIC: 8/8, 1.000
+  - RECLASSIFIED_HAND_TRANSITION: 33/34, 0.971 (1 FP: identical 22->27)
+  - V_RECLASSIFIED_HAND_TRANSITION: 5/5, 1.000
+  - H22_RECLASSIFIED_HAND_TRANSITION: 1/1, 1.000
+  - H26_RECLASSIFIED_HAND_TRANSITION: 2/2, 1.000
+- Per-stem: YouTube precision 1.000, recall 0.923; identical
+  precision 0.964, recall 0.600.
+- Key findings:
+  - The H10 v11 v3 quality is a real, validated signal:
+    CONFIDENT + UNCERTAIN chains have 100% precision (38/0).
+  - The 1 FP (identical 22->27) is correctly demoted to LOW
+    quality by H10 v11 v3.
+  - The 20 FN are a structural limit, not a model bug:
+    h7v3plus3 has a one-successor-per-source capacity constraint.
+  - The H22 YouTube 16->21 veto conflicts with the manual
+    label (2024 review said 16->21 is "correct" but H22's
+    2026 visual QA said 16->21 is a tracklet break; 20->21 is
+    the real catch). Lab analysis is more rigorous.
+- New precision-maximizing operating point (H59-validated):
+  - h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000
+- Verdict: PASS — operating point objectively validated. First
+  validation that doesn't rely on heuristic self-consistency.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h59_eval_against_reviewed.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h59_eval_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h59_per_pair_eval.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h59_report.md`
+

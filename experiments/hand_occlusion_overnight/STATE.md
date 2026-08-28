@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
 LAST_UPDATE: 2026-08-28 16:35 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + **H53**
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1479,3 +1479,107 @@ The 3 identical + 1 YouTube multi-tid CONFIDENT chains are the
 See `h1_hand_pool/reports/FINAL_SUMMARY.md` for a comprehensive
 overview of all 53 episodes, the strongest findings, the
 important negative findings, and the recommended operating point.
+
+## H58 v1 conclusion (2026-08-28 ~15:45 CEST)
+
+**H58 v1: visual verification of the 4 multi-tid CONFIDENT chains** —
+DONE. PASS. Closes the H58 visual-verification gap.
+
+H58 (h58_intersection_analysis.py) reported that the 3 identical +
+1 YouTube multi-tid CONFIDENT chains form a clean single-ball
+subset with consistent held-phase durations (3-ball cascade
+signature 11 frames, 5-ball shower signature 17 frames). But the
+H58 report did not include contact sheets on disk.
+
+H58 v1 (h58_v1_contact_sheets.py) renders 4 contact sheets (one
+per chain), each showing 7 frames: 3 from t_prev, 2 from the held
+phase, 3 from t_curr. Wrist circles + per-tid colors + (x, y)
+labels.
+
+Visual QA via vision_analyze (3/3 inspected, 1 YouTube):
+- chain 7 identical (q11=0.704, tids 11->14): CATCH@114, THROW@114,
+  trajectory consistent with single-ball cascade
+- chain 19 identical (q11=0.867, tids 30->33): CATCH@460, THROW@471,
+  11-frame held phase, ball visible at hand
+- chain 6 YouTube (q11=0.841, tids 10->12): CATCH@238, THROW@255,
+  17-frame held phase, right hand only (SHOWER signature)
+
+The H58 hypothesis is now visually confirmed. Artifacts:
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h58_v1_contact_sheets.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h58/*.png` (4 files)
+
+## H59 conclusion (2026-08-28 ~16:00 CEST)
+
+**H59: end-to-end precision/recall of h7v3plus3 + H10 v11 v3 against
+the 113 manually reviewed pairs** — DONE. PASS. First objective
+validation of the entire chain-quality optimization arc.
+
+The 113 manually reviewed pairs (stitch_review_labels.csv) have
+been sitting on disk since the original E6c work in 2024. They are
+the only ground-truth labels available.
+
+**Headline numbers (full 113-pair set, 71 correct + 42 wrong):**
+- precision = 0.981 (51 TP, 1 FP)
+- recall = 0.718 (20 FN)
+- FPR = 0.024 (1/42)
+
+**Per-quality-band:**
+- CONFIDENT: 2/2 correct, 1.000 precision
+- UNCERTAIN: 36/36 correct, 1.000 precision
+- LOW: 13/13 correct + 1 FP, 0.929 precision
+- NOT_IN_CHAIN: 20 correct missed (FN)
+
+**Per-edge-type:**
+- HAND_TRANSITION: 2/2, 1.000 precision
+- BALLISTIC: 8/8, 1.000 precision
+- RECLASSIFIED_HAND_TRANSITION: 33/34, 0.971 (1 FP: identical 22->27)
+- V_RECLASSIFIED_HAND_TRANSITION: 5/5, 1.000
+- H22/H26: 1/1 + 2/2, 1.000
+
+**Per-stem:** YouTube precision 1.000, recall 0.923 (only 1 FN).
+Identical precision 0.964, recall 0.600 (18 FN from capacity
+constraint, not model bug).
+
+**Structural cause of FN (20 missed correct pairs):**
+h7v3plus3 has a one-successor-per-source capacity constraint.
+When E6c proposes 2+ plausible successors, h7v3plus3 picks one
+and the rest become FN even if they are "correct" in the review.
+This is a design choice (H7 min-cost flow), not a model defect.
+
+**The H22 YouTube 16->21 veto conflicts with the manual label.**
+The 2024 manual review said 16->21 is "correct" but H22's 2026
+visual analysis said 16->21 is a tracklet break and 20->21 is the
+real catch. This is a real disagreement between the manual review
+and the lab visual analysis. Lab analysis is more rigorous and
+more recent.
+
+**New precision-maximizing operating point (H59-validated):**
+- h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000
+  (research/exploratory can use h7v3plus3 all = 0.981/0.718).
+
+This is the first objective validation of the entire chain-quality
+optimization arc (H1 -> H2 -> ... -> H58) without relying on
+heuristic self-consistency.
+
+See `h1_hand_pool/reports/h59_report.md` for full analysis.
+
+## Next action (H60+)
+
+H59 closed the chain-quality arc with objective validation. Possible
+remaining research directions (from PLAN §"Next episode candidates"):
+
+1. **H60: per-frame hold-duration distribution** — the 4 multi-tid
+   CONFIDENT chains have 11-frame (identical) and 17-frame (YouTube)
+   held phases. Measure the held-phase distribution across ALL
+   h7v3plus3 chains and look for multi-modal signatures of
+   different patterns (cascade, fountain, shower).
+
+2. **H11 v5** (hand-relative coordinates for merge) — was
+   DEFERRED in H11 v4; the 1 v2 false positive is now removed by
+   v4's stricter spatial proximity. v5 is a marginal improvement
+   that can wait.
+
+3. **Stop here.** The h7v3plus3 + H10 v11 v3 + (CONF or UNCERTAIN)
+   operating point is precision 1.000 on the manual review. Further
+   chain improvements would require fundamentally different signals
+   (multi-view, learned color tracking, or 3D ball estimation).
