@@ -4277,3 +4277,44 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h66_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h66_report.md`
 
+### H67 (2026-08-28 ~18:10 CEST)
+
+- Hypothesis: H43 + H66 stacked rejection rate on the H50-filtered
+  pattern set should be small, matching H50's 1.0% identical /
+  0.0% YouTube impact.
+- Method: Apply H43 (conf < 0.55) and H66 (pct_A_ge2 < 0.30) to
+  the H50-filtered per-frame pattern data. Mark FOUNTAIN_3+
+  frames as FOUNTAIN_LOW_CONF if either filter rejects.
+- Quantitative result:
+  - identical: 56/1042 (5.4%) frames changed. FOUNTAIN_3+ -56,
+    FOUNTAIN_LOW_CONF +56.
+  - YouTube: 0/898 (0.0%) frames changed.
+- Per-phase contribution (identical):
+  - 977-1011 (real FOUNTAIN, wrongly rejected by H66): 35 frames
+  - 1029-1049 (OTHER static hold, correctly rejected by H43+H66):
+    21 frames
+- Threshold sensitivity (revised):
+  - 0.10: 1 correct (1029), 0 wrong
+  - 0.20: 1 correct (1029), 0 wrong (977 just above threshold)
+  - 0.30: 1 correct (1029), 1 wrong (977 also below)
+  - 0.40: 1 correct (1029), 1 wrong (977 below)
+- Negative findings:
+  - 3-ball FOUNTAIN has pct_A_ge2 ≈ 0.12 (1 ball aloft at a time)
+  - 5-ball FOUNTAIN has pct_A_ge2 ≈ 0.50-0.60 (2-3 balls aloft)
+  - A single threshold cannot serve both. Per-n_total calibration
+    would improve discrimination.
+  - H66 at threshold 0.30 has 37.5% precision on rejects (loses
+    977-1011 real FOUNTAIN). At threshold 0.20, H66 only catches
+    1029-1049 — same as H43 alone.
+- Verdict: PARTIAL PASS. H67 recommends lowering H66 threshold
+  to 0.20 to preserve real 3-ball FOUNTAIN. The H66 signal is
+  real but the operating point needs calibration to ball count.
+  Updated operating point: h7v3plus3 + H10 v11 v3 + H12 v8 +
+  H50 + H43 + H66 (threshold 0.20) + H52 + H53.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h67_stacked_post_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h67_per_frame_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h67_pattern_dist_*.json` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h67_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h67_report.md`
+

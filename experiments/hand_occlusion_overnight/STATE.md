@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 17:50 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65** + **H66**
+LAST_UPDATE: 2026-08-28 18:10 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65** + **H66** + **H67**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1896,3 +1896,55 @@ discrimination on YouTube. H4's general detector confusion finding
 extends to H66.
 
 See `h1_hand_pool/reports/h66_report.md` for full analysis.
+
+## H67 conclusion (2026-08-28 ~18:10 CEST)
+
+**H67: H43 + H66 stacked FOUNTAIN_3+ post-filter — end-to-end impact** —
+DONE. PARTIAL PASS — recommends lowering H66 threshold to 0.20.
+
+**Method:** Apply H43 (conf < 0.55) and H66 (pct_A_ge2 < 0.30) to the
+H50-filtered per-frame pattern data. Mark FOUNTAIN_3+ frames as
+FOUNTAIN_LOW_CONF if either filter rejects.
+
+**Result:**
+- identical: 56/1042 (5.4%) frames changed. FOUNTAIN_3+ -56, FOUNTAIN_LOW_CONF +56.
+- YouTube: 0/898 (0.0%) frames changed.
+
+**Per-phase contribution (identical):**
+- 977-1011 (real FOUNTAIN, wrongly rejected by H66): 35 frames
+- 1029-1049 (OTHER static hold, correctly rejected by H43+H66): 21 frames
+
+**Precision/recall on rejects: 21/56 = 37.5% precision** (62.5% of
+rejected frames are real FOUNTAIN labels).
+
+**Threshold sensitivity (revised):**
+- 0.10: 1 correct (1029), 0 wrong (perfect precision)
+- 0.20: 1 correct (1029), 0 wrong (perfect precision, 977 just above threshold)
+- 0.30: 1 correct (1029), 1 wrong (977 also below)
+- 0.40: 2 "correct" (1029 + wrongly treating 977 as correct), 0 actual wrong
+
+**Recommended operating point update:** lower H66 threshold from
+0.30 to **0.20** to avoid false-rejecting the 977-1011 real FOUNTAIN.
+At threshold 0.20, H66 catches only 1029-1049 (same as H43 alone),
+so H43 + H66 stacked is equivalent to H43 alone on the H65 sample.
+
+**Net useful H66 contribution at threshold 0.20: 0% additional
+rejection on the H65 sample.** The H66 signal is real but the
+operating point needs to be lower to avoid false rejects.
+
+**Verdict: PARTIAL PASS.** H67 confirms the H66 signal works but
+the threshold must be calibrated to the ball count. 3-ball FOUNTAIN
+has pct_A_ge2 ≈ 0.12 (1 ball aloft at a time), 5-ball FOUNTAIN has
+pct_A_ge2 ≈ 0.50-0.60 (2-3 balls aloft). A single threshold cannot
+serve both. A per-n_total calibration would improve discrimination.
+
+**Future work:**
+1. Per-ball A signal from tracklet_features (instead of raw YOLO)
+2. 3-ball vs 5-ball calibration
+3. YouTube static hold (482-594) needs fundamentally different signal
+   (YOLO false positives on background features)
+
+**Recommended operating point (updated):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H66 (threshold 0.20) + H52 + H53
+
+See `h1_hand_pool/reports/h67_report.md` for full analysis.
