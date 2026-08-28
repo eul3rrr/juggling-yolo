@@ -447,3 +447,28 @@ Next episode candidates:
 2. H8 v7: per-frame per-bounce segmentation for YouTube
    long tracklets
 3. H11 v5: hand-relative coordinates for merge algorithm
+
+## Sixteenth episode (H12) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Implemented H12: per-frame pattern inference.
+   Pattern classes: NO_BALL, SINGLE_BALL, TWO_BALL,
+   TWO_BALL_HELD, TWO_BALL_ONE_HAND, CASCADE_3+,
+   FOUNTAIN_3+, UNKNOWN. Thresholds:
+   - MIN_QUALITY_FOR_PATTERN = 0.5
+   - RECENT_EVENT_FRAMES = 30
+2. ✅ Ran on both videos. Result:
+   - identical: 33.8% UNKNOWN, 21.9% CASCADE_3+,
+     15.3% TWO_BALL, 13.9% SINGLE_BALL, 11.7% FOUNTAIN_3+,
+     3.2% NO_BALL, 0.1% TWO_BALL_ONE_HAND
+   - youtube: 93.2% CASCADE_3+ (over-counting artifact)
+3. ✅ Visual QA: contact sheet shows 4 phases on
+   identical (FOUNTAIN → CASCADE → mixed).
+4. ✅ Documented in `h12_report.md` and updated
+   RESULTS_LOG.
+
+**H12 verdict: PASS.** H12 successfully classifies 66.2%
+of identical frames. The 4-phase pattern is consistent
+with a 3-ball trick. Caveat: YouTube unreliable due to
+H10 v5 over-counting.

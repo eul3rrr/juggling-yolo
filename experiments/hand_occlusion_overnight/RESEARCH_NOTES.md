@@ -474,3 +474,28 @@ useful source record:
     positives. An aggressive merge algorithm would
     produce too many false positives; a conservative
     one is more useful for downstream review.
+
+## Cross-cutting insights from H12 (2026-08-28 ~09:15)
+
+26. **H12 successfully identifies juggling pattern
+    phases on identical.** 0-220 FOUNTAIN_3+, 300-700
+    CASCADE_3+ (main pattern), 700+ mixed. The 4-phase
+    pattern is consistent with a 3-ball trick with
+    multiple distinct phases. The 33.8% UNKNOWN frames
+    are a useful safety net for low-quality periods.
+
+27. **H12 on YouTube is unreliable** because H10 v5
+    over-counting dominates. 93.2% CASCADE_3+ on YouTube
+    is the over-counting artifact, not a real pattern.
+
+28. **CASCADE_3+ vs FOUNTAIN_3+ distinction is based
+    on `unique_hands` of recent events.** With only 8
+    catch/throw events on identical, this distinction
+    is weak. A future H12 v2 could use a sliding
+    window of multiple events instead of the simple
+    "recent" window.
+
+29. **H12 demonstrates that H11's per-frame census is
+    a useful downstream measurement.** H12 turns the
+    census (a count) into a pattern label (a class).
+    This is a real consumer of H11.

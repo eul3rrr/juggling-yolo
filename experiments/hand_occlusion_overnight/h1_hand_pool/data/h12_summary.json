@@ -1,0 +1,36 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total_frames": 1077,
+      "pattern_counts": {
+        "UNKNOWN": 364,
+        "CASCADE_3+": 236,
+        "FOUNTAIN_3+": 126,
+        "SINGLE_BALL": 150,
+        "TWO_BALL": 165,
+        "NO_BALL": 35,
+        "TWO_BALL_ONE_HAND": 1
+      },
+      "pct_patterns": {
+        "UNKNOWN": 33.79758588672237,
+        "CASCADE_3+": 21.91272051996286,
+        "FOUNTAIN_3+": 11.699164345403899,
+        "SINGLE_BALL": 13.927576601671309,
+        "TWO_BALL": 15.32033426183844,
+        "NO_BALL": 3.2497678737233056,
+        "TWO_BALL_ONE_HAND": 0.09285051067780872
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_total_frames": 898,
+      "pattern_counts": {
+        "CASCADE_3+": 837,
+        "FOUNTAIN_3+": 61
+      },
+      "pct_patterns": {
+        "CASCADE_3+": 93.20712694877506,
+        "FOUNTAIN_3+": 6.7928730512249444
+      }
+    }
+  }
+}

@@ -1201,3 +1201,62 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v4_sensitivity.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v4_sensitivity_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_v4_report.md`
+
+---
+
+### H12 (2026-08-28 ~09:15 CEST)
+
+- Hypothesis: given H11 v2's per-frame census and H11
+  v1's catch/throw events, we can infer the juggling
+  pattern at each frame (cascade, fountain, single-ball,
+  2-ball, no-ball, or unknown). This is a useful
+  downstream consumer of H11 that gives per-frame
+  "what pattern is the juggler doing" labels.
+- Thresholds (declared from physical geometry):
+  - MIN_QUALITY_FOR_PATTERN = 0.5: below this, pattern
+    is UNKNOWN.
+  - RECENT_EVENT_FRAMES = 30: how recent is "recent"
+    for catch/throw events.
+- Pattern classes: NO_BALL, SINGLE_BALL, TWO_BALL,
+  TWO_BALL_HELD, TWO_BALL_ONE_HAND, CASCADE_3+,
+  FOUNTAIN_3+, UNKNOWN.
+- Quantitative result (identical, 1077 frames):
+  - UNKNOWN: 33.8% (low quality, can't classify)
+  - CASCADE_3+: 21.9% (main pattern)
+  - TWO_BALL: 15.3%
+  - SINGLE_BALL: 13.9%
+  - FOUNTAIN_3+: 11.7% (in distinct blocks)
+  - NO_BALL: 3.2%
+  - TWO_BALL_ONE_HAND: 0.1%
+- Quantitative result (YouTube, 898 frames):
+  - CASCADE_3+: 93.2% (over-counting artifact)
+  - FOUNTAIN_3+: 6.8%
+- Visual QA: contact sheet
+  `pattern_identical_balls_trick_000_018.png`. Vision
+  tool identified 4 phases:
+  1. 0-220: FOUNTAIN_3+ (3+ balls, same hand)
+  2. 220-300: transition / "messy" region
+  3. 300-700: CASCADE_3+ (3+ balls, alternating hands)
+  4. 700-1080: variable mixed tail
+- Negative findings:
+  - YouTube pattern inference is dominated by H10 v5
+    over-counting. 93.2% CASCADE_3+ on YouTube is
+    unreliable.
+  - 33.8% of identical frames are UNKNOWN (low quality).
+    Useful safety net.
+  - CASCADE_3+ vs FOUNTAIN_3+ distinction is based on
+    `unique_hands` of recent events; with only 8
+    catch/throw events on identical, the distinction
+    is weak.
+- Verdict: **PASS.** H12 successfully classifies 66.2%
+  of identical frames into interpretable patterns. The
+  4-phase pattern (FOUNTAIN → CASCADE → mixed) is
+  consistent with a 3-ball trick. Caveat: YouTube
+  unreliable due to H10 v5 over-counting.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_pattern_inference.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_pattern_visualization.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h11/pattern_*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_report.md`
