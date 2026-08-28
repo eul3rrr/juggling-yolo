@@ -1,0 +1,23 @@
+{
+  "method": "H105: H12 v9 hybrid with chain-event quality guard (FAR_DIST, AMBIGUOUS, LOW_SLOPE)",
+  "guard_thresholds": {
+    "QUALITY_FAR_DIST_THR": 100.0,
+    "QUALITY_LOW_SLOPE_THR": 2.5,
+    "QUALITY_LOW_SLOPE_RATIO": 0.5,
+    "QUALITY_AMBIGUOUS_RATIO": 0.25
+  },
+  "v8_baseline": {
+    "TP": 14,
+    "TN": 2,
+    "FP": 2,
+    "FN": 3,
+    "acc": 0.762
+  },
+  "v9_with_guard": {
+    "TP": 2,
+    "TN": 4,
+    "FP": 0,
+    "FN": 15,
+    "acc": 0.286
+  }
+}

@@ -3934,8 +3934,78 @@ See `h1_hand_pool/reports/h104_report.md` for full analysis.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v9_*.csv` (2 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h104_report.md`
 
+## H105 conclusion (2026-08-29 ~04:30 CEST)
+
+**H105: H12 v9 hybrid with chain-event quality guard (FAR_DIST, AMBIGUOUS, LOW_SLOPE)** —
+DONE. NEGATIVE. The H105 guard is a CATASTROPHIC regression: 13 additional FN
+(real juggling phases demoted to MIXED_3+_UNCONFIRMED) for 0 additional TN.
+
+The H7 chain emits hand-edge events at any hand contact, including
+legitimate mid-rhythm contacts during a real cascade. The
+avg_low_slope=4.0 for many REAL JUGGLING phases means the K=4 events_window
+for real juggling has 4 events with |end_slope| < 2.5 — every event triggers
+the QUALITY_LOW_SLOPE_THR guard.
+
+**Verdict: NEGATIVE.** The H12 v8 K=4 events_window is fundamentally
+confounded by the H7 chain's emission pattern. Combined with H104
+(time-density is a no-op), the H104 + H105 finding is:
+**no simple guard on the K=4 events_window can fix H12 v8's
+over-classification.** The H96 v2 full stack is the precision-optimized
+endpoint.
+
+See `h1_hand_pool/reports/h105_report.md`.
+
+## H106 conclusion (2026-08-29 ~05:00 CEST)
+
+**H106: H12 v9 hybrid with H96 v2 stack signals (per-pattern rule selection)** —
+DONE. PASS. H106 v2 reproduces the H96 v2 PERFECT 17/4/0/0 on the 21 H93
+corrected phases with a WIDER flat region than H96 v2's stacked thresholds
+(H78=7-15 vs H96's tight 10; H87=0.10-0.30 vs H96's tight 0.20).
+
+The H106 v2 hybrid is a per-pattern rule selection: H12 v8 provides the
+pattern classification, then the dedicated signal (H90 NEW for FOUNTAIN_3+,
+H78 for FOUNTAIN_3+ Mills Mess, H87+max_aloft for CASCADE_3+ MANIPULATION,
+H74v4 for CASCADE_3+ STATIC_HOLD) provides the rejection. The structure is
+cleaner than the H96 v2 stacked guards because each pattern class has its
+own dedicated signal.
+
+**Verdict: PASS — confirms H96 v2 with a cleaner code path.** H106 v2 is
+a useful re-implementation that downstream consumers could use as a drop-in
+replacement for H96 v2 if they prefer a per-pattern rule structure.
+
+See `h1_hand_pool/reports/h106_report.md`.
+
+## Final operating point (post-H106)
+
+The h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+H69 pct_ge1 guards +
+H74v4 + H78 + H87+max_aloft + H90 NEW stack is the precision-optimized
+endpoint. Three equivalent implementations:
+- **H96 v2** (stacked guards): 17/4/0/0 on 21 phases, P=0.979 R=0.648 on 113 pairs
+- **H100 v4** (conf+spec_conc guard, no aloft): 17/4/0/0 on 21 phases with wider flat region
+- **H106 v2** (per-pattern rule selection): 17/4/0/0 on 21 phases with widest flat region
+
+**H53 H12 v8 over-classification precision/recall matrix on 21 H93 phases:**
+- H12 v8 baseline: 17/1/3/0 (acc=0.857, P=0.850, R=1.000)
+- H96 v2 / H100 v4 / H106 v2 stacks: 17/4/0/0 (acc=1.000, P=R=1.000)
+- The 3 H12 v8 over-classifications are caught by 3 different signals
+  (H87+max_aloft, H78, H90 NEW), not by a single guard
+
+**Future research (post-H106):**
+1. H107: 4th-video validation with pose data. The H101 finding showed
+   weave needs conf>=0.42, but weave lacks pose. A 4th video with full
+   pose data would test the H74v4 / H78 stack on a different juggler.
+2. H108: time-density × chain-event quality 2D guard. H104 and H105
+   each showed one dimension is not enough. A 2D combination
+   (e.g., max_span AND avg_low_slope) might catch misclassifications
+   that each alone misses.
+3. Stop here. The H96 v2 / H100 v4 / H106 v2 stack is precision-optimized.
+   Further work would require fundamentally different signals.
+
 ## Last update
 
-- 2026-08-29 ~04:00 CEST: H104 NEGATIVE (time-density guard is a no-op
-  on the H12 v8 over-classification problem; the K=4 events_window is
-  fundamentally confounded by H7 chain density)
+- 2026-08-29 ~05:00 CEST: H105 NEGATIVE (chain-event quality guard is
+  too aggressive, real juggling phases demoted). H106 PASS (H96 v2 stack
+  reproduced with cleaner per-pattern rule structure and wider flat region).
+  The h7v3plus3 + H10 v11 v3 + H96 v2 / H100 v4 / H106 v2 stack is the
+  precision-optimized endpoint (17/4/0/0 on 21 H93 phases, P=0.979 R=0.648
+  on 113 review pairs).

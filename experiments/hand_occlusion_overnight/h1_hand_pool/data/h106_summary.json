@@ -1,0 +1,22 @@
+{
+  "method": "H106 v2: H12 v9 hybrid with H96 v2 stack signals (H74v4, H87+max_aloft, H78, H90 NEW per-pattern)",
+  "thresholds": {
+    "H74_VAR_THR": 0.2,
+    "H74_uLR_THR": 1,
+    "H87_PCT_GE3_THR": 0.2,
+    "H87_MAX_ALOFT_THR": 2,
+    "H90_C40_PCT_GE3_THR": 0.4,
+    "H90_C40_MAX_ALOFT_THR": 4,
+    "H78_MEAN_DIFF_THR": 10.0
+  },
+  "h93_results": {
+    "TP": 17,
+    "TN": 4,
+    "FP": 0,
+    "FN": 0,
+    "P": 1.0,
+    "R": 1.0,
+    "acc": 1.0,
+    "n": 21
+  }
+}
