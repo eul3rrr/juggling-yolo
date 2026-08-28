@@ -1,0 +1,57 @@
+{
+  "h1_version": "v2",
+  "subsets": [
+    {
+      "label": "gap=0  (HAND-RELEVANT)",
+      "max_gap": 0,
+      "reviewed_total": 14,
+      "reviewed_correct": 8,
+      "reviewed_wrong": 6,
+      "h1_links_total": 3,
+      "h1_links_matched_correct": 1,
+      "h1_links_matched_wrong": 0,
+      "h1_links_extra": 2,
+      "precision_hand_link": 1.0,
+      "recall_hand_link": 0.125
+    },
+    {
+      "label": "gap<=1 (near-instant transitions)",
+      "max_gap": 1,
+      "reviewed_total": 20,
+      "reviewed_correct": 12,
+      "reviewed_wrong": 8,
+      "h1_links_total": 3,
+      "h1_links_matched_correct": 1,
+      "h1_links_matched_wrong": 0,
+      "h1_links_extra": 2,
+      "precision_hand_link": 1.0,
+      "recall_hand_link": 0.0833
+    },
+    {
+      "label": "gap<=2 (broad hand-relevant)",
+      "max_gap": 2,
+      "reviewed_total": 33,
+      "reviewed_correct": 21,
+      "reviewed_wrong": 12,
+      "h1_links_total": 3,
+      "h1_links_matched_correct": 1,
+      "h1_links_matched_wrong": 0,
+      "h1_links_extra": 2,
+      "precision_hand_link": 1.0,
+      "recall_hand_link": 0.0476
+    },
+    {
+      "label": "full set (mostly mid-air)",
+      "max_gap": 99,
+      "reviewed_total": 113,
+      "reviewed_correct": 71,
+      "reviewed_wrong": 42,
+      "h1_links_total": 3,
+      "h1_links_matched_correct": 1,
+      "h1_links_matched_wrong": 0,
+      "h1_links_extra": 2,
+      "precision_hand_link": 1.0,
+      "recall_hand_link": 0.0141
+    }
+  ]
+}

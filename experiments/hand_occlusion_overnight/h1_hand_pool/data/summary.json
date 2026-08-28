@@ -1,5 +1,12 @@
 {
-  "thresholds": {
+  "v2_thresholds": {
+    "TOK_TTL_FRAMES": 60,
+    "STALE_TTL_FRAMES": 30,
+    "THROW_LEAVE_WINDOW_FRAMES": 3,
+    "WRIST_VEL_MAX": 30.0,
+    "CATCH_CONTEXT_FRAMES": 60
+  },
+  "v1_thresholds": {
     "WRIST_CONF_MIN": 0.5,
     "HAND_REACH_PX_RATIO": 0.15,
     "CATCH_SLOPE_PX_PER_FRAME": -1.0,
@@ -15,51 +22,65 @@
     "identical_balls_trick_000_018": {
       "video_key": "videos/identical_balls_trick_000_018.mp4",
       "event_counts": {
-        "ENTRY": 33,
-        "EXIT": 1,
+        "ENTRY": 21,
+        "EXIT": 2,
         "UNMATCHED_EXIT": 2,
-        "UNRESOLVED_HELD_OR_LOST": 10,
-        "AMBIGUOUS_POOL_EXIT": 22
+        "UNRESOLVED_HELD_OR_LOST": 3,
+        "AMBIGUOUS_POOL_EXIT": 1
+      },
+      "filtered_counts": {
+        "EXPIRED_HELD": 26,
+        "STALE_TOKEN_THROW": 1,
+        "WRIST_MOTION_THROW": 0,
+        "THROW_NO_LEAVE": 19,
+        "UNCONTEXTED_ENTRY": 12
       },
       "predecessor_conflicts": 0,
       "successor_conflicts": 0,
       "impossible_states": 0,
-      "multi_token_ambiguous_events": 22,
-      "n_links": 23,
+      "multi_token_ambiguous_events": 1,
+      "n_links": 3,
       "n_tracklets": 76,
       "evaluation_vs_reviewed": {
         "reviewed_total": 85,
         "matched_correct": 1,
-        "matched_wrong": 1,
+        "matched_wrong": 0,
         "missed_correct": 44,
-        "missed_wrong": 39,
-        "precision_hand_link": 0.5,
+        "missed_wrong": 40,
+        "precision_hand_link": 1.0,
         "recall_hand_link": 0.022222222222222223
       }
     },
     "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
       "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
       "event_counts": {
-        "ENTRY": 5,
-        "EXIT": 5,
-        "UNMATCHED_EXIT": 22,
+        "ENTRY": 1,
+        "EXIT": 0,
+        "UNMATCHED_EXIT": 2,
         "UNRESOLVED_HELD_OR_LOST": 0,
         "AMBIGUOUS_POOL_EXIT": 0
+      },
+      "filtered_counts": {
+        "EXPIRED_HELD": 5,
+        "STALE_TOKEN_THROW": 0,
+        "WRIST_MOTION_THROW": 0,
+        "THROW_NO_LEAVE": 25,
+        "UNCONTEXTED_ENTRY": 4
       },
       "predecessor_conflicts": 0,
       "successor_conflicts": 0,
       "impossible_states": 0,
       "multi_token_ambiguous_events": 0,
-      "n_links": 5,
+      "n_links": 0,
       "n_tracklets": 40,
       "evaluation_vs_reviewed": {
         "reviewed_total": 28,
-        "matched_correct": 2,
+        "matched_correct": 0,
         "matched_wrong": 0,
-        "missed_correct": 24,
+        "missed_correct": 26,
         "missed_wrong": 2,
-        "precision_hand_link": 1.0,
-        "recall_hand_link": 0.07692307692307693
+        "precision_hand_link": 0.0,
+        "recall_hand_link": 0.0
       }
     }
   }

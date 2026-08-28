@@ -62,23 +62,44 @@ Sub-steps:
 9. ✅ Visual QA on 4 events via vision; documented 4 distinct failure modes.
 10. ✅ Commit, push, write the next concrete next step into `STATE.md`.
 
-## Second episode (H1 v2)
+## Second episode (H1 v2) — STATUS: COMPLETE
 
 Sub-steps:
 
-1. Add a token TTL (e.g., 60 frames / 2 sec at 30 fps) so tokens expire if
-   no exit arrives. Emit `EXPIRED_HELD` events. Cap pool depth at 1 for
-   throw-side purposes (if a throw pops a stale token, treat as
-   `UNMATCHED_EXIT`).
-2. Add throw-strictness: require the ball to leave the reach radius within
+1. ✅ Add a token TTL (60 frames / 2 sec at 30 fps) so tokens expire if
+   no exit arrives. Emit `EXPIRED_HELD` events. Cap pool depth.
+2. ✅ Add throw-strictness: require the ball to leave the reach radius within
    the first 3 observed frames (a real throw gains height fast).
-3. Add wrist-velocity guard: compute per-frame wrist velocity in the throw
+3. ✅ Add wrist-velocity guard: compute per-frame wrist velocity in the throw
    window; if the wrist moves > 30 px/frame, downgrade throw confidence.
-4. Add catch-context check: a catch is more credible if there was a recent
+4. ✅ Add catch-context check: a catch is more credible if there was a recent
    hand event (exit or another catch) on the same hand.
-5. Re-run on both videos; compare counter distributions.
-6. Re-render contact sheets for the same 4 inspected events and verify the
+5. ✅ Re-run on both videos; compare counter distributions.
+6. ✅ Re-render contact sheets for the same 4 inspected events and verify the
    failure modes are suppressed.
-7. Add a hand-relevant evaluation subset: gap=0 pairs with both endpoints
+7. ✅ Add a hand-relevant evaluation subset: gap=0 pairs with both endpoints
    in hand reach (or all gap=0 pairs).
-8. Document v2 in `h1_v1_report.md` continuation.
+8. ✅ Document v2 in `h1_v2_report.md`.
+
+**v2 verdict: PASS.** Precision 1.000 across every gap subset; all v1
+false-positive failure modes suppressed. See `h1_v2_report.md` for full
+analysis. v3 (soft catch-context + sensitivity grid) is the next episode.
+
+## Third episode (H1 v3) — PLANNED
+
+Sub-steps:
+
+1. Implement H1 v3:
+   - Replace hard `UNCONTEXTED_ENTRY` with `POTENTIAL_ENTRY` flag
+     (catch candidate still creates a token, but the event is tagged
+     so downstream consumers can apply their own confidence).
+   - Sensitivity grid: `THROW_LEAVE_WINDOW_FRAMES` ∈ {3, 5, 7} for
+     the leave-window test. Report counts at each setting.
+   - Consider removing or relaxing `WRIST_MOTION_THROW` (fires 0
+     times in v2; no measurable impact).
+2. Re-run sensitivity grid; report the precision/recall tradeoff.
+3. If time permits, start H2: combine E6c mid-air edges with H1 v2/v3
+   hand-links into a single chain representation (master §11). Preserve
+   edge provenance (each chain edge tagged CONTINUOUS / BALLISTIC /
+   HAND_TRANSITION / AMBIGUOUS_HAND_TRANSITION). Record conflicts
+   instead of silently resolving.

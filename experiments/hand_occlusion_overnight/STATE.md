@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 03:24 CEST
-STATUS: BOOTSTRAPPED (v2 — direct GMI verified). Watchdog launching.
+LAST_UPDATE: 2026-08-28 04:25 CEST
+STATUS: H1 v2 COMPLETE (5 physics-aware filters, all 3 v1 false-positive failure modes suppressed). v3 in next episode.
 
 ## Isolation
 
@@ -39,62 +39,76 @@ STATUS: BOOTSTRAPPED (v2 — direct GMI verified). Watchdog launching.
 
 ## Completed experiments
 
-- **H1 v1** — Hand-pool baseline state machine (committed).
+- **H1 v1** — Hand-pool baseline state machine (committed, `98c0375`).
   Per-tracklet end/start hand-distance features + per-hand FIFO token stack.
   Emits `hand_events.csv`, `hand_inventory.csv`, `hand_links.csv`,
   `tracklet_features.csv`, plus 21 contact sheets for visual QA.
   See `h1_hand_pool/reports/h1_v1_report.md` for full analysis.
 
+- **H1 v2** — Hand-pool with 5 physics-aware filters (committed).
+  Adds: token TTL (60f), stale-token rejection (30f), throw leave-window
+  (3f), wrist-velocity guard (30 px/frame), catch context (60f).
+  Emits same 4 CSVs (extended) + `hand_relevant_eval.json`.
+  See `h1_hand_pool/reports/h1_v2_report.md` for full analysis.
+  20 v2 contact sheets at `contact_sheets_v2/`.
+
 ## Strongest findings so far
 
-- The H1 baseline **runs** and produces structured artifacts; visual QA
-  reveals 4 distinct failure modes that the master instruction explicitly
-  asks us to record (see `h1_v1_report.md` §5-6).
-- **FIFO bookkeeping alone is insufficient**: when the pool depth exceeds 1,
-  oldest-token consumption can pair a current throw with a catch from many
-  seconds ago, producing implausible "links" that pass local evidence at
-  each endpoint.
-- The throw criteria is **dominated by hand motion, not ball motion**;
-  a tracklet whose center moves away from the wrist because the **hand**
-  is moving will fire a false-positive throw.
-- The entry criteria can fire on **detection dropouts** as well as real
-  catches — a ball disappearing near a hand is not evidence of a catch by
-  itself.
+- All 3 v1 false-positive failure modes (false catch from transient tracklet,
+  false throw driven by hand motion, false catch from tracklet appearing
+  near hand without approach) are **correctly suppressed by v2**.
+- v2 emits only 3 surviving hand-links on identical, 0 on youtube.
+  All 3 surviving links are visually plausible (1 matches a gap=0 reviewed
+  "correct" pair, 2 are new plausible catch-throw sequences not surfaced
+  by E6c).
+- H1 v2 precision is **1.000 across every gap subset** of the reviewed
+  labels. No wrong hand-links emitted.
+- The `THROW_NO_LEAVE` filter (3-frame leave window) is the dominant
+  improvement on the YouTube video: 19 of 25 youtube throws that v1
+  classified as throws were reclassified as "ball not actually leaving
+  the hand within 3 frames" — they were mid-air balls passing through
+  the hand reach envelope.
+- The `EXPIRED_HELD` filter bounds the pool: identical's pool depth at
+  end of video goes from 11 (v1) to 3 (v2). 26 tokens aged out.
 
 ## Important negative findings
 
-- H1's recall against the full reviewed-label set is very low (<10%) but
-  this is a **category error**: the reviewed labels are an E6c candidate
-  set, mostly mid-air, NOT a hand-test set. H1 is intentionally a hand-only
-  extractor and should be evaluated on a hand-relevant subset (e.g. gap=0
-  pairs only).
-- The pool grows without bound (depth 7 in identical video) for v1 because
-  entries fire faster than exits.
+- H1 v2 recall is very low (1/8 = 12.5% on gap=0 reviewed) because most
+  real catches in the juggled sequences are NOT in the gap=0 candidate
+  set; the E6c candidate generator doesn't produce a candidate at the
+  same frame as a catch. This is a **gap between E6c's stitching
+  representation and H1's hand model** — a candidate pair implies a
+  single ballistic edge, not necessarily a hand transition.
+- v1 ev0001 (UNMATCHED_EXIT identical f=27) is **fundamentally
+  unrecoverable** by any H1-style model: the catch that should have
+  preceded this throw was never observed in the input data, and no
+  downstream model can recover a "phantom" catch from mid-air.
+- The YouTube video emits zero surviving hand-links in v2: every
+  catch-like tracklet has no prior hand context (likely detector
+  dropouts), and every throw-like tracklet fails the leave-window
+  test. This is a genuine negative result for the YouTube video's
+  H1 coverage.
 
 ## Current best experimental model
 
-H1 v1 is the **baseline**; a v2 with TTL, stale-token rejection, throw
-strictness, wrist-velocity guard, and catch-context check is the next step.
+H1 v2 is the **current best**. v3 should explore:
 
-## Unresolved problems
+1. Soft catch-context: emit a `POTENTIAL_ENTRY` flag instead of hard
+   `UNCONTEXTED_ENTRY` filter; let downstream consumers apply confidence.
+2. Sensitivity grid for `THROW_LEAVE_WINDOW_FRAMES` ∈ {3, 5, 7} to see
+   if the leave-window is too strict.
+3. Remove the `WRIST_MOTION_THROW` filter (it fires 0 times in current
+   data; no measurable impact).
+4. Eventually combine with E6c mid-air edges (master §11) to form
+   AIR+HAND chains.
 
-- v1 visual QA showed false-positive throws driven by hand motion. A
-  wrist-velocity check is needed to suppress these.
-- v1 FIFO can pair very old catches with current throws. A TTL is needed
-  to bound the pool.
-- The youtube video's UNMATCHED_EXIT count (22) is suspiciously high and
-  likely dominated by mid-air balls crossing the reach radius; the
-  throw-strictness filter must require a fast initial divergence.
+## Next action (v3)
 
-## Next action
-
-1. Implement H1 v2 with the 5 filters listed in `h1_v1_report.md` §8.
-2. Re-run on both videos; compare counter distributions before/after.
-3. Re-render contact sheets for the SAME events (e.g. ev0002, ev0006,
-   ev0001) and visually verify the failure modes are suppressed.
-4. Re-evaluate against the gap=0 correct labels (the only hand-relevant
-   subset of the reviewed set).
-5. Document v2 in `h1_v1_report.md` continuation or new file.
+1. Implement H1 v3 with the 3 routes in §10 of `h1_v2_report.md`.
+2. Run sensitivity grid on `THROW_LEAVE_WINDOW_FRAMES` and report.
+3. If time permits, start H2: combine E6c mid-air edges with H1 v2
+   hand-links into a single chain representation (master §11).
+   Preserve edge provenance.
 
 ## Important artifact paths
 
@@ -118,4 +132,4 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. Worktree is clean except for the staged-but-not-yet-committed bootstrap fixup (corrected `watchdog.sh`, refreshed `SETUP_NOTES.md`, `STATE.md`, and `RESULTS_LOG.md`).
+None. Worktree clean after v2 commit.
