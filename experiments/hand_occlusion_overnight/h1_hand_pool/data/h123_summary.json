@@ -1,0 +1,16 @@
+{
+  "h122_n_qa": 5,
+  "h122_n_real": 4,
+  "h122_n_artifact": 1,
+  "h122_n_uncertain": 0,
+  "h123_n_qa": 15,
+  "h123_n_real": 8,
+  "h123_n_artifact": 6,
+  "h123_n_uncertain": 1,
+  "combined_n_qa": 20,
+  "combined_n_real": 12,
+  "combined_n_artifact": 7,
+  "combined_n_uncertain": 1,
+  "raw_rejects_total": 26,
+  "raw_rejects_qa_remaining": 11
+}
