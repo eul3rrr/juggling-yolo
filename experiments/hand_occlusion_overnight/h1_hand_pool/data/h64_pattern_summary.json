@@ -1,0 +1,92 @@
+{
+  "stem": "identical_balls_trick_000_018",
+  "n_pairs": 19,
+  "n_samehand": 12,
+  "n_althand": 7,
+  "overall_same_rate": 0.632,
+  "best_split_frame": 240,
+  "pre_split": {
+    "n_pairs": 4,
+    "n_same": 1,
+    "same_rate": 0.25
+  },
+  "post_split": {
+    "n_pairs": 15,
+    "n_same": 11,
+    "same_rate": 0.733
+  },
+  "same_rate_delta": 0.483,
+  "windows": [
+    {
+      "window_start": 0,
+      "window_end": 100,
+      "n_pairs": 2,
+      "n_same": 0,
+      "same_rate": 0.0
+    },
+    {
+      "window_start": 100,
+      "window_end": 200,
+      "n_pairs": 1,
+      "n_same": 1,
+      "same_rate": 1.0
+    },
+    {
+      "window_start": 200,
+      "window_end": 300,
+      "n_pairs": 2,
+      "n_same": 1,
+      "same_rate": 0.5
+    },
+    {
+      "window_start": 400,
+      "window_end": 500,
+      "n_pairs": 1,
+      "n_same": 1,
+      "same_rate": 1.0
+    },
+    {
+      "window_start": 500,
+      "window_end": 600,
+      "n_pairs": 4,
+      "n_same": 3,
+      "same_rate": 0.75
+    },
+    {
+      "window_start": 600,
+      "window_end": 700,
+      "n_pairs": 2,
+      "n_same": 0,
+      "same_rate": 0.0
+    },
+    {
+      "window_start": 700,
+      "window_end": 800,
+      "n_pairs": 1,
+      "n_same": 1,
+      "same_rate": 1.0
+    },
+    {
+      "window_start": 800,
+      "window_end": 900,
+      "n_pairs": 3,
+      "n_same": 3,
+      "same_rate": 1.0
+    },
+    {
+      "window_start": 900,
+      "window_end": 1000,
+      "n_pairs": 2,
+      "n_same": 2,
+      "same_rate": 1.0
+    },
+    {
+      "window_start": 1000,
+      "window_end": 1100,
+      "n_pairs": 1,
+      "n_same": 0,
+      "same_rate": 0.0
+    }
+  ],
+  "verdict": "CASCADE->FOUNTAIN transition at f=240"
+}
