@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 17:30 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65**
+LAST_UPDATE: 2026-08-28 17:50 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65** + **H66**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1836,3 +1836,63 @@ tracker-fragmentation events but cannot distinguish "hold" from
 FOUNTAIN_3+ post-filter; H65 confirms it.
 
 See `h1_hand_pool/reports/h65_report.md` for full analysis.
+
+## H66 conclusion (2026-08-28 ~17:50 CEST)
+
+**H66: continuous "balls aloft" (A) signal as FOUNTAIN_3+ post-filter** —
+DONE. PARTIAL PASS.
+
+**Hypothesis:** H12 v8 FOUNTAIN_3+ over-classification (43% accuracy on
+H65) might be reduced by filtering phases where balls are NOT
+frequently aloft. A real FOUNTAIN_3+ has multiple balls aloft; a static
+hold has 0-1.
+
+**Method:** Per-frame A = # YOLO balls > 100 px from both hands. Phase-
+level metric: pct_A_ge2 = fraction of frames with >= 2 balls aloft.
+Threshold: 0.30.
+
+**Result on H65 sample (7 substantial FOUNTAIN_3+ phases):**
+- 2/7 rejected: 977-1011 identical (real FOUNTAIN, wrong rej),
+  1029-1049 identical (static hold, correct rej).
+- 5/7 kept: 2 correct (real FOUNTAIN), 3 wrong (890-936 OTHER,
+  482-594 OTHER, 800-861 CASCADE).
+
+**H43 + H66 stacked:** 2/7 rejected, 2/3 of those are real FOUNTAIN
+labels (2 correct rejects / 3 rejects). The remaining 5/7 are kept;
+H12 v8 accuracy on kept is 3/5 = 60% (vs 43% baseline).
+
+**Verdict: PARTIAL PASS.** H66 is a useful additional signal:
+- Catches the 1029-1049 static hold (max_A=1, never 2+ aloft)
+- Independent of H12 v8 confidence (different signal source)
+- Composes cleanly with H43 (no overlap in rejection logic)
+- 67% precision on rejects at threshold 0.30
+
+**Limitations:**
+- YouTube 482-594 static hold NOT caught (YOLO fires on stationary
+  background features — H4 finding extends)
+- 3-ball FOUNTAIN (977-1011) wrongly rejected (only 1 ball aloft)
+- 890-936 crossed-arm trick on identical NOT caught
+- 800-861 YouTube CASCADE NOT caught (CASCADE has balls aloft too)
+
+**Recommended operating point (updated):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + **H66** + H52 + H53
+
+For FOUNTAIN_3+ post-filter: H43 + H66 stacked.
+
+**Comparison to H43 alone:**
+| Filter | correct_rej | wrong_rej | wrong_keep | correct_keep |
+|---|---|---|---|---|
+| H43 (conf < 0.55) | 1 | 0 | 3 | 3 |
+| H66 (pct_A_ge2 < 0.30) | 1 | 1 | 3 | 2 |
+| H43 + H66 (both) | 2 | 1 | 2 | 2 |
+
+**Threshold sensitivity grid (NOT flat):** 0.10 catches 0 wrong / 0
+correct, 0.30 catches 1 wrong / 1 correct, 0.60 catches 4 wrong / 2
+correct. Trade-off at 0.30 is best balance.
+
+**Negative finding:** YOLO detector false positives on stationary
+background features (corrugated door, sign, trees) limit H66's
+discrimination on YouTube. H4's general detector confusion finding
+extends to H66.
+
+See `h1_hand_pool/reports/h66_report.md` for full analysis.

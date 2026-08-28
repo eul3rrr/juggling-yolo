@@ -4233,3 +4233,47 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/*.png` (7 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h65_report.md`
 
+### H66 (2026-08-28 ~17:50 CEST)
+
+- Hypothesis: H12 v8 FOUNTAIN_3+ over-classification (43% on H65)
+  might be reduced by filtering phases where balls are NOT frequently
+  aloft. Real FOUNTAIN_3+ has multiple balls aloft; static hold has
+  0-1.
+- Method: Per-frame A = # YOLO balls > 100 px from both hands. Phase-
+  level metric: pct_A_ge2 = fraction of frames with >= 2 balls aloft.
+  Threshold: 0.30.
+- Quantitative result on H65 sample (7 substantial FOUNTAIN_3+
+  phases):
+  - 2/7 rejected: 977-1011 identical (real FOUNTAIN, wrong rej),
+    1029-1049 identical (static hold, correct rej).
+  - 5/7 kept: 2 correct (real FOUNTAIN), 3 wrong (890-936 OTHER,
+    482-594 OTHER, 800-861 CASCADE).
+- Comparison to H43:
+
+| Filter | correct_rej | wrong_rej | wrong_keep | correct_keep |
+|---|---|---|---|---|
+| H43 (conf < 0.55) | 1 | 0 | 3 | 3 |
+| H66 (pct_A_ge2 < 0.30) | 1 | 1 | 3 | 2 |
+| H43 + H66 (both) | 2 | 1 | 2 | 2 |
+
+- Threshold sensitivity grid (NOT flat):
+  - 0.10: 0 wrong / 0 correct
+  - 0.30: 1 wrong / 1 correct (default)
+  - 0.60: 4 wrong / 2 correct
+- Negative findings:
+  - YouTube 482-594 static hold NOT caught (YOLO fires on stationary
+    background features — H4 finding extends)
+  - 3-ball FOUNTAIN (977-1011) wrongly rejected (only 1 ball aloft)
+  - 890-936 crossed-arm trick on identical NOT caught
+  - 800-861 YouTube CASCADE NOT caught (CASCADE has balls aloft too)
+- Verdict: PARTIAL PASS. H66 is a useful additional signal that
+  composes with H43 to give 2/7 rejection rate (vs 1/7 for H43
+  alone). The recommended operating point is updated:
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H66 + H52 + H53.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h66_continuous_A_fountain_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h66_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h66_rejected_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h66_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h66_report.md`
+

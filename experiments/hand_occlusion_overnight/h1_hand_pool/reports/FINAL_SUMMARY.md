@@ -1,7 +1,7 @@
 # Hand-Occlusion Overnight Lab — Final Summary Report
 
-**Date:** 2026-08-28 ~17:30 CEST
-**Episodes:** H1-H65 (65 research episodes over ~17 hours)
+**Date:** 2026-08-28 ~17:50 CEST
+**Episodes:** H1-H66 (66 research episodes over ~17.5 hours)
 **Status:** COMPLETE — final operating point validated
 **Author:** autonomous hand-occlusion overnight research lab
 
@@ -215,15 +215,25 @@ consistency.
 
 ## Recommended operating point summary
 
-| Component | Choice | Rationale |
-|---|---|---|
-| Chain set | h7v3plus3 | H22 + H26 combined (H34) |
-| Chain quality | H10 v10 | Per-chain 0.30*h3 + 0.30*h8 + 0.40*h9 |
-| Identity propagation | H11 v7 | CONFIDENT chains at q >= 0.7 |
-| Pattern inference | H12 v8 | K=4 events + census + chain quality |
-| Event log filter | H50 10-frame | Drops 3/48 identity switches on identical |
-| Confidence filter | H43 FOUNTAIN < 0.55 | Rejects 21 FOUNTAIN_3+ frames on identical |
-| Physics check | H52 H8 v5 | Confirms all H50 drops are TRACKER_FRAGMENTATION |
+|| Component | Choice | Rationale |
+||---|---|---|
+|| Chain set | h7v3plus3 | H22 + H26 combined (H34) |
+|| Chain quality | H10 v11 v3 (H56 v1) | Non-linear g_cv penalty, deadzone=0.5, ramp_end=1.0, w54=0.30 |
+|| Identity propagation | H11 v7 | CONFIDENT chains at q >= 0.7 |
+|| Pattern inference | H12 v8 | K=4 events + census + chain quality |
+|| Event log filter | H50 10-frame | Drops 3/48 identity switches on identical |
+|| Confidence filter | H43 FOUNTAIN < 0.55 | Rejects 21 FOUNTAIN_3+ frames on identical |
+|| Continuous A filter | **H66 pct_A_ge2 < 0.30** | Rejects 1/4 wrong FOUNTAIN_3+ phases |
+|| Physics check | H52 H8 v5 | Confirms all H50 drops are TRACKER_FRAGMENTATION |
+
+**For FOUNTAIN_3+ post-filter:** H43 + H66 stacked (2/7 rejection,
+67% precision on rejects).
+
+**For maximum precision (production use):**
+- h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000
+
+**For research / exploratory analysis:**
+- h7v3plus3 + H10 v11 v3 (all quality bands) = precision 0.981, recall 0.718
 
 ## Final pattern distribution (H50 + H51 + H52-validated)
 
@@ -402,7 +412,7 @@ that produced 4 experiments) added the following:
 **For research / exploratory analysis:**
 - h7v3plus3 + H10 v11 v3 (all quality bands) = precision 0.981, recall 0.718
 
-## Updated strong findings (post-H61)
+## Updated strong findings (post-H65)
 
 1. **The h7v3plus3 chain set is a closed, validated juggling
    representation** with 100% precision on the 113-pair manual
@@ -410,9 +420,13 @@ that produced 4 experiments) added the following:
 2. **The 10-frame flight-time filter is the actionable downstream
    post-filter.** Drops 3/48 events on identical (all
    TRACKER_FRAGMENTATION), 0/50 on YouTube.
-3. **H12 v8's FOUNTAIN_3+ classification is fundamentally
-   unreliable** (30% accurate). H43's confidence-based filter
-   (conf < 0.55) is the most precise post-filter available.
+3. **H12 v8's FOUNTAIN_3+ classification is 43% accurate** on
+   the H50-filtered H65 sample (improved from H39's 30%).
+   H43's confidence-based filter (conf < 0.55) catches 1/4
+   wrong cases; H66's continuous balls-aloft (pct_A_ge2 < 0.30)
+   catches 1/4 wrong cases. H43 + H66 stacked catches 2/4
+   wrong cases (the unambiguous static hold and the unambiguous
+   CASCADE-with-extra-ball).
 4. **The chain set is mostly multi-ball merges** (H32, H33, H54,
    H55, H56), not single-ball trajectories. The H11 v7 +
    H10 v11 v3 CONFIDENT chains (3 identical + 1 YouTube) are
@@ -495,6 +509,23 @@ CSV/JSON files. All committed and pushed to
   reliable classifier would need continuous hand-occupancy
   signal (per H40-H42), unavailable in the chain-event
   representation.
+
+### **H66 — Continuous balls-aloft (A) FOUNTAIN_3+ post-filter**
+- Per-frame A = # YOLO balls > 100 px from both wrists.
+  Phase-level metric: pct_A_ge2 = fraction of frames with
+  >= 2 balls aloft.
+- Threshold 0.30 on H65 sample: 2/7 rejected, 1 correct
+  (1029-1049 static hold, max_A=1) and 1 wrong (977-1011
+  real 3-ball FOUNTAIN, only 1 ball aloft at a time).
+- H43 + H66 stacked: 2/7 rejection rate, 67% precision on
+  rejects. Kept-set accuracy improves 43% → 60%.
+- Negative finding: YOLO detector false positives on
+  stationary background features (corrugated door, sign,
+  trees) limit H66's discrimination on YouTube. The H4
+  general detector confusion finding extends.
+- **Recommended operating point (updated):**
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + **H66** +
+  H52 + H53. For FOUNTAIN_3+ post-filter: H43 + H66 stacked.
 
 ## Updated strong findings (post-H65)
 
