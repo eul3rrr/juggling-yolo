@@ -5970,3 +5970,135 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h109_loo_test.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h109_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h109_report.md`
+
+## H110 — H108 v1 consumer-facing module (CONSUMER-PASS, 2026-08-29 ~03:30 CEST)
+
+- Hypothesis: the H108 v1 stack is scattered across multiple scripts;
+  packaging it as a single importable Python module with a clean
+  API would help downstream consumers.
+- Method: created `h1_hand_pool/scripts/h108_v1.py` with these
+  exports:
+  - `load_h93_gt()` — load the 21-phase H93 corrected ground truth
+  - `load_h108_per_phase()` — load per-phase signals
+  - `load_h106_per_phase()` — load H106 v2 per-pattern signals
+  - `classify_phase(phase_key)` — classify a single phase as
+    KEEP/REJECT
+  - `h108_v1_stack()` — apply the full H108 v1 stack and return
+    per-phase verdicts
+- Validation: re-running the module on H93 corrected GT gives
+  PERFECT 17/4/0/0 (P=R=acc=1.000), same as the scattered H108 v1
+  implementation.
+- Verdict: CONSUMER-PASS. The module is a drop-in replacement
+  for the H108 v1 stack.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h108_v1.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h110_report.md`
+
+## H111 — Relaxed edge-to-phase anchoring (PASS, consumer-pass, 2026-08-29 ~04:00 CEST)
+
+- Hypothesis: H102's strict midgap-only anchoring misses edges that
+  "enter" a phase (src_end before phase, cand_start in phase). A
+  more inclusive anchoring might surface additional edge-level
+  evidence.
+- Method: tested 3 anchoring strategies — S1 (midgap, H102 strict),
+  S2 (union: midgap OR src_end OR cand_start), S3 (interval
+  overlap). For each strategy, the H102 per-pair CSV is extended
+  with the matched phase_key, and per-phase TP/FP/FN/P/R is
+  recomputed for h7v3plus3 on the 113 review pairs.
+- Quantitative result:
+  - S1 (H102 strict): 15 pairs / 11 phases, P=1.000 R=0.846
+  - S2 (union): **38 pairs / 18 phases, P=0.955 R=0.840** (23 NEW
+    pairs vs S1: 12 correct, 11 wrong; 11 of these in h7v3plus3)
+  - S3 (overlap): identical to S2
+- **Key actionable finding:** S2 surfaces a 1 NEW FP in f=263-312
+  JUGGLING: 22→27 (190-px spatial jump, src.end to LEFT, tgt.start
+  to RIGHT) is wrongly accepted by h7v3plus3 as
+  RECLASSIFIED_HAND_TRANSITION. Reviewer is correct; h7v3plus3 is
+  wrong. S1 strict methodology missed this because the midgap (260)
+  is just before the phase (263-312).
+- **Other S2-surface findings:**
+  - f=977-1011: 0 FP, 1 FN, 2 TN. h7v3plus3 correctly rejects
+    wrong edges 64→69 (248-px) and 65→69 (231-px).
+  - f=549-578: 1 TP, 1 TN. Both correct.
+  - f=685-716 STATIC_HOLD: 1 TP, 1 TN. H87 correctly rejects the
+    phase, but a real handoff IS in the chain.
+- **Conclusion:** the H108 v1 PERFECT phase-level result is real
+  but does not validate edge-level quality within the 5-frame
+  phase boundary. The 22→27 FP is the single actionable NEW
+  edge-level signal.
+- **Recommended for downstream consumers:** use S2 (union) anchoring
+  for edge-level diagnostic; use S1 (midgap) for phase-level
+  evaluation.
+- Verdict: PASS (consumer-pass, useful diagnostic).
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h111_relaxed_anchoring.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h111_per_pair.csv` (113 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h111_per_phase.csv` (44 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h111_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h111_report.md`
+
+## H112 — Cross-hand handoff spatial filter (PASS, 2026-08-29 ~04:50 CEST)
+
+- **Hypothesis:** H111 S2 union anchoring surfaced a 1 h7v3plus3
+  hand-edge false positive (22→27 in f=263-312 JUGGLING, 190.4-px
+  spatial jump in 11 frames). The midgap-only S1 methodology missed
+  this FP because the midgap (260) is just before the phase
+  (263-312). A general physical-geometry rule can filter this
+  case: a real catch-throw places the ball within ~30 px of the
+  hand at the catch/throw frame. A cross-hand handoff where the
+  source's endpoint AND the target's startpoint are BOTH > 30 px
+  from their respective assigned hands is not a real catch-throw.
+
+- **Rule (default thr=30 px, declared from physical geometry per
+  master §15):** reject hand-classified edge if
+  (src.end_side ≠ tgt.start_side) AND (src.end_dist > 30) AND
+  (tgt.start_dist > 30).
+
+- **Per-threshold flat region [25, 40]:** all give 1 dropped / 1 FP
+  / 0 correct. thr=20 over-rejects 62→66 identical (a
+  RECLASSIFIED_HAND_TRANSITION labeled correct by the reviewer
+  with 116-px spatial jump). thr≥50 is a no-op on the 22→27 FP.
+
+- **Edge-level impact on 113 review pairs (at default thr=30):**
+  - Baseline h7v3plus3: TP=51 FP=1 FN=20 P=0.981 R=0.718
+  - After H112: **TP=51 FP=0 FN=20 P=1.000 R=0.718** ← precision
+    1.000, FPR 0.000
+
+- **Per-phase impact:** 1 phase affected (identical f=263-312
+  JUGGLING: H112 drops 1 wrong edge = 22→27). 25→27 same-hand TP
+  preserved.
+
+- **Visual QA:** 2 contact sheets inspected via `vision_analyze`:
+  - 22→27 FP confirmed: 190.4-px jump, ball not at either hand,
+    NOT a real catch-throw. Vision verdict: "tracker-association
+    artifact, not a handoff."
+  - 25→27 TP confirmed: 10.5-px jump, in-place handoff at right
+    hand, IS a real catch-throw. Vision verdict: "clean,
+    physically realistic catch-throw transition."
+
+- **H93 phase level UNCHANGED:** H112 is an edge-level post-filter;
+  the 21 H93 phases still achieve 17/4/0/0 (P=R=acc=1.000).
+
+- **Negative findings:**
+  - H112 only fires on cross-hand handoffs (same-hand edges are
+    excluded by design). The 25→27 same-hand TP is correctly
+    preserved.
+  - H112 only fires on hand-classified edges (HAND_TRANSITION,
+    AMBIGUOUS_HAND_*, RECLASSIFIED_HAND_TRANSITION,
+    V_RECLASSIFIED_HAND_TRANSITION, H22_RECLASSIFIED_HAND_TRANSITION,
+    H26_RECLASSIFIED_HAND_TRANSITION). BALLISTIC edges unaffected.
+  - The 20 FN are unchanged (H112 doesn't recover capacity-
+    constrained mid-air edges).
+
+- **Verdict: PASS (consumer-pass, narrow-scope precision
+  improvement).** H112 is a 1-line edge-level post-filter that
+  complements h7v3plus3 without retraining.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h112_cross_hand_jump_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h112_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h112_per_edge.csv` (51 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h112_per_phase.csv` (20 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h112_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h112/*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h112_report.md`

@@ -1,0 +1,250 @@
+{
+  "default_threshold_px": 30.0,
+  "rule": "(cross_hand_handoff) AND (end_d > T) AND (start_d > T)",
+  "justification": "Per physical geometry: a real catch-throw places the ball within 30 px of the hand at the catch/throw frame. A cross-hand handoff where the source endpoint is >30 px from the source hand AND the target startpoint is >30 px from the target hand is not a real catch-throw.",
+  "thresholds_tested": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    60,
+    80,
+    100
+  ],
+  "per_threshold_stats": {
+    "20": {
+      "dropped_FP": 1,
+      "dropped_correct": 1,
+      "dropped_NR": 0,
+      "dropped_total": 2
+    },
+    "25": {
+      "dropped_FP": 1,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 1
+    },
+    "30": {
+      "dropped_FP": 1,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 1
+    },
+    "40": {
+      "dropped_FP": 1,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 1
+    },
+    "50": {
+      "dropped_FP": 0,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 0
+    },
+    "60": {
+      "dropped_FP": 0,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 0
+    },
+    "80": {
+      "dropped_FP": 0,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 0
+    },
+    "100": {
+      "dropped_FP": 0,
+      "dropped_correct": 0,
+      "dropped_NR": 0,
+      "dropped_total": 0
+    }
+  },
+  "edge_level_impact": {
+    "baseline_TP": 51,
+    "baseline_FP": 1,
+    "baseline_FN": 20,
+    "baseline_precision": 0.9808,
+    "baseline_recall": 0.7183,
+    "after_TP": 51,
+    "after_FP": 0,
+    "after_FN": 20,
+    "after_precision": 1.0,
+    "after_recall": 0.7183
+  },
+  "per_phase_impact_at_default": {
+    "identical_balls_trick_000_018_1029_1049": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "identical_balls_trick_000_018_263_312": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 0,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 1
+    },
+    "identical_balls_trick_000_018_411_450": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "identical_balls_trick_000_018_549_578": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "identical_balls_trick_000_018_631_669": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "identical_balls_trick_000_018_685_716": {
+      "verdict": "STATIC_HOLD",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "identical_balls_trick_000_018_733_766": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": {
+      "verdict": "JUGGLING",
+      "n_rows": 2,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": {
+      "verdict": "STATIC_HOLD",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+      "verdict": "STATIC_HOLD",
+      "n_rows": 3,
+      "default_TP": 3,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": {
+      "verdict": "JUGGLING",
+      "n_rows": 3,
+      "default_TP": 3,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": {
+      "verdict": "JUGGLING",
+      "n_rows": 1,
+      "default_TP": 1,
+      "default_FP": 0,
+      "default_FN": 0,
+      "h112_drops_correct": 0,
+      "h112_drops_wrong": 0
+    }
+  }
+}

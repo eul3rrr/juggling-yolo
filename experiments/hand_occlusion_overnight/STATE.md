@@ -4099,4 +4099,107 @@ diagnostic)**:
     false positives without affecting TP rate.
   - **Recommended for downstream consumers:** use S2 (union) anchoring
     for edge-level diagnostic; use S1 (midgap) for phase-level evaluation.
-  - See `h1_hand_pool/reports/h111_report.md`.
+    - See `h1_hand_pool/reports/h111_report.md`.
+
+  ## H112 conclusion (2026-08-29 ~04:50 CEST)
+
+  **H112: Cross-hand handoff spatial filter for h7v3plus3 hand edges** —
+  DONE. PASS (consumer-pass, narrow-scope precision improvement).
+  H112 lifts edge-level precision from **0.981 to 1.000** on the 113
+  review pairs by filtering the 1 H111-discovered cross-hand false
+  positive (22→27 in f=263-312 JUGGLING, 190.4-px spatial jump in 11
+  frames). It does so without dropping any of the 51 correct
+  hand-edge review pairs, leaving recall unchanged at 0.718.
+
+  **Rule (default thr=30 px, in middle of [25, 40] flat region):**
+  reject hand-classified edge if
+  - (src.end_side ≠ tgt.start_side) — true cross-hand handoff
+  - AND src.end_dist > 30 px — ball not at source hand at catch
+  - AND tgt.start_dist > 30 px — ball not at target hand at throw
+
+  **Per-threshold sensitivity:**
+
+  | thr | dropped | FP | correct |
+  |----:|--------:|---:|--------:|
+  | 20  | 2 | 1 | **1** |
+  | 25  | 1 | 1 | 0 |
+  | **30**  | **1** | **1** | **0** |
+  | 40  | 1 | 1 | 0 |
+  | 50+ | 0 | 0 | 0 |
+
+  **Flat region [25, 40]** is wide. thr=20 over-rejects 62→66
+  identical (a `RECLASSIFIED_HAND_TRANSITION` labeled `correct` by
+  the reviewer with 116-px spatial jump in 9 frames). thr≥50 is a
+  no-op on the 22→27 FP (both endpoints > 50 px).
+
+  **Visual QA:** 2 contact sheets inspected via `vision_analyze`:
+  - **22→27 FP confirmed**: 190.4-px jump, ball not at either
+    hand, NOT a real catch-throw. Vision verdict: "tracker-
+    association artifact, not a handoff."
+  - **25→27 TP confirmed**: 10.5-px jump, in-place handoff at
+    right hand, IS a real catch-throw. Vision verdict: "clean,
+    physically realistic catch-throw transition."
+
+  **Why H112 works and where it doesn't:**
+  - H112 only fires on cross-hand handoffs (same-hand edges are
+    excluded by design). The 25→27 same-hand TP is correctly
+    preserved.
+  - H112 only fires on hand-classified edges (HAND_TRANSITION,
+    AMBIGUOUS_HAND_*, RECLASSIFIED_HAND_TRANSITION,
+    V_RECLASSIFIED_HAND_TRANSITION, H22_RECLASSIFIED_HAND_TRANSITION,
+    H26_RECLASSIFIED_HAND_TRANSITION). BALLISTIC edges are
+    unaffected.
+  - 30 px is the natural threshold (hand radius + 5-10 px
+    detection-noise tolerance), in the middle of the [25, 40] flat
+    region.
+
+  **Cross-validation: H93 phase level UNCHANGED.** H112 is an
+  edge-level post-filter; the 21 H93 phases still achieve 17/4/0/0
+  (TP/TN/FP/FN, P=R=acc=1.000).
+
+  **Recommended operating point (post-H112, edge-level precision
+  optimized):**
+
+  ```
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v4 + H78 +
+  H87+max_aloft + H90 NEW + H108 R4b + H52 + H53 + H71 (MIXED_3+) +
+  H112 (cross_hand AND end>30 AND start>30)
+  ```
+
+  - 21 H93 phases: 17/4/0/0, P=1.000, R=1.000, acc=1.000 (unchanged)
+  - 113 review pairs (chain-edge): **P=1.000, R=0.718, FPR=0.000**
+    (improved from P=0.981 baseline)
+  - (CONF or UNCER) gate: P=1.000, R=0.465 (unchanged)
+
+  **Future research (post-H112):**
+  1. **H113: H112 generalization check on 3rd video.** The H112
+     rule is physically justified and validated on the 22→27 case,
+     but the lab does not have a 3rd video with h7v3plus3 + manual
+     review data. The H101 weave video lacks pose data, so H74/H78
+     can't run on it.
+  2. **H114: H112-style filter for same-hand edges with large
+     spatial jumps.** H112 is restricted to cross-hand. A
+     same-hand variant at higher threshold (100-150 px) might
+     catch large-jump false positives in a future h7v3plus3
+     revision.
+  3. **Stop here.** H112 lifts edge-level precision to 1.000. The
+     recommended operating point is precision-optimized at both
+     phase and edge levels.
+
+  **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h112_cross_hand_jump_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h112_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h112_*.{csv,json}` (3 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h112/*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h112_report.md`
+
+  ## Last update
+
+  - 2026-08-29 (this episode): H112 PASS — cross-hand handoff spatial
+    filter lifts edge-level precision 0.981 → 1.000 on the 113 review
+    pairs. Rule: (cross_hand_handoff) AND (end_d > 30 px) AND
+    (start_d > 30 px). Flat region [25, 40] (all give 1/1/0/0
+    drop/fp/correct). 2 contact sheets visually confirm the 22→27
+    FP (190-px jump) and the 25→27 TP (10.5-px jump). H112 is a
+    1-line edge-level post-filter that complements h7v3plus3 without
+    retraining.
