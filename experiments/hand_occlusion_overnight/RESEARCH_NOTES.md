@@ -1304,3 +1304,75 @@ useful source record:
     that uses chain events where available and H40
     sustained-occupancy otherwise.
 
+## Cross-cutting insights from H42 (2026-08-28 ~14:55)
+
+41. **H42 hybrid H36+H40v2 state is technically working but
+    not significantly better than H40 v2 alone.** The H36
+    chain events carry a handedness bias (H36 sees one hand
+    per chain event) which propagates to the hybrid. H42
+    fills in 51.5-73.0% of frames where H36 has HOLD but
+    H40 v2 has occupancy, but doesn't improve CASCADE/
+    FOUNTAIN discrimination. Verdict: MIXED.
+
+## Cross-cutting insights from H43 (2026-08-28 ~15:00)
+
+42. **H12 v8's own confidence is the most reliable signal
+    for FOUNTAIN_3+ misclassifications.** External signals
+    (H36 chain events, H40 v2 sustained-occupancy) are too
+    noisy to beat H12 v8's calibrated self-confidence. H43
+    (filter FOUNTAIN_3+ with conf < 0.55) achieves precision
+    100% (1/1 correct reject) without over-rejecting any
+    real FOUNTAIN. H43 is a safe, narrow-scope filter.
+
+43. **H43 only catches the lowest-confidence FOUNTAIN_3+
+    frames.** The 27/298 (9.1%) low-conf frames on identical
+    are all in f=1029-1060 (the "OTHER 2-ball exercise"
+    phase from H39 visual QA). H43 misses the f=977-1011
+    hold trick at conf 0.565. Lowering the threshold would
+    catch this but also reject some real FOUNTAIN.
+
+44. **The H12 v8 confidence distribution by pattern is
+    informative on identical but not on YouTube.** identical:
+    FOUNTAIN_3+ range 0.463-0.844 (low < 0.5 = 9.1%);
+    CASCADE_3+ range 0.755-0.844 (low = 0%). YouTube:
+    FOUNTAIN_3+ and CASCADE_3+ both in 0.629-0.698 range
+    (low = 0% for both). The YouTube confidence signal is
+    uninformative because H12 v8 saturates at moderate
+    confidence for 5-ball patterns.
+
+## H44 — Literature search notes (2026-08-28 ~15:00)
+
+45. **No prior work on CV-based cascade/fountain
+    classification.** A web search for "cascade fountain
+    juggling classification computer vision" returns
+    primarily Wikipedia/educational sources. The problem
+    we're working on is novel.
+
+46. **Most related work is in 3D ball trajectory estimation
+    (Ponglertnapakorn 2025, physics-based 2009/2012).** These
+    are CV methods that estimate 3D ball positions from
+    monocular tracking. They require either LSTM training
+    (Ponglertnapakorn) or marker-based calibration
+    (physics-based). Our 2D-only setup is fundamentally
+    limited compared to these methods.
+
+47. **Juggling pattern representation is well-defined
+    (siteswap notation) but not a CV problem.** Siteswap
+    describes any juggling pattern as a sequence of throw
+    heights. The CV problem is recovering the siteswap from
+    a video — which is essentially what H12 v8 tries to do.
+    The H12 v8 K=4 sliding window is one approach; better
+    approaches would use siteswap parsing (e.g., Büttiken
+    et al. 2024 "Beyond the Cascade: Juggling Vanilla
+    Siteswap Patterns" arXiv:2410.19591) but these require
+    reliable per-frame ball-height measurements.
+
+48. **Recommended future direction: a siteswap-based
+    H12 v9 that uses ball-height classification instead
+    of K=4 sliding window of events.** This is a
+    fundamentally different approach that could fix
+    H12 v8's K=4 limitation. But it requires reliable
+    per-frame ball-height measurement, which our 2D
+    tracking provides.
+
+
