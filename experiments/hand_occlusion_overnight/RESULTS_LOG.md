@@ -6102,3 +6102,92 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h112_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h112/*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h112_report.md`
+
+### H114 (2026-08-29 ~05:30 CEST)
+
+- Hypothesis: a same-hand variant of H112 (no `cross_hand` requirement)
+  at higher threshold would catch additional same-hand large-jump FPs
+  in the h7v3plus3 hand-edge set. This is the H112 future-research
+  follow-up direction.
+
+- Two rule variants:
+  - **v1**: reject if `spatial_jump > T_j` AND `end_d > T_d` AND
+    `start_d > T_d` (20 thresholds).
+  - **v2**: H112 rule without `cross_hand` (6 thresholds).
+
+- Evaluation scope: **all 113 manually reviewed pairs**, not just
+  h7v3plus3 hand edges, to test whether the rule is a precision
+  improvement in general.
+
+- **Quantitative result:**
+
+| Setting | in-chain wrong caught | in-chain correct dropped (FN) | NOT-in-chain wrong caught |
+|---------|----------------------:|------------------------------:|---------------------------:|
+| v1 (T_d=30, T_j=80) | 1 | 5 | 23 |
+| v1 (T_d=40, T_j=200) | 0 | 1 | 13 |
+| **v1 (T_d=40, T_j=250)** | **0** | **0** | **10** |
+| v1 (T_d=50, T_j=200) | 0 | 1 | 9 |
+| v2 (T_d=30) | 1 | **15** | 24 |
+| v2 (T_d=50) | 0 | 12 | 13 |
+
+- **Visual QA: 4 contact sheets at `contact_sheets_h114/`.**
+  - 14→18 (WRONG, sj=321 in 0 frames): confirmed false — "infinite
+    velocity", tracker identity swap, not a handoff.
+  - 3→8 (CORRECT in chain, sj=227 in 6 frames): vision tool says
+    "Likely a False Positive" — ball not at hand at either end,
+    227-px jump is suspicious. H7's cost algorithm chose 3→9 over
+    3→8; 3→8 is in h7v3plus3 only because H7v2 reclassification
+    downgraded the air-edge to HAND_TRANSITION. The reviewer marked
+    it correct but visual evidence is ambiguous.
+  - 7→10 (CORRECT in chain, sj=156 in 2 frames): confirmed real —
+    the 156-px jump is the **distance between the two different
+    hands (h7 and h10)**, not the ball traveling. The H24 visual
+    QA correctly identified this as V_SHALLOW.
+  - 65→69 (WRONG, sj=231 in 1 frame): confirmed false — 243 px
+    from left hand at catch, 231-px jump in 1 frame is implausible.
+
+- **Negative findings:**
+  - **No same-hand wrong edges are in h7v3plus3.** The chain
+    algorithm's cost-based selection and capacity constraints
+    already exclude them. H114 has nothing to do within the chain.
+  - **v2 (no cross_hand) is a CATASTROPHIC regression.** At T_d=30,
+    v2 drops 15 in-chain CORRECT edges (3→8, 7→10, 19→20, 23→25,
+    28→29, etc.) for 1 in-chain wrong. The cross_hand restriction
+    is essential.
+  - **v1 (T_d=30, T_j=80) is precision-negative:** 1 in-chain
+    wrong caught but 5 in-chain correct dropped (FN cost > FP
+    reduction).
+  - The h7v3plus3 chain's edge types (HAND_TRANSITION,
+    AMBIGUOUS_HAND_TRANSITION, RECLASSIFIED_HAND_TRANSITION,
+    V_RECLASSIFIED_HAND_TRANSITION, H26_RECLASSIFIED_HAND_TRANSITION)
+    explicitly handle the case where the detector drops the ball
+    during the held phase — the source's last detection and
+    target's first detection are at very different positions
+    because the held phase is invisible. 3→8 (sj=227, end=106,
+    start=71), 7→10 (sj=156), 23→25 (sj=101), 39→47 (sj=72,
+    end=174) are all examples. A naive same-hand large-jump
+    filter would incorrectly reject these.
+
+- **Verdict: NEGATIVE for chain precision, PASS as post-hoc
+  validation tool.** The (T_d=40, T_j=250) v1 operating point is
+  a pure post-hoc validation signal: 0 in-chain wrong caught,
+  0 in-chain correct dropped, 10 NOT-in-chain wrong caught.
+  Useful for confirming the chain's correct rejections are
+  physically justified. The (T_d=30, T_j=80) v1 setting and all
+  v2 settings are precision-negative.
+
+- **Recommended operating point (unchanged from H112):**
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v4 +
+  H78 + H87+max_aloft + H90 NEW + H108 R4b + H52 + H53 + H71
+  (MIXED_3+) + H112 (cross_hand AND end>30 AND start>30).
+  H114 v1 (T_d=40, T_j=250) is a recommended **diagnostic tool**
+  to verify the chain's same-hand rejections are physically
+  justified.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h114_same_hand_jump_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h114_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h114_per_edge.csv` (113 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h114_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h114/*.png` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h114_report.md`

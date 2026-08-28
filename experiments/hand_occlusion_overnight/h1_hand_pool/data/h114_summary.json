@@ -1,0 +1,728 @@
+{
+  "rule_v1": {
+    "rule": "spatial_jump > T_jump AND end_d > T_d AND start_d > T_d",
+    "thresholds": [
+      [
+        30,
+        80
+      ],
+      [
+        30,
+        100
+      ],
+      [
+        30,
+        120
+      ],
+      [
+        30,
+        150
+      ],
+      [
+        30,
+        200
+      ],
+      [
+        40,
+        100
+      ],
+      [
+        40,
+        150
+      ],
+      [
+        40,
+        200
+      ],
+      [
+        40,
+        250
+      ],
+      [
+        50,
+        100
+      ],
+      [
+        50,
+        150
+      ],
+      [
+        50,
+        200
+      ],
+      [
+        50,
+        250
+      ],
+      [
+        60,
+        150
+      ],
+      [
+        60,
+        200
+      ],
+      [
+        60,
+        250
+      ],
+      [
+        60,
+        300
+      ],
+      [
+        80,
+        200
+      ],
+      [
+        80,
+        250
+      ],
+      [
+        80,
+        300
+      ]
+    ],
+    "per_threshold": {
+      "d30_j80": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 38,
+          "drop_wrong": 24,
+          "drop_correct": 14,
+          "keep_wrong": 18,
+          "keep_correct": 57,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 6,
+          "drop_wrong": 1,
+          "drop_correct": 5,
+          "keep_wrong": 0,
+          "keep_correct": 46,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d30_j100": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 36,
+          "drop_wrong": 24,
+          "drop_correct": 12,
+          "keep_wrong": 18,
+          "keep_correct": 59,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 5,
+          "drop_wrong": 1,
+          "drop_correct": 4,
+          "keep_wrong": 0,
+          "keep_correct": 47,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d30_j120": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 33,
+          "drop_wrong": 24,
+          "drop_correct": 9,
+          "keep_wrong": 18,
+          "keep_correct": 62,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 4,
+          "drop_wrong": 1,
+          "drop_correct": 3,
+          "keep_wrong": 0,
+          "keep_correct": 48,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d30_j150": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 28,
+          "drop_wrong": 20,
+          "drop_correct": 8,
+          "keep_wrong": 22,
+          "keep_correct": 63,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 4,
+          "drop_wrong": 1,
+          "drop_correct": 3,
+          "keep_wrong": 0,
+          "keep_correct": 48,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d30_j200": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 22,
+          "drop_wrong": 17,
+          "drop_correct": 5,
+          "keep_wrong": 25,
+          "keep_correct": 66,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 1,
+          "drop_wrong": 0,
+          "drop_correct": 1,
+          "keep_wrong": 1,
+          "keep_correct": 50,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d40_j100": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 26,
+          "drop_wrong": 19,
+          "drop_correct": 7,
+          "keep_wrong": 23,
+          "keep_correct": 64,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 4,
+          "drop_wrong": 1,
+          "drop_correct": 3,
+          "keep_wrong": 0,
+          "keep_correct": 48,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d40_j150": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 20,
+          "drop_wrong": 15,
+          "drop_correct": 5,
+          "keep_wrong": 27,
+          "keep_correct": 66,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 3,
+          "drop_wrong": 1,
+          "drop_correct": 2,
+          "keep_wrong": 0,
+          "keep_correct": 49,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d40_j200": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 16,
+          "drop_wrong": 13,
+          "drop_correct": 3,
+          "keep_wrong": 29,
+          "keep_correct": 68,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 1,
+          "drop_wrong": 0,
+          "drop_correct": 1,
+          "keep_wrong": 1,
+          "keep_correct": 50,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d40_j250": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 10,
+          "drop_wrong": 10,
+          "drop_correct": 0,
+          "keep_wrong": 32,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d50_j100": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 19,
+          "drop_wrong": 13,
+          "drop_correct": 6,
+          "keep_wrong": 29,
+          "keep_correct": 65,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 3,
+          "drop_wrong": 0,
+          "drop_correct": 3,
+          "keep_wrong": 1,
+          "keep_correct": 48,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d50_j150": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 14,
+          "drop_wrong": 10,
+          "drop_correct": 4,
+          "keep_wrong": 32,
+          "keep_correct": 67,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 2,
+          "drop_wrong": 0,
+          "drop_correct": 2,
+          "keep_wrong": 1,
+          "keep_correct": 49,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d50_j200": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 11,
+          "drop_wrong": 9,
+          "drop_correct": 2,
+          "keep_wrong": 33,
+          "keep_correct": 69,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 1,
+          "drop_wrong": 0,
+          "drop_correct": 1,
+          "keep_wrong": 1,
+          "keep_correct": 50,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d50_j250": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 7,
+          "drop_wrong": 7,
+          "drop_correct": 0,
+          "keep_wrong": 35,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d60_j150": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 8,
+          "drop_wrong": 5,
+          "drop_correct": 3,
+          "keep_wrong": 37,
+          "keep_correct": 68,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 1,
+          "drop_wrong": 0,
+          "drop_correct": 1,
+          "keep_wrong": 1,
+          "keep_correct": 50,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d60_j200": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 7,
+          "drop_wrong": 5,
+          "drop_correct": 2,
+          "keep_wrong": 37,
+          "keep_correct": 69,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 1,
+          "drop_wrong": 0,
+          "drop_correct": 1,
+          "keep_wrong": 1,
+          "keep_correct": 50,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d60_j250": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 4,
+          "drop_wrong": 4,
+          "drop_correct": 0,
+          "keep_wrong": 38,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d60_j300": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 4,
+          "drop_wrong": 4,
+          "drop_correct": 0,
+          "keep_wrong": 38,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d80_j200": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 2,
+          "drop_wrong": 2,
+          "drop_correct": 0,
+          "keep_wrong": 40,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d80_j250": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 2,
+          "drop_wrong": 2,
+          "drop_correct": 0,
+          "keep_wrong": 40,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d80_j300": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 2,
+          "drop_wrong": 2,
+          "drop_correct": 0,
+          "keep_wrong": 40,
+          "keep_correct": 71,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 0,
+          "drop_wrong": 0,
+          "drop_correct": 0,
+          "keep_wrong": 1,
+          "keep_correct": 51,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      }
+    }
+  },
+  "rule_v2": {
+    "rule": "end_d > T_d AND start_d > T_d (no cross_hand requirement)",
+    "thresholds": [
+      30,
+      40,
+      50,
+      60,
+      80,
+      100
+    ],
+    "per_threshold": {
+      "d30": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 51,
+          "drop_wrong": 24,
+          "drop_correct": 27,
+          "keep_wrong": 18,
+          "keep_correct": 44,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 16,
+          "drop_wrong": 1,
+          "drop_correct": 15,
+          "keep_wrong": 0,
+          "keep_correct": 36,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d40": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 37,
+          "drop_wrong": 19,
+          "drop_correct": 18,
+          "keep_wrong": 23,
+          "keep_correct": 53,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 13,
+          "drop_wrong": 1,
+          "drop_correct": 12,
+          "keep_wrong": 0,
+          "keep_correct": 39,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d50": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 30,
+          "drop_wrong": 13,
+          "drop_correct": 17,
+          "keep_wrong": 29,
+          "keep_correct": 54,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 12,
+          "drop_wrong": 0,
+          "drop_correct": 12,
+          "keep_wrong": 1,
+          "keep_correct": 39,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d60": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 18,
+          "drop_wrong": 7,
+          "drop_correct": 11,
+          "keep_wrong": 35,
+          "keep_correct": 60,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 9,
+          "drop_wrong": 0,
+          "drop_correct": 9,
+          "keep_wrong": 1,
+          "keep_correct": 42,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d80": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 11,
+          "drop_wrong": 4,
+          "drop_correct": 7,
+          "keep_wrong": 38,
+          "keep_correct": 64,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 7,
+          "drop_wrong": 0,
+          "drop_correct": 7,
+          "keep_wrong": 1,
+          "keep_correct": 44,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      },
+      "d100": {
+        "all_113": {
+          "scope": "all_113",
+          "n_total": 113,
+          "n_dropped": 8,
+          "drop_wrong": 2,
+          "drop_correct": 6,
+          "keep_wrong": 40,
+          "keep_correct": 65,
+          "n_wrong_total": 42,
+          "n_correct_total": 71
+        },
+        "chain_edges_only": {
+          "scope": "chain_edges_only",
+          "n_total": 52,
+          "n_dropped": 6,
+          "drop_wrong": 0,
+          "drop_correct": 6,
+          "keep_wrong": 1,
+          "keep_correct": 45,
+          "n_wrong_total": 1,
+          "n_correct_total": 51
+        }
+      }
+    }
+  },
+  "evaluation_scope": "All 113 review pairs (chain + non-chain) and chain-only subset",
+  "physical_geometry_justification": "A real catch-throw places the ball within ~30 px of the hand at the catch/throw frame. A spatial jump > 150 px in 12 frames is physically implausible for a real catch-throw; only tracker association can produce such a jump."
+}

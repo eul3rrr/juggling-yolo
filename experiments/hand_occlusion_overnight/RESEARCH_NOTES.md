@@ -1597,7 +1597,67 @@ useful source record:
     - H47: H12 v8 with 10-frame filter (event-log level)
     - H48: flight-time filter sensitivity grid
     - H49: filter impact measurement (negative upper bound)
-    - **H50: H12 v8 with 10-frame filter (full pipeline)** - real impact measured
-    - **H51: H50 + H43 combined filter** - composes cleanly
-    - **H52: H8 v5 physics on H50-dropped pairs** - all 3 are TRACKER_FRAGMENTATION
+    - H50: H12 v8 with 10-frame filter (full pipeline) - real impact measured
+    - H51: H50 + H43 combined filter - composes cleanly
+    - H52: H8 v5 physics on H50-dropped pairs - all 3 are TRACKER_FRAGMENTATION
+    - H53-H78: pattern classification refinement (H93, H96 v2, H100 v4, H106 v2, H108 v1)
+    - H87: H10 v11 v3 + 21-phase precision
+    - H90 NEW: FOUNTAIN_3+ precision
+    - H101: 3rd-video (weave) validation
+    - H102: phase-anchored edge ground truth
+    - H103-H106: H12 v9 hybrid variations
+    - H107-H109: 2D combined guard + LOO structural analysis
+    - H110: H108 v1 consumer-facing module
+    - H111: relaxed edge-to-phase anchoring (surfaces 22->27 FP)
+    - **H112: cross-hand handoff spatial filter** - 1-line post-filter, edge-level P=1.000
+    - **H114: same-hand large-jump filter** - NEGATIVE for chain precision, PASS as post-hoc validation
+
+## Cross-cutting insights from H114 (2026-08-29 ~05:30 CEST)
+
+45. **H114 confirms that h7v3plus3's same-hand edge-type handling is correct.**
+    The chain distinguishes 5 hand-edge types: HAND_TRANSITION (clean same-hand
+    catch), AMBIGUOUS_HAND_TRANSITION (FIFO ambiguous), RECLASSIFIED_HAND_TRANSITION
+    (air-edge reclassified because it passes through a hand region), V_RECLASSIFIED
+    (V-shape upgraded from BALLISTIC), and H26_RECLASSIFIED (H24 visual-QA upgrade).
+    Each type has a specific physical interpretation. A naive same-hand large-jump
+    filter (v1 with T_d=30, T_j=80) would drop 5 in-chain correct edges (3->8,
+    7->10, 23->25, 1->6, 4->7) for 1 in-chain wrong. The chain's edge-type
+    taxonomy is essential for handling detector-dropout-during-hold cases.
+
+46. **The cross_hand restriction in H112 is essential.** H114 v2 (H112 rule
+    without cross_hand requirement) at T_d=30 is a catastrophic regression: 1
+    in-chain wrong caught but 15 in-chain correct dropped (3->8, 7->10, 19->20,
+    23->25, 28->29, 31->36, 39->47, 45->46, 51->52, 60->64, 65->68, 50->55,
+    67->70, 41->43, 5->6). The cross_hand filter is what makes H112 a precision
+    improvement; removing it destroys precision because real same-hand catch-
+    throws can have large spatial jumps (when the detector drops the ball mid-
+    hold, the source's last detection and target's first detection are at very
+    different positions).
+
+47. **Visual QA finds an H112 anti-prototype: 3->8 (sj=227, end=106, start=71).**
+    The vision tool says 3->8 is "Likely a False Positive" — the ball is far
+    from the left hand at both endpoints, the 227-px jump in 6 frames is
+    suspicious, and the H7 algorithm explicitly chose 3->9 (hand-edge) over
+    3->8 (air-edge) as the conflict resolution. 3->8 is in h7v3plus3 only
+    because H7v2 reclassification downgraded the air-edge to HAND_TRANSITION
+    when it passed through a hand region. The reviewer marked 3->8 "correct"
+    but visual evidence is ambiguous. This is a real edge-level imperfection
+    that even the precision-optimized h7v3plus3 + H112 stack cannot resolve.
+
+48. **Visual QA confirms 7->10 (sj=156 in 2 frames) is a real catch-throw.**
+    The vision tool correctly identifies that the 156-px jump is the
+    **distance between the two different hands (h7 and h10)** at the moment
+    of the throw, not the ball traveling. The ball is occluded during the
+    handoff. This is the same reasoning that led the H24 visual QA to classify
+    it as V_SHALLOW. The H26 chain correction recovered what the strict h7v2
+    rule wrongly rejected.
+
+49. **A pure post-hoc validation rule is the best same-hand large-jump filter.**
+    The v1 (T_d=40, T_j=250) setting catches 10 NOT-in-chain wrong edges (all
+    already correctly rejected by the chain) without affecting the chain
+    itself. This is a useful diagnostic for verifying the chain's same-hand
+    rejections are physically justified by large spatial jumps, but it is
+    NOT a precision improvement on the chain. The h7v3plus3 chain's correct
+    rejections on these 10 wrong edges are already justified — H114 v1 just
+    provides a second opinion.
 

@@ -4203,3 +4203,86 @@ diagnostic)**:
     FP (190-px jump) and the 25→27 TP (10.5-px jump). H112 is a
     1-line edge-level post-filter that complements h7v3plus3 without
     retraining.
+
+43. **H114: same-hand large-jump filter for h7v3plus3 hand edges** —
+    DONE. NEGATIVE for chain precision, PASS as post-hoc validation
+    tool. Tested two rule variants on the full 113 review pairs
+    (not just h7v3plus3 hand edges):
+    - **v1**: reject if spatial_jump > T_j AND end_d > T_d AND
+      start_d > T_d (with optional cross_hand filter).
+      20 thresholds tested.
+    - **v2**: H112 rule without cross_hand requirement.
+      6 thresholds tested.
+
+    **Key findings:**
+    1. **No same-hand wrong edges are in h7v3plus3.** The chain
+       algorithm's cost-based selection and capacity constraints
+       already exclude them. H114 has nothing to do within the chain.
+    2. **v2 (no cross_hand) is a CATASTROPHIC regression.** At T_d=30,
+       v2 drops 15 in-chain CORRECT edges (3→8, 7→10, 19→20, 23→25,
+       28→29, etc.) for 1 in-chain wrong (22→27, the H112-discovered
+       FP). The cross_hand restriction is essential.
+    3. **v1 (T_d=40, T_j=250) is a pure post-hoc validation signal:**
+       0 in-chain wrong caught, 0 in-chain correct dropped, 10
+       NOT-in-chain wrong caught. Useful for confirming the chain's
+       correct rejections are physically justified.
+    4. **v1 (T_d=30, T_j=80) is precision-negative:** 1 in-chain wrong
+       caught but 5 in-chain correct dropped (FN cost > FP reduction).
+
+    **Why the h7v3plus3 chain's same-hand handling is correct:**
+    The chain's edge types (HAND_TRANSITION, AMBIGUOUS_HAND_TRANSITION,
+    RECLASSIFIED_HAND_TRANSITION, V_RECLASSIFIED_HAND_TRANSITION,
+    H26_RECLASSIFIED_HAND_TRANSITION) explicitly handle the case
+    where the detector drops the ball during the held phase —
+    the source's last detection and target's first detection are
+    at very different positions because the held phase is invisible.
+    3→8 (sj=227, end=106, start=71), 7→10 (sj=156), 23→25 (sj=101),
+    39→47 (sj=72, end=174) are all examples. A naive same-hand
+    large-jump filter would incorrectly reject these.
+
+    **Visual QA: 4 contact sheets at contact_sheets_h114/.**
+    - 14→18 (WRONG, sj=321 in 0 frames): confirmed false — "infinite
+      velocity", tracker identity swap, not a handoff.
+    - 3→8 (CORRECT in chain, sj=227 in 6 frames): vision tool says
+      "Likely a False Positive" — ball not at hand at either end,
+      227-px jump is suspicious. H7's cost algorithm chose 3→9 over
+      3→8; 3→8 is in h7v3plus3 only because H7v2 reclassification
+      downgraded the air-edge to HAND_TRANSITION. The reviewer
+      marked it correct but visual evidence is ambiguous.
+    - 7→10 (CORRECT in chain, sj=156 in 2 frames): confirmed real —
+      the 156-px jump is the **distance between the two different
+      hands (h7 and h10)**, not the ball traveling. The H24 visual
+      QA correctly identified this as V_SHALLOW.
+    - 65→69 (WRONG, sj=231 in 1 frame): confirmed false — 243 px
+      from left hand at catch, 231-px jump in 1 frame is implausible.
+
+    **Recommended operating point (unchanged from H112):**
+    H112 + h7v3plus3 is the precision-optimized endpoint.
+    H114 v1 (T_d=40, T_j=250) is a recommended **diagnostic tool**
+    to verify the chain's same-hand rejections are physically
+    justified. It catches 10 NOT-in-chain wrong edges without
+    affecting the chain.
+
+    See `h1_hand_pool/reports/h114_report.md` for full analysis.
+
+44. **Future research (post-H114):**
+    1. **H115: H114 v1 as a candidate generator for H21 v1.** The
+       10 NOT-in-chain wrong edges caught by H114 v1 are all
+       edges the chain already rejected. A H115 experiment could
+       take a DIFFERENT chain algorithm (e.g., H21 v1, which uses
+       H20-KEPT edges) and check whether H114 v1 catches wrong
+       edges in that chain set. H21 v1 admits H20-KEPT edges with
+       weaker geometric constraints; H114 might surface wrong
+       edges in H21 v1 that are not in h7v3plus3.
+    2. **H116: H114 v1 on 3rd video (weave).** The 3rd video (H101
+       weave) has no manual review labels, but it has chain edges
+       from h7v3plus3-equivalent processing. H114 v1 would be a
+       pure-diagnostic check: do any weave h7v3+ edges trigger the
+       H114 v1 same-hand large-jump rule? If yes, those edges
+       deserve visual QA.
+    3. **Stop here.** H112 + H114 confirm that the cross-hand vs
+       same-hand distinction is essential for hand-edge geometric
+       filters. The h7v3plus3 chain's edge-type-specific handling
+       (RECLASSIFIED, V_RECLASSIFIED, H26_RECLASSIFIED) is correct.
+       Further edge-level precision improvements would require
+       fundamentally different signals.
