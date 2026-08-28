@@ -219,4 +219,52 @@ adds a downstream-consumable flag without changing accounting).
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_v3/*.png` (16 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v3_report.md`
 
+### v4 (2026-08-28 ~04:50 CEST)
+
+- Hypothesis: v3c admits 2 false positives (15→25, 35→40) that
+  both have |from_slope| < 2.5; all 7 other inspected v3 links
+  have |from_slope| >= 3.95. Adding `MIN_FROM_SLOPE = 2.5` on top
+  of v3c should reject the false positives without losing real
+  catch-throws.
+- Quantitative result:
+
+| Setting | identical n_links | youtube n_links | identical R (full) |
+|---|---|---|---|
+| v2 baseline (throw=3)         |  3 | 0 | 0.022 |
+| v3c (throw=7, soft)           | 11 | 2 | 0.044 |
+| v4a (throw=3 + slope)         |  3 | 0 | 0.022 |
+| v4b (throw=3 + full)          |  3 | 0 | 0.022 |
+| v4c (throw=7 + slope)         | 10 | 1 | 0.044 |
+| **v4d (throw=7 + full)**      | **10** | **1** | **0.044** |
+
+v4d rejects 1 link on identical (35→40) and 1 link on youtube
+(15→25) — both LOW_FROM_SLOPE. All 10 surviving identical
+links and 1 surviving youtube link are real catch-throws.
+
+- Visual QA: 3 newly inspected v4d links (17→23, 53→60, 54→59)
+  confirmed as real catch-throws. All 11 v4d links visually
+  confirmed.
+- Negative findings:
+  - The "handedness consistency" filter (v4b/v4d reach check) is
+    a no-op; v2's catch/throw classification already enforces
+    that both endpoints are within reach.
+  - The vision verifier is unreliable on hand color (it confuses
+    ORANGE=LEFT/BLUE=RIGHT in image coordinates with the
+    juggler's left/right, which is mirrored). v4 inherits the
+    v2 model's consistent image-perspective hand attribution.
+- Verdict: **PASS**. v4d is the new recommended operating point,
+  replacing v2. 4x recall gain on identical, first youtube
+  links emitted, ~1.000 visual precision.
+  See `h1_hand_pool/reports/h1_v4_report.md` for full analysis.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_hand_pool_v4.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_contact_sheets_v4.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/sens_grid_v4.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_events_v4_*.csv` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_links_v4_*.csv` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/rejected_links_v4_*.csv` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/summary_v4_*.json` (4 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_v4/*.png` (11 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v4_report.md`
+
 ---

@@ -1,0 +1,268 @@
+{
+  "label": "v4c_throw7_slope",
+  "throw_leave_window_frames": 7,
+  "soft_catch_context": true,
+  "v4_thresholds": {
+    "MIN_FROM_SLOPE": 2.5,
+    "MAX_HAND_REACH_PX_FOR_LINK": 108
+  },
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "video_key": "videos/identical_balls_trick_000_018.mp4",
+      "event_counts": {
+        "ENTRY": 23,
+        "EXIT": 7,
+        "UNMATCHED_EXIT": 4,
+        "UNRESOLVED_HELD_OR_LOST": 2,
+        "AMBIGUOUS_POOL_EXIT": 4
+      },
+      "filtered_counts": {
+        "EXPIRED_HELD": 19,
+        "STALE_TOKEN_THROW": 1,
+        "WRIST_MOTION_THROW": 0,
+        "THROW_NO_LEAVE": 9,
+        "UNCONTEXTED_ENTRY": 10
+      },
+      "potential_entry": 10,
+      "uncontexted_entry": 0,
+      "n_links": 10,
+      "n_tracklets": 76,
+      "predecessor_conflict": 0,
+      "successor_conflict": 0,
+      "impossible_states": 0,
+      "multi_token_ambiguous": 4,
+      "evaluation_vs_reviewed": {
+        "reviewed_total": 85,
+        "matched_correct": 2,
+        "matched_wrong": 0,
+        "missed_correct": 43,
+        "missed_wrong": 40,
+        "precision_hand_link": 1.0,
+        "recall_hand_link": 0.044444444444444446
+      },
+      "links": [
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 3,
+          "to_tid": 9,
+          "hand": "left",
+          "from_frame": 31,
+          "to_frame": 51,
+          "from_dist": 106.16267437299469,
+          "to_dist": 31.19241298357976,
+          "from_slope": -23.593084499602877,
+          "to_slope": 24.33668379261941,
+          "identity_ambiguous": true,
+          "kind": "AMBIGUOUS_POOL_EXIT",
+          "tok_age_frames": 20
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 11,
+          "to_tid": 14,
+          "hand": "right",
+          "from_frame": 97,
+          "to_frame": 126,
+          "from_dist": 48.429531824509596,
+          "to_dist": 51.54904966235505,
+          "from_slope": -4.970225087431267,
+          "to_slope": 21.751991783732727,
+          "identity_ambiguous": true,
+          "kind": "AMBIGUOUS_POOL_EXIT",
+          "tok_age_frames": 29
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 17,
+          "to_tid": 23,
+          "hand": "right",
+          "from_frame": 207,
+          "to_frame": 232,
+          "from_dist": 20.948287213866717,
+          "to_dist": 52.42984812061839,
+          "from_slope": -3.950677069717926,
+          "to_slope": 8.039892014590837,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 25
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 52,
+          "to_tid": 54,
+          "hand": "right",
+          "from_frame": 780,
+          "to_frame": 797,
+          "from_dist": 40.47955436017528,
+          "to_dist": 39.113299132325174,
+          "from_slope": -12.176805993345436,
+          "to_slope": 11.996186390616037,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 17
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 54,
+          "to_tid": 59,
+          "hand": "right",
+          "from_frame": 830,
+          "to_frame": 856,
+          "from_dist": 9.6076926023666,
+          "to_dist": 80.1895705179428,
+          "from_slope": -8.957664950262929,
+          "to_slope": 12.575732737108615,
+          "identity_ambiguous": true,
+          "kind": "AMBIGUOUS_POOL_EXIT",
+          "tok_age_frames": 26
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 53,
+          "to_tid": 60,
+          "hand": "right",
+          "from_frame": 839,
+          "to_frame": 860,
+          "from_dist": 56.966929454270876,
+          "to_dist": 46.85025680264098,
+          "from_slope": -24.62186049453255,
+          "to_slope": 25.589650592238666,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 21
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 59,
+          "to_tid": 63,
+          "hand": "right",
+          "from_frame": 872,
+          "to_frame": 890,
+          "from_dist": 46.08182330009366,
+          "to_dist": 37.240809025359944,
+          "from_slope": -6.071303396735594,
+          "to_slope": 21.359251533331935,
+          "identity_ambiguous": true,
+          "kind": "AMBIGUOUS_POOL_EXIT",
+          "tok_age_frames": 18
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 68,
+          "to_tid": 71,
+          "hand": "right",
+          "from_frame": 1015,
+          "to_frame": 1029,
+          "from_dist": 12.15669979322454,
+          "to_dist": 18.588657596247398,
+          "from_slope": -22.00405314459901,
+          "to_slope": 18.081411701466934,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 14
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 72,
+          "to_tid": 73,
+          "hand": "right",
+          "from_frame": 1050,
+          "to_frame": 1054,
+          "from_dist": 53.17489471271093,
+          "to_dist": 51.70605456858479,
+          "from_slope": -7.877360103619251,
+          "to_slope": 2.061863361141736,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 4
+        },
+        {
+          "video": "videos/identical_balls_trick_000_018.mp4",
+          "stem": "identical_balls_trick_000_018",
+          "from_tid": 70,
+          "to_tid": 74,
+          "hand": "left",
+          "from_frame": 1050,
+          "to_frame": 1056,
+          "from_dist": 33.93614184091884,
+          "to_dist": 101.83645191970552,
+          "from_slope": -11.774734149159503,
+          "to_slope": 20.33954821658611,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 6
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+      "event_counts": {
+        "ENTRY": 1,
+        "EXIT": 2,
+        "UNMATCHED_EXIT": 11,
+        "UNRESOLVED_HELD_OR_LOST": 0,
+        "AMBIGUOUS_POOL_EXIT": 0
+      },
+      "filtered_counts": {
+        "EXPIRED_HELD": 2,
+        "STALE_TOKEN_THROW": 1,
+        "WRIST_MOTION_THROW": 0,
+        "THROW_NO_LEAVE": 13,
+        "UNCONTEXTED_ENTRY": 4
+      },
+      "potential_entry": 4,
+      "uncontexted_entry": 0,
+      "n_links": 1,
+      "n_tracklets": 40,
+      "predecessor_conflict": 0,
+      "successor_conflict": 0,
+      "impossible_states": 0,
+      "multi_token_ambiguous": 0,
+      "evaluation_vs_reviewed": {
+        "reviewed_total": 28,
+        "matched_correct": 0,
+        "matched_wrong": 0,
+        "missed_correct": 26,
+        "missed_wrong": 2,
+        "precision_hand_link": 0.0,
+        "recall_hand_link": 0.0
+      },
+      "links": [
+        {
+          "video": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+          "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+          "from_tid": 10,
+          "to_tid": 12,
+          "hand": "right",
+          "from_frame": 238,
+          "to_frame": 255,
+          "from_dist": 2.2351707808635375,
+          "to_dist": 48.628634334089654,
+          "from_slope": -4.845657096522147,
+          "to_slope": 12.163586081414516,
+          "identity_ambiguous": false,
+          "kind": "EXIT",
+          "tok_age_frames": 17
+        }
+      ]
+    }
+  },
+  "rejected_summary": {
+    "LOW_FROM_SLOPE (2.31 < 2.5)": [
+      "identical_balls_trick_000_018:35->40"
+    ],
+    "LOW_FROM_SLOPE (2.08 < 2.5)": [
+      "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+    ]
+  },
+  "rejected_total": 2
+}

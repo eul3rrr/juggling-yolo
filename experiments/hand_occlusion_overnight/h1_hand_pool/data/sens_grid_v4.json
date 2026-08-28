@@ -1,0 +1,310 @@
+{
+  "v4_settings": [
+    {
+      "throw_leave_window_frames": 3,
+      "soft_catch_context": true,
+      "label": "v4a_throw3_slope",
+      "v4_thresholds": {
+        "MIN_FROM_SLOPE": 2.5,
+        "MAX_HAND_REACH_PX_FOR_LINK": 108
+      },
+      "videos": {
+        "identical_balls_trick_000_018": {
+          "video_key": "videos/identical_balls_trick_000_018.mp4",
+          "event_counts": {
+            "ENTRY": 21,
+            "EXIT": 2,
+            "UNMATCHED_EXIT": 2,
+            "UNRESOLVED_HELD_OR_LOST": 3,
+            "AMBIGUOUS_POOL_EXIT": 1
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 26,
+            "STALE_TOKEN_THROW": 1,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 19,
+            "UNCONTEXTED_ENTRY": 12
+          },
+          "potential_entry": 12,
+          "uncontexted_entry": 0,
+          "n_links": 3,
+          "n_tracklets": 76,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 85,
+            "matched_correct": 1,
+            "matched_wrong": 0,
+            "missed_correct": 44,
+            "missed_wrong": 40,
+            "precision_hand_link": 1.0,
+            "recall_hand_link": 0.022222222222222223
+          }
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+          "event_counts": {
+            "ENTRY": 1,
+            "EXIT": 0,
+            "UNMATCHED_EXIT": 2,
+            "UNRESOLVED_HELD_OR_LOST": 0,
+            "AMBIGUOUS_POOL_EXIT": 0
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 5,
+            "STALE_TOKEN_THROW": 0,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 25,
+            "UNCONTEXTED_ENTRY": 4
+          },
+          "potential_entry": 4,
+          "uncontexted_entry": 0,
+          "n_links": 0,
+          "n_tracklets": 40,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 28,
+            "matched_correct": 0,
+            "matched_wrong": 0,
+            "missed_correct": 26,
+            "missed_wrong": 2,
+            "precision_hand_link": 0.0,
+            "recall_hand_link": 0.0
+          }
+        }
+      },
+      "rejected_summary": {},
+      "rejected_total": 0
+    },
+    {
+      "throw_leave_window_frames": 3,
+      "soft_catch_context": true,
+      "label": "v4b_throw3_full",
+      "v4_thresholds": {
+        "MIN_FROM_SLOPE": 2.5,
+        "MAX_HAND_REACH_PX_FOR_LINK": 108
+      },
+      "videos": {
+        "identical_balls_trick_000_018": {
+          "video_key": "videos/identical_balls_trick_000_018.mp4",
+          "event_counts": {
+            "ENTRY": 21,
+            "EXIT": 2,
+            "UNMATCHED_EXIT": 2,
+            "UNRESOLVED_HELD_OR_LOST": 3,
+            "AMBIGUOUS_POOL_EXIT": 1
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 26,
+            "STALE_TOKEN_THROW": 1,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 19,
+            "UNCONTEXTED_ENTRY": 12
+          },
+          "potential_entry": 12,
+          "uncontexted_entry": 0,
+          "n_links": 3,
+          "n_tracklets": 76,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 85,
+            "matched_correct": 1,
+            "matched_wrong": 0,
+            "missed_correct": 44,
+            "missed_wrong": 40,
+            "precision_hand_link": 1.0,
+            "recall_hand_link": 0.022222222222222223
+          }
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+          "event_counts": {
+            "ENTRY": 1,
+            "EXIT": 0,
+            "UNMATCHED_EXIT": 2,
+            "UNRESOLVED_HELD_OR_LOST": 0,
+            "AMBIGUOUS_POOL_EXIT": 0
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 5,
+            "STALE_TOKEN_THROW": 0,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 25,
+            "UNCONTEXTED_ENTRY": 4
+          },
+          "potential_entry": 4,
+          "uncontexted_entry": 0,
+          "n_links": 0,
+          "n_tracklets": 40,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 28,
+            "matched_correct": 0,
+            "matched_wrong": 0,
+            "missed_correct": 26,
+            "missed_wrong": 2,
+            "precision_hand_link": 0.0,
+            "recall_hand_link": 0.0
+          }
+        }
+      },
+      "rejected_summary": {},
+      "rejected_total": 0
+    },
+    {
+      "throw_leave_window_frames": 7,
+      "soft_catch_context": true,
+      "label": "v4c_throw7_slope",
+      "v4_thresholds": {
+        "MIN_FROM_SLOPE": 2.5,
+        "MAX_HAND_REACH_PX_FOR_LINK": 108
+      },
+      "videos": {
+        "identical_balls_trick_000_018": {
+          "video_key": "videos/identical_balls_trick_000_018.mp4",
+          "event_counts": {
+            "ENTRY": 23,
+            "EXIT": 7,
+            "UNMATCHED_EXIT": 4,
+            "UNRESOLVED_HELD_OR_LOST": 2,
+            "AMBIGUOUS_POOL_EXIT": 4
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 19,
+            "STALE_TOKEN_THROW": 1,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 9,
+            "UNCONTEXTED_ENTRY": 10
+          },
+          "potential_entry": 10,
+          "uncontexted_entry": 0,
+          "n_links": 10,
+          "n_tracklets": 76,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 85,
+            "matched_correct": 2,
+            "matched_wrong": 0,
+            "missed_correct": 43,
+            "missed_wrong": 40,
+            "precision_hand_link": 1.0,
+            "recall_hand_link": 0.044444444444444446
+          }
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+          "event_counts": {
+            "ENTRY": 1,
+            "EXIT": 2,
+            "UNMATCHED_EXIT": 11,
+            "UNRESOLVED_HELD_OR_LOST": 0,
+            "AMBIGUOUS_POOL_EXIT": 0
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 2,
+            "STALE_TOKEN_THROW": 1,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 13,
+            "UNCONTEXTED_ENTRY": 4
+          },
+          "potential_entry": 4,
+          "uncontexted_entry": 0,
+          "n_links": 1,
+          "n_tracklets": 40,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 28,
+            "matched_correct": 0,
+            "matched_wrong": 0,
+            "missed_correct": 26,
+            "missed_wrong": 2,
+            "precision_hand_link": 0.0,
+            "recall_hand_link": 0.0
+          }
+        }
+      },
+      "rejected_summary": {
+        "LOW_FROM_SLOPE (2.31 < 2.5)": [
+          "identical_balls_trick_000_018:35->40"
+        ],
+        "LOW_FROM_SLOPE (2.08 < 2.5)": [
+          "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+        ]
+      },
+      "rejected_total": 2
+    },
+    {
+      "throw_leave_window_frames": 7,
+      "soft_catch_context": true,
+      "label": "v4d_throw7_full",
+      "v4_thresholds": {
+        "MIN_FROM_SLOPE": 2.5,
+        "MAX_HAND_REACH_PX_FOR_LINK": 108
+      },
+      "videos": {
+        "identical_balls_trick_000_018": {
+          "video_key": "videos/identical_balls_trick_000_018.mp4",
+          "event_counts": {
+            "ENTRY": 23,
+            "EXIT": 7,
+            "UNMATCHED_EXIT": 4,
+            "UNRESOLVED_HELD_OR_LOST": 2,
+            "AMBIGUOUS_POOL_EXIT": 4
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 19,
+            "STALE_TOKEN_THROW": 1,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 9,
+            "UNCONTEXTED_ENTRY": 10
+          },
+          "potential_entry": 10,
+          "uncontexted_entry": 0,
+          "n_links": 10,
+          "n_tracklets": 76,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 85,
+            "matched_correct": 2,
+            "matched_wrong": 0,
+            "missed_correct": 43,
+            "missed_wrong": 40,
+            "precision_hand_link": 1.0,
+            "recall_hand_link": 0.044444444444444446
+          }
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+          "event_counts": {
+            "ENTRY": 1,
+            "EXIT": 2,
+            "UNMATCHED_EXIT": 11,
+            "UNRESOLVED_HELD_OR_LOST": 0,
+            "AMBIGUOUS_POOL_EXIT": 0
+          },
+          "filtered_counts": {
+            "EXPIRED_HELD": 2,
+            "STALE_TOKEN_THROW": 1,
+            "WRIST_MOTION_THROW": 0,
+            "THROW_NO_LEAVE": 13,
+            "UNCONTEXTED_ENTRY": 4
+          },
+          "potential_entry": 4,
+          "uncontexted_entry": 0,
+          "n_links": 1,
+          "n_tracklets": 40,
+          "evaluation_vs_reviewed": {
+            "reviewed_total": 28,
+            "matched_correct": 0,
+            "matched_wrong": 0,
+            "missed_correct": 26,
+            "missed_wrong": 2,
+            "precision_hand_link": 0.0,
+            "recall_hand_link": 0.0
+          }
+        }
+      },
+      "rejected_summary": {
+        "LOW_FROM_SLOPE (2.31 < 2.5)": [
+          "identical_balls_trick_000_018:35->40"
+        ],
+        "LOW_FROM_SLOPE (2.08 < 2.5)": [
+          "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+        ]
+      },
+      "rejected_total": 2
+    }
+  ]
+}

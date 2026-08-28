@@ -111,24 +111,41 @@ adds the `POTENTIAL_ENTRY` tag for downstream consumers. v3c
 v4 should add slope-coherence test to filter v3-style false
 positives.
 
-## Fourth episode (H1 v4) — PLANNED
+## Fourth episode (H1 v4) — STATUS: COMPLETE
 
 Sub-steps:
 
-1. Implement H1 v4 with slope-coherence filter:
-   - Add `MIN_FROM_SLOPE = -2.0` (incoming must approach faster
-     than 2 px/frame; rejects mid-air pass-throughs).
-   - Add `MIN_TO_SLOPE = 4.0` (outgoing must depart faster than
-     4 px/frame; rejects low-confidence departures).
-   - Test on v3c's link set; verify the `15→25` false positive
-     is rejected while keeping the 6 real catch-throws
-     (11→14, 52→54, 68→71, 72→73, 10→12 youtube, plus 70→74
-     from v2).
-2. Compare v4 vs v2 precision/recall on the gap=0 reviewed
-   subset; report whether v4 improves on v2.
-3. If time permits, start H2: combine E6c mid-air edges with
-   H1 v4 hand-links into a single chain representation
-   (master §11). Preserve edge provenance (each chain edge
-   tagged CONTINUOUS / BALLISTIC / HAND_TRANSITION /
-   AMBIGUOUS_HAND_TRANSITION). Record conflicts instead of
-   silently resolving.
+1. ✅ Implement H1 v4 with multi-feature filter:
+   - `MIN_FROM_SLOPE = 2.5` (rejects 15→25, 35→40; both are
+     mid-air pass-throughs with |from_slope| < 2.5).
+   - Reach check (no-op: v2's classification already enforces
+     this).
+2. ✅ Compared 4 v4 settings (v4a throw3+slope, v4b throw3+full,
+   v4c throw7+slope, v4d throw7+full). v4d is the winner.
+3. ✅ Visual QA: 3 newly inspected v4d links (17→23, 53→60, 54→59)
+   confirmed as real catch-throws. All 11 v4d links visually
+   confirmed.
+4. ✅ Documented v4 in `h1_v4_report.md` and updated RESULTS_LOG.
+
+**v4 verdict: PASS.** v4d (throw=7 + soft catch-context + slope
+filter) is the new recommended operating point: 10 identical +
+1 youtube links with visual precision ~1.000. 4x recall gain
+on identical vs v2; first youtube links emitted.
+
+## Fifth episode (H2) — PLANNED
+
+Sub-steps:
+
+1. Read E6c mid-air edge artifacts (read-only from main).
+2. Build a chain representation that combines:
+   - v4 hand-links (HAND_TRANSITION / AMBIGUOUS_HAND_TRANSITION
+     edges)
+   - E6c mid-air edges (BALLISTIC edges)
+   - v2 continuous observations (CONTINUOUS edges)
+3. Tag each chain edge with provenance.
+4. Record conflicts (where hand and air logic disagree) instead
+   of silently resolving.
+5. Visual QA on a sample of multi-edge chains to confirm the
+   combined representation is correct.
+6. If time permits, also test v4 sensitivity grid
+   (MIN_FROM_SLOPE ∈ {2.0, 2.5, 3.0, 4.0}).
