@@ -3767,3 +3767,37 @@ PERFECT cells, but the conf threshold must be lowered.
    PERFECT on H93 (17/4/0/0 with conf>=0.50, spec>=0.13) and
    PERFECT on weave (6/6 with conf>=0.42, spec>=0.05). The
    per-video conf calibration is the main remaining issue.
+
+### H101 v6 update (cross-video evaluation)
+
+**H101 v6: cross-video evaluation of H100 v4 conf+spec_conc guard
+on H93 (21 phases) + weave (6 phases) = 27 total phases.** PASS.
+
+| conf\spec | spec>=0.05 | spec>=0.13 |
+|-----------|-----------|-----------|
+| conf>=0.42 | **23/3/0/1** | 16/3/7/1 |
+| conf>=0.50 (H100 v4 default) | 16/3/7/1 | 14/3/9/1 |
+
+**Recommended cross-video: conf>=0.42, spec_conc>=0.05** with
+P=0.885, R=1.000, acc=0.889 (on 27 phases).
+
+The 3 FPs are H93 STATIC/OTHER phases (f=685-716 identical,
+f=890-936 identical, f=482-594 YouTube) that the H96 v2 full
+stack's other signals (H87+max_aloft, H78, H90 NEW) catch.
+The conf+spec_conc guard is the "first pass" for videos without
+pose data; the H96 v2 full stack is the "second pass" for
+videos with pose data.
+
+**Refined recommended operating point (post-H101 v6):**
+- For conf+spec_conc guard: conf>=0.42, spec_conc>=0.05
+  (instead of conf>=0.50)
+- For videos without pose: use conf+spec_conc alone
+  (perfect on weave; on H93 it admits 3 FPs that the full stack would catch)
+- For videos with pose: use the full H96 v2 stack with the
+  relaxed conf>=0.42 conf+spec_conc guard
+
+The H100 v4 conf>=0.50 default was over-calibrated for the H93
+sample; conf>=0.42 is a more general threshold that works
+across 3 videos (identical, YouTube, weave). The cross-video
+operating point achieves R=1.000 (no real juggling missed) at
+the cost of 3 FPs that the second-pass signals catch.

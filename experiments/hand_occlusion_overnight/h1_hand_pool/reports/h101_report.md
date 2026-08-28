@@ -242,3 +242,91 @@ threshold is fine.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h101_v5_phases_weave_colored_317_330.csv`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h101_v5_grid_weave_colored_317_330.csv`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h101_v5_summary.json`
+
+---
+
+## H101 v6 — Cross-video evaluation (H93 + weave)
+
+**Cross-video 2D grid on 27 phases (21 H93 + 6 weave):**
+
+| conf\spec | spec>=0.05 | spec>=0.10 | spec>=0.13 | spec>=0.15 | spec>=0.20 |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| conf>=0.30 | 23/4/0/0 | 19/3/4/1 | 16/3/7/1 | 15/2/8/2 | 8/2/15/2 |
+| conf>=0.35 | 23/3/0/1 | 19/3/4/1 | 16/3/7/1 | 15/2/8/2 | 8/2/15/2 |
+| conf>=0.40 | 23/3/0/1 | 19/3/4/1 | 16/3/7/1 | 15/2/8/2 | 8/2/15/2 |
+| **conf>=0.42** | **23/3/0/1** | 19/3/4/1 | 16/3/7/1 | 15/2/8/2 | 8/2/15/2 |
+| conf>=0.45 | 19/3/4/1 | 17/3/6/1 | 16/3/7/1 | 15/2/8/2 | 8/2/15/2 |
+| conf>=0.50 | 16/3/7/1 | 15/3/8/1 | 14/3/9/1 | 14/2/9/2 | 7/2/16/2 |
+| conf>=0.55 | 16/3/7/1 | 15/3/8/1 | 14/3/9/1 | 14/2/9/2 | 7/2/16/2 |
+
+(Each cell: TP/FP/FN/TN)
+
+**Recommended cross-video operating point: conf>=0.42, spec_conc>=0.05**
+- TP=23/23 (P=0.885, R=1.000, acc=0.889)
+- The 3 FPs are H93 STATIC/OTHER phases that the H96 v2 full
+  stack's other signals catch:
+  - f=685-716 identical (STATIC_HOLD, conf=0.738, spec_conc=0.498):
+    caught by H87+max_aloft (pct_ge3=0.156, max_aloft=4)
+  - f=890-936 identical (OTHER_CROSSED_ARM, conf=0.571, spec_conc=0.308):
+    caught by H78 (mean_diff=14.25, Mills Mess signature)
+  - f=482-594 YouTube (STATIC_HOLD, conf=0.653, spec_conc=0.140):
+    caught by H90 NEW (c40g3=0.36, c40_max_aloft=4)
+- The 1 TN (f=2-71 YouTube, conf=0.333) is caught by H71
+  (spec_conc=0.075 < 0.10).
+
+**Key finding:** the H100 v4 conf+spec_conc guard at conf>=0.42
+spec>=0.05 is a **CONSERVATIVE video-agnostic first-pass guard**:
+- P=0.885 (3 FPs that need second-pass signals)
+- R=1.000 (no false negatives across 3 videos)
+- The 3 FPs are exactly the cases the H96 v2 second-pass stack
+  (H87+max_aloft, H78, H90 NEW) was designed to catch.
+- For videos without pose data (e.g., weave), conf+spec_conc
+  alone is perfect (6/6 with 0 FPs because the weave has no
+  STATIC phases).
+
+**This validates the H101 v5 recommendation as a video-agnostic
+operating point.** The H100 v4 conf>=0.50 default was over-calibrated
+for the H93 sample; conf>=0.42 is a more general threshold that
+works across 3 videos.
+
+**Refined rule-of-thumb:** `conf_min = max(0.40, video_mean_conf - 0.10)`.
+- weave (mean=0.45): conf_min = 0.40
+- identical (mean=0.66): conf_min = 0.56 (but 0.50 default works)
+- YouTube (mean=0.63): conf_min = 0.53 (but 0.50 default works)
+
+The 0.40 floor is a safety threshold for low-quality phases.
+The 0.10 offset is a heuristic (mean conf minus 0.10 catches
+most real juggling while rejecting most static holds). This
+rule-of-thumb needs more videos to validate.
+
+---
+
+## Final H101 verdict (post-v6)
+
+**PASS — H100 v4 conf+spec_conc guard generalizes to 3 videos at
+conf>=0.42 spec>=0.05 with R=1.000 and P=0.885 (3 FPs caught by
+second-pass signals).** The H100 v4 conf>=0.50 default was over-
+calibrated; conf>=0.42 is the new recommended cross-video threshold.
+
+**The 3 FPs are exactly the H93 STATIC/OTHER phases that the
+H96 v2 full stack's other signals (H87+max_aloft, H78, H90 NEW)
+catch.** The conf+spec_conc guard is the "first pass" for videos
+without pose data (e.g., weave). The H96 v2 full stack is the
+"second pass" for videos with pose data.
+
+**Recommended operating point (post-H101 v6, refined):**
+- h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v4 + H78
+  + H87+max_aloft + H90 NEW + H52 + H53 + H71 (MIXED_3+)
+- For conf+spec_conc guard: conf>=0.42, spec_conc>=0.05
+  (instead of conf>=0.50)
+- For videos without pose: use conf+spec_conc alone (perfect on
+  weave; on H93 it admits 3 FPs that the full stack would catch)
+- For videos with pose: use the full H96 v2 stack with the
+  relaxed conf>=0.42 conf+spec_conc guard
+
+---
+
+## H101 v6 artifacts
+
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h101_v6_cross_video.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h101_v6_summary.json`

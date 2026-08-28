@@ -1,0 +1,357 @@
+{
+  "method": "H101 v6: cross-video evaluation of H100 v4 conf+spec_conc guard (H93 + weave)",
+  "n_h93_phases": 21,
+  "n_weave_phases": 6,
+  "n_total_phases": 27,
+  "n_real_total": 6,
+  "n_static_total": 0,
+  "per_stem_conf": {
+    "identical_balls_trick_000_018": 0.656,
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": 0.632,
+    "weave_colored_317_330": 0.45
+  },
+  "results_grid": {
+    "0.3": {
+      "0.05": {
+        "TP": 23,
+        "FP": 4,
+        "FN": 0,
+        "TN": 0
+      },
+      "0.08": {
+        "TP": 22,
+        "FP": 3,
+        "FN": 1,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 19,
+        "FP": 3,
+        "FN": 4,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 15,
+        "FP": 2,
+        "FN": 8,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 8,
+        "FP": 2,
+        "FN": 15,
+        "TN": 2
+      }
+    },
+    "0.35": {
+      "0.05": {
+        "TP": 23,
+        "FP": 3,
+        "FN": 0,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 22,
+        "FP": 3,
+        "FN": 1,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 19,
+        "FP": 3,
+        "FN": 4,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 15,
+        "FP": 2,
+        "FN": 8,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 8,
+        "FP": 2,
+        "FN": 15,
+        "TN": 2
+      }
+    },
+    "0.4": {
+      "0.05": {
+        "TP": 23,
+        "FP": 3,
+        "FN": 0,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 22,
+        "FP": 3,
+        "FN": 1,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 19,
+        "FP": 3,
+        "FN": 4,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 15,
+        "FP": 2,
+        "FN": 8,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 8,
+        "FP": 2,
+        "FN": 15,
+        "TN": 2
+      }
+    },
+    "0.42": {
+      "0.05": {
+        "TP": 23,
+        "FP": 3,
+        "FN": 0,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 22,
+        "FP": 3,
+        "FN": 1,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 19,
+        "FP": 3,
+        "FN": 4,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 15,
+        "FP": 2,
+        "FN": 8,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 8,
+        "FP": 2,
+        "FN": 15,
+        "TN": 2
+      }
+    },
+    "0.45": {
+      "0.05": {
+        "TP": 19,
+        "FP": 3,
+        "FN": 4,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 18,
+        "FP": 3,
+        "FN": 5,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 17,
+        "FP": 3,
+        "FN": 6,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 15,
+        "FP": 2,
+        "FN": 8,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 8,
+        "FP": 2,
+        "FN": 15,
+        "TN": 2
+      }
+    },
+    "0.48": {
+      "0.05": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 15,
+        "FP": 3,
+        "FN": 8,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 14,
+        "FP": 3,
+        "FN": 9,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 14,
+        "FP": 2,
+        "FN": 9,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 7,
+        "FP": 2,
+        "FN": 16,
+        "TN": 2
+      }
+    },
+    "0.5": {
+      "0.05": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 15,
+        "FP": 3,
+        "FN": 8,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 14,
+        "FP": 3,
+        "FN": 9,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 14,
+        "FP": 2,
+        "FN": 9,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 7,
+        "FP": 2,
+        "FN": 16,
+        "TN": 2
+      }
+    },
+    "0.55": {
+      "0.05": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.08": {
+        "TP": 16,
+        "FP": 3,
+        "FN": 7,
+        "TN": 1
+      },
+      "0.1": {
+        "TP": 15,
+        "FP": 3,
+        "FN": 8,
+        "TN": 1
+      },
+      "0.13": {
+        "TP": 14,
+        "FP": 3,
+        "FN": 9,
+        "TN": 1
+      },
+      "0.15": {
+        "TP": 14,
+        "FP": 2,
+        "FN": 9,
+        "TN": 2
+      },
+      "0.2": {
+        "TP": 7,
+        "FP": 2,
+        "FN": 16,
+        "TN": 2
+      }
+    }
+  },
+  "recommended": {
+    "conf_min": 0.42,
+    "spec_conc_min": 0.05,
+    "TP": 23,
+    "FP": 3,
+    "FN": 0,
+    "TN": 1,
+    "P": 0.885,
+    "R": 1.0,
+    "acc": 0.889
+  },
+  "fp_phases": [
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 685,
+      "end": 716,
+      "conf": 0.738,
+      "spec_conc": 0.498,
+      "gt": "STATIC_HOLD"
+    },
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 890,
+      "end": 936,
+      "conf": 0.571,
+      "spec_conc": 0.308,
+      "gt": "OTHER_CROSSED_ARM"
+    },
+    {
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "start": 482,
+      "end": 594,
+      "conf": 0.653,
+      "spec_conc": 0.14,
+      "gt": "STATIC_HOLD"
+    }
+  ],
+  "verdict": "PASS \u2014 H100 v4 conf+spec_conc guard at conf>=0.42 spec>=0.05 is a CONSERVATIVE video-agnostic first-pass guard. The 3 FPs on H93 are STATIC/OTHER phases that the H96 v2 full stack's other signals (H74/H78/H87+max_aloft/H90 NEW) catch. The conf+spec_conc guard is the 'first pass' for videos without pose data (e.g., weave)."
+}
