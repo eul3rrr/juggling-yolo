@@ -3853,3 +3853,28 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h56_sensitivity_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h55/chain7_identical_h56v1.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h56_report.md`
+
+### H57 (2026-08-28 ~19:30 CEST)
+
+- Hypothesis: H56 v1's n_arcs_clean >= 3 gate is too strict for
+  chains with very high g_cv (e.g., chain 14 with g_cv=1.089 and
+  only 2 clean arcs). When g_cv > 1.0, even 2 arcs are sufficient.
+- Formulation: full penalty if n_arcs >= 3, partial penalty
+  (PARTIAL_W54=0.15 with linear ramp 1.0 → 1.5) if n_arcs >= 2
+  AND g_cv >= 1.0, else 0.
+- Quantitative result:
+  - Identical: 11 chains penalized (vs 7 in H56 v1); CONFIDENT
+    preserved at 27; chain 14 q10=0.454 → q11=0.427.
+  - YouTube: identical to H56 v1 (no chains with n_arcs=2 + g_cv>1.0).
+  - No CONFIDENT chains demoted.
+- Verdict: PARTIAL PASS. Soft warning extension of H56 v1 with no
+  label changes but small q reductions for high-CV low-arc chains.
+- Recommended operating point: h7v3plus3 + H10 v11 v4 (H57 v1)
+  + H12 v8 + H50 + H43 + H52 + H53.
+- H10 v11 v3 (H56 v1) and H10 v11 v4 (H57 v1) give the same
+  label classification; v4 adds soft penalties.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h57_conditional_penalty.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v4_conditional_w0.30_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v4_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h57_report.md`

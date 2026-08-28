@@ -1378,15 +1378,57 @@ Multi-tid CONFIDENT: 3 identical (chain 20, chain 19, chain 7) +
 
 See `h1_hand_pool/reports/h56_report.md` for full analysis.
 
+## H57 conclusion
+
+**H57: H10 v11 v4 with conditional penalty for high-CV low-arc chains**
+— DONE. PARTIAL PASS.
+
+**Hypothesis:** H56 v1's `n_arcs_clean >= 3` gate is too strict for
+chains with very high g_cv (e.g., chain 14 with g_cv=1.089 and only
+2 clean arcs). When g_cv > 1.0, even 2 arcs are sufficient to detect
+inconsistency.
+
+**Formulation:**
+- If n_arcs_clean >= 3: apply H56 v1 full non-linear penalty
+- If n_arcs_clean >= 2 AND g_cv >= 1.0: apply partial penalty
+  (PARTIAL_W54=0.15 with linear ramp from 0 at g_cv=1.0 to 0.15 at g_cv=1.5)
+- Else: no penalty
+
+**Key result:** No CONFIDENT chains are demoted. The CONFIDENT count
+is preserved at v10 levels (27 identical, 5 YouTube). The partial
+penalty reduces q for high-CV low-arc chains (chain 14, 16, 28, 34)
+by 0.02-0.08, reflecting the inconsistent-gravity evidence as a
+"soft warning" without changing the label.
+
+**Verdict: PARTIAL PASS.** H57 v1 addresses the H56 v1 chain 14
+limitation but the practical impact is small (no label changes).
+The recommended operating point remains H56 v1 (H10 v11 v3) for
+simplicity; H57 v1 is a useful refinement for downstream consumers
+who want extra signal.
+
+**Recommended operating point:** h7v3plus3 + H10 v11 v4 (H57 v1)
++ H12 v8 + H50 + H43 + H52 + H53.
+
+The H10 v11 v3 (H56 v1) and H10 v11 v4 (H57 v1) give the same
+CONFIDENT/UNCERTAIN/LOW labels; v4 adds soft penalties for
+high-CV low-arc chains.
+
+See `h1_hand_pool/reports/h57_report.md` for full analysis.
+
 ## Final summary
 
 The hand-occlusion overnight lab has produced a comprehensive,
-validated chain representation for both videos over 56 research
-episodes spanning ~15 hours. The final operating point is:
+validated chain representation for both videos over 57 research
+episodes spanning ~15.5 hours. The final operating point is:
 
-**h7v3plus3 + H10 v11 v3 (H56 v1) + H12 v8 + H50 10-frame filter +
+**h7v3plus3 + H10 v11 v4 (H57 v1) + H12 v8 + H50 10-frame filter +
 H43 confidence filter + H52 physics corroboration + H53 multi-rater
 visual QA**
+
+The H10 v11 v3 (H56 v1) and H10 v11 v4 (H57 v1) give the same
+label classification; v4 is the recommended operating point because
+it adds the partial penalty for high-CV low-arc chains as a
+soft warning.
 
 See `h1_hand_pool/reports/FINAL_SUMMARY.md` for a comprehensive
 overview of all 53 episodes, the strongest findings, the
