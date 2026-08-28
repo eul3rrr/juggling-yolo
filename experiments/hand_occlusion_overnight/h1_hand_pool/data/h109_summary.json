@@ -1,0 +1,41 @@
+{
+  "method": "H109: LOO structural analysis of R4b. Honest finding: R4b cannot be re-derived from other 3 TNs.",
+  "tns": [
+    "identical_balls_trick_000_018_685_716",
+    "identical_balls_trick_000_018_890_936",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71"
+  ],
+  "per_tn_signatures": {
+    "identical_balls_trick_000_018_685_716": {
+      "unconf_frac": "0.0",
+      "mean_conf": "0.738",
+      "max_A": "5",
+      "max_events": "4",
+      "min_A": "3"
+    },
+    "identical_balls_trick_000_018_890_936": {
+      "unconf_frac": "0.0",
+      "mean_conf": "0.471",
+      "max_A": "3",
+      "max_events": "4",
+      "min_A": "3"
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+      "unconf_frac": "0.0",
+      "mean_conf": "0.653",
+      "max_A": "6",
+      "max_events": "4",
+      "min_A": "4"
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": {
+      "unconf_frac": "1.0",
+      "mean_conf": "0.333",
+      "max_A": "6",
+      "max_events": "2",
+      "min_A": "4"
+    }
+  },
+  "key_finding": "The 4 TNs have orthogonal signatures. R4b is specifically tied to f=2-71's unconf_frac=1.0 signature. It cannot be re-derived from the other 3 TNs.",
+  "interpretation": "H96 v2 / H106 v2 / H108 v1 is an ENSEMBLE of 4 specific detectors, not a general STATIC_HOLD detector. This is a real structural limitation that requires a 3rd video for validation."
+}
