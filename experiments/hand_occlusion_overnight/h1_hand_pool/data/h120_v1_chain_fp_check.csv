@@ -1,0 +1,10 @@
+stem,src,tgt,edge_type,end_d,start_d,spatial_jump,rule_a,rule_b,rule_c,fires_any
+identical_balls_trick_000_018,17,23,HAND_TRANSITION,20.95,52.43,159.57121325602563,False,False,True,True
+identical_balls_trick_000_018,53,60,HAND_TRANSITION,56.97,46.85,82.5615800478649,False,False,True,True
+identical_balls_trick_000_018,70,74,HAND_TRANSITION,33.94,101.84,170.00324996893443,False,False,True,True
+identical_balls_trick_000_018,3,8,RECLASSIFIED_HAND_TRANSITION,106.16,71.47,227.0099612351846,True,False,False,True
+identical_balls_trick_000_018,22,27,RECLASSIFIED_HAND_TRANSITION,46.69,56.25,190.35110979450573,False,True,True,True
+identical_balls_trick_000_018,62,66,RECLASSIFIED_HAND_TRANSITION,22.19,56.26,116.08178582361657,False,False,True,True
+identical_balls_trick_000_018,11,14,AMBIGUOUS_HAND_TRANSITION,48.43,51.55,142.57754381388392,False,False,True,True
+identical_balls_trick_000_018,54,59,AMBIGUOUS_HAND_TRANSITION,9.61,80.19,195.73961581652293,False,False,True,True
+youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,26,31,RECLASSIFIED_HAND_TRANSITION,11.72,50.19,119.89321290214889,False,False,True,True

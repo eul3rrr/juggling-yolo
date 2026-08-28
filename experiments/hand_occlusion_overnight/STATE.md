@@ -4614,3 +4614,89 @@ pools.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h119_qa_verdicts.csv` (10 rows)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h119/*.png` (10 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h119_report.md`
+
+## H120 conclusion (2026-08-29 ~08:30 CEST)
+
+**H120: Multi-rule strict flagger (H114 v1 + cross-hand handoff + single-end-far)** —
+DONE. NEGATIVE for v1 (A+B+C); MIXED for v2 (A+B).
+
+H120 hypothesizes that H114 v1 strict (Rule A) can be combined with
+two additional geometric rules to catch more cross-ball artifacts:
+- **Rule B** (cross-hand handoff): end_side != start_side AND
+  min(end_d, start_d) > 30 AND spatial_jump > 100
+- **Rule C** (single-end-far): one endpoint > 50 px, other < 50 px,
+  AND spatial_jump > 80
+
+### v1 (A+B+C, 3-rule OR): REJECTED
+
+Rule C fires on 7 in-chain RECLASSIFIED_HAND_TRANSITION edges (real
+catch-throws wrongly flagged as artifacts: 17→23, 53→60, 70→74
+HAND_TRANSITION, 11→14 AMBIGUOUS_HAND_TRANSITION, 3→8, 22→27, 62→66,
+54→59, 26→31 RECLASSIFIED_HAND_TRANSITION). The "single-end-far"
+geometry is the natural signature of HAND_TRANSITION (ball at hand →
+ball at apex → back in hand), so Rule C is a fundamental misfit.
+
+9 chain FPs (9/59 chain-accepted edges = 15.3% FP rate on chain).
+v1 is REJECTED.
+
+### v2 (A+B only, drop C): MIXED
+
+54 fires on H17 full pool, 0 in h7v3plus3, 0 REAL on H17 v1 visual
+QA subset. 25/25 cells in 2D threshold sweep are safe (per H17 v1
+visual QA).
+
+**2 chain FPs (3→8, 22→27):** both are previously known. 3→8 is the
+H114 visually-suspect RECLASSIFIED_HAND_TRANSITION; 22→27 is the
+H112-discovered FP. Neither is a new H120 finding.
+
+**7 NEW Rule-B-only fires (sj 100-200):** visual QA on all 7:
+- 14→19: TRACKER ARTIFACT (temporal overlap: target starts at f=174,
+  source ends at f=180)
+- 25→26: TRACKER ARTIFACT (both on same side)
+- 1→8: TRACKER ARTIFACT (26-frame gap, neither endpoint near a wrist)
+- 10→12: TRACKER ARTIFACT (both on same side)
+- 15→19: TRACKER ARTIFACT (target goes upward away from any hand)
+- 63→68: TRACKER ARTIFACT (depth mismatch: end_d=63 vs start_d=36)
+- 70→73: UNCERTAIN (L→R signature plausible but vision tool ambiguous)
+
+**6/7 = 86% FALSE, 1/7 = 14% UNCERTAIN.** Rule B alone is NOT a useful
+candidate flagger — the cross-hand geometric criterion is too permissive.
+
+### Verdict and recommendation
+
+**H120 v1 (A+B+C): REJECTED.** Rule C is a fundamental misfit.
+
+**H120 v2 (A+B): MIXED.** The 2 chain FPs are already known. The 7 NEW
+Rule-B-only fires are mostly FALSE. Rule B adds value only as a
+strict post-hoc validator, not as a candidate flagger. H120 v2 is
+equivalent to H114 v1 strict for operational purposes.
+
+**Recommended operating point (unchanged from H112 + H114 v1 strict):**
+h7v3plus3 + H112 (cross_hand + end>30 + start>30) for chain-edge
+precision, H114 v1 strict (T_d=25, T_j=200) for V-shape candidate
+flagger.
+
+### Future research
+
+1. **H121: Re-evaluate the H7v3plus3 chain on the 6 H120 v2 FALSE cases
+   + 1 UNCERTAIN.** Some of these may be in chains that include real
+   catch-throws; the chain might benefit from a stricter cross-hand
+   rejection at chain construction level.
+2. **H122: Investigate the 3→8 (RECLASSIFIED_HAND_TRANSITION) edge
+   more carefully.** H114 visual QA flagged 3→8 as suspect but it
+   remains in h7v3plus3 because H7v2 reclassification downgraded the
+   air-edge to HAND_TRANSITION. A targeted investigation of the H7v2
+   reclassification criteria for cross-hand edges with large spatial
+   jumps could identify other latent chain FPs.
+3. **Stop here.** H120 confirmed no additional geometric rules add
+   value beyond H114 v1 strict. The 0.282 recall gap requires
+   fundamentally different signals.
+
+### H120 artifacts
+
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h120_multi_rule_flagger.py` (with math import fix)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h120_contact_sheets.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h120_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h120_v{1,2}_*.csv` (8 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h120/*.png` (7 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h120_report.md`

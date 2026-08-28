@@ -1,0 +1,68 @@
+{
+  "v1_rule_abc": {
+    "h17_full": {
+      "n_unique_edges": 177,
+      "n_h114_v1_strict_fires": 47,
+      "n_v1_fires": 93,
+      "n_v1_new": 46,
+      "n_in_h7v3plus3": 0
+    },
+    "h20_kept": {
+      "n_edges": 115,
+      "n_h114_v1_default_fires": 4,
+      "n_v1_fires": 67,
+      "n_v1_new": 63
+    },
+    "chain_fp_count": 9,
+    "chain_total": 59,
+    "threshold_sweep": {
+      "n_cells": 400,
+      "n_safe_cells_0_real": 0
+    }
+  },
+  "v2_rule_ab": {
+    "h17_full": {
+      "n_unique_edges": 177,
+      "n_h114_v1_strict_fires": 47,
+      "n_v2_fires": 54,
+      "n_v2_new": 7,
+      "n_in_h7v3plus3": 0
+    },
+    "h20_kept": {
+      "n_edges": 115,
+      "n_h114_v1_default_fires": 4,
+      "n_v2_fires": 29,
+      "n_v2_new": 25
+    },
+    "chain_fp_count": 2,
+    "chain_total": 59,
+    "threshold_sweep": {
+      "n_cells": 25,
+      "n_safe_cells_0_real": 25,
+      "best_safe_cell": {
+        "T_D_B": 20,
+        "T_J_B": 60,
+        "n_fires": 62,
+        "n_fires_in_h7v3": 0,
+        "n_qa_in_fires": 3,
+        "n_real_qa": 0,
+        "n_real_partial_qa": 0,
+        "n_false_qa": 3
+      }
+    }
+  },
+  "thresholds": {
+    "rule_a": {
+      "T_D": 25,
+      "T_J": 200
+    },
+    "rule_b": {
+      "T_D": 30,
+      "T_J": 100
+    },
+    "rule_c": {
+      "T_D": 50,
+      "T_J": 80
+    }
+  }
+}
