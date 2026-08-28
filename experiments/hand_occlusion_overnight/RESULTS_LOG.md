@@ -1511,3 +1511,161 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v4/timeline_*.png` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v4/late_phase_visual_qa.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v4v5_report.md`
+
+---
+
+### H8 v7 / v8 (2026-08-28 ~10:55 CEST)
+
+- Hypothesis: H8 v3, v5, v6 fail on YouTube long tracklets because
+  the "last 8 frames of source / first 8 frames of target" can be
+  in different parabolic arcs. Per-bounce segmentation (splitting
+  each tracklet into arcs at parabolic boundaries) should give a
+  per-arc physics signal. Two iterations:
+
+- **H8 v7 (vy-sign-change segmentation, NEGATIVE)**:
+  - Smooth vy with K=2 window; arcs span between sign changes.
+  - Result: 73/76 identical and 38/40 YouTube tracklets detected
+    as 1-arc. Smoothing destroyed intra-tracklet sign changes.
+  - Per-arc gravity identical: median 0.41, mean 0.86.
+  - Per-arc gravity YouTube: median 0.46, mean 0.45.
+  - Air-edge physics: identical 11/23 OK, YouTube 4/24 OK.
+  - **Verdict: NEGATIVE.** Smoothing was the wrong approach.
+
+- **H8 v8 (local-extrema segmentation, MIXED)**:
+  - Detect local extrema (peaks AND valleys) in y with
+    min-distance=5 frame filter.
+  - Arcs span between extrema. Per-arc parabolic fit
+    (3-parameter least-squares).
+  - Cross-edge physics: find arc containing connection point
+    (not always the last/first arc of the tracklet), predict
+    vy at connection point, extrapolate with constant gravity.
+  - Result: identical 1-5 arcs/tracklet (median 1-2), YouTube
+    1-12 arcs/tracklet (median 2-4, max 12).
+  - Per-arc gravity (clean 0.05<g<5.0):
+    - identical: median 0.69, mean 0.90
+    - YouTube: median 0.46, mean 0.46 (matches quoted 0.5)
+  - Air-edge physics: identical 6/23 OK, YouTube 0/24 OK.
+
+- **Key finding 1: per-arc gravity is a useful TRACKLET quality
+  signal.** Tracklets whose arcs all have g close to expected
+  (0.5) are clean parabolic tracklets. v8 enables this signal
+  but doesn't use it itself. Future H10 v6 should integrate
+  per-arc g consistency as a 4th quality dimension (alongside
+  H3, H8 v5, H9).
+
+- **Key finding 2: YouTube cross-edge physics is fundamentally
+  hard.** 24/24 YouTube H7 BALLISTIC edges are VIOLATING in v8.
+  These are mostly catch+throw events in disguise (H7 calls them
+  BALLISTIC but the underlying physical reality is a hand
+  transition with high-velocity discontinuity). Example: edge
+  4→18: t4 ends at f=416 (falling fast, vy~12.6), t18 starts at
+  f=420 (rising fast, vy~-17.9). The discontinuity is real
+  (catch+throw) not anomalous (identity switch).
+
+- **Verdict: H8 v7 NEGATIVE, H8 v8 MIXED.** v8 produces useful
+  per-arc statistics but its cross-edge check is unreliable on
+  YouTube. The YouTube long-tracklet problem (master §11,
+  STATE.md item 14) is fundamental: needs per-frame per-bounce
+  segmentation or 3D trajectory estimation. See
+  `h1_hand_pool/reports/h8_v7v8_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v7_arc_physics.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v8_extrema_arcs.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v7_arc_physics_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v7_arc_physics_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v8_extrema_arcs_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v8_extrema_arcs_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_v7v8_report.md`
+
+---
+
+### H12 v6 / H12 v6b (2026-08-28 ~11:30 CEST)
+
+- Hypothesis (master §17 priority): combine v2 (event-log) and
+  v5 (per-frame detector signal) into a unified ensemble. v2's
+  high-confidence windows should anchor v5's noisy per-frame
+  signal; v5's per-frame signal should disambiguate v2's
+  FOUNTAIN miscalls.
+
+- **H12 v6 (basic ensemble, PARTIAL PASS)**:
+  - For 3+ ball frames where v2 and v5 disagree on
+    CASCADE vs FOUNTAIN, report MIXED_3+_ENSEMBLE with
+    conf = (c2 + c5) / 2.
+  - Result on identical (1077 frames):
+    - 6.3% MIXED_3+_ENSEMBLE (68 frames, mostly late phase)
+    - 6.8% CASCADE_3+ (v2+v5 agree)
+    - 26.0% FOUNTAIN_3+ (v2+v5 agree)
+    - 25.3% TWO_BALL, 20.3% SINGLE_BALL, 3.2% NO_BALL
+  - The 6.3% disagreement is concentrated in the late phase
+    (f=890-1050), where v2's FOUNTAIN_3+ (low conf 0.42-0.63)
+    contradicts v5's CASCADE_3+ (high conf 0.70).
+  - **Verdict: PARTIAL PASS.** v6 correctly identifies
+    v2/v5 disagreements as MIXED_3+_ENSEMBLE. This is honest
+    but loses the correct v5 signal in 6.3% of frames.
+
+- **H12 v6b (confidence-weighted ensemble, MIXED)**:
+  - Confidence asymmetry rule:
+    - if c5 > c2 + 0.10: v5 wins (with its pattern)
+    - if c2 > c5 + 0.10: v2 wins (with its pattern)
+    - if |c2 - c5| <= 0.10: MIXED_3+_ENSEMBLE
+  - Result on identical (1077 frames):
+    - 10.8% CASCADE_3+ (up from v6's 6.8%; v5 won in 43 frames)
+    - 26.3% FOUNTAIN_3+ (similar to v6)
+    - 2.3% MIXED_3+_ENSEMBLE (down from v6's 6.3%)
+  - Sources: 90.1% agree, 4.0% v5_conf_wins_cascade, 3.2%
+    no_ball, 2.3% ensemble_disagree_close_conf.
+  - **Verdict: MIXED.** v6b propagates v5's answer when v5
+    is meaningfully more confident. The 43 frames where v5
+    won are either correct (per H12 v4/v5 visual QA) or
+    wrong (per current vision QA on contact sheets).
+
+- **Visual QA findings (3 independent vision queries)**:
+  - Late phase f=890-1050 with v6b=CASCADE_3+: vision tool
+    said FOUNTAIN. Contradicts H12 v4/v5 report.
+  - Late phase f=890-1050 with v6b=MIXED_3+_ENSEMBLE: vision
+    tool said FOUNTAIN. v6b's MIXED is honest.
+  - Standard 6-frame f=890,920,950,980,1010,1040: vision tool
+    said FOUNTAIN.
+  - **Vision tool is unreliable for CASCADE/FOUNTAIN
+    distinction** on this video. Cascade and fountain can
+    look similar at single frames; 2D camera projection
+    loses 3D depth cues; hand proximity makes crossing
+    patterns ambiguous.
+
+- **Detector signal analysis (per-frame vx direction)**:
+  - early (0-300): 58% 1-dir, 42% 2-dir (MIXED)
+  - mid (300-700): 91% 1-dir (low activity)
+  - late (700-1100): 59% 1-dir, 41% 2-dir (MIXED)
+  - The 2-dir signal is not strongly concentrated in
+    cascade-like phases. Either the detector misses too
+    many balls (causing vx=0) or the actual pattern is
+    mixed.
+
+- **Negative findings**:
+  - **The fundamental question (cascade vs fountain in late
+    phase) remains UNRESOLVED** with the current data.
+  - YouTube 99.8% CASCADE_3+ is uninformative (driven by v5
+    over-counting via H10 v5 chain splits).
+  - v6b's "v5 won" may be wrong if the late phase is actually
+    FOUNTAIN (per current vision QA). The question cannot be
+    resolved without ground-truth labels.
+
+- **Verdict: v6 PARTIAL PASS, v6b MIXED.** Both are useful
+  ensembles, but the CASCADE/FOUNTAIN distinction is
+  fundamentally ambiguous on this data. See
+  `h1_hand_pool/reports/h12_v6_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v6_ensemble.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v6b_confidence_weighted.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v6_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v6b_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v6_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v6b_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_phases_v6*.csv` (4)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v6_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v6b_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v6/*.png` (4)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v6b/*.png` (3)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v6_report.md`

@@ -585,3 +585,63 @@ meaningful).
    arbitrary; a logistic regression on labeled chains could
    outperform.
 
+## Twentieth episode (H8 v7 + v8 + H12 v6 + v6b) — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+
+1. ✅ H8 v7: vy-sign-change segmentation with K=2 smoothing.
+   Result: 73/76 identical and 38/40 YouTube tracklets detected
+   as 1-arc (smoothing destroyed intra-tracklet sign changes).
+   Per-arc gravity YouTube median 0.46, identical median 0.41.
+   NEGATIVE: smoothing was the wrong approach.
+2. ✅ H8 v8: local extrema (peaks + valleys) in y with
+   min-distance=5 frame filter. Better segmentation:
+   identical 1-5 arcs (median 1-2), YouTube 1-12 arcs
+   (median 2-4, max 12). Per-arc gravity YouTube median
+   0.46 (matches quoted 0.5), identical median 0.69.
+   Air-edge physics: 6/23 OK identical, 0/24 OK YouTube.
+   MIXED: good per-arc statistics, bad cross-edge check.
+3. ✅ H12 v6 (basic ensemble): for 3+ ball frames where v2
+   and v5 disagree on CASCADE/FOUNTAIN, report MIXED_3+_ENSEMBLE.
+   Result: 6.3% MIXED on identical, 0% on YouTube. PARTIAL PASS.
+4. ✅ H12 v6b (confidence-weighted): if c5 > c2 + 0.10 take v5,
+   if c2 > c5 + 0.10 take v2, else MIXED. Result: 10.8%
+   CASCADE (up from v6's 6.8%), 2.3% MIXED (down from 6.3%).
+   43 frames where v5 won, 25 where MIXED_ENSEMBLE.
+   MIXED: propagates v5 but adds new risk.
+5. ✅ Visual QA: 3 independent vision queries on late-phase
+   contact sheets all said FOUNTAIN, contradicting H12 v4/v5's
+   earlier visual QA. Vision tool is unreliable for
+   CASCADE/FOUNTAIN distinction.
+6. ✅ Documented in `h12_v6_report.md` and `h8_v7v8_report.md`.
+
+**Verdict: v7 NEGATIVE, v8 MIXED, v6 PARTIAL PASS, v6b MIXED.**
+The H8 series has reached its natural limit on YouTube: per-arc
+statistics work but cross-edge physics is unreliable because
+H7 BALLISTIC edges are mostly catch+throws in disguise. The
+H12 v6/v6b ensemble addresses the v2/v5 disagreement but
+introduces a new epistemic problem: which signal is right?
+Without ground truth, neither vision tools nor simple
+ensembles can resolve the CASCADE/FOUNTAIN ambiguity.
+
+**Next episode candidates:**
+
+1. **H10 v6: integrate per-arc gravity as 4th quality
+   dimension.** H8 v8 enables this. The composite would be
+   `quality = 0.25*h3 + 0.25*h8_v5 + 0.25*h9 + 0.25*h8_v8_g`.
+   Should give a more nuanced per-chain quality score.
+2. **H13: detector-level low-confidence ball detection near
+   hand events** (master §14 follow-up). The detector confusion
+   is partly responsible for over-counting; a conf=0.1 re-run
+   could reveal where balls actually are.
+3. **H7 v2: re-classify YouTube BALLISTIC edges as HAND_TRANSITION
+   if they pass through a hand region.** v8 shows that most
+   YouTube BALLISTIC edges are catch+throws in disguise. Adding
+   a hand-region check at chain construction time could fix
+   the YouTube H10 v5 over-counting at its source.
+4. **H8 v9: per-frame per-bounce segmentation for YouTube long
+   tracklets.** v8's extrema-level segmentation was the best
+   so far but still doesn't solve cross-edge physics. A truly
+   per-frame approach (e.g., LSTM on per-frame vy/vx) might
+   work but is out of scope.
+

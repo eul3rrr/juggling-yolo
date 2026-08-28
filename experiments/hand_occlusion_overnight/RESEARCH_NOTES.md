@@ -645,3 +645,87 @@ useful source record:
     (detector signal) — use v2's high-confidence windows
     (clear K=4 sequences) to anchor v5's per-frame signal.
 
+## Cross-cutting insights from H8 v7 / v8 (2026-08-28 ~11:00)
+
+47. **Smoothing destroys parabolic-arc boundaries.** H8 v7's
+    vy-smoothing with K=2 made long tracklets look like a
+    single monotonic arc, defeating the goal of per-bounce
+    segmentation. 73/76 identical and 38/40 YouTube tracklets
+    were detected as 1-arc. The lesson: detection of arc
+    boundaries needs to be done on the RAW signal, not the
+    smoothed signal. v8's local-extrema approach with
+    min-distance=5 filter achieves this.
+
+48. **Per-arc gravity distribution is a useful tracklet quality
+    signal.** H8 v8 produces per-arc parabolic fits. Tracklets
+    whose arcs all have g close to the expected value (0.5)
+    are clean parabolic tracklets. Tracklets with widely varying
+    g across arcs are noisy. Future H10 v6 should integrate
+    per-arc g consistency as a 4th quality dimension. The
+    YouTube per-arc gravity median is 0.46 (close to 0.5),
+    suggesting YouTube tracklets are clean parabolic motions
+    despite being long. The identical per-arc gravity median
+    is 0.69 (higher), suggesting the juggler is closer to the
+    camera (pixel/m^2 ratio is larger) OR the parabolic motion
+    is contaminated by hand motion during catch/throw.
+
+49. **Most YouTube H7 BALLISTIC edges are catch+throws in
+    disguise.** H8 v8 finds 0/24 OK on YouTube because the
+    cross-edge velocity discontinuity is large. But the
+    discontinuity is real (catch+throw) not anomalous
+    (identity switch). The H7 chain algorithm should
+    re-classify YouTube edges as HAND_TRANSITION if they
+    pass through a hand region. This is a future H7 v2
+    enhancement.
+
+50. **Per-arc segmentation reveals a fundamental difference
+    between identical and YouTube.** Identical has mostly
+    1-arc tracklets (single parabolic motions) because the
+    detector drops out frequently. YouTube has 2-12 arcs
+    per tracklet because the long tracklets span multiple
+    parabolic arcs. The two videos have different
+    detection profiles, and the algorithms need to handle
+    them differently. The current approach treats them
+    uniformly, which is why YouTube is harder.
+
+## Cross-cutting insights from H12 v6 / v6b (2026-08-28 ~11:45)
+
+51. **v2/v5 ensemble is honest but loses signal.** v6 reports
+    MIXED_3+_ENSEMBLE for all v2/v5 disagreements on
+    CASCADE/FOUNTAIN. This is the conservative answer but
+    loses the correct v5 signal in 6.3% of identical frames.
+    v6b's confidence-weighted rule (v5 wins if c5 > c2+0.10)
+    propagates v5's answer but adds a new risk: if v5 is
+    wrong, v6b is wrong.
+
+52. **Vision tool is unreliable for CASCADE/FOUNTAIN
+    distinction on this video.** Three independent vision
+    queries on different late-phase contact sheets all said
+    FOUNTAIN, but the H12 v4/v5 visual QA said CASCADE in
+    4/6 frames. The single-frame view doesn't capture the
+    temporal pattern. This is a real epistemic limitation:
+    cascade vs fountain cannot be reliably determined from
+    single frames in this video.
+
+53. **The detector signal is ambiguous.** Per-frame vx
+    direction analysis: 58% 1-dir, 42% 2-dir in both early
+    and late phases. The 2-dir signal is not strongly
+    concentrated in cascade-like phases. Either the detector
+    misses too many balls (causing vx=0) or the actual
+    pattern is mixed. The detector signal is useful as a
+    vote but not as a definitive answer.
+
+54. **A truly different approach is needed for the
+    CASCADE/FOUNTAIN question.** Possible directions:
+    - Multi-view video (2 cameras from different angles)
+    - Higher frame rate (60+ fps to capture apex/throw)
+    - Temporal pattern recognition (LSTM or transformer
+      on per-frame classifications)
+    - Hand-region check: a BALLISTIC edge that crosses a
+      hand region is a catch+throw, not a mid-air
+      continuation
+    - Ground truth from controlled experiments
+
+    These are out of scope for the current data. The
+    question is FUNDAMENTALLY UNRESOLVED.
+
