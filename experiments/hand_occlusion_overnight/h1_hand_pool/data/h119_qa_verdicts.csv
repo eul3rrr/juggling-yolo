@@ -1,0 +1,11 @@
+src,tgt,kind,vshape,spatial_jump,end_d,start_d,gap,verdict,vision_notes
+40,42,e6c_not_in_h7v2,V_DEEP,227.04,62.99,40.05,11,FALSE,"src ends near R (58px), tgt starts near L (51px) — different hands"
+41,44,e6c_not_in_h7v2,V_DEEP,275.05,45.23,66.11,15,FALSE,"src ends near R (40px), tgt starts near L (66px) — different hands, long jump"
+3,7,e6c_not_in_h7v2,V_DEEP,310.07,106.16,66.22,8,FALSE,"src far from both hands (120/242), tgt near R (83) — no shared neighborhood"
+16,19,e6c_not_in_h7v2,V_SHALLOW,435.84,303.39,68.92,8,FALSE,"src far (416/298), tgt near L (70) — different regions, 436px jump"
+66,67,adjacent_vshape,V_DEEP,210.32,32.65,228.42,3,FALSE,"src near L (34), tgt far from both (235/404) — tgt.start not at hand"
+47,53,adjacent_vshape,V_DEEP,257.72,30.51,69.51,25,FALSE,"src mid (135/121), tgt near L (131) but src.end not at hand"
+12,19,adjacent_vshape,V_DEEP,325.27,34.62,68.92,25,FALSE,"src far (203/252), tgt near L (124) — different regions, no overlap"
+20,23,adjacent_vshape,V_SHALLOW,205.43,278.1,52.43,24,FALSE,"src far (348/245), tgt near R (61) — src.end not at hand"
+44,54,adjacent_vshape,V_SHALLOW,309.22,32.2,39.11,17,FALSE,"src at L (23), tgt at R (49) — different hands, V_SHALLOW = same-ball jitter"
+31,40,adjacent_vshape,V_SHALLOW,377.31,468.66,93.97,27,FALSE,"src way far (474/442), tgt near R (94) — 27f gap, no hand contact"

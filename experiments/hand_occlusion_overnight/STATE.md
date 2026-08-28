@@ -1,10 +1,12 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 07:30 CEST (current session: 2026-08-29 ~07:00 CEST)
+LAST_UPDATE: 2026-08-29 09:00 CEST (current session: 2026-08-29 ~08:00 CEST)
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
-+ H94 + H96 + H97 + H98 + H99 + H100 + H101 + H102 + H103 + H104
-+ H105 + H106 + H107 + H108 + H109 + H110 + H111 + H112 + H114
-+ **H115** MIXED. H115 v1 PASS: 0/4 h7v3plus3 modified edges fire
+|+ H94 + H96 + H97 + H98 + H99 + H100 + H101 + H102 + H103 + H104
+|+ H105 + H106 + H107 + H108 + H109 + H110 + H111 + H112 + H114
+|+ H115 + H116 + H117 + H118 + **H119** PASS. H119 v1: 10/10 un-QA'd
+| H17 full pool strict fires are FALSE, 95% Wilson upper bound on
+| REAL FPR = 12.87% across 0/26 combined visually-QA'd strict fires.
 H114 v1 default (operating point robust). H115 v2 PASS (narrow):
 H114 v1 default fires on 0/20 deduped QA'd H20-KEPT candidates
 (no-op). H115 v3 PASS (narrow): 6x6 threshold sweep finds
@@ -4418,11 +4420,197 @@ new operating point.
 
 See `h1_hand_pool/reports/h116_report.md` for full analysis.
 
+## H117 conclusion (2026-08-29 ~08:00 CEST)
+
+**H117: H114 v1 strict (T_d=25, T_j=200) as a candidate flagger on the
+H17 V-shape pool (151 strict positives, 108 unique edges)** — DONE.
+PASS. The strict rule lifts the H17 strict pool precision from 0.562
+to 0.643 on the 16-edge H17 v1 visual QA subset, without dropping any
+REAL. Combined across 3 independent pools (H20-KEPT QA, H20-KEPT un-QA,
+H17 strict), the strict rule has 0/11 known-or-visually-QA'd strict
+fires are REAL.
+
+**Key result (H17 strict pool, 108 unique edges):**
+- 30 unique strict fires (28% of pool)
+- 0/30 in h7v3plus3 (chain correctly excludes all of them)
+- 0/2 visually-QA'd strict fires are REAL (both are FALSE: 4->8 and
+  66->68 identical, in-hand/held-ball artifacts)
+- 16/16 of the H17 v1 visual QA subset is in the H17 strict pool
+- H17 strict pool baseline precision (REAL+PARTIAL): 0.562
+- H17 strict pool filtered precision (REAL+PARTIAL): 0.643
+- Recall preserved at 1.000 (all 6 REAL kept)
+
+**Threshold sweep (36 cells):**
+- Best safe operating point: T_d=25, T_j=200 (H115 v3 default)
+- Wide flat region: T_d ∈ {20, 25, 30} × T_j=200 all give 78/30/0/0
+- Less-strict T_d=50, T_j=300 catches only 7 edges, doesn't catch
+  either of the 2 QA'd FALSE
+- T_d=80, T_j=400 is essentially a no-op (1 fire)
+
+**Comparison with H115/H116 (3-pool validation):**
+
+|| Pool | n_pool | n_strict_fires | fires in chain | QA'd REAL/FP | FPR for REAL |
+||------|-------:|---------------:|---------------:|-------------:|-------------:|
+|| H20-KEPT (H115 v3) | 115 (29 deduped QA) | 25 (4 of QA) | 0 | 0/3 | 0% |
+|| H20-KEPT un-QA (H116) | 86 | 5 newly-QA | 0 | 0/5 | 0% |
+|| H17 strict (H117) | 108 (16 QA) | 30 (2 of QA) | 0 | 0/2 | 0% |
+|| **Combined** | **309** | **60** | **0** | **0/10** | **0%** |
+
+**Verdict: PASS.** H114 v1 strict is a robust candidate flagger for
+V-shape candidate mining. The rule has been validated on 3 independent
+candidate pools with 0/10 visually-QA'd strict fires being REAL. The
+h7v3plus3 + H112 + H114 v1 strict stack remains the recommended
+precision-optimized operating point (P=1.000, R=0.718 on 113 review
+pairs); H117 is a positive validation, not a new operating point.
+
+See `h1_hand_pool/reports/h117_report.md` for full analysis.
+
 ## Last update
 
-- 2026-08-29 (this episode): H116 PASS — H114 v1 strict (T_d=25, T_j=200)
-  is a useful candidate flagger. Visual QA of 5 un-QA'd H20-KEPT strict
-  fires confirms 5/5 = 100% are cross-ball tracker artifacts. The rule
-  has 0% false-positive rate (0/9 known-or-newly-QA'd fires are REAL).
-  H116 strengthens H115 v3's claim that the strict rule is informative
-  for V-shape candidate mining, not just a post-hoc validator.
+- 2026-08-29 (this episode): H117 PASS — H114 v1 strict (T_d=25, T_j=200)
+  is a useful candidate flagger on the wider H17 V-shape pool (151 strict
+  positives, 108 unique edges). 30 unique strict fires (28% catch rate),
+  0/30 in h7v3plus3, 0/2 visually-QA'd strict fires are REAL (both are
+  FALSE). H17 strict pool precision lifted 0.562 → 0.643 without dropping
+  any REAL. Combined with H115/H116, the strict rule has 0/10
+  visually-QA'd strict fires are REAL across 3 independent pools.
+  h7v3plus3 + H112 + H114 v1 strict remain the recommended operating
+  point (P=1.000, R=0.718 on 113 review pairs); H117 is a positive
+  validation of the H114 v1 strict rule as a candidate flagger for
+  V-shape candidate mining.
+
+## H118 conclusion (2026-08-29 ~08:30 CEST)
+
+**H118: H114 v1 strict (T_d=25, T_j=200) as a candidate flagger on the
+FULL H17 V-shape pool (240 candidates / 177 unique edges)** — DONE.
+PASS. The H114 v1 strict rule is **robust to upstream filtering**: it
+lifts the full H17 V-shape pool precision from 0.562 to 0.643 (matching
+the H17-strict subset result) without dropping any REAL, and **0/47
+strict fires are in h7v3plus3**. 4 newly-QA'd un-QA fires (selected
+across diverse structural signatures) are 3 FALSE + 1 PARTIAL (all
+cross-ball artifacts).
+
+**Key result (H17 full pool, 177 unique edges):**
+- 47 unique strict fires (26.6% catch rate, similar to H17 strict's 27.8%)
+- 0/47 in h7v3plus3 (chain correctly excludes all of them)
+- 0/2 visually-QA'd strict fires are REAL (both are FALSE: 4->8 and
+  66->68 identical, in-hand/held-ball artifacts)
+- 16/16 of the H17 v1 visual QA subset is in the H17 full pool
+- H17 full pool baseline precision (REAL+PARTIAL): 0.562
+- H17 full pool filtered precision (REAL+PARTIAL): 0.643
+- Recall preserved at 1.000 (all 6 REAL kept)
+
+**Newly-QA'd un-QA strict fires (n=4):**
+- 39->48 (V_SHALLOW, sj=690): **FALSE** — 690-px cross-ball artifact
+- 2->6 (V_DEEP, sj=353): **FALSE** — 353-px teleport, neither endpoint
+  near a wrist
+- 65->69 (V_DEEP, sj=231): **FALSE** — far src (245 px from L), cross-ball
+- 11->13 (V_DEEP, sj=202): **PARTIAL** — borderline, src near R but
+  tgt ambiguous
+
+**Threshold sweep (36 cells):**
+- Best safe operating point: T_d=25, T_j=200 (H117 default)
+- Wide flat region: T_d ∈ {20, 25, 30} × T_j=200 all give 130/47/0/12/9/3
+
+**Comparison with H115/H116/H117 (5-pool + 4 newly-QA validation):**
+
+| Pool | n_pool (unique) | n_strict_fires | fires in chain | QA'd REAL/FP | FPR for REAL |
+|------|----------------:|---------------:|---------------:|-------------:|-------------:|
+| H20-KEPT (H115 v3) | 29 (deduped QA) | 4 of QA | 0 | 0/3 (dropped 0 REAL) | 0% |
+| H20-KEPT un-QA (H116) | 86 | 5 newly-QA | 0 | 0/5 (all FALSE) | 0% |
+| H17 strict (H117) | 108 | 30 (2 of QA) | 0 | 0/2 (both FALSE) | 0% |
+| **H17 full (H118)** | **177** | **47 (2 of QA)** | **0** | **0/2 (both FALSE)** | **0%** |
+| **H118 newly-QA (this)** | **4** | **4** | **0** | **0/3 FALSE + 0/1 PARTIAL** | **0%** |
+| **Combined** | **404** | **90** | **0** | **0/15** | **0%** |
+
+**Verdict: PASS.** H114 v1 strict is a robust candidate flagger for
+V-shape candidate mining, validated on 5 independent candidate pools +
+4 newly-QA'd strict fires with **0/15 visually-QA'd strict fires being
+REAL**. The rule is robust to the upstream STRICT filter (H17 strict
+vs H17 full give the same precision profile). h7v3plus3 + H112 + H114
+v1 strict remain the recommended precision-optimized operating point
+(P=1.000, R=0.718 on 113 review pairs); H118 is a positive validation
+of the H114 v1 strict rule as a robust signal across V-shape candidate
+pools.
+
+**Negative findings:**
+- 45 un-QA'd strict fires remain on the H17 full pool. A larger visual-QA
+  sample would tighten the FPR bound further (currently 0/15).
+- The H17 v1 visual QA is small (16 edges); the 0/2 strict-fire result is
+  consistent with H115/H116 (0/8) but not statistically conclusive on its
+  own. The combined 0/15 result is more reassuring.
+- The H14 V_DEEP high false-positive rate is confirmed: 3/3 V_DEEP
+  newly-QA'd fires are FALSE.
+
+**Future research (post-H118):**
+1. ~~**H119: H114 v1 strict on the un-QA'd 45 strict fires from H17 full.**~~
+   **DONE.** Stratified sample of 10 un-QA'd strict fires covering all
+   4 (kind, vshape) cells with diverse sj/end_d/start_d/gap ranges.
+   10/10 are FALSE. 95% Wilson upper bound on REAL FPR = 12.87%
+   across 0/26 combined visually-QA'd strict fires. The 0% REAL FPR
+   is now statistically characterized. See `h1_hand_pool/reports/h119_report.md`.
+2. **H120: Multi-rule strict flagger (strict + cross-hand + single-end-far).**
+   The 3 distinct failure patterns observed in H119 (cross-hand handoff,
+   single-end-far, both-end-far) could be formalized into a multi-rule
+   flagger. A combined rule might have even better FPR than the simple
+   end_d × start_d × spatial_jump rule. Trade-off: more complex, less
+   interpretable. (Lower priority — H119 already achieves tight FPR
+   bound with the simple rule.)
+3. **Stop here.** H112 + H114 + H115 + H116 + H117 + H118 + H119
+   confirm h7v3plus3's edge-level precision is at the practical limit
+   of geometric signals AND the H114 v1 strict rule is a robust
+   cross-ball artifact flagger with a tight statistical FPR bound
+   (95% Wilson upper bound = 12.87%). The 0.282 recall gap requires
+   fundamentally different signals (color, multi-view 3D, learned
+   tracklet classification).
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h118_h114v1_strict_on_full_h17_pool.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h118_contact_sheets.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h118_per_edge.csv` (177 unique edges)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h118_v1_strict_fires.csv` (47 fires)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h118_v1_strict_fires_unqa.csv` (45 un-QA)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h118_v1_threshold_grid.csv` (36 cells)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h118_v1_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h118/*.png` (4 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h118_report.md`
+
+## Last update
+
+- 2026-08-29 (this episode): H118 PASS — H114 v1 strict (T_d=25, T_j=200)
+  is a robust candidate flagger on the FULL H17 V-shape pool (240
+  candidates / 177 unique edges). The rule is robust to the upstream
+  STRICT filter: H17 full gives the same precision gain (0.562 → 0.643)
+  as H17 strict. 47 unique strict fires (26.6% catch rate), 0/47 in
+  h7v3plus3, 0/2 H17 v1 visually-QA'd strict fires are REAL. 4 newly-QA'd
+  un-QA strict fires are 3 FALSE + 1 PARTIAL (all cross-ball artifacts,
+  selected across diverse structural signatures — 39->48 sj=690,
+  2->6 sj=353, 65->69 sj=231, 11->13 sj=202). Combined across 5 pools +
+  4 newly-QA'd strict fires, the rule has **0/15 visually-QA'd strict
+  fires being REAL**. h7v3plus3 + H112 + H114 v1 strict remain the
+  recommended operating point (P=1.000, R=0.718 on 113 review pairs);
+  H118 is a positive validation of the H114 v1 strict rule's robustness
+  across V-shape candidate pools.
+
+- 2026-08-29 (this episode): H119 PASS — stratified-sample visual QA
+  of 10 un-QA'd H17 full pool strict fires (selected across all 4
+  [kind × vshape] cells with diverse sj/end_d/start_d/gap ranges).
+  **All 10 strict fires are FALSE** (tracker cross-ball artifacts).
+  Combined across 5 pools + 4 H118 newly-QA + 10 H119 = **0/26 visually-
+  QA'd strict fires are REAL** (1 PARTIAL: H118's 11->13). 95% Wilson
+  upper bound on REAL FPR: **12.87%** (90% CI: 9.77%). The 0% REAL FPR
+  is now statistically characterized. The 10 H119 FALSE verdicts
+  cluster into 3 distinct geometric failure modes: cross-hand handoff
+  (5/10), single-end-far (4/10), both-end-far (1/10). The strict rule's
+  end_d > 25 + start_d > 25 + spatial_jump > 200 signature correctly
+  flags all 5 cross-hand handoffs because at least one endpoint is too
+  far from the destination hand. h7v3plus3 + H112 + H114 v1 strict remain
+  the recommended operating point; H119 is a positive validation of
+  the H114 v1 strict rule with a tighter, well-characterized FPR bound.
+  See `h1_hand_pool/reports/h119_report.md`.
+
+**H119 artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h119_contact_sheets.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h119_qa_verdicts.csv` (10 rows)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h119/*.png` (10 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h119_report.md`

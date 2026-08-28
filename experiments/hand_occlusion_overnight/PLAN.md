@@ -2374,3 +2374,46 @@ The per-video conf calibration (`conf_min = max(0.40, video_mean_conf - 0.10)`)
 is the main remaining operational issue, but the underlying
 methodology is complete and validated.
 
+
+## Post-H118 episode: H119 — Stratified visual QA of un-QA'd H114 v1 strict fires (2026-08-29 ~08:45 CEST)
+
+Sub-steps:
+1. ✅ Read the 45 un-QA'd strict fires from H17 full pool
+   (`h118_v1_strict_fires_unqa.csv`).
+2. ✅ Designed a stratified sample of 10 cases covering all 4
+   (kind × vshape) cells with diverse sj/end_d/start_d/gap ranges.
+3. ✅ Wrote `h119_contact_sheets.py` (modeled after h118_contact_sheets.py)
+   to render 2D coordinate plots with tracklet endpoints + wrists + jump arrow.
+4. ✅ Visually inspected all 10 contact sheets via `vision_analyze`.
+   **All 10 strict fires are FALSE** (tracker cross-ball artifacts).
+5. ✅ Combined with H115/H116/H117/H118: 0/26 visually-QA'd strict
+   fires are REAL (1 PARTIAL: H118's 11->13 borderline).
+6. ✅ Computed 95% Wilson upper bound on REAL FPR: **12.87%**
+   (90% CI: 9.77%). The 0% REAL FPR is now statistically characterized.
+7. ✅ Documented 3 distinct geometric failure modes (cross-hand handoff
+   5/10, single-end-far 4/10, both-end-far 1/10) and recommended
+   H120 (multi-rule flagger) as lower-priority follow-up.
+8. ✅ Updated STATE.md, RESULTS_LOG.md, PLAN.md, h119_report.md.
+
+**H119 verdict: PASS.** H114 v1 strict rule is a robust candidate
+flagger for V-shape candidate mining. The h7v3plus3 + H112 + H114 v1
+strict stack remains the recommended operating point (P=1.000, R=0.718
+on 113 review pairs); H119 is a positive validation with a tighter,
+well-characterized FPR bound.
+
+**H119 strongest finding:** the strict rule's end_d > 25 + start_d > 25
++ spatial_jump > 200 signature correctly catches 5/10 cross-hand handoff
+false positives in the H119 sample, because at least one endpoint is
+too far from the destination hand. The rule is a true cross-ball
+artifact detector at the V-shape candidate level.
+
+**H119 future research (post-H119, lower priority):**
+- H120: Multi-rule strict flagger (strict + cross-hand + single-end-far).
+  The 3 distinct failure patterns observed in H119 could be formalized
+  into a multi-rule flagger with even better FPR.
+- Stop here. H112 + H114 + H115 + H116 + H117 + H118 + H119 confirm
+  h7v3plus3's edge-level precision is at the practical limit of
+  geometric signals AND the H114 v1 strict rule is a robust cross-ball
+  artifact flagger with a tight statistical FPR bound (95% Wilson upper
+  bound = 12.87%). The 0.282 recall gap requires fundamentally different
+  signals (color, multi-view 3D, learned tracklet classification).

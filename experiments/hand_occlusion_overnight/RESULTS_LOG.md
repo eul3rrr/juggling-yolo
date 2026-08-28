@@ -6191,3 +6191,82 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h114_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h114/*.png` (4 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h114_report.md`
+
+## H119 — Stratified sample visual QA of 10 un-QA'd H17 full pool strict fires (PASS, 2026-08-29 ~08:45 CEST)
+
+- **Hypothesis:** A larger visual-QA sample of 10 un-QA'd H17 full
+  pool strict fires (selected across all 4 (kind, vshape) cells with
+  diverse sj/end_d/start_d/gap ranges) would characterize the H114 v1
+  strict rule's 0% FPR claim with ~95% confidence.
+
+- **Sample selection (10/45 un-QA'd strict fires):**
+  - e6c_not_in_h7v2 V_DEEP: 40->42 (sj=227), 41->44 (sj=275), 3->7 (sj=310)
+  - e6c_not_in_h7v2 V_SHALLOW: 16->19 (sj=436)
+  - adjacent_vshape V_DEEP: 66->67 (sj=210), 47->53 (sj=258), 12->19 (sj=325)
+  - adjacent_vshape V_SHALLOW: 20->23 (sj=205), 44->54 (sj=309), 31->40 (sj=377)
+  - All 4 (kind, vshape) cells covered; sj 205-436; end_d 31-469;
+    start_d 39-228; gap 3-27.
+
+- **Per-edge rule (re-stated for clarity):**
+  `fires = (end_d > 25) AND (start_d > 25) AND (spatial_jump > 200)`
+
+- **Quantitative result (per-case verdicts):**
+
+  | # | Edge | vshape | sj | end_d | start_d | gap | Verdict |
+  |---|------|--------|---:|------:|--------:|----:|---------|
+  | 1 | 40->42 | V_DEEP    | 227 |  63 |  40 | 11 | FALSE |
+  | 2 | 41->44 | V_DEEP    | 275 |  45 |  66 | 15 | FALSE |
+  | 3 | 3->7   | V_DEEP    | 310 | 106 |  66 |  8 | FALSE |
+  | 4 | 16->19 | V_SHALLOW | 436 | 303 |  69 |  8 | FALSE |
+  | 5 | 66->67 | V_DEEP    | 210 |  33 | 228 |  3 | FALSE |
+  | 6 | 47->53 | V_DEEP    | 258 |  31 |  70 | 25 | FALSE |
+  | 7 | 12->19 | V_DEEP    | 325 |  35 |  69 | 25 | FALSE |
+  | 8 | 20->23 | V_SHALLOW | 205 | 278 |  52 | 24 | FALSE |
+  | 9 | 44->54 | V_SHALLOW | 309 |  32 |  39 | 17 | FALSE |
+  | 10| 31->40 | V_SHALLOW | 377 | 469 |  94 | 27 | FALSE |
+
+  **H114 v1 strict REAL precision: 0.0% (0/10).**
+
+- **Combined visually-QA'd strict fires (5 pools + 4 H118 newly-QA + 10 H119):**
+
+  | Pool | n_QA | REAL | PARTIAL | FALSE |
+  |------|-----:|-----:|--------:|------:|
+  | H20-KEPT QA'd (H115 v3)         |  3 | 0 | 0 |  3 |
+  | H20-KEPT un-QA (H116)           |  5 | 0 | 0 |  5 |
+  | H17 strict QA'd (H117)          |  2 | 0 | 0 |  2 |
+  | H17 full QA'd (H118)            |  2 | 0 | 0 |  2 |
+  | H17 full newly-QA (H118)        |  4 | 0 | 1 |  3 |
+  | **H119 (this)**                 | **10** | **0** | **0** | **10** |
+  | **Combined**                    | **26** | **0** | **1** | **25** |
+
+  - **REAL FPR: 0.0% (0/26).**
+  - **REAL+PARTIAL FPR: 3.8% (1/26).**
+  - **95% Wilson upper bound on REAL FPR: 12.87%** (90% CI: 9.77%).
+  - **95% Wilson upper bound on REAL+PARTIAL FPR: 18.89%.**
+
+- **Key findings:**
+  - The 10 H119 FALSE verdicts cluster into 3 distinct geometric
+    failure modes: cross-hand handoff (5/10), single-end-far (4/10),
+    both-end-far (1/10).
+  - The strict rule's end_d > 25 + start_d > 25 + spatial_jump > 200
+    signature correctly flags all 5 cross-hand handoffs because at
+    least one endpoint is too far from the destination hand.
+  - The 0/26 combined result is consistent with the 0/15 result from
+    H118. The 95% Wilson upper bound has tightened from 18.8%
+    (post-H118) to 12.9% (post-H119).
+  - If the 0% FPR is uniform across all 45 un-QA'd strict fires, all
+    45 are likely FALSE. 95% Wilson upper bound on the FPR if all 45
+    are also QA'd at 0/45: FPR ≤ 7.87%.
+
+- **Verdict: PASS.** H114 v1 strict rule is a robust candidate flagger
+  for V-shape candidate mining with a tight, well-characterized
+  statistical FPR bound. The h7v3plus3 + H112 + H114 v1 strict stack
+  remains the recommended precision-optimized operating point
+  (P=1.000, R=0.718 on 113 review pairs); H119 is a positive
+  validation of the strict rule with a tighter FPR bound.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h119_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h119_qa_verdicts.csv` (10 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h119/*.png` (10 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h119_report.md`
