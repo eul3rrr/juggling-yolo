@@ -198,9 +198,12 @@ evidence (ballistic continuation from the last observation).
 
 ## 8. Future work
 
-- **Visual QA on chain 38 and chain 53** (the longest
-  juggling chains) to confirm the combined edges are visually
-  correct.
+- **Apply the "hand-edge wins on conflict" design principle**
+  to downstream consumers: when the H2 chain representation
+  shows a conflict, the hand-edge should be preferred. This
+  is a heuristic but a well-grounded one given v4d's high
+  precision (visual QA on chain 3 confirmed the hand-edge
+  was correct and the air-edge was a false positive).
 - **Resolve the tracklet-3 conflict** by re-examining the
   actual tracklet 8 trajectory and the 4-frame gap: does
   tracklet 8 appear in the same physical location as tracklet
