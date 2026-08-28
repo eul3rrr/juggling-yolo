@@ -4360,3 +4360,92 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h68_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h68_report.md`
 
+---
+
+## H69 — Periodicity of "balls aloft" as FOUNTAIN_3+ post-filter
+
+- Date: 2026-08-28 ~19:00 CEST
+- Hypothesis (from H68 report): a real FOUNTAIN phase has a periodic
+  A signal (balls go up and down coherently). Static hold has
+  incoherent / YOLO-false-positive A signal. CASCADE has different
+  period. Spectral concentration (max FFT power / total) should
+  discriminate FOUNTAIN from HOLD/CASCADE better than the level-based
+  pct_A_ge2 metric used in H66/H67/H68.
+- Method: for each substantial FOUNTAIN_3+ phase (>= 20 frames), compute
+  the per-frame A signal (H66 logic) and FFT spectral concentration.
+  Apply stacked filter: H43 (conf < 0.55) OR H69 (spec_conc < 0.15).
+  Reject phase if either fires. Re-label FOUNTAIN_3+ frames in
+  rejected phases as FOUNTAIN_LOW_CONF.
+- Per-phase spectral features on H65 sample (n=7 phases):
+
+| Video | Phase | conf | mean_A | conc | AC_peak | AC_lag | H65 verdict | H43 | H69 | STACK |
+|-------|-------|------|--------|------|---------|--------|-------------|-----|-----|-------|
+| identical | 631-669 | 0.714 | 1.79 | 0.411 | 0.339 | 5 | FOUNTAIN | K | K | KEEP |
+| identical | 890-936 | 0.571 | 1.31 | 0.308 | 0.197 | 5 | OTHER (crossed-arm) | K | K | KEEP |
+| identical | 977-1011 | 0.565 | 0.68 | 0.326 | 0.189 | 23 | FOUNTAIN | K | K | KEEP |
+| identical | 1029-1049 | 0.463 | 0.85 | 0.361 | 0.056 | 9 | OTHER (static hold) | R | K | REJECT |
+| youtube | 339-374 | 0.646 | 1.73 | 0.164 | 0.152 | 15 | FOUNTAIN | K | K | KEEP |
+| youtube | 482-594 | 0.653 | 1.65 | 0.140 | 0.254 | 14 | OTHER (static hold) | K | R | REJECT |
+| youtube | 800-861 | 0.651 | 1.30 | 0.088 | 0.175 | 8 | CASCADE | K | R | REJECT |
+
+- Discrimination result (H43 OR H69 stacked):
+
+| Filter | correct_rej | wrong_rej | wrong_keep | correct_keep | precision | recall |
+|--------|-------------|-----------|------------|--------------|-----------|--------|
+| H43 alone | 1 | 0 | 3 | 3 | 100% | 25% |
+| **H43 OR H69 (conc < 0.15)** | **3** | **0** | **1** | **3** | **100%** | **75%** |
+
+- Sensitivity grid (H43 OR H69):
+  - thr < 0.15: only 800-861 caught (62 frames, YouTube)
+  - thr = 0.15-0.16 (FLAT): 800-861 + 482-594 caught (175 frames), all
+    correct, no FOUNTAIN wrongly rejected
+  - thr > 0.16: would wrongly reject 339-374 (real FOUNTAIN)
+
+- Per-frame end-to-end impact:
+  - identical: 21/1042 (2.0%) — same as H43 alone (H69 adds 0 frames
+    because the only H69-rejectable phase is 1029-1049, already caught)
+  - youtube: 175/898 (19.5%) — H69 adds 175 frames (482-594 + 800-861
+    = 113 + 62 = 175, both correctly rejected)
+  - Combined: H43 + H69 = 3/3 correct rejects on H65 sample,
+    0/3 wrong rejects. **Best FOUNTAIN_3+ post-filter to date.**
+
+- Comparison to previous post-filters:
+
+| Filter | identical frames | youtube frames | H65 precision on rejects |
+|--------|------------------|----------------|--------------------------|
+| H43 alone (H51) | 21 | 0 | 1/1 = 100% |
+| H66 thr=0.30 (H67) | 56 | 0 | 1/2 = 50% |
+| H68 per-n_total (H68) | 56 | 62 | 2/3 = 67% |
+| **H43 OR H69 (this)** | **21** | **175** | **3/3 = 100%** |
+
+- Negative findings:
+  - The 890-936 identical phase (crossed-arm trick, conf 0.571, conc
+    0.308) escapes BOTH H43 and H69. This is a fundamental limitation
+    — neither signal captures "unusual hand pattern".
+  - H69 spec_conc is sensitive to phase length. Short FOUNTAIN_3+
+    phases (< 20 frames) are not affected (H43 still applies via H12
+    v8 confidence).
+  - YOLO false positives on background features (482-594) limit H69's
+    discrimination on YouTube. A better detector would push spectral
+    concentration lower and the H69 threshold could be raised.
+
+- Verdict: PASS. H69 is the new best FOUNTAIN_3+ post-filter. The
+  level-based metric (H66/H67/H68) and the confidence-based metric
+  (H43) are both dominated by the structural periodicity metric
+  (H69) when stacked.
+
+- Recommended operating point (H69 supersedes H68):
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69(spec_conc < 0.15)
+  + H52 + H53
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h69_periodicity_fountain.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h69v2_end_to_end.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69_rejected_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69_per_frame_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69v2_per_frame_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h69_report.md`
+

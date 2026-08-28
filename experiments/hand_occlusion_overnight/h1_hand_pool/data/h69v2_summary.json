@@ -1,0 +1,90 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total": 1042,
+      "n_changed": 21,
+      "pct_changed": 2.015,
+      "h43_rejected_phases": [
+        [
+          1029,
+          1049
+        ]
+      ],
+      "h69_rejected_phases": [
+        [
+          1029,
+          1049
+        ]
+      ],
+      "stacked_rejected_phases": [
+        [
+          1029,
+          1049
+        ]
+      ],
+      "before": {
+        "TWO_BALL": 269,
+        "MIXED_3+_UNCONFIRMED": 21,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 77,
+        "MIXED_3+": 283,
+        "TWO_BALL_ONE_HAND": 8,
+        "FOUNTAIN_3+": 168
+      },
+      "after": {
+        "TWO_BALL": 269,
+        "MIXED_3+_UNCONFIRMED": 21,
+        "SINGLE_BALL": 216,
+        "CASCADE_3+": 77,
+        "MIXED_3+": 283,
+        "TWO_BALL_ONE_HAND": 8,
+        "FOUNTAIN_3+": 147,
+        "FOUNTAIN_LOW_CONF": 21
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_total": 898,
+      "n_changed": 175,
+      "pct_changed": 19.488,
+      "h43_rejected_phases": [],
+      "h69_rejected_phases": [
+        [
+          482,
+          594
+        ],
+        [
+          800,
+          861
+        ]
+      ],
+      "stacked_rejected_phases": [
+        [
+          482,
+          594
+        ],
+        [
+          800,
+          861
+        ]
+      ],
+      "before": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 119,
+        "MIXED_3+": 498,
+        "FOUNTAIN_3+": 211
+      },
+      "after": {
+        "MIXED_3+_UNCONFIRMED": 70,
+        "CASCADE_3+": 119,
+        "MIXED_3+": 498,
+        "FOUNTAIN_3+": 36,
+        "FOUNTAIN_LOW_CONF": 175
+      }
+    }
+  },
+  "methodology": {
+    "filter": "h69v2: H43 OR H69(spec_conc < 0.15) on H50-filtered pattern data",
+    "H43_CONF_THRESHOLD": 0.55,
+    "H69_SPEC_CONC_THRESHOLD": 0.15
+  }
+}

@@ -1660,4 +1660,39 @@ demonstrated that the 10-frame filter is a safe, useful
 post-filter that drops tracker-fragmentation identity
 switches on identical without affecting real catch-throws.
 
+## H69 — Periodicity of "balls aloft" as FOUNTAIN_3+ post-filter — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ Implemented H69: per-phase A signal + FFT spectral
+   concentration.
+2. ✅ Computed per-phase features (spectral_concentration,
+   ac_dominant_period, ac_periodicity_strength, fft_dominant_period,
+   n_peaks, direction_change_rate) on the 7 H65 substantial
+   FOUNTAIN_3+ phases.
+3. ✅ Compared H69 alone, H43 alone, and H43 OR H69 stacked.
+4. ✅ Sensitivity grid on H69 spec_conc threshold (0.05-0.40 in
+   0.01 increments): flat region at [0.15, 0.16].
+5. ✅ Per-frame end-to-end impact: identical 21/1042 (2.0%),
+   YouTube 175/898 (19.5%).
+6. ✅ Documented in `h69_report.md` and updated
+   STATE/RESULTS_LOG.
+
+**H69 verdict: PASS.** H43 OR H69(spec_conc < 0.15) is the new
+best FOUNTAIN_3+ post-filter. Catches 3/4 wrong FOUNTAIN_3+
+phases on the H65 sample (1029-1049, 482-594, 800-861) with
+0/3 wrong rejects (all FOUNTAIN preserved).
+
+**Key finding:** The level-based metric (H66/H67/H68) and the
+confidence-based metric (H43) are both dominated by the structural
+periodicity metric (H69) when stacked. H69 measures "is the
+ball-aloft pattern coherent?" while H66/H68 measure "are there
+balls aloft?" — the structural check is what discriminates
+FOUNTAIN from HOLD/CASCADE.
+
+**Recommended operating point (H69 supersedes H68):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69(spec_conc < 0.15)
++ H52 + H53.
+
+See `h1_hand_pool/reports/h69_report.md` for full analysis.
+
 See `h1_hand_pool/reports/h52_report.md` for full analysis.

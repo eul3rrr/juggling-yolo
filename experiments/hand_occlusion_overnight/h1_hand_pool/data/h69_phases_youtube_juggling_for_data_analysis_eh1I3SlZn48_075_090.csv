@@ -1,0 +1,4 @@
+phase_start,phase_end,n_frames,mean_confidence,mean_A,max_A,min_A,A_range,n_peaks,n_direction_changes,dchg_rate,ac_dominant_period,ac_periodicity_strength,fft_dominant_period,spectral_concentration,h69_rejected,h69_reason,h65_verdict
+339,374,36,0.646,1.727,3,0,3,8,10,0.303,15.0,0.152,16.5,0.164,False,kept,FOUNTAIN
+482,594,113,0.653,1.654,3,0,3,29,28,0.269,14.0,0.254,13.0,0.14,True,h69_spec_conc,OTHER
+800,861,62,0.651,1.298,3,0,3,15,18,0.316,8.0,0.175,6.33,0.088,True,h69_spec_conc,CASCADE

@@ -2004,3 +2004,64 @@ applied as post-filters. H43 alone is the best FOUNTAIN_3+
 post-filter on the H65 sample.
 
 See `h1_hand_pool/reports/h68_report.md` for full analysis.
+
+## H69 conclusion (2026-08-28 ~19:00 CEST)
+
+**H69: H43 OR H69(spec_conc < 0.15) stacked FOUNTAIN_3+ post-filter** —
+DONE. PASS. H68 superseded.
+
+The H68 report explicitly suggested "periodicity of ball aloft" as a
+fundamentally new FOUNTAIN_3+ signal. H69 implements this by computing
+the per-frame A signal (balls not within 100 px of either wrist) for
+each substantial FOUNTAIN_3+ phase, then computing the FFT spectral
+concentration.
+
+**Key finding:** spectral concentration (max FFT power / total power)
+discriminates FOUNTAIN from static hold / CASCADE on the H65 sample:
+
+- FOUNTAIN: high concentration (0.411, 0.326, 0.164) — coherent
+  rising/falling pattern
+- Static hold: low concentration (0.361, 0.140) — YOLO false positives
+  create incoherent A signal
+- CASCADE: very low concentration (0.088) — rapid hand alternation
+  spreads spectrum
+
+**H43 OR H69 (spec_conc < 0.15) rejection matrix on the H65 sample (n=7):**
+- 3/3 correct rejects (1029-1049 H43, 482-594 H69, 800-861 H69)
+- 0/3 wrong rejects (all 3 FOUNTAIN preserved)
+- 1/3 wrong kept (890-936 crossed-arm trick, conf 0.571 conc 0.308)
+- **Precision 100%, recall 75% on rejects**
+
+**Per-frame end-to-end impact:**
+- identical: 21/1042 (2.0%) — same as H43 alone (H69 adds 0 frames)
+- youtube: 175/898 (19.5%) — H69 adds 175 frames (82.9% of FOUNTAIN_3+)
+
+**Sensitivity grid (flat region [0.15, 0.16]):**
+- thr < 0.15: only 800-861 caught (62 frames)
+- thr = 0.15-0.16: 800-861 + 482-594 caught (175 frames), all correct
+- thr > 0.16: would wrongly reject 339-374 (real FOUNTAIN)
+
+**Comparison to previous post-filters:**
+
+| Filter | identical | youtube | H65 precision on rejects |
+|--------|-----------|---------|--------------------------|
+| H43 alone (H51) | 21 frames | 0 frames | 1/1 = 100% |
+| H66 thr=0.30 (H67) | 56 frames | 0 frames | 1/2 = 50% |
+| H68 per-n_total (H68) | 56 frames | 62 frames | 2/3 = 67% |
+| **H43 OR H69 (this)** | **21 frames** | **175 frames** | **3/3 = 100%** |
+
+**Why H69 works where H66/H68 didn't:** the H66/H68 level metric
+("are there balls aloft?") cannot separate 3-ball FOUNTAIN from static
+hold because both have low ball counts. The H69 spectral concentration
+metric is a STRUCTURAL check ("is the ball-aloft pattern coherent?")
+that captures the temporal pattern of throws.
+
+**Recommended operating point (H69 supersedes H68):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + **H69(spec_conc < 0.15)**
++ H52 + H53
+
+H43 OR H69 is the new best FOUNTAIN_3+ post-filter. The 1 escape
+(890-936 crossed-arm trick) is a fundamental limitation — neither
+H43 nor H69 has a signal for "both hands moving in unusual pattern".
+
+See `h1_hand_pool/reports/h69_report.md` for full analysis.

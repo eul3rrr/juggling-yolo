@@ -1,0 +1,2 @@
+phase_start,phase_end,n_frames,mean_confidence,mean_A,max_A,min_A,A_range,n_peaks,n_direction_changes,dchg_rate,ac_dominant_period,ac_periodicity_strength,fft_dominant_period,spectral_concentration,h69_rejected,h69_reason,h65_verdict
+1029,1049,21,0.463,0.846,1,0,1,2,2,0.154,9.0,0.056,13.0,0.361,True,h43,OTHER
