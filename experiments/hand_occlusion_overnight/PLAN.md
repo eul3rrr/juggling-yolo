@@ -855,3 +855,20 @@ This is the most complete hand-occlusion tracking pipeline
 to date. Further work would require fundamentally different
 signals (multi-view, higher frame rate, detector-level).
 
+
+## Twenty-seventh episode (H11 v6) — STATUS: COMPLETE (PASS)
+
+Sub-steps:
+1. ✅ Implemented H11 v6: identity propagation on H7v2 chains
+   with H10 v8 quality.
+2. ✅ Ran on both videos:
+   - YouTube: catch/throw events 1 → 48 (24x improvement)
+   - identical: 18 events (mostly reclassified, real catches)
+3. ✅ Documented in `h11_v6_report.md`.
+
+**Verdict: PASS.** H11 v6 gives 24x more YouTube catch/throw
+events than H11 v1, validating H7v2's reclassification.
+
+**Final summary report:** see `reports/SUMMARY.md` for a
+comprehensive overview of all 26+ research cycles.
+
