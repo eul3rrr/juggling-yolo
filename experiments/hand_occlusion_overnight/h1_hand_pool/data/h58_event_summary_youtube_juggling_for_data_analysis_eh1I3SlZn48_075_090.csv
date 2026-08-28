@@ -1,0 +1,3 @@
+chain_id,event,tid,prev_tid,event_frame,gap_frames,hand,edge_type
+6,CATCH,12,10,238,17,right,HAND_TRANSITION
+6,THROW,12,10,255,17,right,HAND_TRANSITION
