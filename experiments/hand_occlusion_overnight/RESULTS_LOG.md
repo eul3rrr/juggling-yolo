@@ -2524,3 +2524,38 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h24_visual_qa_verdicts.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h24_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h24_report.md`
+
+### H26 (2026-08-28 ~20:50 CEST)
+
+- Hypothesis: H24 visual QA found 2 NEW REAL H20-KEPT-not-in-h7v2
+  candidates (7->10, 59->61 identical) that H21 v1 did not consider.
+  H26 hypothesis: integrating these 2 additional REAL edges into the
+  h7v3pure chain set will improve chain quality vs the H21 reference.
+- Approach: H21 v1 + 2 H24 NEW REAL edges, HAND_EDGE_COST=1.0,
+  AMBIGUOUS=1.5, BALLISTIC base=2.0, re-run min-cost flow, H10 v10
+  chain quality.
+- Quantitative result:
+  - identical: 33 -> 34 edges (+1 from h7v3pure, +2 -1 in merging)
+  - identical: 43 -> 42 chains (1 chain reduction; 2 merges)
+  - YouTube: 25 edges, 15 chains (no H24-KEPT candidates were REAL)
+  - H26-KEPT admitted: 2/2 (100%) with cost=1.0
+  - H10 v10 mean quality identical: H21 v2 0.8044 -> H26 v10 0.8105 (+0.0061)
+  - H10 v10 mean quality YouTube: unchanged (0.6852)
+- H26-KEPT edge integration (identical):
+  - 7->10: src=chain 5, tgt=chain 7 -> merged into chain 5 = [7, 10]
+  - 59->61: src=chain 30, tgt=chain 35 -> merged into chain 29 = [51, 52, 54, 59, 61]
+- Verdict: **PASS (incremental improvement over H21).** H26's 2 NEW
+  REAL H20-KEPT-not-in-h7v2 edges integrate cleanly without capacity
+  conflicts and improve mean chain quality on identical. H26 is the
+  new recommended chain set for H20-KEPT-augmented analyses. See
+  `h1_hand_pool/reports/h26_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h26_chain_set_augmentation_v2.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v10_with_h26.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h26_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v10_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus2_chains_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus2_admitted_edges_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus2_h26_kept_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v10_chain_quality_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h26_report.md`

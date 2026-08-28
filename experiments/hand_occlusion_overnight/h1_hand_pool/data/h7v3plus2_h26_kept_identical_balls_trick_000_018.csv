@@ -1,0 +1,3 @@
+from_tid,to_tid,h24_verdict,vshape,which_hand,min_d,ratio,gap,h26_reason,admitted
+7,10,REAL,V_SHALLOW,left,57.35,2.239,8,H24 visually-confirmed REAL H20-KEPT-not-in-h7v2 (R->L hand-off),True
+59,61,REAL,V_DEEP,right,18.94,5.303,11,"H24 visually-confirmed REAL H20-KEPT-not-in-h7v2 (R->L hand-off, V_DEEP)",True
