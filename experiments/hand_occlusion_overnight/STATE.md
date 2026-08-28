@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 18:05 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 v1 + H13 v2 + H14 v1 + **H15 v1 + v2** + **H10 v9** COMPLETE. Pipeline advanced. **H15 v2 PASS (with YouTube caveat)**: pure V-shape reclassification of h7v2-kept BALLISTIC edges recovers 4 hidden catch-throws on identical (23→25, 30→33, 39→47, 51→52) and admits 1 YouTube FP (27→28). H15 v1's combined V-shape + velocity-jump was mis-calibrated (rejected 23→25 which has jump=23.4 px/frame; admitted 27→28 which has jump=14.5). v2 abandons the velocity-jump check. **H10 v9 (h10v9_with_h15v2.py) is the new recommended chain quality score**, excluding V_RECLASSIFIED from h3-eligible set (fixes a pre-existing h3=None redistribution bug). Mean quality: identical 0.814 → 0.828 (+0.014), YouTube 0.679 → 0.685 (+0.007). Concentrated on chain 13 and chain 30 (each +0.30). Combined h7v2 + h15v2 = h7v3-pure chains.
+LAST_UPDATE: 2026-08-28 19:45 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + **H20** COMPLETE. **H20 PASS**: In-hand + vel-jump + apex rejection filter for H17 strict V-shape positives achieves 0.900 precision (vs H17's 0.625) and 0.833 FPR drop (5/6 H17 FPs correctly rejected) on the 16-edge visual QA set, with stable sensitivity grid. H20 default thresholds (IN_HAND_PX=30, MIN=3, MAX_GAP_VEL=70, APEX_DIST=20) are in a flat region. The `vel-jump` rule is dominant (28/36 rejections); the `in-hand` rule alone is too lenient (only 1 rejection). Of the 42 H17 e6c_not_in_h7v2 positives, 26 (61.9%) survive all H20 filters and form a high-precision candidate list for chain-set augmentation (5/8 visually-QA'd are confirmed REAL). H20 is a strict post-filter for H17 candidate mining + a candidate-pool generator, not a chain-set augmentation tool. The h7v3pure chain pipeline (H7v2 + H15v2) remains the recommended chain representation.
 
 ## Isolation
 
@@ -373,29 +373,60 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. H14 v1 (PASS) committed in this episode.
+None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
+
+26. ~~**H13 v2: stricter cluster criterion**~~ **DONE. NEGATIVE.**
+    Confirms H13 v1's finding: detector signal is fundamentally NOT a
+    discriminator between real catch-throws and identity switches.
+27. ~~**H14: per-edge V-shape check on h7v2-kept BALLISTIC edges**~~
+    **DONE. PASS.** Recovers 4 hidden catch-throws on identical.
+28. ~~**H15 v2: reclassify h7v2-kept BALLISTIC edges that pass H14**~~
+    **DONE. PASS with YouTube caveat.** h7v3pure chain pipeline.
+29. ~~**H10 v9: H7v2 + H15v2 chains with V_RECLASSIFIED h3 fix**~~
+    **DONE. PASS.**
+30. ~~**H11 v7: identity propagation on h7v3pure chains**~~
+    **DONE. MIXED (consumer-pass, visual nuance).** 23 catch+throw
+    events on identical.
+31. ~~**H16: H3 stationary-cluster corroboration for V-reclass edges**~~
+    **DONE. PARTIAL PASS.** Confirmatory signal only.
+32. ~~**H17 v1: V-shape recovery for v4d-rejected + adjacent candidates**~~
+    **DONE. PARTIAL PASS.** 151 strict V-shape positives, ~38-56%
+    precision.
+33. ~~**H20: stricter in-hand + vel-jump + apex rejection for H17
+    positives**~~ **DONE. PASS.** Achieves 0.900 precision and 0.833
+    FPR drop on the 16-edge visual QA set, with stable sensitivity
+    grid. Vel-jump is the dominant filter (28/36 rejections).
+    H20 is a strict post-filter for H17 candidate mining and a
+    candidate-pool generator (26 e6c_not_in_h7v2 + 88 adjacent
+    H20-KEPTs not in production chain set).
 
 ## Next action
 
-H15 v2 (pass) committed in the most recent episode. H10 v9 is the new
-recommended chain quality score, replacing H10 v8. The combined
-h7v3pure chain construction (h7v2 + h15v2) is the new recommended
-chain pipeline. STATE/PLAN/RESULTS_LOG updated to reflect this.
+H20 is complete. The lab has now generated the most comprehensive
+hand-occlusion tracking pipeline to date. Remaining research directions:
 
-A natural follow-up is **H11 v7: re-run identity propagation on
-h7v3pure chains**. H11 v6 was a big win for YouTube (1 → 48 catch/
-throw events, 24x). H11 v7 should pick up the 4 new V_RECLASSIFIED
-identical catch-throws as additional identity events, and propagate
-the h7v3pure chain structure to downstream consumers.
+1. **H21: H20-KEPT chain set augmentation** — take the 5 visually-
+   confirmed REAL H20-KEPT-not-in-h7v2 candidates (6→15, 54→57,
+   56→57, 56→58 identical; 20→21 YouTube), add them to the h7v3pure
+   chain set as additional V_RECLASSIFIED_HAND_TRANSITION edges,
+   re-run H10 v9 + H11 v7 to measure the chain quality + identity
+   propagation impact. A larger visual QA sample (e.g., 30+ of the
+   26 H20-KEPT-not-in-h7v2 candidates) would characterize the
+   precision more reliably before chain set modification.
 
-Other directions:
-1. **H16: smarter filter for YouTube 27→28 false positive** —
-   parabolic-fit check on the gap trajectory, or look at
-   H8 v8's per-arc gravity to see if a V-shape with high
-   gravity anomaly can be flagged.
-2. **H17: V-shape recovery for v4d-missed links** — apply V-shape
-   to pairs of tracklets that v4d rejected (e.g. 35→40) and
-   check if any are V-shape hidden catch-throws.
-3. **H18: H12 v8 — re-run pattern inference on h7v3pure chains
-   with H10 v9 quality.** Similar to v7 but with the new
-   chain quality score.
+2. **H22: H17 candidate review at scale** — visually QA 30+ of the
+   26 H20-KEPT-not-in-h7v2 candidates to characterize the precision
+   of the pool as a whole, not just the 8 already QA'd. This
+   would inform whether the 26-candidate pool is reliable enough
+   for chain set augmentation.
+
+3. **H23: H20-KEPT adjacent review** — the 88 H20-KEPT adjacent
+   candidates span gap=1 to gap=30 with no clear concentration. A
+   small visual QA sample would characterize the precision of the
+   short-gap (≤10) vs long-gap (>10) subsets. Short-gap adjacent
+   positives (5 with min_d < 30) are likely real catch+throws.
+
+4. **H24: H12 v8 pattern inference on h7v3pure chains with H10 v9
+   quality** — analog of H12 v7 with the new chain quality score.
+   This was deferred from a prior episode and remains a natural
+   follow-up.

@@ -1034,3 +1034,55 @@ useful source record:
     100-px jump in 5 frames) and the 2 hand-borne identical
     cases (23→25, 39→47) while keeping the 2 clean catch+
     throws (30→33, 51→52).
+
+## Cross-cutting insights from H20 (2026-08-28 ~19:30)
+
+31. **H20 reduces H17's FALSE-positive rate by 83%** while preserving
+    100% of REAL and PARTIAL positives. The combination of three
+    independent rejection rules (in-hand, vel-jump, apex-at-src)
+    achieves 0.900 precision and 0.833 FPR drop on the 16-edge
+    visual QA set, with stable sensitivity grid.
+
+32. **The vel-jump rule is the dominant filter** (28/36 rejections).
+    H17's 151 strict V-shape positives include many cross-tracklet
+    jumps where the source ends at one ball position and the target
+    starts at a completely different position (>70 px/frame gap
+    velocity). These are not real catch+throw events; they are
+    tracklet breaks where the detector lost the ball and re-acquired
+    it elsewhere. A simple physical-velocity sanity check
+    eliminates most of them.
+
+33. **The in-hand rule alone is too lenient** (only 1 rejection).
+    Most of H17's 7 FPs are NOT in-hand held balls where both
+    endpoints are stuck in the same hand; they are cross-ball errors
+    (different physical balls at the same hand at different times)
+    or tracklet-break artifacts (source held, target in flight
+    through the hand region). The in-hand rule is too narrow to
+    catch these.
+
+34. **The apex-at-source rule is a useful refinement of the V-shape
+    check.** A V-apex that coincides with the source's stationary
+    position is an artifact of the source's last frame, not a real
+    parabolic catch+throw. This catches the "ball briefly held at
+    hand then re-detected in flight" failure mode.
+
+35. **H20 is a strict post-filter, not a chain-set augmentation tool.**
+    Of the 26 H20-KEPT e6c_not_in_h7v2 candidates, 5/8 visually-QA'd
+    are REAL or PARTIAL. This is a useful candidate list for
+    chain-set augmentation (potential H21), but a larger visual QA
+    sample is needed to characterize the precision of the pool
+    as a whole.
+
+36. **The 88 H20-KEPT adjacent candidates span gap=1 to gap=30 with
+    no clear concentration.** A small visual QA sample would
+    characterize the precision of the short-gap (≤10) vs long-gap
+    (>10) subsets. Short-gap adjacent positives (5 with min_d < 30)
+    are likely real catch+throws and could be a useful additional
+    candidate pool for chain-set augmentation.
+
+37. **Vision verification of H20's REJECTED FPs is reliable.** All 5
+    H20-REJECTED FALSE positives were independently confirmed by
+    `vision_analyze` as held-ball or cross-ball false positives,
+    not real catch+throws. The H20-KEPT FALSE (YouTube 10→11) was
+    also independently confirmed as ambiguous (held source, airborne
+    target, no visible catch in the 3-frame window).

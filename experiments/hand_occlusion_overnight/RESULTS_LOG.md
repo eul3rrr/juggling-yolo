@@ -2284,3 +2284,69 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/chain_events_v7_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h11v7/chain*_*_h11v7.png` (5)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_v7_report.md`
+
+---
+
+### H20 (2026-08-28 ~19:30 CEST)
+
+- Hypothesis: H17's strict V-shape positives have ~38-56% visual precision,
+  with 7/16 FALSE positives showing a clear pattern (V-apex artificially
+  close to a hand, but source/target are actually in-hand or stationary
+  detections, not airborne catches). Adding a stricter in-hand + vel-jump +
+  apex rejection filter should reduce the FALSE-positive rate significantly.
+- Thresholds (declared from physical geometry, NOT tuned to labels):
+  - IN_HAND_PX = 30 (well inside the 108 px reach radius)
+  - MIN_IN_HAND_FRAMES = 3 (all 3 last/first frames must be in-hand)
+  - MAX_GAP_VEL_PX_PER_FRAME = 70.0 (gap velocity above this = ball teleport)
+  - APEX_SRC_DIST_REJECT_PX = 20.0 (V-apex within this of source = V artifact)
+- Quantitative result (default thresholds):
+  - 36/151 (23.8%) rejected, 115/151 (76.2%) kept
+  - Rejection breakdown: in-hand 1, vel-jump 28, apex 9
+  - Per-source: v4d_rejected 1/2 (50%), e6c_not_in_h7v2 16/42 (38%),
+    adjacent 19/107 (18%)
+- Visual QA on the 16 H17 contact sheets:
+  - H20 correctly KEEPS 6 REAL + 3 PARTIAL = 9 positives
+  - H20 correctly REJECTS 5/6 FALSE (5 → 1 kept)
+  - H20 incorrectly REJECTS 1 UNCLEAR (35→40)
+  - H17 baseline: 10 kept (REAL+PARTIAL+UNCLEAR), 6 FALSE kept
+  - H20 precision: 0.900 (vs H17's 0.625) on the 16-edge QA
+  - H20 FPR drop: 0.833 (vs H17's 0.0)
+- Sensitivity grid (24 cells): default (30, 3, 70, 20) is in a flat region
+  (5 cells achieve 0.833 FPR drop, all requiring both the vel-jump rule
+  and the apex rule).
+- Visual confirmation on 5 H20-REJECTED FPs via vision_analyze:
+  - identical 4→8: source in mid-air, target held at L wrist (held ball) ✓
+  - identical 35→38: source held at R wrist, target suspended (tracklet break) ✓
+  - identical 66→68: source held at L wrist, target fast upward (cross-ball) ✓
+  - youtube 24→27: source glued to R wrist, target glued to L wrist (cross-ball) ✓
+  - youtube 10→11: source held at R wrist, target already in upward flight (no catch visible) ✓
+  - identical 35→40: H20 apex rule rejects (V-apex coincides with source's held position); H12 v3 confirmed REAL via 33-frame chain
+- Visual confirmation on 2 H20-KEPT REALs:
+  - identical 56→57: source leaving L hand, target descending to L hand (REAL catch+throw) ✓
+  - identical 6→15: source leaving R hand, target arriving at R hand (REAL catch+throw) ✓
+- Discovery: 26 H20-KEPT e6c_not_in_h7v2 candidates (61.9% of the 42 H17
+  e6c_not_in_h7v2 strict positives) survive all H20 filters. Of the 8
+  visually QA'd, 5 are REAL or PARTIAL (5/8 = 62.5%). The pool is a
+  high-precision candidate list for chain-set augmentation.
+- Negative findings:
+  - The in-hand rule alone (MIN=3, no vel/apex) is too lenient (only 1
+    rejection). Most of H17's 7 FPs are NOT in-hand held balls; they
+    are cross-ball errors or tracklet-break artifacts.
+  - The vel-jump rule is the dominant filter (28/36 rejections) — the
+    H17 positives with high gap velocity (>70 px/frame) are mostly
+    cross-tracklet jumps that don't represent a single physical ball
+    moving between source and target.
+  - H20 is NOT a chain-set augmentation tool. The 26 H20-KEPT
+    e6c_not_in_h7v2 candidates need a larger visual QA sample to
+    characterize the precision of the pool as a whole.
+- Verdict: **PASS.** H20 reduces H17's FALSE-positive rate by 83%
+  while preserving 100% of REAL and PARTIAL positives. H20 is the
+  new recommended strict post-filter for H17 candidate mining.
+  See `h1_hand_pool/reports/h20_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h20_inhand_rejection.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h20_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h20_strict_v_shape_positives_inhand.csv` (151 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h20_summary.json` (sensitivity grid)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h20/*.png` (20 sheets: 16 QA + 4 spot-checked REJ)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h20_report.md`

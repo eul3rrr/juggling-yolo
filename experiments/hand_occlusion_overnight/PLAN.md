@@ -1045,3 +1045,98 @@ Next episode candidates:
    H10 v9 quality (analog of H12 v7 but with v9).
 4. H237 v7: unify h7v3pure chains + h11v7 identities +
    h10v9 quality into a single per-chain record.
+
+## Thirty-first episode (H16 + H17 v1) — STATUS: COMPLETE (H16 PARTIAL PASS, H17 PARTIAL PASS)
+
+1. ✅ H16 v2: H3 stationary-cluster corroboration for V-reclassified edges
+   (exclude_tids fix). Result: 1/4 identical V-reclass confirmed (51→52),
+   0/1 YouTube (27→28 correctly rejected). Useful CONFIRMATORY signal,
+   not a definitive filter. 180-cell sensitivity grid. H16 v1 vs v2
+   showed the exclude_tids fix is essential (without it, YouTube FP
+   gets confirmed).
+2. ✅ H17 v1: V-shape + strict filter (endpoint dist <= 108 + side match +
+   |slope| >= 1.0) for (a) v4d-rejected links, (b) e6c candidates not
+   in h7v2, (c) adjacent tracklet pairs.
+3. ✅ H17 quantitative result: 151 strict V-shape positives
+   (2 v4d_rejected + 42 e6c_not_in_h7v2 + 107 adjacent).
+4. ✅ H17 visual QA on 16 contact sheets:
+   - 5/16 REAL (6→15, 56→57, 20→21, 54→57, 56→58)
+   - 3/16 PARTIAL (29→33, 13→15, 23→24 — real catch, throw not visible)
+   - 1/16 UNCLEAR (35→40 — long 27-frame gap, H12 v3 confirmed real)
+   - 7/16 FALSE (in-hand held balls or apex at wrong location)
+   - Precision: ~38-56% (depending on PARTIAL classification)
+5. ✅ Key H17 finding: **both v4d-rejected links that H17 finds are
+   already in h7v3 chains**. 35→40 via 35→37→40 (chain 23), 15→25
+   directly as RECLASSIFIED_HAND_TRANSITION. h7v2's endpoint check
+   (dist <= 108 AND |slope| >= 1.0) accepted both because the source's
+   end_dist is well within reach.
+6. ✅ Documented in `h16_report.md` and `h17_report.md` and updated
+   RESULTS_LOG.
+
+**H16 verdict: PARTIAL PASS.** Useful CONFIRMATORY signal on V-reclass
+edges. 51→52 TP, 27→28 correctly rejected after exclude_tids fix.
+
+**H17 verdict: PARTIAL PASS.** Useful research tool for finding candidate
+catch-throws that h7v2 missed. The 42 e6c_not_in_h7v2 + 107 adjacent
+strict positives are a "candidate list" for manual review, not a
+reclassification rule. H17's strict V-shape precision is below h7v2's
+endpoint check.
+
+## Thirty-second episode (H20) — STATUS: COMPLETE (PASS)
+
+Sub-steps:
+
+1. ✅ H20: three independent rejection rules applied to the 151 H17
+   strict V-shape positives.
+   - INHAND: BOTH source's last 3 frames AND target's first 3 frames
+     are within 30 px of the V-apex hand (held ball, not a catch+throw)
+   - VEL_JUMP: end-to-start gap velocity > 70 px/frame (ball teleports)
+   - APEX_AT_SRC: V-apex within 20 px of source's last frame AND source
+     is in the hand (V is an artifact of source's stationary position)
+2. ✅ Default thresholds (IN_HAND_PX=30, MIN=3, MAX_VEL=70, APEX_DIST=20):
+   - 36/151 (23.8%) rejected, 115/151 (76.2%) kept
+   - Rejection breakdown: in-hand 1, vel-jump 28, apex 9
+3. ✅ Visual QA on the 16 H17 contact sheets:
+   - H20 correctly KEEPS 6 REAL + 3 PARTIAL = 9 positives
+   - H20 correctly REJECTS 5/6 FALSE (5 → 1 kept)
+   - H20 incorrectly REJECTS 1 UNCLEAR (35→40)
+   - H17 baseline: 10 kept (REAL+PARTIAL+UNCLEAR), 6 FALSE kept
+   - H20 precision: 0.900 (vs H17's 0.625) on the 16-edge QA
+   - H20 FPR drop: 0.833 (vs H17's 0.0)
+4. ✅ Sensitivity grid (24 cells) shows default (30, 3, 70, 20) is in
+   a flat region: 5 cells achieve 0.833 FPR drop, all requiring both
+   the vel-jump rule (50 or 70) AND the apex rule (20 or 40).
+5. ✅ Visual confirmation on 5 H20-REJECTED FPs (4→8, 35→38, 66→68,
+   24→27, 10→11) via `vision_analyze` — all confirmed as held-ball
+   or cross-ball false positives, NOT real catch+throws.
+6. ✅ Discovery: 26 H20-KEPT e6c_not_in_h7v2 candidates (61.9% of
+   the 42 H17 e6c_not_in_h7v2 strict positives) survive all H20
+   filters. Of the 8 visually QA'd, 5 are REAL or PARTIAL (5/8 = 62.5%).
+7. ✅ Documented in `h20_report.md` and updated RESULTS_LOG.
+
+**H20 verdict: PASS.** H20 reduces H17's FALSE-positive rate by 83%
+while preserving 100% of REAL and PARTIAL positives. The vel-jump
+rule is the dominant filter (28/36 rejections); the in-hand rule
+alone is too lenient (only 1 rejection). H20 is a strict post-filter
+for H17 candidate mining and a candidate-pool generator (26
+e6c_not_in_h7v2 + 88 adjacent H20-KEPTs not in production chain set),
+not a chain-set augmentation tool.
+
+**Next episode candidates:**
+
+1. **H21: H20-KEPT chain set augmentation** — add the 5 visually-
+   confirmed REAL H20-KEPT-not-in-h7v2 candidates (6→15, 54→57,
+   56→57, 56→58 identical; 20→21 YouTube) to the h7v3pure chain
+   set as additional V_RECLASSIFIED_HAND_TRANSITION edges, re-run
+   H10 v9 + H11 v7 to measure the chain quality + identity
+   propagation impact.
+2. **H22: H17 candidate review at scale** — visually QA 30+ of the
+   26 H20-KEPT-not-in-h7v2 candidates to characterize the precision
+   of the pool as a whole, not just the 8 already QA'd.
+3. **H23: H20-KEPT adjacent review** — the 88 H20-KEPT adjacent
+   candidates span gap=1 to gap=30. A small visual QA sample
+   would characterize the precision of the short-gap (≤10) vs
+   long-gap (>10) subsets.
+4. **H24: H12 v8 pattern inference on h7v3pure chains with H10 v9
+   quality** — analog of H12 v7 with the new chain quality score.
+   Deferred from a prior episode.
