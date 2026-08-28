@@ -219,7 +219,10 @@ evidence (ballistic continuation from the last observation).
 ## 9. Artifacts
 
 - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h2_chain_combination.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h2_contact_sheets.py`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_summary.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_chains_*.csv` (2 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_edges_*.csv` (2 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_conflicts_*.csv` (2 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h2/*.png` (5 PNGs)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h2_report.md`
