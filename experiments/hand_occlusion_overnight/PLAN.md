@@ -320,28 +320,48 @@ v4 trades YouTube false positives for identical false
 negatives. Neither v3 nor v4 alone is ideal. v3
 retained as H10's H8 signal.
 
-## Twelfth episode — PLANNED
+## Twelfth episode (H8 v5 + H10 v5) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Wrote `h8_v5_parabolic.py` that fits a parabola to the
+   last 8 / first 8 frames of source / target and predicts
+   expected y-velocity with constant-gravity extrapolation.
+2. ✅ Ran on both videos. Identical: 12 OK, 10 VIOLATING,
+   1 INSUFFICIENT. YouTube: 0 OK, 23 VIOLATING, 1 INSUFFICIENT.
+3. ✅ Visual QA on 3 v5 catches: 60→64, 21→22 (NEW), 64→68.
+   All confirmed real identity switches.
+4. ✅ Wrote `h10v5_with_h8v5.py` to compute H10 quality
+   with v5 physics (graduated 0.5 for INSUFFICIENT_DATA).
+5. ✅ Ran on both videos. Identical: 6 chains IMPROVED
+   rank, 3 WORSENED, 34 unchanged.
+6. ✅ Visual QA on biggest rank movers: chain 24, 29
+   (v3 false positives that v5 correctly demotes), chain 36
+   (v3 false negative that v5 correctly promotes).
+7. ✅ Documented in `h8_v5_report.md` and `h10v5_report.md`.
+
+**H8 v5 verdict: MIXED.** v5 catches 2 NEW identity switches
+on identical that v3 missed. YouTube limitation persists.
+
+**H10 v5 verdict: PASS.** v5 is better-calibrated than v3.
+H10 v5 is the new recommended chain quality score.
+
+## Thirteenth episode — PLANNED
 
 Remaining ideas:
 
-1. **H8 v5: parabolic-fit long-tracklet physics** —
-   for long tracklets, fit a parabola to the last 8-12
-   frames of source and first 8-12 frames of target,
-   then predict the expected y-velocity at the gap edges
-   using constant-gravity extrapolation. Compare predicted
-   to actual. This would be more robust than v3 (which
-   uses 3-frame mean velocity) and v4 (which skips long
-   tracklets). Should improve H10 for YouTube chains.
-2. **H11: chain quality regression test** — train a
-   simple classifier on the H3+H8+H9 features plus a
-   few additional ones (chain length, gap variance,
-   hand-edge count) to predict chain quality. Compare
-   to H10's hand-tuned weights. If the classifier
-   agrees with H10's ranking, H10 is well-calibrated.
-3. **H9 v2: Kalman-filter extrapolation** — replace
-   H9's linear interpolation with a Kalman filter
-   (constant gravity) for gap-frame position estimates.
-4. **H12: tracklet-level identity propagation** —
-   given a high-quality chain, propagate identity
-   labels across the chain to enable juggling-pattern
-   analysis (downstream consumer of H10 quality).
+1. **H11: tracklet-level identity propagation** — given
+   a high-quality H10 v5 chain, propagate identity labels
+   across the chain to enable juggling-pattern analysis.
+2. **H8 v6: per-bounce segmentation for long tracklets**
+   — detect parabolic arc boundaries within long tracklets
+   and only use the local arc's tail/head for the physics
+   check. This would solve the YouTube long-tracklet problem.
+3. **H10 v6: combined H3 + H8 v5 + H9 features into a
+   logistic-regression-trained quality classifier** — see
+   if a learned model outperforms H10 v5's hand-tuned
+   weights.
+4. **H12: integrate H10 v5 with the unified chain
+   representation** — produce `h237v5_unified_chains_*.csv`
+   with the H10 v5 quality as a per-chain field, so
+   downstream consumers can use it directly.

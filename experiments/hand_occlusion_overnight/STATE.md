@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 07:50 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge). H8v4 (short-tracklet-only) NEGATIVE: trades false positives on YouTube long-tracklets for false negatives on identical long-tracklet identity switches (5→6). v3 retained as H10's H8 signal.
+LAST_UPDATE: 2026-08-28 08:15 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge). H8v4 (short-tracklet-only) NEGATIVE: trades false positives on YouTube long-tracklets for false negatives on identical long-tracklet identity switches (5→6). H8v5 (parabolic fit + gravity) MIXED: catches 2 NEW identity switches on identical that v3 missed (60→64, 21→22). YouTube limitation persists (long-tracklet phase changes look like identity switches to v5). H10v5 (H8 v5 instead of v3 in H10) PASS: v5 correctly demotes 2 v3-false-positives (chains 24, 29) and promotes 1 v3-false-negative (chain 36). H10 v5 is the new recommended chain quality score.
 
 ## Isolation
 
@@ -200,18 +200,22 @@ extraction: 10 identical + 1 youtube links with visual precision
    On identical, v4 misses 2 known true positives (5→6, 50→55)
    that v3 correctly caught. Trade-off not worth it. v3
    retained as H10's H8 signal.
-7. **H8 v5: parabolic-fit long-tracklet physics** — for long
-   tracklets, fit a parabola to the last 8-12 frames of source
-   and first 8-12 frames of target. Use the parabolic fit to
-   predict the expected y-velocity at the gap edges with
-   constant-gravity extrapolation. Compare predicted to
-   actual. This would be more robust than v3 (which uses
-   3-frame mean velocity) and v4 (which skips long tracklets).
-8. **H9 v2: Kalman-filter extrapolation** — replace H9's
-   linear interpolation with a Kalman filter (constant
-   gravity) for gap-frame position estimates. This would
-   give more accurate ball positions during detector
-   dropouts and improve H10's h9_score.
+7. ~~**H8 v5: parabolic-fit physics**~~ **DONE. MIXED result.** v5
+   fits a parabola to last 8 / first 8 frames of source / target
+   and predicts the expected y-velocity with constant-gravity
+   extrapolation. v5 catches 2 NEW identity switches on identical
+   (60→64, 21→22) that v3 missed. YouTube limitation persists
+   (long-tracklet phase changes look like identity switches).
+8. ~~**H10 v5: replace v3 with v5 in H10**~~ **DONE. PASS.** v5
+   correctly demotes 2 v3-false-positives (chains 24, 29) and
+   promotes 1 v3-false-negative (chain 36). H10 v5 is the new
+   recommended chain quality score. 6 chains IMPROVED rank,
+   3 WORSENED, 34 unchanged. Mean quality similar (0.539 vs 0.529).
+9. **H11: tracklet-level identity propagation** — given
+   a high-quality H10 v5 chain, propagate identity labels
+   across the chain to enable juggling-pattern analysis.
+   This would be a downstream consumer of the H10 quality
+   score.
 
 ## Important artifact paths
 

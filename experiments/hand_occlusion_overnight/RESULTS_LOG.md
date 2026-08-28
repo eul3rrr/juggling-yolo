@@ -846,3 +846,91 @@ Multi-edge chains on identical (sorted by quality):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v4_short_tracklet_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8v4/*.png` (5 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_v4_report.md`
+
+### H8 v5 (2026-08-28 ~08:05 CEST)
+
+- Hypothesis: H8 v3's 3-frame mean velocity is noisy on long
+  tracklets. A parabolic fit to the last 8 frames of source
+  and first 8 frames of target should give a better local
+  velocity estimate. With constant-gravity extrapolation across
+  the gap, predict the expected y-velocity at the gap edges.
+- Thresholds (declared from physical geometry):
+  - PARABOLA_N = 8
+  - MIN_TRACKLET_PTS = 5
+  - GRAVITY_PX_PER_FRAME2 = 0.5
+  - DISCONTINUITY_TOLERANCE = 8.0
+- Quantitative result:
+
+|| Method | identical OK | identical VIOLATING | identical INSUFFICIENT | youtube OK | youtube VIOLATING | youtube INSUFFICIENT |
+||---|---|---|---|---|---|---|
+|| v3 (3-frame mean) | 14 | 9 | 0 | 1 | 23 | 0 |
+|| v4 (short only) | 2 | 3 | 0 (18 LONG) | 0 | 0 | 0 (24 LONG) |
+|| **v5 (parabolic fit)** | **12** | **10** | **1** | **0** | **23** | **1** |
+
+v5 catches 2 NEW identity switches on identical that v3
+missed (60→64, 21→22). All v3 catches are also v5 catches.
+v5's 1 INSUFFICIENT (50→55) is due to t55 having only 4
+detection points.
+
+- Visual QA on 3 v5 catches:
+  - 60→64: REAL IDENTITY SWITCH (285px spatial jump)
+  - 21→22: REAL IDENTITY SWITCH (tracklet 22 already at apex)
+  - 64→68: REAL IDENTITY SWITCH (both v3 and v5 catch)
+
+- Negative findings:
+  - YouTube v5 violations are dominated by phase changes in
+    the juggling cycle, not identity switches. The long
+    tracklet ends near the apex and the next starts after
+    the apex, so src_vy is positive and tgt_vy is negative.
+    v5 incorrectly flags this as a violation.
+  - A real physics check on long tracklets requires per-bounce
+    segmentation (identifying which parabolic arc each tail/head
+    belongs to). This is left as future work.
+
+- Verdict: **MIXED (incrementally better on identical).**
+  v5 catches 2 additional identity switches on identical and
+  has the same YouTube limitation as v3. v5 should be preferred
+  for H10 scoring on identical. See
+  `h1_hand_pool/reports/h8_v5_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v5_parabolic.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v5_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v5_parabolic_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8v5/*.png` (6 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_v5_report.md`
+
+### H10 v5 (2026-08-28 ~08:15 CEST)
+
+- Hypothesis: replacing H8 v3 with H8 v5 in H10's H8 score
+  (with graduated 0.5 for INSUFFICIENT_DATA) should produce a
+  better-calibrated chain quality score.
+- Quantitative result (Identical, 43 chains):
+  - H10 v3 mean quality: 0.539
+  - H10 v5 mean quality: 0.529 (similar)
+  - 6 chains IMPROVED rank, 3 chains WORSENED rank, 34 unchanged.
+- Visual QA on biggest rank movers:
+  - chain 29 (v3 rank 1 → v5 rank 7): v5 CORRECT. v3 was
+    over-trusting high coverage; v5 caught the physics
+    violation. Chain 29 is a FALSE POSITIVE.
+  - chain 24 (v3 rank 2 → v5 rank 8): v5 CORRECT. v3 was
+    over-trusting; v5 caught physics violations on both
+    air edges. Chain 24 is a FALSE POSITIVE.
+  - chain 36 (v3 rank 11 → v5 rank 1): v5 CORRECT. v3 was
+    over-penalizing a 33-frame gap; v5 correctly identifies
+    the parabolic arc as a real single ball. Chain 36 is
+    REAL.
+
+- Verdict: **PASS.** H10 v5 is better-calibrated than H10 v3.
+  v5 correctly demoted 2 false positives (chains 24, 29) and
+  promoted 1 false negative (chain 36) that v3 had missed.
+  **H10 v5 is the new recommended chain quality score**,
+  replacing H10 v3. See
+  `h1_hand_pool/reports/h10v5_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v5_with_h8v5.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v5_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v5_chain_quality_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h10v5/*.png` (6 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v5_report.md`

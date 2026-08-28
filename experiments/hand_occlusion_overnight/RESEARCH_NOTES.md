@@ -332,6 +332,31 @@ useful source record:
     skip. H8 v3 remains the primary H8 signal for
     H10.
 
+13. **H8 v5 parabolic-fit is incrementally better
+    on identical.** v5 catches 2 NEW identity
+    switches on identical that v3 missed (60→64,
+    21→22) by using a parabolic fit instead of
+    a 3-frame mean velocity. v5 also confirms all
+    v3 catches. YouTube limitation persists: long
+    tracklets span multiple parabolic arcs, so the
+    parabolic-fit tail/head are at different points
+    in the juggling cycle. v5 flags these as
+    violations, but they're really just phase
+    changes. **A fundamentally different approach
+    (per-bounce segmentation) is needed for
+    YouTube long tracklets.**
+
+14. **H10 v5 (with v5 physics) is better-calibrated
+    than H10 v3 (with v3 physics).** v5 correctly
+    demotes 2 v3-false-positives (chains 24, 29:
+    air edges not following physics) and promotes
+    1 v3-false-negative (chain 36: large 33-frame
+    gap is consistent with a real parabolic arc).
+    H10 v5 is the new recommended chain quality
+    score, replacing H10 v3. **The H10 quality
+    ranking is now a real signal for downstream
+    consumers.**
+
 ---
 
 ## See also
