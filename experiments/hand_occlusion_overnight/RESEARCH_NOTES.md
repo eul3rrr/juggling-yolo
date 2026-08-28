@@ -1086,3 +1086,47 @@ useful source record:
     not real catch+throws. The H20-KEPT FALSE (YouTube 10→11) was
     also independently confirmed as ambiguous (held source, airborne
     target, no visible catch in the 3-frame window).
+
+## Cross-cutting insights from H21 (2026-08-28 ~20:00)
+
+38. **H21 chain-set augmentation integrates 3/4 visually-confirmed REAL
+    H20-KEPT edges.** The merging of (5,6)+(15) → (5,6,15),
+    (51,52,54,59,63)+(57) → (51,52,54,57), and (56)+(58) → (56,58)
+    are the first chain augmentations driven by the V-shape analysis.
+    These chains now represent longer juggling sequences that the
+    h7v3pure pipeline missed.
+
+39. **H21 v2 chain quality is slightly worse on identical (-0.023).**
+    Adding more tracklets to existing chains can introduce BALLISTIC
+    edges that h8 v5 flags as VIOLATING, reducing the chain's h8 score.
+    This is a real signal: the V-shape analysis finds catch+throws that
+    are physically real but introduce a discontinuity in the chain's
+    parabolic motion. A future experiment could weight these "V-recovered
+    edges" more carefully in H10 v9 quality.
+
+40. **The YouTube 20→21 case reveals a deeper truth about chain
+    capacity conflicts.** When two edges compete for the same successor
+    slot (16→21 vs 20→21 both want t21 as successor), the algorithm
+    keeps the first one admitted and rejects the second. But visual
+    analysis suggests 20→21 is the real catch+throw (tracklet 20 is
+    the canonical contact tracklet) and 16→21 is spurious (tracklet
+    16 is a long earlier-detection with the catch happening after t16
+    ends). A future H22 with a "veto" mode could resolve this by
+    comparing edge confidence and overriding the weaker one.
+
+41. **The H21 algorithm's "first-come-first-served" capacity rule is
+    a known limitation.** The H7v2 / H7v3pure pipeline uses a greedy
+    min-cost flow that admits edges in cost order (hand-edges before
+    air-edges). When two edges have similar cost, the order they
+    appear in the input determines the outcome. This is a stable but
+    not necessarily optimal solution. A true min-cost flow with
+    capacity constraints (e.g., a Hungarian assignment) would be more
+    principled.
+
+42. **H21 motivates a deeper investigation of "which tracklet is the
+    canonical contact?"** The 20→21 case shows that two tracklets
+    (t16 and t20) can both be in the right-hand region at the same
+    time, with the actual catch happening on the shorter (3-pt)
+    tracklet. This suggests a more general rule: **a contact event is
+    more likely to be the SHORTEST tracklet in a hand-region cluster,
+    not the longest.** A future H22 could implement this rule.

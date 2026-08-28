@@ -2350,3 +2350,57 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h20_summary.json` (sensitivity grid)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h20/*.png` (20 sheets: 16 QA + 4 spot-checked REJ)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h20_report.md`
+
+---
+
+### H21 v1 + v2 (2026-08-28 ~19:55 CEST)
+
+- Hypothesis: H20 found 26 e6c_not_in_h7v2 candidates that pass all 3
+  H20 filters. Of the 8 visually-QA'd, 5 are REAL or PARTIAL. These 5
+  represent real catch+throws that the production h7v2 chain set missed.
+  Adding them as new HAND_TRANSITION edges should merge 3 pairs of
+  identical chains (and 1 YouTube chain) without harming chain quality.
+- H21 v1 approach: take the 5 visually-confirmed REAL H20-KEPT edges,
+  add them as new HAND_TRANSITION edges with cost 1.0, re-run min-cost
+  flow. The H21 algorithm does not veto existing edges.
+- H21 v1 quantitative result:
+  - identical: 3/4 H21-KEPT edges admitted (6→15, 54→57, 56→58).
+    1/4 (56→57) rejected by capacity conflict with 56→58. 3 chain merges:
+    (5,6)+(15) → (5,6,15); (51,52,54,59,63)+(57) → (51,52,54,57);
+    (56)+(58) → (56,58). 43 → 41 chains.
+  - YouTube: 0/1 H21-KEPT edges admitted. 20→21 rejected by capacity
+    conflict with existing 16→21. 15 → 15 chains.
+- H21 v2 chain quality (H10 v9 on h7v3plus chains):
+  - identical: mean quality 0.828 → 0.804 (-0.023)
+  - YouTube: mean quality 0.685 → 0.685 (0.000)
+- Visual re-analysis of YouTube 20→21: tracklet 20 is the canonical
+  contact tracklet (3 detections at right wrist with min_d ≈ 5 px),
+  tracklet 16 is a spurious earlier-detection (n=126 frames, ending
+  2 frames before t20's contact). The existing 16→21 edge may be WRONG.
+- Negative findings:
+  - The H21 algorithm does not veto existing edges. When an H21-KEPT
+    edge conflicts with an existing edge for the same successor slot,
+    the H21-KEPT edge is rejected (1/5 case: YouTube 20→21).
+  - The H21 chains have LOWER h10 quality than h7v3pure on identical
+    (-0.023 mean). The chain merges expose BALLISTIC edges that h8 v5
+    penalizes, so the quality score is worse even though the chains
+    are more "correct" in the sense of containing more visually-confirmed
+    catch+throws.
+  - H21 v2 chain quality on YouTube is unchanged because 20→21 was
+    not admitted.
+- Verdict: **MIXED (consumer-pass, quality-neutral).** H21 successfully
+  integrates 3 of 4 visually-confirmed REAL H20-KEPT edges into the
+  identical chain set. The H21 v2 chain quality is slightly worse on
+  identical. The YouTube 20→21 case motivates a future H22 with a
+  "veto" mode that overrides existing edges when an H20-KEPT edge
+  has higher visual confidence. h7v3pure (H7v2 + H15v2) remains
+  the recommended chain set. See `h1_hand_pool/reports/h21_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h21_chain_set_augmentation.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h21v2_chain_quality.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h21_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h21v2_chain_quality_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus_chains_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus_admitted_edges_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus_h21_kept_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h21_report.md`

@@ -1122,21 +1122,57 @@ for H17 candidate mining and a candidate-pool generator (26
 e6c_not_in_h7v2 + 88 adjacent H20-KEPTs not in production chain set),
 not a chain-set augmentation tool.
 
+## Thirty-third episode (H21 v1 + v2) — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+
+1. ✅ H21 v1: take the 5 visually-confirmed REAL H20-KEPT-not-in-h7v2
+   candidates (6→15, 54→57, 56→57, 56→58 identical; 20→21 YouTube),
+   add them as new HAND_TRANSITION edges with cost 1.0, re-run
+   min-cost flow.
+2. ✅ H21 v1 result on identical: 3/4 H21-KEPT edges admitted
+   (6→15, 54→57, 56→58). 1/4 (56→57) rejected by capacity conflict
+   with 56→58 (both want t56 as source). 3 chain merges:
+   (5,6) + (15) → (5,6,15)
+   (51,52,54,59,63) + (57) → (51,52,54,57)
+   (56) + (58) → (56,58)
+3. ✅ H21 v1 result on YouTube: 0/1 H21-KEPT edge admitted.
+   20→21 rejected by capacity conflict with existing 16→21
+   (t21 already has a predecessor in the chain set).
+4. ✅ H21 v2: re-compute H10 v9 chain quality on h7v3plus chains.
+   - identical: mean quality 0.828 → 0.804 (-0.023)
+   - YouTube: mean quality 0.685 → 0.685 (0.000)
+5. ✅ Visual re-analysis of YouTube 20→21 contact sheet:
+   tracklet 20 is the canonical contact tracklet (3 detections at
+   right wrist with min_d ≈ 5 px), tracklet 16 is a spurious
+   earlier-detection (n=126 frames, ending 2 frames before t20's
+   contact). The existing 16→21 edge may be WRONG.
+6. ✅ Documented in `h21_report.md`.
+
+**H21 verdict: MIXED (consumer-pass, quality-neutral).** H21 successfully
+integrates 3 of 4 visually-confirmed REAL H20-KEPT edges into the
+identical chain set, merging 3 pairs of chains. The H21 v2 chain
+quality is slightly worse on identical (-0.023) because the new
+chains expose BALLISTIC edges that h8 v5 penalizes. The YouTube
+20→21 case is a known limitation: the H21 algorithm does not veto
+existing edges to make room for visually-confirmed alternatives.
+Visual analysis of the 20→21 case suggests the existing 16→21 edge
+is wrong (tracklet 20 is the canonical contact, not tracklet 16).
+
 **Next episode candidates:**
 
-1. **H21: H20-KEPT chain set augmentation** — add the 5 visually-
-   confirmed REAL H20-KEPT-not-in-h7v2 candidates (6→15, 54→57,
-   56→57, 56→58 identical; 20→21 YouTube) to the h7v3pure chain
-   set as additional V_RECLASSIFIED_HAND_TRANSITION edges, re-run
-   H10 v9 + H11 v7 to measure the chain quality + identity
-   propagation impact.
-2. **H22: H17 candidate review at scale** — visually QA 30+ of the
-   26 H20-KEPT-not-in-h7v2 candidates to characterize the precision
-   of the pool as a whole, not just the 8 already QA'd.
-3. **H23: H20-KEPT adjacent review** — the 88 H20-KEPT adjacent
-   candidates span gap=1 to gap=30. A small visual QA sample
-   would characterize the precision of the short-gap (≤10) vs
-   long-gap (>10) subsets.
-4. **H24: H12 v8 pattern inference on h7v3pure chains with H10 v9
-   quality** — analog of H12 v7 with the new chain quality score.
-   Deferred from a prior episode.
+1. **H22: H20-KEPT edge veto mode** — when an H20-KEPT edge is
+   rejected by capacity, check if the blocking existing edge is
+   weaker (e.g., the H20-KEPT has min_d=5.3 vs the existing has
+   min_d=21.7). If so, VETO the existing edge and admit the
+   H20-KEPT edge. This would admit the YouTube 20→21 edge and
+   improve chain quality.
+2. **H23: investigate YouTube 16→21 vs 20→21** — visually verify
+   whether 16→21 or 20→21 is the real catch+throw. A more careful
+   inspection of 16's tail frames and 20's head frames is needed.
+3. **H24: visually QA the remaining 18 H20-KEPT e6c_not_in_h7v2
+   candidates** — only 8 of 26 were visually QA'd. The full
+   26-candidate pool could be characterized more reliably with
+   additional QA.
+4. **H25: H12 v8 pattern inference on h7v3plus chains** — analog
+   of H12 v7 but with the H21 chains.

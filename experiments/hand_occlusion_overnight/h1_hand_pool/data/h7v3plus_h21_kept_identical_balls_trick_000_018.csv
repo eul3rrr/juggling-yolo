@@ -1,0 +1,5 @@
+from_tid,to_tid,h17_verdict,vshape,which_hand,min_d,ratio,gap,h21_reason,admitted
+6,15,REAL,V_DEEP,right,2.1,46.6,16,"H20-KEPT e6c_not_in_h7v2, vision-confirmed REAL",True
+54,57,REAL,V_DEEP,right,8.5,38.1,9,"H20-KEPT e6c_not_in_h7v2, vision-confirmed REAL",True
+56,57,REAL,V_DEEP,left,7.1,65.5,10,"H20-KEPT e6c_not_in_h7v2, vision-confirmed REAL",False
+56,58,REAL,V_DEEP,left,,,,"H20-KEPT e6c_not_in_h7v2, vision-confirmed REAL",True

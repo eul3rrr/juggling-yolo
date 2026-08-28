@@ -1,0 +1,2 @@
+from_tid,to_tid,h17_verdict,vshape,which_hand,min_d,ratio,gap,h21_reason,admitted
+20,21,REAL,V_DEEP,right,5.3,17.3,12,"H20-KEPT e6c_not_in_h7v2, vision-confirmed REAL (was BALLISTIC in H2, rejected by H7v2 strict endpoint check)",False
