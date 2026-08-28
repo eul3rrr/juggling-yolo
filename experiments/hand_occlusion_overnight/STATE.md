@@ -1,8 +1,8 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 00:15 CEST
+LAST_UPDATE: 2026-08-29 00:30 CEST
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
-+ H94 + H96 + **H97** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
++ H94 + H96 + H97 + **H98** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
 H36 (L, R, A) and H12 v8 pattern labels. H38 PASS (precision
@@ -3414,4 +3414,76 @@ point is the h7v3plus3 + H96 v2 stack.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h97_cross_validate_h96v2.py`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h97_summary.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h97_report.md`
+
+## H98 conclusion (2026-08-29 ~00:30 CEST)
+
+**H98: Investigate H90 NEW generalization to MIXED_3+ and CASCADE_3+** —
+DONE. NEGATIVE. The H90 NEW signal (c40g3<0.40 AND c40.max_aloft>=4)
+is FOUNTAIN_3+-specific by data, not by rule. Universal application
+catches only 1 of 4 H93 misclassifications (f=482-594) and has 0
+new TN, 0 new FN.
+
+**Per-pattern H90 NEW firing on H93 corrected GT (21 phases):**
+
+| Pattern | TP | TN | FP | FN | H90 NEW fires on |
+|---------|----|----|----|----|------------------|
+| FOUNTAIN_3+ | 5 | 1 | 1 | 0 | 1 (f=482-594 STATIC_HOLD) |
+| MIXED_3+ | 11 | 0 | 1 | 0 | 0 (no phases) |
+| CASCADE_3+ | 1 | 0 | 1 | 0 | 0 (no phases) |
+
+**Universal H90 NEW sensitivity grid:**
+```
+c40g3<0.3:  TP=17 TN=0 FP=4 FN=0 acc=0.810
+c40g3<0.35: TP=17 TN=0 FP=4 FN=0 acc=0.810
+c40g3<0.4:  TP=17 TN=1 FP=3 FN=0 acc=0.857
+c40g3<0.45: TP=17 TN=1 FP=3 FN=0 acc=0.857
+c40g3<0.5:  TP=17 TN=1 FP=3 FN=0 acc=0.857
+c40g3<0.6:  TP=17 TN=1 FP=3 FN=0 acc=0.857
+```
+
+Wide flat region (c40g3 ∈ [0.40, 0.60]) all give 1 TN (f=482-594).
+Universal H90 NEW alone is too weak to catch the 3 remaining
+misclassifications (f=685-716, f=890-936, f=2-71) because their
+c40.max_aloft < 4.
+
+**Why each misclassification is caught by a different signal:**
+
+| Misclass | Pattern | Signal that catches it | Why H90 NEW doesn't |
+|----------|---------|------------------------|---------------------|
+| f=482-594 | FOUNTAIN_3+ | H90 NEW (c40g3=0.36, max_aloft=4) | n/a (this is the target) |
+| f=890-936 | FOUNTAIN_3+ | H78 (mean_diff=14.25) | c40g3=0.10, c40.max_aloft=3 |
+| f=685-716 | CASCADE_3+ | H87+max_aloft (pct_ge3=0.16, max=4) | c40.max_aloft=3 (not 4) |
+| f=2-71 | MIXED_3+_UNCONFIRMED | H71 (spec_conc=0.075) | c40.max_aloft=3 (not 4) |
+
+The H96 v2 stack's per-pattern signal selection is already optimal.
+H90 NEW correctly stays FOUNTAIN_3+-restricted.
+
+**Verdict: NEGATIVE.** H90 NEW universal application has 0 new TNs
+on the H93 sample. The signal is FOUNTAIN_3+-specific.
+
+**Negative findings:**
+- The H93 sample has 0 MIXED_3+ and 0 CASCADE_3+ phases with
+  c40g3<0.40 AND c40.max_aloft>=4. So universal H90 NEW is safe
+  on the current data but the sample is too small to validate.
+- f=685-716 has c40.max_aloft=3 (not 4), so H90 NEW excludes it
+  by design. H87+max_aloft (which uses c00 max_aloft, not c40) is
+  the right signal for CASCADE_3+.
+- f=2-71 has c40g3=0.36 (low) but c40.max_aloft=3. H71 (spec_conc)
+  is the right signal for MIXED_3+ startup.
+
+**Future research directions (post-H98):**
+1. **H99: 3rd video for H90 NEW universal validation.** A juggling
+   video with more CASCADE_3+ / MIXED_3+ phases would characterize
+   whether the FOUNTAIN_3+ specificity is a sample artifact or a
+   real signal property.
+2. **Stop here.** The H96 v2 stack achieves PERFECT 21-phase
+   accuracy with a wide flat region. The 113 review pair metrics
+   are P=0.979, R=0.648, FPR=0.024. The (CONF or UNCER) gate
+   achieves P=1.000 on 33/33 pairs. Further improvements would
+   require fundamentally different signals.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h98_h90_new_generalization.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h98_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h98_report.md`
 
