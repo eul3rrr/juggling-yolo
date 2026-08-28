@@ -1,0 +1,75 @@
+{
+  "config": {
+    "PARABOLA_N": 8,
+    "MIN_TRACKLET_PTS": 6,
+    "GRAVITY_PX_PER_FRAME2": 0.46,
+    "DISCONTINUITY_TOLERANCE": 5.0
+  },
+  "videos": {
+    "identical_balls_trick_000_018": [
+      {
+        "chain_id": 13,
+        "from_tid": 17,
+        "to_tid": 23,
+        "f_catch": 207,
+        "f_throw": 232,
+        "flight_time": 3,
+        "gap": 25,
+        "src_n_pts": 36,
+        "tgt_n_pts": 4,
+        "h8v5_result": {
+          "physics_status": "INSUFFICIENT_DATA",
+          "src_vy": 0.0,
+          "tgt_vy": 0.0,
+          "predicted_tgt_vy": 0.0,
+          "velocity_discontinuity": 0.0,
+          "src_n_used": 36,
+          "tgt_n_used": 4
+        },
+        "h8v5_verdict": "INSUFFICIENT_DATA"
+      },
+      {
+        "chain_id": 23,
+        "from_tid": 35,
+        "to_tid": 37,
+        "f_catch": 522,
+        "f_throw": 533,
+        "flight_time": 1,
+        "gap": 11,
+        "src_n_pts": 14,
+        "tgt_n_pts": 2,
+        "h8v5_result": {
+          "physics_status": "INSUFFICIENT_DATA",
+          "src_vy": 0.0,
+          "tgt_vy": 0.0,
+          "predicted_tgt_vy": 0.0,
+          "velocity_discontinuity": 0.0,
+          "src_n_used": 14,
+          "tgt_n_used": 2
+        },
+        "h8v5_verdict": "INSUFFICIENT_DATA"
+      },
+      {
+        "chain_id": 30,
+        "from_tid": 51,
+        "to_tid": 52,
+        "f_catch": 766,
+        "f_throw": 775,
+        "flight_time": 5,
+        "gap": 9,
+        "src_n_pts": 2,
+        "tgt_n_pts": 6,
+        "h8v5_result": {
+          "physics_status": "INSUFFICIENT_DATA",
+          "src_vy": 0.0,
+          "tgt_vy": 0.0,
+          "predicted_tgt_vy": 0.0,
+          "velocity_discontinuity": 0.0,
+          "src_n_used": 2,
+          "tgt_n_used": 6
+        },
+        "h8v5_verdict": "INSUFFICIENT_DATA"
+      }
+    ]
+  }
+}

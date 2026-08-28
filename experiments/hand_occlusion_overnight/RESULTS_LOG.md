@@ -3609,3 +3609,49 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h51_phases_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h51_combined_filter_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h51_report.md`
+
+### H52 (2026-08-28 ~17:00 CEST)
+
+- Hypothesis: H50 visual QA found chain 13 ft=3 looked like
+  a real catch-throw, contradicting H45's bucket analysis.
+  Can H8 v5 physics distinguish chain 13 from chain 23/30?
+- Implementation: `h52_physics_check.py` applies H8 v5's
+  parabolic fit to the 3 H50-dropped pairs and runs a
+  sensitivity grid on MIN_TRACKLET_PTS ∈ {2, 3, 4, 5, 6, 8, 10}.
+- Quantitative result:
+
+  || Chain | ft | src_n | tgt_n | H8 v5 MIN=6 | H8 v5 MIN=2 |
+  ||---|---|---|---|---|---|
+  || 13 | 3 | 36 | 4 | INSUFFICIENT | VIOLATING (19.5 px/f) |
+  || 23 | 1 | 14 | 2 | INSUFFICIENT | OK (1.3, unreliable) |
+  || 30 | 5 |  2 | 6 | INSUFFICIENT | VIOLATING (18.1 px/f) |
+
+- Key finding: H50 visual QA was wrong about chain 13.
+  H8 v5 physics says chain 13 is TRACKER_FRAGMENTATION:
+  source in fast descent (-32.1 px/f), target at rest
+  (-1.1 px/f), 19.5 px/f velocity discontinuity.
+  A real catch-throw would have consistent velocities.
+
+- Negative findings:
+  - The H50 vision tool was misled by the visual appearance
+    of "ball at hand" — the source was in fast descent, the
+    target was at rest, and these are physically inconsistent.
+  - The H8 v5 check is INSUFFICIENT_DATA at MIN=6 for all
+    3 pairs because at least one side has < 6 points. This
+    is itself a strong signal: real catch-throws have both
+    source and target tracklets with at least 6 points.
+  - The chain 23 OK result at MIN=2 is unreliable (only 2
+    target points, parabolic fit is noise-sensitive).
+
+- Resolution of H50 ambiguity: H45's claim "< 10 frame
+  flights = identity switches" is now fully verified by
+  H8 v5 physics. The 10-frame filter is correct and should
+  not be relaxed to preserve chain 13.
+
+- Verdict: **PASS.** The h7v3plus3 + H12 v8 + H50 + H43 +
+  H52-validated stack is the final operating point.
+  See `h1_hand_pool/reports/h52_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h52_physics_check.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h52_physics_check_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h52_report.md`

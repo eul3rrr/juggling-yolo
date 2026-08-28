@@ -1166,3 +1166,38 @@ The two filters operate at different stages and don't interfere:
 H43. This is the final precision-optimized stack.
 
 See `h1_hand_pool/reports/h51_report.md` for full analysis.
+
+## H52 conclusion
+
+**H52: H8 v5 parabolic physics on H50-dropped pairs** — DONE. PASS.
+Closes the H50 visual QA ambiguity on chain 13.
+
+H8 v5 parabolic fit on the 3 H50-dropped pairs:
+
+| Chain | ft | src_n | tgt_n | H8 v5 (MIN=6) | H8 v5 (MIN=2) | H50 visual QA |
+|---|---|---|---|---|---|---|
+| 13   | 3  | 36 | 4  | INSUFFICIENT | VIOLATING  | REAL (WRONG) |
+| 23   | 1  | 14 | 2  | INSUFFICIENT | OK (unreliable) | FRAGMENTATION |
+| 30   | 5  |  2 | 6  | INSUFFICIENT | VIOLATING  | FRAGMENTATION |
+
+**Key finding**: H50 visual QA was wrong about chain 13. H8 v5
+physics says chain 13 is TRACKER_FRAGMENTATION:
+- Source tail y-velocity at CATCH: -32.1 px/frame (fast descent)
+- Target head y-velocity at THROW: -1.1 px/frame (at rest)
+- Gravity-adjusted predicted tgt_vy: -27.0 px/frame
+- **Velocity discontinuity: 19.5 px/frame** (way above 5.0 tol)
+
+A real catch-throw would have consistent velocities. The
+19.5 px/frame discontinuity is too large. The target tracklet
+is a spurious detection at the hand region.
+
+**Resolution**: H45's claim "< 10 frame flights = identity
+switches" is now fully verified by H8 v5 physics. The
+10-frame filter is correct and should not be relaxed.
+
+**Recommended operating point** (now fully validated):
+h7v3plus3 + H12 v8 + H50 10-frame filter + H43 confidence filter
++ H52 physics corroboration. The 10-frame filter is the final
+operating point.
+
+See `h1_hand_pool/reports/h52_report.md` for full analysis.

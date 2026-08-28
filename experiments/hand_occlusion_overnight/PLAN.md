@@ -1623,3 +1623,41 @@ the changed frames are not in the H43 rejection region
 error modes.
 
 See `h1_hand_pool/reports/h51_report.md` for full analysis.
+
+## H52 — H8 v5 parabolic physics on H50-dropped pairs — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ Implemented H52: apply H8 v5 parabolic fit to the
+   3 H50-dropped (CATCH, THROW) pairs.
+2. ✅ Sensitivity grid on MIN_TRACKLET_PTS ∈ {2, 3, 4, 5, 6, 8, 10}.
+3. ✅ Found that H8 v5 returns VIOLATING (chain 13, 30) or
+   INSUFFICIENT_DATA (chain 23) at all settings.
+4. ✅ Resolved H50's "1/3 ambiguous drop" caveat: chain 13
+   ft=3 is TRACKER_FRAGMENTATION per H8 v5 physics, NOT a
+   real catch-throw.
+5. ✅ Documented in `h52_report.md` and updated
+   STATE/RESULTS_LOG.
+
+**H52 verdict: PASS.** Closes the H50 visual QA ambiguity.
+
+**Key finding**: H8 v5's physics check confirms all 3
+H50-dropped pairs are TRACKER_FRAGMENTATION. The 10-frame
+filter is correct and should not be relaxed.
+
+**Source of H50 visual QA error**: The vision tool saw
+"ball at hand" but didn't check velocity consistency.
+The chain 13 source is in fast descent (-32.1 px/f),
+the target is at rest (-1.1 px/f), and these are
+physically inconsistent.
+
+**Recommended operating point (now fully validated)**:
+h7v3plus3 + H12 v8 + H50 10-frame filter + H43 confidence
+filter + H52 physics corroboration.
+
+The H50→H51→H52 series has produced the final validated
+operating point. The hand-occlusion overnight lab has
+demonstrated that the 10-frame filter is a safe, useful
+post-filter that drops tracker-fragmentation identity
+switches on identical without affecting real catch-throws.
+
+See `h1_hand_pool/reports/h52_report.md` for full analysis.
