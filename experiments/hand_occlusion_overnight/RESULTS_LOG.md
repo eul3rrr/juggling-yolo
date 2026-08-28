@@ -3878,3 +3878,37 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v4_conditional_w0.30_<stem>.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v4_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h57_report.md`
+
+### H58 (2026-08-28 ~20:00 CEST)
+
+- Hypothesis: the 4 multi-tid CONFIDENT chains (3 identical + 1
+  YouTube) at the intersection of H11 v7 and H10 v11 v3 CONFIDENT
+  criteria should be the "purest" single-ball trajectories. The
+  H12 v8 catch/throw events on these chains should reveal a clean
+  juggling pattern.
+- Identical (3 multi-tid CONFIDENT chains):
+  - chain 7: tids (11, 14), f=87-160, q11=0.704, gap=11
+  - chain 19: tids (30, 33), f=399-472, q11=0.867, gap=11
+  - chain 20: tids (31, 36), f=411-578, q11=0.908, gap=11
+- YouTube (1 multi-tid CONFIDENT chain):
+  - chain 6: tids (10, 12), f=117-309, q11=0.841, gap=17, right hand
+- Key findings:
+  - All 3 identical chains have gap_frames=11 (consistent 3-ball
+    cascade held phase).
+  - Hand alternation rate 100% for all 3 identical chains.
+  - chain 6 YouTube is a 5-ball shower pattern (same-hand events,
+    longer held phase).
+- Verdict: PASS — validates the v11 multi-tid CONFIDENT chains as
+  a clean single-ball filter. The 11-frame held phase (identical)
+  and 17-frame held phase (YouTube) are structural signatures of
+  3-ball cascade and 5-ball shower.
+- Recommended operating point: h7v3plus3 + H10 v11 v3 (H56 v1) +
+  H12 v8 + H50 + H43 + H52 + H53 + H58 pattern validation.
+- The 3 identical + 1 YouTube multi-tid CONFIDENT chains are the
+  "purest" single-ball trajectories.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h58_intersection_analysis.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h58_intersection_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h58_event_summary_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h58_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h58_report.md`

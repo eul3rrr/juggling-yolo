@@ -1415,20 +1415,66 @@ high-CV low-arc chains.
 
 See `h1_hand_pool/reports/h57_report.md` for full analysis.
 
+## H58 conclusion
+
+**H58: H11 v7 + H10 v11 v3 + H12 v8 triple intersection** — DONE.
+PASS — validates the v11 multi-tid CONFIDENT chains as a clean
+single-ball filter.
+
+**Hypothesis:** The 4 multi-tid CONFIDENT chains (3 identical + 1
+YouTube) at the intersection of H11 v7 and H10 v11 v3 CONFIDENT
+criteria should be the "purest" single-ball trajectories. The H12
+v8 catch/throw events on these chains should reveal a clean
+juggling pattern.
+
+**Identical (n=3 multi-tid CONFIDENT chains):**
+- chain 7: tids (11, 14), f=87-160, q11=0.704
+- chain 19: tids (30, 33), f=399-472, q11=0.867
+- chain 20: tids (31, 36), f=411-578, q11=0.908
+
+**Key findings:**
+- **All 3 identical chains have gap_frames=11** (consistent 11-frame
+  held phase). This is a structural signature of 3-ball cascade.
+- **Hand alternation rate 100%** for all 3 chains (alternating
+  hands, consistent with CASCADE pattern).
+- q11 range 0.704-0.908.
+
+**YouTube (n=1 multi-tid CONFIDENT chain):**
+- chain 6: tids (10, 12), f=117-309, q11=0.841, gap=17 frames,
+  right hand only. Consistent with 5-ball SHOWER pattern.
+
+**Verdict: PASS.** The 3 identical + 1 YouTube chains form a clean
+single-ball subset. The 11-frame held phase (identical) and
+17-frame held phase (YouTube) are structural signatures of 3-ball
+cascade and 5-ball shower respectively. This is the **closing
+experiment** for the chain-quality optimization arc (H54 → H55 →
+H56 → H57 → H58).
+
+**Recommended operating point (final):** h7v3plus3 + H10 v11 v3
+(H56 v1) + H12 v8 + H50 + H43 + H52 + H53 + H58 pattern validation.
+
+The 3 identical + 1 YouTube multi-tid CONFIDENT chains are the
+"purest" single-ball trajectories for downstream consumers.
+
+See `h1_hand_pool/reports/h58_report.md` for full analysis.
+
 ## Final summary
 
 The hand-occlusion overnight lab has produced a comprehensive,
-validated chain representation for both videos over 57 research
-episodes spanning ~15.5 hours. The final operating point is:
+validated chain representation for both videos over 58 research
+episodes spanning ~16 hours. The final operating point is:
 
-**h7v3plus3 + H10 v11 v4 (H57 v1) + H12 v8 + H50 10-frame filter +
+**h7v3plus3 + H10 v11 v3 (H56 v1) + H12 v8 + H50 10-frame filter +
 H43 confidence filter + H52 physics corroboration + H53 multi-rater
-visual QA**
+visual QA + H58 pattern validation**
 
 The H10 v11 v3 (H56 v1) and H10 v11 v4 (H57 v1) give the same
-label classification; v4 is the recommended operating point because
-it adds the partial penalty for high-CV low-arc chains as a
-soft warning.
+label classification; v3 is the recommended operating point.
+
+The 3 identical + 1 YouTube multi-tid CONFIDENT chains are the
+"purest" single-ball trajectories:
+- chain 7, 19, 20 identical (3-ball cascade, 11-frame held phase)
+- chain 6 YouTube (5-ball shower, 17-frame held phase)
 
 See `h1_hand_pool/reports/FINAL_SUMMARY.md` for a comprehensive
 overview of all 53 episodes, the strongest findings, the
