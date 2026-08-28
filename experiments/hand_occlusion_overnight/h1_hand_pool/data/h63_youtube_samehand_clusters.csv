@@ -1,0 +1,8 @@
+cluster_id,throw_frame,throw_hand,next_catch_frame,next_catch_hand,gap_frames,q11,q11_band,chain_id
+1,308,right,327,right,19,0.6156096059113301,UNC,7
+2,420,right,468,right,48,0.6799540133779265,UNC,3
+2,482,right,498,right,16,0.6714763497372193,UNC,0
+2,510,right,582,right,72,0.6144640234948605,UNC,9
+3,769,right,789,right,20,0.6714763497372193,UNC,0
+3,800,right,818,right,18,0.6144640234948605,UNC,9
+3,825,right,845,right,20,0.6755921052631579,UNC,8

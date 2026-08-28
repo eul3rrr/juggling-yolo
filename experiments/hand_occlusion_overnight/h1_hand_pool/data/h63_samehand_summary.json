@@ -1,0 +1,90 @@
+{
+  "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+  "n_total_pairs": 23,
+  "n_samehand": 7,
+  "n_althand": 16,
+  "samehand_rate": 0.304,
+  "n_clusters": 3,
+  "clusters": [
+    {
+      "cluster_id": 1,
+      "n_events": 1,
+      "first_frame": 308,
+      "last_frame": 308,
+      "span": 0,
+      "chains": [
+        7
+      ],
+      "gaps": [
+        19
+      ]
+    },
+    {
+      "cluster_id": 2,
+      "n_events": 3,
+      "first_frame": 420,
+      "last_frame": 510,
+      "span": 90,
+      "chains": [
+        0,
+        3,
+        9
+      ],
+      "gaps": [
+        48,
+        16,
+        72
+      ]
+    },
+    {
+      "cluster_id": 3,
+      "n_events": 3,
+      "first_frame": 769,
+      "last_frame": 825,
+      "span": 56,
+      "chains": [
+        0,
+        8,
+        9
+      ],
+      "gaps": [
+        20,
+        18,
+        20
+      ]
+    }
+  ],
+  "samehand_gaps": {
+    "n": 7,
+    "mean": 30.43,
+    "median": 20,
+    "min": 16,
+    "max": 72
+  },
+  "althand_gaps": {
+    "n": 16,
+    "mean": 24.75,
+    "median": 13.5,
+    "min": 1,
+    "max": 124
+  },
+  "hand_asymmetry": {
+    "samehand_right": 7,
+    "samehand_left": 0,
+    "althand_right": 8,
+    "althand_left": 8
+  },
+  "by_q11": {
+    "samehand": {
+      "CONF": 0,
+      "UNC": 7,
+      "LOW": 0
+    },
+    "althand": {
+      "CONF": 1,
+      "UNC": 15,
+      "LOW": 0
+    }
+  },
+  "verdict": "CASCADE-SHOWER mix (SHOWER bursts within CASCADE)"
+}
