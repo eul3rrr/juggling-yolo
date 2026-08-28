@@ -3484,3 +3484,88 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h49_filter_impact.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h49_filter_impact_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h49_report.md`
+
+### H50 (2026-08-28 ~16:30 CEST)
+
+- Hypothesis: H49's K=4-only re-classification rate is an
+  upper bound. The proper measurement requires re-running
+  H12 v8's FULL pipeline (census + K=4 events + chain quality
+  + n_total) on the filtered event log. H50 implements this.
+- Implementation: `h50_filtered_patterns.py` re-builds the
+  H12 v8 catch/throw timeline from h7v3pure hand-edges,
+  applies the 10-frame flight-time filter (drop (CATCH, THROW)
+  pairs where THROW's flight time < 10 frames), and runs the
+  full per-frame pattern inference on BOTH the unfiltered and
+  filtered event logs for an apples-to-apples comparison.
+- Quantitative result:
+
+  || Video | Unfiltered | Filtered | Dropped | n_short | Frames changed |
+  ||---|---|---|---|---|---|
+  || identical | 50 events | 44 events | 6 | 3/11 | 10/1042 (1.0%) |
+  || YouTube   | 50 events | 50 events | 0 | 0/16 | 0/898 (0.0%) |
+
+  Per-pattern delta on identical:
+  - FOUNTAIN_3+ -0.3% (3 frames)
+  - CASCADE_3+ +0.7% (7 frames)
+  - MIXED_3+ -0.3%
+  - All other patterns: 0.0% change
+  - Substantial phases (n_frames >= 20): 15 -> 15 (unchanged)
+
+  YouTube: 0.0% change across all patterns.
+
+- Visual QA on the 3 changed windows (3 contact sheets in
+  `contact_sheets_h50/`):
+  - **chain 13 ft=3 (f=207 -> f=232)**: Vision tool says this
+    looks like a REAL catch-throw (yellow trail at hand,
+    cyan trail emerging from hand, ball visible at hand).
+    This contradicts H45's prior bucket analysis that all
+    < 10-frame flights are identity switches. **H45 did not
+    visually QA this case** (only chains with n_flights >= 3
+    were QA'd). The 10-frame filter may be over-aggressive
+    here.
+  - **chain 23 ft=1 (f=522 -> f=533)**: Vision tool confirms
+    IDENTITY_SWITCH (1-frame flight is physically impossible).
+    H50 filter is correct.
+  - **chain 30 ft=5 (f=766 -> f=775)**: Vision tool confirms
+    TRACKER_FRAGMENTATION (5-frame flight, persistent teal
+    predicted markers, hands co-located). H50 filter is correct.
+
+- Negative findings:
+  - The chain 13 ft=3 case shows the 10-frame threshold is
+    approaching its useful limit. A more conservative THR=5
+    would preserve this case, but H48's sensitivity grid
+    showed THR=5-9 admits all 4 H45 REAL catch-throws plus
+    the 3 IDENTITY_SWITCHES, which is less precise.
+  - The chain 13 ft=3 case was not visually QA'd in H45
+    (only chains with n_flights >= 3 were QA'd). The H45
+    claim "all < 10-frame flights are identity switches" is
+    based on bucket analysis, not direct visual confirmation
+    of all 3 cases.
+
+- Implications:
+  - The 10-frame filter is a SAFE post-filter for H12 v8
+    event log consumers: 1.0% identical / 0.0% YouTube
+    real downstream impact.
+  - H49's K=4-only upper bound (45.2%/15.9%) was indeed an
+    upper bound, as H49 suspected. The full pipeline is
+    dominated by census + quality + n_total, not K=4.
+  - H12 v8 + 10-frame filter is the new recommended
+    operating point for downstream consumers.
+
+- Verdict: **PASS** (closes H49's negative result). The
+  10-frame flight-time filter has small, real downstream
+  impact on H12 v8's per-frame pattern labels. The 1/3
+  ambiguous drop (chain 13 ft=3) is a known limitation
+  that does not invalidate the 10-frame threshold.
+  See `h1_hand_pool/reports/h50_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h50_filtered_patterns.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h50_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_h50_*.csv` (filtered, 2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_h50_unfiltered_*.csv` (apples-to-apples baseline, 2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_phases_h50_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/catch_throw_timeline_h50_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h50_dropped_events_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h50_filtered_patterns_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h50/*.png` (3 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h50_report.md`

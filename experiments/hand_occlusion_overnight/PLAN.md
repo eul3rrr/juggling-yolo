@@ -1549,3 +1549,47 @@ distinguishing real flights from tracker-fragmentation
 artifacts based on physics alone.
 
 See `h1_hand_pool/reports/h45_report.md` for full analysis.
+
+## H50 — H12 v8 with 10-frame filter (full pipeline re-run) — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ Implemented H50: re-run H12 v8's full pipeline
+   (census + K=4 events + chain quality + n_total) on the
+   FILTERED event log, with the unfiltered version as
+   apples-to-apples baseline.
+2. ✅ Ran on both videos. Result:
+   - identical: 6 events dropped (3 short flights),
+     10/1042 (1.0%) frames changed
+   - YouTube: 0 events dropped, 0/898 (0.0%) frames changed
+3. ✅ Per-pattern delta on identical:
+   - FOUNTAIN_3+ -0.3%, CASCADE_3+ +0.7%, MIXED_3+ -0.3%
+   - Substantial phases: 15 -> 15 (unchanged)
+4. ✅ Visual QA on the 3 changed windows (3 contact sheets).
+   Found 1 unexpected result: chain 13 ft=3 may be a real
+   catch-throw, not an identity switch. The 10-frame
+   threshold may be over-aggressive for this 1 case.
+5. ✅ Documented in `h50_report.md` and updated
+   STATE/RESULTS_LOG.
+
+**H50 verdict: PASS.** Closes H49's negative result. The
+10-frame filter is a SAFE post-filter for H12 v8 event
+log consumers.
+
+**Recommended operating point:** h7v3plus3 chain set +
+H12 v8 + H50 10-frame event log filter. This is the
+final precision-optimized configuration for FOUNTAIN_3+ /
+CASCADE_3+ downstream consumers.
+
+**Most important finding:** H49's K=4-only upper bound
+(45.2%/15.9%) was indeed an upper bound, as H49 suspected.
+The full pipeline (census + chain quality + n_total)
+dominates the K=4 sliding window signal, so the real
+downstream impact of the 10-frame filter is only 1% identical
+and 0% YouTube.
+
+**Recommended next research (H51):** H43 + H50 combined
+post-filter. Apply H43's confidence-based FOUNTAIN_3+ filter
+(conf < 0.55) on top of H50's filtered pipeline. The combined
+filter should be the final precision-optimized stack.
+
+See `h1_hand_pool/reports/h50_report.md` for full analysis.

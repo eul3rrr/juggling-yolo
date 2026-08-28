@@ -1,0 +1,7 @@
+chain_id,tid,event,event_frame,hand,flight_time,reason
+13,23,THROW,232,right,3,flight_time<10
+13,23,CATCH,207,right,3,paired_with_dropped_throw_ft<10
+23,37,THROW,533,left,1,flight_time<10
+23,37,CATCH,522,left,1,paired_with_dropped_throw_ft<10
+30,52,THROW,775,unknown,5,flight_time<10
+30,52,CATCH,766,unknown,5,paired_with_dropped_throw_ft<10
