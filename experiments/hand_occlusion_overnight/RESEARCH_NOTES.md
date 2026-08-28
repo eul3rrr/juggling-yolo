@@ -855,3 +855,26 @@ useful source record:
     hand catch events), not a model bug. Multi-view or
     higher frame rate could fix it, but those are out of
     scope.
+
+## Cross-cutting insights from H11 v6 (2026-08-28 ~15:00)
+
+69. **The real payoff of H7v2 is YouTube ball ID coverage.**
+    H11 v1 emitted 1 YouTube catch/throw event. H11 v6 emits
+    48 (24x). This is because 25/27 YouTube BALLISTIC edges
+    were reclassified as HAND_TRANSITION, which now counts
+    as "hand-edge" in the identity propagation. The
+    reclassified edges provide physical ball ID coverage
+    for 24 of 40 YouTube tracklets (60%), compared to 1
+    tracklet in v1.
+
+70. **The 5-ball YouTube juggling pattern is now well-tracked.**
+    chain 0 (7 tids, q=0.671) is a real juggling cycle with
+    12 catch/throw events all on reclassified edges. This is
+    the "5 balls in a 5-ball cascade" pattern that the visual
+    confirmation at f=2 and f=500 showed.
+
+71. **H11 v6's tradeoff: fewer CONFIDENT chains on identical.**
+    H7v2's reclassification creates slightly different chains
+    than h237v5, and some longer chains are split. The 3
+    remaining multi-tracklet CONFIDENT chains on identical
+    (chains 21, 20, 8) are still real single balls.

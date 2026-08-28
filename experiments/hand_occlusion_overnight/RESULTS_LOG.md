@@ -2036,3 +2036,43 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v6_unified_chains_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v6_unified_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h237v6_report.md`
+
+### H11 v6 (2026-08-28 ~15:00 CEST)
+
+- Hypothesis: H7v2 chains + H10 v8 quality should give
+  substantially more physical ball ID coverage on YouTube
+  (because 25/27 YouTube BALLISTIC edges were reclassified
+  as HAND_TRANSITION).
+- Implementation: `h11_v6_h7v2_identities.py` reads H7v2
+  chains and edges, propagates per-tracklet ball_id, and
+  extracts CATCH/THROW events for chains with at least 1
+  hand-edge and quality >= QUALITY_TRUSTABLE.
+- Quantitative result:
+
+  | Video | Metric | v1 (h237v5) | v6 (h7v2) |
+  |---|---|---|---|
+  | YouTube | CATCH events | 1 | **24** |
+  | YouTube | THROW events | 1 | **24** |
+  | YouTube | n_CONFIDENT chains | 1 | 5 |
+  | YouTube | reclassified events | 0 | **46** |
+  | identical | CATCH events | 8 | 18 |
+  | identical | n_CONFIDENT multi | 9 | 3 |
+
+- Key finding: **YouTube catch/throw events jump 1 → 48 (24x).**
+  60% of YouTube tracklets now have a physical ball ID,
+  compared to just 1 tracklet in v1.
+- Top YouTube chain (chain 0, 7 tids, q=0.671) has 12
+  catch/throw events (6 CATCH + 6 THROW, all reclassified).
+- identical multi-tracklet CONFIDENT chains drop from 9 to 3
+  because H7v2 chains are slightly different (some longer
+  chains are split into smaller pieces by the reclassification).
+  The 3 remaining CONFIDENT chains are still real single balls.
+- Verdict: **PASS.** H11 v6 is a meaningful improvement.
+  60% of YouTube tracklets now have a physical ball ID.
+  See `h1_hand_pool/reports/h11_v6_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v6_h7v2_identities.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/tracklet_identity_v6_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/chain_events_v6_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v6_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_v6_report.md`
