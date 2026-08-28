@@ -1,0 +1,20 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_fountain_total": 298,
+      "n_low_conf": 27,
+      "n_mid_conf": 67,
+      "n_high_conf": 204,
+      "n_fountain_after": 271,
+      "n_fountain_rejected": 27
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_fountain_total": 110,
+      "n_low_conf": 0,
+      "n_mid_conf": 110,
+      "n_high_conf": 0,
+      "n_fountain_after": 110,
+      "n_fountain_rejected": 0
+    }
+  }
+}

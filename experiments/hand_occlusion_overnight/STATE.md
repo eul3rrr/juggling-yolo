@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 14:55 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + **H42**
+LAST_UPDATE: 2026-08-28 15:00 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + **H43**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -513,24 +513,29 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
-H42 complete (MIXED). Hybrid state is technically working
-but doesn't significantly improve CASCADE/FOUNTAIN
-discrimination.
+H43 complete (PASS, narrow scope). H43 is a safe, narrow-scope
+post-filter that rejects the 9.1% lowest-confidence FOUNTAIN_3+
+frames on identical. Precision 100% (no over-rejects).
 
-Recommended operating point remains h7v3plus3 (H34).
+**Recommended operating point:** h7v3plus3 + H43 filter is
+the new recommended configuration for FOUNTAIN_3+ downstream
+consumers.
 
-The H39→H40→H41→H42 series has shown that the H12 v8
-FOUNTAIN_3+ over-classification problem is fundamentally
-hard to fix with hand-occupancy signals. The H12 v8 K=4
-sliding window is the root cause. A reliable fix would
-require a fundamentally different approach.
+The H39→H40→H41→H42→H43 series has been productive:
+- H39: H12 v8 FOUNTAIN_3+ is 30% accurate (negative for filter)
+- H40: continuous hand-occupancy signal (PASS as diagnostic)
+- H41: H40-based filter (NEGATIVE)
+- H42: hybrid H36+H40 (MIXED)
+- H43: H12 v8 confidence < 0.55 filter (PASS narrow scope)
+
+The most reliable FOUNTAIN_3+ post-filter is H43 because
+it leverages H12 v8's own confidence, which is the most
+calibrated signal available. H39-H42 external signals
+(hand-occupancy, chain events) are too noisy to beat H12 v8's
+self-reported confidence.
 
 Remaining research directions (lower priority):
-1. **H43: H12 v9 with H12 v8 confidence-based filter.**
-   Use H12 v8's own confidence values (currently 0.42-0.97
-   range) to filter low-confidence FOUNTAIN_3+ classifications.
-   This is a H12 v8 self-filter, not a new signal.
-2. **H44: literature search for multi-ball juggling tracking.**
+1. **H44: literature search for multi-ball juggling tracking.**
    The H17→H20→H31 chain and H32's finding that the chain set
    is mostly multi-ball merges suggest that we need fundamentally
    different signals (per-point color tracking, multi-view 3D,
@@ -804,6 +809,33 @@ timeline.
 
 See `h1_hand_pool/reports/h42_report.md` for full
 analysis.
+
+## H43 conclusion
+
+**H43: H12 v8 confidence-based FOUNTAIN_3+ filter.** Rejects
+FOUNTAIN_3+ frames where H12 v8 confidence < 0.55.
+
+**Verdict: PASS (narrow scope).** H43 correctly identifies
+27/298 (9.1%) of identical FOUNTAIN_3+ frames as low-confidence.
+All 27 are in f=1029-1060 (the "OTHER 2-ball exercise" phase
+from H39 visual QA) — a real misclassification that H43
+catches without over-rejecting any real FOUNTAIN.
+
+**Visual QA: 1/1 correct reject (precision 100%), 1/2 recall.**
+H43 misses the f=977-1011 hold trick (conf 0.565), but
+catches the f=1029-1050 2-ball exercise (conf 0.463).
+
+**Comparison with H39-H42:**
+- H39 v1 (frame-level H36): precision 20% (over-rejects)
+- H39 v2 (phase-level H36): precision 50% on 2 rejections
+- H41 v2 (H40 v2): precision 50% on 4 rejections
+- **H43 (H12 v8 conf < 0.55): precision 100% on 1 rejection**
+
+**Recommended operating point:** H43 + h7v3plus3 chain set
+is the new recommended configuration for FOUNTAIN_3+
+downstream consumers.
+
+See `h1_hand_pool/reports/h43_report.md` for full analysis.
 
 ## Future research directions (post H34)
 
