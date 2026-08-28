@@ -1882,3 +1882,104 @@ operating point for FOUNTAIN_3+ post-filter. It combines:
 Test on:
 - H65 sample: 7 FOUNTAIN_3+ phases (3 real, 4 misclassified)
 - H70 sample: 7 FOUNTAIN_3+ phases (already covered by H65 + H72/H73)
+
+## H76 episode — STATUS: COMPLETE (PASS, limited scope)
+
+Sub-steps:
+
+1. ✅ Built comprehensive ground truth table for 19 H70 phases from
+   H65/H71/H72/H73 verdicts.
+2. ✅ Implemented H76 end-to-end evaluator that applies the full
+   stack (H75 for FOUNTAIN_3+, H74 for CASCADE_3+, H71 v1 for
+   MIXED_3+) to each H70 phase and checks against ground truth.
+3. ✅ Aggregate stats: 16/19 = 84.2% accuracy. 14/15 real juggling
+   kept (93.3% recall). 2/4 misclassifications caught (50% precision).
+4. ✅ Per-pattern breakdown:
+   - CASCADE_3+ (n=1): 0/1 correct
+   - FOUNTAIN_3+ (n=6): 4/6 correct
+   - MIXED_3+ (n=11): 11/11 correct (100%)
+   - MIXED_3+_UNCONFIRMED (n=1): 1/1 correct
+5. ✅ Compared with H59 (chain-edge evaluation on 113 review pairs):
+   H59 P=0.981, R=0.718 vs H76 phase-level accuracy 84.2%.
+6. ✅ Documented in `h76_report.md` and updated STATE.md / RESULTS_LOG.md.
+
+**H76 verdict: PASS (limited scope).** The full stack achieves
+84.2% accuracy on the H70 sample. MIXED_3+ is perfect. FOUNTAIN_3+
+is partial. CASCADE_3+ is research-only.
+
+**Key findings:**
+- MIXED_3+ post-filter is PERFECT (11/11) on H70 sample
+- FOUNTAIN_3+ post-filter is PARTIAL (4/6) — f=890-936 crossed-arm
+  not caught, f=800-861 real CASCADE mislabeled as FOUNTAIN_3+
+- CASCADE_3+ is FUNDAMENTALLY LIMITED (0/1 in H76, 0/2 in H73)
+- End-to-end accuracy 84.2% — all 3 errors on FOUNTAIN/CASCADE
+
+**Recommended operating point (post-H76, final):**
+- FOUNTAIN_3+: (H43 OR H69 OR H74) where H74=LR_variance<0.20
+- CASCADE_3+: H74 alone (1/2 catches in H73 sample)
+- MIXED_3+: H71 v1 (100% precision on H70 sample)
+
+**Future research (post-H76):**
+1. H77: extend H76 to 113 manual review pairs (combined H59 + H76)
+2. H78: novel signals for crossed-arm trick detection
+3. H79: cross-video calibration of H69 spec_conc threshold
+
+See `h1_hand_pool/reports/h76_report.md` for full analysis.
+
+## Final summary (H0 - H76)
+
+The hand-occlusion overnight lab has produced a comprehensive,
+validated chain representation for both videos over 76 research
+episodes spanning ~21 hours.
+
+**Final operating point (h7v3plus3 + H10 v11 v3 + H12 v8 + H50 +
+H70/H71/H75 v1 stack):**
+- FOUNTAIN_3+: (H43 OR H69 OR H74) where H74=LR_variance<0.20
+- CASCADE_3+: H74 alone (research signal only)
+- MIXED_3+: H71 v1 (KEEP>=0.15, REJECT<0.10)
+
+**End-to-end accuracy on H70 sample: 84.2% (16/19 correct).**
+- MIXED_3+: 11/11 correct (100%)
+- FOUNTAIN_3+: 4/6 correct
+- CASCADE_3+: 0/1 correct (research only)
+- MIXED_3+_UNCONFIRMED: 1/1 correct
+
+**Cumulative findings (76 episodes):**
+- H1-H4: hand-pool baseline (v4d is the recommended operating point)
+- H2-H7: chain combination methods (H7 min-cost flow is recommended)
+- H8-H10: chain quality scoring (H10 v11 v3 = H56 v1 is recommended)
+- H11: identity propagation (CONFIDENT chains are 9/9 visually verified)
+- H12-H12v8: per-frame pattern inference
+- H36: per-frame hand-occupancy state machine (PASS)
+- H37-H38: hand-occupancy supports CASCADE_3+ (PASS, narrow scope)
+- H39-H43: FOUNTAIN_3+ post-filter (H43 conf<0.55 is best)
+- H45-H50: H12 v8 event log 10-frame filter
+- H51-H52: H43 + H50 + H52 stack (precision-optimized)
+- H54-H58: per-chain arc-gravity CV (H56 v1 is the recommended
+  chain quality score)
+- H59: end-to-end precision/recall validation (P=0.981, R=0.718)
+- H60-H61: hold-duration and 16->21 conflict
+- H62-H64: pattern characterization (YouTube CASCADE-SHOWER mix,
+  identical CASCADE->FOUNTAIN transition)
+- H65: FOUNTAIN_3+ label validation (43% H12 v8 accuracy)
+- H66-H69: FOUNTAIN_3+ post-filter evolution (H43 + H69 is best)
+- H70: H69 spec_conc characterization across pattern types
+- H71: multi-rater visual QA on H70 contact sheets (5/7 confirmed)
+- H72: complete H70 visual QA (10/11 MIXED_3+ confirmed real)
+- H73: H40v2 as CASCADE_3+ validator (NEGATIVE, CASCADE has 0% precision)
+- H74: H40v2 L+R variance as static-hold detector (MIXED)
+- H75: H43 + H69 + H74 stacked FOUNTAIN_3+ filter (MIXED, 3/3 real kept)
+- H76: end-to-end precision/recall on H70 sample (PASS, 84.2%)
+
+**Cascade/FOUNTAIN/MIXED discrimination is fundamentally noisy:**
+- H12 v8 CASCADE_3+ has 0% precision on substantial phases
+- H12 v8 FOUNTAIN_3+ has ~60% precision on substantial phases
+- H12 v8 MIXED_3+ has ~91% precision on substantial phases (H71 v1)
+
+**Strongest signals for downstream consumers:**
+- h7v3plus3 chain set (H22+H26)
+- H10 v11 v3 chain quality (H56 v1)
+- H12 v8 per-frame patterns
+- H50 10-frame event log filter
+- H43 + H69 + H74 FOUNTAIN_3+ post-filter
+- H71 v1 MIXED_3+ post-filter
