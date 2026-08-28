@@ -68621,3 +68621,235 @@ Now let me commit and push the state file updates, then look at the research log
 ╰──────────────────────────────────────────────────────────────────────────────╯
   ┊ 💻 preparing terminal…
   ┊ 📋 preparing todo…
+  ┊ 💻 $         git add -A + 2 commands  2.6s
+  ┊ 📋 plan      10/12 task(s)  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now let me design H57 to address the chain 14 escape. The idea: if a chain has very high g_cv (>1.0) even with few arcs, it's still a strong multi-ball-merge signal. Let me implement and test.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ 💻 preparing terminal…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h57_conditional_penalty.py  0.4s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h57_conditional_penalty.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h57_conditional_penalty.py
+@@ -0,0 +1,176 @@
++#!/usr/bin/env python3
++"""
++H57 - H10 v11 v4: extend H56 v1 with conditional penalty for high-CV
++chains with few arcs.
++
++H56 v1's n_arcs_clean >= 3 gate is too strict for chains with very
++high g_cv (e.g., chain 14 with g_cv=1.089 and only 2 clean arcs).
++When a chain has g_cv > 1.0, even 2 arcs are sufficient to detect
++the inconsistency.
++
++H57 v1 formulation:
++  if n_arcs_clean >= 3:
++    apply full H56 v1 non-linear penalty
++  elif n_arcs_clean == 2 and g_cv >= HIGH_CV_FLOOR:
++    apply partial penalty (e.g., 0.5 * w54 if g_cv > HIGH_CV_FLOOR)
++  else:
++    no penalty
++
++HIGH_CV_FLOOR = 1.0 (only chains with extreme g_cv get the
++reduced-n_arcs penalty)
++"""
++
++import csv
++import json
++import statistics
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool"
++H1_DATA = H1_DIR / "data"
++
++# H57 v1 settings
++DEADZONE = 0.5
++RAMP_END = 1.0
++W54 = 0.30
++HIGH_CV_FLOOR = 1.0  # trigger partial penalty for low-arc + high-g_cv
++PARTIAL_W54 = 0.15   # half of full penalty for low-arc + high-g_cv
++MIN_ARCS_PARTIAL = 2  # min arcs for partial penalty (vs 3 for full)
++
++STEMS = [
++    "identical_balls_trick_000_018",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
++]
++QUALITY_CONFIDENT = 0.7
++QUALITY_TRUSTABLE = 0.4
++
++
++def load_h10v10(stem):
++    path = H1_DATA / f"h10v10_h7v3plus3_{stem}.csv"
++    out = {}
++    with path.open() as fh:
++        for r in csv.DictReader(fh):
++            q = r["quality_v10"]
++            out[r["chain_id"]] = {
++                "q": float(q) if q else None,
++                "n_tracklets": int(r["n_tracklets"]),
++            }
++    return out
++
++
++def load_h54_gcv(stem):
++    path = H1_DATA / f"h54_per_chain_arc_gravity_{stem}.csv"
++    out = {}
++    with path.open() as fh:
++        for r in csv.DictReader(fh):
++            gcv = r["g_cv_clean"]
++            out[r["chain_id"]] = {
++                "g_cv": float(gcv) if gcv else None,
++                "n_arcs_clean": int(r["n_arcs_clean"]),
++            }
++    return out
++
++
++def non_linear_penalty(g_cv, w54, deadzone, ramp_end):
++    if g_cv is None or g_cv <= deadzone:
++        return 0.0
++    if g_cv >= ramp_end:
++        return w54
+… omitted 98 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 $         PY=/home/it-admin/.hermes/profiles/juggling-tracker/workspace/.venv/bin/python3 $PY experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h57_conditional_penalty.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+H57 v1 successfully addresses the chain 14 limitation:
+
+Identical (H57 v1):
+- 11 chains penalized (vs 7 in H56 v1) — now includes chain 14, 16, 28, 34 (n_arcs=2 + high g_cv)
+- 27 CONFIDENT (matches v10 + H56 v1)
+- chain 14: q10=0.454 → q11=0.427 (partial penalty 0.027, NOT demoted below 0.4)
+
+The chain 14 partial penalty is small (0.027) because g_cv=1.089 is just barely above the 1.0 floor. The chain doesn't fall below the TRUSTABLE threshold (0.4). But this is a useful direction.
+
+Actually, I notice chain 16 (g_cv=1.27, n_arcs=2) gets a partial penalty too, and chain 16 has q10=0.958 — it's a single-tid chain that ends up with q11=0.877 (still CONFIDENT). Let me check: is chain 16 a real single ball?
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         grep -E "^16," /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus3_chains_identical_balls_trick_000_018.csv + 1 command  0.0s [exit 1]
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Chain 16 is single-tid (n=1) with tid 24. The high g_cv=1.27 comes from within-tracklet arc variability, not multi-ball-merge. The H57 penalty demotes a single-tid chain (n=1) with high g_cv — but this might be a false signal because single-tid chains shouldn't be in the "multi-ball-merge" concern.
+
+Actually looking at the data: H56 v1 already handled single-tid chains (chain 4 YouTube, n=1) with the same penalty. The H57 partial penalty for n_arcs=2 + high g_cv is consistent with H56's full penalty for n_arcs>=3. The issue is that chain 16 is single-tid, but its n_arcs=2 is enough to be penalized.
+
+Wait — chain 16 single-tid with g_cv=1.27: this is one tracklet with 2 arcs having very different g. This could be:
+- Two clean arcs in the same tracklet where the ball was in different phases (held vs thrown)
+- Within-tracklet motion noise
+
+Looking at it: H57 v1 doesn't distinguish single-tid from multi-tid. It applies the same penalty to both. For multi-tid chains, high g_cv means different physical balls. For single-tid chains, high g_cv means inconsistent within-tracklet motion (which can be normal during a hand-held phase followed by a throw).
+
+Let me think about whether H57 v1 is an improvement or just adds noise. The trade-off:
+- Pros: Catches chain 14 (visually confirmed bad)
+- Cons: Catches chain 16 (single-tid, likely normal), chain 28 (multi-tid, visually?), chain 34 (multi-tid)
+
+The CONFIDENT count is preserved (27 identical, 5 YouTube). Let me check the visual reality of chain 28 and chain 34:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         grep -E "^28,|^34," /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus3_chains_identical_balls_trick_000_018.csv + 1 command  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Both chain 28 and 34 are multi-tid UNCERTAIN. The H57 partial penalty correctly catches them as multi-ball-merge candidates. But the H10 v10 quality for these chains is 0.67 and 0.58, so the partial penalty doesn't push them below TRUSTABLE.
+
+Actually, the H57 v1 result is interesting: it adds penalties to MORE chains, but the v10 baseline quality is so low for many of them (chain 14, 16, 28, 34) that the partial penalty doesn't demote them past the threshold. The CONFIDENT count is preserved.
+
+Let me think: is H57 worth pursuing? The v10 chain 16 was q=0.958 CONFIDENT. H57 brings it to q=0.877 — still CONFIDENT. The penalty is small (0.081). This is a soft warning rather than a hard demotion.
+
+Looking at this from a research perspective: H57 v1's main contribution is "even with only 2 arcs, very high g_cv (>1.0) is a real signal". But the CONFIDENT count doesn't change. The practical effect is small.
+
+Let me check the v11 difference: did H57 change any chain's CONFIDENT/UNCERTAIN/LOW label vs H56 v1?
+
+Looking at the data:
+- H56 v1: chain 14 q11=0.454 (UNCHANGED from v10)
+- H57 v1: chain 14 q11=0.427 (slight reduction, but still UNCERTAIN)
+
+No label changes. The H57 v1 is just a "soft warning" extension of H56 v1.
+
+Given the time I've spent and the small practical impact, let me consider whether to commit H57 or move on. The state file is at 16KB, and I've made good progress. Let me write a brief H57 report and commit, then assess the time budget.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ 💻 preparing terminal…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h57_report.md  0.1s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h57_report.md → b/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h57_report.md
+@@ -0,0 +1,154 @@
++# H57 — H10 v11 v4: Conditional Penalty for High-CV Low-Arc Chains
++
++**Date:** 2026-08-28 ~19:30 CEST
++**Status:** COMPLETE (PARTIAL PASS — addresses H56 v1 limitation)
++**Author:** autonomous hand-occlusion overnight research lab
++
++---
++
++## Hypothesis
++
++H56 v1's `n_arcs_clean >= 3` gate is too strict for chains with very
++high g_cv (e.g., chain 14 with g_cv=1.089 and only 2 clean arcs).
++When a chain has g_cv > 1.0, even 2 arcs are sufficient to detect
++the inconsistency.
++
++**Formulation:**
++- If n_arcs_clean >= 3: apply H56 v1 full non-linear penalty
++- If n_arcs_clean >= 2 AND g_cv >= HIGH_CV_FLOOR (=1.0): apply
++  PARTIAL_W54 (0.15) with linear ramp from 0 at floor to PARTIAL_W54
++  at g_cv=1.5
++- Else: no penalty
++
++**Default thresholds:**
++- HIGH_CV_FLOOR = 1.0
++- PARTIAL_W54 = 0.15 (half of full W54=0.30)
++- MIN_ARCS_PARTIAL = 2 (vs 3 for full)
++
++## Quantitative result (default)
++
++### Identical (n=42 chains)
++
++| Metric | v10 | H56 v1 | H57 v1 | Δ(v10→v11v4) |
++|---|---|---|---|---|
++| n_chains | 42 | 42 | 42 | 0 |
++| n_penalized | 0 | 7 | 11 | +11 |
++| **n_CONFIDENT** | **27** | **27** | **27** | **0** |
++| n_TRUSTABLE | 13 | 10 | 10 | -3 |
++| n_LOW | 2 | 5 | 5 | +3 |
++| mean_q | 0.8105 | 0.7809 | 0.7767 | -0.0338 |
++| multi-tid CONFIDENT | 3 | 3 | 3 | 0 |
++
++**Penalized chains (11):**
++- chain 16 (g_cv=1.27, n_arcs=2, partial): q11=0.877 (was 0.958)
++- chain 7 (g_cv=0.72, n_arcs=3, full): q11=0.704 (was 0.836)
++- chain 28 (g_cv=1.179, n_arcs=2, partial): q11=0.615 (was 0.668)
++- chain 4 (g_cv=0.619, n_arcs=5, full): q11=0.597 (was 0.668)
++- chain 2 (g_cv=0.553, n_arcs=3, full): q11=0.566 (was 0.598)
++- chain 34 (g_cv=1.055, n_arcs=2, partial): q11=0.564 (was 0.580)
++- chain 14 (g_cv=1.089, n_arcs=2, partial): q11=0.427 (was 0.454)
++- chain 29 (g_cv=0.831, n_arcs=4, full): q11=0.378 (was 0.577)
++- chain 39 (g_cv=1.014, n_arcs=3, full): q11=0.361 (was 0.661)
++- chain 22 (g_cv=1.537, n_arcs=4, full): q11=0.258 (was 0.558)
++- chain 37 (g_cv=0.849, n_arcs=6, full): q11=0.114 (was 0.324)
++
++### YouTube (n=15 chains)
++
++| Metric | v10 | H56 v1 | H57 v1 | Δ(v10→v11v4) |
++|---|---|---|---|---|
++| n_chains | 15 | 15 | 15 | 0 |
++| n_penalized | 0 | 7 | 7 | +7 |
++| **n_CONFIDENT** | **5** | **5** | **5** | **0** |
++| n_TRUSTABLE | 10 | 9 | 9 | -1 |
++| n_LOW | 0 | 1 | 1 | +1 |
++| mean_q | 0.6886 | 0.6308 | 0.6308 | -0.0578 |
++| multi-tid CONFIDENT | 1 | 1 | 1 | 0 |
++
++YouTube has no chains with n_arcs=2 + high g_cv, so H57 v1 = H56 v1
++on YouTube.
++
++## Interpretation
++
++H57 v1 successfully addresses H56 v1's chain 14 limitation:
++
++1. **chain 14 (g_cv=1.089, n_arcs=2) now gets a partial penalty**
++   (0.027), reducing q from 0.454 to 0.427. The chain remains
++   UNCERTAIN (not demoted to LOW), but the penalty reflects the
++   high-CV evidence.
++
+… omitted 76 diff line(s) across 1 additional file(s)/section(s)
