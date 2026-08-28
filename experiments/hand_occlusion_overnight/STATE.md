@@ -1,19 +1,22 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 03:30 CEST (current session: 2026-08-28 ~21:50 CEST-equivalent)
+LAST_UPDATE: 2026-08-29 07:30 CEST (current session: 2026-08-29 ~07:00 CEST)
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
-+ H94 + H96 + H97 + **H98** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
-hand-occupancy state machine produces closed juggling system. H37
-PASS (consumer-pass, validation): 80.7%/76.5% agreement between
-H36 (L, R, A) and H12 v8 pattern labels. H38 PASS (precision
-improvement, narrow scope): rejects 1/22 identical and 12/129
-YouTube CASCADE_3+ classifications that lack hand-occupancy
-support. The YouTube rejection is a tight 12-frame contiguous
-block at f=470-481 with H12 v8 confidence 0.639-0.646.
-Recommended operating point remains h7v3plus3 (H34 + H35 + H36
-+ H37 + H38). **H39 NEGATIVE**: H12 v8 FOUNTAIN_3+ classification
-is fundamentally unreliable (only 30% accurate on 10 visual-QA'd
-phases — 4/10 MIXED, 1/10 CASCADE, 2/10 OTHER, 3/10 FOUNTAIN).
++ H94 + H96 + H97 + H98 + H99 + H100 + H101 + H102 + H103 + H104
++ H105 + H106 + H107 + H108 + H109 + H110 + H111 + H112 + H114
++ **H115** MIXED. H115 v1 PASS: 0/4 h7v3plus3 modified edges fire
+H114 v1 default (operating point robust). H115 v2 PASS (narrow):
+H114 v1 default fires on 0/20 deduped QA'd H20-KEPT candidates
+(no-op). H115 v3 PASS (narrow): 6x6 threshold sweep finds
+(T_d=25, T_j=200) catches 2 confirmed FALSE + 1 UNCLEAR
+H20-KEPT candidates without dropping any REAL (P_kept_TRUE
+0.450 -> 0.529, +7.9 points). All 3 fires are already excluded
+from h7v3plus3 (chain correctly rejects them); H114 v1 strict
+is a useful post-hoc validation tool but does not change the
+operating point. **H39 NEGATIVE**: H12 v8 FOUNTAIN_3+
+classification is fundamentally unreliable (only 30% accurate
+on 10 visual-QA'd phases — 4/10 MIXED, 1/10 CASCADE, 2/10 OTHER,
+3/10 FOUNTAIN).
 H36 chain-driven state is too sparse to validate FOUNTAIN_3+
 because H36 only marks hand-occupancy at chain events, not
 continuous state. H39 v1 (frame-level) precision 20% (over-
@@ -4266,23 +4269,115 @@ diagnostic)**:
     See `h1_hand_pool/reports/h114_report.md` for full analysis.
 
 44. **Future research (post-H114):**
-    1. **H115: H114 v1 as a candidate generator for H21 v1.** The
-       10 NOT-in-chain wrong edges caught by H114 v1 are all
-       edges the chain already rejected. A H115 experiment could
-       take a DIFFERENT chain algorithm (e.g., H21 v1, which uses
-       H20-KEPT edges) and check whether H114 v1 catches wrong
-       edges in that chain set. H21 v1 admits H20-KEPT edges with
-       weaker geometric constraints; H114 might surface wrong
-       edges in H21 v1 that are not in h7v3plus3.
-    2. **H116: H114 v1 on 3rd video (weave).** The 3rd video (H101
-       weave) has no manual review labels, but it has chain edges
-       from h7v3plus3-equivalent processing. H114 v1 would be a
-       pure-diagnostic check: do any weave h7v3+ edges trigger the
-       H114 v1 same-hand large-jump rule? If yes, those edges
-       deserve visual QA.
-    3. **Stop here.** H112 + H114 confirm that the cross-hand vs
-       same-hand distinction is essential for hand-edge geometric
-       filters. The h7v3plus3 chain's edge-type-specific handling
-       (RECLASSIFIED, V_RECLASSIFIED, H26_RECLASSIFIED) is correct.
-       Further edge-level precision improvements would require
-       fundamentally different signals.
+    1. ~~**H115: H114 v1 as a candidate generator for H21 v1.**~~
+       **DONE. MIXED.** H115 v1/v2/v3 confirms H114 v1 default is
+       a no-op on h7v3plus3 (0/4 fires) and on the deduped 20-row
+       QA'd H20-KEPT (0/20 fires). A stricter (T_d=25, T_j=200)
+       operating point catches 2 FALSE + 1 UNCLEAR H20-KEPT
+       without dropping any REAL (P_kept_TRUE 0.450 -> 0.529).
+       All 3 fires are already excluded from h7v3plus3; H114 v1
+       strict is a useful post-hoc validation tool but does not
+       change the operating point. See
+       `h1_hand_pool/reports/h115_report.md`.
+    2. **H116: H114 v1 strict on 3rd video (weave) or
+       NOT-visually-QA'd H20-KEPT candidates.** The 4 H114 v1
+       strict fires (1->6, 39->46, 67->72, 18->22 identical)
+       on the 86 NOT-visually-QA'd H20-KEPT need visual QA.
+       This would test whether H114 v1 strict is informative
+       as a candidate flagger (not just a validator). The
+       H101 weave video lacks pose data so H74/H78 can't run,
+       but the per-edge H114 v1 strict would be a pure-
+       diagnostic check on weave chain edges if any exist.
+    3. **Stop here.** H112 + H114 + H115 confirm h7v3plus3's
+       edge-level precision is at the practical limit of
+       geometric signals. The 0.282 recall gap requires
+       fundamentally different signals (color, multi-view 3D,
+       learned tracklet classification).
+
+## H115 conclusion (2026-08-29 ~07:00 CEST)
+
+**H115: H114 v1 diagnostic on h7v3plus3 + H20-KEPT pool + extended
+threshold sweep** — DONE. MIXED.
+
+H115 has three sub-experiments extending H114's same-hand large-jump
+filter (T_d, T_j spatial_jump + end_d + start_d) to two new contexts:
+
+**H115 v1 (PASS)** — H114 v1 on the 4 h7v3plus3 modified edges
+(3 ADDED, 2 REMOVED vs h7v3pure). 0/4 fire H114 v1 default
+(T_d=40, T_j=250). The h7v3plus3 operating point's modifications
+are robust: the 3 ADDED edges have end_d < 80 px and spatial_jump
+< 250 px; the 2 REMOVED edges have even smaller spatial_jumps
+than the new edges they were replaced by. H114 v1 correctly
+identifies the REMOVED edges as physically plausible.
+
+**H115 v2 (PASS, narrow)** — H114 v1 default on 115 H20-KEPT
+candidates. 4/115 fire (3 in the NOT-visually-QA'd subset:
+67->72, 18->22, 1->6; 1 duplicate). On the deduped 20-row
+QA'd subset (3 REAL, 9 REAL+PARTIAL, 11 FALSE), 0/20 fire H114 v1
+default. The H114 v1 default is a no-op on H20-KEPT.
+
+**H115 v3 (PASS, narrow)** — 6x6 = 36-cell threshold sweep on
+the deduped 20-row QA'd H20-KEPT. Stricter threshold (T_d=25,
+T_j=200) fires on 3 candidates: 1->6 (FALSE, sj=248, end=78,
+start=96), 39->46 (FALSE, sj=238, end=174, start=89), 66->67
+(UNCLEAR, sj=210). 0 REAL dropped, recall=1.0, P_kept_TRUE
+0.450 -> 0.529 (+7.9 points). The (T_d=25-30, T_j=200) region
+is a flat operating point.
+
+**Key findings:**
+1. **H114 v1 default (T_d=40, T_j=250) is a no-op on h7v3plus3
+   AND on the H20-KEPT QA'd subset.** Too conservative to be
+   useful as a precision filter.
+2. **H114 v1 strict (T_d=25, T_j=200) is a useful post-hoc
+   validation signal** for the H20-KEPT pool. It catches 2
+   confirmed FALSE + 1 UNCLEAR without dropping any REAL.
+3. **All 3 strict-filter fires are already excluded from
+   h7v3plus3.** The chain correctly rejects the large-spatial-jump
+   FPs; H114 v1 strict is purely diagnostic.
+4. **H115 confirms the H17->H20->H24->H28->H31 negative
+   finding chain:** the wider H20-KEPT pool has only 3/20 = 15%
+   REAL precision. Geometric post-filters on the V-shape pool
+   cannot rescue this precision — cross-ball artifacts are
+   geometrically indistinguishable from real catch-throws at the
+   per-edge feature level.
+
+**Recommended operating point (unchanged from H112):**
+h7v3plus3 + H112 is precision-optimized at both phase and edge
+levels (P=1.000, R=0.718 on 113 review pairs). H114 v1 strict
+(T_d=25, T_j=200) is a useful post-hoc validation tool but does
+not change the operating point.
+
+**Future research (post-H115):**
+1. **H116: H114 v1 strict on the 86 NOT-visually-QA'd H20-KEPT
+   candidates.** 4 fires (1->6, 39->46, 67->72, 18->22) need
+   visual QA. This would test whether H114 v1 strict is
+   informative as a candidate flagger (not just a validator).
+2. **H117: H114 v1 strict on the wider H17 V-shape pool**
+   (151 candidates, 38-56% precision per H17 v1). The H17 pool
+   is the original geometric candidate set; H114 v1 might lift
+   its precision similarly.
+3. **Stop here.** H112 + H114 + H115 confirm h7v3plus3's
+   edge-level precision is at the practical limit of geometric
+   signals. The 0.282 recall gap requires fundamentally
+   different signals (color, multi-view 3D, learned tracklet
+   classification).
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h115_h114_diagnostic_h7v3plus3.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h115_v3_threshold_sweep.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h115_*.{csv,json}` (5 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h115_report.md`
+
+## Last update
+
+- 2026-08-29 (this episode): H115 MIXED — H114 v1 default is a
+  no-op on h7v3plus3 (0/4 fires) and on the deduped 20-row
+  QA'd H20-KEPT (0/20 fires). A stricter threshold (T_d=25,
+  T_j=200) catches 2 FALSE + 1 UNCLEAR H20-KEPT candidates
+  without dropping any REAL (P_kept_TRUE 0.450 -> 0.529, +7.9
+  points). The 3 fires are all already excluded from h7v3plus3;
+  H114 v1 strict is a useful post-hoc validation tool but does
+  not change the operating point. H115 confirms the
+  H17->H20->H24->H28->H31 negative finding chain: the wider
+  H20-KEPT pool has only 15% REAL precision, and geometric
+  post-filters on V-shape candidates cannot rescue this.
