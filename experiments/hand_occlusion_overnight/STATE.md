@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 15:50 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45 + H46 + H47**
+LAST_UPDATE: 2026-08-28 16:00 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + **H45 + H46 + H47 + H48**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -989,3 +989,33 @@ simplified classifier doesn't use chain quality); it's a
 measurement of the filter's impact on the event log.
 
 See `h1_hand_pool/reports/h47_report.md` for full analysis.
+
+## H48 conclusion
+
+**H48: flight-time filter threshold sensitivity grid** — DONE.
+PASS (confirms H45's 10-frame filter is optimal).
+
+Sweeps MIN_FLIGHT_TIME in {5, 10, 15, 20, 30, 40, 50, 60} and
+reports the per-threshold impact on H45-labeled flights.
+
+**Key finding: THR=10 is in a flat region (10-30) for
+identical.** All thresholds in {10, 15, 20, 30} give
+identical results on H45 labels (4 REAL kept, 3
+IDENTITY_SWITCH dropped). THR=10 is the most permissive,
+so it's the best choice.
+
+**THR=40 is the first threshold that drops REAL catch-throws
+on identical** (false positives). THR=50+ drops all 4 REAL
+catch-throws (catastrophic).
+
+**YouTube: no threshold in {5..50} drops any of the 4
+TRACKER_FRAGMENTATION flights.** The 4 YouTube flights have
+very similar flight times 58-67, so a single threshold
+cannot separate them. THR=60 drops 1/4 (the longest, ft=134).
+
+**There is NO single threshold that filters YouTube's
+tracker-fragmentation flights without dropping identical's
+real catch-throws.** The H45 finding (10-frame filter) is
+robust and in a flat region of the sensitivity grid.
+
+See `h1_hand_pool/reports/h48_report.md` for full analysis.

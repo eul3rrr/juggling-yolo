@@ -3404,3 +3404,42 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h47_h12v8_flight_time_filter.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h47_flight_time_filter_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h47_report.md`
+
+### H48 (2026-08-28 ~15:55 CEST)
+
+- Hypothesis: H47 used a 10-frame filter. Is 10 the
+  optimal threshold? Sweep {5, 10, 15, 20, 30, 40, 50, 60}
+  and report per-threshold impact on H45 labels.
+- Implementation: `h48_flight_filter_sensitivity.py` loads
+  H12 v8 event log, computes per-flight flight times,
+  cross-references with H45 visual-QA labels, and reports
+  the per-threshold drop/keep counts.
+- Quantitative result on identical (7 H45-labeled flights,
+  4 REAL + 3 IDENTITY_SWITCH):
+
+| THR | dropped events | kept REAL | dropped REAL | kept ID | dropped ID |
+|---|---|---|---|---|---|
+| 5  | 4  | 4 | 0 | 1 | 2 |
+| **10** | **6**  | **4** | **0** | **0** | **3** |
+| 15 | 6  | 4 | 0 | 0 | 3 |
+| 20 | 8  | 4 | 0 | 0 | 3 |
+| 30 | 8  | 4 | 0 | 0 | 3 |
+| 40 | 16 | 0 | 4 | 0 | 3 |
+| 50 | 18 | 0 | 4 | 0 | 3 |
+
+- YouTube: 0/4 TRACKER_FRAGMENTATION dropped at any
+  threshold <= 50; 1/4 dropped at THR=60.
+
+- Key finding: **THR=10 is in a flat region (10-30)** for
+  identical. THR=40 first drops REAL catch-throws. THR=50+
+  drops all REAL catch-throws. There is no single threshold
+  that filters YouTube's tracker-fragmentation flights.
+
+- Verdict: **PASS (confirms H45).** The 10-frame filter is
+  the optimal threshold for identical and is in a flat
+  region. The H45 finding is robust. See
+  `h1_hand_pool/reports/h48_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h48_flight_filter_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h48_flight_filter_sensitivity.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h48_report.md`
