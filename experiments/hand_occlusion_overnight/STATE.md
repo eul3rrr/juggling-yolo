@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 05:05 CEST
-STATUS: H1 v4 + H2 COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded for review.
+LAST_UPDATE: 2026-08-28 05:10 CEST
+STATUS: H1 v4 + H2 + v5 sens grid COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). v5 sens grid confirms v4d's MIN_FROM_SLOPE=2.5 is in a flat region of the precision/recall curve. H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded for review.
 
 ## Isolation
 
@@ -69,6 +69,13 @@ STATUS: H1 v4 + H2 COMPLETE. v4d is the recommended hand-link extractor (10 iden
   (tracklet 3 → {hand=9, air=8}). YouTube: 40 tracklets →
   13 chains. 0 conflicts.
   See `h1_hand_pool/reports/h2_report.md` for full analysis.
+
+- **H1 v5** — Sensitivity grid on `MIN_FROM_SLOPE` ∈
+  {1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0} (committed). Confirms
+  v4d's `MIN_FROM_SLOPE = 2.5` is in a flat region
+  (2.5-3.5 all give identical results). Threshold is
+  well-justified and robust to small perturbations.
+  See `h1_hand_pool/reports/h1_v5_sens_report.md`.
 
 ## Strongest findings so far
 

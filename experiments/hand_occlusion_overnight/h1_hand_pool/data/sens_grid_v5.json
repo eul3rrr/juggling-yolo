@@ -1,0 +1,136 @@
+{
+  "v5_settings": [
+    {
+      "min_from_slope": 1.5,
+      "n_surviving": 13,
+      "n_rejected": 0,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 11,
+          "rejected": 0
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 2,
+          "rejected": 0
+        }
+      },
+      "rejected_pairs": []
+    },
+    {
+      "min_from_slope": 2.0,
+      "n_surviving": 13,
+      "n_rejected": 0,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 11,
+          "rejected": 0
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 2,
+          "rejected": 0
+        }
+      },
+      "rejected_pairs": []
+    },
+    {
+      "min_from_slope": 2.5,
+      "n_surviving": 11,
+      "n_rejected": 2,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 10,
+          "rejected": 1
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 1,
+          "rejected": 1
+        }
+      },
+      "rejected_pairs": [
+        "identical_balls_trick_000_018:35->40",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+      ]
+    },
+    {
+      "min_from_slope": 3.0,
+      "n_surviving": 11,
+      "n_rejected": 2,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 10,
+          "rejected": 1
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 1,
+          "rejected": 1
+        }
+      },
+      "rejected_pairs": [
+        "identical_balls_trick_000_018:35->40",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+      ]
+    },
+    {
+      "min_from_slope": 3.5,
+      "n_surviving": 11,
+      "n_rejected": 2,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 10,
+          "rejected": 1
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 1,
+          "rejected": 1
+        }
+      },
+      "rejected_pairs": [
+        "identical_balls_trick_000_018:35->40",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+      ]
+    },
+    {
+      "min_from_slope": 4.0,
+      "n_surviving": 10,
+      "n_rejected": 3,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 9,
+          "rejected": 2
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 1,
+          "rejected": 1
+        }
+      },
+      "rejected_pairs": [
+        "identical_balls_trick_000_018:17->23",
+        "identical_balls_trick_000_018:35->40",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+      ]
+    },
+    {
+      "min_from_slope": 5.0,
+      "n_surviving": 8,
+      "n_rejected": 5,
+      "by_stem": {
+        "identical_balls_trick_000_018": {
+          "surviving": 8,
+          "rejected": 3
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "surviving": 0,
+          "rejected": 2
+        }
+      },
+      "rejected_pairs": [
+        "identical_balls_trick_000_018:11->14",
+        "identical_balls_trick_000_018:17->23",
+        "identical_balls_trick_000_018:35->40",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:10->12",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090:15->25"
+      ]
+    }
+  ],
+  "v3c_total_links": 13
+}

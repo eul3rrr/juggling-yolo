@@ -306,4 +306,21 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_conflicts_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h2_report.md`
 
+### v5 (2026-08-28 ~05:10 CEST)
+
+- Hypothesis: v4d's `MIN_FROM_SLOPE = 2.5` was chosen by visual
+  QA; verify it is the optimal threshold.
+- Quantitative result: a sensitivity grid on
+  `MIN_FROM_SLOPE` ∈ {1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0} shows
+  that 2.5 is in a flat region (2.5-3.5 all give identical
+  results: 11 surviving links, 2 rejected). Higher thresholds
+  (4.0+) start rejecting verified real catch-throws.
+- Verdict: **PASS.** v4d's threshold is well-justified and
+  robust to small perturbations.
+  See `h1_hand_pool/reports/h1_v5_sens_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_hand_pool_v5_sens.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/sens_grid_v5.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v5_sens_report.md`
+
 ---
