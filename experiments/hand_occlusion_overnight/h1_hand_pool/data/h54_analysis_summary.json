@@ -1,0 +1,42 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 42,
+      "n_chains_with_g_cv": 22,
+      "n_multi": 18,
+      "n_confident": 27,
+      "n_uncertain": 13,
+      "n_low": 2,
+      "n_multi_confident": 2,
+      "n_multi_uncert": 11,
+      "n_multi_low": 2,
+      "g_cv_mean_multi_confident": 0.379,
+      "g_cv_median_multi_confident": 0.379,
+      "g_cv_mean_multi_uncert": 0.782,
+      "g_cv_median_multi_uncert": 0.831,
+      "g_cv_mean_all_multi": 0.702,
+      "pearson_g_cv_h10": 0.008
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_chains_with_g_cv": 11,
+      "n_multi": 10,
+      "n_confident": 5,
+      "n_uncertain": 10,
+      "n_low": 0,
+      "n_multi_confident": 1,
+      "n_multi_uncert": 9,
+      "n_multi_low": 0,
+      "g_cv_mean_multi_confident": 0.427,
+      "g_cv_median_multi_confident": 0.427,
+      "g_cv_mean_multi_uncert": 0.656,
+      "g_cv_median_multi_uncert": 0.56,
+      "g_cv_mean_all_multi": 0.633,
+      "pearson_g_cv_h10": -0.308
+    }
+  },
+  "config": {
+    "QUALITY_CONFIDENT": 0.7,
+    "QUALITY_TRUSTABLE": 0.4
+  }
+}

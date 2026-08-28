@@ -1,0 +1,37 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 42,
+      "n_chains_with_clean_arcs": 22,
+      "n_chains_with_3plus_clean_arcs": 9,
+      "g_cv_mean": 0.734,
+      "g_cv_median": 0.77,
+      "g_cv_min": 0.037,
+      "g_cv_max": 1.537,
+      "g_mean_overall": 0.834,
+      "pearson_g_cv_vs_h10_quality": 0.008,
+      "spearman_g_cv_vs_h10_quality": 0.016,
+      "n_pairs_for_corr": 22
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_chains_with_clean_arcs": 11,
+      "n_chains_with_3plus_clean_arcs": 11,
+      "g_cv_mean": 0.626,
+      "g_cv_median": 0.552,
+      "g_cv_min": 0.405,
+      "g_cv_max": 1.179,
+      "g_mean_overall": 0.512,
+      "pearson_g_cv_vs_h10_quality": -0.308,
+      "spearman_g_cv_vs_h10_quality": -0.309,
+      "n_pairs_for_corr": 11
+    }
+  },
+  "config": {
+    "EXTREMA_MIN_DIST": 5,
+    "MIN_ARC_N": 4,
+    "MIN_TRACKLET_PTS": 8,
+    "GRAVITY_CLEAN_LO": 0.05,
+    "GRAVITY_CLEAN_HI": 5.0
+  }
+}
