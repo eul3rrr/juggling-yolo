@@ -1,22 +1,38 @@
 Continue the autonomous hand-occlusion overnight research lab in this worktree.
 
-FIRST read (in this order):
-1. `experiments/hand_occlusion_overnight/MASTER_INSTRUCTIONS.md`
-2. `experiments/hand_occlusion_overnight/STATE.md`
-3. `experiments/hand_occlusion_overnight/PLAN.md`
-4. `experiments/hand_occlusion_overnight/RESULTS_LOG.md`
-5. `experiments/hand_occlusion_overnight/RESEARCH_NOTES.md`
-6. `git status` and `git log --oneline -20`
+IMPORTANT PATH NOTE: always use ABSOLUTE paths in tool calls. The system prompt's
+"Current working directory" is the juggling-tracker profile workspace
+(/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/experiments/overnight/reports),
+NOT the isolated lab worktree. Relative `read_file` / `search_files` calls
+resolve against the former, so they will fail with "File not found". Always pass
+the full lab path, e.g. read_file("/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/MASTER_INSTRUCTIONS.md").
+
+Lab root (the worktree you should actually work in): /home/it-admin/projects/juggling-yolo-hand-occlusion-night
+
+FIRST read (in this exact order, using ABSOLUTE paths):
+1. /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/MASTER_INSTRUCTIONS.md
+2. /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md
+3. /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md
+4. /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/RESULTS_LOG.md
+5. /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/RESEARCH_NOTES.md
+6. /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/SETUP_NOTES.md
+7. `git -C /home/it-admin/projects/juggling-yolo-hand-occlusion-night status` and
+   `git -C /home/it-admin/projects/juggling-yolo-hand-occlusion-night log --oneline -20`
 
 Also skim the existing overnight research for context (read-only):
-- `experiments/overnight/RESULTS_LOG.md`
-- `experiments/overnight/reports/`
-- `experiments/overnight/scripts/`
-- `experiments/overnight/data/`
+- /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/overnight/RESULTS_LOG.md
+- /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/overnight/reports/
+- /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/overnight/scripts/
+- /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/overnight/data/
 
 You are running as a fresh research episode invoked by the watchdog. Each episode is
 capped (~75 min wall-clock) and may be killed at any time. Assume prior context is
 lost — STATE.md and the persistent files are your real memory.
+
+When invoking `terminal` for git/file ops, use:
+  workdir="/home/it-admin/projects/juggling-yolo-hand-occlusion-night"
+to ensure the command runs in the lab worktree. Example:
+  terminal(command="git status", workdir="/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
 
 Actually use tools and perform research; do not merely describe what you would do.
 Continue from the recorded next action in `STATE.md`.
@@ -46,7 +62,8 @@ Strict isolation rules:
   large models.
 
 Before starting any new experiment, check whether
-`experiments/hand_occlusion_overnight/STOP` exists. If it does:
+`/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STOP`
+exists. If it does:
 1. checkpoint useful work,
 2. update STATE.md / RESULTS_LOG.md / PLAN.md,
 3. commit and push if appropriate,

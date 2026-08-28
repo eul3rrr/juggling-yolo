@@ -45,20 +45,40 @@ Session: bootstrap 2026-08-28 ~02:55 CEST · Branch: `experiments/hand-occlusion
 - After each episode, watchdog records HEAD before/after and STATE.md mtime.
 - After three no-progress episodes in a row, log `NO_PROGRESS_EPISODE` and continue.
 
-## First episode (H1)
+## First episode (H1) — STATUS
 
 Sub-steps:
 
-1. Catalogue existing tracklet / pose / review artifacts (read-only).
-2. Pick the easier review-rich video for H1 development; reserve the other for sensitivity.
-3. Compute per-tracklet endpoint distances to left/right wrist with a short trend window.
-4. Compute per-new-tracklet start distances to wrist with a short divergence window.
-5. Apply a small physical-geometry threshold grid (declare first); record all
-   candidates, not just accepted ones.
-6. Run a chronological state machine:
+1. ✅ Catalogue existing tracklet / pose / review artifacts (read-only).
+2. ✅ Pick the easier review-rich video for H1 development; reserve the other for sensitivity. (Both are run; identical video has more reviewed pairs.)
+3. ✅ Compute per-tracklet endpoint distances to left/right wrist with a short trend window.
+4. ✅ Compute per-new-tracklet start distances to wrist with a short divergence window.
+5. ✅ Apply a small physical-geometry threshold grid (declared first); record all candidates, not just accepted ones.
+6. ✅ Run a chronological state machine:
    - per hand, a FIFO token stack with occupancy timestamps;
    - emit ENTRY / EXIT / UNMATCHED_EXIT / UNRESOLVED_HELD_OR_LOST / AMBIGUOUS_POOL_EXIT.
-7. Cross-check against reviewed contact pairs; do NOT tune to those labels.
-8. Produce the three CSVs; produce a contact-sheet grid for ~10–20 selected events.
-9. Visual QA: read the contact sheets, assign verdicts, log them in `RESULTS_LOG.md`.
-10. Commit, push, write the next concrete next step into `STATE.md`.
+7. ✅ Cross-check against reviewed contact pairs (recorded low recall; the labels are not a hand-test set, see RESULTS_LOG §H1 v1).
+8. ✅ Produce the three CSVs; produce a contact-sheet grid for 21 selected events.
+9. ✅ Visual QA on 4 events via vision; documented 4 distinct failure modes.
+10. ✅ Commit, push, write the next concrete next step into `STATE.md`.
+
+## Second episode (H1 v2)
+
+Sub-steps:
+
+1. Add a token TTL (e.g., 60 frames / 2 sec at 30 fps) so tokens expire if
+   no exit arrives. Emit `EXPIRED_HELD` events. Cap pool depth at 1 for
+   throw-side purposes (if a throw pops a stale token, treat as
+   `UNMATCHED_EXIT`).
+2. Add throw-strictness: require the ball to leave the reach radius within
+   the first 3 observed frames (a real throw gains height fast).
+3. Add wrist-velocity guard: compute per-frame wrist velocity in the throw
+   window; if the wrist moves > 30 px/frame, downgrade throw confidence.
+4. Add catch-context check: a catch is more credible if there was a recent
+   hand event (exit or another catch) on the same hand.
+5. Re-run on both videos; compare counter distributions.
+6. Re-render contact sheets for the same 4 inspected events and verify the
+   failure modes are suppressed.
+7. Add a hand-relevant evaluation subset: gap=0 pairs with both endpoints
+   in hand reach (or all gap=0 pairs).
+8. Document v2 in `h1_v1_report.md` continuation.
