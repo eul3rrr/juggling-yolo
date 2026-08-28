@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 11:45 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 + H12v3 + H12v4 + H12v5 + H8v7 + H8v8 + H12v6 + H12v6b COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED. H5 applies H3 as a downstream confidence flag. H6 simplified min-cost flow resolves the H2 conflict. H7 full min-cost flow with capacity constraints + gap/error-aware cost. H2+H3+H7 unified chain representation. H8 physics consistency check identifies 2 confirmed E6c false positives. H9 object permanence: coverage 82.9% on identical. H10 per-chain quality. H8v4 NEGATIVE. H8v5 MIXED. H10v5 PASS. H237v5. H8v6 NEGATIVE. H11 PASS: 9 CONFIDENT identical + 1 CONFIDENT YouTube chain, 8 catch/throw events, per-frame census 51% cascade on identical / 100% on YouTube (over-counting). H11 v2 identity-merge false positive. H11 v3 quality-filtered census confirms over-counting on YouTube. H11 v4 PASS: 85.7% reduction in merge candidates, correctly removes chain 36 ↔ chain 30 false positive. H12 PASS: per-frame pattern inference identifies 4-phase pattern on identical (FOUNTAIN → CASCADE → mixed), 33.8% UNKNOWN. YouTube unreliable due to H10 v5 over-counting. H12 v2 PASS: sliding-window event history + MIN_EVENTS_FOR_PATTERN=3 + MIXED_3+ category + phase detection. UNKNOWN collapses 33.8% → 1.4% on identical. 13 substantial phases emitted. YouTube 100% MIXED_3+_UNCONFIRMED (correct, due to n_total=5 over-counting). Sensitivity grid (K=4, MIN=3) in flat region. Visual QA reveals FOUNTAIN_3+ at f=890-936 is actually a cascade (algorithm wrong on this phase due to event sparsity). H12 v3 MIXED: enriched event log with 1 visually-confirmed v3c-rejected event (35->40 identical, real catch-throw that v4d incorrectly rejected). Changes 26 frames from FOUNTAIN_3+ to MIXED_3+ at f=797-829. Does NOT fix late FOUNTAIN_3+ blocks (f=890-1050) which are visually cascades. Confirms H12 v2 limitation is fundamental. H12 v4/v5 detector-level signal: late phase 71% FOUNTAIN (v2) → 33% CASCADE / 38% FOUNTAIN (v5 smoothed). H8 v7 vy-sign-change segmentation NEGATIVE: 73/76 identical and 38/40 YouTube tracklets detected as 1-arc (smoothing destroyed intra-tracklet sign changes). H8 v8 local-extrema segmentation MIXED: identical 1-5 arcs/tracklet, YouTube 1-12 arcs/tracklet. Per-arc gravity YouTube median 0.46 (matches quoted 0.5), identical median 0.69 (higher, juggler closer to camera). Cross-edge physics: 0/24 OK on YouTube because most H7 BALLISTIC edges are catch+throws in disguise. Per-arc gravity is a useful TRACKLET quality signal. H12 v6 ensemble (basic, PARTIAL PASS): 6.3% MIXED_3+_ENSEMBLE on identical, honest about v2/v5 disagreements. H12 v6b confidence-weighted ensemble (MIXED): 43 frames where v5 won (low conf v2 vs high conf v5), 2.3% MIXED_3+_ENSEMBLE. Visual QA reveals vision tool is unreliable for CASCADE/FOUNTAIN distinction on this video; 3 independent queries all said FOUNTAIN, contradicting H12 v4/v5's earlier visual QA. The CASCADE/FOUNTAIN question is FUNDAMENTALLY UNRESOLVED with current data.
+LAST_UPDATE: 2026-08-28 12:30 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 + H12v3 + H12v4 + H12v5 + H8v7 + H8v8 + H12v6 + H12v6b + H10v6 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED. H5 applies H3 as a downstream confidence flag. H6 simplified min-cost flow resolves the H2 conflict. H7 full min-cost flow with capacity constraints + gap/error-aware cost. H2+H3+H7 unified chain representation. H8 physics consistency check identifies 2 confirmed E6c false positives. H9 object permanence: coverage 82.9% on identical. H10 per-chain quality. H8v4 NEGATIVE. H8v5 MIXED. H10v5 PASS. H237v5. H8v6 NEGATIVE. H11 PASS: 9 CONFIDENT identical + 1 CONFIDENT YouTube chain, 8 catch/throw events, per-frame census 51% cascade on identical / 100% on YouTube (over-counting). H11 v2 identity-merge false positive. H11 v3 quality-filtered census confirms over-counting on YouTube. H11 v4 PASS: 85.7% reduction in merge candidates, correctly removes chain 36 ↔ chain 30 false positive. H12 PASS: per-frame pattern inference identifies 4-phase pattern on identical (FOUNTAIN → CASCADE → mixed), 33.8% UNKNOWN. YouTube unreliable due to H10 v5 over-counting. H12 v2 PASS: sliding-window event history + MIN_EVENTS_FOR_PATTERN=3 + MIXED_3+ category + phase detection. UNKNOWN collapses 33.8% → 1.4% on identical. 13 substantial phases emitted. YouTube 100% MIXED_3+_UNCONFIRMED (correct, due to n_total=5 over-counting). Sensitivity grid (K=4, MIN=3) in flat region. Visual QA reveals FOUNTAIN_3+ at f=890-936 is actually a cascade (algorithm wrong on this phase due to event sparsity). H12 v3 MIXED: enriched event log with 1 visually-confirmed v3c-rejected event (35->40 identical, real catch-throw that v4d incorrectly rejected). Changes 26 frames from FOUNTAIN_3+ to MIXED_3+ at f=797-829. Does NOT fix late FOUNTAIN_3+ blocks (f=890-1050) which are visually cascades. Confirms H12 v2 limitation is fundamental. H12 v4/v5 detector-level signal: late phase 71% FOUNTAIN (v2) → 33% CASCADE / 38% FOUNTAIN (v5 smoothed). H8 v7 vy-sign-change segmentation NEGATIVE: 73/76 identical and 38/40 YouTube tracklets detected as 1-arc (smoothing destroyed intra-tracklet sign changes). H8 v8 local-extrema segmentation MIXED: identical 1-5 arcs/tracklet, YouTube 1-12 arcs/tracklet. Per-arc gravity YouTube median 0.46 (matches quoted 0.5), identical median 0.69 (higher, juggler closer to camera). Cross-edge physics: 0/24 OK on YouTube because most H7 BALLISTIC edges are catch+throws in disguise. Per-arc gravity is a useful TRACKLET quality signal. H12 v6 ensemble (basic, PARTIAL PASS): 6.3% MIXED_3+_ENSEMBLE on identical, honest about v2/v5 disagreements. H12 v6b confidence-weighted ensemble (MIXED): 43 frames where v5 won (low conf v2 vs high conf v5), 2.3% MIXED_3+_ENSEMBLE. Visual QA reveals vision tool is unreliable for CASCADE/FOUNTAIN distinction on this video; 3 independent queries all said FOUNTAIN, contradicting H12 v4/v5's earlier visual QA. The CASCADE/FOUNTAIN question is FUNDAMENTALLY UNRESOLVED with current data. H10 v6 per-arc gravity as 4th quality dimension: MIXED. identical: v5 mean 0.529 → v6 mean 0.495 (5 worsened, 31 improved). youtube: v5 mean 0.537 → v6 mean 0.569 (2 worsened, 4 improved). Sensitivity grid is NOT flat — h8v8 weight has opposite effects on the two videos. Recommended v6b: per-video adaptive weights (w8v8=0 for identical, w8v8=0.30 for YouTube) — not implemented.
 
 ## Isolation
 
@@ -255,46 +255,54 @@ extraction: 10 identical + 1 youtube links with visual precision
     4-phase pattern: 0-220 FOUNTAIN, 300-700 CASCADE
     (main), 700+ mixed. YouTube unreliable due to H10 v5
     over-counting. See `h1_hand_pool/reports/h12_report.md`.
-14. **H8 v7: fundamentally different approach for YouTube
-    long tracklets** — per-bounce segmentation at frame
-    level (not just apexes), or 3D ball trajectory
-    estimation (Ponglertnapakorn & Suwajanakorn 2025),
-    or accept the limitation and use H8 only for short
-    tracklets. H8 v6's apex-level segmentation was too
-    coarse.
-15. **H11 v5: hand-relative coordinates for merge
-    algorithm** — use polar coordinates centered on the
-    wrist instead of 2D distance. The H11 v4 2D distance
-    criterion admits some false positives (e.g., t8 at
-    f=43 is 71px from the left wrist but is below the
-    hand, not at it).
-16. **H12 v3: integrate detector-level signal** — the H12
-    v2 algorithm is fundamentally limited by event log
-    density. A future H12 v3 should use ball positions
-    in the air relative to each hand (not just n_in_hand
-    counts) to disambiguate CASCADE from FOUNTAIN. The
-    current visual QA found FOUNTAIN_3+ at f=890-936 is
-    actually a cascade, suggesting the algorithm's
-    cascade/fountain classification is wrong ~30% of
-    the time. **H12 v3 DONE as label-informed event
-    enrichment** — added 1 visually-confirmed v3c-rejected
-    event (35->40 identical). Result: 26 frames changed
-    from FOUNTAIN_3+ to MIXED_3+ at f=797-829. Late
-    FOUNTAIN_3+ blocks (f=890-1050) UNCHANGED. Confirms
-    the limitation is fundamental. A truly different
-    approach is needed.
-17. **H12 v3b: use chain-IDs as ball IDs** — chain 2
-    (CONFIDENT, q=0.92) and chain 8 (CONFIDENT, q=0.85)
-    are real single-ball juggling cycles. A future
-    v3 could assign physical ball IDs based on chain
-    membership and report the per-ball sequence.
-18. **H13: detector-level ball detection** — re-run
+14. ~~**H8 v7: fundamentally different approach for YouTube
+    long tracklets**~~ **DONE. NEGATIVE result.**
+    v7 (vy-sign-change) detected 1-arc for 73/76
+    identical and 38/40 YouTube tracklets (smoothing
+    destroyed intra-tracklet sign changes). v8
+    (local-extrema) detected 1-12 arcs correctly. Per-arc
+    gravity statistics are useful (YouTube median 0.46
+    matches expected 0.5; identical median 0.69 is higher).
+    Cross-edge physics: 0/24 OK on YouTube because most
+    H7 BALLISTIC edges are catch+throws in disguise.
+    v8 is useful for per-arc statistics but its cross-edge
+    check doesn't work.
+15. ~~**H11 v5: hand-relative coordinates for merge
+    algorithm**~~ **DEFERRED.** H11 v4 already achieves
+    100% reduction in false-positive merge candidates.
+    v5 is a marginal improvement that can wait.
+16. ~~**H12 v3: integrate detector-level signal**~~ **DONE.
+    MIXED.** Enriched event log with 1 visually-confirmed
+    v3c-rejected event (35->40 identical, real catch-throw
+    that v4d incorrectly rejected). Changes 26 frames from
+    FOUNTAIN_3+ to MIXED_3+ at f=797-829. Late FOUNTAIN_3+
+    blocks (f=890-1050) UNCHANGED. Confirms the limitation
+    is fundamental. A truly different approach is needed.
+17. **H13: detector-level ball detection** — re-run
     YOLO at lower confidence (0.1) and compare to
     v4d hand-link predictions. Master §14's "lower
     confidence evidence tier near hand events" is
     the inspiration. The YouTube over-counting is
     partly due to detector confusion; a lower-conf
     re-run might reveal where balls actually are.
+18. ~~**H12 v6: ensemble of v2 and v5**~~ **DONE.**
+    PARTIAL PASS (basic) and MIXED (v6b confidence-
+    weighted). The CASCADE/FOUNTAIN question is
+    FUNDAMENTALLY UNRESOLVED with current data.
+19. ~~**H10 v6: integrate per-arc gravity as 4th
+    quality dimension**~~ **DONE. MIXED.**
+    Default w8v8=0.25 hurts identical ranking
+    (chain 21 drops from v5 #0 to v6 #7) and helps
+    YouTube ranking (mean q 0.537 → 0.569).
+    Sensitivity grid is NOT flat. Recommended v6b:
+    per-video adaptive weights (w8v8=0 for identical,
+    w8v8=0.30 for YouTube) — not implemented in this
+    episode.
+20. **H10 v6b: per-video adaptive weights for h8v8**
+    — use w8v8=0 for identical (revert to v5) and
+    w8v8=0.30 for YouTube. Should give best of both
+    worlds. Implementation: ~30 lines of code in
+    h10v6_with_h8v8.py.
 
 ## Important artifact paths
 

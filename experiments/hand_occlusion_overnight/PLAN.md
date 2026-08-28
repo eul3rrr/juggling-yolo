@@ -645,3 +645,44 @@ ensembles can resolve the CASCADE/FOUNTAIN ambiguity.
    per-frame approach (e.g., LSTM on per-frame vy/vx) might
    work but is out of scope.
 
+## Twenty-first episode (H10 v6) — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+
+1. ✅ Implemented H10 v6: chain quality with per-arc gravity
+   as 4th dimension.
+   - quality_v6 = 0.25*h3 + 0.20*h8_v5 + 0.30*h9 + 0.25*h8v8
+   - h8v8 = mean over chain's tracklets of
+     n_clean_arcs / n_total_arcs (clean = g in [0.2, 0.8])
+2. ✅ Ran on both videos. Compared to v5 ranking.
+3. ✅ Sensitivity grid: 7 cells of h8v8 weight (0.0 to 0.50).
+   - identical: w8v8=0 best (matches v5)
+   - youtube: w8v8=0.5 best (improves over v5)
+   - sensitivity is NOT flat on either video
+4. ✅ Documented in `h10v6_report.md`.
+
+**Verdict: MIXED.** H10 v6 with default weights (h8v8=0.25)
+HURTS identical ranking (mean q 0.529 → 0.495) and HELPS
+YouTube ranking (mean q 0.537 → 0.569). Chain 21 (v5 #0) drops
+to v6 #7 because t31/t36 have per-arc g=0.117 (asymmetric
+motion artifact, NOT a real quality signal).
+
+**H10 v6 has OPPOSITE effects on the two videos:**
+- Identical: short tracklets have unreliable parabolic fits
+- YouTube: long tracklets have many arcs and per-arc gravity
+  is a real signal
+
+**Recommended v6b: per-video adaptive weights**
+(w8v8=0 for identical, w8v8=0.30 for YouTube).
+Not implemented in this episode.
+
+**Next episode candidates:**
+
+1. **H10 v6b**: per-video adaptive weights implementation
+   (~30 lines of code in h10v6_with_h8v8.py). Should give
+   best of both worlds.
+2. **H13: detector-level low-confidence ball detection**
+   (master §14 follow-up).
+3. **H7 v2: re-classify YouTube BALLISTIC edges as
+   HAND_TRANSITION if they pass through a hand region.**
+

@@ -729,3 +729,33 @@ useful source record:
     These are out of scope for the current data. The
     question is FUNDAMENTALLY UNRESOLVED.
 
+## Cross-cutting insights from H10 v6 (2026-08-28 ~12:30)
+
+55. **Per-arc gravity as a quality signal has opposite
+    effects on the two videos.** Identical has mostly
+    short tracklets where the parabolic fit is unreliable
+    (apex near one end of the data window, asymmetric
+    motion). YouTube has long tracklets with many arcs
+    where the parabolic fit captures real motion. A
+    single weight set cannot optimize for both. Future
+    implementations should use per-video adaptive weights
+    or length-dependent weights.
+
+56. **Chain 21's h8v8=0.0 is a false negative.** t31 and
+    t36 are real tracklets in a real chain (v5 quality
+    0.966). The per-arc parabolic fit gives g=0.117
+    because the apex is near the start of t31 and the
+    t36 motion is purely falling. The parabolic
+    coefficient g doesn't measure "parabolic-ness" well
+    when the data doesn't span a full arc.
+
+57. **H8 v8's per-arc statistics are still useful as a
+    TRACKLET-LEVEL signal** even if the per-CHAIN
+    composite (h8v8) doesn't work well. Future work
+    should:
+    - Use h8v8 only on YouTube (or long tracklets)
+    - Combine h8v8 with tracklet length (longer
+      tracklets → more reliable g)
+    - Report h8v8 as a per-tracklet flag, not a
+      per-chain composite
+

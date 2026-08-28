@@ -1669,3 +1669,84 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v6/*.png` (4)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v6b/*.png` (3)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v6_report.md`
+
+---
+
+### H10 v6 (2026-08-28 ~12:30 CEST)
+
+- Hypothesis: H8 v8's per-arc parabolic fits give a useful
+  TRACKLET quality signal. Tracklets whose arcs all have
+  gravity close to the expected 0.5 are clean parabolic
+  tracklets. A chain of such tracklets is more likely a
+  real juggling cycle. Adding h8v8 (per-arc gravity
+  consistency) as a 4th quality dimension should improve
+  the chain ranking over H10 v5.
+
+- Thresholds (declared from physical geometry):
+  - G_TOLERANCE = 0.3 (clean arc: g in [0.2, 0.8])
+  - G_FLOOR = 0.0, G_CEIL = 2.0 (valid g range)
+  - WEIGHTS_V6 = (0.25 h3, 0.20 h8, 0.30 h9, 0.25 h8v8)
+
+- Quantitative result (default weights, h8v8=0.25):
+
+  | Video | v5 mean q | v6 mean q | n_changed | improved | unchanged | worsened |
+  |---|---|---|---|---|---|---|
+  | identical | 0.529 | 0.495 | 35/43 | 31 | 7 | 5 |
+  | youtube | 0.537 | 0.569 | 4/15 | 4 | 9 | 2 |
+
+  **H10 v6 has OPPOSITE effects on the two videos:**
+  - identical: HURTS mean quality (0.529 → 0.495).
+    Chain 21 (v5 #0) drops to v6 #7 because t31/t36 have
+    per-arc g=0.117 (asymmetric motion artifact, NOT a
+    real quality signal).
+  - youtube: HELPS mean quality (0.537 → 0.569).
+    Chain 3, 8, 0 promote from v5 ranks 2, 4, 7 to v6
+    ranks 2, 3, 5 because they have h8v8=0.88 (high
+    arc-gravity consistency).
+
+- Sensitivity grid (h8v8 weight):
+
+  | w8v8 | identical mean q | youtube mean q |
+  |---|---|---|
+  | 0.00 (= v5) | 0.529 | 0.537 |
+  | 0.10 | 0.520 | 0.547 |
+  | 0.20 | 0.513 | 0.556 |
+  | 0.25 (default) | 0.510 | 0.559 |
+  | 0.30 | 0.507 | 0.562 |
+  | 0.40 | 0.502 | 0.567 |
+  | 0.50 | 0.498 | 0.571 |
+
+  Sensitivity is **NOT flat** on either video. Higher w8v8
+  → better YouTube ranking, worse identical ranking.
+
+- Big movers (default weights):
+  - identical: chain 21 (v5 #0 → v6 #7, q 0.966 → 0.643);
+    chain 2 (v5 #4 → v6 #0, q 0.921 → 0.816)
+  - youtube: chain 0 (v5 #7 → v6 #4); chain 1 (v5 #3 → v6 #8)
+
+- Negative findings:
+  - **H10 v6 with default weights HURTS identical ranking.**
+    Chain 21's t31/t36 have unreliable parabolic fits
+    because the apex is near one end of the data window,
+    making the symmetric-parabola fit give a low g.
+  - **The h8v8 dimension has opposite effects on the two
+    videos.** Identical has short tracklets with unreliable
+    parabolic fits. YouTube has long tracklets with many
+    arcs. A single weight set cannot optimize for both.
+  - **Chain 21's h8v8=0.0 may be a false negative.** The
+    chain is a real single ball (v5 quality 0.966 confirms)
+    but the v8 per-arc analysis says it has irregular
+    parabolic motion.
+
+- Verdict: **MIXED.** H10 v6 introduces a real 4th quality
+  dimension but the per-arc gravity signal is unreliable on
+  short identical tracklets. Recommended v6b: per-video
+  adaptive weights (w8v8=0 for identical, w8v8=0.30 for
+  YouTube). Not implemented in this episode. See
+  `h1_hand_pool/reports/h10v6_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v6_with_h8v8.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6_chain_quality_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v6_report.md`
