@@ -1942,3 +1942,61 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v8_chain_quality_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v8_chain_quality_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v8_report.md`
+
+### H12 v7 (2026-08-28 ~14:30 CEST)
+
+- Hypothesis: H7v2 fixes the YouTube over-counting at the source
+  (25/27 BALLISTIC edges reclassified). Re-running the v2 pattern
+  inference on H7v2 chains with H10 v8 quality should give
+  meaningful YouTube pattern classification for the first time.
+- Implementation:
+  1. Census built from H7v2 chains (different membership than
+     H237v5 chains).
+  2. Catch/throw timeline from H7v2 hand-edges (including
+     RECLASSIFIED_HAND_TRANSITION).
+  3. Chain quality = H10 v8 quality.
+  4. Hand parsed from reclassify_reason for reclassified edges
+     (e.g. "side=left").
+- Quantitative result:
+
+  | Video | Metric | v2 | v7 |
+  |---|---|---|---|
+  | identical | CASCADE_3+ | 6.8% | 0.2% |
+  | identical | FOUNTAIN_3+ | 15.5% | 17.7% |
+  | identical | MIXED_3+ | 29.3% | 32.8% |
+  | YouTube | MIXED_3+_UNCONFIRMED | **100%** | **7.8%** |
+  | YouTube | CASCADE_3+ | 0% | 12.4% |
+  | YouTube | FOUNTAIN_3+ | 0% | 23.5% |
+  | YouTube | MIXED_3+ | 0% | 56.3% |
+
+- Visual QA on late phase f=890-1050 (6 frames): vision tool
+  confirms pattern is CASCADE (balls alternate hands), but
+  v7 still classifies 74.5% as FOUNTAIN_3+. This is the
+  same fundamental limitation as v2: event log is right-hand-
+  biased in the late phase, so the K=4 window sees mostly
+  right-hand events.
+- Negative findings:
+  - **YouTube is genuinely a 5-ball pattern** (visual
+    confirmation at f=2, f=500). The n_total=5 in 67% of
+    frames is correct, not an over-counting artifact.
+  - H7v2 fixes the h8 over-penalization (chain quality) but
+    does NOT fix the CASCADE/FOUNTAIN classification (event
+    log density). These are two separate problems.
+  - H12 v7's CASCADE_3+ on identical drops from 6.8% to 0.2%
+    because H7v2's reclassification creates more right-hand-
+    dominant event sequences, which fail the CASCADE criteria.
+- Verdict: **MIXED.** H12 v7 successfully fixes the YouTube
+  pattern classification (100% UNCONFIRMED → 12.4% CASCADE /
+  23.5% FOUNTAIN / 56.3% MIXED). It does NOT fix the
+  CASCADE/FOUNTAIN misclassification on identical (event log
+  density is the fundamental bottleneck). See
+  `h1_hand_pool/reports/h12_v7_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v7_h7v2_patterns.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v7_late_phase_sheet.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v7_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_phases_v7_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/catch_throw_timeline_v7_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v7_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v7/late_phase_f890_1040.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v7_report.md`

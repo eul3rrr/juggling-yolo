@@ -824,3 +824,34 @@ useful source record:
     the top chain. This is the largest single-episode
     improvement since H10 v5.
 
+
+## Cross-cutting insights from H12 v7 (2026-08-28 ~14:30)
+
+65. **Chain quality and pattern classification are
+    orthogonal.** H7v2 fixes the YouTube chain quality
+    (h8 over-penalization), but the CASCADE/FOUNTAIN
+    classification is still limited by event log density.
+    These are two separate problems; fixing one doesn't
+    fix the other.
+
+66. **YouTube is genuinely a 5-ball pattern.** Visual
+    confirmation at f=2 (4 balls) and f=500 (5 balls).
+    The n_total=5 in 67% of frames is correct, not an
+    over-counting artifact. Earlier interpretation of
+    YouTube as "5 balls inflated by over-counting" was
+    wrong — the 5 balls are real.
+
+67. **Reclassifying edges changes event log density.** H7v2
+    adds ~25 more hand-edge events to the YouTube event
+    log (reclassified BALLISTIC edges). This changes the
+    K=4 window contents, which changes the CASCADE/
+    FOUNTAIN classification. H12 v7's identical CASCADE_3+
+    drops from 6.8% to 0.2% because of this effect.
+
+68. **The CASCADE/FOUNTAIN ambiguity is fundamentally
+    unresolvable with single-camera 2D tracking.** The
+    late-phase right-hand bias in the event log is a
+    detection artifact (the detector misses some right-
+    hand catch events), not a model bug. Multi-view or
+    higher frame rate could fix it, but those are out of
+    scope.

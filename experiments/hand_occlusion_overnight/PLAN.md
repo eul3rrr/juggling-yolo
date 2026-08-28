@@ -786,3 +786,42 @@ recommended chain quality score, replacing H10 v6b.
    spatial pattern inference, etc.) rather than chain-level
    quality.
 
+
+## Twenty-fifth episode (H12 v7) — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+1. ✅ Implemented H12 v7: re-run pattern inference on H7v2
+   chains with H10 v8 quality.
+2. ✅ Fixed hand parsing for reclassified edges (parse
+   `side=left/right` from reclassify_reason).
+3. ✅ Ran on both videos. YouTube 100% UNCONFIRMED → 12.4%
+   CASCADE / 23.5% FOUNTAIN / 56.3% MIXED.
+4. ✅ Visual QA on late phase f=890-1050: vision tool confirms
+   CASCADE pattern but v7 still classifies 74.5% FOUNTAIN_3+.
+5. ✅ Documented in `h12_v7_report.md`.
+
+**Verdict: MIXED.** H12 v7 successfully fixes the YouTube
+pattern classification (chain quality layer). It does NOT
+fix the CASCADE/FOUNTAIN misclassification on identical
+(event log density is the fundamental bottleneck).
+
+**Insight: YouTube is genuinely a 5-ball pattern.** Visual
+confirmation at f=2 (4 balls) and f=500 (5 balls). The
+n_total=5 in 67% of frames is correct, not an over-counting
+artifact.
+
+**Next episode candidates:**
+
+1. **H237 v6: enrich h237 unified chain with H7v2
+   reclassification metadata.** Useful as a downstream
+   consumer (e.g. for juggling-pattern analyzers that want
+   to know "this chain has 6 hand edges and 0 BALLISTIC
+   edges, so it's a real juggling cycle").
+2. **H13: detector-level low-confidence ball detection.**
+   Now that the chain structure is well-understood, a
+   detector-level signal could find missed balls near hands.
+3. **Stop here.** The CASCADE/FOUNTAIN problem is
+   fundamentally unresolvable with current data (event log
+   density, single-camera 2D tracking). Future work needs
+   a different signal (multi-view, higher frame rate, or
+   ground truth).
