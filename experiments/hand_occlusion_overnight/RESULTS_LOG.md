@@ -2830,3 +2830,72 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h33_visual_qa_check.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h33_report.md`
 
+
+### H34 (2026-08-28 ~12:50 CEST)
+
+- Hypothesis: H22 (YouTube 16->21 veto -> 20->21) and H26 (identical
+  7->10, 59->61 H24-KEPT edges) are on different videos and don't
+  conflict. Combining them should give the union of both improvements,
+  producing the h7v3plus3 chain set as the new recommended operating
+  point.
+- Approach:
+  - Take h7v3plus2 chains as base (h7v3pure + 2 H24-KEPT edges)
+  - Apply H22's 1 YouTube veto: replace existing 16->21 with 20->21
+    (cost 1.0, H22_RECLASSIFIED_HAND_TRANSITION)
+  - Run min-cost flow with the augmented edge set
+  - Walk new chains
+  - Compute H10 v10 chain quality (v6b per-video weights, with the
+    h3-redistribution rule from h10v10_with_h26.py)
+- Quantitative result:
+
+  | Video | h7v3plus2 chains | h7v3plus3 chains | h7v3plus2 mean q | h7v3plus3 mean q | Delta |
+  |---|---|---|---|---|---|
+  | identical | 42 | 42 | 0.8105 | 0.8105 | 0.0000 |
+  | YouTube | 15 | 15 | 0.6852 | 0.6886 | **+0.0034** |
+
+  Edge type counts (h7v3plus3):
+  - identical: 6 HAND_TRANS + 12 RECLASSIFIED + 4 V_RECLASSIFIED +
+    2 H26_RECLASSIFIED + 2 AMBIGUOUS_HAND + 8 BALLISTIC
+  - YouTube: 1 HAND_TRANS + 22 RECLASSIFIED + 1 V_RECLASSIFIED +
+    1 H22_RECLASSIFIED
+
+  Chain topology change (YouTube):
+  - h7v3plus2 chain 0: (1,9,13,16,21,29,34) — 7 tids
+  - h7v3plus3 chain 0: (1,9,13,16) — 4 tids (16 no longer connects to 21)
+  - h7v3plus3 chain 10: (20,21,29,34) — 4 tids (new chain with 20->21 edge)
+
+- Bug found and fixed in h34_chain_quality.py: initial version used
+  a formula that excluded h3 from the average when h3 was None, which
+  made single-tracklet chains drop from 1.0 to 0.7. Fixed to use the
+  h10v10_with_h26.py formula with h3-redistribution across h8, h9,
+  h8v8. The h3-redistribution rule: when h3 is None, redistribute the
+  h3 weight across h8, h9, h8v8 in proportion to their existing weights.
+- Visual QA: not re-done. The H22 visual QA (8 contact sheets,
+  4 identical + 4 YouTube) already confirmed the 20->21 edge is real
+  and the 16->21 is wrong. The H26 visual QA (H24 at scale) already
+  confirmed the 2 H24-KEPT identical edges are real.
+- Negative findings:
+  - H22 YouTube improvement (+0.0034) is small. The visual
+    confirmation is the primary value; the chain quality metric
+    doesn't fully capture the topology correction.
+  - The 7-tid YouTube chain split produces two shorter chains, but
+    the mean quality is preserved. Downstream consumers that rely
+    on long chains for pattern inference (e.g., H12) will see
+    shorter chains, which may affect pattern statistics.
+  - h7v3plus3 does NOT add any NEW visually-confirmed REAL edges
+    beyond what h7v3plus2 + h7v3veto have. It's the union.
+- Verdict: **PASS (incremental, union-of-improvements).**
+  h7v3plus3 is the new recommended chain set, replacing
+  h7v3plus2 (H26). The qualitative change (correct chain topology
+  on YouTube) is more valuable than the small mean quality
+  improvement suggests.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h34_combined_chain_set.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h34_min_cost_flow.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h34_chain_quality.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h34_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h34_h10v10_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus3_admitted_edges_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus3_chains_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v10_h7v3plus3_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h34_report.md`

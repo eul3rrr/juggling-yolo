@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""H34 — H10 v10 chain quality on H7v3plus3 chains (H22+H26 combined)."""
+"""H34 — H10 v10 chain quality on H7v3plus3 chains (H22+H26 combined).
+
+Faithful port of h10v10_with_h26.py to h7v3plus3 chains. Includes:
+- h3-redistribution rule when h3 is None
+- h9 = coverage (observed_frames / span_frames)
+- h8v8 = mean per-tid arc_score using h8_v8_extrema_arcs
+- n_h3_eligible excludes V_RECLASSIFIED and H22_RECLASSIFIED
+  (matches h10v10_with_h26.py)
+"""
 from __future__ import annotations
 
 import csv
@@ -49,20 +57,33 @@ def load_edges(stem: str) -> list[dict]:
             r["to_tid"] = int(r["to_tid"])
             try:
                 r["cost"] = float(r["cost"])
-            except (ValueError, KeyError):
+            except (ValueError, KeyError, TypeError):
                 r["cost"] = None
             out.append(r)
     return out
 
 
+def load_tracklets(stem: str) -> dict[int, dict]:
+    out = {}
+    with (H1_DATA / "tracklet_features.csv").open() as fh:
+        for r in csv.DictReader(fh):
+            if r["stem"] != stem:
+                continue
+            r["tid"] = int(r["tid"])
+            r["first_frame"] = int(r["first_frame"])
+            r["last_frame"] = int(r["last_frame"])
+            r["n_pts"] = int(r["n_pts"])
+            out[r["tid"]] = r
+    return out
+
+
 def load_h3_confirmed(stem: str) -> set:
-    path = H1_DATA / "hand_links_v4_v4d_throw7_full_with_h3.csv"
     confirmed = set()
+    path = H1_DATA / "hand_links_v4_v4d_throw7_full_with_h3.csv"
     if not path.exists():
         return confirmed
     with path.open() as fh:
-        rdr = csv.DictReader(fh)
-        for r in rdr:
+        for r in csv.DictReader(fh):
             if r["stem"] == stem and r.get("h3_confirmed", "False") == "True":
                 confirmed.add((int(r["from_tid"]), int(r["to_tid"])))
     return confirmed
@@ -102,66 +123,94 @@ def load_h8v8_per_arc_g(stem: str) -> dict[int, list[float]]:
     return out
 
 
-def compute_chain_quality(chain: dict, edges: list[dict],
+def compute_arc_g_score(gs, expected_g=0.5, tolerance=0.3) -> float:
+    if not gs:
+        return 0.5
+    n_clean = sum(1 for g in gs if abs(g - expected_g) <= tolerance)
+    return n_clean / len(gs)
+
+
+def compute_h9(stem: str, chains: list[dict], tracklets: dict[int, dict]) -> dict:
+    """Coverage = observed_frames / span_frames (matches h10v10_with_h26)."""
+    out = {}
+    for c in chains:
+        tids = c["tids"]
+        if not tids:
+            continue
+        observed = sum(tracklets[t]["n_pts"] for t in tids
+                       if t in tracklets)
+        span = c["last_frame"] - c["first_frame"]
+        coverage = min(1.0, observed / span) if span > 0 else 1.0
+        out[c["chain_id"]] = coverage
+    return out
+
+
+def compute_chain_quality(chain: dict, edges_in_chain: list[dict],
                           h3_confirmed: set, h8_violations: set,
-                          h8_unknowns: set, h8v8_arcs: dict[int, list[float]],
-                          weights: dict) -> dict:
-    """Compute H10 v10 quality for one chain."""
-    cids = set(chain["tids"])
-    chain_edges = [e for e in edges if e["from_tid"] in cids and e["to_tid"] in cids]
-    n_total = len(chain_edges)
+                          h8_unknowns: set, h8v8_stats: dict,
+                          coverage: float, weights: dict) -> dict:
+    """Compute H10 v10 quality for one chain.
 
-    n_hand = sum(1 for e in chain_edges if e["edge_type"] in (
-        "HAND_TRANSITION", "AMBIGUOUS_HAND_TRANSITION", "RECLASSIFIED_HAND_TRANSITION",
-        "V_RECLASSIFIED_HAND_TRANSITION", "H26_RECLASSIFIED_HAND_TRANSITION",
-        "H22_RECLASSIFIED_HAND_TRANSITION"))
-    n_v_reclass = sum(1 for e in chain_edges if e["edge_type"] == "V_RECLASSIFIED_HAND_TRANSITION")
-    n_h26 = sum(1 for e in chain_edges if e["edge_type"] == "H26_RECLASSIFIED_HAND_TRANSITION")
-    n_air = sum(1 for e in chain_edges if e["edge_type"] == "BALLISTIC")
-    n_h3 = sum(1 for e in chain_edges if (e["from_tid"], e["to_tid"]) in h3_confirmed)
+    Faithful to h10v10_with_h26.py:
+    - n_h3_eligible = HAND + RECLASSIFIED + AMBIGUOUS + H26
+      (excludes V_RECLASSIFIED and H22_RECLASSIFIED)
+    - h3 = n_h3 / n_h3_eligible if n_h3_eligible > 0 else None
+    - h8 = (n_air - n_viol - 0.5*n_unk) / n_air if n_air > 0 else 1.0
+    - h8v8 = mean of per-tid arc_g scores
+    - h3-redistribution rule when h3 is None
+    """
+    n_total = len(edges_in_chain)
+    n_hand = sum(1 for e in edges_in_chain if "HAND" in e["edge_type"])
+    n_v_reclass = sum(1 for e in edges_in_chain
+                      if e["edge_type"] == "V_RECLASSIFIED_HAND_TRANSITION")
+    n_h26 = sum(1 for e in edges_in_chain
+                if e["edge_type"] == "H26_RECLASSIFIED_HAND_TRANSITION")
+    n_h22 = sum(1 for e in edges_in_chain
+                if e["edge_type"] == "H22_RECLASSIFIED_HAND_TRANSITION")
+    n_air = sum(1 for e in edges_in_chain if e["edge_type"] == "BALLISTIC")
+    n_h3_eligible = sum(1 for e in edges_in_chain
+                        if e["edge_type"] in (
+                            "HAND_TRANSITION",
+                            "RECLASSIFIED_HAND_TRANSITION",
+                            "AMBIGUOUS_HAND_TRANSITION",
+                            "H26_RECLASSIFIED_HAND_TRANSITION",
+                        ))
+    n_h3 = sum(1 for e in edges_in_chain
+               if e["edge_type"] in (
+                   "HAND_TRANSITION",
+                   "RECLASSIFIED_HAND_TRANSITION",
+                   "AMBIGUOUS_HAND_TRANSITION",
+                   "H26_RECLASSIFIED_HAND_TRANSITION",
+               )
+               and (e["from_tid"], e["to_tid"]) in h3_confirmed)
+    h3 = (n_h3 / n_h3_eligible) if n_h3_eligible > 0 else None
 
-    # H3 score: fraction of hand-edges with H3 confirmation
-    # If n_hand == 0, h3 is None (no edges to confirm)
-    h3 = (n_h3 / n_hand) if n_hand > 0 else None
+    n_viol = sum(1 for e in edges_in_chain
+                 if e["edge_type"] == "BALLISTIC"
+                 and (e["from_tid"], e["to_tid"]) in h8_violations)
+    n_unk = sum(1 for e in edges_in_chain
+                if e["edge_type"] == "BALLISTIC"
+                and (e["from_tid"], e["to_tid"]) in h8_unknowns)
+    h8 = ((n_air - n_viol - 0.5 * n_unk) / n_air) if n_air > 0 else 1.0
 
-    # H8 score: fraction of BALLISTIC edges without physics violation
-    # If n_air == 0, h8 = 1.0 (no air edges = no violations)
-    air_violating = sum(1 for e in chain_edges
-                        if e["edge_type"] == "BALLISTIC"
-                        and (e["from_tid"], e["to_tid"]) in h8_violations)
-    air_unknown = sum(1 for e in chain_edges
-                      if e["edge_type"] == "BALLISTIC"
-                      and (e["from_tid"], e["to_tid"]) in h8_unknowns)
-    h8 = 1.0 - (air_violating / n_air) if n_air > 0 else 1.0
+    h9 = coverage
 
-    # H9 score: a chain has 1.0 if it has at least one tid
-    h9 = 1.0 if chain["n_tracklets"] > 0 else 0.0
+    arc_scores = [compute_arc_g_score(h8v8_stats.get(t, []))
+                  for t in chain["tids"]]
+    h8v8 = sum(arc_scores) / len(arc_scores) if arc_scores else 0.5
 
-    # H8v8 score: per-arc gravity consistency
-    chain_arcs = []
-    for tid in chain["tids"]:
-        chain_arcs.extend(h8v8_arcs.get(tid, []))
-    if chain_arcs:
-        clean = sum(1 for g in chain_arcs if 0.2 <= g <= 0.8)
-        h8v8 = clean / len(chain_arcs)
-    else:
-        h8v8 = 0.5  # no arcs = neutral
-
-    # Composite quality v10 (per-video weights)
-    # The H10 v6b formula excludes h3 if n_hand == 0 (h3=None)
-    # and uses h8v8 with weight 0 for identical (per H10 v6b)
     w = weights
-    q_components = []
-    if h3 is not None and w["h3"] > 0:
-        q_components.append(w["h3"] * h3)
-    if w["h8"] > 0:
-        q_components.append(w["h8"] * h8)
-    if w["h9"] > 0:
-        q_components.append(w["h9"] * h9)
-    if w["h8v8"] > 0:
-        q_components.append(w["h8v8"] * h8v8)
-    total_w = sum(w.values())
-    q = sum(q_components) / total_w if total_w > 0 else 0.0
+    if h3 is None:
+        s = w["h8"] + w["h9"] + w["h8v8"]
+        if s > 0:
+            w8_eff = w["h8"] + w["h3"] * w["h8"] / s
+            w9_eff = w["h9"] + w["h3"] * w["h9"] / s
+            w8v8_eff = w["h8v8"] + w["h3"] * w["h8v8"] / s
+        else:
+            w8_eff, w9_eff, w8v8_eff = 0.0, 0.0, 0.0
+    else:
+        w8_eff, w9_eff, w8v8_eff = w["h8"], w["h9"], w["h8v8"]
+    q = (w["h3"] * (h3 or 0) + w8_eff * h8 + w9_eff * h9 + w8v8_eff * h8v8)
 
     return {
         "chain_id": chain["chain_id"],
@@ -169,11 +218,12 @@ def compute_chain_quality(chain: dict, edges: list[dict],
         "n_hand_edges": n_hand,
         "n_v_reclass_edges": n_v_reclass,
         "n_h26_edges": n_h26,
+        "n_h22_edges": n_h22,
         "n_air_edges": n_air,
         "n_h3_confirmed": n_h3,
         "n_air_in_chain": n_air,
-        "n_air_violating": air_violating,
-        "n_air_unknown": air_unknown,
+        "n_air_violating": n_viol,
+        "n_air_unknown": n_unk,
         "h3_score": round(h3, 4) if h3 is not None else "",
         "h8_score": round(h8, 4),
         "h9_score": round(h9, 4),
@@ -187,15 +237,31 @@ def main() -> None:
     for stem in STEMS:
         chains = load_chains(stem)
         edges = load_edges(stem)
+        tracklets = load_tracklets(stem)
         h3_confirmed = load_h3_confirmed(stem)
         h8_violations, h8_unknowns = load_h8_violations(stem)
-        h8v8_arcs = load_h8v8_per_arc_g(stem)
+        h8v8_stats = load_h8v8_per_arc_g(stem)
+        coverage_map = compute_h9(stem, chains, tracklets)
         weights = WEIGHTS_PER_VIDEO[stem]
+
+        # Build chain -> edges map (only consecutive edges within chain)
+        chain_edges = defaultdict(list)
+        for c in chains:
+            tids = c["tids"]
+            for i in range(len(tids) - 1):
+                a, b = tids[i], tids[i + 1]
+                for e in edges:
+                    if e["from_tid"] == a and e["to_tid"] == b:
+                        chain_edges[c["chain_id"]].append(e)
+                        break
 
         results = []
         for c in chains:
-            r = compute_chain_quality(c, edges, h3_confirmed, h8_violations,
-                                      h8_unknowns, h8v8_arcs, weights)
+            cid = c["chain_id"]
+            r = compute_chain_quality(
+                c, chain_edges[cid], h3_confirmed, h8_violations,
+                h8_unknowns, h8v8_stats, coverage_map[cid], weights,
+            )
             results.append(r)
 
         results.sort(key=lambda r: -r["quality_v10"])
@@ -203,7 +269,6 @@ def main() -> None:
         mean_q = sum(r["quality_v10"] for r in results) / len(results)
         print(f"  {stem}: n_chains={len(chains)} mean_v10={mean_q:.4f}")
 
-        # Save per-chain CSV
         out_csv = H1_DATA / f"h10v10_h7v3plus3_{stem}.csv"
         with out_csv.open("w", newline="") as fh:
             cols = list(results[0].keys())

@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 12:35 CEST
-STATUS: H30 + H31 + H32 + **H33** COMPLETE. **H32 NEGATIVE**: per-chain
+LAST_UPDATE: 2026-08-28 12:50 CEST
+STATUS: H30 + H31 + H32 + H33 + **H34** COMPLETE. **H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -16,8 +16,11 @@ cascade-vs-fountain classification problem. **H33 NEGATIVE**:
 tracklet-time overlap is not a useful signal for multi-ball
 detection — the h7v3plus2 chain construction produces temporally
 sequential tracklets by design, so even multi-ball-merge chains
-have NO tracklet overlap. Recommended operating point remains
-h7v3plus2 (H26).
+have NO tracklet overlap. **H34 PASS (incremental)**: union of
+H22 YouTube 16->21 veto (-> 20->21) and H26 identical 7->10/59->61
+H24-KEPT edges. YouTube 7-tid chain (1,9,13,16,21,29,34) is
+correctly split into (1,9,13,16) and (20,21,29,34). Recommended
+operating point is now **h7v3plus3** (H34).
 
 ## Isolation
 
@@ -554,10 +557,28 @@ Remaining research directions (priorities):
     H32. Tracklet-time overlap is not a useful signal. See
     `h1_hand_pool/reports/h33_report.md`.
 
-## H32 conclusion
+43. **H34: H22 + H26 combined chain set (h7v3plus3) + H10 v10
+    chain quality** — DONE. PASS (incremental, union-of-improvements).
+    Combines H22's YouTube 16->21 veto (-> 20->21) with H26's
+    2 identical H24-KEPT edges (7->10, 59->61). h7v3plus3 is
+    the new recommended chain set, replacing h7v3plus2 (H26).
+    Results:
+    - identical: 42 chains, mean q 0.8105 (unchanged from h7v3plus2)
+    - YouTube: 15 chains, mean q 0.6886 (+0.0034 vs h7v3plus2's 0.6852)
+    - YouTube chain topology: the contested 7-tid chain
+      (1,9,13,16,21,29,34) is correctly split into
+      (1,9,13,16) and (20,21,29,34)
+    - Found and fixed a chain-quality formula bug (h3=None handling)
+      in the initial h34_chain_quality.py — the v1 formula
+      incorrectly made single-tracklet chains drop from 1.0 to 0.7.
+      Fixed to use h10v10_with_h26.py's h3-redistribution rule.
+    See `h1_hand_pool/reports/h34_report.md`.
 
-The recommended operating point h7v3plus2 (H26) has been thoroughly
-characterized:
+## H34 conclusion
+
+The recommended operating point h7v3plus3 (H34) is the union of
+H22's YouTube 16->21 veto and H26's identical 7->10/59->61
+H24-KEPT edges:
 
 - **H10 v10 chain quality** is a real but imperfect signal for
   single-ball-ness (1/7 false positive rate on visual QA).
@@ -566,27 +587,40 @@ characterized:
 - **H32 hand-alternation pattern_verdict** is confounded by
   multi-ball merges (5/7 MULTI_BALL_MERGE on visual QA).
 
-**For downstream consumers:** the h7v3plus2 chain set is a list of
-"real hand events" with 42 identical + 15 YouTube chains. For
-"single-ball trajectory" claims, use H11 v7 CONFIDENT chains (9 + 1).
-For "this catch/throw happened here" claims, use h7v3plus2 + H10 v10
-quality. For "this chain is CASCADE/FOUNTAIN" claims, abandon the
-classification — the chain is mostly multi-ball merges, not a
-single-ball pattern.
+**For downstream consumers:** the h7v3plus3 chain set (H34) is a
+list of "real hand events" with 42 identical + 15 YouTube chains.
+For "single-ball trajectory" claims, use H11 v7 CONFIDENT chains
+(9 + 1). For "this catch/throw happened here" claims, use h7v3plus3
++ H10 v10 quality. For "this chain is CASCADE/FOUNTAIN" claims,
+abandon the classification — the chain is mostly multi-ball merges,
+not a single-ball pattern.
 
-## Future research directions (post H32)
+## Future research directions (post H34)
+
+The h7v3plus3 chain set is now the recommended operating point.
+The most likely productive directions:
 
 1. **Multi-ball identification** — the fundamental problem is now
-   "is this chain a single physical ball?" not "is this chain a
-   cascade or fountain?". Possible approaches:
+   "is this chain a single physical ball?". Possible approaches:
    - Cross-tracklet velocity coherence (H8 v5 already checks
      per-edge; could extend to per-chain)
-   - Color tracking (H25 was mentioned in H30 but not implemented;
+   - Color tracking (mentioned in H30 but not implemented;
      would require re-running detector)
    - Multi-view 3D (out of scope for monocular 2D setup)
-2. **H33 literature search** — multi-ball juggling tracking methods
+2. **Literature search for multi-ball juggling tracking methods**
    that handle identity and hand-occlusion. See RESEARCH_NOTES for
-   current sources.
-3. **Stop here.** The h7v3plus2 chain set is well-validated. Further
-   chain improvements would require fundamentally different signals
-   (multi-view, learned color tracking, or 3D ball estimation).
+   current sources. Possible directions:
+   - Where Is The Ball (Ponglertnapakorn 2025) — 3D trajectory
+     estimation, but requires LSTM training
+   - TOTNet (2025) — learned temporal tracking, requires
+     sports-tracking dataset
+   - Cooperative Trajectory Matching (2024) — Kalman filter
+     prediction
+3. **Re-running downstream consumers on h7v3plus3** — H12 pattern
+   inference, H11 v7 identity propagation, H237 unified chain
+   representation all need re-measurement on the new chain set
+   to fully characterize the impact of H22's YouTube chain split.
+4. **Stop here.** The h7v3plus3 chain set is well-validated.
+   Further chain improvements would require fundamentally different
+   signals (multi-view, learned color tracking, or 3D ball
+   estimation).
