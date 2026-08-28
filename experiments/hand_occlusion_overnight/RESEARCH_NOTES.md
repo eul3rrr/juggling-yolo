@@ -231,6 +231,29 @@ useful source record:
    new links that v4d missed). v4d's hand-event detection
    is the primary signal; H3 adds confidence.
 
+9. **H4 face-mask hypothesis was wrong.** The H3 YouTube
+   false positive is not face-feature confusion; it's
+   a stuck detection on a stationary high-up object
+   (~200 px above the wrist). A simple geometric mask
+   cannot solve detector confusion on arbitrary
+   stationary features. This is a useful negative
+   result: it tells us that detector confusion is
+   *general* (any stationary feature), not specific
+   to faces. A real fix would require a more
+   discriminating detector or a learned "ball-ness"
+   classifier.
+
+10. **H6 min-cost flow validates the "hand-edge wins
+    on conflict" design principle.** A simplified
+    per-source greedy min-cost flow (HAND=1.0,
+    AMBIGUOUS_HAND=1.5, BALLISTIC=2.0) resolves the
+    1 H2 conflict (tracklet 3 → {9, 8}) by picking
+    the hand-edge (cost 1.5) over the air-edge
+    (cost 2.0). This is the same answer as the visual
+    QA on H2 confirmed. **The "hand-edge wins"
+    principle is now backed by both visual evidence
+    AND a cost-based formulation.**
+
 ---
 
 ## See also

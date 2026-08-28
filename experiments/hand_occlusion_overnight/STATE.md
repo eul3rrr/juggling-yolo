@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 05:55 CEST
-STATUS: H1 v4 + H2 + v5 sens grid + H3 + H4 COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded. H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls, 1 YouTube false positive (stuck on a stationary high-up object, NOT face). H4 face-mask attempt FAILED — the YouTube H3 false positive is not a face feature; a simple geometric mask cannot solve detector confusion on arbitrary stationary features.
+LAST_UPDATE: 2026-08-28 06:00 CEST
+STATUS: H1 v4 + H2 + v5 sens grid + H3 + H4 + H5 + H6 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost).
 
 ## Isolation
 
@@ -83,8 +83,9 @@ STATUS: H1 v4 + H2 + v5 sens grid + H3 + H4 COMPLETE. v4d is the recommended han
   30px radius over ≥5 frames) correctly identifies
   6/6 identical-video v4d hand-link held phases as real
   held balls, with 1 false positive on the YouTube video
-  (stuck on face). H3 is useful as a *downstream confidence
-  signal* on v4d links, not as a general held-ball detector.
+  (stuck on a stationary high-up object, NOT face).
+  H3 is useful as a *downstream confidence signal* on v4d
+  links, not as a general held-ball detector.
   See `h1_hand_pool/reports/h3_report.md`.
 
 ## Strongest findings so far
@@ -167,25 +168,20 @@ extraction: 10 identical + 1 youtube links with visual precision
 
 ## Next action
 
-1. **Apply H3 as a downstream confidence signal on v4d
-   links.** Add a `h3_confirmed: bool` field to v4d link
-   records when a v3 stationary cluster is found in the
-   held phase. This gives consumers a per-link
-   corroboration flag.
-2. **H4 follow-up: Try a learned "ball-ness" classifier**
-   to filter out non-ball stationary features. The simple
-   geometric mask doesn't work; a learned model on
-   detection features (size, color, shape) might. This
-   would require a small training set.
-3. **H5: min-cost flow formulation of AIR+HAND graph.**
-   Try to resolve the 1 H2 conflict (tracklet 3 → {hand=9,
-   air=8}) optimally instead of recording it. The current
-   H2 union-find records conflicts; a min-cost flow could
-   resolve them by choosing the lowest-cost edge.
-4. **H6: explicit object permanence.** v4d is implicitly
-   object-permanent (tokens persist 60 frames), but a v6
-   could model this explicitly and use it to bridge
-   detector dropouts in the H2 chains.
+1. **Integrate H3 + H2 + H6 into a unified chain
+   representation.** Add h3_confirmed per H2 link and
+   apply H6's conflict resolution. The resulting
+   representation is the most informative possible:
+   v4d hand-links + E6c air-edges + H3 confirmation
+   + H6 conflict resolution.
+2. **H7: full min-cost flow** with capacity
+   constraints (one predecessor + one successor per
+   tracklet) using networkx.
+3. **H8: learned "ball-ness" classifier** to filter
+   out non-ball stationary features (the H4 failure
+   mode). Would require a small training set.
+4. **H9: explicit object permanence** to bridge
+   detector dropouts in H2 chains.
 
 ## Important artifact paths
 

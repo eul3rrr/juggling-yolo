@@ -1,0 +1,49 @@
+{
+  "h6_thresholds": {
+    "HAND_EDGE_COST": 1.0,
+    "AIR_EDGE_COST": 2.0,
+    "IDENTITY_AMBIGUOUS_HAND_COST": 1.5
+  },
+  "summary": {
+    "identical_balls_trick_000_018": {
+      "n_edges": 37,
+      "n_conflicts": 1,
+      "n_chains": 18,
+      "n_multi": 17,
+      "longest": 7,
+      "longest_chain": [
+        35,
+        37,
+        40,
+        41,
+        43,
+        45,
+        46
+      ],
+      "resolutions": {
+        "3": [
+          "9",
+          "AMBIGUOUS_HAND_TRANSITION",
+          1.5
+        ]
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_edges": 27,
+      "n_conflicts": 0,
+      "n_chains": 11,
+      "n_multi": 11,
+      "longest": 7,
+      "longest_chain": [
+        1,
+        9,
+        13,
+        16,
+        21,
+        29,
+        34
+      ],
+      "resolutions": {}
+    }
+  }
+}

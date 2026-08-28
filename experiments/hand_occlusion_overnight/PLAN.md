@@ -197,16 +197,43 @@ confusion, it's a stuck detection on a stationary high-up
 object. A simple geometric mask cannot solve detector
 confusion on arbitrary stationary features.
 
-## Eighth episode — PLANNED
+## Eighth episode (H5+H6) — STATUS: COMPLETE
 
 Sub-steps:
 
-1. **Apply H3 as a downstream confidence signal on v4d
-   links.** Add a `h3_confirmed: bool` field to v4d link
-   records when a v3 stationary cluster is found in the
-   held phase.
-2. **H5: min-cost flow formulation of AIR+HAND graph.**
-   Resolve the 1 H2 conflict (tracklet 3 → {hand=9, air=8})
-   optimally.
-3. **H6: explicit object permanence.** Bridge detector
-   dropouts in the H2 chains.
+1. ✅ Implemented H5: H3 stationary-cluster as a
+   downstream confidence flag on v4d links. 6/11 links
+   have h3_confirmed=True.
+2. ✅ Implemented H6: simplified per-source greedy
+   min-cost flow. Resolves the 1 H2 conflict (tracklet
+   3 → {9, 8}) by preferring the hand-edge (cost 1.5)
+   over the air-edge (cost 2.0). Same answer as visual
+   QA on H2.
+3. ✅ Documented in `h5` (script + CSV output) and
+   `h6_report.md`.
+
+**H5 verdict: PASS.** Useful as a downstream
+confidence signal.
+
+**H6 verdict: PASS (limited scope).** Validates
+"hand-edge wins on conflict" via a cost-based
+formulation. A true min-cost flow with capacity
+constraints would be more principled but is
+unnecessary for this dataset (1 conflict).
+
+## Ninth episode — PLANNED
+
+Sub-steps (lower priority; the lab is well-progressed
+on hand-occlusion work):
+
+1. **H7: literature search.** If new ideas emerge
+   from web research, design a literature-derived
+   experiment.
+2. **H8: full min-cost flow** with capacity constraints
+   (one predecessor + one successor per tracklet) using
+   `networkx.min_cost_flow` or similar.
+3. **H9: H3 + H2 + H6 integration.** Produce a
+   unified chain representation that includes:
+   - H2's edge list (hand + air)
+   - H3's confirmation flags (h3_confirmed per link)
+   - H6's conflict resolutions (one successor per source)

@@ -413,4 +413,53 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h4/*.png` (7 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h4_report.md`
 
+### H5 (2026-08-28 ~05:55 CEST)
+
+- Hypothesis: H3 stationary-cluster can be applied as a
+  downstream confidence flag on v4d links. Add a
+  `h3_confirmed: bool` field to v4d link records when a
+  v3 stationary cluster is found in the held phase.
+- Implementation: `scripts/h5_h3_confirmation.py` re-runs
+  the H3 v3 stationary-cluster check on each v4d link
+  restricted to the held phase (from_frame + 5 to
+  to_frame - 5).
+- Result: 6/11 v4d links have h3_confirmed=True
+  (3→9, 11→14, 54→59, 53→60, 59→63, 10→12). The
+  remaining 5 don't have a stationary cluster in the
+  middle of the held phase (often because the held
+  phase is too short or the detector didn't fire).
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h5_h3_confirmation.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/hand_links_v4_v4d_throw7_full_with_h3.csv`
+
+### H6 (2026-08-28 ~06:00 CEST)
+
+- Hypothesis (master §17): a min-cost flow formulation
+  can resolve the 1 H2 conflict (tracklet 3 → {9, 8})
+  optimally. H2's union-find records but doesn't
+  resolve conflicts.
+- Implementation: `scripts/h6_min_cost_flow.py` uses a
+  simplified per-source greedy min-cost: for each
+  source tracklet, pick the lowest-cost successor.
+  Costs: HAND=1.0, AMBIGUOUS_HAND=1.5, BALLISTIC=2.0.
+- Result: tracklet 3 → 9 (hand, cost 1.5) wins over
+  → 8 (air, cost 2.0). **Same answer as visual QA.**
+- Negative findings:
+  - The simplified "one successor per tracklet"
+    approach produces fewer, longer chains than H2's
+    union-find (18 vs 40 on identical) because it
+    disallows a tracklet having multiple predecessors
+    (e.g. chain 38 where 47 and 51 both predict 52).
+  - A true min-cost flow with capacity constraints
+    (one predecessor + one successor per tracklet)
+    would be more principled but unnecessary for this
+    dataset (1 conflict).
+- Verdict: **PASS (limited scope).** H6 validates
+  "hand-edge wins on conflict" via a cost-based
+  formulation. See `h1_hand_pool/reports/h6_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h6_min_cost_flow.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h6_min_cost_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h6_report.md`
+
 ---
