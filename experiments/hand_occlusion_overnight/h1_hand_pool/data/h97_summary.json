@@ -1,0 +1,30 @@
+{
+  "H97_methodology": "Cross-validate H96 v2 on 113 manual review pairs (H59 GT)",
+  "overlap_pairs": 15,
+  "overlap_match": 15,
+  "overlap_disagree": 0,
+  "h77_metrics": {
+    "P": 0.979,
+    "R": 0.648,
+    "FPR": 0.024,
+    "TP": 46,
+    "FP": 1,
+    "FN": 25
+  },
+  "h77_conf_unc_metrics": {
+    "P": 1.0,
+    "R": 0.465,
+    "TP": 33,
+    "FP": 0
+  },
+  "h96_v2_phase_level": {
+    "TP": 17,
+    "TN": 4,
+    "FP": 0,
+    "FN": 0,
+    "P": 1.0,
+    "R": 1.0,
+    "acc": 1.0
+  },
+  "verdict": "H96 v2 has NO edge-level impact (P=0.979, R=0.648 identical to H77). The (CONF or UNCER) gate achieves P=1.000 on 33/33 pairs. The H96 v2 phase-level PERFECT 17/4/0/0 (P=1.000, R=1.000, acc=1.000) is the FINAL operating point on the 21 H93 corrected phases."
+}

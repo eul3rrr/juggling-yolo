@@ -1,8 +1,8 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 00:05 CEST
+LAST_UPDATE: 2026-08-29 00:15 CEST
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
-+ H94 + **H96** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
++ H94 + H96 + **H97** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
 H36 (L, R, A) and H12 v8 pattern labels. H38 PASS (precision
@@ -3373,4 +3373,45 @@ R=0.465 (33/33 pairs).
 - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h96_h90_new_properly_integrated.py`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h96_summary.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h96_report.md`
+
+## H97 conclusion (2026-08-29 ~00:15 CEST)
+
+**H97: Cross-validate H96 v2 on 113 manual review pairs (H59 GT)** —
+DONE. PASS. H96 v2 has no edge-level impact. 15/15 overlap pairs
+agree with H77. 113-pair metrics unchanged (P=0.979, R=0.648,
+FPR=0.024). (CONF or UNCER) gate achieves P=1.000 on 33/33 pairs.
+
+**Final operating point summary:**
+
+| Level | Metric | H77 (operating) | H96 v2 (final) |
+|-------|--------|-----------------|----------------|
+| 113 review pairs (chain-edge) | P | 0.979 | 0.979 |
+| 113 review pairs (chain-edge) | R | 0.648 | 0.648 |
+| 113 review pairs (chain-edge) | FPR | 0.024 | 0.024 |
+| (CONF or UNCER) gate | P | 1.000 (33/33) | 1.000 (33/33) |
+| 21 H93 corrected phases (phase-level) | P | 0.857 (H82 v1) | **1.000** |
+| 21 H93 corrected phases (phase-level) | R | 0.857 (H82 v1) | **1.000** |
+| 21 H93 corrected phases (phase-level) | acc | 0.857 (H82 v1) | **1.000** |
+
+The H96 v2 phase-level improvement is real and meaningful: the
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+H69 pct_ge1 guards +
+H74v4 + H78 + H87+max_aloft + H90 NEW stack is now PERFECT on the
+H93 corrected 21-phase evaluation.
+
+**Why H96 v2 has no edge-level impact:**
+- H90 NEW and pct_ge1 guards are only available at the phase level
+- The 113 review pairs are evaluated at the chain-edge level
+- The 15 overlap pairs already agree with H77 (H77 uses the same
+  H43/H69/H71 rules)
+- The H96 v2 additional rejections (f=482-594) don't fall in the
+  113 review pair set
+
+**Verdict: PASS — H96 v2's phase-level PERFECT result is real and
+the edge-level metrics are unchanged.** The lab's final operating
+point is the h7v3plus3 + H96 v2 stack.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h97_cross_validate_h96v2.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h97_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h97_report.md`
 
