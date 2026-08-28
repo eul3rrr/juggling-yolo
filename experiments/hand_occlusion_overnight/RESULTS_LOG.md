@@ -794,3 +794,55 @@ Multi-edge chains on identical (sorted by quality):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10_sensitivity_grid.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h10/*.png` (6 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10_report.md`
+
+### H8 v4 (2026-08-28 ~07:50 CEST)
+
+- Hypothesis: H8 v3 is unreliable on long tracklets because
+  the constant-velocity tail/head windows are contaminated by
+  the tracklet's multiple parabolic arcs. Restricting H8 to
+  short tracklets (n_pts ≤ 30) should recover the physics signal.
+- Thresholds (declared from physical geometry):
+  - SHORT_N = 30
+  - VELOCITY_DISCONTINUITY_PX_PER_FRAME = 8.0
+- Quantitative result:
+
+|| Method | identical n_air_OK | identical n_air_VIOL | identical LONG | youtube n_air_OK | youtube n_air_VIOL | youtube LONG |
+||---|---|---|---|---|---|---|
+|| v3 (all) | 14 | 9 | 0 | 1 | 23 | 0 |
+|| **v4 (short)** | **2** | **3** | **18** | **0** | **0** | **24** |
+
+  v4 catches 3 NEW short-tracklet violations on identical
+  (19→20, 51→52, 23→25) that v3 already caught. But v4
+  SKIPS 18 long-tracklet edges on identical, including 2
+  known true positives (5→6, 50→55).
+
+- Visual QA on 5 edges:
+  - 19→20, 51→52, 23→25: v4 VIOLATING, all confirmed
+    REAL identity switches.
+  - 5→6: v3 VIOLATING → v4 LONG_TRACKLET. CONFIRMED
+    identity switch but v4 misses it (false negative).
+  - 50→55: v3 OK → v4 LONG_TRACKLET. v3 was lenient;
+    v3 visual QA originally noted this as a confirmed
+    identity switch (H8 v3 report).
+
+- Negative findings:
+  - H8 v4 trades false positives (YouTube long-tracklet
+    noise) for false negatives (missing real identity
+    switches on long tracklets on identical).
+  - H8 v4 provides ZERO physics signal on YouTube (all
+    24 air edges are LONG_TRACKLET).
+  - Neither v3 nor v4 alone is ideal for cross-video use.
+
+- Verdict: **NEGATIVE (v4 not worth the trade-off).**
+  H8 v3 should be retained as the primary H8 signal for
+  H10. Future H8 v5 should use a graduated penalty (e.g.
+  parabolic fit on long-tracklet tail/head) rather than
+  the binary v4 skip. See
+  `h1_hand_pool/reports/h8_v4_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v4_short_tracklet.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v4_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v4_short_tracklet_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8v4/*.png` (5 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_v4_report.md`

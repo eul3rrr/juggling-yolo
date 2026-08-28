@@ -308,6 +308,30 @@ useful source record:
     principle is now backed by both visual evidence
     AND a cost-based formulation.**
 
+11. **H10 chain quality is a real signal.** The
+    composite quality score (0.30*h3 + 0.30*h8 + 0.40*h9)
+    successfully separates real single-ball chains from
+    multi-ball merges. Top-quality chains (chain 23,
+    chain 6) are real juggling cycles. Low-quality
+    chains (chain 13) are dominated by false ballistic
+    edges. Mid-quality chains (chain 30) contain
+    identity switches. H10 has 1 false positive
+    (chain 38) due to H8+H3 limitations, but this is
+    a known limitation of the underlying H8 check.
+    **H10 is useful as a downstream confidence signal
+    for chain consumers** (e.g. juggling-pattern
+    analyzers).
+
+12. **H8 v4 short-tracklet-only is a regression.**
+    Restricting H8 to tracklets with n_pts <= 30
+    removes the YouTube false positives but also
+    misses 2 known true positives (5→6, 50→55) on
+    identical. The trade-off is not worth it. The
+    right fix is a graduated penalty (parabolic fit
+    on long-tracklet tails) rather than a binary
+    skip. H8 v3 remains the primary H8 signal for
+    H10.
+
 ---
 
 ## See also

@@ -296,28 +296,52 @@ low-quality chains are dominated by false ballistic edges.
 H10 has 1 false positive (chain 38) due to H3+H8
 limitations. See `h1_hand_pool/reports/h10_report.md`.
 
-## Eleventh episode — PLANNED
+## Eleventh episode (H8 v4) — STATUS: COMPLETE (NEGATIVE)
 
-The lab has produced strong hand-occlusion work (H1-H10)
-and the chain representation is now in good shape.
+Sub-steps:
+
+1. ✅ Wrote `h8_v4_short_tracklet.py` that restricts H8 v3
+   to tracklets with n_pts ≤ 30.
+2. ✅ Ran on both videos. Identical: 3 v4-VIOLATING
+   (19→20, 51→52, 23→25), 18 LONG_TRACKLET, 2 OK.
+   YouTube: 0 OK, 0 VIOLATING, 24 LONG_TRACKLET.
+3. ✅ Visual QA on 5 edges:
+   - 19→20, 51→52, 23→25: v4 VIOLATING, all
+     CONFIRMED identity switches
+   - 5→6: v3 VIOLATING → v4 LONG_TRACKLET.
+     CONFIRMED identity switch but v4 misses it
+     (false negative)
+   - 50→55: v3 OK → v4 LONG_TRACKLET
+4. ✅ Documented in `h8_v4_report.md` and updated
+   RESULTS_LOG.
+
+**H8 v4 verdict: NEGATIVE (v4 not worth the trade-off).**
+v4 trades YouTube false positives for identical false
+negatives. Neither v3 nor v4 alone is ideal. v3
+retained as H10's H8 signal.
+
+## Twelfth episode — PLANNED
+
 Remaining ideas:
 
-1. **H11: chain quality regression test** — train a
+1. **H8 v5: parabolic-fit long-tracklet physics** —
+   for long tracklets, fit a parabola to the last 8-12
+   frames of source and first 8-12 frames of target,
+   then predict the expected y-velocity at the gap edges
+   using constant-gravity extrapolation. Compare predicted
+   to actual. This would be more robust than v3 (which
+   uses 3-frame mean velocity) and v4 (which skips long
+   tracklets). Should improve H10 for YouTube chains.
+2. **H11: chain quality regression test** — train a
    simple classifier on the H3+H8+H9 features plus a
    few additional ones (chain length, gap variance,
    hand-edge count) to predict chain quality. Compare
    to H10's hand-tuned weights. If the classifier
    agrees with H10's ranking, H10 is well-calibrated.
-2. **H8 v2: Kalman-filter physics check** — restrict
-   H8 to short tracklets (n_pts ≤ 30), use a simple
-   Kalman filter with constant gravity to predict the
-   expected velocity at the target tracklet's start,
-   and compare to the actual velocity.
 3. **H9 v2: Kalman-filter extrapolation** — replace
    H9's linear interpolation with a Kalman filter
    (constant gravity) for gap-frame position estimates.
-4. **H12: tracklet-level identity propagation** — given
-   a high-quality chain, can we propagate identity labels
-   across the chain to enable juggling-pattern analysis?
-   This would be a downstream consumer of the H10 quality
-   score.
+4. **H12: tracklet-level identity propagation** —
+   given a high-quality chain, propagate identity
+   labels across the chain to enable juggling-pattern
+   analysis (downstream consumer of H10 quality).
