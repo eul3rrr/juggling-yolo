@@ -1,0 +1,2 @@
+phase_start,phase_end,n_frames,n_total,mean_confidence,mean_A,max_A,pct_A_ge2,threshold,h43_rejected,h66_rejected,h68_rejected
+800,861,62,5,0.651,1.298,3,0.421,0.45,False,True,True

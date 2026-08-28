@@ -1,0 +1,139 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_phases": 4,
+      "n_rejected": 2,
+      "n_total": 3,
+      "threshold": 0.2,
+      "phases": [
+        {
+          "phase_start": 631,
+          "phase_end": 669,
+          "n_frames": 39,
+          "n_total": 3,
+          "mean_confidence": 0.714,
+          "mean_A": 1.795,
+          "max_A": 3,
+          "pct_A_ge2": 0.692,
+          "threshold": 0.2,
+          "h43_rejected": false,
+          "h66_rejected": false,
+          "h68_rejected": false
+        },
+        {
+          "phase_start": 890,
+          "phase_end": 936,
+          "n_frames": 47,
+          "n_total": 3,
+          "mean_confidence": 0.571,
+          "mean_A": 1.306,
+          "max_A": 3,
+          "pct_A_ge2": 0.306,
+          "threshold": 0.2,
+          "h43_rejected": false,
+          "h66_rejected": false,
+          "h68_rejected": false
+        },
+        {
+          "phase_start": 977,
+          "phase_end": 1011,
+          "n_frames": 35,
+          "n_total": 3,
+          "mean_confidence": 0.565,
+          "mean_A": 0.68,
+          "max_A": 2,
+          "pct_A_ge2": 0.12,
+          "threshold": 0.2,
+          "h43_rejected": false,
+          "h66_rejected": true,
+          "h68_rejected": true
+        },
+        {
+          "phase_start": 1029,
+          "phase_end": 1049,
+          "n_frames": 21,
+          "n_total": 3,
+          "mean_confidence": 0.463,
+          "mean_A": 0.846,
+          "max_A": 1,
+          "pct_A_ge2": 0.0,
+          "threshold": 0.2,
+          "h43_rejected": true,
+          "h66_rejected": true,
+          "h68_rejected": true
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_phases": 3,
+      "n_rejected": 1,
+      "n_total": 5,
+      "threshold": 0.45,
+      "phases": [
+        {
+          "phase_start": 339,
+          "phase_end": 374,
+          "n_frames": 36,
+          "n_total": 5,
+          "mean_confidence": 0.646,
+          "mean_A": 1.727,
+          "max_A": 3,
+          "pct_A_ge2": 0.576,
+          "threshold": 0.45,
+          "h43_rejected": false,
+          "h66_rejected": false,
+          "h68_rejected": false
+        },
+        {
+          "phase_start": 482,
+          "phase_end": 594,
+          "n_frames": 113,
+          "n_total": 5,
+          "mean_confidence": 0.653,
+          "mean_A": 1.654,
+          "max_A": 3,
+          "pct_A_ge2": 0.558,
+          "threshold": 0.45,
+          "h43_rejected": false,
+          "h66_rejected": false,
+          "h68_rejected": false
+        },
+        {
+          "phase_start": 800,
+          "phase_end": 861,
+          "n_frames": 62,
+          "n_total": 5,
+          "mean_confidence": 0.651,
+          "mean_A": 1.298,
+          "max_A": 3,
+          "pct_A_ge2": 0.421,
+          "threshold": 0.45,
+          "h43_rejected": false,
+          "h66_rejected": true,
+          "h68_rejected": true
+        }
+      ]
+    }
+  },
+  "end_to_end": {
+    "identical_balls_trick_000_018": {
+      "n_frames": 1042,
+      "n_changed": 56,
+      "pct_changed": 5.37
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_frames": 898,
+      "n_changed": 62,
+      "pct_changed": 6.9
+    }
+  },
+  "methodology": {
+    "filters_stacked": "H43 (conf < 0.55) + H66 (per-n_total pct_A_ge2 < threshold)",
+    "thresholds": {
+      "3": 0.2,
+      "5": 0.45
+    },
+    "H43_threshold": 0.55,
+    "HAND_REACH": 100.0
+  }
+}
