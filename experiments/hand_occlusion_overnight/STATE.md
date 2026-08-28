@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 14:35 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + **H39**
+LAST_UPDATE: 2026-08-28 14:50 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + **H40 + H41**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -513,34 +513,26 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
-H39 is complete (NEGATIVE for H12 v8 FOUNTAIN_3+ post-filter).
-H12 v8 FOUNTAIN_3+ classification is fundamentally unreliable
-(only 30% accurate on visual QA). H36 is not a useful
-validator. A better fix would require a continuous hand-
-occupancy signal, which the chain-driven H36 doesn't provide.
+H40 + H41 complete. H40 is a useful diagnostic (3-4x more
+hand-occupancy coverage than H36). H41 is NEGATIVE — does
+not solve H12 v8 FOUNTAIN_3+ classification problem.
 
 Recommended operating point remains h7v3plus3 (H34).
 
 Remaining research directions (priorities):
-1. **H40: continuous hand-occupancy signal.** Build a
-   per-frame hand-occupancy signal from the underlying
-   detector + pose data, not from chain events. This would
-   enable a proper FOUNTAIN_3+ post-filter (and likely
-   improve H12 v8 pattern inference). Approach:
-   - For each frame, check if any detected ball is within
-     the hand reach (108 px) of either wrist
-   - If yes, mark as hand-occupied (L=1 or R=1)
-   - This is a per-frame signal, not chain-driven
-2. **H41: H12 v9 with H40 signal.** Re-run H12 pattern
-   inference using the continuous hand-occupancy signal
-   instead of the chain-driven K=4 window. May produce
-   better CASCADE/FOUNTAIN classification.
-3. **H42: literature search for juggling-specific multi-ball
-   tracking.** The H17→H20→H31 chain and H32's finding that
-   the chain set is mostly multi-ball merges suggest that
-   we need fundamentally different signals (per-point color
-   tracking, multi-view 3D, learned color tracking) to
-   distinguish single balls from multi-ball merges.
+1. **H42: H40 v2 enrichment of H36 (L, R, A) state.** Replace
+   H36's chain-driven HOLD state with H40 v2 sustained-occupancy
+   when no chain event has fired recently. This would give a
+   truly continuous (L, R, A) state that combines chain events
+   with raw hand-occupancy.
+2. **H43: H12 v9 with H40 signal.** Re-run H12 pattern inference
+   using H40 v2 continuous hand-occupancy to disambiguate
+   CASCADE from FOUNTAIN. May produce better pattern
+   classification than H12 v8's K=4 window.
+3. **H44: combined H40 + H12 v8 confidence.** Filter FOUNTAIN_3+
+   classifications that have H40 v2 sustained-occupancy in
+   BOTH hands (>50% both-hands rate). This is a more
+   permissive version of H41.
 
 H37 is complete (PASS, consumer-pass, validation). H36 (L, R, A)
 state validates CASCADE_3+ but cannot disambiguate FOUNTAIN_3+.
@@ -753,6 +745,43 @@ require a continuous hand-occupancy signal, which H36 doesn't
 provide.
 
 See `h1_hand_pool/reports/h39_report.md` for full analysis.
+
+## H40 + H41 conclusion
+
+**H40: continuous per-frame hand-occupancy signal.** Implements
+two signals: H40 v1 (per-frame, 108 px reach) and H40 v2
+(sustained 100 px reach, 3-frame run). H40 v2 detects ~3-4x
+more hand-occupancy than H36 (72.3% vs 23.7% on identical,
+98.1% vs 25.8% on YouTube). H40 is a useful diagnostic
+signal — independent of chain events.
+
+**H41: FOUNTAIN_3+ post-filter via H40 v2.** H41 v1
+(MIN_OCC=0.50) and v2 (MIN_OCC=0.20) implemented. Both
+over-reject real juggling phases and over-keep real
+misclassifications. H41 v2 precision is 50% on rejects
+(same as H39 v2) — no improvement.
+
+**Key finding:** H40 v2 hand-occupancy does NOT cleanly
+discriminate FOUNTAIN from CASCADE. On identical, FOUNTAIN
+81.8% vs CASCADE 90.9% (similar). On YouTube, FOUNTAIN 98.2%
+vs CASCADE 96.9% (essentially equal). The "both-hands
+occupied" rate is more discriminating (YouTube FOUNTAIN
+74.5% vs CASCADE 42.2%) but is dominated by sustained
+ball-wrist proximity, not actual holds.
+
+**Negative finding:** H40 sustained-occupancy detects "ball
+near hand", not "ball held by hand". A ball passing through
+the 100 px hand reach for 3 frames is counted as
+hand-occupied. This is a fundamental limitation of 2D
+distance as a proxy for holding.
+
+**Verdict:** H40 PASS as a diagnostic signal (better
+hand-occupancy coverage than H36). H41 NEGATIVE as a
+FOUNTAIN_3+ post-filter. H12 v8 FOUNTAIN_3+ classification
+remains fundamentally unreliable (per H39).
+
+See `h1_hand_pool/reports/h40_h41_report.md` for full
+analysis.
 
 ## Future research directions (post H34)
 

@@ -1,0 +1,140 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_fountain_before": 291,
+      "n_fountain_rejected": 100,
+      "n_fountain_kept": 191,
+      "n_phases_total": 12,
+      "n_phases_rejected": 5,
+      "n_phases_kept": 7,
+      "rejected_phases": [
+        {
+          "start": 411,
+          "end": 449,
+          "n": 39,
+          "occ_rate": 0.15,
+          "both_rate": 0.0,
+          "reason": "low_occ_rate=0.15"
+        },
+        {
+          "start": 631,
+          "end": 669,
+          "n": 39,
+          "occ_rate": 0.0,
+          "both_rate": 0.0,
+          "reason": "low_occ_rate=0.00"
+        },
+        {
+          "start": 775,
+          "end": 779,
+          "n": 5,
+          "occ_rate": 0.0,
+          "both_rate": 0.0,
+          "reason": "low_occ_rate=0.00"
+        },
+        {
+          "start": 860,
+          "end": 871,
+          "n": 12,
+          "occ_rate": 0.25,
+          "both_rate": 0.0,
+          "reason": "low_occ_rate=0.25"
+        },
+        {
+          "start": 1070,
+          "end": 1074,
+          "n": 5,
+          "occ_rate": 0.0,
+          "both_rate": 0.0,
+          "reason": "low_occ_rate=0.00"
+        }
+      ],
+      "kept_phases": [
+        {
+          "start": 243,
+          "end": 252,
+          "n": 10,
+          "occ_rate": 0.7,
+          "both_rate": 0.0
+        },
+        {
+          "start": 263,
+          "end": 312,
+          "n": 50,
+          "occ_rate": 0.64,
+          "both_rate": 0.24
+        },
+        {
+          "start": 685,
+          "end": 716,
+          "n": 32,
+          "occ_rate": 0.78,
+          "both_rate": 0.44
+        },
+        {
+          "start": 733,
+          "end": 766,
+          "n": 34,
+          "occ_rate": 1.0,
+          "both_rate": 0.25
+        },
+        {
+          "start": 977,
+          "end": 1011,
+          "n": 35,
+          "occ_rate": 0.74,
+          "both_rate": 0.09
+        },
+        {
+          "start": 1030,
+          "end": 1050,
+          "n": 21,
+          "occ_rate": 0.55,
+          "both_rate": 0.15
+        },
+        {
+          "start": 1056,
+          "end": 1060,
+          "n": 5,
+          "occ_rate": 1.0,
+          "both_rate": 0.0
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_fountain_before": 110,
+      "n_fountain_rejected": 106,
+      "n_fountain_kept": 4,
+      "n_phases_total": 3,
+      "n_phases_rejected": 3,
+      "n_phases_kept": 0,
+      "rejected_phases": [
+        {
+          "start": 339,
+          "end": 374,
+          "n": 36,
+          "occ_rate": 0.97,
+          "both_rate": 0.53,
+          "reason": "high_both_rate=0.53"
+        },
+        {
+          "start": 701,
+          "end": 708,
+          "n": 8,
+          "occ_rate": 0.88,
+          "both_rate": 0.62,
+          "reason": "high_both_rate=0.62"
+        },
+        {
+          "start": 800,
+          "end": 861,
+          "n": 62,
+          "occ_rate": 0.94,
+          "both_rate": 0.58,
+          "reason": "high_both_rate=0.58"
+        }
+      ],
+      "kept_phases": []
+    }
+  }
+}

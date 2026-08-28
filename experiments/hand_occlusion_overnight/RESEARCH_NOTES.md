@@ -1260,3 +1260,47 @@ useful source record:
     - CASCADE/FOUNTAIN disambiguation on the late phase
     This is the highest-priority next step (H40).
 
+## Cross-cutting insights from H40 + H41 (2026-08-28 ~14:50)
+
+36. **H40 v2 sustained-occupancy detects 3-4x more hand-
+    occupancy than H36 chain-driven state.** H36 reports
+    HOLD state during chain-event gaps even when the
+    juggler's hands ARE occupied. H40 v2 captures this
+    continuous state (72.3% on identical, 98.1% on
+    YouTube, vs H36's 23.7% and 25.8%).
+
+37. **H40 v2 hand-occupancy does NOT cleanly discriminate
+    FOUNTAIN from CASCADE.** On identical, FOUNTAIN 81.8%
+    vs CASCADE 90.9% (similar). On YouTube, FOUNTAIN 98.2%
+    vs CASCADE 96.9% (essentially equal). The "both-hands
+    occupied" rate is more discriminating (YouTube
+    FOUNTAIN 74.5% vs CASCADE 42.2%) but is dominated by
+    sustained ball-wrist proximity, not actual holds.
+
+38. **H40 sustained-occupancy detects "ball near hand", not
+    "ball held by hand".** A ball passing through the 100 px
+    hand reach for 3 frames is counted as hand-occupied.
+    This is a fundamental limitation of 2D distance as a
+    proxy for holding. The pose wrist position is at the
+    wrist joint, not the center of the hand palm — at
+    f=631-669 the held ball is 70-90 px from the wrist
+    despite the hand being clearly occupied.
+
+39. **H41 v2 (FOUNTAIN_3+ post-filter via H40 v2) has the
+    same precision as H39 v2 (50% on rejects).** The H40
+    continuous signal doesn't help distinguish FOUNTAIN
+    from CASCADE because the FOUNTAIN_3+ over-classification
+    problem is at the H12 v8 K=4 sliding window level,
+    not at the hand-occupancy level. A reliable fix would
+    need a fundamentally different approach (learned
+    pattern classifier, multi-view 3D, or raw detector
+    re-run).
+
+40. **H40 is a useful diagnostic for chain quality and
+    coverage measurement.** The 3-4x higher hand-occupancy
+    detection rate than H36 makes H40 a more complete
+    picture of the juggling activity. Future H42 could
+    combine H40 with H36 to give a hybrid (L, R, A) state
+    that uses chain events where available and H40
+    sustained-occupancy otherwise.
+

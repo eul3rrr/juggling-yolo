@@ -1,0 +1,33 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_frames": 958,
+      "n_with_L40v2": 502,
+      "n_with_R40v2": 565,
+      "n_with_any40v2": 693,
+      "pattern_occupancy_rate": {
+        "TWO_BALL": 73.0,
+        "MIXED_3+_UNCONFIRMED": 95.7,
+        "SINGLE_BALL": 31.5,
+        "CASCADE_3+": 90.9,
+        "MIXED_3+": 86.7,
+        "TWO_BALL_ONE_HAND": 76.5,
+        "FOUNTAIN_3+": 81.8
+      },
+      "fountain_pure_single_hand_pct": 34.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_frames": 894,
+      "n_with_L40v2": 784,
+      "n_with_R40v2": 778,
+      "n_with_any40v2": 877,
+      "pattern_occupancy_rate": {
+        "MIXED_3+_UNCONFIRMED": 100.0,
+        "CASCADE_3+": 96.9,
+        "MIXED_3+": 98.1,
+        "FOUNTAIN_3+": 98.2
+      },
+      "fountain_pure_single_hand_pct": 23.6
+    }
+  }
+}

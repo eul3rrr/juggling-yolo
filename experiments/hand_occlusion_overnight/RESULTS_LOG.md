@@ -3171,3 +3171,71 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39v2_filtered_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/*.png` (11 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h39_report.md`
+
+### H40 + H41 (2026-08-28 ~14:50 CEST)
+
+- **H40 hypothesis:** H36 only emits hand-occupancy state at
+  chain events. H39 v1/v2 over-rejected real FOUNTAIN_3+ phases
+  because H36 reports HOLD state during chain-event gaps even
+  when the juggler's hands ARE occupied. A continuous per-frame
+  hand-occupancy signal (raw detector + pose) would be more
+  reliable.
+- **H40 v1 (per-frame, 108 px reach):** detects 54.6% hand-
+  occupancy on identical, 90.3% on YouTube (vs H36's 23.7%
+  and 25.8%).
+- **H40 v2 (sustained, 100 px, 3-frame run):** detects 72.3%
+  hand-occupancy on identical, 98.1% on YouTube. Better than
+  v1 at rejecting transient fly-bys.
+- **H40 v2 by H12 v8 pattern (identical):**
+  - FOUNTAIN_3+: 81.8% (47.8% both-hands)
+  - CASCADE_3+: 90.9% (22.7% both-hands)
+  - MIXED_3+: 86.7% (22.2% both-hands)
+  - SINGLE_BALL: 31.5% (6.1% both-hands)
+- **H40 v2 by H12 v8 pattern (YouTube):**
+  - FOUNTAIN_3+: 98.2% (74.5% both-hands)
+  - CASCADE_3+: 96.9% (42.2% both-hands)
+  - MIXED_3+: 98.1% (58.2% both-hands)
+- **H41 hypothesis:** H40 v2-based FOUNTAIN_3+ post-filter
+  should improve over H39 v1 (precision 20%) and v2 (50%).
+- **H41 v1 (MIN_OCC=0.50) and v2 (MIN_OCC=0.20) implemented.**
+  H41 v2 rejects 4 identical phases (f=411-449, f=631-669,
+  f=775-779, f=1070-1074) and all 3 YouTube phases (high
+  both-hands rate).
+- **H41 visual QA on identical:**
+  - 2/4 correct rejects (f=411-449 MIXED, f=631-669 FOUNTAIN — over-rejects)
+  - 2/2 correct keeps (f=243-252 FOUNTAIN, f=685-716 FOUNTAIN)
+  - 2/2 over-keeps (f=977-1011 hold trick, f=1029-1050 2-ball exercise)
+- **Key findings:**
+  1. H40 v2 detects 3-4x more hand-occupancy than H36 (continuous
+     signal, not chain-driven).
+  2. H40 v2 hand-occupancy does NOT cleanly discriminate FOUNTAIN
+     from CASCADE (FOUNTAIN 81.8% vs CASCADE 90.9% on identical,
+     FOUNTAIN 98.2% vs CASCADE 96.9% on YouTube).
+  3. The "both-hands occupied" rate IS more discriminating
+     (YouTube FOUNTAIN 74.5% vs CASCADE 42.2%) but is dominated
+     by sustained ball-wrist proximity, not actual holds.
+  4. H40 sustained-occupancy detects "ball near hand", not
+     "ball held by hand" — a fundamental 2D-distance limitation.
+  5. Pose wrist position is sometimes far from the held ball
+     (70-90 px in f=631-669), causing H40 v2 to under-detect
+     real hand-occupancy.
+- **Verdict:**
+  - **H40 PASS as a diagnostic signal.** Better hand-occupancy
+    coverage than H36, independent of chain events.
+  - **H41 NEGATIVE as a FOUNTAIN_3+ post-filter.** H41 v2
+    precision 50% (same as H39 v2) — no improvement. H12 v8
+    FOUNTAIN_3+ classification remains fundamentally unreliable.
+  - **Recommended operating point:** h7v3plus3 (H34) remains
+    the recommended chain set. H40 is a useful diagnostic but
+    does not solve the H12 v8 FOUNTAIN_3+ problem.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h40_continuous_hand_occupancy.py` (v1)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h40v2_sustained_hand_occupancy.py` (v2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h41_fountain_post_filter_h40.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h40_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h40v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h40_continuous_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h40v2_continuous_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h41_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h41_filtered_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h40_h41_report.md`
