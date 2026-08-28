@@ -353,10 +353,12 @@ Remaining ideas:
 1. **H11: tracklet-level identity propagation** — given
    a high-quality H10 v5 chain, propagate identity labels
    across the chain to enable juggling-pattern analysis.
-2. **H8 v6: per-bounce segmentation for long tracklets**
-   — detect parabolic arc boundaries within long tracklets
-   and only use the local arc's tail/head for the physics
-   check. This would solve the YouTube long-tracklet problem.
+2. ~~**H8 v6: per-bounce segmentation for long tracklets**~~
+   **DONE. NEGATIVE result.** Apex detection (APEX_HALFWIN=6)
+   is too coarse to isolate clean parabolic segments within
+   long tracklets. The juggler's catch-throw motion within
+   a long tracklet contaminates any naive tail fit. v6
+   produces the same YouTube result as v5.
 3. ~~**H10 v6: combined H3 + H8 v5 + H9 features into a
    logistic-regression-trained quality classifier** — see
    if a learned model outperforms H10 v5's hand-tuned
