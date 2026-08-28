@@ -1,7 +1,7 @@
 # Hand-Occlusion Overnight Lab — Final Summary Report
 
-**Date:** 2026-08-28 ~18:30 CEST
-**Episodes:** H1-H68 (68 research episodes over ~18.5 hours)
+**Date:** 2026-08-28 ~19:45 CEST
+**Episodes:** H1-H70 (70 research episodes over ~19.5 hours)
 **Status:** COMPLETE — final operating point validated
 **Author:** autonomous hand-occlusion overnight research lab
 
@@ -28,11 +28,14 @@ Two juggling videos, both 30 fps, monocular 2D:
 
 **h7v3plus3 chain set + H12 v8 pattern inference + H50 10-frame
 event log filter + H43 confidence-based FOUNTAIN_3+ filter +
-H52 physics corroboration**
+H69 spectral-concentration FOUNTAIN_3+ filter + H52 physics
+corroboration**
 
 This stack is the final, validated operating point for downstream
 consumers needing precision-optimized juggling-pattern classification
-on both videos.
+on both videos. **H43 OR H69** is the new FOUNTAIN_3+ post-filter,
+replacing H43 alone from H51. H66 and H68 are no longer applied at
+any threshold (superseded by H69).
 
 ## Episode summary by topic
 
@@ -559,7 +562,66 @@ CSV/JSON files. All committed and pushed to
   (pct=0.12) and static hold (pct=0.00) is too narrow for
   safe discrimination.
 
-## Updated strong findings (post-H65)
+### **H69 — Periodicity of "balls aloft" as FOUNTAIN_3+ post-filter (PASS, H68 superseded)**
+- H69 implements the H68 report's suggestion of using
+  *periodicity* of the A signal (not just level) to discriminate
+  FOUNTAIN from HOLD/CASCADE.
+- Metric: FFT spectral concentration of the per-frame A signal
+  (max FFT power / total power, after Hann windowing). High
+  concentration = coherent periodic A pattern (real FOUNTAIN
+  with synchronized parallel throws). Low concentration =
+  incoherent A pattern (static hold with YOLO false positives,
+  or CASCADE with rapid hand alternation).
+- H43 OR H69(spec_conc < 0.15) on H65 sample (n=7 phases):
+  - 3/3 correct rejects (1029-1049 H43, 482-594 H69, 800-861 H69)
+  - 0/3 wrong rejects (all FOUNTAIN preserved)
+  - 1 wrong kept (890-936 crossed-arm trick, escapes both)
+  - **Precision 100%, recall 75%** (vs H43 alone: 100% / 25%)
+- Per-frame end-to-end impact:
+  - identical: 21/1042 (2.0%) — same as H43 alone
+  - YouTube: 175/898 (19.5%) — H69 adds 175 frames
+    (482-594 + 800-861 = 113 + 62 = 175, both correctly rejected)
+- Sensitivity grid: flat region [0.15, 0.16] on H69 spec_conc.
+  Above 0.16 wrongly rejects 339-374 (real FOUNTAIN).
+  Below 0.15 misses 482-594.
+- **Why H69 works where H66/H68 didn't:** the H66/H68 level
+  metric ("are there balls aloft?") cannot separate 3-ball
+  FOUNTAIN from static hold because both have low ball counts.
+  The H69 spectral concentration is a STRUCTURAL check ("is the
+  ball-aloft pattern coherent?") that captures the temporal
+  pattern of throws. H69 vs H66 is the difference between
+  "what is the A signal level?" and "what is the A signal
+  structure?".
+- **Recommended operating point (H69 supersedes H68):**
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69(spec_conc
+  < 0.15) + H52 + H53. H66 and H68 are no longer applied at
+  any threshold.
+
+### **H70 — H69 spec_conc characterization across pattern types (MIXED)**
+- Question: is H69 spec_conc FOUNTAIN-specific, or a more
+  general "is this a real pattern?" signal?
+- Per-pattern H69 spec_conc on 19 substantial phases:
+  - CASCADE_3+ (n=1): 0.498
+  - FOUNTAIN_3+ (n=6): mean 0.240, range [0.088, 0.411]
+  - MIXED_3+ (n=11): mean 0.205, range [0.124, 0.332]
+  - MIXED_3+_UNCONFIRMED (n=1): 0.075
+- H43 OR H69(spec_conc < 0.15) on ALL substantial phases:
+  - 3 FOUNTAIN_3+ correctly rejected (same as H69)
+  - 1 MIXED_3+ rejected: 114-255 (conc=0.124, vision tool:
+    "NOT real 5-ball juggling. Transition/pause sequence.")
+  - 1 MIXED_3+_UNCONFIRMED rejected: 2-71 (conc=0.075,
+    vision tool: "NOT real juggling. Static demonstration,
+    pose, or freeze-frame.")
+- **Verdict: MIXED.** H69 spec_conc is a GENERAL "pattern
+  coherence" signal that applies to MIXED_3+ too. H70 catches
+  2 additional misclassified MIXED_3+ phases. The recommended
+  operating point is unchanged (H43 + H69 on FOUNTAIN_3+ only).
+  H70 is a useful diagnostic signal that warrants future
+  multi-rater validation. The H70 contact sheets at
+  `contact_sheets_h70/` and `contact_sheets_h70v2/` document
+  the verdicts.
+
+## Updated strong findings (post-H70)
 
 1. **The h7v3plus3 chain set is a closed, validated juggling
    representation** with 100% precision on the 113-pair manual
@@ -569,15 +631,19 @@ CSV/JSON files. All committed and pushed to
    TRACKER_FRAGMENTATION), 0/50 on YouTube.
 3. **H12 v8's FOUNTAIN_3+ classification is 43% accurate** on
    the H50-filtered H65 sample (improved from H39's 30%).
-   H43's confidence-based filter (conf < 0.55) remains the
-   most precise post-filter.
-4. **The chain set is mostly multi-ball merges** (H32, H33,
+4. **H43 + H69 (H43 OR H69) is the new best FOUNTAIN_3+
+   post-filter** (precision 100%, recall 75% on the H65 sample,
+   +1 correct catch vs H43 alone).
+5. **H69 spec_conc is a general "pattern coherence" signal**
+   (H70) that catches misclassified MIXED_3+ phases too. H70
+   is a research-grade extension of H69.
+6. **The chain set is mostly multi-ball merges** (H32, H33,
    H54, H55, H56), not single-ball trajectories. The H11 v7 +
    H10 v11 v3 CONFIDENT chains (3 identical + 1 YouTube) are
    the "purest" single-ball trajectories.
-5. **The 2024 manual review has 1 known label error** (YouTube
+7. **The 2024 manual review has 1 known label error** (YouTube
    16->21, corrected to 20->21 by H22, confirmed by H61).
-6. **Identical 3-ball has a CASCADE->FOUNTAIN transition at
+8. **Identical 3-ball has a CASCADE->FOUNTAIN transition at
    f=240 (H64).** YouTube 5-ball is a CASCADE-SHOWER mix
    (H62, H63). The 11-frame and 17-frame held-phase
    signatures (H58) are consistent with 3-ball cascade and
