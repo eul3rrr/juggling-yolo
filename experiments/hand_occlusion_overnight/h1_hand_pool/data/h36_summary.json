@@ -1,0 +1,48 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "total_balls": 3,
+      "n_events": 26,
+      "n_ambiguous": 2,
+      "n_known_hand": 24,
+      "n_unknown_hand": 0,
+      "n_timeline_entries": 51,
+      "n_per_frame_entries": 1102,
+      "n_violations": 0,
+      "violation_types": {},
+      "n_conflicts": 0,
+      "state_distribution": {
+        "L0 R1 A2": 14,
+        "L0 R0 A3": 26,
+        "L1 R0 A2": 10
+      },
+      "per_frame_state_distribution": {
+        "L0 R0 A3": 805,
+        "L0 R1 A2": 193,
+        "L1 R0 A2": 104
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "total_balls": 5,
+      "n_events": 25,
+      "n_ambiguous": 0,
+      "n_known_hand": 24,
+      "n_unknown_hand": 1,
+      "n_timeline_entries": 50,
+      "n_per_frame_entries": 870,
+      "n_violations": 0,
+      "violation_types": {},
+      "n_conflicts": 0,
+      "state_distribution": {
+        "L1 R0 A4": 10,
+        "L0 R0 A5": 25,
+        "L0 R1 A4": 14
+      },
+      "per_frame_state_distribution": {
+        "L0 R0 A5": 638,
+        "L1 R0 A4": 95,
+        "L0 R1 A4": 137
+      }
+    }
+  }
+}

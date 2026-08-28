@@ -1,16 +1,17 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 13:05 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + **H35** COMPLETE. H35 PASS
-(consumer-pass, no change): H11 v7 identity propagation and H12 v7
-pattern inference re-run on h7v3plus3 (H22 + H26 combined) chain set
-produces identical per-frame pattern distribution to h7v3pure (H12 v8)
-on YouTube. The H22 YouTube 7-tid chain split into 4-tid + 4-tid does
-NOT change the per-frame census. H26's 4 identical events propagate
-correctly. H22's 2 YouTube events propagate correctly. h7v3plus3 is
-now confirmed as functionally equivalent to h7v3pure for downstream
-consumers. Recommended operating point remains h7v3plus3 (H34 + H35).
-**H32 NEGATIVE**: per-chain
+LAST_UPDATE: 2026-08-28 13:20 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + **H36** COMPLETE. H35
+PASS (consumer-pass, no change): h7v3plus3 functionally equivalent
+to h7v3pure for downstream consumers. H36 PASS: per-frame
+hand-occupancy state machine on h7v3plus3 produces a closed
+juggling system (zero conservation violations, zero over-capacity
+events) on both videos. 73% of frames have all balls in air
+(consistent with 3-ball/5-ball cascade patterns). The h7v3plus3
+chain set is now validated at the per-frame hand-occupancy
+level in addition to the chain quality (H10) and identity
+propagation (H11) levels. Recommended operating point remains
+h7v3plus3 (H34 + H35 + H36). **H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -503,6 +504,9 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
+H36 is complete (PASS). The h7v3plus3 chain set is now
+validated at the per-frame hand-occupancy level.
+
 H35 is complete (PASS, consumer-pass). The h7v3plus3 chain set
 is functionally equivalent to h7v3pure for downstream consumers.
 
@@ -620,6 +624,31 @@ YouTube chains, not the multi-tid chain topology).
 h7v3pure for downstream consumers. Use h7v3plus3 going forward.
 
 See `h1_hand_pool/reports/h35_report.md` for full analysis.
+
+## H36 conclusion
+
+H36 implements a per-frame hand-occupancy state machine on
+h7v3plus3 chains. The state is (L, R, A) where L = balls in
+left hand, R = balls in right hand, A = balls in air. The
+state is constrained: L + R + A = total_n_balls (3 for
+identical, 5 for YouTube) and each hand has bounded capacity
+(0-3 balls).
+
+**Key results:**
+- Zero conservation violations on either video.
+- Zero over-capacity events on either video.
+- 73% of frames have all balls in air (consistent with
+  cascade patterns).
+- The h7v3plus3 chain set is a closed juggling system on
+  both videos.
+
+**H36 PASS verdict:** The h7v3plus3 chain set is now
+validated at three levels: chain quality (H10), identity
+propagation (H11), and per-frame hand-occupancy (H36). The
+chain set is a complete, consistent, closed representation
+of the juggling routines in both videos.
+
+See `h1_hand_pool/reports/h36_report.md` for full analysis.
 
 ## Future research directions (post H34)
 

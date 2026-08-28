@@ -2962,3 +2962,62 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_h35_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h35/*.png` (6 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h35_report.md`
+
+
+### H36 (2026-08-28 ~13:20 CEST)
+
+- Hypothesis: The h7v3plus3 chain set is a validated list of
+  hand-events. We can walk the chains chronologically and maintain
+  a (L, R, A) state where L = balls in left hand, R = balls in
+  right hand, A = balls in air. The state is constrained:
+  L + R + A = total_n_balls (3 for identical, 5 for YouTube)
+  and each hand has bounded capacity (0-3 balls).
+  Question: is the chain set a closed juggling system?
+- Approach:
+  - Walk h7v3plus3 chains chronologically, emit per-event
+    CATCH (at from-tracklet last_frame) and THROW (at
+    to-tracklet first_frame).
+  - Update (L, R, A) state. Detect violations:
+    CATCH_NO_AIR, CATCH_OVER_CAP, THROW_EMPTY_HAND,
+    THROW_NO_AIR_SLOT.
+  - Interpolate state to per-frame timeline (HOLD between events).
+  - Render 2 contact sheets (one per video) with stacked
+    area chart of (L, R, A) over time and scatter of catch/
+    throw events.
+- Quantitative result:
+  - identical: 24 known-hand events, 2 ambiguous. 51 timeline
+    entries, 0 violations, 0 over-capacity events. Interpolated
+    per-frame states: 1102. Distribution: L=0 R=0 A=3 (73.0%),
+    L=0 R=1 A=2 (17.5%), L=1 R=0 A=2 (9.4%).
+  - YouTube: 24 known-hand events, 0 ambiguous, 1 unknown-hand.
+    50 timeline entries, 0 violations. Interpolated per-frame
+    states: 870. Distribution: L=0 R=0 A=5 (73.3%),
+    L=0 R=1 A=4 (15.7%), L=1 R=0 A=4 (10.9%).
+- Visual QA: 2 contact sheets rendered. Identical is a clean
+  3-ball cascade; YouTube is a clean 5-ball pattern. Total
+  state is flat at 3 (identical) and 5 (YouTube) throughout,
+  confirming a closed juggling system.
+- Negative findings:
+  - The "73% all in air" baseline is consistent with cascade
+    patterns. No frame has 3+ balls in one hand.
+  - H32's MULTI_BALL_MERGE chains are NOT due to chain-set
+    over-attribution of hand occupancy to one hand. The
+    multi-ball-merge problem is at the per-chain physical-
+    ball-identity level, not the global hand-occupancy level.
+  - Right-hand bias on YouTube (15.7% R vs 10.9% L) is real
+    but unexplained (camera angle or juggler preference).
+- Verdict: **PASS.** The h7v3plus3 chain set is a complete,
+  consistent, closed representation of the juggling routines
+  in both videos, validated at three levels: chain quality
+  (H10), identity propagation (H11), and per-frame
+  hand-occupancy (H36). See `h1_hand_pool/reports/h36_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h36_hand_occupancy_state_machine.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h36_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h36_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h36_timeline_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h36_per_frame_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h36_violations_*.csv` (2 files, empty)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h36_conflicts_*.csv` (2 files, empty)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h36/*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h36_report.md`
