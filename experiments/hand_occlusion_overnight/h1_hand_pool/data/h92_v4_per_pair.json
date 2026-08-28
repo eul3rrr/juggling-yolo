@@ -1,0 +1,36 @@
+{
+  "n_review_pairs": 113,
+  "n_in_target_phases": 0,
+  "n_target_correct": 0,
+  "n_target_wrong": 0,
+  "h77_full": {
+    "P": 0.979,
+    "R": 0.648,
+    "FPR": 0.024,
+    "TP": 46,
+    "FP": 1,
+    "n_correct": 71,
+    "n_wrong": 42
+  },
+  "h77_conf_or_unc": {
+    "P": 1.0,
+    "R": 0.465,
+    "TP": 33,
+    "FP": 0
+  },
+  "h92_v1_impact": "IDENTICAL to H90 v3 on 113 review pairs (no overlap with 2 FN phases)",
+  "h92_v1_recovered_phases": [
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 263,
+      "end": 312,
+      "verdict": "JUGGLING"
+    },
+    {
+      "stem": "identical_balls_trick_000_018",
+      "start": 977,
+      "end": 1011,
+      "verdict": "FOUNTAIN"
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "flat_cells": [
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.05,
+      "pct_ge3_thr": 0.5
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.08,
+      "pct_ge3_thr": 0.5
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.1,
+      "pct_ge3_thr": 0.5
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.12,
+      "pct_ge3_thr": 0.5
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.15,
+      "pct_ge3_thr": 0.5
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.18,
+      "pct_ge3_thr": 0.5
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.1
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.15
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.2
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.25
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.3
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.35
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.4
+    },
+    {
+      "pct_ge2_thr": 0.2,
+      "pct_ge3_thr": 0.5
+    }
+  ],
+  "n_flat": 56,
+  "recommended": {
+    "pct_ge2_thr": 0.15,
+    "pct_ge3_thr": 0.2
+  }
+}

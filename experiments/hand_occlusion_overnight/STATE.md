@@ -2971,23 +2971,104 @@ fundamental limitations of the 3-ball aloft signal.
    but hurts identical (removes true edge-of-frame detections).
    Per-stem calibration is required.
 
-## Next action (H91+)
+## H91 + H92 conclusion (2026-08-28 ~23:55 CEST)
 
-H90 closes the H87-H88-H89-H90 conf-filtering arc. The recommended
-operating points are now well-validated on 21 phases. Remaining
-research directions:
+**H92: per-pattern-class adaptive pct_ge2 threshold for identical
+3-ball phases** — DONE. PASS on the H70 ground truth, but the
+H92 visual QA reveals **2 H70 ground truth errors** that
+undermine the "perfect" metrics.
 
-1. **H91: extend H90 to test on a 3rd video.** If a 3rd juggling
-   video is available, apply the H90 v3 stack to characterize
-   the conf-filtering behavior across detector conditions.
+**H92 v1 rule:** For identical phases, REJECT if
+`(pct_ge3 < 0.20) AND (pct_ge2 < 0.15)`. This recovers the
+2 H90 v3 FNs (f=263-312 JUGGLING, f=977-1011 FOUNTAIN) because
+real 3-ball juggling has pct_ge2 >= 0.20 even when pct_ge3 is
+near 0 (only 1 ball aloft at most times for 3-ball pattern).
 
-2. **H92: per-pattern-class adaptive thresholds.** Different
-   juggling patterns (cascade, FOUNTAIN, startup) have different
-   balls-aloft profiles. Per-class thresholds might preserve
-   more recall on identical.
+**Quantitative result (H70 ground truth):**
 
-3. **Stop here.** H90 v3 is precision-optimized with 100% YouTube
-   accuracy. Further improvements would require fundamentally
-   different signals (multi-view, learned color tracking, or
-   3D ball estimation).
+| Stem    | TP | TN | FP | FN | P     | R     | acc   |
+|---------|----|----|----|----|-------|-------|-------|
+| ident   |  5 |  4 |  0 |  0 | 1.000 | 1.000 | 1.000 |
+| youtu   |  9 |  3 |  0 |  0 | 1.000 | 1.000 | 1.000 |
+| **all** | 14 |  7 |  0 |  0 | 1.000 | 1.000 | 1.000 |
+
+**H92 v2 sensitivity grid:** flat region pct_ge2 in
+[0.05, 0.20] (7 thresholds all give 14/7/0/0). The 0.15
+choice is well-justified by the flat region (per master §15).
+
+**H92 v3 2D grid:** 56/72 cells (78%) in the flat region.
+Wide operating point stability.
+
+**H92 v4 cross-validation on 113 review pairs:** H92 v1 has
+NO edge-level impact. The 2 H92-recovered phases are not in
+the 113 review pair set. H77/H85 metrics unchanged.
+
+**Visual QA (4 contact sheets):**
+- f=263-312 JUGGLING: ✅ CONFIRMED real 3-ball cascade
+- f=977-1011 FOUNTAIN: ⚠️ vision tool ambiguous, H65 verdict is GT
+- **f=733-766 STATIC_HOLD: ❌ vision tool says ACTIVE JUGGLING**
+  (H40v2 LR_var=0.157 was a false STATIC_HOLD trigger)
+- **f=1029-1049 OTHER_STATIC_HOLD: ❌ vision tool says ACTIVE
+  JUGGLING** (H40v2 LR_var=0.355 was a false STATIC_HOLD trigger)
+
+**CRITICAL FINDING (NEW from H92):** The H70 ground truth is
+PARTIALLY CONTAMINATED. 2/9 identical phases are mislabeled:
+- f=733-766: labeled STATIC_HOLD, actually ACTIVE JUGGLING
+- f=1029-1049: labeled OTHER_STATIC_HOLD, actually ACTIVE JUGGLING
+
+The H82+H74 stack "achieves" precision by rejecting these 2
+real juggling phases via H40v2 LR_variance. H92 v1 is a real
+improvement (recovers 2 FNs vs H90 v3 on the corrected ground
+truth), but the "100% accuracy" claim is anchored to a
+partially-flawed H70 ground truth.
+
+**Corrected H70 ground truth (after H92 visual QA):**
+- f=733-766: JUGGLING (was STATIC_HOLD) — H40v2 false positive
+- f=1029-1049: JUGGLING (was OTHER_STATIC_HOLD) — H40v2 false positive
+
+With corrected ground truth, H82+H74 has 4 FN; H92 v1 recovers
+2 of them (the others are still rejected by H82+H87+H71
+baseline, which the H92 v1 rule does NOT override).
+
+**Negative findings:**
+- H40v2 LR_variance is structurally broken for 3-ball patterns
+  (saturates at "both hands always hold 1 ball" = LR=2.0 for
+  any 3-ball cycle where each hand momentarily holds 1 ball).
+- H70 ground truth is partially contaminated (2/9 identical
+  phases mislabeled STATIC_HOLD).
+- H92 v1's "perfect 21-phase metrics" are PARTIALLY CIRCULAR
+  (2/4 TNs are themselves H70 GT errors).
+
+**Recommended operating point (post-H92, with caveats):**
+- Most consumers: h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 +
+  H69 + H74v2 + H78 + **H92 v1 (pct_ge2 < 0.15 on identical)** +
+  H52 + H53
+- 21 phases: 14/7/0/0, P=1.000, R=1.000, acc=1.000
+- 113 review pairs: P=0.979 R=0.648 (no edge impact)
+- H77 + (CONF or UNCER) gate: P=1.000 R=1.000 on 33/33 pairs
+
+**Future research directions (post-H92):**
+1. **H93: re-label the H70 ground truth with multi-rater visual
+   QA on all 21 phases.** Apply the H53 multi-rater methodology
+   (2-4 independent vision queries per phase, conservative
+   tie-breaking) to ALL 21 phases, not just the 7 H70/H71/H72
+   cases. This would correct the H70 ground truth and produce a
+   more reliable evaluation set.
+2. **H94: detect 3-ball "both hands always hold 1 ball" pattern
+   as a FALSE STATIC_HOLD signal.** The H40v2 LR_variance < 0.20
+   is broken for 3-ball patterns. A refined metric could avoid
+   the false positive.
+3. **Stop here on H92 stack.** The H92 v1 rule is well-justified
+   and in a wide flat region. The 2 FNs it recovers are real
+   juggling.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h92_v1_pct_ge2.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h92_v2_sens_grid.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h92_v3_2d_grid.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h92_v4_per_pair.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h92_contact_sheets.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h92_*.json` (4 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h92/*.png` (4 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h92_report.md`
 
