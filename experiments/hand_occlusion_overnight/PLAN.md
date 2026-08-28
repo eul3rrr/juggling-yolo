@@ -969,3 +969,79 @@ Next episode candidates:
 3. H17: V-shape recovery for v4d-missed links (e.g. 35→40,
    15→25 youtube) to see if any rejected v4d links are
    V-shape hidden catch-throws.
+
+## Twenty-ninth episode (H15 v1 + v2 + H10 v9) — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ H15 v1: combined V-shape + velocity-jump (JUMP_TOLERANCE=15
+   px/frame). NEGATIVE result: the threshold was mis-calibrated
+   (rejected 23→25 which has jump=23.4, admitted 27→28 which has
+   jump=14.5).
+2. ✅ H15 v2: pure V-shape reclassification (no velocity-jump).
+   PASS with documented YouTube caveat.
+3. ✅ H10 v9: H15v2 chains + H10 v6b per-video weights, with
+   V_RECLASSIFIED excluded from h3-eligible set (fixes a
+   pre-existing h3=None redistribution bug).
+4. ✅ Documented in `h15v2_report.md` and `h10v8_report.md`.
+
+**H15v2 verdict: PASS (with documented YouTube limitation).**
+H15v2 recovers 4 hidden catch-throws on identical (23→25,
+30→33, 39→47, 51→52) and admits 1 YouTube FP (27→28).
+Visual precision 4/5 = 0.80 on H15v2's contact-sheet QA.
+
+**H10v9 verdict: PASS.** H10v9 is the new recommended chain
+quality score. Mean quality: identical 0.814 → 0.828 (+0.014),
+YouTube 0.679 → 0.685 (+0.007). Concentrated on chain 13 and
+chain 30 (each +0.30). Combined h7v2 + h15v2 = h7v3pure
+chains. The h7v3pure chain construction is the new
+recommended chain pipeline.
+
+## Thirtieth episode (H11 v7) — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+1. ✅ Implemented H11 v7: identity propagation on h7v3pure chains
+   with H10 v9 quality. Treats V_RECLASSIFIED_HAND_TRANSITION as
+   a hand-edge for catch/throw event extraction. Parses hand
+   from `v_reclassify_reason` field.
+2. ✅ Ran on both videos. Result:
+   - identical: 18 → 23 catch+throw events (+5); 3 → 4
+     multi-tracklet CONFIDENT chains (+1)
+   - YouTube: 24 → 25 catch+throw events (+1)
+3. ✅ Per-hand breakdown: 6 added identical events split
+   3 left + 3 right (matches H14 V-shape hand assignment).
+4. ✅ Visual QA on all 5 V-reclassified chains via vision_analyze.
+   - chain 20 (30→33): REAL CATCH+THROW
+   - chain 30 (51→52): REAL CATCH+THROW (left→right handoff)
+   - chain 13 (23→25): HAND-BORNE (not BALLISTIC, but not clean
+     catch+throw either)
+   - chain 24 (39→47): HAND-BORNE (same as chain 13)
+   - chain 12 YouTube (27→28): FALSE POSITIVE (tracklet break)
+5. ✅ Documented in `h11_v7_report.md` and updated RESULTS_LOG.
+
+**H11 v7 verdict: MIXED (consumer-pass, visual nuance).**
+H11 v7 successfully propagates the V-shape reclassification to
+the identity layer. The h10v9 quality improvement on chain 30
+and chain 13 is real and meaningful (chain 30 → CONFIDENT).
+The visual QA reveals that 2/4 identical V-reclassified edges
+are hand-borne (not clean catch+throws), which is a more
+nuanced picture than H15v2 reported.
+
+**H11 v7 is the new recommended identity propagation
+algorithm**, replacing H11 v6. The catch/throw event log
+should be consumed with the caveat that V-shape "events"
+include some hand-borne cases.
+
+Next episode candidates:
+1. H16: stricter V-shape check that combines position with
+   motion signature (e.g., the ball must change direction at
+   the V-apex, not just be near the hand). Would reject the
+   2 hand-borne cases (23→25, 39→47) while keeping the 2
+   clean catch+throws (30→33, 51→52) and rejecting the 27→28
+   FP.
+2. H17: V-shape recovery for v4d-missed links (e.g. 35→40,
+   15→25 youtube) to see if any rejected v4d links are
+   V-shape hidden catch-throws.
+3. H12 v8: re-run pattern inference on h7v3pure chains with
+   H10 v9 quality (analog of H12 v7 but with v9).
+4. H237 v7: unify h7v3pure chains + h11v7 identities +
+   h10v9 quality into a single per-chain record.

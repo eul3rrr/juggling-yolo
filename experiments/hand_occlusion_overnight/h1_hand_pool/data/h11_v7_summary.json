@@ -1,0 +1,32 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 43,
+      "n_confident_chains": 30,
+      "n_uncertain_chains": 11,
+      "n_low_chains": 2,
+      "n_multi_confident": 4,
+      "n_catches": 23,
+      "n_throws": 23,
+      "n_h3_confirmed_events": 8,
+      "n_reclassified_events": 22,
+      "n_v_reclassified_events": 8,
+      "n_ambiguous_events": 6,
+      "n_tracklets_with_identity": 76
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_confident_chains": 5,
+      "n_uncertain_chains": 10,
+      "n_low_chains": 0,
+      "n_multi_confident": 1,
+      "n_catches": 25,
+      "n_throws": 25,
+      "n_h3_confirmed_events": 2,
+      "n_reclassified_events": 46,
+      "n_v_reclassified_events": 2,
+      "n_ambiguous_events": 0,
+      "n_tracklets_with_identity": 40
+    }
+  }
+}

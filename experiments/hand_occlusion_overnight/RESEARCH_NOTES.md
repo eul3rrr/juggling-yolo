@@ -966,3 +966,71 @@ useful source record:
     that works well for the easy cases; h14 catches the hard
     cases where the endpoint signature is degraded but the
     trajectory is clearly V-shaped.
+
+## Cross-cutting insights from H15 v2 (2026-08-28 ~18:00)
+
+34. **Velocity-jump is the wrong discriminator.** H15 v1
+    attempted to combine V-shape + velocity-jump (JUMP_TOLERANCE=15
+    px/frame). It rejected 23→25 (real catch, jump=23.4) and
+    admitted 27→28 (FP, jump=14.5). The threshold discriminated
+    in the WRONG direction. The 27→28 case has a 100-px jump in
+    5 frames, which IS too fast for a real ball (20 px/frame
+    exceeds gravity at 0.5 px/frame² even with horizontal motion),
+    but the JUMP_TOLERANCE=15 was set above the FP jump and below
+    the real jump, so the rule was inverted. A more principled
+    filter would use a parabolic-fit check on the gap trajectory:
+    a real ball follows a parabola, while a tracklet break
+    doesn't.
+
+35. **H15v2's V-shape is more permissive than ideal.** 4/5
+    V-shape candidates (80%) are visually plausible catch-throws
+    on the edge boundary, but only 2/4 identical V-reclassified
+    chains (50%) are clean catch+throws when examined in full
+    chain context. The 2 hand-borne cases (23→25, 39→47) are
+    correctly NOT BALLISTIC, but the strict "catch+throw" label
+    is over-generous. The ball is being handled/carried, not
+    thrown.
+
+36. **H10 h3=None redistribution bug was exposed.** Adding
+    V_RECLASSIFIED edges to the h3-eligible set initially
+    REDUCED chain quality (because V_RECLASSIFIED has no
+    h3 confirmation). The fix in H10 v9: V_RECLASSIFIED is
+    excluded from h3-eligible set. The bug is pre-existing in
+    H10 v5/v6/v7/v8 but was hidden because no edges had the
+    "hand-edge with no h3 confirmation" property. V_RECLASSIFIED
+    is the first such edge type.
+
+## Cross-cutting insights from H11 v7 (2026-08-28 ~18:15)
+
+37. **H11 v7 is a clean consumer of h7v3pure + H10 v9.** No
+    new algorithmic decisions; just propagates the V-shape
+    reclassification to the identity layer. The +5 catch+throw
+    events on identical are entirely from V_RECLASSIFIED edges;
+    the +1 on YouTube is the 27→28 FP.
+
+38. **Chain 30 crossing the CONFIDENT threshold (0.427 → 0.727)
+    is the most important outcome of H11 v7.** Chain 30 is a
+    5-tid chain (51→52→54→59→63) that represents a real
+    juggling sequence with 4 hand-edges and 1 V-reclassified
+    hand-edge. The h10v9 quality improvement brings it from
+    UNCERTAIN to CONFIDENT, making it available as a "real
+    single ball" identity for downstream consumers.
+
+39. **H15v2's 4/5 visual precision was on edge boundaries; H11
+    v7's 2/4 visual precision is on full chains.** Both
+    verdicts are correct in their context. The edge-boundary
+    view is correct for "is the trajectory a V-shape? (yes)".
+    The full-chain view is correct for "is the ball being
+    thrown? (sometimes no — just being handled)". Downstream
+    consumers should use H11 v7's catch+throw event log with
+    the caveat that V-shape "events" include some hand-borne
+    cases.
+
+40. **The 27→28 YouTube FP propagates downstream: chain 12
+    quality jumps 0.518 → 0.618 (+0.10).** This is a real cost
+    of the V-shape reclassification. A future H16 should
+    design a stricter V-shape check that combines position
+    with motion signature to reject 27→28 (tracklet break,
+    100-px jump in 5 frames) and the 2 hand-borne identical
+    cases (23→25, 39→47) while keeping the 2 clean catch+
+    throws (30→33, 51→52).

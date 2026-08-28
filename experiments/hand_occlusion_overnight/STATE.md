@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 17:55 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 v1 + H13 v2 + **H14 v1** COMPLETE. Pipeline unchanged. **H14 PASS**: V-shape trajectory check on h7v2-kept BALLISTIC edges finds 3 V_DEEP + 2 V_SHALLOW candidates (5/13 = 38%). Visual QA on all 5: 4/5 are real catch-throws (23→25, 30→33, 39→47, 51→52 identical) that the strict h7v2 rule missed; 1/5 is a false positive (27→28 YouTube — tracklet break with 100-px jump in 5 frames). The H7v2 rule's strict endpoint signature (end_dist <= 108 AND |slope| > 1.0) is too narrow. H14 recovers +35% recall on identical hand-links. 8 of 13 BALLISTIC edges are correctly FLAT (no V-shape, true mid-air). H14 is an add-on to H7v2, not a replacement.
+LAST_UPDATE: 2026-08-28 18:05 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 v1 + H13 v2 + H14 v1 + **H15 v1 + v2** + **H10 v9** COMPLETE. Pipeline advanced. **H15 v2 PASS (with YouTube caveat)**: pure V-shape reclassification of h7v2-kept BALLISTIC edges recovers 4 hidden catch-throws on identical (23→25, 30→33, 39→47, 51→52) and admits 1 YouTube FP (27→28). H15 v1's combined V-shape + velocity-jump was mis-calibrated (rejected 23→25 which has jump=23.4 px/frame; admitted 27→28 which has jump=14.5). v2 abandons the velocity-jump check. **H10 v9 (h10v9_with_h15v2.py) is the new recommended chain quality score**, excluding V_RECLASSIFIED from h3-eligible set (fixes a pre-existing h3=None redistribution bug). Mean quality: identical 0.814 → 0.828 (+0.014), YouTube 0.679 → 0.685 (+0.007). Concentrated on chain 13 and chain 30 (each +0.30). Combined h7v2 + h15v2 = h7v3-pure chains.
 
 ## Isolation
 
@@ -377,21 +377,25 @@ None. H14 v1 (PASS) committed in this episode.
 
 ## Next action
 
-H14 found 4 hidden catch-throws on identical that h7v2 missed.
-These are NOT yet integrated into the chain representation. A
-natural next step is **H15: reclassify h7v2-kept BALLISTIC edges
-that pass H14's V-shape check as HAND_TRANSITION, and re-run
-H7v2/H10v8 to measure the impact on chain quality.**
+H15 v2 (pass) committed in the most recent episode. H10 v9 is the new
+recommended chain quality score, replacing H10 v8. The combined
+h7v3pure chain construction (h7v2 + h15v2) is the new recommended
+chain pipeline. STATE/PLAN/RESULTS_LOG updated to reflect this.
 
-This would extend the chain construction pipeline from h7v2 alone
-to h7v2 + h14 combined, and could improve chain quality scores
-on the affected chains.
+A natural follow-up is **H11 v7: re-run identity propagation on
+h7v3pure chains**. H11 v6 was a big win for YouTube (1 → 48 catch/
+throw events, 24x). H11 v7 should pick up the 4 new V_RECLASSIFIED
+identical catch-throws as additional identity events, and propagate
+the h7v3pure chain structure to downstream consumers.
 
 Other directions:
-1. **H16: V-shape + velocity-jump check** — combine the V-shape
-   position check with a velocity jump check to reduce the
-   YouTube 27→28 false positive. The 27→28 case has a 100-px
-   jump in 5 frames (20 px/frame, too fast for a real ball).
+1. **H16: smarter filter for YouTube 27→28 false positive** —
+   parabolic-fit check on the gap trajectory, or look at
+   H8 v8's per-arc gravity to see if a V-shape with high
+   gravity anomaly can be flagged.
 2. **H17: V-shape recovery for v4d-missed links** — apply V-shape
    to pairs of tracklets that v4d rejected (e.g. 35→40) and
-   check if any of them are V-shape hidden catch-throws.
+   check if any are V-shape hidden catch-throws.
+3. **H18: H12 v8 — re-run pattern inference on h7v3pure chains
+   with H10 v9 quality.** Similar to v7 but with the new
+   chain quality score.

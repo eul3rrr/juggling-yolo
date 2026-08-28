@@ -2190,3 +2190,97 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h14_sensitivity.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h14/*.png` (6 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h14_report.md`
+
+### H15 (2026-08-28 ~18:00 CEST)
+
+- Hypothesis: H7v2's strict endpoint-signature rule misses some real
+  catch-throws. H14's V-shape check recovered 4 such cases on
+  identical. Reclassifying h7v2-kept BALLISTIC edges that pass H14's
+  V-shape as HAND_TRANSITION should improve chain quality.
+- Two iterated implementations:
+  - **v1 (combined V-shape + velocity-jump, JUMP_TOLERANCE=15) — NEGATIVE.**
+    The threshold was mis-calibrated: rejected 23→25 (jump=23.4 px/frame)
+    which is a real catch, and admitted 27→28 (jump=14.5) which is a
+    false positive. The threshold discriminated in the WRONG direction.
+  - **v2 (pure V-shape, no velocity-jump) — PASS with YouTube caveat.**
+    Recovers 4 hidden catch-throws on identical (23→25, 30→33, 39→47,
+    51→52) and admits 1 YouTube FP (27→28). Visual precision 4/5 = 0.80
+    on H15v2's contact-sheet QA.
+- The new edge type is `V_RECLASSIFIED_HAND_TRANSITION`, with cost 1.0
+  (same as hand-edges). The h7v3pure chain construction
+  (= h7v2 + h15v2) is the new recommended chain pipeline.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h15v2_pure_v_shape.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3pure_chains_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3pure_admitted_edges_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3pure_v_reclassified_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h15v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h15v2_report.md`
+
+### H10 v9 (2026-08-28 ~18:05 CEST)
+
+- Hypothesis: H10 v9 (h7v3pure chains + H10 v6b per-video weights +
+  V_RECLASSIFIED excluded from h3-eligible set) should give a better-
+  calibrated chain quality score than H10 v8. The h3=None redistribution
+  bug was exposed when V_RECLASSIFIED edges were added: chains with
+  unconfirmed hand edges were penalized more than chains with no hand
+  edges. Fix: V_RECLASSIFIED is excluded from the h3-eligible set.
+- Quantitative result:
+  - identical mean quality: 0.8136 → 0.8275 (+0.014)
+  - YouTube mean quality: 0.6785 → 0.6852 (+0.007)
+- Per-chain impact (V-reclassified chains):
+  - chain 13 (identical): q8=0.204 → q9=0.504 (+0.300, LOW → UNCERTAIN)
+  - chain 30 (identical): q8=0.427 → q9=0.727 (+0.300, UNCERTAIN → CONFIDENT)
+  - chain 20 (identical): q8=0.867 → q9=0.867 (no change, h3 fix worked)
+  - chain 24 (identical): q8=0.645 → q9=0.645 (no change)
+  - chain 12 YouTube: q8=0.518 → q9=0.618 (+0.100, the 27→28 FP)
+- Verdict: **PASS.** H10 v9 is the new recommended chain quality
+  score, replacing H10 v8. The improvement is concentrated on
+  the 2 chains with the largest BALLISTIC-violation penalties.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v9_with_h15v2.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v9_chain_quality_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v9_chain_quality_summary.json`
+
+### H11 v7 (2026-08-28 ~18:15 CEST)
+
+- Hypothesis: re-running the v6 identity propagation on h7v3pure
+  chains + H10 v9 quality should give the same chain structure
+  (chains are unchanged from h7v2) but with V_RECLASSIFIED edges
+  now correctly classified as catch/throw events.
+- Implementation: identical to H11 v6 but with V_RECLASSIFIED in
+  the hand-edge set, and hand parsed from `v_reclassify_reason`.
+- Quantitative result:
+  - identical: 18 → 23 CATCH+THROW events (+5); 3 → 4 multi-tracklet
+    CONFIDENT chains (+1, chain 30 newly CONFIDENT).
+  - YouTube: 24 → 25 CATCH+THROW events (+1, the 27→28 FP).
+  - Per-hand breakdown: 6 added identical events split 3 left + 3
+    right (matches H14 V-shape hand assignment).
+- Visual QA on all 5 V-reclassified chains via vision_analyze:
+  - chain 20 (30→33): REAL CATCH+THROW (left wrist convergence f=428)
+  - chain 30 (51→52): REAL CATCH+THROW (left→right handoff f=765-801)
+  - chain 13 (23→25): HAND-BORNE (ball cradled by both hands, not thrown)
+  - chain 24 (39→47): HAND-BORNE (ball carried face-to-chest, V is hand-path artifact)
+  - chain 12 YouTube (27→28): FALSE POSITIVE (no ball at wrist)
+- **Visual precision: 2/4 identical V-reclassified = 0.50 clean catch+throws.**
+  H15v2's own 4/5 visual precision was on edge boundaries only; the
+  full-chain QA reveals that 2 are hand-borne (correctly not BALLISTIC,
+  but not catch+throw either).
+- Negative findings:
+  - V-shape is a position-only check. The 2 hand-borne cases have
+    positions close to a hand on both sides but no real ball transfer.
+  - The YouTube 27→28 FP propagates downstream: chain 12 quality
+    jumps from 0.518 to 0.618 (+0.10) due to the FP.
+  - V_RECLASSIFIED events are not validated by H3 (held-ball evidence).
+- Verdict: **MIXED (consumer-pass, visual nuance).** H11 v7 is
+  the new recommended identity propagation algorithm, replacing
+  H11 v6. The catch/throw event log should be consumed with the
+  caveat that V-shape "events" include some hand-borne cases.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v7_h7v3pure_identities.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v7_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v7_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/tracklet_identity_v7_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/chain_events_v7_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h11v7/chain*_*_h11v7.png` (5)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_v7_report.md`
