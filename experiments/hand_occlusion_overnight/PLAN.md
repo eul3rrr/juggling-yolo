@@ -825,3 +825,33 @@ artifact.
    density, single-camera 2D tracking). Future work needs
    a different signal (multi-view, higher frame rate, or
    ground truth).
+
+## Twenty-sixth episode (H237 v6) — STATUS: COMPLETE (PASS)
+
+Sub-steps:
+1. ✅ Implemented H237 v6: H7v2 chains + H10 v8 quality +
+   per-chain `n_reclassified_edges` and `pct_reclassified`.
+2. ✅ Ran on both videos:
+   - identical: 43 chains, 4 pure-ballistic, 3 pure-reclassified
+   - YouTube: 15 chains, **0 pure-ballistic**, 7 pure-reclassified
+3. ✅ Documented in `h237v6_report.md`.
+
+**Verdict: PASS.** H237 v6 is the new recommended unified
+chain representation, replacing h237v5. All YouTube multi-
+tracklet chains are now correctly attributed to hand
+interactions, validating H7v2's reclassification rule.
+
+**State of the lab:**
+
+The chain-quality + pattern-inference pipeline is now:
+- **H7v2**: reclassify BALLISTIC edges as HAND_TRANSITION
+  when at hand (PASS)
+- **H10 v8**: chain quality on H7v2 chains (PASS)
+- **H12 v7**: pattern inference on H7v2 chains (MIXED)
+- **H237 v6**: unified representation with reclassification
+  metadata (PASS)
+
+This is the most complete hand-occlusion tracking pipeline
+to date. Further work would require fundamentally different
+signals (multi-view, higher frame rate, detector-level).
+

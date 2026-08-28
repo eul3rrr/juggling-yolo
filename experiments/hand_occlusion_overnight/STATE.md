@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 15:00 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 + H12v3 + H12v4 + H12v5 + H8v7 + H8v8 + H12v6 + H12v6b + H10v6 + H10v6b + H10v7 + H7v2 + H10v8 + H12v7 COMPLETE. v4d is the recommended hand-link extractor. H7v2 PASS. H10v8 PASS (YouTube mean quality 0.537 -> 0.679). H12v7 MIXED: YouTube 100% UNCONFIRMED -> 12.4% CASCADE/23.5% FOUNTAIN/56.3% MIXED (chain quality fix works), but CASCADE/FOUNTAIN classification on identical still limited by event log density (74.5% late-phase FOUNTAIN vs visual CASCADE).
+LAST_UPDATE: 2026-08-28 15:30 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 + H12v3 + H12v4 + H12v5 + H8v7 + H8v8 + H12v6 + H12v6b + H10v6 + H10v6b + H10v7 + H7v2 + H10v8 + H12v7 + H237v6 COMPLETE. Pipeline: H7v2 (BALLISTIC->HAND reclassify, 35%/93% rate) -> H10v8 (chain quality) -> H12v7 (pattern inference) -> H237v6 (unified representation). YouTube h8 over-penalization fixed (mean q 0.537 -> 0.679). CASCADE/FOUNTAIN classification fundamentally limited by event log density. H237v6 PASS: 0 pure-ballistic YouTube chains, 7 pure-reclassified.
 
 ## Isolation
 

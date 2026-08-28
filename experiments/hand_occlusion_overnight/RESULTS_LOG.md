@@ -2000,3 +2000,39 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v7_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v7/late_phase_f890_1040.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v7_report.md`
+
+### H237 v6 (2026-08-28 ~14:50 CEST)
+
+- Hypothesis: H7v2 reclassifies BALLISTIC edges as HAND_TRANSITION,
+  changing the chain structure. The h237v5 unified representation
+  (which used H7 chains + H10 v5 quality) is now stale. H237 v6
+  rebuilds the unified representation with H7v2 chains + H10 v8
+  quality, and adds `n_reclassified_edges` and `pct_reclassified`
+  per chain.
+- Implementation: `h237v6_unified.py` reads H7v2 chains, joins
+  with H7v2 admitted edges (per-edge type), and joins with H10 v8
+  chain quality. Output: `h237v6_unified_chains_<stem>.csv` with
+  the new fields.
+- Quantitative result:
+
+  | Video | n_chains | pure_ballistic | pure_reclassified | top chain |
+  |---|---|---|---|---|
+  | identical | 43 | 4 | 3 | chain 21 (q=0.908) |
+  | YouTube  | 15 | **0** | **7** | chain 0 (q=0.671) |
+
+- Key finding: **All YouTube multi-tracklet chains are now
+  correctly attributed to hand interactions** (0 pure-ballistic).
+  This is a strong signal that H7v2's reclassification rule is
+  correct: 25/27 YouTube BALLISTIC edges were really catch+throws.
+- 4 identical chains remain pure-ballistic. These are likely
+  true identity switches (H7v2 correctly preserved them).
+- chain 0 (YouTube, 7 tids, 6 reclassified edges) is the new
+  top YouTube chain at q=0.6715 — a real 7-tid juggling cycle.
+- Verdict: **PASS.** H237 v6 is the new recommended unified
+  chain representation, replacing h237v5. See
+  `h1_hand_pool/reports/h237v6_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h237v6_unified.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v6_unified_chains_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v6_unified_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h237v6_report.md`

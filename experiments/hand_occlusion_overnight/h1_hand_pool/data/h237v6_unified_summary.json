@@ -1,0 +1,70 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_chains": 43,
+      "n_multi_chains": 17,
+      "n_pure_ballistic_chains": 4,
+      "n_pure_reclassified_chains": 3,
+      "top5_by_h10v8": [
+        {
+          "chain_id": 21,
+          "n_tracklets": 2,
+          "h10_v8_quality": 0.9076
+        },
+        {
+          "chain_id": 20,
+          "n_tracklets": 2,
+          "h10_v8_quality": 0.8669
+        },
+        {
+          "chain_id": 8,
+          "n_tracklets": 2,
+          "h10_v8_quality": 0.8356
+        },
+        {
+          "chain_id": 29,
+          "n_tracklets": 2,
+          "h10_v8_quality": 0.6685
+        },
+        {
+          "chain_id": 4,
+          "n_tracklets": 2,
+          "h10_v8_quality": 0.6683
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_chains": 15,
+      "n_multi_chains": 9,
+      "n_pure_ballistic_chains": 0,
+      "n_pure_reclassified_chains": 7,
+      "top5_by_h10v8": [
+        {
+          "chain_id": 6,
+          "n_tracklets": 2,
+          "h10_v8_quality": 0.8406
+        },
+        {
+          "chain_id": 3,
+          "n_tracklets": 4,
+          "h10_v8_quality": 0.68
+        },
+        {
+          "chain_id": 8,
+          "n_tracklets": 4,
+          "h10_v8_quality": 0.6756
+        },
+        {
+          "chain_id": 0,
+          "n_tracklets": 7,
+          "h10_v8_quality": 0.6715
+        },
+        {
+          "chain_id": 7,
+          "n_tracklets": 4,
+          "h10_v8_quality": 0.6156
+        }
+      ]
+    }
+  }
+}
