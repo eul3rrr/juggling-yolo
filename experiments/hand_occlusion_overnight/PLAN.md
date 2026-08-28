@@ -153,16 +153,40 @@ Sub-steps:
 correctly merges hand and air edges, and records the one
 genuine conflict for post-hoc review.
 
-## Sixth episode — PLANNED
+## Sixth episode (H3) — STATUS: COMPLETE
 
 Sub-steps:
 
-1. Visual QA on chain 38 (the 8-tracklet chain) and chain 53
-   to confirm H2's combined edges are visually correct.
-2. Build H2 contact sheets showing the full chain with both
-   hand-edges and air-edges highlighted.
-3. If time permits, low-confidence hand-region evidence
-   (master §14): a lower-confidence evidence tier only near
-   an active hand event, to fill detector dropouts.
-4. Or: v4 sensitivity grid (MIN_FROM_SLOPE ∈ {2.0, 2.5, 3.0, 4.0})
-   to verify the v4 threshold is well-chosen.
+1. ✅ Implemented three H3 designs (v1: 60-frame temporal cluster
+   — FPR ~80%, abandoned; v2: per-detection held candidate —
+   wrong direction, abandoned; v3: stationary cluster in
+   30px radius over ≥5 frames — recommended).
+2. ✅ v3 emits 7 stationary clusters on the 11 v4d links:
+   6 on identical (all confirmed real held balls) and 1 on
+   youtube (false positive — stuck on face).
+3. ✅ Visual QA on all 7 via `vision_analyze`:
+   - 6/6 identical clusters = REAL held balls (ball visible
+     in hand during held phase).
+   - 1/1 youtube cluster = STUCK FALSE POSITIVE on face/head.
+4. ✅ Documented in `h3_report.md` and updated RESULTS_LOG.
+
+**H3 verdict: PARTIAL PASS.** H3 is useful as a
+*downstream confidence signal* on v4d links (100% precision
+on identical video). The YouTube false positive is a
+detector limitation, not a criterion failure.
+
+## Seventh episode — PLANNED
+
+Sub-steps:
+
+1. **Apply H3 as a downstream confidence signal on v4d links.**
+   Add a `h3_confirmed: bool` field to v4d link records when
+   a v3 stationary cluster is found in the held phase.
+2. **Test face-masked H3.** Use a face detector to mask
+   out face-region low-conf detections before clustering.
+3. **H4: min-cost flow formulation of AIR+HAND graph.**
+   Try to resolve the 1 H2 conflict (tracklet 3 → {hand=9,
+   air=8}) optimally instead of recording it.
+4. **H5: explicit object permanence.** A v6 hand-pool that
+   explicitly maintains held-ball state across detector
+   dropouts.

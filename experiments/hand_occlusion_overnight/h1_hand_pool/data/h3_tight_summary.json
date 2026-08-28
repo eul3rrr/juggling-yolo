@@ -1,0 +1,194 @@
+{
+  "tight_thresholds": {
+    "MAX_CLUSTER_SPAN_FRAMES": 8,
+    "MAX_GAP_IN_CLUSTER": 3,
+    "MIN_GLIMPSE_FRAMES": 3,
+    "STATIONARY_STD_PX": 25,
+    "LOW_CONF_THRESHOLD": 0.4,
+    "MAX_DISTANCE_FROM_HAND": 80
+  },
+  "results": [
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 3,
+        "to_tid": 9,
+        "hand": "left",
+        "from_frame": 31,
+        "to_frame": 51
+      },
+      "n_unassigned": 9,
+      "n_low_conf": 7,
+      "n_orig_glimpses": 0,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 11,
+        "to_tid": 14,
+        "hand": "right",
+        "from_frame": 97,
+        "to_frame": 126
+      },
+      "n_unassigned": 20,
+      "n_low_conf": 14,
+      "n_orig_glimpses": 1,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 17,
+        "to_tid": 23,
+        "hand": "right",
+        "from_frame": 207,
+        "to_frame": 232
+      },
+      "n_unassigned": 6,
+      "n_low_conf": 3,
+      "n_orig_glimpses": 0,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 52,
+        "to_tid": 54,
+        "hand": "right",
+        "from_frame": 780,
+        "to_frame": 797
+      },
+      "n_unassigned": 3,
+      "n_low_conf": 1,
+      "n_orig_glimpses": 1,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 54,
+        "to_tid": 59,
+        "hand": "right",
+        "from_frame": 830,
+        "to_frame": 856
+      },
+      "n_unassigned": 7,
+      "n_low_conf": 4,
+      "n_orig_glimpses": 1,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 53,
+        "to_tid": 60,
+        "hand": "right",
+        "from_frame": 839,
+        "to_frame": 860
+      },
+      "n_unassigned": 7,
+      "n_low_conf": 1,
+      "n_orig_glimpses": 0,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 59,
+        "to_tid": 63,
+        "hand": "right",
+        "from_frame": 872,
+        "to_frame": 890
+      },
+      "n_unassigned": 13,
+      "n_low_conf": 13,
+      "n_orig_glimpses": 0,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 68,
+        "to_tid": 71,
+        "hand": "right",
+        "from_frame": 1015,
+        "to_frame": 1029
+      },
+      "n_unassigned": 9,
+      "n_low_conf": 8,
+      "n_orig_glimpses": 1,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 72,
+        "to_tid": 73,
+        "hand": "right",
+        "from_frame": 1050,
+        "to_frame": 1054
+      },
+      "n_unassigned": 6,
+      "n_low_conf": 4,
+      "n_orig_glimpses": 1,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 70,
+        "to_tid": 74,
+        "hand": "left",
+        "from_frame": 1050,
+        "to_frame": 1056
+      },
+      "n_unassigned": 7,
+      "n_low_conf": 5,
+      "n_orig_glimpses": 0,
+      "n_tight_glimpses": 1,
+      "tight_glimpses": [
+        {
+          "n": 3,
+          "frame_min": 1048,
+          "frame_max": 1050,
+          "x_mean": 708.0483333333333,
+          "y_mean": 553.6533333333333,
+          "conf_mean": 0.2964636666666667,
+          "std_x": 2.450592354694875,
+          "std_y": 18.79080137253924,
+          "max_d": 78.58231859605125,
+          "frames": [
+            1048,
+            1049,
+            1050
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from_tid": 10,
+        "to_tid": 12,
+        "hand": "right",
+        "from_frame": 238,
+        "to_frame": 255
+      },
+      "n_unassigned": 20,
+      "n_low_conf": 16,
+      "n_orig_glimpses": 1,
+      "n_tight_glimpses": 0,
+      "tight_glimpses": []
+    }
+  ]
+}

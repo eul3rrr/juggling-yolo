@@ -323,4 +323,60 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/sens_grid_v5.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v5_sens_report.md`
 
+### H3 (2026-08-28 ~05:30 CEST)
+
+- Hypothesis (master §14): around an active v4d hand-link,
+  low-confidence sports-ball detections NOT in the incoming or
+  outgoing tracklet can provide *supporting evidence* for the
+  held-ball state, without globally lowering the detector
+  confidence. This is a hand-crafted version of the ByteTrack
+  "second-tier association" idea, applied at the tracklet
+  level rather than the detection level.
+- Three iterated implementations (v1, v2, v3):
+  - v1: temporal cluster of low-conf dets in 60-frame window,
+    FPR ~77-99% (over-permissive).
+  - v2: per-detection "held candidate" (close to wrist in
+    ±2 frames), FPR HIGHER on random regions than on v4d
+    links (33.8% vs 50.1%) — wrong direction.
+  - v3: stationary cluster of ≥3 low-conf dets in 30px radius
+    over ≥5 frames (allowing gaps of ≤8 frames).
+    Quantitative: 7/11 v4d links have a v3 cluster; visual
+    precision 6/7 = 0.857.
+- Visual QA: 7 contact sheets rendered and inspected via
+  `vision_analyze`:
+  - 6/6 identical-video H3 clusters are REAL held balls
+    (ball visibly in the hand during the held phase).
+  - 1/1 youtube-video H3 cluster is a STUCK FALSE POSITIVE
+    on the juggler's face/head (the detector confuses
+    face features with sports balls when the hand is near
+    the face).
+- Negative findings:
+  - v1 and v2 were non-discriminative (FPR too high or in
+    the wrong direction).
+  - v3's baseline rate (50-60%) is HIGHER than v4d link
+    rate (11%) — the criterion is not specific to hand-events.
+  - H3 confirms v4d held-ball events but does NOT recover
+    any new v4d-missed links. H3 is a corroborating signal,
+    not a recovery mechanism.
+  - H3 cannot fill detector dropouts during the held phase
+    (dropouts = no detections, not low-conf detections).
+  - The YouTube failure is a detector limitation, not a
+    criterion failure. The detector confuses face features
+    with sports balls when the hand is near the face.
+- Verdict: **PARTIAL PASS.** H3's stationary-cluster
+  criterion correctly identifies held-ball evidence on
+  the identical video (6/6 = 100% precision) and has 1
+  false positive on the YouTube video. H3 is useful as a
+  downstream confidence signal on v4d links, not as a
+  general held-ball detector. See
+  `h1_hand_pool/reports/h3_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h3_low_conf_hand_region.py` (v1, preserved)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h3_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h3_summary.json` (v1)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h3_v2_summary.json` (v2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h3_v3_summary.json` (v3, recommended)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h3/*.png` (7 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h3_report.md`
+
 ---

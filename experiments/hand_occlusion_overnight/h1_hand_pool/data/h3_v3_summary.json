@@ -1,0 +1,286 @@
+{
+  "h3_v3_thresholds": {
+    "REACH_PX": 108,
+    "LOW_CONF_THRESHOLD": 0.4,
+    "STATIONARY_RADIUS_PX": 30,
+    "STATIONARY_MIN_N": 3,
+    "STATIONARY_MIN_SPAN": 5,
+    "STATIONARY_MAX_GAP": 8,
+    "BASELINE_SAMPLES": 200,
+    "RANDOM_SEED": 42
+  },
+  "per_link": [
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 3,
+        "to_tid": 9,
+        "hand": "left",
+        "from_frame": 31,
+        "to_frame": 51
+      },
+      "n_unassigned_lowconf": 10,
+      "n_stationary_clusters": 1,
+      "stationary_clusters": [
+        {
+          "n": 7,
+          "span": 7,
+          "frames": [
+            39,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 11,
+        "to_tid": 14,
+        "hand": "right",
+        "from_frame": 97,
+        "to_frame": 126
+      },
+      "n_unassigned_lowconf": 19,
+      "n_stationary_clusters": 2,
+      "stationary_clusters": [
+        {
+          "n": 6,
+          "span": 5,
+          "frames": [
+            116,
+            117,
+            118,
+            119,
+            120,
+            121
+          ]
+        },
+        {
+          "n": 3,
+          "span": 8,
+          "frames": [
+            125,
+            126,
+            133
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 17,
+        "to_tid": 23,
+        "hand": "right",
+        "from_frame": 207,
+        "to_frame": 232
+      },
+      "n_unassigned_lowconf": 3,
+      "n_stationary_clusters": 0,
+      "stationary_clusters": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 52,
+        "to_tid": 54,
+        "hand": "right",
+        "from_frame": 780,
+        "to_frame": 797
+      },
+      "n_unassigned_lowconf": 1,
+      "n_stationary_clusters": 0,
+      "stationary_clusters": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 54,
+        "to_tid": 59,
+        "hand": "right",
+        "from_frame": 830,
+        "to_frame": 856
+      },
+      "n_unassigned_lowconf": 9,
+      "n_stationary_clusters": 1,
+      "stationary_clusters": [
+        {
+          "n": 3,
+          "span": 7,
+          "frames": [
+            848,
+            854,
+            855
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 53,
+        "to_tid": 60,
+        "hand": "right",
+        "from_frame": 839,
+        "to_frame": 860
+      },
+      "n_unassigned_lowconf": 5,
+      "n_stationary_clusters": 1,
+      "stationary_clusters": [
+        {
+          "n": 3,
+          "span": 7,
+          "frames": [
+            848,
+            854,
+            855
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 59,
+        "to_tid": 63,
+        "hand": "right",
+        "from_frame": 872,
+        "to_frame": 890
+      },
+      "n_unassigned_lowconf": 17,
+      "n_stationary_clusters": 1,
+      "stationary_clusters": [
+        {
+          "n": 6,
+          "span": 5,
+          "frames": [
+            878,
+            879,
+            880,
+            881,
+            882,
+            883
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 68,
+        "to_tid": 71,
+        "hand": "right",
+        "from_frame": 1015,
+        "to_frame": 1029
+      },
+      "n_unassigned_lowconf": 7,
+      "n_stationary_clusters": 0,
+      "stationary_clusters": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 72,
+        "to_tid": 73,
+        "hand": "right",
+        "from_frame": 1050,
+        "to_frame": 1054
+      },
+      "n_unassigned_lowconf": 2,
+      "n_stationary_clusters": 1,
+      "stationary_clusters": [
+        {
+          "n": 3,
+          "span": 8,
+          "frames": [
+            1040,
+            1041,
+            1048
+          ]
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 70,
+        "to_tid": 74,
+        "hand": "left",
+        "from_frame": 1050,
+        "to_frame": 1056
+      },
+      "n_unassigned_lowconf": 3,
+      "n_stationary_clusters": 0,
+      "stationary_clusters": []
+    },
+    {
+      "link": {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from_tid": 10,
+        "to_tid": 12,
+        "hand": "right",
+        "from_frame": 238,
+        "to_frame": 255
+      },
+      "n_unassigned_lowconf": 16,
+      "n_stationary_clusters": 3,
+      "stationary_clusters": [
+        {
+          "n": 5,
+          "span": 5,
+          "frames": [
+            248,
+            250,
+            251,
+            252,
+            253
+          ]
+        },
+        {
+          "n": 6,
+          "span": 6,
+          "frames": [
+            248,
+            250,
+            251,
+            252,
+            253,
+            254
+          ]
+        },
+        {
+          "n": 6,
+          "span": 5,
+          "frames": [
+            251,
+            252,
+            253,
+            254,
+            255,
+            256
+          ]
+        }
+      ]
+    }
+  ],
+  "baseline": {
+    "identical_balls_trick_000_018": {
+      "n_samples": 100,
+      "n_checked": 633,
+      "n_stationary": 328,
+      "stationary_rate": 0.5181674565560821
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_samples": 100,
+      "n_checked": 914,
+      "n_stationary": 537,
+      "stationary_rate": 0.587527352297593
+    }
+  }
+}

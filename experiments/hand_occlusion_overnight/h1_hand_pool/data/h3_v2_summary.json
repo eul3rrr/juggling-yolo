@@ -1,0 +1,462 @@
+{
+  "h3_v2_thresholds": {
+    "REACH_PX": 108,
+    "LOW_CONF_THRESHOLD": 0.4,
+    "HELD_DIST_PX": 60,
+    "LOOKBACK_FRAMES": 2,
+    "LOOKAHEAD_FRAMES": 2,
+    "REJECT_ASSIGNED": true,
+    "BASELINE_SAMPLES": 200,
+    "RANDOM_SEED": 42
+  },
+  "per_link": [
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 3,
+        "to_tid": 9,
+        "hand": "left",
+        "from_frame": 31,
+        "to_frame": 51
+      },
+      "n_unassigned_in_reach": 12,
+      "n_lowconf_in_reach": 9,
+      "n_held": 1,
+      "held_candidates": [
+        {
+          "frame": 49,
+          "x": 734.176,
+          "y": 485.712,
+          "conf": 0.277221,
+          "tid": null,
+          "d_now": 17.116994328833428,
+          "d_past": 16.017156450740753,
+          "d_future": 6.793860362339045
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 11,
+        "to_tid": 14,
+        "hand": "right",
+        "from_frame": 97,
+        "to_frame": 126
+      },
+      "n_unassigned_in_reach": 25,
+      "n_lowconf_in_reach": 17,
+      "n_held": 8,
+      "held_candidates": [
+        {
+          "frame": 108,
+          "x": 528.364,
+          "y": 484.962,
+          "conf": 0.162981,
+          "tid": null,
+          "d_now": 35.48268616166302,
+          "d_past": 20.721535251353036,
+          "d_future": 55.61048359614802
+        },
+        {
+          "frame": 111,
+          "x": 525.237,
+          "y": 539.835,
+          "conf": 0.394089,
+          "tid": null,
+          "d_now": 9.313252051474207,
+          "d_past": 20.311680219210935,
+          "d_future": 6.577817897790159
+        },
+        {
+          "frame": 112,
+          "x": 525.296,
+          "y": 552.446,
+          "conf": 0.222577,
+          "tid": null,
+          "d_now": 10.63568056408415,
+          "d_past": 19.799106372294805,
+          "d_future": 6.470687871582446
+        },
+        {
+          "frame": 113,
+          "x": 525.997,
+          "y": 567.059,
+          "conf": 0.363868,
+          "tid": null,
+          "d_now": 20.86316519400848,
+          "d_past": 27.12649106328141,
+          "d_future": 10.21256440773397
+        },
+        {
+          "frame": 116,
+          "x": 548.718,
+          "y": 606.844,
+          "conf": 0.203645,
+          "tid": null,
+          "d_now": 45.420839363209026,
+          "d_past": 53.38849715434448,
+          "d_future": 46.22969768714318
+        },
+        {
+          "frame": 117,
+          "x": 555.23,
+          "y": 611.796,
+          "conf": 0.3988,
+          "tid": null,
+          "d_now": 51.08635920989949,
+          "d_past": 55.340182682532976,
+          "d_future": 58.156288716630584
+        },
+        {
+          "frame": 122,
+          "x": 579.589,
+          "y": 552.152,
+          "conf": 0.202781,
+          "tid": null,
+          "d_now": 44.127921650433585,
+          "d_past": 34.963597970086575,
+          "d_future": 54.25504694457265
+        },
+        {
+          "frame": 124,
+          "x": 579.765,
+          "y": 493.975,
+          "conf": 0.314148,
+          "tid": null,
+          "d_now": 38.78131351364692,
+          "d_past": 46.96916663977328,
+          "d_future": 42.196260803383666
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 17,
+        "to_tid": 23,
+        "hand": "right",
+        "from_frame": 207,
+        "to_frame": 232
+      },
+      "n_unassigned_in_reach": 8,
+      "n_lowconf_in_reach": 3,
+      "n_held": 0,
+      "held_candidates": []
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 52,
+        "to_tid": 54,
+        "hand": "right",
+        "from_frame": 780,
+        "to_frame": 797
+      },
+      "n_unassigned_in_reach": 3,
+      "n_lowconf_in_reach": 1,
+      "n_held": 1,
+      "held_candidates": [
+        {
+          "frame": 791,
+          "x": 589.553,
+          "y": 354.08,
+          "conf": 0.159827,
+          "tid": null,
+          "d_now": 36.220471018422124,
+          "d_past": 37.31232462022564,
+          "d_future": 34.58547482814188
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 54,
+        "to_tid": 59,
+        "hand": "right",
+        "from_frame": 830,
+        "to_frame": 856
+      },
+      "n_unassigned_in_reach": 14,
+      "n_lowconf_in_reach": 9,
+      "n_held": 3,
+      "held_candidates": [
+        {
+          "frame": 829,
+          "x": 576.804,
+          "y": 533.521,
+          "conf": 0.213319,
+          "tid": null,
+          "d_now": 5.881933120800485,
+          "d_past": 26.24465891334529,
+          "d_future": 37.08597602348841
+        },
+        {
+          "frame": 830,
+          "x": 576.912,
+          "y": 493.189,
+          "conf": 0.243985,
+          "tid": null,
+          "d_now": 36.254596533960544,
+          "d_past": 45.86844904720591,
+          "d_future": 22.02314305467791
+        },
+        {
+          "frame": 848,
+          "x": 652.612,
+          "y": 365.13,
+          "conf": 0.168778,
+          "tid": null,
+          "d_now": 50.07545629378359,
+          "d_past": 54.624046373711266,
+          "d_future": 46.88563161740506
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 53,
+        "to_tid": 60,
+        "hand": "right",
+        "from_frame": 839,
+        "to_frame": 860
+      },
+      "n_unassigned_in_reach": 11,
+      "n_lowconf_in_reach": 5,
+      "n_held": 1,
+      "held_candidates": [
+        {
+          "frame": 848,
+          "x": 652.612,
+          "y": 365.13,
+          "conf": 0.168778,
+          "tid": null,
+          "d_now": 50.07545629378359,
+          "d_past": 54.624046373711266,
+          "d_future": 46.88563161740506
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 59,
+        "to_tid": 63,
+        "hand": "right",
+        "from_frame": 872,
+        "to_frame": 890
+      },
+      "n_unassigned_in_reach": 24,
+      "n_lowconf_in_reach": 16,
+      "n_held": 2,
+      "held_candidates": [
+        {
+          "frame": 872,
+          "x": 664.255,
+          "y": 624.708,
+          "conf": 0.333403,
+          "tid": null,
+          "d_now": 39.46202389073649,
+          "d_past": 57.887750407116386,
+          "d_future": 38.948360948824345
+        },
+        {
+          "frame": 885,
+          "x": 601.434,
+          "y": 577.218,
+          "conf": 0.15616,
+          "tid": null,
+          "d_now": 24.17886694351096,
+          "d_past": 13.5497489385007,
+          "d_future": 47.99115644673962
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 68,
+        "to_tid": 71,
+        "hand": "right",
+        "from_frame": 1015,
+        "to_frame": 1029
+      },
+      "n_unassigned_in_reach": 9,
+      "n_lowconf_in_reach": 7,
+      "n_held": 4,
+      "held_candidates": [
+        {
+          "frame": 1013,
+          "x": 508.702,
+          "y": 523.963,
+          "conf": 0.308057,
+          "tid": null,
+          "d_now": 32.62559878023965,
+          "d_past": 17.54101146321674,
+          "d_future": 45.58962827580022
+        },
+        {
+          "frame": 1015,
+          "x": 507.889,
+          "y": 587.008,
+          "conf": 0.389083,
+          "tid": null,
+          "d_now": 20.829433034090112,
+          "d_past": 35.59548606603328,
+          "d_future": 10.059764010235053
+        },
+        {
+          "frame": 1027,
+          "x": 524.632,
+          "y": 586.354,
+          "conf": 0.250917,
+          "tid": null,
+          "d_now": 49.509570885340175,
+          "d_past": 25.614135656781635,
+          "d_future": 55.78492348985602
+        },
+        {
+          "frame": 1029,
+          "x": 520.558,
+          "y": 524.485,
+          "conf": 0.168197,
+          "tid": null,
+          "d_now": 24.125940972925648,
+          "d_past": 24.65760319131859,
+          "d_future": 32.41899994521578
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 72,
+        "to_tid": 73,
+        "hand": "right",
+        "from_frame": 1050,
+        "to_frame": 1054
+      },
+      "n_unassigned_in_reach": 7,
+      "n_lowconf_in_reach": 2,
+      "n_held": 1,
+      "held_candidates": [
+        {
+          "frame": 1052,
+          "x": 490.911,
+          "y": 469.412,
+          "conf": 0.1963,
+          "tid": null,
+          "d_now": 37.116539067764705,
+          "d_past": 38.154487718803004,
+          "d_future": 31.584870110258368
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "identical_balls_trick_000_018",
+        "from_tid": 70,
+        "to_tid": 74,
+        "hand": "left",
+        "from_frame": 1050,
+        "to_frame": 1056
+      },
+      "n_unassigned_in_reach": 7,
+      "n_lowconf_in_reach": 3,
+      "n_held": 1,
+      "held_candidates": [
+        {
+          "frame": 1050,
+          "x": 710.884,
+          "y": 529.741,
+          "conf": 0.211471,
+          "tid": null,
+          "d_now": 21.732718362085887,
+          "d_past": 8.920248856784433,
+          "d_future": 33.97118524356641
+        }
+      ]
+    },
+    {
+      "link": {
+        "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        "from_tid": 10,
+        "to_tid": 12,
+        "hand": "right",
+        "from_frame": 238,
+        "to_frame": 255
+      },
+      "n_unassigned_in_reach": 10,
+      "n_lowconf_in_reach": 8,
+      "n_held": 5,
+      "held_candidates": [
+        {
+          "frame": 238,
+          "x": 555.444,
+          "y": 452.124,
+          "conf": 0.307283,
+          "tid": null,
+          "d_now": 4.524015956568805,
+          "d_past": 16.312968205231385,
+          "d_future": 6.085699747245653
+        },
+        {
+          "frame": 248,
+          "x": 566.078,
+          "y": 457.135,
+          "conf": 0.27154,
+          "tid": null,
+          "d_now": 10.553458281831833,
+          "d_past": 7.1573204957903345,
+          "d_future": 24.208244938849084
+        },
+        {
+          "frame": 251,
+          "x": 570.999,
+          "y": 415.187,
+          "conf": 0.333124,
+          "tid": null,
+          "d_now": 19.24066302894169,
+          "d_past": 33.21864206205011,
+          "d_future": 17.96772885141411
+        },
+        {
+          "frame": 252,
+          "x": 573.156,
+          "y": 401.086,
+          "conf": 0.308187,
+          "tid": null,
+          "d_now": 28.07958817385542,
+          "d_past": 33.6291802056683,
+          "d_future": 24.898712573076633
+        },
+        {
+          "frame": 254,
+          "x": 576.75,
+          "y": 373.628,
+          "conf": 0.243555,
+          "tid": null,
+          "d_now": 47.416718485579416,
+          "d_past": 53.99689291784598,
+          "d_future": 46.83607638291372
+        }
+      ]
+    }
+  ],
+  "baseline": {
+    "identical_balls_trick_000_018": {
+      "n_samples": 100,
+      "n_lowconf_in_reach": 233,
+      "n_held": 99,
+      "held_rate": 0.4248927038626609
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_samples": 100,
+      "n_lowconf_in_reach": 356,
+      "n_held": 196,
+      "held_rate": 0.550561797752809
+    }
+  }
+}

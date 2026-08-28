@@ -122,6 +122,13 @@ useful source record:
 - **Applied:** H1 v4d's `MIN_FROM_SLOPE` is a hand-crafted
   version: low-slope candidates are demoted from "throw" to
   "pass-through" without globally lowering the threshold.
+- **H3 result:** H3's "stationary cluster" criterion
+  (≥3 low-conf dets in 30px radius over ≥5 frames) was tested
+  in 3 iterations. v3 correctly confirms 6/6 identical-video
+  v4d hand-link held phases as real held balls, with 1 false
+  positive on the YouTube video (stuck on face). H3 is
+  useful as a downstream confidence signal but does not
+  recover v4d-missed links.
 
 ### Topic: min-cost flow / factor-graph stitching
 
@@ -147,7 +154,7 @@ useful source record:
 
 ---
 
-## Cross-cutting insights from this episode (2026-08-28 ~04:00-05:10)
+## Cross-cutting insights from this episode (2026-08-28 ~04:00-05:35)
 
 1. **v4d's hand-edge wins on H2 conflict.** Visual QA on
    chain 3 (the only H2 conflict) confirmed that the
@@ -192,6 +199,37 @@ useful source record:
    temporal-continuity reasoning that the current models
    don't have. The H2 "record conflicts, don't silently
    resolve" approach is the right design.
+
+6. **H3 stationary-cluster pattern is not specific to
+   hand-events.** v3's baseline FPR (50-60% of random
+   hand-region searches produce a stationary cluster) is
+   HIGHER than the v4d-link rate (~11%). The "stationary
+   cluster of low-conf dets" pattern is common throughout
+   the video (the detector fires on stationary features
+   for many reasons). H3 is useful only because it's
+   *restricted* to v4d-link time windows. This is a
+   crucial finding: a downstream consumer should not use
+   H3 as a general held-ball detector, but it CAN use H3
+   as a confidence signal on v4d links.
+
+7. **The YouTube false positive is a detector limitation,
+   not a criterion failure.** The YOLO detector confuses
+   face/head features (skin tone, rounded shapes) with
+   sports balls when the hand is near the face. The
+   YouTube juggling pattern has the juggler's hand raised
+   near the face during certain held phases, and the
+   detector latches onto face features. This is a
+   fundamental limitation of the YOLO model on this
+   specific video. A face detector could mask out
+   face-region false positives before clustering.
+
+8. **H3 confirms but does not recover.** All 6 H3-confirmed
+   identical-video v4d links were already v4d links; H3
+   did not recover any v4d-missed links. H3 is a
+   *corroborating* signal (the held ball is genuinely
+   there), not a *recovery* mechanism (it does not find
+   new links that v4d missed). v4d's hand-event detection
+   is the primary signal; H3 adds confidence.
 
 ---
 

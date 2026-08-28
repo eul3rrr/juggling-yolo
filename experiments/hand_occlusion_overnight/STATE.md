@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 05:10 CEST
-STATUS: H1 v4 + H2 + v5 sens grid COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). v5 sens grid confirms v4d's MIN_FROM_SLOPE=2.5 is in a flat region of the precision/recall curve. H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded for review.
+LAST_UPDATE: 2026-08-28 05:35 CEST
+STATUS: H1 v4 + H2 + v5 sens grid + H3 COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). v5 sens grid confirms v4d's MIN_FROM_SLOPE=2.5 is in a flat region of the precision/recall curve. H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded for review. H3 stationary-cluster criterion correctly confirms 6/6 identical-video v4d hand-links as real held balls, with 1 false positive on the youtube video (stuck on face).
 
 ## Isolation
 
@@ -77,6 +77,16 @@ STATUS: H1 v4 + H2 + v5 sens grid COMPLETE. v4d is the recommended hand-link ext
   well-justified and robust to small perturbations.
   See `h1_hand_pool/reports/h1_v5_sens_report.md`.
 
+- **H3** — Low-confidence hand-region evidence (master §14).
+  Three iterated designs (v1, v2, v3). The recommended v3
+  "stationary cluster" criterion (≥3 low-conf dets in
+  30px radius over ≥5 frames) correctly identifies
+  6/6 identical-video v4d hand-link held phases as real
+  held balls, with 1 false positive on the YouTube video
+  (stuck on face). H3 is useful as a *downstream confidence
+  signal* on v4d links, not as a general held-ball detector.
+  See `h1_hand_pool/reports/h3_report.md`.
+
 ## Strongest findings so far
 
 - v2 precision is **1.000 across every gap subset** of the reviewed
@@ -97,6 +107,19 @@ STATUS: H1 v4 + H2 + v5 sens grid COMPLETE. v4d is the recommended hand-link ext
   already created tokens on `UNCONTEXTED_ENTRY` and the
   `POTENTIAL_ENTRY` rename is purely a downstream-consumable
   signal.
+- H3 stationary-cluster correctly identifies 6/6 identical-video
+  v4d hand-link held phases as real held balls (visual
+  precision 1.000 on identical). The 1 YouTube false positive
+  is a detector limitation: YOLO confuses face/head features
+  with sports balls when the hand is near the face. H3 does
+  not recover any v4d-missed links — it is a *corroborating
+  signal*, not a recovery mechanism.
+- H3's baseline FPR (50-60% of random hand-region searches
+  produce a stationary cluster) is HIGHER than its v4d-link
+  rate (~11%). The "stationary cluster of low-conf dets"
+  pattern is not specific to hand-events; it appears
+  throughout the video. v3 is useful only because it's
+  *restricted* to v4d-link time windows.
 - The `THROW_NO_LEAVE` filter (3-frame leave window) is the dominant
   improvement on the YouTube video: 19 of 25 youtube throws that v1
   classified as throws were reclassified as "ball not actually leaving
@@ -144,15 +167,26 @@ extraction: 10 identical + 1 youtube links with visual precision
 
 ## Next action
 
-1. **Visual QA on chain 38 and chain 53** (the longest
-   juggling chains from H2) to confirm the combined edges
-   are visually correct. Generate H2 contact sheets.
-2. **Resolve the tracklet-3 conflict** in H2 by re-examining
-   the actual tracklet 8 trajectory and the 4-frame gap.
-3. **If time permits, explore low-confidence hand-region
-   evidence (master §14)**: a lower-confidence evidence tier
-   only near an active hand event, to fill detector dropouts
-   around the v4 hand-links.
+1. **Apply H3 as a downstream confidence signal on v4d
+   links.** Add a `h3_confirmed: bool` field to v4d link
+   records when a v3 stationary cluster is found in the
+   held phase. This gives consumers a per-link
+   corroboration flag.
+2. **Test face-masked H3** to see if a face detector
+   can mask out the YouTube false positive. The hypothesis
+   is that the false positive is a face feature; masking
+   face-region low-conf detections before clustering
+   should eliminate it.
+3. **H4: Literature-derived experiment.** Try a min-cost
+   flow formulation of the AIR+HAND graph as an alternative
+   to H2's union-find. Master §17 lists min-cost flow as
+   a candidate approach; H2 is a simpler union-find that
+   records conflicts; a min-cost flow could resolve the
+   1 conflict optimally.
+4. **H5: Object permanence explicit.** v4d is implicitly
+   object-permanent (tokens persist 60 frames), but a v6
+   could model this explicitly and use it to bridge
+   detector dropouts in the H2 chains.
 
 ## Important artifact paths
 

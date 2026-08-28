@@ -1,0 +1,34 @@
+v4d links: 11
+stems: ['identical_balls_trick_000_018', 'youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090']
+  identical_balls_trick_000_018: 2456 sports ball dets, 1079 wrist frames, 2774 norfair index entries
+  youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090: 4132 sports ball dets, 900 wrist frames, 4339 norfair index entries
+
+    3->9    hand= left  f=  31..51    n_in_reach=  9  low_conf=  7  glimpses=0  outgoing_previews=0
+
+   11->14   hand=right  f=  97..126   n_in_reach= 20  low_conf= 14  glimpses=1  outgoing_previews=0
+
+   17->23   hand=right  f= 207..232   n_in_reach=  6  low_conf=  3  glimpses=0  outgoing_previews=0
+
+   52->54   hand=right  f= 780..797   n_in_reach=  3  low_conf=  1  glimpses=1  outgoing_previews=0
+
+   54->59   hand=right  f= 830..856   n_in_reach=  7  low_conf=  4  glimpses=1  outgoing_previews=0
+
+   53->60   hand=right  f= 839..860   n_in_reach=  7  low_conf=  1  glimpses=0  outgoing_previews=0
+
+   59->63   hand=right  f= 872..890   n_in_reach= 13  low_conf= 13  glimpses=0  outgoing_previews=0
+
+   68->71   hand=right  f=1015..1029  n_in_reach=  9  low_conf=  8  glimpses=1  outgoing_previews=0
+
+   72->73   hand=right  f=1050..1054  n_in_reach=  6  low_conf=  4  glimpses=1  outgoing_previews=0
+
+   70->74   hand= left  f=1050..1056  n_in_reach=  7  low_conf=  5  glimpses=0  outgoing_previews=0
+
+   10->12   hand=right  f= 238..255   n_in_reach= 20  low_conf= 16  glimpses=1  outgoing_previews=3
+
+  baseline[identical_balls_trick_000_018]: samples=200  clusters_total=284  glimpse_like=219  fpr_per_cluster=0.771
+
+  baseline[youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090]: samples=200  clusters_total=225  glimpse_like=222  fpr_per_cluster=0.987
+
+Saved: /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data/h3_summary.json
+Saved: /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data/h3_glimpses.csv (6 rows)
+Saved: /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data/h3_clusters_detailed.json
