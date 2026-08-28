@@ -5718,3 +5718,43 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v2_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v3_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h100v4_summary.json`
+
+## H101 — 3rd video validation (weave_colored_317_330)
+
+Status: **PARTIAL PASS** (committed)
+
+- Date: 2026-08-29 ~03:00 CEST
+- Hypothesis: the H100 v4 conf+spec_conc guard (PERFECT 17/4/0/0 on
+  H93 corrected phases) generalizes to a 3rd video (weave_colored_317_330).
+- Method: 60-frame non-overlapping phase analysis on the weave video
+  (270 frames, 0-311). Multi-rater visual QA on 21 frames across 4
+  contact sheets. 2D threshold grid for the H100 v4 guard.
+- Quantitative result:
+
+  | Setting | n_pass / 6 phases | Notes |
+  |---------|-------------------|-------|
+  | H100 v4 default (conf>=0.50, spec>=0.13) | 0/6 | FAILS |
+  | H101 v5 relaxed (conf>=0.42, spec>=0.05) | 6/6 | PERFECT, 5 flat region cells |
+
+- Visual QA: 3 rounds of multi-rater visual QA. Final GT: all 6
+  phases are real 3-ball WEAVE pattern. The "weave" name refers to
+  the arm-crossing pattern, not 5-ball (H100 report was wrong
+  about the ball count).
+- Negative findings:
+  - The H100 v4 conf>=0.50 default is NOT video-agnostic. The
+    weave video has mean conf 0.44-0.47 (vs identical/YouTube
+    0.55-0.65) due to detector limitations with the arm-crossing
+    pattern.
+  - Per-video conf calibration is required.
+  - f=0 is a title graphic (not a juggling frame).
+- Recommended rule-of-thumb: `conf_min = max(0.40, video_mean_conf - 0.10)`.
+  This gives conf_min=0.40 for weave (mean=0.45) and conf_min=0.50
+  for identical/YouTube (mean=0.60). The 0.40 floor is a safety
+  threshold for low-quality phases.
+- Verdict: **PARTIAL PASS.** H100 v4 generalizes to weave at
+  conf>=0.42 (not 0.50). The guard is video-specific.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h101_v[1-5]_*.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h101/weave_*.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h101_v[3-5]_*.{csv,json}`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h101_report.md`

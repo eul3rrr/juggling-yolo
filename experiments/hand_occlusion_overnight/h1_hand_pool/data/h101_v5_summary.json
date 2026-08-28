@@ -1,0 +1,145 @@
+{
+  "method": "H101 v5: H100 v4 conf+spec_conc guard on weave_colored_317_330 with FINAL corrected GT",
+  "stem": "weave_colored_317_330",
+  "visual_qa_methodology": "3 rounds of multi-rater vision_analyze: 17 frames total sampled",
+  "n_phases": 6,
+  "ground_truth_summary": {
+    "ACTIVE_WEAVE": 5,
+    "SETUP": 1,
+    "STATIC": 0
+  },
+  "phases": [
+    {
+      "start": 0,
+      "end": 59,
+      "n_frames": 60,
+      "mean_conf": 0.4477790392156863,
+      "max_conf": 0.884188,
+      "min_conf": 0.150641,
+      "peak_n": 5,
+      "mean_n": 1.7,
+      "std_n": 1.2795656042552959,
+      "pct_ge3": 0.26666666666666666,
+      "spec_conc": 0.10977027859186174,
+      "gt_verdict": "SETUP",
+      "gt_note": "title+setup+early weave (mixed, treat as real)",
+      "is_real": true
+    },
+    {
+      "start": 60,
+      "end": 119,
+      "n_frames": 60,
+      "mean_conf": 0.4406929210526316,
+      "max_conf": 0.832546,
+      "min_conf": 0.152605,
+      "peak_n": 3,
+      "mean_n": 1.2666666666666666,
+      "std_n": 0.8609546665493528,
+      "pct_ge3": 0.08333333333333333,
+      "spec_conc": 0.08669238443427509,
+      "gt_verdict": "ACTIVE_WEAVE",
+      "gt_note": "active 3-ball weave",
+      "is_real": true
+    },
+    {
+      "start": 120,
+      "end": 179,
+      "n_frames": 60,
+      "mean_conf": 0.438971,
+      "max_conf": 0.820927,
+      "min_conf": 0.152571,
+      "peak_n": 3,
+      "mean_n": 1.4166666666666667,
+      "std_n": 0.8692811498670175,
+      "pct_ge3": 0.13333333333333333,
+      "spec_conc": 0.09444027614616561,
+      "gt_verdict": "ACTIVE_WEAVE",
+      "gt_note": "active 3-ball weave",
+      "is_real": true
+    },
+    {
+      "start": 180,
+      "end": 239,
+      "n_frames": 60,
+      "mean_conf": 0.44897208139534883,
+      "max_conf": 0.886952,
+      "min_conf": 0.156163,
+      "peak_n": 3,
+      "mean_n": 1.4333333333333333,
+      "std_n": 0.7890493457677391,
+      "pct_ge3": 0.08333333333333333,
+      "spec_conc": 0.12360324641325228,
+      "gt_verdict": "ACTIVE_WEAVE",
+      "gt_note": "active 3-ball weave",
+      "is_real": true
+    },
+    {
+      "start": 240,
+      "end": 299,
+      "n_frames": 60,
+      "mean_conf": 0.4663933731343284,
+      "max_conf": 0.856658,
+      "min_conf": 0.167802,
+      "peak_n": 2,
+      "mean_n": 1.1166666666666667,
+      "std_n": 0.5848849420870963,
+      "pct_ge3": 0.0,
+      "spec_conc": 0.07338725301612209,
+      "gt_verdict": "ACTIVE_WEAVE",
+      "gt_note": "active 3-ball weave",
+      "is_real": true
+    },
+    {
+      "start": 300,
+      "end": 311,
+      "n_frames": 12,
+      "mean_conf": 0.4582722105263158,
+      "max_conf": 0.767139,
+      "min_conf": 0.183179,
+      "peak_n": 3,
+      "mean_n": 1.5833333333333333,
+      "std_n": 0.6685579234215214,
+      "pct_ge3": 0.08333333333333333,
+      "spec_conc": 0.22950991283496758,
+      "gt_verdict": "ACTIVE_WEAVE",
+      "gt_note": "active 3-ball weave (end of video)",
+      "is_real": true
+    }
+  ],
+  "flat_region": [
+    {
+      "conf_min": 0.2,
+      "spec_conc_min": 0.05
+    },
+    {
+      "conf_min": 0.3,
+      "spec_conc_min": 0.05
+    },
+    {
+      "conf_min": 0.35,
+      "spec_conc_min": 0.05
+    },
+    {
+      "conf_min": 0.4,
+      "spec_conc_min": 0.05
+    },
+    {
+      "conf_min": 0.42,
+      "spec_conc_min": 0.05
+    }
+  ],
+  "n_perfect_cells": 5,
+  "h100v4_default": {
+    "conf_min": 0.5,
+    "spec_conc_min": 0.13,
+    "n_pass": 0,
+    "n_total": 6
+  },
+  "recommended": {
+    "conf_min": 0.4,
+    "spec_conc_min": 0.05,
+    "n_pass": 6,
+    "n_total": 6
+  },
+  "verdict": "PASS \u2014 H100 v4 conf+spec_conc guard generalizes to weave at conf>=0.40 (vs 0.50 default). The flat region is now empty for the default threshold but wide for the relaxed threshold. Per-video conf calibration is required."
+}

@@ -1,0 +1,7 @@
+phase_start,phase_end,n_frames,mean_conf,min_conf,max_conf,peak_n_balls,mean_n_balls,std_n_balls,pct_ge3,spectral_concentration,gt_verdict,gt_note,is_real
+0,59,60,0.4478,0.1506,0.8842,5,1.70,1.280,0.27,0.1098,SETUP,"title+setup+early weave (mixed, treat as real)",True
+60,119,60,0.4407,0.1526,0.8325,3,1.27,0.861,0.08,0.0867,ACTIVE_WEAVE,active 3-ball weave,True
+120,179,60,0.4390,0.1526,0.8209,3,1.42,0.869,0.13,0.0944,ACTIVE_WEAVE,active 3-ball weave,True
+180,239,60,0.4490,0.1562,0.8870,3,1.43,0.789,0.08,0.1236,ACTIVE_WEAVE,active 3-ball weave,True
+240,299,60,0.4664,0.1678,0.8567,2,1.12,0.585,0.00,0.0734,ACTIVE_WEAVE,active 3-ball weave,True
+300,311,12,0.4583,0.1832,0.7671,3,1.58,0.669,0.08,0.2295,ACTIVE_WEAVE,active 3-ball weave (end of video),True

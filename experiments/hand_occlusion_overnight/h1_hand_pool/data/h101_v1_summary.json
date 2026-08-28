@@ -1,0 +1,183 @@
+{
+  "method": "H101 v1: weave_colored_317_330 pattern inference + H100 v4 conf+spec_conc guard",
+  "stem": "weave_colored_317_330",
+  "n_frames_with_detections": 270,
+  "frame_range": [
+    0,
+    311
+  ],
+  "n_balls_distribution": {
+    "4": 5,
+    "5": 1,
+    "3": 29,
+    "2": 88,
+    "1": 147
+  },
+  "n_substantial_phases": 14,
+  "guard_thresholds": {
+    "conf_min": 0.5,
+    "spec_conc_min": 0.13
+  },
+  "guard_results": {
+    "n_passes": 0,
+    "n_fails_conf_only": 1,
+    "n_fails_spec_only": 7,
+    "n_fails_both": 6
+  },
+  "phases": [
+    {
+      "start": 0,
+      "end": 7,
+      "n_frames": 8,
+      "n_balls_category": 3,
+      "mean_conf": 0.47157991666666665,
+      "spec_conc": 0.43368283180007383,
+      "conf_pass": false,
+      "spec_pass": true,
+      "guard_pass": false
+    },
+    {
+      "start": 87,
+      "end": 91,
+      "n_frames": 5,
+      "n_balls_category": 1,
+      "mean_conf": 0.530159,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 95,
+      "end": 100,
+      "n_frames": 6,
+      "n_balls_category": 1,
+      "mean_conf": 0.4913125,
+      "spec_conc": 0.0,
+      "conf_pass": false,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 162,
+      "end": 167,
+      "n_frames": 6,
+      "n_balls_category": 1,
+      "mean_conf": 0.4755485,
+      "spec_conc": 0.0,
+      "conf_pass": false,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 170,
+      "end": 175,
+      "n_frames": 6,
+      "n_balls_category": 1,
+      "mean_conf": 0.7307943333333333,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 189,
+      "end": 193,
+      "n_frames": 5,
+      "n_balls_category": 2,
+      "mean_conf": 0.5010774,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 206,
+      "end": 211,
+      "n_frames": 6,
+      "n_balls_category": 1,
+      "mean_conf": 0.6178468333333333,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 224,
+      "end": 230,
+      "n_frames": 7,
+      "n_balls_category": 1,
+      "mean_conf": 0.33307985714285715,
+      "spec_conc": 0.0,
+      "conf_pass": false,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 233,
+      "end": 237,
+      "n_frames": 5,
+      "n_balls_category": 1,
+      "mean_conf": 0.4329626,
+      "spec_conc": 0.0,
+      "conf_pass": false,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 242,
+      "end": 248,
+      "n_frames": 7,
+      "n_balls_category": 1,
+      "mean_conf": 0.6655551428571429,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 268,
+      "end": 272,
+      "n_frames": 5,
+      "n_balls_category": 1,
+      "mean_conf": 0.5312288000000001,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 277,
+      "end": 284,
+      "n_frames": 8,
+      "n_balls_category": 1,
+      "mean_conf": 0.6104935,
+      "spec_conc": 0.0,
+      "conf_pass": true,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 291,
+      "end": 297,
+      "n_frames": 7,
+      "n_balls_category": 1,
+      "mean_conf": 0.36303142857142856,
+      "spec_conc": 0.0,
+      "conf_pass": false,
+      "spec_pass": false,
+      "guard_pass": false
+    },
+    {
+      "start": 302,
+      "end": 306,
+      "n_frames": 5,
+      "n_balls_category": 1,
+      "mean_conf": 0.386384,
+      "spec_conc": 0.0,
+      "conf_pass": false,
+      "spec_pass": false,
+      "guard_pass": false
+    }
+  ]
+}
