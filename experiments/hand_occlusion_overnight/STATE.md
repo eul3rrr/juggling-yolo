@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 09:20 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED. H5 applies H3 as a downstream confidence flag. H6 simplified min-cost flow resolves the H2 conflict. H7 full min-cost flow with capacity constraints + gap/error-aware cost. H2+H3+H7 unified chain representation. H8 physics consistency check identifies 2 confirmed E6c false positives. H9 object permanence: coverage 82.9% on identical. H10 per-chain quality. H8v4 NEGATIVE. H8v5 MIXED. H10v5 PASS. H237v5. H8v6 NEGATIVE. H11 PASS: 9 CONFIDENT identical + 1 CONFIDENT YouTube chain, 8 catch/throw events, per-frame census 51% cascade on identical / 100% on YouTube (over-counting). H11 v2 identity-merge false positive. H11 v3 quality-filtered census confirms over-counting on YouTube. H11 v4 PASS: 85.7% reduction in merge candidates, correctly removes chain 36 ↔ chain 30 false positive. H12 PASS: per-frame pattern inference identifies 4-phase pattern on identical (FOUNTAIN → CASCADE → mixed), 33.8% UNKNOWN. YouTube unreliable due to H10 v5 over-counting.
+LAST_UPDATE: 2026-08-28 09:50 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED. H5 applies H3 as a downstream confidence flag. H6 simplified min-cost flow resolves the H2 conflict. H7 full min-cost flow with capacity constraints + gap/error-aware cost. H2+H3+H7 unified chain representation. H8 physics consistency check identifies 2 confirmed E6c false positives. H9 object permanence: coverage 82.9% on identical. H10 per-chain quality. H8v4 NEGATIVE. H8v5 MIXED. H10v5 PASS. H237v5. H8v6 NEGATIVE. H11 PASS: 9 CONFIDENT identical + 1 CONFIDENT YouTube chain, 8 catch/throw events, per-frame census 51% cascade on identical / 100% on YouTube (over-counting). H11 v2 identity-merge false positive. H11 v3 quality-filtered census confirms over-counting on YouTube. H11 v4 PASS: 85.7% reduction in merge candidates, correctly removes chain 36 ↔ chain 30 false positive. H12 PASS: per-frame pattern inference identifies 4-phase pattern on identical (FOUNTAIN → CASCADE → mixed), 33.8% UNKNOWN. YouTube unreliable due to H10 v5 over-counting. H12 v2 PASS: sliding-window event history + MIN_EVENTS_FOR_PATTERN=3 + MIXED_3+ category + phase detection. UNKNOWN collapses 33.8% → 1.4% on identical. 13 substantial phases emitted. YouTube 100% MIXED_3+_UNCONFIRMED (correct, due to n_total=5 over-counting). Sensitivity grid (K=4, MIN=3) in flat region. Visual QA reveals FOUNTAIN_3+ at f=890-936 is actually a cascade (algorithm wrong on this phase due to event sparsity).
 
 ## Isolation
 
@@ -268,10 +268,27 @@ extraction: 10 identical + 1 youtube links with visual precision
     criterion admits some false positives (e.g., t8 at
     f=43 is 71px from the left wrist but is below the
     hand, not at it).
-16. **H12 v2: sliding-window pattern inference** — use a
-    sliding window of multiple events for CASCADE_3+ vs
-    FOUNTAIN_3+ distinction, with quality-based confidence
-    floor to suppress over-counting on YouTube.
+16. **H12 v3: integrate detector-level signal** — the H12
+    v2 algorithm is fundamentally limited by event log
+    density. A future H12 v3 should use ball positions
+    in the air relative to each hand (not just n_in_hand
+    counts) to disambiguate CASCADE from FOUNTAIN. The
+    current visual QA found FOUNTAIN_3+ at f=890-936 is
+    actually a cascade, suggesting the algorithm's
+    cascade/fountain classification is wrong ~30% of
+    the time.
+17. **H12 v3b: use chain-IDs as ball IDs** — chain 2
+    (CONFIDENT, q=0.92) and chain 8 (CONFIDENT, q=0.85)
+    are real single-ball juggling cycles. A future
+    v3 could assign physical ball IDs based on chain
+    membership and report the per-ball sequence.
+18. **H13: detector-level ball detection** — re-run
+    YOLO at lower confidence (0.1) and compare to
+    v4d hand-link predictions. Master §14's "lower
+    confidence evidence tier near hand events" is
+    the inspiration. The YouTube over-counting is
+    partly due to detector confusion; a lower-conf
+    re-run might reveal where balls actually are.
 
 ## Important artifact paths
 

@@ -1,0 +1,306 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "K=2_MIN=2": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 2.04,
+          "SINGLE_BALL": 20.33,
+          "FOUNTAIN_3+": 48.93,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 6
+      },
+      "K=2_MIN=3": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 50.97,
+          "SINGLE_BALL": 20.33,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 5
+      },
+      "K=2_MIN=4": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 50.97,
+          "SINGLE_BALL": 20.33,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 5
+      },
+      "K=3_MIN=2": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 2.04,
+          "SINGLE_BALL": 20.33,
+          "FOUNTAIN_3+": 19.59,
+          "MIXED_3+": 29.34,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=3_MIN=3": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 29.34,
+          "NO_BALL": 3.25,
+          "FOUNTAIN_3+": 15.51,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=3_MIN=4": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 50.97,
+          "SINGLE_BALL": 20.33,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 5
+      },
+      "K=4_MIN=2": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 2.04,
+          "SINGLE_BALL": 20.33,
+          "FOUNTAIN_3+": 19.59,
+          "MIXED_3+": 29.34,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=4_MIN=3": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 29.34,
+          "NO_BALL": 3.25,
+          "FOUNTAIN_3+": 15.51,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=4_MIN=4": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 29.34,
+          "NO_BALL": 3.25,
+          "FOUNTAIN_3+": 15.51,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=5_MIN=2": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 2.04,
+          "SINGLE_BALL": 20.33,
+          "FOUNTAIN_3+": 17.18,
+          "MIXED_3+": 31.75,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=5_MIN=3": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 31.75,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37,
+          "FOUNTAIN_3+": 13.09
+        },
+        "n_unique": 7
+      },
+      "K=5_MIN=4": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 31.75,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37,
+          "FOUNTAIN_3+": 13.09
+        },
+        "n_unique": 7
+      },
+      "K=6_MIN=2": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 2.04,
+          "SINGLE_BALL": 20.33,
+          "FOUNTAIN_3+": 17.18,
+          "MIXED_3+": 31.75,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37
+        },
+        "n_unique": 7
+      },
+      "K=6_MIN=3": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 31.75,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37,
+          "FOUNTAIN_3+": 13.09
+        },
+        "n_unique": 7
+      },
+      "K=6_MIN=4": {
+        "n_total": 1077,
+        "pct": {
+          "TWO_BALL": 25.07,
+          "MIXED_3+_UNCONFIRMED": 6.13,
+          "SINGLE_BALL": 20.33,
+          "MIXED_3+": 31.75,
+          "NO_BALL": 3.25,
+          "TWO_BALL_ONE_HAND": 0.37,
+          "FOUNTAIN_3+": 13.09
+        },
+        "n_unique": 7
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "K=2_MIN=2": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 27.17,
+          "FOUNTAIN_3+": 72.83
+        },
+        "n_unique": 2
+      },
+      "K=2_MIN=3": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=2_MIN=4": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=3_MIN=2": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 27.17,
+          "FOUNTAIN_3+": 72.83
+        },
+        "n_unique": 2
+      },
+      "K=3_MIN=3": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=3_MIN=4": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=4_MIN=2": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 27.17,
+          "FOUNTAIN_3+": 72.83
+        },
+        "n_unique": 2
+      },
+      "K=4_MIN=3": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=4_MIN=4": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=5_MIN=2": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 27.17,
+          "FOUNTAIN_3+": 72.83
+        },
+        "n_unique": 2
+      },
+      "K=5_MIN=3": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=5_MIN=4": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=6_MIN=2": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 27.17,
+          "FOUNTAIN_3+": 72.83
+        },
+        "n_unique": 2
+      },
+      "K=6_MIN=3": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      },
+      "K=6_MIN=4": {
+        "n_total": 898,
+        "pct": {
+          "MIXED_3+_UNCONFIRMED": 100.0
+        },
+        "n_unique": 1
+      }
+    }
+  }
+}

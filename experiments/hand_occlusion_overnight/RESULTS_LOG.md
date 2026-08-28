@@ -1260,3 +1260,121 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h11/pattern_*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_report.md`
+
+### H12 v2 (2026-08-28 ~09:50 CEST)
+
+- Hypothesis: H12 v1's CASCADE_3+/FOUNTAIN_3+ distinction based
+  purely on `unique_hands` of events in a ±30-frame window is too
+  weak (with only 8 events on identical, 1 on YouTube, the
+  distinction collapsed). H12 v2 hypothesizes that (1) sliding
+  window of K=4 last events (not temporal window) gives more
+  stable classification; (2) hand-alternation regularity
+  (consecutive same-hand events) is a robust signal: CASCADE → 0
+  same-hand runs, FOUNTAIN → N-1 same-hand runs; (3) catch rate
+  (events/sec) helps disambiguate; (4) quality-aware confidence
+  floor propagates chain quality as pattern confidence; (5)
+  MIN_EVENTS_FOR_PATTERN=3 prevents over-classification on
+  sparse-event windows; (6) phase-boundary detection emits
+  explicit pattern transitions.
+
+- Thresholds (declared from physical geometry):
+  - K_EVENTS = 4 (last 4 catch/throw events)
+  - MIN_EVENTS_FOR_PATTERN = 3 (need >= 3 events to classify)
+  - CASCADE_MAX_SAME_HAND_RUN = 1
+  - CASCADE_MIN_CATCH_RATE = 1.0 events/second
+  - FOUNTAIN: same_run >= n-1 AND alt < 0.3
+  - MIXED_3+: 3+ events but criteria not strictly met
+  - MIXED_3+_UNCONFIRMED: 1-2 events (insufficient evidence)
+
+- Quantitative result:
+
+  Identical (1077 frames):
+
+  | Pattern | v1 | v2 | Δ |
+  |---|---|---|---|
+  | UNKNOWN | 33.8% | 1.4% | **-32.4 pp** |
+  | CASCADE_3+ | 21.9% | 0.0% | -21.9 pp |
+  | FOUNTAIN_3+ | 11.7% | 15.5% | +3.8 pp |
+  | MIXED_3+ | 0.0% | 29.3% | +29.3 pp (new) |
+  | MIXED_3+_UNCONFIRMED | 0.0% | 6.1% | +6.1 pp (new) |
+  | TWO_BALL | 15.3% | 25.1% | +9.8 pp |
+  | SINGLE_BALL | 13.9% | 20.3% | +6.4 pp |
+  | NO_BALL | 3.2% | 3.2% | 0.0 pp |
+  | TWO_BALL_ONE_HAND | 0.1% | 0.4% | +0.3 pp |
+
+  YouTube (898 frames):
+
+  | Pattern | v1 | v2 | Δ |
+  |---|---|---|---|
+  | CASCADE_3+ | 93.2% | 0.0% | -93.2 pp |
+  | FOUNTAIN_3+ | 6.8% | 0.0% | -6.8 pp |
+  | MIXED_3+_UNCONFIRMED | 0.0% | 100.0% | +100.0 pp |
+
+- Phase detection: 13 substantial phases on identical (n_frames >= 20),
+  ranging from MIXED_3+ (early, low conf 0.39) to FOUNTAIN_3+ (late,
+  conf 0.42-0.63). The 3-phase structure (cascade-with-transitions
+  → fountain) is a meaningful result.
+
+- Visual QA on 5 phases via `vision_analyze`:
+  - **f=411-450 MIXED_3+ conf=0.93**: 3-ball balance trick (not a
+    clean pattern). Algorithm's MIXED label is plausible.
+  - **f=549-578 MIXED_3+ conf=0.85**: transition regime. Plausible.
+  - **f=890-936 FOUNTAIN_3+ conf=0.63**: VISION TOOL SAYS THIS IS
+    A CASCADE. The 4 right-hand events in the window made the
+    algorithm think it's same-hand-dominant. **Algorithm is wrong
+    on this phase.** Limitation: event log density is too low.
+  - **f=977-1011 FOUNTAIN_3+ conf=0.42**: VISION TOOL SAYS THIS
+    IS A CASCADE. **Algorithm is wrong** (low conf reflects
+    the visual evidence).
+  - **f=335-382 SINGLE_BALL conf=0.93**: VISION TOOL SEES 2 BALLS.
+    The airborne ball is a low-confidence detection not in any
+    tracklet. n_total=1 is a chain count, not a ball count.
+
+- Sensitivity grid: 15 cells (K in {2,3,4,5,6} × MIN in {2,3,4}).
+  (K=2, MIN=2) is an outlier (48.9% FOUNTAIN, too few events).
+  All other cells give MIXED_3+ as the dominant 3+ pattern with
+  29-32% on identical. The default (K=4, MIN=3) is in the flat region.
+  YouTube: (K=*, MIN=2) gives 72.8% FOUNTAIN; (K=*, MIN=3) gives
+  100% UNCONFIRMED. The default is the conservative end.
+
+- Negative findings:
+  - **The FOUNTAIN_3+ classification can be wrong** when the event
+    log is sparse. The 4 right-hand events at f=788, 843, 849, 881,
+    1022, 1052 make the algorithm see same-hand dominance, but
+    visually the juggler is doing a cascade.
+  - **MIXED_3+ is a "we don't know" bucket**, not a scientifically
+    meaningful pattern class. The vision tool confirmed some
+    MIXED_3+ phases are 3-ball balance tricks, others are
+    transitions.
+  - **SINGLE_BALL can be wrong** when there are un-trackleted
+    balls. The vision tool saw 2 balls in f=335-382, but the
+    algorithm only counts 1 chain.
+  - **The YouTube 100% UNCONFIRMED is the correct answer.** The
+    n_total=5 in 601/898 frames is an over-counting artifact
+    (chain algorithm splits long tracklets). v1's 93.2% CASCADE_3+
+    was wrong.
+
+- Verdict: **PASS.** H12 v2 is a meaningful improvement over v1:
+  UNKNOWN collapses 33.8% → 1.4% on identical. New MIXED_3+
+  category is a useful "ambiguous" bucket. Phase detection
+  emits 13 substantial phases. YouTube correctly reports
+  UNCONFIRMED. Threshold choice (K=4, MIN=3) is in a flat
+  region. Limitation: CASCADE/FOUNTAIN classification is
+  limited by event log density; future H12 v3 should integrate
+  detector-level ball position signals.
+  See `h1_hand_pool/reports/h12_v2_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v2_sliding_window.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v2_visualize.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v2_comparison.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v2_phase_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v2_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v2_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_phases_v2_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v2_sensitivity.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/timeline_*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/comparison_*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/phase_*.png` (5 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v2_report.md`

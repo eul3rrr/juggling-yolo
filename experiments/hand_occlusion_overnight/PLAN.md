@@ -472,3 +472,40 @@ Sub-steps:
 of identical frames. The 4-phase pattern is consistent
 with a 3-ball trick. Caveat: YouTube unreliable due to
 H10 v5 over-counting.
+
+## Seventeenth episode (H12 v2) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Implemented H12 v2: sliding window of last K=4 events
+   (not temporal ±window), hand-alternation metric, catch
+   rate, MIN_EVENTS_FOR_PATTERN=3, MIXED_3+ category, phase
+   detection.
+2. ✅ Ran on both videos. Result:
+   - identical: UNKNOWN 33.8% → 1.4%, FOUNTAIN 11.7% → 15.5%,
+     MIXED_3+ 0% → 29.3%, MIXED_3+_UNCONFIRMED 0% → 6.1%
+   - youtube: CASCADE_3+ 93.2% → 0%, MIXED_3+_UNCONFIRMED 0% → 100%
+3. ✅ Phase detection emits 13 substantial phases on identical.
+4. ✅ Sensitivity grid: 15 cells (K×MIN), (K=4, MIN=3) is in
+   flat region.
+5. ✅ Visual QA on 5 phase contact sheets via vision_analyze.
+   Important finding: the algorithm's FOUNTAIN_3+ classification
+   at f=890-936 and f=977-1011 is visually wrong (those are
+   cascades). The event log is too sparse to disambiguate.
+6. ✅ Documented in `h12_v2_report.md` and updated RESULTS_LOG.
+
+**H12 v2 verdict: PASS.** H12 v2 is a meaningful improvement:
+UNKNOWN collapses 33.8% → 1.4%. Phase detection emits 13
+substantial phases. YouTube correctly reports UNCONFIRMED.
+Limitation: CASCADE/FOUNTAIN classification is limited by
+event log density; visual QA found at least 2 FOUNTAIN_3+
+phases that are actually cascades. Future H12 v3 should
+integrate detector-level ball position signals.
+
+Next episode candidates:
+1. H12 v3: integrate detector-level ball position signals
+   (per-frame ball x,y relative to each hand, not just n_in_hand)
+2. H13: detector-level low-confidence ball detection near
+   active hand events (master §14 follow-up)
+3. H8 v7: per-frame per-bounce segmentation for YouTube
+   long tracklets

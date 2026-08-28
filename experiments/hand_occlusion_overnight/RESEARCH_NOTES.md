@@ -498,4 +498,66 @@ useful source record:
 29. **H12 demonstrates that H11's per-frame census is
     a useful downstream measurement.** H12 turns the
     census (a count) into a pattern label (a class).
-    This is a real consumer of H11.
+
+## Cross-cutting insights from H12 v2 (2026-08-28 ~09:50)
+
+30. **UNKNOWN should be propagated as low confidence, not a
+    binary label.** H12 v1 dropped everything below
+    MIN_QUALITY_FOR_PATTERN=0.5 to UNKNOWN, hiding the chain
+    quality information. H12 v2 propagates chain quality as
+    the pattern's confidence, so a 0.42 quality chain with
+    CASCADE_3+ becomes "CASCADE_3+ at conf 0.42" — much more
+    informative for downstream consumers.
+
+31. **The "MIXED" category is essential for honest
+    classification.** A binary CASCADE/FOUNTAIN classifier
+    would force every 3-ball frame into one of two classes
+    even when the data is inconclusive. The MIXED_3+
+    category (3+ events but criteria not strictly met) and
+    MIXED_3+_UNCONFIRMED (1-2 events) explicitly say "I
+    can't decide". On identical, MIXED_3+ goes from 0% (v1)
+    to 29.3% (v2), a substantial gain in honest reporting.
+
+32. **Phase detection enables temporal analysis.** H12 v2
+    emits explicit pattern phase transitions
+    (`pattern_phases_v2_*.csv`). On identical, 13 substantial
+    phases (n_frames >= 20) reveal a 3-phase structure:
+    early cascade-with-transitions → late fountain. This is
+    a meaningful result that v1 couldn't produce.
+
+33. **The YouTube "100% UNCONFIRMED" is the correct answer.**
+    H12 v1's 93.2% CASCADE_3+ on YouTube was a classification
+    forced by the census (n_total=5 in 601/898 frames).
+    H12 v2's MIN_EVENTS_FOR_PATTERN=3 prevents this: with
+    only 1 catch/throw event on YouTube, all frames are
+    correctly classified as MIXED_3+_UNCONFIRMED. The n_total
+    signal in YouTube is over-counting due to long tracklets
+    being split by the chain algorithm.
+
+34. **CASCADE/FOUNTAIN classification is fundamentally limited
+    by event log density.** With only 8 events on identical
+    (and 4 of them on the right hand at f=788-1052), the
+    algorithm concludes "same-hand dominance" → FOUNTAIN_3+
+    for frames f=890-1050. Visual QA confirmed those frames
+    are actually a CASCADE (balls cross between hands). The
+    H12 v2 algorithm is honest about its uncertainty via
+    confidence, but the underlying event log is too sparse
+    to disambiguate. **Future H12 v3 should integrate
+    detector-level ball position signals** (per-frame ball
+    x,y relative to each hand, not just n_in_hand counts).
+
+35. **n_total is a chain count, not a ball count.** Visual
+    QA on the f=335-382 SINGLE_BALL phase (conf=0.93) found
+    2 balls in the air, but the algorithm reports n_total=1
+    because only 1 chain is active. The airborne ball is a
+    low-confidence detection not incorporated into any
+    tracklet. **Future H12 v3 should use raw detector
+    output, not just tracklet chain membership.**
+
+36. **Sensitivity grid (K=4, MIN=3) is in a flat region.**
+    13 of 15 cells in the (K, MIN) grid give the same MIXED_3+
+    dominance on identical. The 2 outliers are (K=2, MIN=2)
+    which gives 48.9% FOUNTAIN (too few events), and
+    (K=2, MIN=3) which gives 51.0% MIXED_3+_UNCONFIRMED
+    (correctly conservative). The default (K=4, MIN=3) is
+    a well-justified operating point.
