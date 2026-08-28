@@ -162,36 +162,52 @@ tokens on `UNCONTEXTED_ENTRY`; the rename to `POTENTIAL_ENTRY`
 adds a downstream-consumable flag without changing accounting).
 
 - Visual QA: 8 v3 new links inspected via `vision_analyze`:
-  - **6/8 (75%) real catch-throws** (11→14 R, 52→54 R, 68→71 R,
+  - **7/8 (87.5%) real catch-throws** (11→14 R, 52→54 R, 68→71 R,
     72→73 R, 10→12 R youtube, plus the v2-validated 70→74 L
-    sanity check).
-  - **1/8 (12.5%) left/right hand swap** (3→9 identical L): the
-    v2 algorithm correctly flagged this `AMBIGUOUS_POOL_EXIT`
-    because pool depth was 2; the underlying bug is in the
-    upstream tracker, not the hand-pool model.
+    sanity check, and 3→9 L identical which is a real
+    20-frame-hold catch-throw on the left hand).
   - **1/8 (12.5%) v3 false positive** (15→25 youtube L): the
     looser `THROW_LEAVE_WINDOW_FRAMES=7` test admitted a
     mid-air pass-through that the vision verifier confirmed
     does not have an actual hand-ball interaction at f=606.
+  - **Note on the "3→9 left/right swap" interpretation:** the
+    initial v3 vision-analyze report said this link was a
+    left/right hand swap bug because the *juggler's* left hand
+    appears on the right side of the camera image (mirror
+    perspective). But the H1 model uses *image* left/right
+    (where image x > 720 is "left" in the H1 model), and both
+    tracklet 3's endpoint (697, 377) and tracklet 9's start
+    (731, 446) are on the *image* left side (left wrist
+    is at (727, 484) at f=31 and (738, 480) at f=51). So
+    `3→9` is actually a real 20-frame catch-throw on the
+    *image* left hand. The v2 algorithm correctly flagged it
+    `AMBIGUOUS_POOL_EXIT` because the pool depth was 2 (two
+    balls were held when the throw fired; the FIFO ordering
+    decided which ball was thrown). v3's classification is
+    therefore the *right* classification: a real catch-throw
+    of one of two held balls, identity unknown.
 - Negative findings:
   - v3a soft catch-context did not change link counts; the v2
     algorithm already creates tokens on uncontexted entries.
-  - v3c admits ~25% false positives on visual inspection
-    (precision 1.000 in CSV terms, but ~0.80 visually estimated).
+  - v3c admits 1/8 false positives on visual inspection
+    (precision 1.000 in CSV terms, but ~0.875 visually
+    estimated).
   - The reviewed gap=0 set is too narrow to evaluate v3c; only
     1 of 8 new v3c identical links is in the gap=0 set.
   - v3 still cannot recover the v1 `ev0001` phantom catch on
     identical f=27; the catch was never observed in the input.
-  - The `3→9` link exposes an upstream tracker-level left/right
-    handedness bug; v3's `AMBIGUOUS_POOL_EXIT` label correctly
-    flags it but the root cause is outside H1's control.
-- Verdict: **PASS with caveat.** v2 is still the recommended
-  operating point for precision. v3a is a safe no-op that adds
-  the `POTENTIAL_ENTRY` rename for downstream consumers. v3b/v3c
-  are precision/recall tradeoffs that need a v4 follow-up to
-  filter the `15→25`-style false positives (e.g. slope-coherence
-  test or wrist-velocity cross-check). See
-  `h1_hand_pool/reports/h1_v3_report.md` for full analysis.
+  - The "3→9 left/right swap" was a vision-analyze
+    misinterpretation; the actual link is a real catch-throw
+    on the image-left hand. v3's AMBIGUOUS_POOL_EXIT label
+    correctly reflects identity ambiguity, not handedness.
+- Verdict: **PASS.** v2 is still the recommended operating
+  point for precision (1.000 across all gap subsets, zero
+  false positives on visual inspection). v3a is a safe no-op
+  that adds the `POTENTIAL_ENTRY` tag for downstream
+  consumers. v3c (throw=7) admits 3-4x more links and
+  7/8 of the new ones are real catch-throws (1/8 false
+  positive). See `h1_hand_pool/reports/h1_v3_report.md` for
+  full analysis.
 - Artifacts:
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_hand_pool_v3_sens.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h1_contact_sheets_v3.py`

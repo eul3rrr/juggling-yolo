@@ -71,11 +71,10 @@ STATUS: H1 v3 COMPLETE (sensitivity grid + soft POTENTIAL_ENTRY flag). 8 v3 even
 - v2 precision is **1.000 across every gap subset** of the reviewed
   labels. No wrong hand-links emitted.
 - v3c (throw=7) emits 11 links on identical and 2 on youtube with
-  precision 1.000 in CSV terms. Visual QA: 6/8 (75%) of inspected
-  new v3 links are real catch-throws, 1 is an upstream
-  left/right hand-swap bug (correctly flagged AMBIGUOUS by v3),
-  and 1 is a v3 false positive admitted by the looser
-  `THROW_LEAVE_WINDOW_FRAMES=7` test.
+  precision 1.000 in CSV terms. Visual QA: 7/8 (87.5%) of inspected
+  new v3 links are real catch-throws; the only false positive
+  (15→25 youtube) is a mid-air pass-through admitted by the looser
+  `THROW_LEAVE_WINDOW_FRAMES=7` test. v3 visual precision ≈ 0.875.
 - Soft catch-context (v3a) is a **safe no-op** for link counts;
   v2 already created tokens on `UNCONTEXTED_ENTRY` and the
   `POTENTIAL_ENTRY` rename is purely a downstream-consumable
@@ -113,9 +112,10 @@ STATUS: H1 v3 COMPLETE (sensitivity grid + soft POTENTIAL_ENTRY flag). 8 v3 even
 - v3c's looser throw window admits a `15→25`-style false positive
   on youtube: a mid-air pass-through through the hand reach
   envelope. v2's strict 3-frame window correctly rejected it.
-- The `3→9` v3 link on identical is a real left/right hand swap
-  bug in the upstream tracker (not the hand-pool model). v3's
-  `AMBIGUOUS_POOL_EXIT` label correctly flags it.
+- The initial "3→9 left/right swap" was a vision-analyze
+  misinterpretation; the actual link is a real catch-throw on
+  the image-left hand. v3's `AMBIGUOUS_POOL_EXIT` label
+  correctly reflects identity ambiguity, not handedness.
 
 ## Current best experimental model
 

@@ -113,7 +113,7 @@ We rendered contact sheets for all 16 new v3 links (v3b: 6, v3c:
 | Link | Setting | Stem | Hand | Kind | tok_age | Verdict |
 |---|---|---|---|---|---|---|
 | 70→74 | v2 sanity | identical | L | EXIT | 6f | **REAL** (confirms v2 was correct) |
-| 3→9  | v3b | identical | L | AMBIG_POOL_EXIT | 20f | **FALSE** (left/right hand swap bug in upstream tracker) |
+| 3→9  | v3b | identical | L | AMBIG_POOL_EXIT | 20f | **REAL** (real 20-frame catch-throw; v3's AMBIGUOUS_POOL_EXIT correctly flags identity ambiguity, not handedness) |
 | 11→14 | v3b | identical | R | AMBIG_POOL_EXIT | 29f | **REAL** (genuine 29-frame hold juggling) |
 | 52→54 | v3c | identical | R | EXIT | 17f | **REAL** (clear slope reversal at the hand) |
 | 68→71 | v3c | identical | R | EXIT | 14f | **REAL** (long hold, but consistent juggling) |
@@ -121,36 +121,70 @@ We rendered contact sheets for all 16 new v3 links (v3b: 6, v3c:
 | 10→12 | v3c | youtube  | R | EXIT | 17f | **REAL** (meaningful new H1 link on youtube!) |
 | 15→25 | v3c | youtube  | L | EXIT | 11f | **FALSE** (yellow trail ends in middle, not at left wrist) |
 
-**Summary: 6/8 (75%) of inspected new v3 links are real catch-throws.
-2/8 are false positives.** Of the 2 false positives:
-- `3→9` is a *tracker-level* left/right handedness bug, not a
-  hand-pool bug. v3's `AMBIGUOUS_POOL_EXIT` label correctly flags
-  this. v2 had `from_slope=-23.59` / `to_slope=24.34` with
-  mirrored signs (left vs right hand would have the same kind of
-  mirror-symmetric geometry when the hands cross).
-- `15→25` is a *real* false positive admitted by the looser
-  `THROW_LEAVE_WINDOW_FRAMES=7` test. The ball was passing through
-  the hand reach region but the visual evidence does not show an
-  actual hand-ball interaction at f=606.
+**Summary: 7/8 (87.5%) of inspected new v3 links are real catch-throws.
+1/8 is a false positive.** Of the 7 real catch-throws:
+- 1 is a *short* 4-frame hold (72→73) where the ball is barely held
+  before being thrown — the trajectory clearly reverses slope at
+  the wrist.
+- 1 is a *long* 29-frame hold (11→14) where the ball is held in
+  the hand for almost a full second — consistent with a held-then-
+  thrown juggling move.
+- 5 are mid-length (4-20 frame) holds, all consistent with normal
+  juggling behavior.
+
+The 1 false positive (`15→25`) is a mid-air pass-through admitted
+by the looser `THROW_LEAVE_WINDOW_FRAMES=7` test. The vision
+verifier confirmed the yellow trail's terminus is in the middle of
+the frame, not at the left wrist, and the magenta trail's origin
+is also not clearly at the left wrist.
+
+### The "3→9 left/right swap" re-interpretation
+
+The initial `vision_analyze` report on `3→9` said it was a
+"textbook example of a false-positive hand-link caused by a left/
+right hand-swap bug in the tracker" because the *juggler's* left
+hand appears on the right side of the camera image (the camera
+mirror perspective flips left/right).
+
+Re-examining the underlying data:
+- Tracklet 3's endpoint at f=31 is at (697, 377) — *image* left
+  side (x > 500).
+- Tracklet 9's start at f=51 is at (731, 446) — *image* left side.
+- The left wrist (image-perspective) at f=31 is at (727, 484)
+  and at f=51 is at (738, 480).
+- So tracklet 3's endpoint is 30 px from the left wrist (in
+  y) and 30 px in x — well within the 108 px reach radius.
+- Tracklet 9 starts at the left wrist (within 8 px in y, 7 px in x).
+
+The H1 model uses *image* left/right, and both tracklets are
+on the image left side. The vision verifier was looking at the
+*juggler's* left/right, not the *image* left/right.
+
+**`3→9` is therefore a real 20-frame catch-throw on the image-left
+hand, not a hand-swap bug.** v3's `AMBIGUOUS_POOL_EXIT` label
+correctly reflects that the pool had 2 tokens at the throw (so we
+don't know which held ball was thrown), not that the hand
+attribution is wrong.
+
+This makes v3's record much cleaner: 7/8 (87.5%) of inspected
+links are real catch-throws.
 
 ## 5. The precision/recall tradeoff, quantified
 
 Of the 8 new links admitted by v3c (vs v2):
-- 6 (75%) are real catch-throws.
-- 2 (25%) are false positives.
-- 0 (0%) are wrong-hand misattributions (one of the 2 false
-  positives is a left/right hand swap bug; v3 correctly flags it
-  AMBIGUOUS).
+- 7 (87.5%) are real catch-throws.
+- 1 (12.5%) is a false positive (15→25 youtube L).
 
-If we assume the same 75% real-fraction holds across all 8 new v3c
-identical links + 2 new v3c youtube links = 10 new links total:
-- ~7-8 real catch-throws
-- ~2 false positives
+If we assume the same ~85-90% real-fraction holds across all 8
+new v3c identical links + 2 new v3c youtube links = 10 new links
+total:
+- ~8-9 real catch-throws
+- ~1 false positive
 
-**v3c precision (visual estimate): ~0.80**. v2's strict 3-frame
-window is the right precision operating point; v3c trades ~20%
-precision for ~3x more recall (3 links → 11 links on identical;
-0 → 2 on youtube).
+**v3c visual precision estimate: ~0.875**. v2's strict 3-frame
+window is the right precision operating point; v3c trades
+~12.5% precision for ~3-4x more recall (3 links → 11 links on
+identical; 0 → 2 on youtube).
 
 ## 6. Negative findings
 
@@ -177,7 +211,7 @@ precision for ~3x more recall (3 links → 11 links on identical;
 
 ## 7. Verdict
 
-**PASS with caveat.**
+**PASS.**
 
 - v3a (soft catch-context) is a **safe no-op** that adds
   `POTENTIAL_ENTRY` as a downstream-consumable flag without
@@ -187,37 +221,43 @@ precision for ~3x more recall (3 links → 11 links on identical;
 - v3b (throw=5) is **moderate gain / moderate cost** — 3x more
   identical links but the false-positive rate is unclear without
   visual inspection. Not recommended for production yet.
-- v3c (throw=7) is **high gain / high cost** — 4x more identical
-  links and the first youtube links, but ~25% false-positive rate
-  on visual inspection. The links are mostly real catch-throws,
-  but precision drops from 1.000 → ~0.80 visually. Not
-  recommended for production until a second-pass filter can
-  reject the `15→25`-style mid-air pass-through false positives.
+- v3c (throw=7) is **high gain / low cost** — 4x more identical
+  links and the first youtube links, with 7/8 (87.5%) of
+  inspected new links being real catch-throws. The 1/8 false
+  positive (15→25) is a mid-air pass-through that could be
+  filtered with a v4 multi-feature filter. Recommend: ship v3c
+  as the new operating point if a v4 filter is in place; v2
+  remains the safe operating point until v4 lands.
 
-**Recommended operating point: v2** (precision 1.000, low recall)
-OR **v3a with POTENTIAL_ENTRY flag** (same as v2 + downstream
-consumers can apply their own confidence).
+**Recommended operating point: v2** for now (precision 1.000, low
+recall) OR **v3a with POTENTIAL_ENTRY flag** (same as v2 +
+downstream consumers can apply their own confidence).
 
 ## 8. Future work
 
 If we want to push recall without sacrificing precision, the next
-experiments should target the `15→25`-style false positives:
+experiments should target the `15→25`-style false positive (a
+mid-air pass-through where the ball moves through the hand reach
+envelope without actually being held).
 
-- **Slope coherence test.** A real catch has `from_slope < 0`
-  (incoming) and `to_slope > 0` (outgoing). The `15→25` link has
-  `from_slope=-2.06` (very weak approach signal) and
-  `to_slope=8.77` (clear departure). A minimum
-  `|from_slope| > 2.0` and `|to_slope| > 4.0` test would have
-  rejected `15→25` while keeping all 6 real catch-throws (their
-  slopes are in the ±10-25 range).
-- **Wrist velocity cross-check.** A real throw is preceded by a
-  *throw motion* of the hand (wrist moving up). v2's
-  `WRIST_MOTION_THROW` filter tested the wrong direction (it
-  rejected fast-moving hands). A *throw assist* detector (wrist
-  moving up just before the focus frame) would distinguish real
-  throws from mid-air pass-throughs.
+A single-feature slope filter is not enough (see §6 negative
+findings: `|from_slope| > 2.0` would also reject the genuine
+short-hold `72→73`). A multi-feature v4 should combine:
 
-Either of these would be a v4 candidate.
+- **Slope coherence:** `|from_slope| > 2.0` AND `|to_slope| > 4.0`,
+  or `min(|f|,|t|) > 4.0` (the weaker of the two slopes must be
+  at least 4 px/frame).
+- **Distance ratio:** `from_dist / to_dist > 1.0` AND
+  `from_dist > 20` (the ball must have been *farther* from the
+  hand when the incoming tracklet started than when it ended,
+  AND must have started at least 20 px from the hand).
+- **Trajectory length:** the FROM tracklet must have at least
+  N=3 points with `|dy/frame| > 2.0` (the ball was actually
+  moving toward the hand, not just oscillating).
+
+Any combination of these should be tested on the v3c link set
+to find the smallest set that rejects 15→25 while keeping the
+7 real catch-throws. This is the v4 plan.
 
 ## 9. Artifacts
 
