@@ -365,9 +365,10 @@ def main() -> None:
             print(f"    {label}: {c}")
         print(f"    Verified tally: REAL={n_real}, FRAG={n_frag}, INSUF={n_insuf} / {n_verified}")
         print(f"    CONSENSUS: {consensus}")
-        if consensus.startswith("TRACKER_FRAGMENTATION"):
+        consensus_stripped = consensus.split(" (")[0]
+        if consensus_stripped == "TRACKER_FRAGMENTATION":
             print(f"    -> Filter keeps drop: correct, identity switch is rejected")
-        elif consensus == "REAL_CATCH_THROW":
+        elif consensus_stripped == "REAL_CATCH_THROW":
             print(f"    -> Filter drops this REAL catch-throw: a small false-positive cost")
         else:
             print(f"    -> UNDETERMINED: cannot decide with current data")
@@ -385,8 +386,8 @@ def main() -> None:
             "verified_tally_insuf": n_insuf,
             "verified_total": n_verified,
             "consensus": consensus,
-            "filter_decision": "KEEP_DROP" if consensus == "TRACKER_FRAGMENTATION" else (
-                "FALSE_POSITIVE_DROP" if consensus == "REAL_CATCH_THROW" else "UNDETERMINED"
+            "filter_decision": "KEEP_DROP" if consensus_stripped == "TRACKER_FRAGMENTATION" else (
+                "FALSE_POSITIVE_DROP" if consensus_stripped == "REAL_CATCH_THROW" else "UNDETERMINED"
             ),
             "notes": entry["notes"],
         })
