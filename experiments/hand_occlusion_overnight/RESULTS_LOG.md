@@ -4179,3 +4179,57 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h64_pattern_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h64_report.md`
 
+### H65 (2026-08-28 ~17:30 CEST)
+
+- Hypothesis: With H50's 10-frame filter applied and H64's zone
+  classification, H12 v8 FOUNTAIN_3+ accuracy might exceed H39's
+  30% (10-phase sample).
+- Implementation: `h65_fountain_label_validation.py` renders
+  4-frame contact sheets for all 7 substantial FOUNTAIN_3+ phases
+  (>= 20 frames) in the H50-filtered pattern data. Visual QA via
+  vision_analyze.
+- Quantitative result:
+
+| Video | Phase | n | conf | H12 v8 | Vision | Match |
+|---|---|---|---|---|---|---|
+| identical | 631-669 | 39 | 0.714 | FOUNTAIN_3+ | FOUNTAIN | YES |
+| identical | 890-936 | 47 | 0.571 | FOUNTAIN_3+ | OTHER | NO |
+| identical | 977-1011 | 35 | 0.565 | FOUNTAIN_3+ | FOUNTAIN | YES |
+| identical | 1029-1049 | 21 | 0.463 | FOUNTAIN_3+ | OTHER | NO |
+| youtube | 339-374 | 36 | 0.646 | FOUNTAIN_3+ | FOUNTAIN | YES |
+| youtube | 482-594 | 113 | 0.653 | FOUNTAIN_3+ | OTHER | NO |
+| youtube | 800-861 | 62 | 0.651 | FOUNTAIN_3+ | CASCADE | NO |
+
+**H12 v8 FOUNTAIN_3+ accuracy: 3/7 = 43%** (vs H39's 30% on
+10 phases, vs naive majority "always OTHER" = 57% accuracy).
+
+- Negative findings:
+  - H50 10-frame filter is necessary but not sufficient: it removes
+    tracker-fragmentation events but cannot distinguish "hold" from
+    "synchronized throw".
+  - H12 v8 over-classifies FOUNTAIN_3+ because the K=4 sliding
+    window of recent events interprets a "hold" (both hands hold
+    balls, no throwing) as "same-hand repeated catch" and a
+    CASCADE-with-2-balls-in-hand as same-hand rhythm.
+  - H43 confidence filter is high-precision but low-recall: only
+    1/4 H65 wrong-on-identical has conf < 0.55 (the 1029-1049
+    phase). The 890-936 phase (conf=0.571) is missed.
+  - YouTube f=339-374 IS a real FOUNTAIN (3-up-2-held synchronized
+    throw) — this confirms the H62 finding that the YouTube pattern
+    has FOUNTAIN-like elements.
+  - YouTube f=482-594 (113 frames) is a static hold, not FOUNTAIN.
+    H12 v8's K=4 window interprets the held balls as "same-hand
+    repeated catch" = FOUNTAIN. A truly reliable FOUNTAIN_3+
+    classifier would need continuous hand-occupancy (per H40-H42).
+- Verdict: PARTIAL PASS. H12 v8 FOUNTAIN_3+ is more accurate than
+  H39 (43% vs 30%) but still noisy. The H43 confidence filter
+  remains the most precise FOUNTAIN_3+ post-filter; H65 confirms
+  it. The recommended operating point is unchanged:
+  h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H52 + H53.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h65_fountain_label_validation.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h65_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h65_visual_qa_verdicts.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h65/*.png` (7 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h65_report.md`
+

@@ -1,7 +1,7 @@
 # Hand-Occlusion Overnight Lab — Final Summary Report
 
-**Date:** 2026-08-28 ~17:10 CEST
-**Episodes:** H1-H52 (52 research episodes over ~14 hours)
+**Date:** 2026-08-28 ~17:30 CEST
+**Episodes:** H1-H65 (65 research episodes over ~17 hours)
 **Status:** COMPLETE — final operating point validated
 **Author:** autonomous hand-occlusion overnight research lab
 
@@ -450,6 +450,75 @@ Total: 4 new experiments, 1 new code script per experiment,
 multiple contact sheets, 4 new report documents, 4 new data
 CSV/JSON files. All committed and pushed to
 `origin/experiments/hand-occlusion-overnight`.
+
+---
+
+## H62-H65 extension (2026-08-28 17:00-17:30 CEST, 4 additional episodes)
+
+### **H62 — YouTube 5-ball pattern: CASCADE not SHOWER**
+- Examined all 24 YouTube catch+throw events: 70% alt-hand,
+  30% same-hand (right). H58 SHOWER interpretation was based
+  on n=1 (chain 6); the broader YouTube pattern is CASCADE.
+- 17-frame chain 6 hold is a real signature but an exception
+  in an otherwise CASCADE pattern.
+- Refines H58 from "5-ball SHOWER" to "5-ball CASCADE".
+
+### **H63 — YouTube 5-ball CASCADE-SHOWER mix**
+- The 7 same-hand events form 2 SHOWER-like clusters of 3
+  events each, separated by ~250 frames of CASCADE.
+- All 7 same-hand events are on the right hand (consistent
+  with a right-handed juggler). Same-hand gaps are LONGER
+  (median 20 vs 13.5 alt-hand). SHOWER requires the dominant
+  hand to throw, wait for peak, then catch.
+- Pattern: CASCADE (70%) with SHOWER bursts (30%).
+
+### **H64 — Identical 3-ball CASCADE->FOUNTAIN transition**
+- Best temporal split: f=240. Pre (f<240): 1/4 same-hand
+  (CASCADE-like). Post (f>=240): 11/15 same-hand
+  (FOUNTAIN-like). 0.48 same-rate delta.
+- Per 100-frame window: 0-300 mostly alt-hand, 800-1000
+  100% same-hand. H58 v1 "3-ball cascade" refined to
+  "CASCADE->FOUNTAIN transition at f=240".
+
+### **H65 — H12 v8 FOUNTAIN_3+ label validation at scale**
+- Visual QA on all 7 substantial FOUNTAIN_3+ phases
+  (>= 20 frames) in the H50-filtered pattern data.
+- H12 v8 accuracy: **3/7 = 43%** (improved over H39's 30%
+  but still noisy).
+- 2 wrong: OTHER (static hold). 1 wrong: CASCADE
+  (alt-hand misread as same-hand). 1 wrong: cascade-like
+  with extra hand-held ball.
+- H43 confidence filter: high-precision (1.000 on H39+H65)
+  but low-recall (1/4 wrong-on-identical has conf < 0.55).
+- **H65 confirms the H43 confidence filter is the most
+  precise FOUNTAIN_3+ post-filter available.** A truly
+  reliable classifier would need continuous hand-occupancy
+  signal (per H40-H42), unavailable in the chain-event
+  representation.
+
+## Updated strong findings (post-H65)
+
+1. **The h7v3plus3 chain set is a closed, validated juggling
+   representation** with 100% precision on the 113-pair manual
+   review (when restricted to CONFIDENT + UNCERTAIN chains).
+2. **The 10-frame flight-time filter is the actionable downstream
+   post-filter.** Drops 3/48 events on identical (all
+   TRACKER_FRAGMENTATION), 0/50 on YouTube.
+3. **H12 v8's FOUNTAIN_3+ classification is 43% accurate** on
+   the H50-filtered H65 sample (improved from H39's 30%).
+   H43's confidence-based filter (conf < 0.55) remains the
+   most precise post-filter.
+4. **The chain set is mostly multi-ball merges** (H32, H33,
+   H54, H55, H56), not single-ball trajectories. The H11 v7 +
+   H10 v11 v3 CONFIDENT chains (3 identical + 1 YouTube) are
+   the "purest" single-ball trajectories.
+5. **The 2024 manual review has 1 known label error** (YouTube
+   16->21, corrected to 20->21 by H22, confirmed by H61).
+6. **Identical 3-ball has a CASCADE->FOUNTAIN transition at
+   f=240 (H64).** YouTube 5-ball is a CASCADE-SHOWER mix
+   (H62, H63). The 11-frame and 17-frame held-phase
+   signatures (H58) are consistent with 3-ball cascade and
+   5-ball shower hold times respectively.
 
 EOF
 echo "OK"

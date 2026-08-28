@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:58 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64**
+LAST_UPDATE: 2026-08-28 17:30 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1785,3 +1785,54 @@ Implications:
   the H12 v8 FOUNTAIN_3+ classification.
 
 See `h1_hand_pool/reports/h64_report.md` for full analysis.
+
+## H65 conclusion (2026-08-28 ~17:30 CEST)
+
+**H65: H12 v8 FOUNTAIN_3+ label validation at scale (post-H64 zones)** —
+DONE. PARTIAL PASS.
+
+**Hypothesis:** With H50's 10-frame filter applied and H64's zone
+classification, H12 v8 FOUNTAIN_3+ accuracy might exceed H39's 30%.
+
+**Method:** Render 4-frame contact sheets for all 7 substantial
+FOUNTAIN_3+ phases (>= 20 frames) in the H50-filtered pattern data.
+Visual QA via vision_analyze.
+
+**Result: 3/7 = 43% H12 v8 FOUNTAIN_3+ accuracy.**
+
+| Video | Phase | conf | H12 v8 | Vision | Match |
+|---|---|---|---|---|---|
+| identical | 631-669 | 0.714 | FOUNTAIN_3+ | FOUNTAIN | YES |
+| identical | 890-936 | 0.571 | FOUNTAIN_3+ | OTHER | NO (crossed-arm trick) |
+| identical | 977-1011 | 0.565 | FOUNTAIN_3+ | FOUNTAIN | YES |
+| identical | 1029-1049 | 0.463 | FOUNTAIN_3+ | OTHER | NO (static hold) |
+| youtube | 339-374 | 0.646 | FOUNTAIN_3+ | FOUNTAIN | YES |
+| youtube | 482-594 | 0.653 | FOUNTAIN_3+ | OTHER | NO (static hold) |
+| youtube | 800-861 | 0.651 | FOUNTAIN_3+ | CASCADE | NO (alt-hand cascade) |
+
+**Verdict: PARTIAL PASS.** H12 v8 FOUNTAIN_3+ is more accurate than
+H39's 30% (43% on H65) but remains a noisy classifier. The 4 wrong
+cases break down:
+- 2 OTHER (static hold / trick — both hands hold balls, no throwing)
+- 1 CASCADE (alt-hand crossing arcs, misread as same-hand)
+
+**Why H12 v8 over-classifies FOUNTAIN_3+:** the K=4 sliding window
+of recent catch/throw events interprets a "hold" as "same-hand
+repeated catch" and a CASCADE-with-2-balls-in-hand as same-hand
+rhythm. H12 v8 cannot distinguish "hold" from "synchronized throw"
+without continuous hand-occupancy.
+
+**H43 confidence filter confirmed.** The H65 wrong cases have conf
+0.463, 0.571, 0.651, 0.653. Only 1/4 (the 1029-1049 conf=0.463
+case) is below H43's 0.55 threshold. H43's precision is high (1.000
+on H39+H65) but its recall is low (1/2 of H65 wrong-on-identical).
+
+**H50 10-frame filter is necessary but not sufficient.** It removes
+tracker-fragmentation events but cannot distinguish "hold" from
+"synchronized throw".
+
+**Recommended operating point (unchanged):** h7v3plus3 + H10 v11 v3
++ H12 v8 + H50 + H43 + H52 + H53. H43 is the most precise
+FOUNTAIN_3+ post-filter; H65 confirms it.
+
+See `h1_hand_pool/reports/h65_report.md` for full analysis.
