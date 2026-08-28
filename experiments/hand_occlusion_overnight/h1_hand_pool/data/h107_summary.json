@@ -1,0 +1,21 @@
+{
+  "method": "H107 v1: 2D combined guard (ambig>0 OR far>0+lrvar>0.30 OR lslope>=3.0+maxspan>80)",
+  "thresholds": {
+    "H107_AVG_AMBIG_THR": 0.5,
+    "H107_AVG_FAR_THR": 0.5,
+    "H107_LR_VAR_THR": 0.3,
+    "H107_AVG_LOW_SLOPE_THR": 3.0,
+    "H107_MAX_TIME_SPAN_THR": 80
+  },
+  "h93_results": {
+    "TP": 17,
+    "TN": 3,
+    "FP": 1,
+    "FN": 0,
+    "P": 0.944,
+    "R": 1.0,
+    "acc": 0.952,
+    "n": 21,
+    "PERFECT": false
+  }
+}
