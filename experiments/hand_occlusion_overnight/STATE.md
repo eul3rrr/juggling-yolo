@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:46 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60**
+LAST_UPDATE: 2026-08-28 16:50 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1623,3 +1623,43 @@ not quirks of the 4 multi-tid CONFIDENT chains — they are typical
 or extreme values of the global distribution.
 
 See `h1_hand_pool/reports/h60_report.md` for full analysis.
+
+## H61 conclusion (2026-08-28 ~16:50 CEST)
+
+**H61: YouTube 16->21 vs 20->21 catch+throw conflict — visual
+adjudication** — DONE. PASS. H22 verdict visually confirmed.
+
+The 2024 manual stitch review said YouTube 16->21 is "correct"
+(gap=8, prediction_error=194.41). H22's 2026 visual analysis
+(V-shape min_d=5.3 for 20->21 vs target_start_dist=35.3 for 16->21)
+concluded 16->21 is WRONG and 20->21 is the real catch.
+
+H61 renders a side-by-side contact sheet showing both alternatives
+and asks the vision tool to adjudicate.
+
+Vision tool verdict (3 independent evidence):
+1. **Proximity**: t20 endpoint (f=473) is AT the right-hand catch
+   zone. t16 endpoint (f=468) is high and offset from the wrist,
+   visibly far from the right hand.
+2. **Temporal gap**: 20->21 has 9 frames (typical YouTube hold per
+   H60 finding). 16->21 has 14 frames (atypically long).
+3. **Trajectory continuity**: t20's path leads naturally to the
+   right hand at f=473. t16's trajectory ends in a region
+   inconsistent with handing the ball to the right hand.
+
+**Verdict: 20->21 is the real catch-throw. 16->21 is not.**
+
+Implications:
+- H22's 2026 visual analysis is a stronger signal than the 2024
+  manual labels for this case. The 2024 reviewer did not have
+  access to V-shape hand-proximity evidence.
+- The h7v3plus3 chain set (which has 20->21 and excludes 16->21)
+  is correct.
+- This is the ONLY "FN that's actually a TN" case from H59. All
+  other 51 TP match the manual review. The H59 evaluation is
+  now fully validated.
+- The 9-frame gap (20->21) is the exact typical YouTube hold
+  per H60 — the chain algorithm correctly identifies the
+  characteristic 5-ball hold.
+
+See `h1_hand_pool/reports/h61_report.md` for full analysis.

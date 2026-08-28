@@ -4025,3 +4025,41 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h60_hold_duration_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h60_report.md`
 
+### H61 (2026-08-28 ~16:50 CEST)
+
+- Hypothesis: H22 (2026-08-28) concluded that the YouTube 16->21
+  edge in h7v3pure is WRONG (tracklet 16 ends at f=468, 2 frames
+  BEFORE t20's contact at f=471-473). The real catch is t20->t21
+  (V-shape min_d=5.3 vs t21's start_dist=35.3). The 2024 manual
+  stitch review said 16->21 is "correct" — an unresolved conflict
+  between the manual labels and the 2026 lab visual analysis.
+  H61 renders a side-by-side contact sheet and asks the vision
+  tool to adjudicate.
+- Implementation: `h61_youtube_16_21_conflict.py` renders 3
+  contact sheets: 16->21 alone, 20->21 alone, and combined
+  side-by-side.
+- Vision tool verdict (3 independent evidence):
+  1. Proximity: t20 endpoint (f=473) is AT the right-hand catch
+     zone. t16 endpoint (f=468) is high and offset from the wrist.
+  2. Temporal gap: 20->21 has 9 frames (typical YouTube hold per
+     H60). 16->21 has 14 frames (atypically long).
+  3. Trajectory continuity: t20's path leads naturally to the
+     right hand at f=473. t16's trajectory ends in a region
+     inconsistent with handing the ball to the right hand.
+- Verdict: PASS. 20->21 is the real catch-throw. 16->21 is not.
+  H22's analysis is confirmed.
+- Implications:
+  - H22's 2026 visual analysis is a stronger signal than the 2024
+    manual labels for this case.
+  - The h7v3plus3 chain set is correct.
+  - This is the only "FN that's actually a TN" case from H59. All
+    other 51 TP match the manual review. The H59 evaluation is now
+    fully validated.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h61_youtube_16_21_conflict.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h61/youtube_16to21_*.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h61/youtube_20to21_*.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h61/youtube_16to21_vs_20to21_*.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h61_pair_metadata.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h61_report.md`
+
