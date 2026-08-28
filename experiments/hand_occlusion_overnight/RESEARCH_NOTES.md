@@ -878,3 +878,60 @@ useful source record:
     than h237v5, and some longer chains are split. The 3
     remaining multi-tracklet CONFIDENT chains on identical
     (chains 21, 20, 8) are still real single balls.
+
+## Cross-cutting insights from H13 (2026-08-28 ~17:30)
+
+72. **Master §14's "lower-confidence evidence tier only near
+    hand events" is NOT a reliable held-ball detector.** H13
+    tested the H3 v3 stationary-cluster criterion on a wider
+    window (gap + 5 frames each side) and found that 3/6 v2
+    CORROBORATED edges are h7v2_kept_ballistic (true identity
+    switches). The criterion is more like "any ball near hand"
+    than "real held ball". H3's `h3_confirmed` flag is therefore
+    a noisy downstream signal. This is the most important
+    negative finding of H13.
+
+73. **Concentration ratio (n_in_reach / total) IS a real signal
+    but correlates with gap length, not event type.** v4d
+    hand-links have lower concentration (0.142) than h7v2-
+    reclassified (0.201) and h7v2-kept-ballistic (0.206) on
+    identical, but the difference is largely explained by v4d
+    having longer gaps (18 frames vs 9-10) which means wider
+    search windows. Cohen's d (h7v2_reclass vs v4d) = +0.965
+    (large), but the discriminating power is mostly the gap
+    length, not the event type.
+
+74. **The detector doesn't strongly distinguish catch-throws
+    from identity switches on identical.** h7v2_reclassified
+    and h7v2_kept_ballistic have statistically identical
+    concentration (CI [-0.047, +0.041] includes 0). This
+    validates H7v2's geometric reclassification rule (which
+    doesn't depend on the detector signal) but also shows that
+    a "smart" detector that could see the held ball during
+    reclassified edges would still be a noisy signal at best.
+
+75. **Mean concentration at hand events (0.15-0.30) is similar
+    to the mean concentration at random hand-region windows
+    (0.21 identical, 0.36 YouTube).** The detector fires
+    constantly on background; the hand region is not
+    significantly enriched in low-conf dets compared to other
+    hand-region windows. This is consistent with the H3
+    baseline FPR of 50-60% — the pattern "low-conf sports
+    ball near hand" is not specific to hand-events.
+
+76. **H13 was implemented as the natural follow-up to H3's
+    master-§14 work.** H3 was restricted to v4d hand-links
+    only; H13 extends the analysis to H7v2-reclassified edges
+    and to h7v2-kept-ballistic edges (the control group).
+    The extension reveals that the v3 stationary-cluster
+    pattern is not specific to real catch-throws — it's a
+    general "ball at hand" pattern that fires on identity
+    switches too.
+
+77. **A stricter H3 would need additional filters.** The
+    single best filter would be: the cluster must be at the
+    EXACT hand used by the v4d rule, and no other hand should
+    have cluster activity simultaneously. This would rule out
+    the 41->43 case (where 2 balls at the right hand look like
+    one cluster) and similar multi-ball-in-one-hand patterns.
+    A future H13 v2 could test this stricter criterion.

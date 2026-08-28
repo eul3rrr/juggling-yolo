@@ -1,0 +1,1687 @@
+{
+  "thresholds": {
+    "HAND_REACH_PX": 108,
+    "LOW_CONF_THRESHOLD": 0.5,
+    "GAP_PAD_FRAMES": 5,
+    "MAX_GAP_FRAMES": 60,
+    "MIN_CLUSTER_DETECTIONS": 3,
+    "MAX_CLUSTER_SPAN_FRAMES": 60,
+    "MAX_GAP_IN_CLUSTER": 12,
+    "STATIONARY_RADIUS_PX": 30,
+    "STATIONARY_MIN_STD_PX": 0,
+    "STATIONARY_MAX_STD_PX": 30,
+    "BASELINE_SAMPLES": 200,
+    "RANDOM_SEED": 42
+  },
+  "n_total_edges": 62,
+  "per_source_summary": {
+    "v4d": {
+      "n_total": 11,
+      "n_skipped": 0,
+      "n_v2_corroborated": 1,
+      "n_v3_corroborated": 0,
+      "n_v3_ambiguous": 11,
+      "n_v3_no_evidence": 0,
+      "n_v3_refuted": 0,
+      "avg_concentration": 0.15
+    },
+    "h7v2_reclassified": {
+      "n_total": 38,
+      "n_skipped": 0,
+      "n_v2_corroborated": 2,
+      "n_v3_corroborated": 0,
+      "n_v3_ambiguous": 38,
+      "n_v3_no_evidence": 0,
+      "n_v3_refuted": 0,
+      "avg_concentration": 0.268
+    },
+    "h7v2_kept_ballistic": {
+      "n_total": 13,
+      "n_skipped": 0,
+      "n_v2_corroborated": 3,
+      "n_v3_corroborated": 0,
+      "n_v3_ambiguous": 13,
+      "n_v3_no_evidence": 0,
+      "n_v3_refuted": 0,
+      "avg_concentration": 0.206
+    }
+  },
+  "fpr_by_stem": {
+    "identical_balls_trick_000_018": {
+      "fpr_v2_per_sample": 0.42,
+      "fpr_v3_per_sample": 0.025,
+      "n_cor_v2": 84,
+      "n_cor_v3": 5,
+      "n_total": 200,
+      "mean_concentration_random": 0.20687877609694436,
+      "concentration_p50_random": 0.1875,
+      "concentration_p90_random": 0.34375,
+      "concentration_p99_random": 0.53125
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "fpr_v2_per_sample": 0.15,
+      "fpr_v3_per_sample": 0.16,
+      "n_cor_v2": 30,
+      "n_cor_v3": 32,
+      "n_total": 200,
+      "mean_concentration_random": 0.36395934790324036,
+      "concentration_p50_random": 0.37037037037037035,
+      "concentration_p90_random": 0.5333333333333333,
+      "concentration_p99_random": 0.631578947368421
+    }
+  },
+  "per_edge": [
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 3,
+      "to_tid": 9,
+      "hand": "left",
+      "from_frame": 31,
+      "to_frame": 51,
+      "gap": 20,
+      "skipped": "",
+      "hand_xy": [
+        727.6,
+        529.7
+      ],
+      "window": [
+        26,
+        56
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 25,
+      "n_out_reach": 145,
+      "concentration": 0.147,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 11,
+      "to_tid": 14,
+      "hand": "right",
+      "from_frame": 97,
+      "to_frame": 126,
+      "gap": 29,
+      "skipped": "",
+      "hand_xy": [
+        516.1,
+        541.8
+      ],
+      "window": [
+        92,
+        131
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 35,
+      "n_out_reach": 249,
+      "concentration": 0.123,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 17,
+      "to_tid": 23,
+      "hand": "right",
+      "from_frame": 207,
+      "to_frame": 232,
+      "gap": 25,
+      "skipped": "",
+      "hand_xy": [
+        582.4,
+        421.9
+      ],
+      "window": [
+        202,
+        237
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 23,
+      "n_out_reach": 225,
+      "concentration": 0.093,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 52,
+      "to_tid": 54,
+      "hand": "right",
+      "from_frame": 780,
+      "to_frame": 797,
+      "gap": 17,
+      "skipped": "",
+      "hand_xy": [
+        563.8,
+        382.9
+      ],
+      "window": [
+        775,
+        802
+      ],
+      "classification_v2": "CORROBORATED",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 17,
+      "n_out_reach": 124,
+      "concentration": 0.121,
+      "n_clusters": 1,
+      "cluster_n_max": 17
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 54,
+      "to_tid": 59,
+      "hand": "right",
+      "from_frame": 830,
+      "to_frame": 856,
+      "gap": 26,
+      "skipped": "",
+      "hand_xy": [
+        594.3,
+        395.3
+      ],
+      "window": [
+        825,
+        861
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 35,
+      "n_out_reach": 169,
+      "concentration": 0.172,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 53,
+      "to_tid": 60,
+      "hand": "right",
+      "from_frame": 839,
+      "to_frame": 860,
+      "gap": 21,
+      "skipped": "",
+      "hand_xy": [
+        609.3,
+        384.8
+      ],
+      "window": [
+        834,
+        865
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 32,
+      "n_out_reach": 146,
+      "concentration": 0.18,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 59,
+      "to_tid": 63,
+      "hand": "right",
+      "from_frame": 872,
+      "to_frame": 890,
+      "gap": 18,
+      "skipped": "",
+      "hand_xy": [
+        608.3,
+        618.5
+      ],
+      "window": [
+        867,
+        895
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 32,
+      "n_out_reach": 122,
+      "concentration": 0.208,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 68,
+      "to_tid": 71,
+      "hand": "right",
+      "from_frame": 1015,
+      "to_frame": 1029,
+      "gap": 14,
+      "skipped": "",
+      "hand_xy": [
+        510.2,
+        589.2
+      ],
+      "window": [
+        1010,
+        1034
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 131,
+      "concentration": 0.132,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 72,
+      "to_tid": 73,
+      "hand": "right",
+      "from_frame": 1050,
+      "to_frame": 1054,
+      "gap": 4,
+      "skipped": "",
+      "hand_xy": [
+        496.6,
+        506.1
+      ],
+      "window": [
+        1045,
+        1059
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 9,
+      "n_out_reach": 87,
+      "concentration": 0.094,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "v4d",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 70,
+      "to_tid": 74,
+      "hand": "left",
+      "from_frame": 1050,
+      "to_frame": 1056,
+      "gap": 6,
+      "skipped": "",
+      "hand_xy": [
+        724.6,
+        494.4
+      ],
+      "window": [
+        1045,
+        1061
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 90,
+      "concentration": 0.151,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 3,
+      "to_tid": 8,
+      "hand": "left",
+      "from_frame": 31,
+      "to_frame": 43,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        727.4,
+        503.5
+      ],
+      "window": [
+        26,
+        48
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 21,
+      "n_out_reach": 108,
+      "concentration": 0.163,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 5,
+      "to_tid": 6,
+      "hand": "right",
+      "from_frame": 22,
+      "to_frame": 27,
+      "gap": 5,
+      "skipped": "",
+      "hand_xy": [
+        530.4,
+        504.7
+      ],
+      "window": [
+        17,
+        32
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 18,
+      "n_out_reach": 82,
+      "concentration": 0.18,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 22,
+      "to_tid": 27,
+      "hand": "left",
+      "from_frame": 252,
+      "to_frame": 263,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        679.7,
+        503.5
+      ],
+      "window": [
+        247,
+        268
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 28,
+      "n_out_reach": 135,
+      "concentration": 0.172,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 29,
+      "to_tid": 34,
+      "hand": "left",
+      "from_frame": 460,
+      "to_frame": 471,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        679.0,
+        464.5
+      ],
+      "window": [
+        455,
+        476
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 35,
+      "n_out_reach": 77,
+      "concentration": 0.312,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 35,
+      "to_tid": 37,
+      "hand": "left",
+      "from_frame": 522,
+      "to_frame": 533,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        711.6,
+        501.4
+      ],
+      "window": [
+        517,
+        538
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 46,
+      "n_out_reach": 78,
+      "concentration": 0.371,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 37,
+      "to_tid": 40,
+      "hand": "left",
+      "from_frame": 534,
+      "to_frame": 549,
+      "gap": 15,
+      "skipped": "",
+      "hand_xy": [
+        690.6,
+        498.3
+      ],
+      "window": [
+        529,
+        554
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 46,
+      "n_out_reach": 117,
+      "concentration": 0.282,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 38,
+      "to_tid": 39,
+      "hand": "right",
+      "from_frame": 534,
+      "to_frame": 545,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        588.2,
+        485.7
+      ],
+      "window": [
+        529,
+        550
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 27,
+      "n_out_reach": 110,
+      "concentration": 0.197,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 40,
+      "to_tid": 41,
+      "hand": "right",
+      "from_frame": 582,
+      "to_frame": 591,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        586.7,
+        390.6
+      ],
+      "window": [
+        577,
+        596
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 18,
+      "n_out_reach": 106,
+      "concentration": 0.145,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 43,
+      "to_tid": 45,
+      "hand": "right",
+      "from_frame": 622,
+      "to_frame": 631,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        589.8,
+        359.4
+      ],
+      "window": [
+        617,
+        636
+      ],
+      "classification_v2": "CORROBORATED",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 17,
+      "n_out_reach": 88,
+      "concentration": 0.162,
+      "n_clusters": 1,
+      "cluster_n_max": 17
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 45,
+      "to_tid": 46,
+      "hand": "left",
+      "from_frame": 670,
+      "to_frame": 679,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        531.2,
+        371.6
+      ],
+      "window": [
+        665,
+        684
+      ],
+      "classification_v2": "CORROBORATED",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 22,
+      "n_out_reach": 90,
+      "concentration": 0.196,
+      "n_clusters": 1,
+      "cluster_n_max": 22
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 62,
+      "to_tid": 66,
+      "hand": "right",
+      "from_frame": 948,
+      "to_frame": 957,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        561.3,
+        579.0
+      ],
+      "window": [
+        943,
+        962
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 124,
+      "concentration": 0.139,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 64,
+      "to_tid": 68,
+      "hand": "right",
+      "from_frame": 964,
+      "to_frame": 970,
+      "gap": 6,
+      "skipped": "",
+      "hand_xy": [
+        543.3,
+        654.3
+      ],
+      "window": [
+        959,
+        975
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 17,
+      "n_out_reach": 89,
+      "concentration": 0.16,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 68,
+      "to_tid": 71,
+      "hand": "right",
+      "from_frame": 1015,
+      "to_frame": 1029,
+      "gap": 14,
+      "skipped": "",
+      "hand_xy": [
+        510.2,
+        589.2
+      ],
+      "window": [
+        1010,
+        1034
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 131,
+      "concentration": 0.132,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 50,
+      "to_tid": 55,
+      "hand": "left_inferred",
+      "from_frame": 805,
+      "to_frame": 811,
+      "gap": 6,
+      "skipped": "",
+      "hand_xy": [
+        546.4,
+        376.7
+      ],
+      "window": [
+        800,
+        816
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 15,
+      "n_out_reach": 90,
+      "concentration": 0.143,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 19,
+      "to_tid": 20,
+      "hand": "left_inferred",
+      "from_frame": 195,
+      "to_frame": 202,
+      "gap": 7,
+      "skipped": "",
+      "hand_xy": [
+        705.7,
+        537.8
+      ],
+      "window": [
+        190,
+        207
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 31,
+      "n_out_reach": 108,
+      "concentration": 0.223,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 21,
+      "to_tid": 22,
+      "hand": "right_inferred",
+      "from_frame": 213,
+      "to_frame": 220,
+      "gap": 7,
+      "skipped": "",
+      "hand_xy": [
+        576.4,
+        420.5
+      ],
+      "window": [
+        208,
+        225
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 19,
+      "n_out_reach": 98,
+      "concentration": 0.162,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 28,
+      "to_tid": 29,
+      "hand": "right_inferred",
+      "from_frame": 382,
+      "to_frame": 391,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        650.8,
+        350.0
+      ],
+      "window": [
+        377,
+        396
+      ],
+      "classification_v2": "CORROBORATED",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 29,
+      "n_out_reach": 55,
+      "concentration": 0.345,
+      "n_clusters": 1,
+      "cluster_n_max": 29
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 60,
+      "to_tid": 64,
+      "hand": "right_inferred",
+      "from_frame": 936,
+      "to_frame": 944,
+      "gap": 8,
+      "skipped": "",
+      "hand_xy": [
+        530.4,
+        578.9
+      ],
+      "window": [
+        931,
+        949
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 34,
+      "n_out_reach": 117,
+      "concentration": 0.225,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 39,
+      "to_tid": 47,
+      "hand": "left_inferred",
+      "from_frame": 676,
+      "to_frame": 685,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        536.1,
+        372.6
+      ],
+      "window": [
+        671,
+        690
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 97,
+      "concentration": 0.171,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 51,
+      "to_tid": 52,
+      "hand": "left_inferred",
+      "from_frame": 766,
+      "to_frame": 775,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        638.4,
+        530.0
+      ],
+      "window": [
+        761,
+        780
+      ],
+      "classification_v2": "CORROBORATED",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 25,
+      "n_out_reach": 81,
+      "concentration": 0.236,
+      "n_clusters": 1,
+      "cluster_n_max": 25
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 31,
+      "to_tid": 36,
+      "hand": "right_inferred",
+      "from_frame": 522,
+      "to_frame": 533,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        596.4,
+        528.1
+      ],
+      "window": [
+        517,
+        538
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 26,
+      "n_out_reach": 98,
+      "concentration": 0.21,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 23,
+      "to_tid": 25,
+      "hand": "left_inferred",
+      "from_frame": 235,
+      "to_frame": 243,
+      "gap": 8,
+      "skipped": "",
+      "hand_xy": [
+        546.9,
+        393.5
+      ],
+      "window": [
+        230,
+        248
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 14,
+      "n_out_reach": 117,
+      "concentration": 0.107,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 67,
+      "to_tid": 70,
+      "hand": "left_inferred",
+      "from_frame": 1020,
+      "to_frame": 1029,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        746.6,
+        499.1
+      ],
+      "window": [
+        1015,
+        1034
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 17,
+      "n_out_reach": 100,
+      "concentration": 0.145,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 30,
+      "to_tid": 33,
+      "hand": "left_inferred",
+      "from_frame": 450,
+      "to_frame": 461,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        657.9,
+        437.8
+      ],
+      "window": [
+        445,
+        466
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 38,
+      "n_out_reach": 80,
+      "concentration": 0.322,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 41,
+      "to_tid": 43,
+      "hand": "right_inferred",
+      "from_frame": 608,
+      "to_frame": 621,
+      "gap": 13,
+      "skipped": "",
+      "hand_xy": [
+        603.4,
+        373.7
+      ],
+      "window": [
+        603,
+        626
+      ],
+      "classification_v2": "CORROBORATED",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 24,
+      "n_out_reach": 110,
+      "concentration": 0.179,
+      "n_clusters": 1,
+      "cluster_n_max": 24
+    },
+    {
+      "source": "v4d",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 10,
+      "to_tid": 12,
+      "hand": "right",
+      "from_frame": 238,
+      "to_frame": 255,
+      "gap": 17,
+      "skipped": "",
+      "hand_xy": [
+        558.9,
+        457.4
+      ],
+      "window": [
+        233,
+        260
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 53,
+      "concentration": 0.232,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 1,
+      "to_tid": 9,
+      "hand": "left",
+      "from_frame": 102,
+      "to_frame": 114,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        642.2,
+        446.1
+      ],
+      "window": [
+        97,
+        119
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 12,
+      "n_out_reach": 40,
+      "concentration": 0.231,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 2,
+      "to_tid": 8,
+      "hand": "right",
+      "from_frame": 72,
+      "to_frame": 83,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        561.7,
+        455.0
+      ],
+      "window": [
+        67,
+        88
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 13,
+      "n_out_reach": 41,
+      "concentration": 0.241,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 3,
+      "to_tid": 6,
+      "hand": "left",
+      "from_frame": 22,
+      "to_frame": 34,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        637.8,
+        463.0
+      ],
+      "window": [
+        17,
+        39
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 13,
+      "n_out_reach": 33,
+      "concentration": 0.283,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 4,
+      "to_tid": 18,
+      "hand": "right",
+      "from_frame": 411,
+      "to_frame": 420,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        556.0,
+        466.6
+      ],
+      "window": [
+        406,
+        425
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 14,
+      "n_out_reach": 42,
+      "concentration": 0.25,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 9,
+      "to_tid": 13,
+      "hand": "left",
+      "from_frame": 256,
+      "to_frame": 267,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        621.9,
+        449.4
+      ],
+      "window": [
+        251,
+        272
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 19,
+      "n_out_reach": 41,
+      "concentration": 0.317,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 11,
+      "to_tid": 14,
+      "hand": "right",
+      "from_frame": 299,
+      "to_frame": 308,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        555.5,
+        452.2
+      ],
+      "window": [
+        294,
+        313
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 13,
+      "n_out_reach": 25,
+      "concentration": 0.342,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 13,
+      "to_tid": 16,
+      "hand": "right",
+      "from_frame": 327,
+      "to_frame": 339,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        556.9,
+        455.0
+      ],
+      "window": [
+        322,
+        344
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 10,
+      "n_out_reach": 35,
+      "concentration": 0.222,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 14,
+      "to_tid": 17,
+      "hand": "left",
+      "from_frame": 375,
+      "to_frame": 381,
+      "gap": 6,
+      "skipped": "",
+      "hand_xy": [
+        628.2,
+        436.4
+      ],
+      "window": [
+        370,
+        386
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 30,
+      "concentration": 0.348,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 15,
+      "to_tid": 25,
+      "hand": "left",
+      "from_frame": 595,
+      "to_frame": 606,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        639.2,
+        461.8
+      ],
+      "window": [
+        590,
+        611
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 40,
+      "concentration": 0.286,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 16,
+      "to_tid": 21,
+      "hand": "right",
+      "from_frame": 468,
+      "to_frame": 482,
+      "gap": 14,
+      "skipped": "",
+      "hand_xy": [
+        559.1,
+        461.3
+      ],
+      "window": [
+        463,
+        487
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 34,
+      "concentration": 0.37,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 17,
+      "to_tid": 24,
+      "hand": "right",
+      "from_frame": 582,
+      "to_frame": 591,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        554.0,
+        462.5
+      ],
+      "window": [
+        577,
+        596
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 43,
+      "concentration": 0.271,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 18,
+      "to_tid": 30,
+      "hand": "right",
+      "from_frame": 709,
+      "to_frame": 715,
+      "gap": 6,
+      "skipped": "",
+      "hand_xy": [
+        554.5,
+        441.5
+      ],
+      "window": [
+        704,
+        720
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 31,
+      "concentration": 0.392,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 19,
+      "to_tid": 22,
+      "hand": "right",
+      "from_frame": 498,
+      "to_frame": 510,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        561.2,
+        457.5
+      ],
+      "window": [
+        493,
+        515
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 30,
+      "concentration": 0.348,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 20,
+      "to_tid": 21,
+      "hand": "right",
+      "from_frame": 470,
+      "to_frame": 482,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        559.7,
+        455.8
+      ],
+      "window": [
+        465,
+        487
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 20,
+      "n_out_reach": 31,
+      "concentration": 0.392,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 21,
+      "to_tid": 29,
+      "hand": "left",
+      "from_frame": 693,
+      "to_frame": 701,
+      "gap": 8,
+      "skipped": "",
+      "hand_xy": [
+        622.7,
+        436.1
+      ],
+      "window": [
+        688,
+        706
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 16,
+      "n_out_reach": 24,
+      "concentration": 0.4,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 22,
+      "to_tid": 26,
+      "hand": "right",
+      "from_frame": 644,
+      "to_frame": 656,
+      "gap": 12,
+      "skipped": "",
+      "hand_xy": [
+        563.9,
+        455.2
+      ],
+      "window": [
+        639,
+        661
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 12,
+      "n_out_reach": 39,
+      "concentration": 0.235,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 23,
+      "to_tid": 24,
+      "hand": "right",
+      "from_frame": 578,
+      "to_frame": 591,
+      "gap": 13,
+      "skipped": "",
+      "hand_xy": [
+        562.8,
+        464.5
+      ],
+      "window": [
+        573,
+        596
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 21,
+      "n_out_reach": 53,
+      "concentration": 0.284,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 25,
+      "to_tid": 33,
+      "hand": "left",
+      "from_frame": 749,
+      "to_frame": 755,
+      "gap": 6,
+      "skipped": "",
+      "hand_xy": [
+        625.8,
+        449.1
+      ],
+      "window": [
+        744,
+        760
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 15,
+      "n_out_reach": 30,
+      "concentration": 0.333,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 26,
+      "to_tid": 31,
+      "hand": "left",
+      "from_frame": 717,
+      "to_frame": 731,
+      "gap": 14,
+      "skipped": "",
+      "hand_xy": [
+        618.6,
+        446.7
+      ],
+      "window": [
+        712,
+        736
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 23,
+      "n_out_reach": 48,
+      "concentration": 0.324,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 28,
+      "to_tid": 32,
+      "hand": "right",
+      "from_frame": 738,
+      "to_frame": 743,
+      "gap": 5,
+      "skipped": "",
+      "hand_xy": [
+        556.9,
+        438.6
+      ],
+      "window": [
+        733,
+        748
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 15,
+      "n_out_reach": 37,
+      "concentration": 0.288,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 29,
+      "to_tid": 34,
+      "hand": "right",
+      "from_frame": 761,
+      "to_frame": 769,
+      "gap": 8,
+      "skipped": "",
+      "hand_xy": [
+        555.5,
+        459.8
+      ],
+      "window": [
+        756,
+        774
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 11,
+      "n_out_reach": 45,
+      "concentration": 0.196,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 30,
+      "to_tid": 37,
+      "hand": "right",
+      "from_frame": 845,
+      "to_frame": 854,
+      "gap": 9,
+      "skipped": "",
+      "hand_xy": [
+        561.0,
+        466.6
+      ],
+      "window": [
+        840,
+        859
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 12,
+      "n_out_reach": 37,
+      "concentration": 0.245,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 31,
+      "to_tid": 35,
+      "hand": "right",
+      "from_frame": 789,
+      "to_frame": 800,
+      "gap": 11,
+      "skipped": "",
+      "hand_xy": [
+        562.1,
+        462.5
+      ],
+      "window": [
+        784,
+        805
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 17,
+      "n_out_reach": 27,
+      "concentration": 0.386,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 33,
+      "to_tid": 36,
+      "hand": "right",
+      "from_frame": 818,
+      "to_frame": 825,
+      "gap": 7,
+      "skipped": "",
+      "hand_xy": [
+        561.3,
+        460.8
+      ],
+      "window": [
+        813,
+        830
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 11,
+      "n_out_reach": 30,
+      "concentration": 0.268,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_reclassified",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 35,
+      "to_tid": 38,
+      "hand": "left",
+      "from_frame": 862,
+      "to_frame": 869,
+      "gap": 7,
+      "skipped": "",
+      "hand_xy": [
+        630.9,
+        448.1
+      ],
+      "window": [
+        857,
+        874
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 17,
+      "n_out_reach": 35,
+      "concentration": 0.327,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    },
+    {
+      "source": "h7v2_kept_ballistic",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 27,
+      "to_tid": 28,
+      "hand": "left_inferred",
+      "from_frame": 670,
+      "to_frame": 678,
+      "gap": 8,
+      "skipped": "",
+      "hand_xy": [
+        641.5,
+        397.1
+      ],
+      "window": [
+        665,
+        683
+      ],
+      "classification_v2": "AMBIGUOUS",
+      "classification_v3": "AMBIGUOUS",
+      "n_in_reach": 12,
+      "n_out_reach": 44,
+      "concentration": 0.214,
+      "n_clusters": 0,
+      "cluster_n_max": 0
+    }
+  ]
+}

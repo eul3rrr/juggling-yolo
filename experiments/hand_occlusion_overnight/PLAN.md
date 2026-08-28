@@ -872,3 +872,64 @@ events than H11 v1, validating H7v2's reclassification.
 **Final summary report:** see `reports/SUMMARY.md` for a
 comprehensive overview of all 26+ research cycles.
 
+
+## Twenty-eighth episode (H13) — STATUS: COMPLETE (PARTIAL PASS)
+
+Sub-steps:
+1. ✅ Implemented H13 v1: scan a wider window (gap+5 frames each side)
+   for low-conf sports-ball detections within 108 px of the relevant
+   hand. Tested v1 (any single detection), v2 (H3 stationary cluster
+   criterion restricted to the window), v3 (concentration ratio),
+   v4 (peak-vs-context).
+2. ✅ Ran on both videos. 11 v4d links + 13 h7v2-reclassified + 12
+   h7v2-kept-ballistic on identical, 1 v4d + 25 h7v2-reclassified +
+   1 h7v2-kept-ballistic on YouTube.
+3. ✅ Mean concentration comparison:
+   - identical v4d: 0.142 +/- 0.012 (n=10)
+   - identical h7v2_reclassified: 0.201 +/- 0.020 (n=13)
+   - identical h7v2_kept_ballistic: 0.206 +/- 0.021 (n=12)
+   - YouTube h7v2_reclassified: 0.303 +/- 0.012 (n=25)
+4. ✅ Bootstrap 90% CI for differences (identical):
+   - h7v2_reclassified - v4d: +0.059 [+0.022, +0.098] (significant)
+   - h7v2_reclassified - h7v2_kept_ballistic: -0.005 [-0.047, +0.041] (NOT significant)
+   - Cohen's d (reclass vs v4d): +0.965 (large effect)
+5. ✅ Visual QA: 14 contact sheets rendered, 4 inspected via
+   vision_analyze. Key finding: v2 cluster corroboration of
+   h7v2_kept_ballistic 41->43 is a FALSE POSITIVE — the two balls
+   at the hand look like one cluster, but they are identity switches.
+6. ✅ Documented in `h13_report.md` and updated RESULTS_LOG.
+
+**Verdict: PARTIAL PASS.** H13's stationary-cluster criterion (H3 v3)
+is NOT a discriminator between real catch-throws and identity switches
+(3/6 v2 corroborated edges are kept-ballistic false positives). The
+concentration ratio IS a real signal but correlates with gap length,
+not event type. **This is an important negative finding for master
+§14**: lowering the detector confidence to find held balls does not
+specifically identify hand events — it identifies any "ball near hand"
+pattern, including identity switches.
+
+**Implications for downstream consumers:**
+- H3's `h3_confirmed` flag (used in H11 identity propagation) is a
+  noisy signal. 50% of v2 CORROBORATED edges are kept-ballistic, so
+  the flag is more like "this edge has detector activity at the hand"
+  than "this edge is a real catch-throw".
+- A stricter H3 would need to combine the cluster signal with
+  additional filters (e.g., the hand must be the only hand with
+  cluster activity, or the cluster must be tight and at the specific
+  hand used by the v4d rule).
+
+**Next episode candidates:**
+
+1. **H13 v2: stricter cluster criterion** that requires (a) the cluster
+   to be at the EXACT hand used by v4d (not just "any hand"), (b) no
+   other hand has cluster activity simultaneously, (c) the cluster's
+   spatial extent is consistent with a held ball (small std).
+2. **H14: per-frame per-arc segmentation for YouTube long tracklets**
+   — H8 v6/v7/v8 all failed; a fundamentally different approach
+   (e.g., LSTM on per-frame vy/vx features) might work but is out of
+   scope for autonomous run.
+3. **Stop here.** H13's negative finding closes the master §14 question:
+   the detector signal is too noisy to be a reliable held-ball detector
+   in this 2D single-camera setup. Future work needs multi-view or
+   higher frame rate.
+

@@ -2076,3 +2076,46 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/chain_events_v6_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v6_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_v6_report.md`
+
+---
+
+## H13 — Detector-level low-confidence ball evidence at hand events
+
+### v1 (2026-08-28 ~17:00 CEST)
+
+- Hypothesis (master §14): for each v4d hand-link AND each
+  H7v2-reclassified edge, scan a wider temporal window for
+  low-conf sports-ball detections within reach of the relevant
+  hand. If they exist, the hand-link is "corroborated" by detector
+  evidence (even if the gap spans detector dropouts).
+- Three iterations: v1 (single detection), v2 (H3 stationary
+  cluster), v3+v4 (concentration ratio + peak-vs-context).
+- v1 FPR = 91-100% (single detection criterion useless — detector
+  fires constantly on background).
+- v2 (H3 stationary cluster): only 6/62 edges CORROBORATED;
+  baseline FPR identical 42%, YouTube 15%. PROBLEMATIC: 3/6
+  v2 CORROBORATED edges are h7v2_kept_ballistic (true identity
+  switches). H3 stationary-cluster is NOT a discriminator.
+- v3+v4 concentration: produces a real statistical signal.
+- Mean concentration per group (identical):
+  - v4d hand-links: 0.142 +/- 0.012 (n=10)
+  - h7v2_reclassified: 0.201 +/- 0.020 (n=13)
+  - h7v2_kept_ballistic: 0.206 +/- 0.021 (n=12)
+- Bootstrap 90% CI for differences (identical):
+  - h7v2_reclassified - v4d: +0.059 [+0.022, +0.098] (significant)
+  - h7v2_reclassified - h7v2_kept_ballistic: -0.005 [-0.047, +0.041] (NOT significant)
+- Cohen's d (h7v2_reclass vs v4d, identical): +0.965 (large effect)
+- Verdict: **PARTIAL PASS (limited signal).** H13's
+  stationary-cluster criterion is NOT a discriminator between
+  real catch-throws and identity switches (important negative
+  finding for master §14 and H3). Concentration ratio IS a real
+  signal but correlates with gap length, not event type.
+  See `h1_hand_pool/reports/h13_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h13_low_conf_corroboration.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h13_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h13_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h13_per_edge.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h13_sensitivity.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h13/*.png` (14 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h13_report.md`

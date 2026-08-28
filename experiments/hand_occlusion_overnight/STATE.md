@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 15:45 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 + H12v3 + H12v4 + H12v5 + H8v7 + H8v8 + H12v6 + H12v6b + H10v6 + H10v6b + H10v7 + H7v2 + H10v8 + H12v7 + H237v6 + H11v6 COMPLETE. Pipeline: H7v2 (BALLISTIC->HAND reclassify) -> H10v8 (chain quality) -> H12v7 (pattern inference) -> H237v6 (unified repr) -> H11v6 (identity propagation). H7v2 PASS: 35%/93% reclassification rate. H10v8 PASS: YouTube mean q 0.537 -> 0.679. H11v6 PASS: YouTube catch/throw events 1 -> 48 (24x), 60% of tracklets have ball IDs. H12v7 MIXED: YouTube 100% UNCONFIRMED -> 12.4% CASCADE/23.5% FOUNTAIN/56.3% MIXED, but identical CASCADE/FOUNTAIN classification still limited by event log density.
+LAST_UPDATE: 2026-08-28 17:30 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + **H13 v1** COMPLETE. Pipeline unchanged. H13 PARTIAL PASS: stationary-cluster criterion (H3 v3) is NOT a discriminator between real catch-throws and identity switches (3/6 v2 corroborated edges are kept-ballistic). Concentration ratio IS a real signal: v4d hand-links have lower mean concentration (0.142) than h7v2-reclassified (0.201) and h7v2-kept-ballistic (0.206) on identical. The difference correlates with gap length (v4d mean gap 18, others 9-10), NOT with event type. Cohen's d (h7v2_reclass vs v4d) = +0.965 (large).
 
 ## Isolation
 
@@ -303,7 +303,7 @@ extraction: 10 identical + 1 youtube links with visual precision
     over v5: mean q 0.537 → 0.569). H10 v6b is the
     new recommended chain quality score for
     mixed-video analyses. Best of both worlds.
-21. ~~**H7 v2: re-classify YouTube BALLISTIC edges as
+22. ~~**H7 v2: re-classify YouTube BALLISTIC edges as
     HAND_TRANSITION if they pass through a hand
     region.**~~ **DONE. PASS.** Reclassified 13/37
     identical and 25/27 YouTube BALLISTIC edges. Visual
@@ -311,12 +311,26 @@ extraction: 10 identical + 1 youtube links with visual precision
     as REAL_CATCH_THROW. Mean YouTube chain quality jumps
     0.537 → 0.679 (over-counting fixed at its source).
     See `h1_hand_pool/reports/h7v2_report.md`.
-22. ~~**H10 v8: H7v2-reclassified chains + v6b per-video
+23. ~~**H10 v8: H7v2-reclassified chains + v6b per-video
     adaptive weights**~~ **DONE. PASS.** 14/15 YouTube
     chains now have h8=1.0 (no BALLISTIC edges to
     penalize). New top YouTube chain (chain 0, 7 tids,
     6 hand edges) achieves q=0.671 with h8v8=0.86. See
     `h1_hand_pool/reports/h10v8_report.md`.
+24. **H13: detector-level low-confidence ball evidence at
+    hand events (master §14)** — DONE. PARTIAL PASS.
+    Three iterations: v1 (any single detection, FPR 91-100%
+    — useless), v2 (H3 stationary cluster, 6/62 edges
+    corroborated, 3 are kept-ballistic false positives —
+    NOT a discriminator), v3+v4 (concentration ratio +
+    peak-vs-context). Key finding: v4d hand-links have
+    LOWER concentration (0.142) than h7v2-reclassified
+    (0.201) and h7v2-kept-ballistic (0.206) on identical.
+    The difference correlates with gap length, not event
+    type. Cohen's d = +0.965 (large). Conclusion: H3
+    stationary-cluster is a noisy signal that does NOT
+    discriminate catch-throws from identity switches.
+    See `h1_hand_pool/reports/h13_report.md`.
 
 ## Important artifact paths
 
@@ -342,4 +356,4 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. H8 v7/v8 and H12 v6/v6b work committed in this episode.
+None. H13 v1 (partial pass) committed in this episode.

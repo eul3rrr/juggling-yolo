@@ -1,0 +1,47 @@
+{
+  "total_edges": 62,
+  "by_stem_source": {
+    "identical_balls_trick_000_018|v4d": {
+      "n": 10,
+      "mean_concentration": 0.1421,
+      "median_concentration": 0.1395,
+      "stdev_concentration": 0.0371,
+      "mean_gap_frames": 18
+    },
+    "identical_balls_trick_000_018|h7v2_reclassified": {
+      "n": 13,
+      "mean_concentration": 0.2008,
+      "median_concentration": 0.172,
+      "stdev_concentration": 0.0739,
+      "mean_gap_frames": 10.2
+    },
+    "identical_balls_trick_000_018|h7v2_kept_ballistic": {
+      "n": 12,
+      "mean_concentration": 0.2057,
+      "median_concentration": 0.1945,
+      "stdev_concentration": 0.0712,
+      "mean_gap_frames": 8.9
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|v4d": {
+      "n": 1,
+      "mean_concentration": 0.232,
+      "median_concentration": 0.232,
+      "stdev_concentration": 0,
+      "mean_gap_frames": 17
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|h7v2_reclassified": {
+      "n": 25,
+      "mean_concentration": 0.3032,
+      "median_concentration": 0.288,
+      "stdev_concentration": 0.0597,
+      "mean_gap_frames": 9.8
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090|h7v2_kept_ballistic": {
+      "n": 1,
+      "mean_concentration": 0.214,
+      "median_concentration": 0.214,
+      "stdev_concentration": 0,
+      "mean_gap_frames": 8
+    }
+  }
+}
