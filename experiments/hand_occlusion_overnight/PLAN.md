@@ -287,3 +287,9 @@ Remaining ideas:
    gravity, and compare to the actual velocity.
    This would be more rigorous than the simple
    discontinuity check.
+4. **H9 v2: Kalman filter extrapolation** to
+   fill gap frames in H7 chains. The current
+   linear interpolation is a crude approximation.
+   A Kalman filter with constant gravity would
+   give more accurate position estimates during
+   detector dropouts.

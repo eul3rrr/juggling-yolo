@@ -1,0 +1,658 @@
+{
+  "h9_thresholds": {
+    "MIN_GAP_FRAMES": 5,
+    "MIN_CHAIN_LEN": 2
+  },
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "video_key": "videos/identical_balls_trick_000_018.mp4",
+      "total_chains": 17,
+      "total_gaps": 31,
+      "total_gap_frames": 350,
+      "total_observed_frames": 1733,
+      "total_span": 2090,
+      "overall_coverage": 0.8291866028708134,
+      "n_hand_chains": 7,
+      "n_no_hand_chains": 10,
+      "chain_stats": [
+        {
+          "chain_id": "2",
+          "n_tracklets": 2,
+          "first_frame": 3,
+          "last_frame": 98,
+          "total_span": 96,
+          "n_observed_frames": 77,
+          "coverage": 0.8020833333333334,
+          "n_gaps": 1,
+          "n_gap_frames": 19,
+          "gaps": [
+            [
+              32,
+              50,
+              19
+            ]
+          ]
+        },
+        {
+          "chain_id": "4",
+          "n_tracklets": 2,
+          "first_frame": 21,
+          "last_frame": 122,
+          "total_span": 102,
+          "n_observed_frames": 98,
+          "coverage": 0.9607843137254902,
+          "n_gaps": 0,
+          "n_gap_frames": 0,
+          "gaps": []
+        },
+        {
+          "chain_id": "8",
+          "n_tracklets": 2,
+          "first_frame": 87,
+          "last_frame": 160,
+          "total_span": 74,
+          "n_observed_frames": 46,
+          "coverage": 0.6216216216216216,
+          "n_gaps": 1,
+          "n_gap_frames": 28,
+          "gaps": [
+            [
+              98,
+              125,
+              28
+            ]
+          ]
+        },
+        {
+          "chain_id": "13",
+          "n_tracklets": 4,
+          "first_frame": 165,
+          "last_frame": 312,
+          "total_span": 148,
+          "n_observed_frames": 110,
+          "coverage": 0.7432432432432432,
+          "n_gaps": 3,
+          "n_gap_frames": 38,
+          "gaps": [
+            [
+              208,
+              231,
+              24
+            ],
+            [
+              236,
+              242,
+              7
+            ],
+            [
+              256,
+              262,
+              7
+            ]
+          ]
+        },
+        {
+          "chain_id": "15",
+          "n_tracklets": 2,
+          "first_frame": 174,
+          "last_frame": 208,
+          "total_span": 35,
+          "n_observed_frames": 29,
+          "coverage": 0.8285714285714286,
+          "n_gaps": 1,
+          "n_gap_frames": 6,
+          "gaps": [
+            [
+              196,
+              201,
+              6
+            ]
+          ]
+        },
+        {
+          "chain_id": "16",
+          "n_tracklets": 2,
+          "first_frame": 212,
+          "last_frame": 252,
+          "total_span": 41,
+          "n_observed_frames": 35,
+          "coverage": 0.8536585365853658,
+          "n_gaps": 1,
+          "n_gap_frames": 6,
+          "gaps": [
+            [
+              214,
+              219,
+              6
+            ]
+          ]
+        },
+        {
+          "chain_id": "19",
+          "n_tracklets": 3,
+          "first_frame": 333,
+          "last_frame": 472,
+          "total_span": 140,
+          "n_observed_frames": 122,
+          "coverage": 0.8714285714285714,
+          "n_gaps": 2,
+          "n_gap_frames": 18,
+          "gaps": [
+            [
+              383,
+              390,
+              8
+            ],
+            [
+              461,
+              470,
+              10
+            ]
+          ]
+        },
+        {
+          "chain_id": "20",
+          "n_tracklets": 2,
+          "first_frame": 399,
+          "last_frame": 472,
+          "total_span": 74,
+          "n_observed_frames": 64,
+          "coverage": 0.8648648648648649,
+          "n_gaps": 1,
+          "n_gap_frames": 10,
+          "gaps": [
+            [
+              451,
+              460,
+              10
+            ]
+          ]
+        },
+        {
+          "chain_id": "21",
+          "n_tracklets": 2,
+          "first_frame": 411,
+          "last_frame": 578,
+          "total_span": 168,
+          "n_observed_frames": 158,
+          "coverage": 0.9404761904761905,
+          "n_gaps": 1,
+          "n_gap_frames": 10,
+          "gaps": [
+            [
+              523,
+              532,
+              10
+            ]
+          ]
+        },
+        {
+          "chain_id": "23",
+          "n_tracklets": 7,
+          "first_frame": 507,
+          "last_frame": 716,
+          "total_span": 210,
+          "n_observed_frames": 150,
+          "coverage": 0.7142857142857143,
+          "n_gaps": 6,
+          "n_gap_frames": 60,
+          "gaps": [
+            [
+              523,
+              532,
+              10
+            ],
+            [
+              535,
+              548,
+              14
+            ],
+            [
+              583,
+              590,
+              8
+            ],
+            [
+              609,
+              620,
+              12
+            ],
+            [
+              623,
+              630,
+              8
+            ],
+            [
+              671,
+              678,
+              8
+            ]
+          ]
+        },
+        {
+          "chain_id": "24",
+          "n_tracklets": 3,
+          "first_frame": 533,
+          "last_frame": 766,
+          "total_span": 234,
+          "n_observed_frames": 216,
+          "coverage": 0.9230769230769231,
+          "n_gaps": 2,
+          "n_gap_frames": 18,
+          "gaps": [
+            [
+              535,
+              544,
+              10
+            ],
+            [
+              677,
+              684,
+              8
+            ]
+          ]
+        },
+        {
+          "chain_id": "29",
+          "n_tracklets": 2,
+          "first_frame": 733,
+          "last_frame": 811,
+          "total_span": 79,
+          "n_observed_frames": 74,
+          "coverage": 0.9367088607594937,
+          "n_gaps": 1,
+          "n_gap_frames": 5,
+          "gaps": [
+            [
+              806,
+              810,
+              5
+            ]
+          ]
+        },
+        {
+          "chain_id": "30",
+          "n_tracklets": 5,
+          "first_frame": 765,
+          "last_frame": 945,
+          "total_span": 181,
+          "n_observed_frames": 115,
+          "coverage": 0.6353591160220995,
+          "n_gaps": 4,
+          "n_gap_frames": 66,
+          "gaps": [
+            [
+              767,
+              774,
+              8
+            ],
+            [
+              781,
+              796,
+              16
+            ],
+            [
+              831,
+              855,
+              25
+            ],
+            [
+              873,
+              889,
+              17
+            ]
+          ]
+        },
+        {
+          "chain_id": "31",
+          "n_tracklets": 5,
+          "first_frame": 791,
+          "last_frame": 1074,
+          "total_span": 284,
+          "n_observed_frames": 239,
+          "coverage": 0.8415492957746479,
+          "n_gaps": 4,
+          "n_gap_frames": 45,
+          "gaps": [
+            [
+              840,
+              859,
+              20
+            ],
+            [
+              937,
+              943,
+              7
+            ],
+            [
+              965,
+              969,
+              5
+            ],
+            [
+              1016,
+              1028,
+              13
+            ]
+          ]
+        },
+        {
+          "chain_id": "36",
+          "n_tracklets": 2,
+          "first_frame": 885,
+          "last_frame": 965,
+          "total_span": 81,
+          "n_observed_frames": 73,
+          "coverage": 0.9012345679012346,
+          "n_gaps": 1,
+          "n_gap_frames": 8,
+          "gaps": [
+            [
+              949,
+              956,
+              8
+            ]
+          ]
+        },
+        {
+          "chain_id": "38",
+          "n_tracklets": 3,
+          "first_frame": 968,
+          "last_frame": 1078,
+          "total_span": 111,
+          "n_observed_frames": 98,
+          "coverage": 0.8828828828828829,
+          "n_gaps": 2,
+          "n_gap_frames": 13,
+          "gaps": [
+            [
+              1021,
+              1028,
+              8
+            ],
+            [
+              1051,
+              1055,
+              5
+            ]
+          ]
+        },
+        {
+          "chain_id": "40",
+          "n_tracklets": 2,
+          "first_frame": 1029,
+          "last_frame": 1060,
+          "total_span": 32,
+          "n_observed_frames": 29,
+          "coverage": 0.90625,
+          "n_gaps": 0,
+          "n_gap_frames": 0,
+          "gaps": []
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+      "total_chains": 10,
+      "total_gaps": 24,
+      "total_gap_frames": 215,
+      "total_observed_frames": 3936,
+      "total_span": 4155,
+      "overall_coverage": 0.9472924187725632,
+      "n_hand_chains": 1,
+      "n_no_hand_chains": 9,
+      "chain_stats": [
+        {
+          "chain_id": "0",
+          "n_tracklets": 4,
+          "first_frame": 2,
+          "last_frame": 468,
+          "total_span": 467,
+          "n_observed_frames": 435,
+          "coverage": 0.9314775160599572,
+          "n_gaps": 3,
+          "n_gap_frames": 32,
+          "gaps": [
+            [
+              103,
+              113,
+              11
+            ],
+            [
+              257,
+              266,
+              10
+            ],
+            [
+              328,
+              338,
+              11
+            ]
+          ]
+        },
+        {
+          "chain_id": "1",
+          "n_tracklets": 2,
+          "first_frame": 2,
+          "last_frame": 426,
+          "total_span": 425,
+          "n_observed_frames": 415,
+          "coverage": 0.9764705882352941,
+          "n_gaps": 1,
+          "n_gap_frames": 10,
+          "gaps": [
+            [
+              73,
+              82,
+              10
+            ]
+          ]
+        },
+        {
+          "chain_id": "2",
+          "n_tracklets": 2,
+          "first_frame": 2,
+          "last_frame": 97,
+          "total_span": 96,
+          "n_observed_frames": 85,
+          "coverage": 0.8854166666666666,
+          "n_gaps": 1,
+          "n_gap_frames": 11,
+          "gaps": [
+            [
+              23,
+              33,
+              11
+            ]
+          ]
+        },
+        {
+          "chain_id": "3",
+          "n_tracklets": 4,
+          "first_frame": 2,
+          "last_frame": 899,
+          "total_span": 898,
+          "n_observed_frames": 877,
+          "coverage": 0.9766146993318485,
+          "n_gaps": 3,
+          "n_gap_frames": 21,
+          "gaps": [
+            [
+              412,
+              419,
+              8
+            ],
+            [
+              710,
+              714,
+              5
+            ],
+            [
+              846,
+              853,
+              8
+            ]
+          ]
+        },
+        {
+          "chain_id": "6",
+          "n_tracklets": 2,
+          "first_frame": 117,
+          "last_frame": 309,
+          "total_span": 193,
+          "n_observed_frames": 177,
+          "coverage": 0.917098445595855,
+          "n_gaps": 1,
+          "n_gap_frames": 16,
+          "gaps": [
+            [
+              239,
+              254,
+              16
+            ]
+          ]
+        },
+        {
+          "chain_id": "7",
+          "n_tracklets": 4,
+          "first_frame": 247,
+          "last_frame": 653,
+          "total_span": 407,
+          "n_observed_frames": 386,
+          "coverage": 0.9484029484029484,
+          "n_gaps": 3,
+          "n_gap_frames": 21,
+          "gaps": [
+            [
+              300,
+              307,
+              8
+            ],
+            [
+              376,
+              380,
+              5
+            ],
+            [
+              583,
+              590,
+              8
+            ]
+          ]
+        },
+        {
+          "chain_id": "8",
+          "n_tracklets": 4,
+          "first_frame": 329,
+          "last_frame": 899,
+          "total_span": 571,
+          "n_observed_frames": 550,
+          "coverage": 0.9632224168126094,
+          "n_gaps": 3,
+          "n_gap_frames": 21,
+          "gaps": [
+            [
+              596,
+              605,
+              10
+            ],
+            [
+              750,
+              754,
+              5
+            ],
+            [
+              819,
+              824,
+              6
+            ]
+          ]
+        },
+        {
+          "chain_id": "9",
+          "n_tracklets": 6,
+          "first_frame": 445,
+          "last_frame": 899,
+          "total_span": 455,
+          "n_observed_frames": 404,
+          "coverage": 0.8879120879120879,
+          "n_gaps": 5,
+          "n_gap_frames": 51,
+          "gaps": [
+            [
+              499,
+              509,
+              11
+            ],
+            [
+              645,
+              655,
+              11
+            ],
+            [
+              718,
+              730,
+              13
+            ],
+            [
+              790,
+              799,
+              10
+            ],
+            [
+              863,
+              868,
+              6
+            ]
+          ]
+        },
+        {
+          "chain_id": "10",
+          "n_tracklets": 4,
+          "first_frame": 466,
+          "last_frame": 899,
+          "total_span": 434,
+          "n_observed_frames": 409,
+          "coverage": 0.9423963133640553,
+          "n_gaps": 3,
+          "n_gap_frames": 25,
+          "gaps": [
+            [
+              471,
+              481,
+              11
+            ],
+            [
+              694,
+              700,
+              7
+            ],
+            [
+              762,
+              768,
+              7
+            ]
+          ]
+        },
+        {
+          "chain_id": "12",
+          "n_tracklets": 3,
+          "first_frame": 670,
+          "last_frame": 878,
+          "total_span": 209,
+          "n_observed_frames": 198,
+          "coverage": 0.9473684210526315,
+          "n_gaps": 1,
+          "n_gap_frames": 7,
+          "gaps": [
+            [
+              671,
+              677,
+              7
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -13135,3 +13135,442 @@ Now let me append the H8 entry to RESULTS_LOG:
 Now commit and push:
 ╰──────────────────────────────────────────────────────────────────────────────╯
   ┊ 💻 preparing terminal…
+  ┊ 💻 $         git add -A + 1 command  0.4s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         git commit -m "experiment: H8 physics consistency check (per-edge y-velocity discontinuity) Hypothesis: a real airborne ball's y-velocity changes slowly (gravity ~0.5 px/frame^2 for a juggling ball at ~1m distance). E6c's constant-velocity ballistic model misses identity switches where two unrelated tracklets are linked. A per-edge y-velocity discontinuity check should flag these. Three iterated implementations: - v1 (per-chain parabola): abandoned; juggling chains span multiple parabolic arcs, single parabola doesn't fit. - v2 (per-tracklet classification): useful as tracklet-level metadata but not as per-edge check. - v3 (per-edge y-velocity discontinuity) — RECOMMENDED. v3 algorithm: for each BALLISTIC edge in H7's chain representation, compare y-velocity at source-tracklet tail (last 3 frames) to y-velocity at target-tracklet head (first 3 frames). Flag edges with discontinuity > 8.0 px/frame as likely identity switches. Hand edges are EXCLUDED (held-then-released naturally has vy discontinuity). Quantitative result: - Identical: 23 air edges, 14 OK, 9 violating. - YouTube: 24 air edges, 1 OK, 23 violating (unreliable for long tracklets - t4 has 415 frames covering many bounces). Visual QA confirmed 2 identity switches on identical: - 5->6: t5 was held ball being released, t6 is a different ball already in mid-air. 90px y-jump in 1 frame. - 50->55: t50 ends in the hand area, t55 starts at a different location. E6c err was 1.23 (very low) but H8 catches the identity switch. All 6 air-edges in the longest H7 chain (35->37->40->41->43->45->46) are OK (discontinuity <= 2.2 px/frame). This is consistent with the visual QA that confirmed it as a real juggling cycle. Limitation: H8 is unreliable on long tracklets (YouTube video). A v4 should restrict to short tracklets (n_pts <= 30) or use Kalman filter prediction for a stricter test. H8 is a post-hoc quality signal: when it flags an edge, it's worth a closer look. H8 is NOT a recovery mechanism. Literature inspiration: - Ponglertnapakorn & Suwajanakorn 2025 'Where Is The Ball' (arXiv:2506.05763) - estimate physical parameters that best explain the observed trajectory. - Physics-based ball tracking 2009 (basketball) - physics constraints disambiguate occluded/noisy detections. - Cooperative Trajectory Matching 2024 (MDPI) - automatic trajectory correction using Kalman filter. Artifacts: - scripts/h8_physics_check.py (v1, abandoned) - scripts/h8_v2_per_tracklet.py (v2, partial) - scripts/h8_v3_edge_physics.py (v3, recommended) - scripts/h8_contact_sheets.py - data/h8_*_summary.json (3 files) - contact_sheets_h8/*.png (3 files) - reports/h8_report.md"  0.1s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         git push origin experiments/hand-occlusion-overnight  4.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+H7 and H8 are both committed and pushed. Let me update the todo list and consider what to do next. Given the remaining time and that I've made substantial progress (H7, H8, h237 unified), I should consider whether to attempt H9 (object permanence) or stop here. Let me check time:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         date echo "---" # Check the episode start - we started at 05:25 # It's now 05:55. We've used about 30 min. # We have about 45 min left in the 75 min budget. ps -p $(cat experiments/hand_occlusion_overnight/watchdog.pid 2>/dev/null) -o etime= 2>/dev/null + 1 command  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+We have about 25-30 min left. Let me try one more focused experiment: H9 (object permanence) — extend each tracklet using a constant velocity model to bridge short detector dropouts within chains. This is a focused, well-defined experiment.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 📋 preparing todo…
+  ┊ 📋 plan      7/8 task(s)  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+For H9, the simplest and most useful version: for each H7 chain, fit a Kalman-like constant-velocity model to the chain's tracklets, then for any DROPOUT between tracklets (where the chain has a gap), fill in the missing frames using the model. The "filled" frames are not real detections — they're extrapolated.
+
+Actually a more useful H9: count the number of "chain gaps" (periods where no tracklet is active in the chain) and report statistics. This is a quick analysis that reveals how fragmented the chains are.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_object_permanence.py  0.4s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_object_permanence.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_object_permanence.py
+@@ -0,0 +1,222 @@
++#!/usr/bin/env python3
++"""H9 — Object permanence: bridge detector dropouts in H7 chains.
++
++Hypothesis: H7 chains are punctuated by detector dropouts (the
++detector misses the ball for some frames, then picks it up again).
++By modeling the chain as a single physical ball, we can identify
++"missing" frames and quantify the dropout rate. This tells us
++how much of the chain is "real observations" vs "gaps where
++we have to assume the ball is still there."
++
++Approach (declared before reading outcomes):
++1. For each H7 chain, compute the timeline of tracklet coverage
++   (frame ranges per tracklet).
++2. Identify GAPS: periods of >5 frames where no tracklet is active
++   in the chain.
++3. For each gap, use a constant-velocity model (linear
++   extrapolation from tracklet endpoints) to PREDICT the ball
++   position. This is the "object permanence" prediction.
++4. Compare predicted position to actual detector observations
++   (if any) in the gap window.
++5. Report chain fragmentation statistics.
++
++This is a *measurement* experiment, not a *recovery* experiment.
++H9 doesn't generate new chains — it measures how much of each
++chain is real vs gap.
++"""
++from __future__ import annotations
++
++import csv
++import json
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool"
++H1_DATA = H1_DIR / "data"
++
++STEMS = {
++    "identical_balls_trick_000_018": "videos/identical_balls_trick_000_018.mp4",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090":
++        "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
++}
++
++# H9 thresholds
++H9 = {
++    "MIN_GAP_FRAMES": 5,   # ignore gaps shorter than 5 frames
++    "MIN_CHAIN_LEN": 2,    # only consider chains with 2+ tracklets
++}
++
++
++def load_tracklet_features(stem: str) -> dict[int, dict]:
++    out = {}
++    with (H1_DATA / "tracklet_features.csv").open() as fh:
++        for r in csv.DictReader(fh):
++            if r["stem"] != stem:
++                continue
++            out[int(r["tid"])] = {
++                "first_frame": int(r["first_frame"]),
++                "last_frame": int(r["last_frame"]),
++                "first_x": float(r["first_x"]),
++                "first_y": float(r["first_y"]),
++                "last_x": float(r["last_x"]),
++                "last_y": float(r["last_y"]),
++            }
++    return out
++
++
++def load_h237_chains(stem: str) -> list[dict]:
++    out = []
++    with (H1_DATA / f"h237_unified_chains_{stem}.csv").open() as fh:
++        for r in csv.DictReader(fh):
++            r["tids"] = [int(t) for t in r["tids"].split(",") if t]
++            r["n_tracklets"] = int(r["n_tracklets"])
++            r["n_hand_edges"] = int(r["n_hand_edges"])
++            r["n_air_edges"] = int(r["n_air_edges"])
++            r["n_h3_confirmed"] = int(r["n_h3_confirmed"])
++            out.append(r)
++    return out
++
+… omitted 144 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_object_permanence.py  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent! H9 results:
+- Identical: 82.9% coverage (350 gap frames out of 2090 total span)
+- YouTube: 94.7% coverage (215 gap frames out of 4155 total span)
+
+The gap frames are the detector dropouts that H7 already accounts for by linking tracklets. The coverage metric shows how much of the chain is "real" vs "gaps we assume are the same ball."
+
+Now let me also do a quick check: for the chain with biggest gaps (chain 30 on identical, 5 tids, 66 gap frames), can we actually see if those gaps are reasonable (the ball is held/hidden) or unreasonable (detector just missed)?
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") import json from pathlib import Path H1 = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data") # Look at the actual chain 30 with (H1 / "h237_unified_chains_identical_balls_trick_000_018.csv").open() as fh: for r in csv.DictReader(fh): if r["chain_id"] == "30": print(f"chain 30: tids={r['tids']}, n_air={r['n_air_edges']}, n_hand={r['n_hand_edges']}") print(f" n_h3={r['n_h3_confirmed']}") break import csv print() print("chain 30 details:") # Get tracklet first/last for chain 30 tids from h9_object_permanence import load_tracklet_features tids = [50, 53, 60, 64, 68] # guessing from the gap chain pattern tf = load_tracklet_features("identical_balls_trick_000_018") for tid in tids: if tid in tf: print(f" t{tid}: f={tf[tid]['first_frame']}-{tf[tid]['last_frame']} " f"({tf[tid]['last_frame']-tf[tid]['first_frame']+1} pts)") EOF  0.2s [exit 1]
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 << 'EOF' import sys, csv sys.path.insert(0, "/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts") import json from pathlib import Path H1 = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data") # Look at the actual chain 30 with (H1 / "h237_unified_chains_identical_balls_trick_000_018.csv").open() as fh: for r in csv.DictReader(fh): if r["chain_id"] == "30": print(f"chain 30: tids={r['tids']}, n_air={r['n_air_edges']}, n_hand={r['n_hand_edges']}") print(f" n_h3={r['n_h3_confirmed']}") tids = [int(t) for t in r["tids"].split(",")] break # Get tracklet first/last for chain 30 tids from h9_object_permanence import load_tracklet_features tf = load_tracklet_features("identical_balls_trick_000_018") for tid in tids: if tid in tf: print(f" t{tid}: f={tf[tid]['first_frame']}-{tf[tid]['last_frame']} " f"({tf[tid]['last_frame']-tf[tid]['first_frame']+1} pts)") EOF  0.2s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Chain 30: [51, 52, 54, 59, 63] - 5 tids, 4 gaps:
+- 51→52: f=766 to f=775 (8 frames gap)
+- 52→54: f=780 to f=797 (16 frames gap)
+- 54→59: f=830 to f=856 (25 frames gap)
+- 59→63: f=872 to f=890 (17 frames gap)
+
+Total gap = 66 frames (matches the output). These are real detector dropouts where the ball was probably held in the hand between throws. The hand-edges (3 of them) explain most of these gaps.
+
+This is a useful measurement. Let me also do a quick visual QA on a key gap (51→52) to see if it's a real hand-held phase or a tracker failure:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py  0.5s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py
+@@ -0,0 +1,180 @@
++#!/usr/bin/env python3
++"""H9 contact sheet — visualize a chain's gaps.
++
++Show chain 30 [51, 52, 54, 59, 63] on the identical video. This chain
++has the most gap frames (66 of 181) and is dominated by hand events.
++Visualize:
++- End of each tracklet (last 2-3 frames)
++- Start of each tracklet (first 2-3 frames)
++- The gap windows (where detector dropout occurred)
++"""
++from __future__ import annotations
++
++import csv
++from pathlib import Path
++
++import cv2
++import numpy as np
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++H1_DATA = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "data"
++VIDEOS_DIR = Path("/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos")
++OUT_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "contact_sheets_h9"
++OUT_DIR.mkdir(parents=True, exist_ok=True)
++
++COLOR_LEFT = (0, 165, 255)
++COLOR_RIGHT = (255, 128, 0)
++COLORS = [(0, 200, 0), (200, 200, 0), (200, 0, 200), (0, 200, 200),
++          (200, 100, 100)]  # 5 distinct colors for 5 tracklets
++
++
++def load_tracklet_points(stem, tid):
++    out = []
++    candidates = [
++        WORKTREE / "detections" / f"{stem}_norfair_dt50_hc5.csv",
++        WORKTREE / "detections" / f"{stem}_yolo26s_botsort.csv",
++    ]
++    for path in candidates:
++        if not path.exists():
++            continue
++        with path.open() as fh:
++            for r in csv.DictReader(fh):
++                if "track_id" not in r:
++                    continue
++                if int(r["track_id"]) == tid:
++                    out.append((int(r["frame"]), float(r["center_x"]),
++                                float(r["center_y"])))
++        if out:
++            break
++    out.sort()
++    return out
++
++
++def load_wrist_frames(stem):
++    out = {}
++    path = WORKTREE / "detections" / f"{stem}_yolo26s-pose.csv"
++    if not path.exists():
++        return out
++    with path.open() as fh:
++        for r in csv.DictReader(fh):
++            try:
++                fr = int(r["frame"])
++                out[fr] = {
++                    "left": (float(r["left_wrist_x"]), float(r["left_wrist_y"]),
++                             float(r.get("left_wrist_confidence", 0))),
++                    "right": (float(r["right_wrist_x"]), float(r["right_wrist_y"]),
++                              float(r.get("right_wrist_confidence", 0))),
++                }
++            except (ValueError, KeyError):
++                continue
++    return out
++
++
++def render_sheet(stem, frames, tracklets, title, subtitle, out_path,
++                 show_xy=True):
++    video_path = VIDEOS_DIR / f"{stem}.mp4"
++    cap = cv2.VideoCapture(str(video_path))
++    if not cap.isOpened():
++        return
+… omitted 102 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         /home/it-admin/.hermes/profiles/juggling-tracker/workspace/.venv/bin/python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py  1.0s [exit 1]
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+The frame resize is producing inconsistent tile sizes. Let me check:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py  0.3s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py
+@@ -81,11 +81,11 @@
+     if not ok:
+         return
+     H, W = first.shape[:2]
+-    tile_w = 360
++    tile_w = 320
+     tile_h = int(H * tile_w / W)
+     cols = 6
+     rows = (len(frames) + cols - 1) // cols
+-    sheet_h = 100 + rows * tile_h
++    sheet_h = 110 + rows * tile_h
+     sheet_w = cols * tile_w
+     sheet = np.full((sheet_h, sheet_w, 3), 30, dtype=np.uint8)
+     cv2.putText(sheet, title, (8, 22), cv2.FONT_HERSHEY_SIMPLEX, 0.55,
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py  0.3s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py
+@@ -106,8 +106,9 @@
+         ok, img = cap.read()
+         if not ok:
+             continue
+-        img = cv2.resize(img, (tile_w, tile_h), interpolation=cv2.INTER_AREA)
+-        if img.shape != (tile_h, tile_w, 3):
++        # Force resize to (tile_h, tile_w) - some frames may have
++        # slightly different shapes due to aspect-ratio rounding
++        if img.shape[:2] != (tile_h, tile_w):
+             img = cv2.resize(img, (tile_w, tile_h), interpolation=cv2.INTER_AREA)
+         if fr in wrist_frames:
+             w = wrist_frames[fr]
+@@ -133,6 +134,10 @@
+         col = i % cols
+         y0 = 110 + row * tile_h
+         x0 = col * tile_w
++        # Final safety: ensure exact shape
++        if sheet[y0:y0 + tile_h, x0:x0 + tile_w].shape != img.shape:
++            print(f"  skip frame {fr}: tile {sheet[y0:y0+tile_h, x0:x0+tile_w].shape} vs img {img.shape}")
++            continue
+         sheet[y0:y0 + tile_h, x0:x0 + tile_w] = img
+     cv2.imwrite(str(out_path), sheet)
+     print(f"Wrote {out_path}")
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         /home/it-admin/.hermes/profiles/juggling-tracker/workspace/.venv/bin/python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py  1.4s
+  ┊ 👁️ preparing vision_analyze…
+  ┊ 👁️  vision    Look at frames 765-945. The chain has 5 tracklets (t51, t52, t54, t59, t63) and 4 gaps where the detector lost the ball. Looking at the frames in the gap windows (e.g., 770, 785, 840, 880), can you see the ball being held in the hand, or is the ball actually missing? In other words, are these gaps "ball is in the hand" (object permanence makes sense) or "ball is genuinely missing/unobservable" (object permanence is wrong)?  53.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent confirmation! The vision verifier confirms:
+- All 4 gaps in chain 30 are real hand-hold phases
+- The ball is genuinely present (in the hand) during the gaps
+- Object permanence is the correct interpretation: the ball exists, the detector just can't see it
+
+This validates H9's measurement: 82.9% coverage on identical means 17.1% of chain time is "object permanence" (the ball is there, we just can't see it).
+
+Let me write the H9 report and commit:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h9_report.md  0.1s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h9_report.md → b/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h9_report.md
+@@ -0,0 +1,123 @@
++# H9 — Object permanence: bridge detector dropouts in H7 chains
++
++**Date:** 2026-08-28 ~07:25 CEST
++**Status:** COMPLETE
++**Verdict:** PASS — useful as a chain quality measurement
++
++## Hypothesis
++
++H7 chains are punctuated by detector dropouts (the detector misses
++the ball for some frames, then picks it up again). By modeling the
++chain as a single physical ball, we can identify "missing" frames
++and quantify the dropout rate. This tells us how much of the chain
++is "real observations" vs "gaps where we assume the ball is still
++there."
++
++## Approach (declared from physical geometry, not from manual labels)
++
++For each H7 chain:
++1. Compute the timeline of tracklet coverage (frame ranges).
++2. Identify GAPS: periods of ≥5 frames where no tracklet is active
++   in the chain.
++3. For each gap, use a constant-velocity linear interpolation
++   between the source tracklet's last point and the target
++   tracklet's first point. This is the "object permanence"
++   prediction.
++4. Report chain coverage: (observed frames) / (total span).
++
++The metric is a *measurement*, not a *recovery*. H9 doesn't
++generate new chains — it measures how much of each chain is
++real observation vs gap.
++
++## Quantitative result
++
++| Video | chains (multi) | total gaps | total gap frames | total observed | total span | coverage |
++|---|---|---|---|---|---|---|
++| identical | 17 | 31 | 350 | 1733 | 2090 | **82.9%** |
++| YouTube | 10 | 24 | 215 | 3936 | 4155 | **94.7%** |
++
++Identical has more gap frames per chain (350/17 = 20.6 vs 215/10 = 21.5
++per chain — actually similar) but a lower overall coverage because
++the chains are shorter (less time for the same number of gaps).
++
++The identical video's lower coverage (82.9% vs 94.7%) reflects
++that the identical video is more dynamic (more hand events, more
++detector dropouts during holds).
++
++## Chains with biggest gaps (identical)
++
++| Chain ID | tids | n_tids | span | observed | gaps | gap frames |
++|---|---|---|---|---|---|---|
++| 30 | 51, 52, 54, 59, 63 | 5 | 181 | 115 | 4 | **66** |
++| 23 | 35, 37, 40, 41, 43, 45, 46 | 7 | 210 | 150 | 6 | 60 |
++| 31 | 53, 60, 64, 68, 71 | 5 | 284 | 239 | 4 | 45 |
++| 13 | 17, 23, 25, 27 | 4 | 148 | 110 | 3 | 38 |
++| 8 | 11, 14 | 2 | 74 | 46 | 1 | 28 |
++
++Chain 30 has 3 HAND_TRANSITIONS in its 4 edges — most of its gap
++frames are real hand-hold phases. This is the kind of chain
++where object permanence is most useful: the ball is in the
++hand, the detector can't see it, but the chain is still valid.
++
++## Visual QA
++
++Rendered `contact_sheets_h9/chain30_object_permanence.png`
++showing chain 30 with all 5 tracklets and the 4 gap windows.
++Visual QA confirmed:
++- All 4 gaps in chain 30 are real hand-hold phases (ball
++  visibly in the hand during the gap).
++- The detector fails primarily because of hand occlusion
++  (hand/fingers cover the ball) and motion blur at the
++  apex of trajectories.
++- Object permanence is the correct interpretation: the
++  ball exists and is being held — it just temporarily
++  escapes detection due to occlusion.
++
++## Negative findings
++
++- H9 is a *measurement*, not a *recovery*. It doesn't generate
+… omitted 45 diff line(s) across 1 additional file(s)/section(s)
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now update STATE/PLAN/RESULTS_LOG and commit:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md
+@@ -1,7 +1,7 @@
+ # Hand Occlusion Overnight Lab — State
+ 
+-LAST_UPDATE: 2026-08-28 07:10 CEST
+-STATUS: H7 + H8 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted.
++LAST_UPDATE: 2026-08-28 07:30 CEST
++STATUS: H7 + H8 + H9 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases.
+ 
+ ## Isolation
+ 
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/STATE.md
+@@ -184,15 +184,16 @@
+    false positives on identical (5→6, 50→55). Most useful as a
+    post-hoc quality signal. Limitation: unreliable on long
+    tracklets (YouTube video).
+-4. **H9: explicit object permanence** to bridge
+-   detector dropouts in H7 chains (e.g. extend
+-   each tracklet by ±5 frames using a constant
+-   velocity model when the detector is silent).
++4. ~~**H9: explicit object permanence** to bridge
++   detector dropouts in H7 chains~~ **DONE.** Coverage
++   measurement: 82.9% on identical, 94.7% on YouTube.
++   Visual QA confirmed all 4 gaps in chain 30 are real
++   hand-hold phases. H9 is a measurement, not a recovery.
+ 5. **H10: chain quality assessment** — given a
+    chain, how confident should downstream consumers
+    be in its physical-ball identity? H3 + H8 +
+-   h3 confirmations could be combined into a
+-   per-chain confidence score.
++   h3 confirmations + H9 coverage could be
++   combined into a per-chain confidence score.
+ 
+ ## Important artifact paths
+ 
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now append H9 to RESULTS_LOG and commit:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         cat << 'EOF' ### H9 (2026-08-28 ~07:30 CEST) - Hypothesis: H7 chains are punctuated by detector dropouts. Modeling each chain as a single physical ball, we can identify "missing" frames and quantify the dropout rate. This tells us how much of the chain is "real observations" vs "gaps where we assume the ball is still there" (object permanence). - Thresholds (declared from physical geometry): - MIN_GAP_FRAMES = 5 (ignore gaps shorter than 5 frames) - MIN_CHAIN_LEN = 2 (only consider multi-tracklet chains) - Algorithm: for each H7 chain, identify gaps of ≥5 frames between consecutive tracklets. Use linear interpolation to predict ball position during the gap (constant-velocity extrapolation from tracklet endpoints). - Quantitative result: | Video | n_chains (multi) | total gaps | total gap frames | total observed | total span | coverage | |---|---|---|---|---|---|---| | identical | 17 | 31 | 350 | 1733 | 2090 | **82.9%** | | YouTube | 10 | 24 | 215 | 3936 | 4155 | **94.7%** | - Chains with biggest gaps (identical): - chain 30 [51, 52, 54, 59, 63]: 5 tids, 4 gaps, 66 gap frames (3 of 4 edges are HAND_TRANSITIONS, so most gap frames are real hand-hold phases). - chain 23 [35, 37, 40, 41, 43, 45, 46]: 7 tids, 6 gaps, 60 gap frames (longest H7 chain, mostly air-edges with small gaps). - Visual QA: rendered `contact_sheets_h9/chain30_object_permanence.png` showing chain 30 with all 5 tracklets and 4 gap windows. Visual QA confirmed: - All 4 gaps in chain 30 are real hand-hold phases (ball visibly in the hand during the gap). - The detector fails primarily because of hand occlusion (hand/fingers cover the ball) and motion blur at trajectory apexes. - Object permanence is the correct interpretation: the ball exists and is being held — it just temporarily escapes detection due to occlusion. - Negative findings: - H9 is a *measurement*, not a *recovery*. It doesn't generate new chains or fill in new detections. The gap frames remain detector dropouts; H9 just quantifies them. - H9 doesn't help with the YouTube identity switches that H8 flagged. - The "object permanence" prediction (linear interpolation) is a crude approximation. A Kalman filter with constant gravity would be more accurate (future H10 work). - Verdict: **PASS.** H9 successfully measures chain coverage and quantifies detector dropouts. The measurement is useful for understanding chain quality: chains with high coverage are well-observed + 1 command  0.1s
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md  0.1s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/PLAN.md
+@@ -287,3 +287,9 @@
+    gravity, and compare to the actual velocity.
+    This would be more rigorous than the simple
+    discontinuity check.
++4. **H9 v2: Kalman filter extrapolation** to
++   fill gap frames in H7 chains. The current
++   linear interpolation is a crude approximation.
++   A Kalman filter with constant gravity would
++   give more accurate position estimates during
++   detector dropouts.
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now commit and push H9:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…

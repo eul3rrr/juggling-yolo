@@ -626,3 +626,70 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8/chain29_t50_t55_violating.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h8/longest_chain_consistent.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_report.md`
+
+### H9 (2026-08-28 ~07:30 CEST)
+
+- Hypothesis: H7 chains are punctuated by detector dropouts.
+  Modeling each chain as a single physical ball, we can identify
+  "missing" frames and quantify the dropout rate. This tells
+  us how much of the chain is "real observations" vs "gaps where
+  we assume the ball is still there" (object permanence).
+
+- Thresholds (declared from physical geometry):
+  - MIN_GAP_FRAMES = 5 (ignore gaps shorter than 5 frames)
+  - MIN_CHAIN_LEN = 2 (only consider multi-tracklet chains)
+
+- Algorithm: for each H7 chain, identify gaps of ≥5 frames
+  between consecutive tracklets. Use linear interpolation to
+  predict ball position during the gap (constant-velocity
+  extrapolation from tracklet endpoints).
+
+- Quantitative result:
+
+| Video | n_chains (multi) | total gaps | total gap frames | total observed | total span | coverage |
+|---|---|---|---|---|---|---|
+| identical | 17 | 31 | 350 | 1733 | 2090 | **82.9%** |
+| YouTube | 10 | 24 | 215 | 3936 | 4155 | **94.7%** |
+
+- Chains with biggest gaps (identical):
+  - chain 30 [51, 52, 54, 59, 63]: 5 tids, 4 gaps, 66 gap frames
+    (3 of 4 edges are HAND_TRANSITIONS, so most gap frames are
+    real hand-hold phases).
+  - chain 23 [35, 37, 40, 41, 43, 45, 46]: 7 tids, 6 gaps, 60
+    gap frames (longest H7 chain, mostly air-edges with small gaps).
+
+- Visual QA: rendered `contact_sheets_h9/chain30_object_permanence.png`
+  showing chain 30 with all 5 tracklets and 4 gap windows. Visual
+  QA confirmed:
+  - All 4 gaps in chain 30 are real hand-hold phases (ball visibly
+    in the hand during the gap).
+  - The detector fails primarily because of hand occlusion
+    (hand/fingers cover the ball) and motion blur at trajectory
+    apexes.
+  - Object permanence is the correct interpretation: the ball
+    exists and is being held — it just temporarily escapes
+    detection due to occlusion.
+
+- Negative findings:
+  - H9 is a *measurement*, not a *recovery*. It doesn't generate
+    new chains or fill in new detections. The gap frames remain
+    detector dropouts; H9 just quantifies them.
+  - H9 doesn't help with the YouTube identity switches that
+    H8 flagged.
+  - The "object permanence" prediction (linear interpolation)
+    is a crude approximation. A Kalman filter with constant
+    gravity would be more accurate (future H10 work).
+
+- Verdict: **PASS.** H9 successfully measures chain coverage and
+  quantifies detector dropouts. The measurement is useful for
+  understanding chain quality: chains with high coverage are
+  well-observed; chains with low coverage have many gaps that
+  the model assumes the ball is still there.
+  See `h1_hand_pool/reports/h9_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_object_permanence.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h9_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h9_object_permanence_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h9/chain30_object_permanence.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h9_report.md`

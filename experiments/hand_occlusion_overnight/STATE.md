@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 07:10 CEST
-STATUS: H7 + H8 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted.
+LAST_UPDATE: 2026-08-28 07:30 CEST
+STATUS: H7 + H8 + H9 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases.
 
 ## Isolation
 
@@ -184,15 +184,16 @@ extraction: 10 identical + 1 youtube links with visual precision
    false positives on identical (5→6, 50→55). Most useful as a
    post-hoc quality signal. Limitation: unreliable on long
    tracklets (YouTube video).
-4. **H9: explicit object permanence** to bridge
-   detector dropouts in H7 chains (e.g. extend
-   each tracklet by ±5 frames using a constant
-   velocity model when the detector is silent).
+4. ~~**H9: explicit object permanence** to bridge
+   detector dropouts in H7 chains~~ **DONE.** Coverage
+   measurement: 82.9% on identical, 94.7% on YouTube.
+   Visual QA confirmed all 4 gaps in chain 30 are real
+   hand-hold phases. H9 is a measurement, not a recovery.
 5. **H10: chain quality assessment** — given a
    chain, how confident should downstream consumers
    be in its physical-ball identity? H3 + H8 +
-   h3 confirmations could be combined into a
-   per-chain confidence score.
+   h3 confirmations + H9 coverage could be
+   combined into a per-chain confidence score.
 
 ## Important artifact paths
 
