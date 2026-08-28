@@ -1,0 +1,20 @@
+{
+  "identical_balls_trick_000_018": {
+    "n_reclassified": 12,
+    "n_still_reclassified": 7,
+    "n_raw_rejects": 5,
+    "n_sj_gt_100_raw": 2,
+    "n_sj_gt_200_raw": 0,
+    "n_sj_gt_100_orig": 5,
+    "n_sj_gt_200_orig": 1
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "n_reclassified": 22,
+    "n_still_reclassified": 1,
+    "n_raw_rejects": 21,
+    "n_sj_gt_100_raw": 8,
+    "n_sj_gt_200_raw": 0,
+    "n_sj_gt_100_orig": 1,
+    "n_sj_gt_200_orig": 0
+  }
+}

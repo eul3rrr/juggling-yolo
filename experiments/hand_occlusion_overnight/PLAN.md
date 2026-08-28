@@ -2417,3 +2417,23 @@ artifact detector at the V-shape candidate level.
   artifact flagger with a tight statistical FPR bound (95% Wilson upper
   bound = 12.87%). The 0.282 recall gap requires fundamentally different
   signals (color, multi-view 3D, learned tracklet classification).
+
+## Eighteenth episode (H121) — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ Implemented H121: H7v2 reclassification at scale using RAW
+   tracklet data. For each RECLASSIFIED_HAND_TRANSITION edge in
+   h7v3plus3, computed H7v2's reclassification rule using raw
+   detection data (not tracklet_features).
+2. ✅ Result: 26/34 (76.5%) of RECLASSIFIED_HAND_TRANSITION edges
+   would NOT be reclassified if raw data were used. 21/22 (95%)
+   on YouTube vs 5/12 (42%) on identical.
+3. ✅ Key cases: 3→8 (raw_end_slope=+21.27 ascending, not -23.59
+   descending) and 22→27 (raw spatial jump 37.5 px, not 190.4 px).
+4. ✅ Documented in h121_report.md and updated STATE.md +
+   RESULTS_LOG.md.
+
+**H121 verdict: PASS.** H7v2 reclassification is over-applied
+because tracklet_features is truncated. The H112+H114 v1 strict
+geometric post-filters compensate. Recommended operating point
+unchanged.

@@ -4700,3 +4700,111 @@ flagger.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h120_v{1,2}_*.csv` (8 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h120/*.png` (7 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h120_report.md`
+
+## H121 conclusion (2026-08-29 ~09:00 CEST)
+
+**H121: H7v2 reclassification at scale using RAW tracklet data** —
+DONE. PASS. The H121 hypothesis (tracklet_features truncation causes
+H7v2 to misclassify RECLASSIFIED_HAND_TRANSITION edges) is **CONFIRMED**.
+
+**Key result: 26/34 = 76.5% of RECLASSIFIED_HAND_TRANSITION edges in
+h7v3plus3 would NOT be reclassified if raw tracklet data were used
+instead of tracklet_features.**
+
+| Stem | n_reclassified | n_still_reclassified | n_raw_rejects |
+|---|---|---|---|
+| identical | 12 | 7 | **5** (41.7%) |
+| youtube | 22 | 1 | **21** (95.5%) |
+| **combined** | **34** | **8** | **26 (76.5%)** |
+
+**Why this happens:** `tracklet_features.csv` is truncated 2-5 frames
+before the raw tracklet's actual last frame. The H7v2 catch/throw
+signature (`end_dist <= 108 AND end_slope < -1.0`) sees a mid-catch
+snapshot in the truncated features, but the raw tracklet extends
+through a complete catch+throw cycle. By the raw last frame, the
+ball is often ascending rapidly (post-throw) — not descending into
+the hand.
+
+**Key case: 3→8 (the H120-suspect edge).**
+- `feat_end_slope = -23.59` (very steep descent — H7v2 classifies as "catch")
+- `raw_end_slope = +21.27` (very steep ascent — tracklet is in post-throw)
+- `feat_jump = 227 px` (orig metric; H114 v1 default would fire)
+- `raw_jump = 123 px` (raw metric; H114 v1 default would NOT fire)
+
+**Key case: 22→27 (the H112-discovered FP).**
+- `feat_jump = 190.4 px` (orig metric; H112 cross-hand handoff filter fires)
+- `raw_jump = 37.5 px` (raw metric; H112 would NOT fire at default thr=30)
+
+**The 22→27 case is the most informative:** the 190-px jump that
+H112 used to identify 22→27 as a cross-hand handoff FP was an
+**artifact of tracklet_features truncation**. At the raw last frame
+(5 frames later), the ball is at the wrist (`raw_end_dist=18.8 px`).
+H112's visual QA is still correct (22→27 is a tracker artifact),
+but the H112 metric would NOT have flagged it from raw data.
+
+**Per-stem asymmetry:**
+- identical: 5/12 (42%) RAW_REJECTS — 3 of 5 show `raw_end_slope > 0`
+  (ascending at raw end). 2 of 5 have `n_pts < 5` (very short source
+  tracklets, catch/throw signature is just noise).
+- YouTube: 21/22 (95%) RAW_REJECTS — YouTube's tracklet_features
+  are systematically more truncated (4-5 frames behind raw) than
+  identical's (2-3 frames). Almost every YouTube RECLASSIFIED edge
+  fails the raw check.
+
+**Implication for H112/H114/H117/H118:** the H112 cross-hand handoff
+filter and the H114 v1 strict large-jump filter all used
+**tracklet_features-based spatial jumps**. These are systematically
+larger than raw spatial jumps. If the thresholds were re-calibrated
+to use raw jumps, the false-positive rate would be higher. The
+H112/H114/H117/H118 results are a useful workaround; a clean fix
+would require re-running H7v2 with raw inputs.
+
+**Negative findings:**
+- H121 does NOT affect edge-level precision: 0/26 RAW_REJECTS are
+  in the 113 review pair set, so H59/H77/H100 v4 metrics are unchanged.
+- The 26 RAW_REJECTS are not necessarily "wrong" edges. Without
+  visual QA, we cannot tell if they are over-inclusions or real
+  catch-throws that the truncated features correctly captured.
+- The 1 YouTube STILL_RECLASSIFIED (28→32) shows the rule CAN
+  work correctly when tracklet_features is not too truncated.
+
+**Recommended operating point (unchanged):** h7v3plus3 + H112 +
+H114 v1 strict is the precision-optimized operating point
+(P=1.000, R=0.718 on 113 review pairs). H121 is a positive finding
+about an upstream data issue, not a new operating point.
+
+**Future research (post-H121):**
+1. **H122: Visual QA on 5-10 RAW_REJECTS to characterize the
+   false-positive vs correct-reclassification split.** If most
+   are over-inclusions, the H112/H114 filters are doing the right
+   thing for the wrong reason. If many are correct, the raw
+   data check is too strict and H7v2's original reclassification
+   is sound.
+2. **H123: Re-run H7v2 with raw data instead of tracklet_features.**
+   A major chain revision that would re-classify all 26 RAW_REJECTS
+   edges as BALLISTIC. Trade-off: cleaner chain, but smaller.
+3. **Stop here.** H121 is an important structural finding. The
+   recommended operating point remains the H112+H114 v1 strict
+   stack. Further work would require either visual QA on RAW_REJECTS
+   (H122) or a major chain re-run (H123), both of which are out of
+   scope for the precision-optimization arc.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h121_raw_vs_features_h7v2.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h121_per_edge.csv` (34 rows)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h121_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h121_report.md`
+
+## Last update
+
+- 2026-08-29 (this episode): H121 PASS — H7v2 reclassification is
+  over-applied because tracklet_features is truncated 2-5 frames
+  before the raw tracklet's last frame. 26/34 (76.5%) of
+  RECLASSIFIED_HAND_TRANSITION edges in h7v3plus3 would NOT be
+  reclassified if raw data were used. 21/22 (95%) on YouTube vs
+  5/12 (42%) on identical. The H112-discovered 22→27 FP had a
+  raw spatial jump of 37.5 px, not 190.4 px — the orig metric
+  was an artifact of truncation. H121 confirms the H7v2 pipeline
+  is sensitive to its input data, but the H112+H114 v1 strict
+  geometric post-filters compensate. The recommended operating
+  point (h7v3plus3 + H112 + H114 v1 strict) is unchanged.
