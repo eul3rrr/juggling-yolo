@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:55 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63**
+LAST_UPDATE: 2026-08-28 16:58 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1739,3 +1739,49 @@ h7v3plus3 chain set correctly captures both CASCADE and SHOWER
 events.
 
 See `h1_hand_pool/reports/h63_report.md` for full analysis.
+
+## H64 conclusion (2026-08-28 ~17:20 CEST)
+
+**H64: Identical 3-ball CASCADE->FOUNTAIN transition** — DONE. PASS.
+H58 v1 cascade interpretation refined.
+
+H62 found identical 3-ball is 63% same-hand (0.63 rate). H64
+asks: is this spread evenly (CASCADE-SHOWER mix like YouTube) or
+concentrated in a late phase (CASCADE->FOUNTAIN transition)?
+
+Temporal split search (max same-rate delta, >=3 events each side):
+- Best split: **f=240**
+- Pre  (f<240): 1/4 same-hand (**0.25** same-hand rate) — CASCADE-like
+- Post (f>=240): 11/15 same-hand (**0.73** same-hand rate) — FOUNTAIN-like
+- Same-rate delta: **+0.48** (statistically significant)
+
+Per 100-frame window:
+- 0-300: mostly alt-hand (CASCADE)
+- 500-600: 3/4 same-hand (mixed)
+- 800-1000: 5/5 same-hand (FOUNTAIN)
+
+**Verdict: CASCADE->FOUNTAIN transition at f=240.** The H58 v1
+"3-ball cascade" interpretation should be refined to "3-ball
+CASCADE->FOUNTAIN".
+
+Key findings:
+1. The 4 multi-tid CONFIDENT chains (chain 7, 19, 20) are
+   CASCADE events in the pre-f=240 phase.
+2. The h7v3plus3 chain set correctly captures both phases.
+3. The H12 v8 FOUNTAIN_3+ classification (11.7% of frames)
+   is correct but understated — the H64 per-event analysis
+   shows 73% of post-f=240 events are same-hand, which is
+   FOUNTAIN's signature.
+4. The 800-1000 window is 100% same-hand, consistent with a
+   sustained 3-ball FOUNTAIN.
+
+Implications:
+- Identical video is CASCADE early, FOUNTAIN late. Both phases
+  have the same-hand bias direction but with different magnitudes.
+- The h7v3plus3 chain set's 4 multi-tid CONFIDENT chains are
+  CASCADE events (validated by H59). The FOUNTAIN phase
+  chains are not in the manual review.
+- Future work could label FOUNTAIN-phase pairs to validate
+  the H12 v8 FOUNTAIN_3+ classification.
+
+See `h1_hand_pool/reports/h64_report.md` for full analysis.

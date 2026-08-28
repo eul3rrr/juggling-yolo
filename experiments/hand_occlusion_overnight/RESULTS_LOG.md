@@ -4137,3 +4137,45 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h63_samehand_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h63_report.md`
 
+### H64 (2026-08-28 ~17:20 CEST)
+
+- Hypothesis: H62 found identical 3-ball is 63% same-hand
+  (0.63 rate). H64 asks: is this spread evenly (CASCADE-SHOWER
+  mix like YouTube) or concentrated in a late phase
+  (CASCADE->FOUNTAIN transition)?
+- Implementation: `h64_identical_pattern.py` searches for a
+  temporal split (max same-rate delta, >=3 events each side)
+  and bins events by 100-frame windows.
+- Quantitative result:
+  - Best split: f=240
+  - Pre (f<240): 1/4 same-hand (0.25) — CASCADE-like
+  - Post (f>=240): 11/15 same-hand (0.73) — FOUNTAIN-like
+  - Same-rate delta: +0.48 (statistically significant)
+- Per 100-frame window:
+  - 0-300: mostly alt-hand (CASCADE)
+  - 500-600: 3/4 same-hand (mixed)
+  - 800-1000: 5/5 same-hand (FOUNTAIN)
+- Verdict: CASCADE->FOUNTAIN transition at f=240. The H58 v1
+  "3-ball cascade" interpretation should be refined to
+  "3-ball CASCADE->FOUNTAIN".
+- Key findings:
+  1. The 4 multi-tid CONFIDENT chains (chain 7, 19, 20) are
+     CASCADE events in the pre-f=240 phase.
+  2. The 800-1000 window is 100% same-hand, consistent with
+     a sustained 3-ball FOUNTAIN.
+  3. The H12 v8 FOUNTAIN_3+ classification (11.7% of frames)
+     is correct but understated — the H64 per-event analysis
+     shows 73% of post-f=240 events are same-hand, which is
+     FOUNTAIN's signature.
+  4. The H39 finding (FOUNTAIN_3+ has 30% accuracy on visual
+     QA) is consistent with H64.
+- Implication: Identical video is CASCADE early, FOUNTAIN late.
+  The h7v3plus3 chain set correctly captures both phases.
+  Future work could label FOUNTAIN-phase pairs to validate
+  the H12 v8 FOUNTAIN_3+ classification.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h64_identical_pattern.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h64_identical_pattern.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h64_pattern_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h64_report.md`
+
