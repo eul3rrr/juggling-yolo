@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 18:30 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62** + **H63** + **H64** + **H65** + **H66** + **H67** + **H68**
+LAST_UPDATE: 2026-08-28 23:00 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + H54 + H55 + H56 + H57 + H58 v1 + H59 + H60 + H61 + H62 + H63 + H64 + H65 + H66 + H67 + H68 + H69 + H70 + H71 + H72 + H73 + H74 + H75 + H76 + H77 + **H78**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -2593,3 +2593,106 @@ For phase-validated precision: h7v3plus3 + H77 (NOT in misclassified
 phase) → P=0.979 R=0.648 on 113 pairs.
 
 **See `h1_hand_pool/reports/h77_report.md` for full analysis.**
+
+## H78 conclusion (2026-08-28 ~23:00 CEST)
+
+**H78: wrist-distance signal as FOUNTAIN_3+ / CASCADE_3+ discriminator** —
+DONE. PASS (narrow-scope precision improvement). Catches the Mills
+Mess trick (f=890-936 identical) that no other filter catches.
+
+The H77 + (CONF/UNCER) gate achieved P=1.000 on 33/33 chain-edge
+review pairs, but the H76 phase-level evaluation found 2
+un-caught FOUNTAIN_3+ misclassifications on the 19-phase H70
+sample. The 1 remaining un-caught (after H43+H69+H74) is
+**f=890-936 identical**, classified as FOUNTAIN_3+ by H12 v8 but
+visually confirmed as a Mills Mess / crossed-arm juggling trick.
+
+**Hypothesis:** A crossed-arm pattern (Mills Mess) has the
+juggler's hands periodically crossing the body midline, which
+should produce very large variations in per-frame wrist distance
+as the hands come together and separate. A real FOUNTAIN has the
+hands held roughly parallel and the wrist distance should be
+more stable.
+
+**Method:** For each of the 11 H70 substantial phases with
+sufficient pose data, compute per-frame `|wrist_L - wrist_R|`
+Euclidean distance, then aggregate to mean, std, range, and
+mean_diff_per_frame (mean of |Δ wrist_dist| between consecutive
+frames).
+
+**Key per-phase data (FOUNTAIN_3+ only):**
+- f=631-669 identical (real FOUNTAIN per H65): mean=86.46, mean_diff=7.76
+- **f=890-936 identical (Mills Mess per H65)**: mean=163.23, **mean_diff=14.25** (HIGHEST)
+- f=977-1011 identical (real FOUNTAIN per H65): mean=215.73, mean_diff=4.33
+- f=339-374 YouTube (real FOUNTAIN): mean=95.7, mean_diff=5.56
+- f=482-594 YouTube (static hold): mean=95.41, mean_diff=5.08
+- f=800-861 YouTube (real CASCADE mislabeled): mean=97.19, mean_diff=4.89
+
+**H78v5 = mean_diff_per_frame > 10** catches f=890-936 (Mills
+Mess) without losing any real FOUNTAIN. Sensitivity grid
+confirms the flat region: thresholds 8-14 all give identical
+results (TP=3, TN=1, FP=2, FN=0 on FOUNTAIN_3+ only).
+
+**End-to-end stack comparison (all 19 H70 substantial phases):**
+- H75 (H43 OR H69 OR H74): TP=12, TN=3, FP=2, FN=2, P=0.857, R=0.857, acc=0.789
+- **H78v5 (H75 OR H78 mean_diff>10)**: TP=12, TN=4, FP=1, FN=2, **P=0.923, R=0.857, acc=0.842**
+
+H78v5 adds 1 correct rejection (f=890-936 Mills Mess) with 0
+false rejections. End-to-end accuracy improves from 78.9% to
+84.2% on the H70 sample.
+
+**Visual QA confirmation (3 contact sheets in
+`contact_sheets_h78/`):**
+- f=890-936: vision tool confirms Mills Mess / crossed-arm
+  pattern. Wrist distance oscillates 22.3 → 244.0 in 9 frames.
+- f=631-669: vision tool labels this as "crossed-arm columns
+  variation" (not strict FOUNTAIN). Wrist distance oscillates
+  8.3 → 158.9 in 38 frames (lower amplitude than f=890-936).
+- f=977-1011: vision tool labels this as "3-ball cascade" (not
+  strict FOUNTAIN). Wrist distance is STABLE in 180-243 range
+  (wide-stance signature).
+
+**Key new finding (worth highlighting):** H12 v8's FOUNTAIN_3+
+class actually captures **3 different kinds of 3-ball patterns**:
+- True FOUNTAIN (parallel-hand columns, no crossings)
+- Crossed-arm columns (lower-amplitude hand crossings, mean_diff 5-8)
+- Wide cascade (uncrossed but wide, mean_diff 4-5)
+- Mills Mess (full hand-body crossings, mean_diff > 10)
+
+The H65 ground truth labels all 3 identical FOUNTAIN_3+ phases
+inconsistently as "FOUNTAIN" or "OTHER". H12 v8's FOUNTAIN_3+
+class may be capturing all non-cascade patterns. The H78
+mean_diff signal can distinguish Mills Mess (mean_diff > 10)
+from the other two (mean_diff < 8) at the phase level.
+
+**Recommended operating point (post-H78):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74 + **H78v5** + H52 + H53
+
+For phase-validated precision: H75+H78v5 stack gives 84.2%
+accuracy on the H70 sample (vs 78.9% for H75 alone).
+
+**Negative findings:**
+- H78 does NOT catch YouTube FOUNTAIN_3+ misclassifications
+  (f=482-594 static hold, f=800-861 real CASCADE). The YouTube
+  juggler has a stable hand stance across all phases.
+- H78's mean_diff signal depends on individual juggling style.
+  The threshold of 10 is calibrated for the 2 identical videos
+  but may need re-calibration for other jugglers.
+- The "real FOUNTAIN" ground truth may itself be unreliable.
+  H65's verdicts on f=631-669 and f=977-1011 are labeled
+  "FOUNTAIN" but vision tool describes them as "crossed-arm
+  columns" and "wide cascade" respectively.
+
+**Future research:**
+1. **H79: per-ball-count calibration of H78** — the YouTube
+   5-ball phases have lower mean_diff than the identical 3-ball
+   phases. A per-ball-count threshold may preserve more real
+   juggling on YouTube.
+2. **H80: stricter "true FOUNTAIN" detection** — partition the
+   H12 v8 FOUNTAIN_3+ class into "true FOUNTAIN" (low std AND
+   low mean_diff) vs "other non-cascade patterns" (high std OR
+   high mean_diff).
+3. **H81: cross-validate H78v5 on the 113 manual review pairs**
+   (H59 ground truth) to verify the per-edge impact.
+
+See `h1_hand_pool/reports/h78_report.md` for full analysis.

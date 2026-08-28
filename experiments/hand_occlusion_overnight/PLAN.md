@@ -1983,3 +1983,54 @@ H70/H71/H75 v1 stack):**
 - H50 10-frame event log filter
 - H43 + H69 + H74 FOUNTAIN_3+ post-filter
 - H71 v1 MIXED_3+ post-filter
+
+## Seventy-eighth episode (H78) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Implement H78: per-frame wrist distance from pose data
+   - For each of the 11 H70 substantial phases with pose data,
+     compute `|wrist_L - wrist_R|` Euclidean distance per frame
+   - Aggregate to mean, std, range, mean_diff_per_frame
+2. ✅ Sensitivity grid on H78 mean_diff threshold
+   - 8-14 all give identical results on FOUNTAIN_3+ (flat region)
+   - Threshold 10 is in the middle of the flat region
+3. ✅ H78v5 = `mean_diff_per_frame > 10` catches Mills Mess
+   (f=890-936) without losing any real FOUNTAIN
+4. ✅ H78v5 stacked on H75 (H43 OR H69 OR H74):
+   - H75 alone: TP=12 TN=3 FP=2 FN=2 (acc=78.9%)
+   - H78v5 stack: TP=12 TN=4 FP=1 FN=2 (**acc=84.2%**)
+5. ✅ Visual QA via 3 contact sheets and vision_analyze
+   - f=890-936: Mills Mess confirmed (wrist 22-244 in 9 frames)
+   - f=631-669: vision labels "crossed-arm columns" (mean_diff 7.76)
+   - f=977-1011: vision labels "wide cascade" (mean_diff 4.33)
+6. ✅ Documented in `h78_report.md` and updated STATE.md + RESULTS_LOG.md
+
+**H78 verdict: PASS (narrow-scope precision improvement).**
+Catches the Mills Mess trick (f=890-936) which no other filter
+in the stack catches. End-to-end accuracy improves from 78.9% to
+84.2% on the H70 sample.
+
+**Key new finding:** H12 v8's FOUNTAIN_3+ class captures 3
+different 3-ball patterns (true FOUNTAIN, crossed-arm columns,
+wide cascade, Mills Mess). The H65 ground truth is inconsistent
+about which is which. The H78 mean_diff signal can distinguish
+Mills Mess (mean_diff > 10) from the others (mean_diff < 8).
+
+**Recommended operating point (post-H78):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74 + **H78v5** + H52 + H53
+
+For phase-validated precision: H75 + H78v5 stack gives 84.2%
+accuracy on the H70 sample (vs 78.9% for H75 alone, vs 84.2% for
+H76/H77). H78 closes the "1 un-caught misclassification" gap
+from H76/H77.
+
+**Future research (post-H78):**
+1. **H79: per-ball-count calibration of H78** — YouTube 5-ball
+   phases have lower mean_diff than identical 3-ball. Per-ball-count
+   threshold may preserve more real juggling on YouTube.
+2. **H80: stricter "true FOUNTAIN" detection** — partition the
+   H12 v8 FOUNTAIN_3+ class by mean_diff to recover the strict
+   "two parallel columns" pattern.
+3. **H81: cross-validate H78v5 on the 113 manual review pairs**
+   (H59 ground truth) to verify per-edge impact.

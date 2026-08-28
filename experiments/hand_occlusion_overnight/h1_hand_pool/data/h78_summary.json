@@ -1,0 +1,22 @@
+{
+  "n_phases": 19,
+  "fountain_phases": 6,
+  "cascade_phases": 1,
+  "mixed_phases": 12,
+  "real_fountain_phases": 3,
+  "misclass_fountain_phases": 3,
+  "real_fountain": {
+    "n": 3,
+    "mean_wrist_dist": 132.63,
+    "median_wrist_dist": 132.44,
+    "mean_pct_close": 0.4,
+    "mean_pct_crossed": 0.12
+  },
+  "misclass_fountain": {
+    "n": 3,
+    "mean_wrist_dist": 118.61,
+    "median_wrist_dist": 117.46,
+    "mean_pct_close": 0.48,
+    "mean_pct_crossed": 0.01
+  }
+}

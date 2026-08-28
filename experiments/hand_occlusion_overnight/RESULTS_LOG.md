@@ -4935,3 +4935,69 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h77_per_pair_eval.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h77_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h77_report.md`
+
+---
+
+## H78 — Wrist-distance signal as FOUNTAIN_3+ / CASCADE_3+ discriminator (2026-08-28 ~23:00 CEST)
+
+- Hypothesis: A crossed-arm pattern (Mills Mess, f=890-936 identical)
+  has the juggler's hands periodically crossing the body midline,
+  producing very large per-frame wrist-distance changes. A real
+  FOUNTAIN has the hands held roughly parallel and the wrist
+  distance should be more stable. A `mean_diff_per_frame` signal
+  should catch Mills Mess without losing any real FOUNTAIN.
+- Method: For each of the 11 H70 substantial phases with sufficient
+  pose data, compute per-frame `|wrist_L - wrist_R|` Euclidean
+  distance, then aggregate to mean, std, range, and mean_diff_per_frame.
+- Quantitative result:
+  - FOUNTAIN_3+ only: H78v5 (`mean_diff > 10`) catches f=890-936 with
+    TP=3, TN=1, FP=2, FN=0 (FOUNTAIN only, FOUNTAIN_3+ class)
+  - Sensitivity grid flat region: thresholds 8-14 all give identical
+    results on the FOUNTAIN_3+ phases
+  - **End-to-end stack comparison (all 19 H70 substantial phases):**
+    - H75 (H43 OR H69 OR H74): TP=12, TN=3, FP=2, FN=2, P=0.857, R=0.857, acc=0.789
+    - **H78v5 (H75 OR H78 mean_diff>10): TP=12, TN=4, FP=1, FN=2, P=0.923, R=0.857, acc=0.842**
+- Visual QA confirmation (3 contact sheets in `contact_sheets_h78/`):
+  - f=890-936: vision tool confirms Mills Mess / crossed-arm pattern
+    (wrist distance oscillates 22.3 → 244.0 in 9 frames)
+  - f=631-669: vision tool labels as "crossed-arm columns" (mean_diff 7.76)
+  - f=977-1011: vision tool labels as "wide cascade" (mean_diff 4.33)
+- Key new finding: H12 v8's FOUNTAIN_3+ class captures 3 different
+  3-ball patterns (true FOUNTAIN, crossed-arm columns, wide cascade,
+  Mills Mess). H65 ground truth is inconsistent (mixes FOUNTAIN
+  and OTHER labels). H78 mean_diff > 10 distinguishes Mills Mess
+  (mean_diff > 10) from the others (mean_diff < 8).
+- Negative findings:
+  - H78 does NOT catch YouTube FOUNTAIN_3+ misclassifications
+    (f=482-594 static hold, f=800-861 real CASCADE). YouTube
+    juggler has stable hand stance across all phases.
+  - H78 mean_diff signal depends on individual juggling style.
+    Threshold of 10 may need re-calibration for other jugglers.
+  - The "real FOUNTAIN" ground truth itself may be unreliable
+    (H65's verdicts on f=631-669 and f=977-1011 don't match
+    vision tool's interpretations).
+- Verdict: **PASS (narrow-scope precision improvement).** H78
+  wrist-distance signal adds 1 correct rejection (f=890-936 Mills
+  Mess) to the H75 stack with 0 false rejections. End-to-end
+  accuracy improves from 78.9% to 84.2% on the H70 sample.
+- Recommended operating point (post-H78): h7v3plus3 + H10 v11 v3
+  + H12 v8 + H50 + H43 + H69 + H74 + **H78v5** + H52 + H53
+- Future research:
+  1. H79: per-ball-count calibration of H78 threshold
+  2. H80: stricter "true FOUNTAIN" detection (partition H12 v8
+     FOUNTAIN_3+ class by mean_diff)
+  3. H81: cross-validate H78v5 on the 113 manual review pairs
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h78_wrist_distance.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h78v2_wrist_distance.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h78v3_sens_grid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h78v4_end_to_end.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h78v5_refined.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h78_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h78_wrist_distance_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h78v2_wrist_distance_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h78v3_sensitivity_grid.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h78v4_stack_per_phase.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h78v4_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h78/*.png` (3 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h78_report.md`
