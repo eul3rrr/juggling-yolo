@@ -1,0 +1,117 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_events_catch": 25,
+      "n_events_throw": 25,
+      "min": 4,
+      "max": 29,
+      "mean": 12.6,
+      "median": 11,
+      "stdev": 6.65,
+      "buckets": {
+        "[0-2)": 0,
+        "[2-5)": 1,
+        "[5-10)": 10,
+        "[10-15)": 7,
+        "[15-20)": 3,
+        "[20-30)": 4,
+        "[30-50)": 0,
+        "[50-200)": 0
+      },
+      "mode_bucket": "[5-10)",
+      "mode_count": 10,
+      "n_short_lt10": 11,
+      "n_mid_10_25": 11,
+      "n_high_25_50": 3,
+      "n_extreme_50plus": 0,
+      "stable_count": 14,
+      "stable_mean": 16.57,
+      "stable_median": 14.5,
+      "by_hand": {
+        "right": {
+          "n": 14,
+          "mean": 14.5,
+          "median": 12.5
+        },
+        "left": {
+          "n": 7,
+          "mean": 10.71,
+          "median": 11
+        }
+      },
+      "by_q11_label": {
+        "UNCERTAIN": {
+          "n": 11,
+          "mean": 12.73,
+          "median": 11
+        },
+        "CONFIDENT": {
+          "n": 14,
+          "mean": 12.5,
+          "median": 11.0
+        }
+      },
+      "per_chain_count": 14,
+      "n_chains_with_3plus_events": 3
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_events_catch": 25,
+      "n_events_throw": 25,
+      "min": 5,
+      "max": 17,
+      "mean": 9.84,
+      "median": 9,
+      "stdev": 2.97,
+      "buckets": {
+        "[0-2)": 0,
+        "[2-5)": 0,
+        "[5-10)": 13,
+        "[10-15)": 11,
+        "[15-20)": 1,
+        "[20-30)": 0,
+        "[30-50)": 0,
+        "[50-200)": 0
+      },
+      "mode_bucket": "[5-10)",
+      "mode_count": 13,
+      "n_short_lt10": 13,
+      "n_mid_10_25": 12,
+      "n_high_25_50": 0,
+      "n_extreme_50plus": 0,
+      "stable_count": 12,
+      "stable_mean": 12.42,
+      "stable_median": 12.0,
+      "by_hand": {
+        "left": {
+          "n": 9,
+          "mean": 9.67,
+          "median": 11
+        },
+        "right": {
+          "n": 15,
+          "mean": 10.07,
+          "median": 9
+        }
+      },
+      "by_q11_label": {
+        "UNCERTAIN": {
+          "n": 22,
+          "mean": 9.82,
+          "median": 10.0
+        },
+        "CONFIDENT": {
+          "n": 1,
+          "mean": 17,
+          "median": 17
+        },
+        "LOW": {
+          "n": 2,
+          "mean": 6.5,
+          "median": 6.5
+        }
+      },
+      "per_chain_count": 9,
+      "n_chains_with_3plus_events": 5
+    }
+  }
+}
