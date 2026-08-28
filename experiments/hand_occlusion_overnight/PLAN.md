@@ -695,13 +695,43 @@ score for mixed-video analyses.
   4 chains promoted (chain 3, 8, 0 from h8v8=0.88),
   2 demoted (chain 12, 1), 9 unchanged.
 
+## Twenty-third episode (H10 v7) — STATUS: COMPLETE (NEGATIVE)
+
+Sub-steps:
+
+1. ✅ Implemented H10 v7: length-dependent weight
+   w8v8 = min(0.30, mean(n_tracklet_pts) / 200).
+2. ✅ Ran on both videos. Compared to v5 ranking.
+3. ✅ Documented in `h10v7_report.md`.
+
+**Verdict: NEGATIVE.** v7 doesn't outperform v6b on either
+video:
+- identical: v5 0.529 → v7 0.509 (worse)
+- youtube: v5 0.537 → v7 0.557 (better but worse than
+  v6b's 0.569)
+
+v7's length-dependent formula is intermediate between v5
+and v6 behaviors, which is worse than either extreme.
+v6b's per-video fixed weights are the recommended
+operating point.
+
 **Next episode candidates:**
 
-1. **H10 v7: length-dependent weight (w8v8 ∝ n_tracklet_pts)**
-   — generalize H10 v6b without needing video identification.
-   ~20 lines of code.
-2. **H13: detector-level low-confidence ball detection**
-   (master §14 follow-up).
-3. **H7 v2: re-classify YouTube BALLISTIC edges as
+1. **H13: detector-level low-confidence ball detection**
+   (master §14 follow-up). The detector confusion is
+   partly responsible for over-counting; a conf=0.1
+   re-run could reveal where balls actually are.
+2. **H7 v2: re-classify YouTube BALLISTIC edges as
    HAND_TRANSITION if they pass through a hand region.**
+3. **H12 v6c: visual ground truth via frame-by-frame
+   manual labeling** — resolve the CASCADE/FOUNTAIN
+   ambiguity by labeling 50 random frames from the late
+   phase as cascade/fountain/mixed. Out of scope for
+   autonomous run (no human in the loop).
+4. **Stop here.** The H10 series has reached its
+   natural limit: v6b is the best operating point,
+   v7 is a useful negative result. Future H10 work
+   would need a different signal (e.g., h8v8 with
+   length-based arc-segmentation quality, not just
+   arc-gravity consistency).
 

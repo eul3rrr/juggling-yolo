@@ -768,3 +768,13 @@ useful source record:
     The h8v8 dimension is real but the right weight
     depends on the tracklet length distribution.
 
+59. **Length-dependent weight is intermediate between
+    v5 and v6, which is worse than either extreme.**
+    H10 v7 uses w8v8 = min(0.30, n_pts/200). On
+    identical, w8v8 ranges 0.10-0.30 — short tracklets
+    still get h8v8 noise. On YouTube, w8v8 caps at
+    0.30 — same as v6b. v7 doesn't beat v6b on either
+    video. The lesson: per-video fixed weights
+    (step function) are hard to beat with length-
+    dependent formulas (smooth function).
+

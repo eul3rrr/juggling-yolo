@@ -1787,3 +1787,58 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6b_chain_quality_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6b_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v6b_report.md`
+
+---
+
+### H10 v7 (2026-08-28 ~13:00 CEST)
+
+- Hypothesis: H10 v6b uses per-video adaptive weights. A
+  length-dependent weight would generalize: w8v8 = min(0.30,
+  mean(n_tracklet_pts) / 200). Long tracklets get more
+  weight (more reliable parabolic fit), short tracklets get
+  less. This would not require video identification.
+
+- Thresholds:
+  - W8V8_MAX = 0.30
+  - LENGTH_DIVISOR = 200 frames
+  - Per-arc gravity: G_TOLERANCE = 0.3 (clean: g in [0.2, 0.8])
+
+- Quantitative result:
+
+  | Video | mean tracklet length | v5 mean q | v7 mean q | delta |
+  |---|---|---|---|---|
+  | identical | 36.5 | 0.529 | 0.509 | -0.020 |
+  | youtube | 108.5 | 0.537 | 0.557 | +0.021 |
+
+  - identical: v7 is WORSE than v5 (chain 21 stays at v5 #0
+    but drops in v7 ranking; some chains promote due to
+    w8v8 > 0 even for short tracklets).
+  - youtube: v7 is BETTER than v5 but WORSE than v6b
+    (0.557 vs 0.569).
+
+- Negative findings:
+  - **Length-dependent formula is intermediate between v5
+    and v6 behaviors, which is worse than either extreme.**
+    v7's w8v8 ranges from 0.10 to 0.30 on identical, so
+    short tracklets still get h8v8 noise. v6b's hard
+    cutoff (w8v8=0 for identical) avoids the noise
+    entirely.
+  - **On YouTube, v7 caps at w8v8=0.30 (same as v6b), so
+    the benefit is the same as v6b but with the same
+    risks.**
+  - **Per-video fixed weights are hard to beat with
+    length-dependent formulas.** The right w8v8 is a step
+    function of video (0 for identical, 0.25 for
+    YouTube), not a smooth function of tracklet length.
+
+- Verdict: **NEGATIVE.** v7 doesn't outperform v6b on
+  either video. v6b (per-video fixed weights) is the
+  recommended operating point. v7 is a useful NEGATIVE
+  result: it shows that smoothing a step function doesn't
+  help. See `h1_hand_pool/reports/h10v7_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v7_length_dependent.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v7_chain_quality_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v7_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v7_report.md`
