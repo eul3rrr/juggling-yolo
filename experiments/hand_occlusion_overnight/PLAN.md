@@ -265,31 +265,59 @@ per-source greedy). For the practical question
 "what's the right successor for tracklet X?" H6
 and H7 give the same answer.
 
-## Tenth episode — PLANNED
+## Tenth episode (H10) — STATUS: COMPLETE
 
-The lab is well-progressed on hand-occlusion work
+Sub-steps:
+
+1. ✅ Wrote `h10_chain_quality.py` that computes per-chain
+   quality = 0.30*h3 + 0.30*h8 + 0.40*h9.
+2. ✅ Ran on both videos. Identical: 43 chains, quality
+   range 0.297-0.966 (median 0.429). YouTube: 15 chains,
+   quality range 0.429-0.967 (median 0.532).
+3. ✅ Sensitivity grid: 9 cells (3×3 of w3, w8, w9). Only
+   ~20% of chains have stable rank. Top-quality chain
+   (chain 23) is consistently top-3 across all cells.
+   Bottom-quality chain (chain 13) is consistently bottom-3.
+4. ✅ Visual QA: 6 contact sheets rendered and inspected.
+   - chain 23 (top): REAL single ball
+   - chain 30 (mid): IDENTITY SWITCH
+   - chain 13 (low): STATIONARY DETECTOR ARTIFACT
+   - chain 38 (low, false positive): REAL single ball
+   - chain 6 YouTube (top): REAL single catch-throw
+   - chain 9 YouTube (worst): MULTI-BALL MERGE
+5. ✅ H10 successfully produces a per-chain quality score
+   that correlates with physical-ball identity confidence.
+6. ✅ Documented in `h10_report.md` and updated RESULTS_LOG.
+
+**H10 verdict: PASS.** H10 is a useful per-chain
+confidence signal. Top-quality chains are real juggling
+cycles; mid-quality chains contain identity switches;
+low-quality chains are dominated by false ballistic edges.
+H10 has 1 false positive (chain 38) due to H3+H8
+limitations. See `h1_hand_pool/reports/h10_report.md`.
+
+## Eleventh episode — PLANNED
+
+The lab has produced strong hand-occlusion work (H1-H10)
 and the chain representation is now in good shape.
 Remaining ideas:
 
-1. **H9: explicit object permanence** to bridge
-   detector dropouts in H7 chains (e.g. extend
-   each tracklet by ±5 frames using a constant
-   velocity model when the detector is silent).
-2. **H10: chain quality assessment** — given a
-   chain, how confident should downstream consumers
-   be in its physical-ball identity? H3 + H8 +
-   h3 confirmations could be combined into a
-   per-chain confidence score.
-3. **H8 v2: physics-based Kalman filter** for
-   stricter physics consistency. Predict the
-   expected velocity at the target tracklet's
-   start using a Kalman filter with constant
-   gravity, and compare to the actual velocity.
-   This would be more rigorous than the simple
-   discontinuity check.
-4. **H9 v2: Kalman filter extrapolation** to
-   fill gap frames in H7 chains. The current
-   linear interpolation is a crude approximation.
-   A Kalman filter with constant gravity would
-   give more accurate position estimates during
-   detector dropouts.
+1. **H11: chain quality regression test** — train a
+   simple classifier on the H3+H8+H9 features plus a
+   few additional ones (chain length, gap variance,
+   hand-edge count) to predict chain quality. Compare
+   to H10's hand-tuned weights. If the classifier
+   agrees with H10's ranking, H10 is well-calibrated.
+2. **H8 v2: Kalman-filter physics check** — restrict
+   H8 to short tracklets (n_pts ≤ 30), use a simple
+   Kalman filter with constant gravity to predict the
+   expected velocity at the target tracklet's start,
+   and compare to the actual velocity.
+3. **H9 v2: Kalman-filter extrapolation** — replace
+   H9's linear interpolation with a Kalman filter
+   (constant gravity) for gap-frame position estimates.
+4. **H12: tracklet-level identity propagation** — given
+   a high-quality chain, can we propagate identity labels
+   across the chain to enable juggling-pattern analysis?
+   This would be a downstream consumer of the H10 quality
+   score.

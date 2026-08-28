@@ -1,0 +1,516 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "grid_cells": [
+        [
+          0.2,
+          0.2,
+          0.6
+        ],
+        [
+          0.2,
+          0.3,
+          0.5
+        ],
+        [
+          0.2,
+          0.4,
+          0.4
+        ],
+        [
+          0.3,
+          0.2,
+          0.5
+        ],
+        [
+          0.3,
+          0.3,
+          0.4
+        ],
+        [
+          0.3,
+          0.4,
+          0.3
+        ],
+        [
+          0.4,
+          0.2,
+          0.4
+        ],
+        [
+          0.4,
+          0.3,
+          0.3
+        ],
+        [
+          0.4,
+          0.4,
+          0.2
+        ]
+      ],
+      "n_stable_chains": 9,
+      "n_total_chains": 43,
+      "stability": [
+        {
+          "chain_id": "36",
+          "mean_rank": 23.11111111111111,
+          "std_rank": 13.779569775935553,
+          "min_rank": 10,
+          "max_rank": 39
+        },
+        {
+          "chain_id": "15",
+          "mean_rank": 24.555555555555557,
+          "std_rank": 13.59829328433953,
+          "min_rank": 12,
+          "max_rank": 40
+        },
+        {
+          "chain_id": "4",
+          "mean_rank": 21.555555555555557,
+          "std_rank": 13.38416237458048,
+          "min_rank": 9,
+          "max_rank": 38
+        },
+        {
+          "chain_id": "38",
+          "mean_rank": 29.333333333333332,
+          "std_rank": 13.046923860520618,
+          "min_rank": 14,
+          "max_rank": 41
+        },
+        {
+          "chain_id": "31",
+          "mean_rank": 23.666666666666668,
+          "std_rank": 12.382783747337808,
+          "min_rank": 12,
+          "max_rank": 38
+        },
+        {
+          "chain_id": "30",
+          "mean_rank": 24.666666666666668,
+          "std_rank": 11.74734012447073,
+          "min_rank": 14,
+          "max_rank": 40
+        },
+        {
+          "chain_id": "13",
+          "mean_rank": 36.22222222222222,
+          "std_rank": 10.809232450680275,
+          "min_rank": 16,
+          "max_rank": 42
+        },
+        {
+          "chain_id": "40",
+          "mean_rank": 12.222222222222221,
+          "std_rank": 8.07984842786571,
+          "min_rank": 9,
+          "max_rank": 35
+        },
+        {
+          "chain_id": "0",
+          "mean_rank": 13.333333333333334,
+          "std_rank": 3.265986323710904,
+          "min_rank": 9,
+          "max_rank": 17
+        },
+        {
+          "chain_id": "1",
+          "mean_rank": 14.333333333333334,
+          "std_rank": 3.265986323710904,
+          "min_rank": 10,
+          "max_rank": 18
+        },
+        {
+          "chain_id": "3",
+          "mean_rank": 15.333333333333334,
+          "std_rank": 3.265986323710904,
+          "min_rank": 11,
+          "max_rank": 19
+        },
+        {
+          "chain_id": "5",
+          "mean_rank": 16.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 12,
+          "max_rank": 20
+        },
+        {
+          "chain_id": "6",
+          "mean_rank": 17.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 13,
+          "max_rank": 21
+        },
+        {
+          "chain_id": "7",
+          "mean_rank": 18.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 14,
+          "max_rank": 22
+        },
+        {
+          "chain_id": "9",
+          "mean_rank": 19.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 15,
+          "max_rank": 23
+        },
+        {
+          "chain_id": "10",
+          "mean_rank": 20.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 16,
+          "max_rank": 24
+        },
+        {
+          "chain_id": "11",
+          "mean_rank": 21.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 17,
+          "max_rank": 25
+        },
+        {
+          "chain_id": "12",
+          "mean_rank": 22.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 18,
+          "max_rank": 26
+        },
+        {
+          "chain_id": "14",
+          "mean_rank": 23.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 19,
+          "max_rank": 27
+        },
+        {
+          "chain_id": "17",
+          "mean_rank": 24.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 20,
+          "max_rank": 28
+        },
+        {
+          "chain_id": "18",
+          "mean_rank": 25.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 21,
+          "max_rank": 29
+        },
+        {
+          "chain_id": "22",
+          "mean_rank": 26.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 22,
+          "max_rank": 30
+        },
+        {
+          "chain_id": "25",
+          "mean_rank": 27.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 23,
+          "max_rank": 31
+        },
+        {
+          "chain_id": "26",
+          "mean_rank": 28.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 24,
+          "max_rank": 32
+        },
+        {
+          "chain_id": "27",
+          "mean_rank": 29.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 25,
+          "max_rank": 33
+        },
+        {
+          "chain_id": "28",
+          "mean_rank": 30.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 26,
+          "max_rank": 34
+        },
+        {
+          "chain_id": "32",
+          "mean_rank": 31.333333333333332,
+          "std_rank": 3.265986323710904,
+          "min_rank": 27,
+          "max_rank": 35
+        },
+        {
+          "chain_id": "33",
+          "mean_rank": 32.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 28,
+          "max_rank": 36
+        },
+        {
+          "chain_id": "34",
+          "mean_rank": 33.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 29,
+          "max_rank": 37
+        },
+        {
+          "chain_id": "35",
+          "mean_rank": 34.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 30,
+          "max_rank": 38
+        },
+        {
+          "chain_id": "37",
+          "mean_rank": 35.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 31,
+          "max_rank": 39
+        },
+        {
+          "chain_id": "39",
+          "mean_rank": 36.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 32,
+          "max_rank": 40
+        },
+        {
+          "chain_id": "41",
+          "mean_rank": 37.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 33,
+          "max_rank": 41
+        },
+        {
+          "chain_id": "42",
+          "mean_rank": 38.333333333333336,
+          "std_rank": 3.265986323710904,
+          "min_rank": 34,
+          "max_rank": 42
+        },
+        {
+          "chain_id": "2",
+          "mean_rank": 4.666666666666667,
+          "std_rank": 1.247219128924647,
+          "min_rank": 3,
+          "max_rank": 6
+        },
+        {
+          "chain_id": "19",
+          "mean_rank": 3.3333333333333335,
+          "std_rank": 0.4714045207910317,
+          "min_rank": 3,
+          "max_rank": 4
+        },
+        {
+          "chain_id": "20",
+          "mean_rank": 4.333333333333333,
+          "std_rank": 0.4714045207910317,
+          "min_rank": 4,
+          "max_rank": 5
+        },
+        {
+          "chain_id": "16",
+          "mean_rank": 5.666666666666667,
+          "std_rank": 0.4714045207910317,
+          "min_rank": 5,
+          "max_rank": 6
+        },
+        {
+          "chain_id": "23",
+          "mean_rank": 7.666666666666667,
+          "std_rank": 0.4714045207910317,
+          "min_rank": 7,
+          "max_rank": 8
+        },
+        {
+          "chain_id": "8",
+          "mean_rank": 7.333333333333333,
+          "std_rank": 0.4714045207910317,
+          "min_rank": 7,
+          "max_rank": 8
+        },
+        {
+          "chain_id": "21",
+          "mean_rank": 0.0,
+          "std_rank": 0.0,
+          "min_rank": 0,
+          "max_rank": 0
+        },
+        {
+          "chain_id": "29",
+          "mean_rank": 1.0,
+          "std_rank": 0.0,
+          "min_rank": 1,
+          "max_rank": 1
+        },
+        {
+          "chain_id": "24",
+          "mean_rank": 2.0,
+          "std_rank": 0.0,
+          "min_rank": 2,
+          "max_rank": 2
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "grid_cells": [
+        [
+          0.2,
+          0.2,
+          0.6
+        ],
+        [
+          0.2,
+          0.3,
+          0.5
+        ],
+        [
+          0.2,
+          0.4,
+          0.4
+        ],
+        [
+          0.3,
+          0.2,
+          0.5
+        ],
+        [
+          0.3,
+          0.3,
+          0.4
+        ],
+        [
+          0.3,
+          0.4,
+          0.3
+        ],
+        [
+          0.4,
+          0.2,
+          0.4
+        ],
+        [
+          0.4,
+          0.3,
+          0.3
+        ],
+        [
+          0.4,
+          0.4,
+          0.2
+        ]
+      ],
+      "n_stable_chains": 2,
+      "n_total_chains": 15,
+      "stability": [
+        {
+          "chain_id": "4",
+          "mean_rank": 6.333333333333333,
+          "std_rank": 4.109609335312651,
+          "min_rank": 1,
+          "max_rank": 10
+        },
+        {
+          "chain_id": "5",
+          "mean_rank": 7.333333333333333,
+          "std_rank": 4.109609335312651,
+          "min_rank": 2,
+          "max_rank": 11
+        },
+        {
+          "chain_id": "11",
+          "mean_rank": 8.333333333333334,
+          "std_rank": 4.109609335312651,
+          "min_rank": 3,
+          "max_rank": 12
+        },
+        {
+          "chain_id": "13",
+          "mean_rank": 9.333333333333334,
+          "std_rank": 4.109609335312651,
+          "min_rank": 4,
+          "max_rank": 13
+        },
+        {
+          "chain_id": "14",
+          "mean_rank": 10.333333333333334,
+          "std_rank": 4.109609335312651,
+          "min_rank": 5,
+          "max_rank": 14
+        },
+        {
+          "chain_id": "3",
+          "mean_rank": 4.222222222222222,
+          "std_rank": 2.4845199749997664,
+          "min_rank": 2,
+          "max_rank": 7
+        },
+        {
+          "chain_id": "1",
+          "mean_rank": 5.222222222222222,
+          "std_rank": 2.4845199749997664,
+          "min_rank": 3,
+          "max_rank": 8
+        },
+        {
+          "chain_id": "8",
+          "mean_rank": 6.222222222222222,
+          "std_rank": 2.4845199749997664,
+          "min_rank": 4,
+          "max_rank": 9
+        },
+        {
+          "chain_id": "7",
+          "mean_rank": 7.222222222222222,
+          "std_rank": 2.4845199749997664,
+          "min_rank": 5,
+          "max_rank": 10
+        },
+        {
+          "chain_id": "10",
+          "mean_rank": 8.222222222222221,
+          "std_rank": 2.484519974999766,
+          "min_rank": 6,
+          "max_rank": 11
+        },
+        {
+          "chain_id": "0",
+          "mean_rank": 9.222222222222221,
+          "std_rank": 2.484519974999766,
+          "min_rank": 7,
+          "max_rank": 12
+        },
+        {
+          "chain_id": "9",
+          "mean_rank": 10.222222222222221,
+          "std_rank": 2.484519974999766,
+          "min_rank": 8,
+          "max_rank": 13
+        },
+        {
+          "chain_id": "2",
+          "mean_rank": 11.222222222222221,
+          "std_rank": 2.484519974999766,
+          "min_rank": 9,
+          "max_rank": 14
+        },
+        {
+          "chain_id": "12",
+          "mean_rank": 1.5555555555555556,
+          "std_rank": 1.5713484026367723,
+          "min_rank": 1,
+          "max_rank": 6
+        },
+        {
+          "chain_id": "6",
+          "mean_rank": 0.0,
+          "std_rank": 0.0,
+          "min_rank": 0,
+          "max_rank": 0
+        }
+      ]
+    }
+  }
+}

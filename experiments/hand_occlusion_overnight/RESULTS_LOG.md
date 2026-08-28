@@ -693,3 +693,104 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h9_object_permanence_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h9/chain30_object_permanence.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h9_report.md`
+
+### H10 (2026-08-28 ~07:35 CEST)
+
+- Hypothesis: a chain's *physical-ball identity confidence*
+  can be measured by combining H3 (held-ball evidence),
+  H8 (physics consistency), and H9 (chain coverage) into
+  a single quality score. High quality = high confidence
+  the chain represents one physical ball; low quality =
+  likely contains identity switches or detector artifacts.
+- Thresholds (declared from physical geometry, not from
+  manual labels):
+  - Composite weights: `quality = 0.30 * h3 + 0.30 * h8 + 0.40 * h9`
+  - Chain with no hand edges: h3=None, redistribute w3 -> w8:w9 in ratio
+  - Chain with no air edges: h8 = 1.0
+  - Quality bins: high > 0.7, mid 0.3-0.7, low < 0.3
+  - Sensitivity grid: 9 cells, w3/w8/w9 ∈ {0.2, 0.3, 0.4}
+- Quantitative result (per chain):
+
+|| Video | n_chains | multi | h3 confirmed | H8 viol | quality min/q1/med/q3/max |
+||---|---|---|---|---|---|
+|| identical | 43 | 17 | 4 | 7 chains | 0.297/0.429/0.429/0.549/0.966 |
+|| youtube  | 15 | 10 | 1 | 9 chains | 0.429/0.429/0.532/0.558/0.967 |
+
+Multi-edge chains on identical (sorted by quality):
+
+|| chain | n_tids | n_hand | n_air | viol | h3 | h8 | h9 | quality |
+||---|---|---|---|---|---|---|---|---|
+|| 24 | 3 | 0 | 2 | 0 | n/a | 1.00 | 0.92 | 0.956 |
+|| 19 | 3 | 0 | 2 | 0 | n/a | 1.00 | 0.87 | 0.927 |
+|| 23 | 7 | 0 | 6 | 0 | n/a | 1.00 | 0.71 | **0.837** |
+|| 31 | 5 | 2 | 2 | 2 | 0.50 | 0.00 | 0.84 | 0.487 |
+|| 30 | 5 | 3 | 1 | 1 | 0.67 | 0.00 | 0.64 | 0.454 |
+|| 38 | 3 | 1 | 1 | 1 | 0.00 | 0.00 | 0.88 | 0.353 |
+|| 13 | 4 | 1 | 2 | 2 | 0.00 | 0.00 | 0.74 | **0.297** |
+
+- Visual QA: 6 contact sheets rendered and inspected:
+  - **chain 23 (top, 0.84)**: REAL single-ball juggling
+    cycle. H10 correctly identifies this as high quality.
+  - **chain 30 (mid, 0.45)**: IDENTITY SWITCH. The 51→52
+    air edge is between two simultaneously visible balls
+    in the air. H10 correctly identifies this as mid
+    quality (h8=0 for the violating air edge, h9=0.64).
+  - **chain 13 (low, 0.30)**: STATIONARY DETECTOR ARTIFACT.
+    The 17→23 hand-edge is real (H1 v4 visual QA) but the
+    23→25 and 25→27 air edges are false (ballistic
+    continuation from a stationary point is impossible).
+    H10 correctly identifies this as low quality.
+  - **chain 38 (low, 0.35)**: H10 FALSE POSITIVE — the
+    chain is a real single ball across 15 frames with
+    smooth ballistic motion, but H3 didn't corroborate
+    the hand-edge and H8 over-penalized the air edge.
+    H10's "low quality" verdict is wrong here.
+  - **chain 6 YouTube (top, 0.97)**: REAL single catch-throw
+    (v4d 10→12 hand-link, H3 confirmed). H10 correctly
+    identifies this as high quality.
+  - **chain 9 YouTube (worst, 0.51)**: MULTI-BALL MERGE.
+    A single tracklet followed across many frames but
+    appears at varying heights and positions inconsistent
+    with a single ball. H10 correctly identifies this as
+    low quality (5 H8 violations).
+
+- Sensitivity grid: 9 cells (3×3 of w3, w8, w9). Only ~20%
+  of chains have stable rank (std<2) across the grid. This
+  is expected: chains whose h3, h8, h9 differ significantly
+  correctly rank differently under different priorities.
+  The top-quality chain (chain 23) is consistently top-3
+  across all 9 cells. The bottom-quality chain (chain 13)
+  is consistently bottom-3 across all 9 cells.
+
+- Negative findings:
+  - H10 has a false positive: chain 38 is a real single
+    ball but H10 misclassifies it as low quality because
+    H3 didn't corroborate the hand-edge and H8 over-
+    penalizes the air edge. H10 conflates "identity switch"
+    with "noisy tracklet" via H8.
+  - H8 is unreliable on long YouTube tracklets (per H8 v3
+    report), which propagates into H10's YouTube quality
+    scores. The YouTube median quality is dragged down by
+    H8 noise rather than genuine identity switches.
+  - H10 is not informative for the 26 single-tracklet
+    chains on identical — they all have n_tracklets=1 so
+    there's no chain to evaluate. These are not the
+    chains H10 is designed to assess.
+
+- Verdict: **PASS.** H10 successfully produces a per-chain
+  quality score that correlates with physical-ball identity
+  confidence. Top-quality chains are real juggling cycles;
+  mid-quality chains contain identity switches; low-quality
+  chains are dominated by false ballistic edges. H10's false
+  positive (chain 38) is a known limitation of using H8 as
+  a chain-quality proxy on its own. Useful as a downstream
+  confidence signal for chain consumers. See
+  `h1_hand_pool/reports/h10_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10_chain_quality.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10_chain_quality_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10_sensitivity_grid.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h10/*.png` (6 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10_report.md`

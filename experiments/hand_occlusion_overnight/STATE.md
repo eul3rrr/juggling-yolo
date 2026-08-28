@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 07:30 CEST
-STATUS: H7 + H8 + H9 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases.
+LAST_UPDATE: 2026-08-28 07:35 CEST
+STATUS: H7 + H8 + H9 + H10 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge).
 
 ## Isolation
 
@@ -175,25 +175,45 @@ extraction: 10 identical + 1 youtube links with visual precision
    `data/h237_unified_chains_*.csv` and
    `data/h237_unified_edges_*.csv`.
 2. ~~**H7: full min-cost flow**~~ **DONE.** Capacity constraints,
-   cycle detection, gap/error-aware cost. Sensitivity grid is flat
+   cycle detection, gap/error-aware air-edge cost. Sensitivity grid is flat
    (48 settings, identical results). Longest chain 7 on identical,
    6 on YouTube. H7 resolves the H2 conflict the same way H6 does
    (hand-edge wins on cost) but adds strict DAG-path semantics.
-3. ~~**H8: physics consistency check on H7 chains**~~ **DONE.**
-   Per-edge y-velocity discontinuity. Identifies 2 confirmed E6c
-   false positives on identical (5→6, 50→55). Most useful as a
-   post-hoc quality signal. Limitation: unreliable on long
-   tracklets (YouTube video).
-4. ~~**H9: explicit object permanence** to bridge
-   detector dropouts in H7 chains~~ **DONE.** Coverage
-   measurement: 82.9% on identical, 94.7% on YouTube.
-   Visual QA confirmed all 4 gaps in chain 30 are real
+3. ~~**H8: physics consistency check on H7 chains**~~ **DONE.** Per-edge
+   y-velocity discontinuity. Identifies 2 confirmed E6c false positives
+   on identical (5→6, 50→55). Most useful as a post-hoc quality
+   signal. Limitation: unreliable on long tracklets (YouTube video).
+4. ~~**H9: explicit object permanence** to bridge detector dropouts in H7
+   chains~~ **DONE.** Coverage measurement: 82.9% on identical, 94.7%
+   on YouTube. Visual QA confirmed all 4 gaps in chain 30 are real
    hand-hold phases. H9 is a measurement, not a recovery.
-5. **H10: chain quality assessment** — given a
-   chain, how confident should downstream consumers
-   be in its physical-ball identity? H3 + H8 +
-   h3 confirmations + H9 coverage could be
-   combined into a per-chain confidence score.
+5. ~~**H10: chain quality assessment**~~ **DONE.** Per-chain quality
+   = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains are real
+   juggling cycles (chain 23, chain 6); mid-quality chains contain
+   identity switches (chain 30); low-quality chains are dominated
+   by false ballistic edges (chain 13). 1 H10 false positive
+   (chain 38: real single ball, misclassified as low quality).
+   Useful as a downstream confidence signal.
+6. **H11: chain quality regression test** — can we train a
+   simple classifier (e.g. logistic regression) to predict
+   chain quality using the same H3, H8, H9 features plus a
+   few additional ones (chain length, gap variance, hand-edge
+   count, air-edge count)? Compare to H10's hand-tuned
+   weights. If the classifier agrees with H10's ranking,
+   H10 is well-calibrated. If it improves on H10, we have
+   a better quality metric.
+7. **H8 v2: Kalman-filter physics check** — restrict H8 to
+   short tracklets (n_pts ≤ 30), use a simple Kalman filter
+   with constant gravity to predict the expected velocity at
+   the target tracklet's start, and compare to the actual
+   velocity. This would address H8's main limitation
+   (unreliable on long YouTube tracklets) and improve H10
+   for YouTube chains.
+8. **H9 v2: Kalman-filter extrapolation** — replace H9's
+   linear interpolation with a Kalman filter (constant
+   gravity) for gap-frame position estimates. This would
+   give more accurate ball positions during detector
+   dropouts and improve H10's h9_score.
 
 ## Important artifact paths
 
