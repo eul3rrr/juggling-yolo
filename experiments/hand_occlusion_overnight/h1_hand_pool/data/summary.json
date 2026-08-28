@@ -1,0 +1,66 @@
+{
+  "thresholds": {
+    "WRIST_CONF_MIN": 0.5,
+    "HAND_REACH_PX_RATIO": 0.15,
+    "CATCH_SLOPE_PX_PER_FRAME": -1.0,
+    "THROW_SLOPE_PX_PER_FRAME": 1.0,
+    "SLOPE_WINDOW": 5,
+    "MIN_SLOPE_SAMPLES": 3,
+    "MIN_TRACKLET_LEN": 3,
+    "MIN_HAND_DIST_SAMPLES": 3
+  },
+  "image_height": 720.0,
+  "hand_reach_px": 108.0,
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "video_key": "videos/identical_balls_trick_000_018.mp4",
+      "event_counts": {
+        "ENTRY": 33,
+        "EXIT": 1,
+        "UNMATCHED_EXIT": 2,
+        "UNRESOLVED_HELD_OR_LOST": 10,
+        "AMBIGUOUS_POOL_EXIT": 22
+      },
+      "predecessor_conflicts": 0,
+      "successor_conflicts": 0,
+      "impossible_states": 0,
+      "multi_token_ambiguous_events": 22,
+      "n_links": 23,
+      "n_tracklets": 76,
+      "evaluation_vs_reviewed": {
+        "reviewed_total": 85,
+        "matched_correct": 1,
+        "matched_wrong": 1,
+        "missed_correct": 44,
+        "missed_wrong": 39,
+        "precision_hand_link": 0.5,
+        "recall_hand_link": 0.022222222222222223
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+      "event_counts": {
+        "ENTRY": 5,
+        "EXIT": 5,
+        "UNMATCHED_EXIT": 22,
+        "UNRESOLVED_HELD_OR_LOST": 0,
+        "AMBIGUOUS_POOL_EXIT": 0
+      },
+      "predecessor_conflicts": 0,
+      "successor_conflicts": 0,
+      "impossible_states": 0,
+      "multi_token_ambiguous_events": 0,
+      "n_links": 5,
+      "n_tracklets": 40,
+      "evaluation_vs_reviewed": {
+        "reviewed_total": 28,
+        "matched_correct": 2,
+        "matched_wrong": 0,
+        "missed_correct": 24,
+        "missed_wrong": 2,
+        "precision_hand_link": 1.0,
+        "recall_hand_link": 0.07692307692307693
+      }
+    }
+  }
+}
