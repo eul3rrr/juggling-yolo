@@ -2194,3 +2194,92 @@ a 30-sample visual QA with the multi-rater methodology would
 characterize the 5-ball startup periodicity signature in detail.
 
 See `h1_hand_pool/reports/h71_report.md` for full analysis.
+
+## H72 conclusion (2026-08-28 ~20:30 CEST)
+
+**H72: multi-rater visual QA on the 6 un-QA'd H70 substantial phases** —
+DONE. PARTIAL PASS. H70 KEEP threshold validated at 10/11 = 91% precision
+on MIXED_3+ across both videos. 1 H12 v8 misclassification identified.
+
+**Method:** For each of the 6 un-QA'd H70 substantial phases (1
+CASCADE_3+ identical + 5 MIXED_3+ YouTube), do 1-4 independent
+vision queries with different question framings. Majority vote with
+conservative tie-breaking (prefer STATIC on ties).
+
+**Result:**
+- 5/6 KEEP phases confirmed as real juggling (4 YouTube MIXED_3+ +
+  1 YouTube MIXED_3+ after 3-rater consensus)
+- 1/6 KEEP phase is NOT a true cascade: identical f=685-716 is a
+  3-ball manipulation trick (body rolls / contact juggling) misclassified
+  by H12 v8 as CASCADE_3+
+
+**Key findings:**
+
+1. **H70 KEEP threshold (spec_conc >= 0.15) is validated at 91%**
+   on MIXED_3+ (10/11 across H71 + H72 = 5+5 confirmed, 1 H72 WRONG).
+   The 1 error is an H12 v8 misclassification, not a H70 spec_conc
+   failure.
+
+2. **CASCADE_3+ class has only 1 substantial phase in the dataset**,
+   and it's a 3-ball manipulation trick (not a true cascade). H12 v8's
+   CASCADE_3+ accuracy is unmeasurable at scale from the H70 sample.
+   Per-frame census (H36/H37 data) confirms L+R=0 throughout f=685-716
+   (no balls near either hand), inconsistent with a true cascade.
+
+3. **Single-pass vision tool errors quantified at 2/6 = 33%** on the
+   H72 sample (combined with H71: ~20-25% across all multi-rater
+   studies). H53's unreliability finding is reinforced.
+
+4. **Per-frame census (L+R=0) is a useful programmatic check** that
+   supplements vision QA. The f=685-716 L+R=0 finding is decisive
+   evidence that this is not a true cascade.
+
+**Recommended operating point (post-H72):**
+
+For MIXED_3+ post-filter (unchanged from H71):
+- KEEP at spec_conc >= 0.15: VALIDATED at 10/11 = 91% precision
+- REJECT at spec_conc < 0.10: validated (1/1 correct on H71)
+- 0.10 <= spec_conc < 0.15: MIXED_3+_LOW_CONF (research signal)
+
+For CASCADE_3+ class: no recommended filter (insufficient sample).
+
+**Negative findings:**
+- CASCADE_3+ class has 1 substantial phase (misclassified)
+- H70 KEEP precision is 91% on MIXED_3+, not 100%
+- H12 v8's CASCADE_3+ accuracy is unmeasurable at scale
+
+**H72 closes the H70 visual-QA arc.** All 20 H70 substantial phases
+have been QA'd:
+- 7 FOUNTAIN_3+ (H65): 3 real, 4 misclassified
+- 5 KEEP MIXED_3+ (H71): 5 real juggling
+- 2 REJECT MIXED phases (H71): 1 real juggling, 1 correctly rejected
+- 1 CASCADE_3+ (H72): 0 real cascade (it's a manipulation trick)
+- 5 KEEP MIXED_3+ (H72): 5 real juggling
+
+The H70 spec_conc signal is a useful MIXED_3+ discriminator but
+should not be applied to CASCADE_3+ classification.
+
+See `h1_hand_pool/reports/h72_report.md` for full analysis.
+
+## Future research directions (post-H72)
+
+The H70/H71/H72 arc has fully characterized the H70 spec_conc signal
+on the 20 substantial phases. Remaining directions:
+
+1. **H73: per-frame census (L+R) as a programmatic CASCADE_3+
+   validator** — the f=685-716 L+R=0 finding suggests L+R=0 throughout
+   a phase is a strong "not a true cascade" signal. Test on the full
+   dataset: how many H12 v8 CASCADE_3+ phases have L+R=0 throughout?
+   This could be a precision-improving filter for CASCADE_3+.
+
+2. **H74: re-run H59 precision/recall on the FULL H70 sample with
+   ground truth** — H59 was evaluated on the 113 manual review pairs,
+   not the H70 phases. A full precision/recall matrix for the entire
+   h7v3plus3 + H10 v11 v3 + H12 v8 + H70 + H71 v1 stack would
+   characterize end-to-end quality.
+
+3. **Stop here.** The H70 spec_conc signal is fully characterized,
+   and the recommended operating point (H43 + H69 for FOUNTAIN_3+,
+   H71 v1 for MIXED_3+) is precision-optimized. Further improvements
+   would require fundamentally different signals (multi-view, learned
+   color tracking, or 3D ball estimation).

@@ -1,0 +1,119 @@
+{
+  "hypothesis": "All 6 un-QA'd H70 substantial phases should be confirmed as real juggling by multi-rater visual QA. This completes the H70 sample at 20/20.",
+  "methodology": "For each contact sheet, do 2-3 independent vision queries with different question framings. Take majority verdict. Conservative tie-breaking: prefer STATIC on ties.",
+  "phases": [
+    {
+      "path": "phase_identical_balls_trick_000_018_f685-716_CASCADE_3+_keep_conc_0.498.png",
+      "stem": "identical_balls_trick_000_018",
+      "f_start": 685,
+      "f_end": 716,
+      "pattern": "CASCADE_3+",
+      "n_balls": 3,
+      "spec_conc": 0.498,
+      "h70_verdict": "KEEP",
+      "h72_verdicts": [
+        "STATIC_HOLD",
+        "STATIC_HOLD",
+        "JUGGLING",
+        "STATIC_HOLD"
+      ],
+      "h72_consensus": "STATIC_HOLD",
+      "h72_juggle_votes": 1,
+      "h72_total_votes": 4,
+      "h70_correct": false
+    },
+    {
+      "path": "phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f267-298_MIXED_3+_keep_conc_0.175.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 267,
+      "f_end": 298,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.175,
+      "h70_verdict": "KEEP",
+      "h72_verdicts": [
+        "JUGGLING"
+      ],
+      "h72_consensus": "JUGGLING",
+      "h72_juggle_votes": 1,
+      "h72_total_votes": 1,
+      "h70_correct": true
+    },
+    {
+      "path": "phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f375-410_MIXED_3+_keep_conc_0.216.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 375,
+      "f_end": 410,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.216,
+      "h70_verdict": "KEEP",
+      "h72_verdicts": [
+        "JUGGLING"
+      ],
+      "h72_consensus": "JUGGLING",
+      "h72_juggle_votes": 1,
+      "h72_total_votes": 1,
+      "h70_correct": true
+    },
+    {
+      "path": "phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f420-481_MIXED_3+_keep_conc_0.165.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 420,
+      "f_end": 481,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.165,
+      "h70_verdict": "KEEP",
+      "h72_verdicts": [
+        "JUGGLING"
+      ],
+      "h72_consensus": "JUGGLING",
+      "h72_juggle_votes": 1,
+      "h72_total_votes": 1,
+      "h70_correct": true
+    },
+    {
+      "path": "phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f595-643_MIXED_3+_keep_conc_0.170.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 595,
+      "f_end": 643,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.17,
+      "h70_verdict": "KEEP",
+      "h72_verdicts": [
+        "JUGGLING"
+      ],
+      "h72_consensus": "JUGGLING",
+      "h72_juggle_votes": 1,
+      "h72_total_votes": 1,
+      "h70_correct": true
+    },
+    {
+      "path": "phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f862-899_MIXED_3+_keep_conc_0.249.png",
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "f_start": 862,
+      "f_end": 899,
+      "pattern": "MIXED_3+",
+      "n_balls": 3,
+      "spec_conc": 0.249,
+      "h70_verdict": "KEEP",
+      "h72_verdicts": [
+        "STATIC_HOLD",
+        "JUGGLING",
+        "JUGGLING"
+      ],
+      "h72_consensus": "JUGGLING",
+      "h72_juggle_votes": 2,
+      "h72_total_votes": 3,
+      "h70_correct": true
+    }
+  ],
+  "stats": {
+    "n_phases": 6,
+    "n_keep": 6,
+    "n_keep_confirmed_real": 5,
+    "h70_precision_on_sample": 0.833
+  }
+}

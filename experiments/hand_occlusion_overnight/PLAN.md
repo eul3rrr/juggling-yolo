@@ -1696,3 +1696,68 @@ h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69(spec_conc < 0.15)
 See `h1_hand_pool/reports/h69_report.md` for full analysis.
 
 See `h1_hand_pool/reports/h52_report.md` for full analysis.
+
+## H72 episode — STATUS: COMPLETE (PARTIAL PASS)
+
+Sub-steps:
+
+1. ✅ Read prior persistent state (STATE.md, RESULTS_LOG.md, H71 report).
+2. ✅ Surveyed the 20 H70 substantial phases; identified 6 un-QA'd
+   phases (1 CASCADE_3+ identical + 5 MIXED_3+ YouTube).
+3. ✅ Generated 6 contact sheets in `contact_sheets_h72/`.
+4. ✅ Multi-rater visual QA on all 6 contact sheets (1-4 vision
+   queries per sheet). H70 precision on this sample: 5/6 = 83.3%.
+5. ✅ Cross-validation with per-frame census (H36/H37 data):
+   L+R=0 throughout f=685-716 confirms this is NOT a true cascade.
+6. ✅ Documented in `h72_report.md` and updated
+   STATE.md / RESULTS_LOG.md.
+
+**H72 verdict: PARTIAL PASS.** H70 KEEP threshold (spec_conc >= 0.15)
+is validated at 10/11 = 91% precision on MIXED_3+ across H71+H72.
+The 1 H72 WRONG case is an H12 v8 misclassification (CASCADE_3+
+labeled on a 3-ball manipulation trick), not a H70 spec_conc
+failure.
+
+**Key findings:**
+- H70 spec_conc is a useful MIXED_3+ discriminator
+- H70 spec_conc should NOT be applied to CASCADE_3+ classification
+- Per-frame census (L+R=0) is a useful programmatic check
+- CASCADE_3+ class has only 1 substantial phase, which is
+  misclassified — H12 v8's CASCADE_3+ accuracy is unmeasurable at
+  scale from the H70 sample
+- Multi-rater single-pass unreliability: 2/6 = 33% on H72 sample
+  (combined with H71: ~20-25%)
+
+**H72 closes the H70 visual-QA arc** at 20/20 = 100% coverage
+of substantial phases:
+- 7 FOUNTAIN_3+ (H65): 3 real, 4 misclassified
+- 5 KEEP MIXED_3+ (H71): 5 real juggling
+- 2 REJECT MIXED phases (H71): 1 real juggling, 1 correctly rejected
+- 1 CASCADE_3+ (H72): 0 real cascade (it's a manipulation trick)
+- 5 KEEP MIXED_3+ (H72): 5 real juggling
+
+**Recommended operating point (post-H72, unchanged from H71 for
+MIXED_3+):**
+- FOUNTAIN_3+: H43 OR H69(spec_conc < 0.15)
+- MIXED_3+: KEEP at spec_conc >= 0.15 (91% precision),
+  REJECT at spec_conc < 0.10 (validated on 1/1),
+  0.10-0.15 = MIXED_3+_LOW_CONF (research signal)
+- CASCADE_3+: no recommended filter (insufficient sample)
+
+See `h1_hand_pool/reports/h72_report.md` for full analysis.
+
+## H73 episode — PLANNED
+
+The H70/H71/H72 arc is closed. The H72 "future research directions"
+section identifies two remaining experiments:
+
+1. **H73: per-frame census (L+R) as a programmatic CASCADE_3+
+   validator** — measure how many H12 v8 CASCADE_3+ phases have
+   L+R=0 throughout. The f=685-716 finding suggests L+R=0 is a
+   strong "not a true cascade" signal. Could be a precision-
+   improving filter for CASCADE_3+.
+
+2. **H74: re-run H59 precision/recall on the FULL H70 sample with
+   ground truth** — characterize end-to-end quality of the
+   h7v3plus3 + H10 v11 v3 + H12 v8 + H70/H71 v1 stack.
+

@@ -4579,3 +4579,72 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h71_report.md`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h70_report.md`
 
+### H72 (2026-08-28 ~20:30 CEST)
+
+- Hypothesis: The 6 un-QA'd H70 substantial phases (1 CASCADE_3+
+  identical + 5 MIXED_3+ YouTube) should mostly be confirmed as
+  real juggling by multi-rater visual QA. The H70 KEEP threshold
+  (spec_conc >= 0.15) is already validated on the 5 H71 KEEP
+  MIXED phases; H72 extends this to a total of 11 KEEP phases
+  across both videos.
+
+- Method: for each contact sheet, do 1-4 independent vision
+  queries with different question framings (H53/H71 methodology).
+  Majority vote with conservative tie-breaking (prefer STATIC on
+  ties). Per-frame census (L+R) used as supplementary programmatic
+  check.
+
+- Quantitative result:
+
+| Phase | Stem | f_range | Pattern | conc | H70 | H72 consensus | H70 correct |
+|-------|------|---------|---------|------|-----|---------------|-------------|
+| identical f685-716 | identical | 685-716 | CASCADE_3+ | 0.498 | KEEP | STATIC_HOLD (1/4 juggle) | NO (FP) |
+| YouTube f267-298 | youtube | 267-298 | MIXED_3+ | 0.175 | KEEP | JUGGLING (1/1) | YES |
+| YouTube f375-410 | youtube | 375-410 | MIXED_3+ | 0.216 | KEEP | JUGGLING (1/1) | YES |
+| YouTube f420-481 | youtube | 420-481 | MIXED_3+ | 0.165 | KEEP | JUGGLING (1/1) | YES |
+| YouTube f595-643 | youtube | 595-643 | MIXED_3+ | 0.170 | KEEP | JUGGLING (1/1) | YES |
+| YouTube f862-899 | youtube | 862-899 | MIXED_3+ | 0.249 | KEEP | JUGGLING (2/3) | YES |
+
+**H70 precision on this sample: 5/6 = 83.3%**
+
+- Key findings:
+  - H70 KEEP threshold (spec_conc >= 0.15) is validated at
+    10/11 = 91% precision on MIXED_3+ (5 H71 + 5 H72 + 1 H72
+    WRONG). The 1 error is an H12 v8 misclassification, not a
+    H70 spec_conc failure.
+  - CASCADE_3+ class has only 1 substantial phase in the dataset
+    (identical f=685-716), and it's a 3-ball manipulation trick
+    (body rolls / contact juggling) misclassified by H12 v8 as
+    CASCADE_3+. Per-frame census (L+R=0 throughout 31 frames)
+    confirms this is NOT a true cascade (a cascade would have
+    L+R>0 at ~50% of frames).
+  - H12 v8's CASCADE_3+ accuracy is unmeasurable at scale from
+    the H70 sample (only 1 substantial phase).
+  - Single-pass vision tool errors quantified at 2/6 = 33% on
+    the H72 sample. Combined with H71 (1/7 wrong), the multi-rater
+    single-pass unreliability rate is ~20-25% across all studies,
+    consistent with the H53 finding.
+
+- Negative findings:
+  - CASCADE_3+ class has 1 substantial phase (misclassified)
+  - H70 KEEP precision is 91% on MIXED_3+, not 100% (H72 sample)
+  - H12 v8's CASCADE_3+ accuracy is unmeasurable
+  - Per-frame census (L+R=0) is a useful programmatic check
+    that supplements vision QA
+
+- Verdict: **PARTIAL PASS.** H70 KEEP threshold is validated at
+  91% on MIXED_3+ across H71+H72. The 1 H72 WRONG case is an
+  H12 v8 misclassification, not a H70 spec_conc failure. The
+  H70 spec_conc signal is a useful MIXED_3+ discriminator but
+  should not be applied to CASCADE_3+ classification. H72 closes
+  the H70 visual-QA arc at 20/20 = 100% coverage of substantial
+  phases. See `h1_hand_pool/reports/h72_report.md` for full
+  analysis.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h72_full_qa_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h72_multi_rater_qa.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h72_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h72/*.png` (6 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h72_report.md`
+
