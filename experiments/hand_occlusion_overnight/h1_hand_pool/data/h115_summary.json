@@ -1,0 +1,50 @@
+{
+  "h115_v1": {
+    "h7v3plus3_added_edges": [
+      [
+        "identical_balls_trick_000_018",
+        7,
+        10
+      ],
+      [
+        "identical_balls_trick_000_018",
+        59,
+        61
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        20,
+        21
+      ]
+    ],
+    "h7v3plus3_removed_edges": [
+      [
+        "identical_balls_trick_000_018",
+        59,
+        63
+      ],
+      [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        16,
+        21
+      ]
+    ],
+    "n_fires": 0,
+    "threshold_TD": 40.0,
+    "threshold_TJ": 250.0
+  },
+  "h115_v2": {
+    "n_h20_kept": 115,
+    "n_fires": 4,
+    "n_qa": 29,
+    "n_qa_real": 5,
+    "n_qa_real_or_partial": 13,
+    "n_qa_false": 14,
+    "n_kept_by_h114": 29,
+    "n_rej_by_h114": 0,
+    "precision_kept_real": 0.1724137931034483,
+    "precision_kept_real_or_partial": 0.4482758620689655,
+    "precision_rej_real": 0,
+    "precision_rej_real_or_partial": 0
+  }
+}

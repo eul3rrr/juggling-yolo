@@ -1,0 +1,6 @@
+stem,src,tgt,end_d,start_d,end_side,start_side,spatial_jump,in_h7v3plus3,in_h7v3plus2,in_h7v3pure,status,h114_v1_fires_TD40_TJ250
+identical_balls_trick_000_018,7,10,50.14,71.95,left,left,156.10421935361006,True,True,False,ADDED,False
+identical_balls_trick_000_018,59,61,46.08,31.32,right,right,71.38829385830701,True,True,False,ADDED,False
+identical_balls_trick_000_018,59,63,46.08,37.24,right,right,204.1994853078724,False,False,True,REMOVED,False
+youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,16,21,7.83,35.34,right,right,73.2086183451102,False,True,True,REMOVED,False
+youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090,20,21,5.56,35.34,right,right,71.17550280819941,True,False,False,ADDED,False
