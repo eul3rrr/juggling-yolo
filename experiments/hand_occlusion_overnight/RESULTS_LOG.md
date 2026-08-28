@@ -1,30 +1,35 @@
-# Hand Occlusion Overnight Lab — Results Log
+# Results Log — Hand Occlusion Overnight Lab
 
-Each result entry should be a self-contained record. Negative results are first-class.
+This file records the experimental findings produced by the overnight workers.
+Each entry should include: hypothesis, dataset/video, smallest reproduction,
+quantitative result, visual QA result, verdict, and links to artifacts.
 
-Suggested fields per entry (adapt as needed):
+## Conventions
 
-- Experiment ID (e.g. H1, H2, H1.1, L1)
-- Date / time (CEST)
-- Worker session ID
-- Branch / commit
-- Hypothesis
-- Setup (script, parameters, grid, video)
-- Outputs (paths, counts, headline numbers)
-- Visual QA verdicts
-- Conclusion (clean, mixed, or negative)
-- Follow-up
+- One H-section per hypothesis. Sub-entries per experiment within a hypothesis.
+- Quote counts directly from the CSV outputs; do not pool across videos without
+  saying so.
+- Tag label-informed experiments explicitly as `LABEL_INFORMED_EXPLORATORY`.
+- Always include: video, video frame range, denominator, precision, recall,
+  ambiguous-pool count, impossible-state count, predecessor/successor conflict
+  count, chain-fragmentation count.
 
 ---
 
-## H0 — Bootstrap (no experiment, just setup)
+## H0 — Bootstrap
 
-- Date: 2026-08-28 ~02:55 CEST
-- Branch: `experiments/hand-occlusion-overnight` @ `2ddf422` base
-- Worktree: `/home/it-admin/projects/juggling-yolo-hand-occlusion-night`
-- Profile: `juggling-tracker`
-- Model: `minimax/minimax-m3:free`
-- Reasoning: `ultra` (per-model override + `--reasoning` flag)
-- Watchdog: implemented and launching detached
-- STOP sentinel: `experiments/hand_occlusion_overnight/STOP` (not yet created)
-- Conclusion: setup complete; no research result yet.
+- Date: 2026-08-28 03:24 CEST
+- Hypothesis: N/A (bootstrap)
+- Result: Worktree created, branch `experiments/hand-occlusion-overnight` based
+  on `2ddf422`, all lab files committed at `5f69f25`, watchdog and per-model
+  reasoning override corrected for direct GMI use, one-shot GMI verification
+  `GMI_OK` returned by `MiniMaxAI/MiniMax-M3` via provider `gmi`.
+- Verdict: PASS — setup ready, watchdog launching.
+
+---
+
+## H1 — Hand-pool baseline
+
+Status: NOT YET STARTED.
+
+---

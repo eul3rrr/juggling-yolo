@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 02:55 CEST
-STATUS: BOOTSTRAPPED. No hand experiments completed yet. Worker is launching.
+LAST_UPDATE: 2026-08-28 03:24 CEST
+STATUS: BOOTSTRAPPED (v2 — direct GMI verified). Watchdog launching.
 
 ## Isolation
 
@@ -10,26 +10,29 @@ STATUS: BOOTSTRAPPED. No hand experiments completed yet. Worker is launching.
 - Base commit: `2ddf422` (main @ "experiment: E15 detector headroom — dropouts are threshold+association, not blindness")
 - Upstream: pushed to `origin/experiments/hand-occlusion-overnight`
 - Existing research recognized: E1, E2, E3, E3c, E4, E5, E6, E6c, E6d, E6e, E7, E8, E9, E10, E11, E15 — all on `main` and accessible read-only.
-- Existing `experiments/overnight/` directory preserved untouched for reference.
+- Existing `experiments/overnight/` directory preserved untouched for reference. (A legacy `STOP` file exists there from the previous run; it is NOT the lab stop sentinel and the watchdog does not read it.)
 
 ## Hardware safety
 
 - Physical RAM: ~14 GiB total.
-- Pre-launch available: ~6.3 GiB MemAvailable, 1.8 GiB SwapFree.
-- Watchdog preflight: require MemAvailable >= 3 GiB AND SwapFree >= 768 MiB before launching a worker.
-- While worker runs: poll /proc/meminfo every 30s; if MemAvailable < 1.5 GiB or SwapFree < 256 MiB, terminate the worker gracefully and wait for recovery.
-- Per-worker transient memory scope: MemoryHigh=4G MemoryMax=6G MemorySwapMax=2G (if available).
+- Pre-launch available: ~5.9 GiB MemAvailable, ~2.2 GiB SwapFree at bootstrap.
+- Watchdog preflight: require `MemAvailable >= 3 GiB` AND `SwapFree >= 768 MiB` before launching a worker.
+- While worker runs: poll /proc/meminfo every 30s; if `MemAvailable < 1.5 GiB` or `SwapFree < 256 MiB`, terminate the worker gracefully and wait for recovery.
+- Per-worker transient memory scope: `MemoryHigh=4G MemoryMax=6G MemorySwapMax=2G` (when systemd-run --user --scope is usable).
 
-## Reasoning configuration
+## Reasoning / model configuration
 
-- Worker model: `minimax/minimax-m3:free`
+- Worker provider: `gmi` (explicit, never auto; never OpenRouter)
+- Worker model: `MiniMaxAI/MiniMax-M3` (exact GMI model ID; verified by one-shot)
 - Reasoning requested: `ultra`
-- Per-model override: `agent.reasoning_overrides["minimax/minimax-m3:free"] = "ultra"` set in `/home/it-admin/.hermes/profiles/juggling-tracker/config.yaml`.
-- Watchdog also passes `--reasoning ultra` explicitly on the `hermes chat` invocation as belt-and-braces.
+- Per-model override in `/home/it-admin/.hermes/profiles/juggling-tracker/config.yaml`:
+  `agent.reasoning_overrides["MiniMaxAI/MiniMax-M3"] = "ultra"`
+- Watchdog also passes `--reasoning ultra` on every `hermes chat` invocation as belt-and-braces.
+- One-shot verification reply: `GMI_OK`.
 
 ## Watchdog status
 
-- Lock file: `experiments/hand_occlusion_overnight/watchdog.lock`
+- Lock dir: `experiments/hand_occlusion_overnight/watchdog.lock`
 - PID file: `experiments/hand_occlusion_overnight/watchdog.pid`
 - Log file: `experiments/hand_occlusion_overnight/watchdog.log`
 - Stop sentinel: `experiments/hand_occlusion_overnight/STOP` (NOT yet created).
@@ -54,6 +57,7 @@ Not yet determined.
 
 - H1 hand-pool baseline not implemented.
 - No hand-event CSV, no hand inventory CSV, no hand links CSV.
+- E6c / E11 quantitative baselines need to be reconstructed as evaluation references for H1.
 
 ## Next action
 
@@ -89,4 +93,4 @@ Reference inputs (read-only):
 
 ## Interrupted / dirty work
 
-None. The worktree was just created from a clean committed base; no uncommitted experimental changes exist.
+None. Worktree is clean except for the staged-but-not-yet-committed bootstrap fixup (corrected `watchdog.sh`, refreshed `SETUP_NOTES.md`, `STATE.md`, and `RESULTS_LOG.md`).
