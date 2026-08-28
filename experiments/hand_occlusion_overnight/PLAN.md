@@ -735,3 +735,54 @@ operating point.
    length-based arc-segmentation quality, not just
    arc-gravity consistency).
 
+
+## Twenty-fourth episode (H7 v2 + H10 v8) — STATUS: COMPLETE (PASS)
+
+Sub-steps:
+1. ✅ Implemented H7 v2: re-classify BALLISTIC edges as
+   HAND_TRANSITION if either endpoint has a catch/throw
+   signature (distance ≤ 108 AND strong slope) AND the gap
+   is ≤ 20 frames.
+2. ✅ Ran H7 v2 on both videos.
+   - identical: 13/37 (35%) BALLISTIC edges reclassified
+   - YouTube: 25/27 (93%) BALLISTIC edges reclassified
+3. ✅ Rendered 8 contact sheets (4 identical + 4 YouTube) and
+   visually confirmed all 8 as REAL_CATCH_THROW.
+4. ✅ Implemented H10 v8: H7v2 chains + v6b per-video weights.
+5. ✅ Ran H10 v8: YouTube mean quality 0.537 → 0.679.
+6. ✅ Documented in `h7v2_report.md` and `h10v8_report.md`.
+
+**Verdict: PASS.** H7 v2 + H10 v8 fixes the YouTube
+over-counting at its source. The asymmetric reclassification
+rate (35% identical vs 93% YouTube) reflects the fundamental
+difference in detection profiles. H10 v8 is the new
+recommended chain quality score, replacing H10 v6b.
+
+**Next episode candidates:**
+
+1. **H237 v6: enrich h237 unified chain with H7v2's
+   reclassification metadata.** Each H7v2 chain has
+   `n_reclassified_hand_edges` and `n_ballistic_edges` fields.
+   Downstream consumers can use these to identify "real"
+   juggling cycles (mostly reclassified) vs. true multi-ball
+   merges (mostly ballistic).
+2. **H12 v7: re-run pattern inference on H7v2 chains.** With
+   the YouTube over-counting fixed, the per-frame census on
+   YouTube should now be meaningful. H12 v2 was 100%
+   MIXED_3+_UNCONFIRMED on YouTube; v7 should split into
+   actual patterns.
+3. **H13: detector-level low-confidence ball detection** (master
+   §14). The detector confusion is partly responsible for the
+   remaining issues; a conf=0.1 re-run could reveal where
+   balls actually are.
+4. **H8 v9: try a hybrid arc-segmentation approach for YouTube
+   long tracklets.** v8's extrema-level segmentation is the
+   best so far but doesn't isolate clean parabolic arcs.
+   A 2D Gaussian Mixture on (x, y) trajectory features might
+   work better.
+5. **Stop here.** H7 v2 + H10 v8 has reached a natural
+   inflection point. The h8 over-penalization is fixed; future
+   work should focus on different signals (detector-level,
+   spatial pattern inference, etc.) rather than chain-level
+   quality.
+

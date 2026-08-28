@@ -778,3 +778,49 @@ useful source record:
     (step function) are hard to beat with length-
     dependent formulas (smooth function).
 
+
+## Cross-cutting insights from H7 v2 (2026-08-28 ~13:30)
+
+60. **BALLISTIC edges that pass through a hand region are
+    usually catch+throws in disguise.** H7 v2 reclassifies
+    13/37 identical and 25/27 YouTube BALLISTIC edges as
+    HAND_TRANSITION. All 8 visually inspected edges
+    confirmed as REAL_CATCH_THROW. The principle: a real
+    catch happens at the hand, a real throw starts at the
+    hand. A ballistic edge that connects to the hand at
+    EITHER endpoint is likely a catch+throw pair.
+
+61. **YouTube's 93% reclassification rate is the root cause
+    of the H10 v5 over-counting.** H8 v3 was correctly
+    flagging the velocity discontinuity at catch+throws,
+    but the edges were labeled BALLISTIC, so the h8
+    penalty was applied. H7 v2 fixes this at the chain
+    construction layer, not the chain quality layer.
+
+62. **The asymmetric reclassification rate (35% identical
+    vs 93% YouTube) is a feature, not a bug.** It reflects
+    the fundamental difference in detection profiles:
+    - Identical: short tracklets with frequent detector
+      dropouts. The BALLISTIC edges that remain (12) are
+      real identity switches between simultaneously visible
+      balls.
+    - YouTube: long tracklets spanning many parabolic arcs.
+      Most "ballistic" edges are actually catch+throws
+      where the velocity discontinuity is real (catch+throw)
+      not anomalous (identity switch).
+
+63. **H10 v6b's per-video adaptive weights are no longer
+    needed for the h8 dimension on YouTube.** After H7v2,
+    14/15 YouTube chains have n_air_edges=0, so h8=1.0
+    universally. The w8v8 dimension still matters (h8v8
+    captures per-arc gravity consistency) but the
+    per-video h8 distinction is moot.
+
+64. **H7v2 + H10v8 is a one-line architectural change
+    with outsized impact.** The h7v2 reclassification
+    rule is ~20 lines of code, but it transforms the
+    YouTube H10 quality distribution: mean 0.537 → 0.679,
+    and a real 7-tid juggling cycle (chain 0) becomes
+    the top chain. This is the largest single-episode
+    improvement since H10 v5.
+

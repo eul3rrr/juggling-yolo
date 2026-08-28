@@ -1,0 +1,14 @@
+from_tid,to_tid,gap,reason
+3,8,12,src_catch_dist=106.2_slope=-23.59_side=left
+5,6,5,tgt_throw_dist=96.2_slope=21.41_side=right
+22,27,11,src_catch_dist=46.7_slope=-7.84_side=left
+29,34,11,src_catch_dist=47.5_slope=-5.14_side=left
+35,37,11,src_catch_dist=19.2_slope=-2.31_side=left
+37,40,15,tgt_throw_dist=94.0_slope=3.95_side=left
+38,39,11,tgt_throw_dist=62.7_slope=4.60_side=right
+40,41,9,src_catch_dist=63.0_slope=-1.39_side=right
+43,45,9,tgt_throw_dist=60.9_slope=1.72_side=right
+45,46,9,tgt_throw_dist=89.4_slope=2.31_side=left
+62,66,9,src_catch_dist=22.2_slope=-4.91_side=right
+64,68,6,tgt_throw_dist=36.2_slope=2.48_side=right
+68,71,14,src_catch_dist=12.2_slope=-22.00_side=right

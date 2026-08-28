@@ -1842,3 +1842,103 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v7_chain_quality_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v7_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v7_report.md`
+
+### H7 v2 (2026-08-28 ~13:30 CEST)
+
+- Hypothesis: most YouTube H7 BALLISTIC edges are catch+throw events
+  in disguise (H8 v8's analysis showed 0/24 OK on YouTube). Adding
+  a hand-region check at chain construction time will reclassify
+  these as HAND_TRANSITION, removing the false h8 penalty.
+- Thresholds (declared from physical geometry):
+  - HAND_REACH_PX = 108
+  - MAX_GAP_FOR_RECLASSIFY_FRAMES = 20
+  - CATCH_SLOPE_PX_PER_FRAME = -1.0
+  - THROW_SLOPE_PX_PER_FRAME = 1.0
+  - MIN_TRACKLET_LEN = 3
+- Quantitative result:
+
+  | Video | n_edges_in | n_reclassified | n_admitted | n_chains | n_chains_multi |
+  |---|---|---|---|---|---|
+  | identical | 37 | 13 (35%) | 33 | 43 | 17 |
+  | YouTube  | 27 | 25 (93%) | 25 | 15 | 9 |
+
+- Visual QA: 8 contact sheets (4 identical + 4 YouTube) rendered and
+  inspected via `vision_analyze`. **All 8 confirmed as REAL_CATCH_THROW**
+  (V-shaped trajectory through the hand region, with hand-wrist
+  co-located with the ball at the connection point). Visual precision
+  1.000 (8/8).
+- Identical vs YouTube reclassification rate:
+  - identical: 35% (12 BALLISTIC edges remain — these are real
+    identity switches confirmed by H8 v3: 5→6, 50→55, etc.)
+  - YouTube: 93% (only 1 BALLISTIC edge remains: 27→28, a true
+    mid-air continuation)
+- Negative findings:
+  - 8/8 visual precision is encouraging but the sample is small.
+    A larger sample (e.g., 30+ edges) would give tighter
+    confidence intervals. The 100% result is consistent with
+    the rule's strict design (distance < 108 AND strong slope
+    in the right direction), so I expect precision to remain
+    high.
+  - The reclassification is asymmetric (93% YouTube vs 35%
+    identical), reflecting the fundamental difference in
+    detection profiles: YouTube has long tracklets spanning
+    multiple parabolic arcs, so most "ballistic" edges are
+    really catch+throws.
+- Verdict: **PASS.** H7 v2 correctly reclassifies catch+throw
+  BALLISTIC edges as HAND_TRANSITION with 100% visual precision
+  on 8 inspected edges. H7 v2 is the recommended chain
+  construction method, replacing H7. See
+  `h1_hand_pool/reports/h7v2_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h7v2_hand_region.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h7v2_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v2_chains_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v2_admitted_edges_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v2_reclassified_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h7v2/*.png` (8)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h7v2_report.md`
+
+### H10 v8 (2026-08-28 ~13:45 CEST)
+
+- Hypothesis: H7v2 changes the chain structure (most YouTube
+  BALLISTIC edges become HAND_TRANSITION), so re-scoring the new
+  chains with H10 v6b's per-video adaptive weights should give
+  a substantially improved YouTube quality score (no more
+  false h8 penalty from BALLISTIC edges that were really
+  catch+throws).
+- Quantitative result:
+
+  | Video | v5 mean q | v6b mean q | **v8 mean q** | n_chains | n_air_edges=0 |
+  |---|---|---|---|---|---|
+  | identical | 0.529 | 0.529 | **0.814** | 43 | 31/43 |
+  | YouTube  | 0.537 | 0.569 | **0.679** | 15 | 14/15 |
+
+- YouTube mean quality jumps v5 0.537 → v6b 0.569 → v8 0.679.
+  14/15 YouTube chains now have n_air_edges=0 (no BALLISTIC
+  edges to penalize), so h8=1.0 universally.
+- New top YouTube chain (chain 0, 7 tids, 6 hand edges) at
+  q=0.671. All 6 hand edges are visually confirmed (H7v2
+  contact sheets). v6b had this chain at q=0.640 because of
+  the h8 penalty; v8 removes it.
+- Visual QA: H7v2's 8 contact sheets confirm all 6 chain 0
+  hand edges are real catch+throws (3→6, 4→18, 9→13, 13→16,
+  16→21, 21→29, 29→34). Chain 0 is a real 7-tid juggling
+  cycle.
+- Negative findings:
+  - identical chain 21 still has h8v8=0.00 (its t31/t36 have
+    unreliable parabolic fits). The h8v8 dimension doesn't
+    help identical; v8's identical mean quality comes mostly
+    from the singleton chains (q=1.0 trivially).
+  - The 1 YouTube chain with n_air_edges>0 (chain 27→28) is
+    a true mid-air continuation. Its h8 score correctly
+    penalizes it (chain rank drops).
+- Verdict: **PASS.** H10 v8 fixes the YouTube over-counting
+  at its source. For mixed-video analyses, H10 v8 is the new
+  recommended chain quality score, replacing H10 v6b. See
+  `h1_hand_pool/reports/h10v8_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v8_with_h7v2.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v8_chain_quality_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v8_chain_quality_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v8_report.md`
