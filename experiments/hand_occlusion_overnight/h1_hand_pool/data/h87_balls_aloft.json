@@ -1,0 +1,191 @@
+{
+  "identical_balls_trick_000_018_263_312": {
+    "verdict": "JUGGLING",
+    "mean_total": 2.76,
+    "mean_aloft": 1.2,
+    "max_aloft": 3,
+    "pct_ge1": 0.96,
+    "pct_ge2": 0.2,
+    "pct_ge3": 0.04
+  },
+  "identical_balls_trick_000_018_411_450": {
+    "verdict": "JUGGLING",
+    "mean_total": 2.925,
+    "mean_aloft": 2.325,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.95,
+    "pct_ge3": 0.275
+  },
+  "identical_balls_trick_000_018_549_578": {
+    "verdict": "JUGGLING",
+    "mean_total": 2.8666666666666667,
+    "mean_aloft": 2.066666666666667,
+    "max_aloft": 4,
+    "pct_ge1": 0.9333333333333333,
+    "pct_ge2": 0.6666666666666666,
+    "pct_ge3": 0.43333333333333335
+  },
+  "identical_balls_trick_000_018_631_669": {
+    "verdict": "FOUNTAIN",
+    "mean_total": 3.2051282051282053,
+    "mean_aloft": 2.1025641025641026,
+    "max_aloft": 5,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.7435897435897436,
+    "pct_ge3": 0.2564102564102564
+  },
+  "identical_balls_trick_000_018_685_716": {
+    "verdict": "MANIPULATION",
+    "mean_total": 3.1875,
+    "mean_aloft": 1.625,
+    "max_aloft": 4,
+    "pct_ge1": 0.96875,
+    "pct_ge2": 0.4375,
+    "pct_ge3": 0.15625
+  },
+  "identical_balls_trick_000_018_733_766": {
+    "verdict": "STATIC_HOLD",
+    "mean_total": 2.757575757575758,
+    "mean_aloft": 0.9090909090909091,
+    "max_aloft": 1,
+    "pct_ge1": 0.9090909090909091,
+    "pct_ge2": 0.0,
+    "pct_ge3": 0.0
+  },
+  "identical_balls_trick_000_018_890_936": {
+    "verdict": "OTHER_CROSSED_ARM",
+    "mean_total": 2.782608695652174,
+    "mean_aloft": 1.434782608695652,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.30434782608695654,
+    "pct_ge3": 0.10869565217391304
+  },
+  "identical_balls_trick_000_018_977_1011": {
+    "verdict": "FOUNTAIN",
+    "mean_total": 2.6857142857142855,
+    "mean_aloft": 1.0571428571428572,
+    "max_aloft": 3,
+    "pct_ge1": 0.8285714285714286,
+    "pct_ge2": 0.2,
+    "pct_ge3": 0.02857142857142857
+  },
+  "identical_balls_trick_000_018_1029_1049": {
+    "verdict": "OTHER_STATIC_HOLD",
+    "mean_total": 2.9047619047619047,
+    "mean_aloft": 1.0952380952380953,
+    "max_aloft": 2,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.09523809523809523,
+    "pct_ge3": 0.0
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": {
+    "verdict": "STATIC_DEMO",
+    "mean_total": 4.828571428571428,
+    "mean_aloft": 2.8,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9714285714285714,
+    "pct_ge3": 0.7428571428571429
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": {
+    "verdict": "JUGGLING_STARTUP",
+    "mean_total": 4.6879432624113475,
+    "mean_aloft": 2.7588652482269502,
+    "max_aloft": 5,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9645390070921985,
+    "pct_ge3": 0.7092198581560284
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": {
+    "verdict": "JUGGLING",
+    "mean_total": 4.875,
+    "mean_aloft": 2.75,
+    "max_aloft": 5,
+    "pct_ge1": 1.0,
+    "pct_ge2": 1.0,
+    "pct_ge3": 0.65625
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": {
+    "verdict": "JUGGLING",
+    "mean_total": 4.064516129032258,
+    "mean_aloft": 2.4838709677419355,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.8064516129032258,
+    "pct_ge3": 0.6451612903225806
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": {
+    "verdict": "FOUNTAIN",
+    "mean_total": 4.666666666666667,
+    "mean_aloft": 2.6666666666666665,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9444444444444444,
+    "pct_ge3": 0.6111111111111112
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": {
+    "verdict": "JUGGLING",
+    "mean_total": 4.805555555555555,
+    "mean_aloft": 2.6944444444444446,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9722222222222222,
+    "pct_ge3": 0.6944444444444444
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": {
+    "verdict": "JUGGLING",
+    "mean_total": 4.548387096774194,
+    "mean_aloft": 2.661290322580645,
+    "max_aloft": 4,
+    "pct_ge1": 0.9838709677419355,
+    "pct_ge2": 0.9516129032258065,
+    "pct_ge3": 0.6935483870967742
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+    "verdict": "STATIC_HOLD",
+    "mean_total": 4.814159292035399,
+    "mean_aloft": 2.7079646017699117,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9911504424778761,
+    "pct_ge3": 0.6637168141592921
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": {
+    "verdict": "JUGGLING",
+    "mean_total": 4.428571428571429,
+    "mean_aloft": 2.6530612244897958,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9387755102040817,
+    "pct_ge3": 0.673469387755102
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": {
+    "verdict": "JUGGLING",
+    "mean_total": 4.419354838709677,
+    "mean_aloft": 2.5806451612903225,
+    "max_aloft": 3,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9354838709677419,
+    "pct_ge3": 0.6451612903225806
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": {
+    "verdict": "CASCADE_REAL",
+    "mean_total": 4.387096774193548,
+    "mean_aloft": 2.435483870967742,
+    "max_aloft": 4,
+    "pct_ge1": 0.9354838709677419,
+    "pct_ge2": 0.9032258064516129,
+    "pct_ge3": 0.5806451612903226
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": {
+    "verdict": "JUGGLING",
+    "mean_total": 5.078947368421052,
+    "mean_aloft": 2.710526315789474,
+    "max_aloft": 4,
+    "pct_ge1": 1.0,
+    "pct_ge2": 0.9736842105263158,
+    "pct_ge3": 0.7105263157894737
+  }
+}
