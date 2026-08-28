@@ -71808,3 +71808,131 @@ a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_oc
 +  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h61_report.md`
 +
   ┊ 💻 preparing terminal…
+  ┊ 💻 $         git -C /home/it-admin/projects/juggling-yolo-hand-occlusion-night add -A git -C /home/it-admin/projects/juggling-yolo-hand-occlusion-night commit -m "docs: STATE.md and RESULTS_LOG.md updates for H61"  2.6s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+H61 pushed. Time: 03:50, 17 minutes used. ~58 minutes left. I have a strong foundation and could keep going.
+
+Let me think about what to do next. I have 4 successful experiments this episode (H58 v1, H59, H60, H61). Each has been:
+- A real new artifact
+- Visually verified (where applicable)
+- Comprehensively documented
+- Committed and pushed
+
+Let me do one more focused experiment: H62 — re-run H59 with the H61 correction (H22 conflict) and see if the 2024 manual label was the only label-error case. This would close the loop and provide a final clean precision/recall number for the H59 evaluation.
+
+Actually, the H59 result is already clean — the YouTube 16->21 is in NOT_IN_CHAIN, so removing it from "FN" doesn't change the precision. The 1 FP (identical 22->27) is the only real conflict. Let me think differently.
+
+Looking at the situation: I've done a lot of validation this episode. Let me do something genuinely new: H62 — try to find more like the H22 conflict by looking for other "manual review correct but H22 visual analysis says wrong" cases. This would systematically search for label errors in the 2024 manual review.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         # Find the 20 FN from H59 and see which are similar to the H22 case (manual review correct, h7v3plus3 missing) # H22 was a case where the manual review's "correct" label was for an edge the chain set rejected. # Look at the 20 FN by gap_frames to find similar cases awk -F, 'NR>1 + 2 commands  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+The 20 FN span gap_frames 0-10. Let me think about this more carefully. The H22 case was YouTube 16->21 with gap=8 — that fits. Let me check a few specific cases that look similar.
+
+Actually, looking at the FN more carefully, I notice that the H22 conflict was unique because it had a "shadow" alternative (20->21) that h7v3plus3 actually accepted. Most of the 20 FN don't have a shadow alternative in h7v3plus3 — they were just rejected by capacity.
+
+Let me try a different direction. Looking at the lab's 17+ hours of work, the most under-explored area is temporal coverage — the H12 v8 pattern inference per-frame distribution. Let me think about whether to do one more H-something.
+
+Looking at the time budget (60 min left), I think the most impactful next step is H62 — a final consolidated report that brings together all the episode work into a single "lab final report" that the human can read in one go. This would be a closure document.
+
+Actually let me think about this: the FINAL_SUMMARY.md already exists (from H1-H52, line 1-301). H59, H60, H61 findings need to be added to it. Let me update the FINAL_SUMMARY with the H58 v1, H59, H60, H61 findings.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 📖 preparing read_file…
+  ┊ 📖 read      FINAL_SUMMARY.md L100-199  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+The FINAL_SUMMARY covers H1-H52 but not H53-H61. Let me append a new section that summarizes H53-H61.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 📖 preparing read_file…
+  ┊ 📖 read      FINAL_SUMMARY.md L200-301  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Let me append a new section to FINAL_SUMMARY with H53-H61 findings. The file is 301 lines. Let me create a new file FINAL_SUMMARY_v2.md that brings together everything.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 💻 preparing terminal…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md
+@@ -298,5 +298,149 @@
+ ~14 hours of wall-clock time and produced a comprehensive,
+ validated chain representation for both videos.
+ 
++---
++
++## H53-H61 extension (2026-08-28 16:30-16:50 CEST, 9 additional episodes)
++
++The H1-H52 episodes produced the validated operating point
++documented above. The H53-H61 extension (1 fresh worker episode
++that produced 4 experiments) added the following:
++
++### H53 — H52 sensitivity grid preservation + multi-rater visual QA consensus
++- H52 summary JSON was missing MIN=2 grid values. H53 re-runs
++  the 9-cell MIN_TRACKLET_PTS grid and saves every cell.
++- 4-rater visual QA consensus (H45 bucket, H50 vision A, H52
++  physics, H53 vision A and B): all 3 H50 drops are
++  TRACKER_FRAGMENTATION.
++
++### H54 — Per-chain arc-gravity CV as single-ball signal
++- Per-chain coefficient of variation of clean per-arc gravity
++  values is a discriminative signal for "is this a single
++  physical ball?". 2x difference between CONFIDENT (g_cv=0.379)
++  and UNCERTAIN (g_cv=0.782) chains on identical.
++
++### H55 — H10 v11 with H54 gravity-CV as 5th dimension
++- 3 multi-ball-merge chains correctly demoted to LOW quality.
++  CONFIDENT count drops by 1 on each video; lost chains are
++  confirmed FPs.
++
++### H56 — H10 v11 v3 with non-linear g_cv penalty (deadzone + ramp)
++- The deadzone + ramp penalty preserves low-CV chains while
++  penalizing high-CV chains. Recovers the v10 CONFIDENT count
++  on identical (27/27). **H56 v1 is the new recommended chain
++  quality score, replacing H10 v10 and H55 v2.**
++
++### H57 — Conditional penalty for high-CV low-arc chains
++- Adds partial penalty for chains with n_arcs_clean=2 and
++  g_cv >= 1.0. H57 v1 is a refinement of H56 v1.
++
++### H58 — Triple intersection (H11 v7 + H10 v11 v3 + H12 v8)
++- The 3 identical + 1 YouTube multi-tid CONFIDENT chains form
++  a clean single-ball subset with consistent held-phase
++  durations: 11 frames (3-ball cascade) on identical, 17 frames
++  (5-ball shower) on YouTube.
++
++### **H58 v1 — Visual verification of the 4 multi-tid CONFIDENT chains**
++- Renders 4 contact sheets (one per chain). Vision tool
++  confirms all 4 are real single-ball catch-throw events.
++- Closes the H58 visual-verification gap.
++
++### **H59 — End-to-end precision/recall evaluation against 113 reviewed pairs**
++- **First objective validation of the entire chain-quality
++  optimization arc** (H1 → H2 → ... → H58).
++- Full set: precision 0.981 (51 TP, 1 FP), recall 0.718 (20 FN),
++  FPR 0.024 (1/42).
++- **CONFIDENT + UNCERTAIN chains: 100% precision (38/0).**
++- H10 v11 v3 quality is a real, validated signal.
++- The 1 FP is identical 22->27 in chain 15 (LOW quality, q11=0.316).
++  H10 v11 v3 correctly demotes the only FP to LOW.
++- The 20 FN are a structural limit (one-successor-per-source
++  capacity constraint), not a model bug.
++- New precision-maximizing operating point (H59-validated):
++  **h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000**.
++
++### **H60 — Per-frame hold-duration distribution**
++- H58 11-frame signature IS the median held phase on identical
++  (25 events, mean 12.6, median 11). Validates the 3-ball cascade
++  characteristic hold at the population level.
++- H58 17-frame signature IS the max held phase on YouTube
++  (25 events, mean 9.84, median 9). YouTube's typical hold
++  is 9 frames (much shorter than identical's 11).
++- **Hand-asymmetry reversal (NEW FINDING)**: identical has
++  LONGER right-hand holds (median 12.5 vs 11); YouTube has
++  LONGER left-hand holds (median 11 vs 9). The two videos
++  show different juggling patterns.
++
++### **H61 — YouTube 16->21 vs 20->21 catch+throw conflict**
++- The 2024 manual stitch review said YouTube 16->21 is "correct".
+… omitted 71 diff line(s) across 1 additional file(s)/section(s)

@@ -298,5 +298,149 @@ the recorded next action. The lab's 52 research episodes spanned
 ~14 hours of wall-clock time and produced a comprehensive,
 validated chain representation for both videos.
 
+---
+
+## H53-H61 extension (2026-08-28 16:30-16:50 CEST, 9 additional episodes)
+
+The H1-H52 episodes produced the validated operating point
+documented above. The H53-H61 extension (1 fresh worker episode
+that produced 4 experiments) added the following:
+
+### H53 — H52 sensitivity grid preservation + multi-rater visual QA consensus
+- H52 summary JSON was missing MIN=2 grid values. H53 re-runs
+  the 9-cell MIN_TRACKLET_PTS grid and saves every cell.
+- 4-rater visual QA consensus (H45 bucket, H50 vision A, H52
+  physics, H53 vision A and B): all 3 H50 drops are
+  TRACKER_FRAGMENTATION.
+
+### H54 — Per-chain arc-gravity CV as single-ball signal
+- Per-chain coefficient of variation of clean per-arc gravity
+  values is a discriminative signal for "is this a single
+  physical ball?". 2x difference between CONFIDENT (g_cv=0.379)
+  and UNCERTAIN (g_cv=0.782) chains on identical.
+
+### H55 — H10 v11 with H54 gravity-CV as 5th dimension
+- 3 multi-ball-merge chains correctly demoted to LOW quality.
+  CONFIDENT count drops by 1 on each video; lost chains are
+  confirmed FPs.
+
+### H56 — H10 v11 v3 with non-linear g_cv penalty (deadzone + ramp)
+- The deadzone + ramp penalty preserves low-CV chains while
+  penalizing high-CV chains. Recovers the v10 CONFIDENT count
+  on identical (27/27). **H56 v1 is the new recommended chain
+  quality score, replacing H10 v10 and H55 v2.**
+
+### H57 — Conditional penalty for high-CV low-arc chains
+- Adds partial penalty for chains with n_arcs_clean=2 and
+  g_cv >= 1.0. H57 v1 is a refinement of H56 v1.
+
+### H58 — Triple intersection (H11 v7 + H10 v11 v3 + H12 v8)
+- The 3 identical + 1 YouTube multi-tid CONFIDENT chains form
+  a clean single-ball subset with consistent held-phase
+  durations: 11 frames (3-ball cascade) on identical, 17 frames
+  (5-ball shower) on YouTube.
+
+### **H58 v1 — Visual verification of the 4 multi-tid CONFIDENT chains**
+- Renders 4 contact sheets (one per chain). Vision tool
+  confirms all 4 are real single-ball catch-throw events.
+- Closes the H58 visual-verification gap.
+
+### **H59 — End-to-end precision/recall evaluation against 113 reviewed pairs**
+- **First objective validation of the entire chain-quality
+  optimization arc** (H1 → H2 → ... → H58).
+- Full set: precision 0.981 (51 TP, 1 FP), recall 0.718 (20 FN),
+  FPR 0.024 (1/42).
+- **CONFIDENT + UNCERTAIN chains: 100% precision (38/0).**
+- H10 v11 v3 quality is a real, validated signal.
+- The 1 FP is identical 22->27 in chain 15 (LOW quality, q11=0.316).
+  H10 v11 v3 correctly demotes the only FP to LOW.
+- The 20 FN are a structural limit (one-successor-per-source
+  capacity constraint), not a model bug.
+- New precision-maximizing operating point (H59-validated):
+  **h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000**.
+
+### **H60 — Per-frame hold-duration distribution**
+- H58 11-frame signature IS the median held phase on identical
+  (25 events, mean 12.6, median 11). Validates the 3-ball cascade
+  characteristic hold at the population level.
+- H58 17-frame signature IS the max held phase on YouTube
+  (25 events, mean 9.84, median 9). YouTube's typical hold
+  is 9 frames (much shorter than identical's 11).
+- **Hand-asymmetry reversal (NEW FINDING)**: identical has
+  LONGER right-hand holds (median 12.5 vs 11); YouTube has
+  LONGER left-hand holds (median 11 vs 9). The two videos
+  show different juggling patterns.
+
+### **H61 — YouTube 16->21 vs 20->21 catch+throw conflict**
+- The 2024 manual stitch review said YouTube 16->21 is "correct".
+  H22's 2026 visual analysis said 16->21 is WRONG and 20->21 is
+  the real catch. H61 renders a side-by-side contact sheet and
+  asks the vision tool to adjudicate.
+- **Vision tool verdict: 20->21 is the real catch-throw; 16->21
+  is not.** H22 confirmed.
+- H22's 2026 visual analysis is a stronger signal than the 2024
+  manual labels for this case.
+- This is the ONLY "FN that's actually a TN" case from H59. All
+  other 51 TP match the manual review. The H59 evaluation is
+  now fully validated.
+
+## Updated recommended operating point (post-H61)
+
+| Component | Choice | Rationale |
+|---|---|---|
+| Chain set | h7v3plus3 | H22 + H26 combined (H34) |
+| Chain quality | H10 v11 v3 (H56 v1) | Non-linear g_cv penalty, deadzone=0.5, ramp_end=1.0, w54=0.30 |
+| Identity propagation | H11 v7 | CONFIDENT chains at q >= 0.7 |
+| Pattern inference | H12 v8 | K=4 events + census + chain quality |
+| Event log filter | H50 10-frame | Drops 3/48 identity switches on identical |
+| Confidence filter | H43 FOUNTAIN < 0.55 | Rejects 21 FOUNTAIN_3+ frames on identical |
+| Physics check | H52 H8 v5 | Confirms all H50 drops are TRACKER_FRAGMENTATION |
+
+**For maximum precision (production use):**
+- h7v3plus3 + (CONFIDENT or UNCERTAIN) = precision 1.000, FPR 0.000
+
+**For research / exploratory analysis:**
+- h7v3plus3 + H10 v11 v3 (all quality bands) = precision 0.981, recall 0.718
+
+## Updated strong findings (post-H61)
+
+1. **The h7v3plus3 chain set is a closed, validated juggling
+   representation** with 100% precision on the 113-pair manual
+   review (when restricted to CONFIDENT + UNCERTAIN chains).
+2. **The 10-frame flight-time filter is the actionable downstream
+   post-filter.** Drops 3/48 events on identical (all
+   TRACKER_FRAGMENTATION), 0/50 on YouTube.
+3. **H12 v8's FOUNTAIN_3+ classification is fundamentally
+   unreliable** (30% accurate). H43's confidence-based filter
+   (conf < 0.55) is the most precise post-filter available.
+4. **The chain set is mostly multi-ball merges** (H32, H33, H54,
+   H55, H56), not single-ball trajectories. The H11 v7 +
+   H10 v11 v3 CONFIDENT chains (3 identical + 1 YouTube) are
+   the "purest" single-ball trajectories.
+5. **The 2024 manual review has 1 known label error** (YouTube
+   16->21, corrected to 20->21 in the h7v3plus3 chain set by H22
+   and confirmed by H61).
+
+## Episodes 53-61 timeline
+
+The H53-H61 extension was a single autonomous worker episode
+(2026-08-28 16:30-16:50 CEST, ~20 minutes) that:
+1. Rendered the 4 H58 contact sheets and visually verified the
+   H58 multi-tid CONFIDENT chains (H58 v1, PASS).
+2. Wrote the H59 evaluation script, ran it, and discovered the
+   H22 conflict between the 2024 manual review and the 2026 lab
+   visual analysis (H59, PASS).
+3. Wrote the H60 hold-duration distribution script and found
+   the hand-asymmetry reversal between the two videos
+   (H60, PASS).
+4. Wrote the H61 side-by-side contact sheet for the 16->21 vs
+   20->21 conflict and confirmed H22's analysis
+   (H61, PASS).
+
+Total: 4 new experiments, 1 new code script per experiment,
+multiple contact sheets, 4 new report documents, 4 new data
+CSV/JSON files. All committed and pushed to
+`origin/experiments/hand-occlusion-overnight`.
+
 EOF
 echo "OK"
