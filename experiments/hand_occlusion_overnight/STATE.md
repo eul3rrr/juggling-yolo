@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 09:50 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED. H5 applies H3 as a downstream confidence flag. H6 simplified min-cost flow resolves the H2 conflict. H7 full min-cost flow with capacity constraints + gap/error-aware cost. H2+H3+H7 unified chain representation. H8 physics consistency check identifies 2 confirmed E6c false positives. H9 object permanence: coverage 82.9% on identical. H10 per-chain quality. H8v4 NEGATIVE. H8v5 MIXED. H10v5 PASS. H237v5. H8v6 NEGATIVE. H11 PASS: 9 CONFIDENT identical + 1 CONFIDENT YouTube chain, 8 catch/throw events, per-frame census 51% cascade on identical / 100% on YouTube (over-counting). H11 v2 identity-merge false positive. H11 v3 quality-filtered census confirms over-counting on YouTube. H11 v4 PASS: 85.7% reduction in merge candidates, correctly removes chain 36 ↔ chain 30 false positive. H12 PASS: per-frame pattern inference identifies 4-phase pattern on identical (FOUNTAIN → CASCADE → mixed), 33.8% UNKNOWN. YouTube unreliable due to H10 v5 over-counting. H12 v2 PASS: sliding-window event history + MIN_EVENTS_FOR_PATTERN=3 + MIXED_3+ category + phase detection. UNKNOWN collapses 33.8% → 1.4% on identical. 13 substantial phases emitted. YouTube 100% MIXED_3+_UNCONFIRMED (correct, due to n_total=5 over-counting). Sensitivity grid (K=4, MIN=3) in flat region. Visual QA reveals FOUNTAIN_3+ at f=890-936 is actually a cascade (algorithm wrong on this phase due to event sparsity).
+LAST_UPDATE: 2026-08-28 10:10 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 + H11v4 + H12 + H12v2 + H12v3 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED. H5 applies H3 as a downstream confidence flag. H6 simplified min-cost flow resolves the H2 conflict. H7 full min-cost flow with capacity constraints + gap/error-aware cost. H2+H3+H7 unified chain representation. H8 physics consistency check identifies 2 confirmed E6c false positives. H9 object permanence: coverage 82.9% on identical. H10 per-chain quality. H8v4 NEGATIVE. H8v5 MIXED. H10v5 PASS. H237v5. H8v6 NEGATIVE. H11 PASS: 9 CONFIDENT identical + 1 CONFIDENT YouTube chain, 8 catch/throw events, per-frame census 51% cascade on identical / 100% on YouTube (over-counting). H11 v2 identity-merge false positive. H11 v3 quality-filtered census confirms over-counting on YouTube. H11 v4 PASS: 85.7% reduction in merge candidates, correctly removes chain 36 ↔ chain 30 false positive. H12 PASS: per-frame pattern inference identifies 4-phase pattern on identical (FOUNTAIN → CASCADE → mixed), 33.8% UNKNOWN. YouTube unreliable due to H10 v5 over-counting. H12 v2 PASS: sliding-window event history + MIN_EVENTS_FOR_PATTERN=3 + MIXED_3+ category + phase detection. UNKNOWN collapses 33.8% → 1.4% on identical. 13 substantial phases emitted. YouTube 100% MIXED_3+_UNCONFIRMED (correct, due to n_total=5 over-counting). Sensitivity grid (K=4, MIN=3) in flat region. Visual QA reveals FOUNTAIN_3+ at f=890-936 is actually a cascade (algorithm wrong on this phase due to event sparsity). H12 v3 MIXED: enriched event log with 1 visually-confirmed v3c-rejected event (35->40 identical, real catch-throw that v4d incorrectly rejected). Changes 26 frames from FOUNTAIN_3+ to MIXED_3+ at f=797-829. Does NOT fix late FOUNTAIN_3+ blocks (f=890-1050) which are visually cascades. Confirms H12 v2 limitation: CASCADE/FOUNTAIN classification is fundamentally limited by event log density.
 
 ## Isolation
 
@@ -276,7 +276,13 @@ extraction: 10 identical + 1 youtube links with visual precision
     current visual QA found FOUNTAIN_3+ at f=890-936 is
     actually a cascade, suggesting the algorithm's
     cascade/fountain classification is wrong ~30% of
-    the time.
+    the time. **H12 v3 DONE as label-informed event
+    enrichment** — added 1 visually-confirmed v3c-rejected
+    event (35->40 identical). Result: 26 frames changed
+    from FOUNTAIN_3+ to MIXED_3+ at f=797-829. Late
+    FOUNTAIN_3+ blocks (f=890-1050) UNCHANGED. Confirms
+    the limitation is fundamental. A truly different
+    approach is needed.
 17. **H12 v3b: use chain-IDs as ball IDs** — chain 2
     (CONFIDENT, q=0.92) and chain 8 (CONFIDENT, q=0.85)
     are real single-ball juggling cycles. A future

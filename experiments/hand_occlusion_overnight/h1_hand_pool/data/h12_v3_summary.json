@@ -1,0 +1,64 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total_frames": 1077,
+      "pattern_counts": {
+        "TWO_BALL": 270,
+        "MIXED_3+_UNCONFIRMED": 66,
+        "SINGLE_BALL": 219,
+        "MIXED_3+": 342,
+        "NO_BALL": 35,
+        "TWO_BALL_ONE_HAND": 4,
+        "FOUNTAIN_3+": 141
+      },
+      "pct_patterns": {
+        "TWO_BALL": 25.069637883008358,
+        "MIXED_3+_UNCONFIRMED": 6.128133704735376,
+        "SINGLE_BALL": 20.33426183844011,
+        "MIXED_3+": 31.754874651810585,
+        "NO_BALL": 3.2497678737233056,
+        "TWO_BALL_ONE_HAND": 0.3714020427112349,
+        "FOUNTAIN_3+": 13.09192200557103
+      },
+      "n_phases": 126
+    }
+  },
+  "added_events": [
+    [
+      "identical_balls_trick_000_018",
+      "23",
+      "CATCH",
+      40,
+      35,
+      535,
+      522,
+      549,
+      27,
+      "left",
+      27,
+      "False",
+      "False",
+      0.8367,
+      "HAND_TRANSITION",
+      "v3c_rejected_visually_confirmed"
+    ],
+    [
+      "identical_balls_trick_000_018",
+      "23",
+      "THROW",
+      40,
+      35,
+      535,
+      522,
+      549,
+      27,
+      "left",
+      27,
+      "False",
+      "False",
+      0.8367,
+      "HAND_TRANSITION",
+      "v3c_rejected_visually_confirmed"
+    ]
+  ]
+}

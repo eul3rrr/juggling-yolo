@@ -503,9 +503,41 @@ phases that are actually cascades. Future H12 v3 should
 integrate detector-level ball position signals.
 
 Next episode candidates:
-1. H12 v3: integrate detector-level ball position signals
-   (per-frame ball x,y relative to each hand, not just n_in_hand)
+1. H12 v4: detector-level ball position signal (per-frame ball
+   x,y relative to each hand) — this is needed to fix the
+   CASCADE/FOUNTAIN misclassification in the late phase
 2. H13: detector-level low-confidence ball detection near
    active hand events (master §14 follow-up)
 3. H8 v7: per-frame per-bounce segmentation for YouTube
    long tracklets
+
+## Eighteenth episode (H12 v3) — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+
+1. ✅ Visually QA'd the 2 v3c-rejected links:
+   - 35->40 on identical (left hand, from_slope=2.31): VISUALLY
+     CONFIRMED as a real catch-throw. v4d threshold is too strict.
+   - 15->25 on YouTube (left hand, from_slope=2.08): VISUALLY
+     REJECTED as not a real catch-throw. v4d threshold is correct.
+2. ✅ Implemented H12 v3: enriched event log with the
+   visually-confirmed 35->40 event added back as a
+   "v3c_rejected_visually_confirmed" entry.
+3. ✅ Ran H12 v2 classifier on the enriched event log.
+   Result: 26 frames changed from FOUNTAIN_3+ to MIXED_3+ at
+   f=797-829. No change in f<535. No change in f>829.
+4. ✅ Documented in `h12_v3_report.md` and updated RESULTS_LOG.
+
+**H12 v3 verdict: MIXED.** The enriched event log changes 26
+frames in the mid-phase but does NOT fix the late FOUNTAIN_3+
+blocks (f=890-1050) which the visual QA identified as actually
+cascades. The new event is too far in the past to be in the
+K=4 window during the late phase. **The H12 v2 limitation is
+fundamental**: CASCADE/FOUNTAIN classification is limited by
+event log density, and event log is right-hand-biased. A truly
+different approach (H12 v4) is needed.
+
+Next episode candidates:
+1. H12 v4: detector-level ball position signal
+2. H13: low-confidence detector-based event detection
+3. H8 v7: per-frame per-bounce segmentation

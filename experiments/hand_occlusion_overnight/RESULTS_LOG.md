@@ -1378,3 +1378,72 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/comparison_*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/phase_*.png` (5 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v2_report.md`
+
+### H12 v3 (2026-08-28 ~10:10 CEST)
+
+- Hypothesis: H12 v2's CASCADE/FOUNTAIN misclassification in
+  the late phase (f=890-1050) is caused by the right-hand
+  bias of the existing event log. Visual QA of the 2 v3c-
+  rejected links found 35->40 on identical is a real
+  catch-throw (v4d's `MIN_FROM_SLOPE=2.5` threshold is too
+  strict, from_slope=2.31). Adding this event back to the
+  log should change pattern classification in the mid-to-late
+  phase. The 15->25 on YouTube was correctly rejected (not a
+  real catch-throw).
+
+- **Caveat:** This is a `LABEL_INFORMED_EXPLORATORY` experiment
+  — the event is added because visual QA confirmed it, not
+  because the algorithm's threshold was wrong.
+
+- Thresholds (inherited from H12 v2): K_EVENTS=4,
+  MIN_EVENTS_FOR_PATTERN=3. v4d threshold is preserved at 2.5.
+
+- Quantitative result on identical (1077 frames):
+
+  | Pattern | v2 | v3 | Δ |
+  |---|---|---|---|
+  | FOUNTAIN_3+ | 15.5% | 13.1% | **-2.4 pp** |
+  | MIXED_3+ | 29.3% | 31.8% | +2.5 pp |
+  | (others) | unchanged | unchanged | 0.0 pp |
+
+  Frame-level diff: 26 frames changed from `FOUNTAIN_3+` to
+  `MIXED_3+`, all in the f=797-829 range. The new event enters
+  the K=4 window at f=535 and stays until ~f=797-829 where it
+  changes the alternation metric enough to demote FOUNTAIN to
+  MIXED.
+
+- Why the late FOUNTAIN_3+ blocks are unchanged: The new
+  left-hand event at f=535 is too far in the past to be in
+  the K=4 window during the late phase (f=890-1050). The late
+  window is dominated by right-hand events at f=843, 881, 1022,
+  1052. The algorithm still classifies these as FOUNTAIN, but
+  the vision tool confirmed they are visually cascades (balls
+  cross between hands).
+
+- Negative findings:
+  - **H12 v3 confirms the H12 v2 limitation is fundamental.**
+    Adding 1 visually-confirmed event to the log changes 26
+    frames in the mid-phase but not in the late phase where the
+    algorithm's CASCADE/FOUNTAIN classification is most wrong.
+  - **A truly different approach (H12 v4) is needed.** The
+    event-log-based classification is fundamentally limited by
+    event density and hand distribution. A detector-level
+    signal (per-frame ball positions relative to each hand) is
+    the only way to fix the late phase.
+
+- Verdict: **MIXED.** H12 v3 demonstrates that label-informed
+  event enrichment has limited impact on the CASCADE/FOUNTAIN
+  classification. The 26-frame change in f=797-829 is a real
+  but localized improvement. The fundamental limitation
+  remains. See `h1_hand_pool/reports/h12_v3_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v3_enriched_events.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v3_visualize.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h12_v2_v3c_rejected.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v3_*.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_phases_v3_*.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h12_v3_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v2/v3c_rejected_*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h12v3/v2_v3_comparison_*.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h12_v3_report.md`

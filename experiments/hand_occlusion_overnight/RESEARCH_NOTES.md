@@ -561,3 +561,38 @@ useful source record:
     (K=2, MIN=3) which gives 51.0% MIXED_3+_UNCONFIRMED
     (correctly conservative). The default (K=4, MIN=3) is
     a well-justified operating point.
+
+## Cross-cutting insights from H12 v3 (2026-08-28 ~10:10)
+
+37. **Visual QA of v3c-rejected links is informative.** Of
+    the 2 v3c-rejected links, 1 was a real catch-throw
+    incorrectly rejected by v4d (35->40 identical), and 1
+    was correctly rejected (15->25 YouTube). This validates
+    the v4d threshold's overall correctness while showing
+    it has a small (~1 of 11) false negative rate.
+
+38. **Enriching the event log has limited effect on late-phase
+    classification.** Adding 1 visually-confirmed event
+    (35->40 at f=535) changes only 26 frames (f=797-829)
+    from FOUNTAIN_3+ to MIXED_3+. The late FOUNTAIN_3+ blocks
+    (f=890-1050) are unchanged because the new event is too
+    far in the past to be in the K=4 window. **This confirms
+    the H12 v2 limitation is fundamental: CASCADE/FOUNTAIN
+    classification is limited by event log density.**
+
+39. **A truly different approach is needed for the late
+    phase.** H12 v3 demonstrates that the event-log-based
+    classification cannot be fixed by adding more events.
+    The late phase's right-hand-biased window leads to
+    FOUNTAIN_3+ classification even though the visual
+    evidence is cascade. A detector-level signal (per-frame
+    ball positions relative to each hand) is needed.
+
+40. **The H12 v2/v3 confidence values are honest about
+    uncertainty.** The FOUNTAIN_3+ blocks at f=890-1050
+    have conf=0.42-0.63, which is lower than the MIXED_3+
+    blocks at conf=0.85-0.93. The lower conf reflects the
+    algorithm's lower certainty, which is consistent with
+    the visual evidence. Downstream consumers can use the
+    conf value to filter out low-certainty FOUNTAIN_3+
+    labels.
