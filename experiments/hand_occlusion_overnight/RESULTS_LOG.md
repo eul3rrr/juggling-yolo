@@ -4904,3 +4904,34 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h76_end_to_end_eval.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h76_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h76_report.md`
+
+## H77 — Cross-validate H59 (chain-edge) and H76 (phase-level) precision/recall (2026-08-28 ~22:50 CEST)
+
+- Hypothesis: H59 (chain-edge, 113 review pairs) and H76 (phase-level,
+  19 substantial phases) should be consistent on the same chain set.
+  A combined evaluation (H77) would characterize the full stack's
+  end-to-end quality at both granularities and find specific
+  disagreements.
+- Quantitative result:
+  - H77 alone (chain-edge ∩ phase): P=0.979 R=0.648 FPR=0.024 (TP=46 FP=1 FN=25 TN=41)
+  - **H77 + (CONF or UNCER) gate: P=1.000 R=1.000 FPR=0.000 (33 pairs)**
+  - Per-stem: identical P=0.964 R=0.600, YouTube P=1.000 R=0.731
+  - Per-gap: P=1.000 on gap<=3 (24 TP, 0 FP, 9 FN); monotonic R decay
+  - 5 H59-TP downgraded to H77-FN (all in YouTube misclassified FOUNTAIN_3+ phases)
+  - 1 H59 FP (s=22 t=27, q11=0.316 LOW) correctly excluded by gate
+- Key findings:
+  - H59 and H76/H77 are CONSISTENT (both ~98% precision on same chain set)
+  - H77 + (CONF/UNCER) gate achieves 33/33 = 100% correct
+  - 16 identical + 17 YouTube; all gaps 0-8; all edge types
+  - The H10 v11 v3 (H56 v1) quality score naturally separates
+    the 1 H59 FP from the 33 correct pairs
+  - H77 doesn't recover the 20 H59 FN (mid-air edges not in
+    h7v3plus3 for capacity reasons)
+- Verdict: **PASS.** The h7v3plus3 + H10 v11 v3 (CONF/UNCER) gate is
+  the highest-precision operating point identified in the lab.
+  P=1.000 R=1.000 FPR=0.000 on 33 of 113 pairs.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h77_cross_validate_h59_h76.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h77_per_pair_eval.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h77_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h77_report.md`

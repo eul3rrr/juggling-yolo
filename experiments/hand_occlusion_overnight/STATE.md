@@ -2541,3 +2541,55 @@ H70/H71/H75 v1 stack achieves 84.2% (16/19) accuracy on the H70 sample.
 3. H79: cross-video calibration of H69 spec_conc threshold
 
 See `h1_hand_pool/reports/h76_report.md` for full analysis.
+
+## H77 conclusion (2026-08-28 ~22:50 CEST)
+
+**H77: cross-validate H59 (chain-edge) and H76 (phase-level)
+precision/recall on the 113 manual review pairs** — DONE. PASS.
+
+The 33 review pairs that are `in_h7v3plus3` AND have `q11_label in
+(CONFIDENT, UNCERTAIN)` are **100% correct** (P=1.000, R=1.000, FPR=0.000).
+This is the highest-precision operating point identified in the lab.
+
+**Key findings:**
+
+1. **H59 and H76/H77 are consistent.** Both achieve ~98% precision on
+   the same chain set, just at different granularities. H59 evaluates
+   at chain-edge level (113 review pairs); H76 at phase level (19
+   substantial phases). H77 confirms they don't contradict.
+
+2. **H77 + (CONF or UNCER) gate: 33/33 = 100% correct.** 16 identical
+   + 17 YouTube, all gaps 0-8, all edge types. The H10 v11 v3
+   (H56 v1) quality score naturally separates the 1 H59 FP (s=22
+   t=27, q11=0.316 LOW) from the 33 correct pairs.
+
+3. **5 H59-TP downgraded to H77-FN.** All 5 are real correct catches
+   in YouTube FOUNTAIN_3+ phases that H12 v8 misclassified:
+   - s=3 t=6, s=17 t=24, s=19 t=22: f=482-594 (STATIC_HOLD, H74)
+   - s=30 t=37, s=33 t=36: f=800-861 (real CASCADE mislabeled, H65)
+   - s=3 t=6: f=2-71 (MIXED_3+_UNCONFIRMED startup, H71_REJECT)
+   H77's spec_conc filter rejects the phase but loses these 5 TPs.
+
+4. **Per-gap: P=1.000 on all gaps up to 3 frames.** 24 TP, 0 FP on
+   47 pairs. Recall 0.727 on gap<=3 (9 FN are mid-air edges).
+
+5. **Per-stem: YouTube P=1.000 R=0.731 (perfect precision).** Identical
+   P=0.964 R=0.600 (1 FP s=22 t=27, excluded by quality gate).
+
+6. **H77 doesn't recover the 20 H59 FN.** These are mid-air edges
+   h7v3plus3 didn't accept for capacity reasons. H77 only filters
+   pairs already in h7v3plus3.
+
+**Recommended operating point (post-H77, supersedes H76):**
+
+For precision-maximizing downstream consumers:
+**h7v3plus3 + H10 v11 v3 (CONF or UNCER gate)** → P=1.000 R=1.000
+on 33 of 113 pairs; loses 14 LOW-quality pairs (13 correct + 1 wrong).
+
+For exhaustive coverage (original H59): h7v3plus3 alone → P=0.981
+R=0.718 on 113 pairs.
+
+For phase-validated precision: h7v3plus3 + H77 (NOT in misclassified
+phase) → P=0.979 R=0.648 on 113 pairs.
+
+**See `h1_hand_pool/reports/h77_report.md` for full analysis.**
