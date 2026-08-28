@@ -1,0 +1,23 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_flights": 11,
+      "verdict_counts": {
+        "BOUNCE_VIOLATION": 9,
+        "BOUNCE_OK": 2
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_flights": 15,
+      "verdict_counts": {
+        "BOUNCE_VIOLATION": 15
+      }
+    }
+  },
+  "config": {
+    "TAIL_N": 3,
+    "VY_DESCEND_MAX": -0.5,
+    "VY_ASCEND_MIN": 0.5,
+    "MIN_TRACKLET_PTS": 5
+  }
+}
