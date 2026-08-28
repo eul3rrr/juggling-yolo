@@ -1,0 +1,98 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_v_reclassified": 4,
+      "n_h3_confirmed": 1,
+      "results": [
+        {
+          "edge": "39->47",
+          "v_class": "V_SHALLOW",
+          "v_min_d": 74.86,
+          "hand": "left",
+          "gap_start": 676,
+          "gap_end": 685,
+          "target_hand_xy": [
+            536.3526306,
+            374.5252473
+          ],
+          "n_total_dets_in_cluster": 0,
+          "n_unique_frames_in_cluster": 0,
+          "h3_confirmed": false
+        },
+        {
+          "edge": "51->52",
+          "v_class": "V_DEEP",
+          "v_min_d": 26.65,
+          "hand": "left",
+          "gap_start": 766,
+          "gap_end": 775,
+          "target_hand_xy": [
+            626.6778319,
+            536.7173279
+          ],
+          "n_total_dets_in_cluster": 8,
+          "n_unique_frames_in_cluster": 5,
+          "h3_confirmed": true
+        },
+        {
+          "edge": "23->25",
+          "v_class": "V_DEEP",
+          "v_min_d": 18.39,
+          "hand": "right",
+          "gap_start": 235,
+          "gap_end": 243,
+          "target_hand_xy": [
+            496.69605866666666,
+            474.81379177777785
+          ],
+          "n_total_dets_in_cluster": 0,
+          "n_unique_frames_in_cluster": 0,
+          "h3_confirmed": false
+        },
+        {
+          "edge": "30->33",
+          "v_class": "V_SHALLOW",
+          "v_min_d": 58.52,
+          "hand": "left",
+          "gap_start": 450,
+          "gap_end": 461,
+          "target_hand_xy": [
+            658.4024606666667,
+            436.00411733333334
+          ],
+          "n_total_dets_in_cluster": 0,
+          "n_unique_frames_in_cluster": 0,
+          "h3_confirmed": false
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_v_reclassified": 1,
+      "n_h3_confirmed": 0,
+      "results": [
+        {
+          "edge": "27->28",
+          "v_class": "V_DEEP",
+          "v_min_d": 21.81,
+          "hand": "left",
+          "gap_start": 670,
+          "gap_end": 678,
+          "target_hand_xy": [
+            640.4382527777777,
+            408.7423298888889
+          ],
+          "n_total_dets_in_cluster": 3,
+          "n_unique_frames_in_cluster": 3,
+          "h3_confirmed": false
+        }
+      ]
+    }
+  },
+  "thresholds": {
+    "LOW_CONF_MAX": 0.5,
+    "CLUSTER_RADIUS_PX": 30.0,
+    "CLUSTER_MIN_FRAMES": 5,
+    "CLUSTER_MIN_DETS": 3,
+    "GAP_PAD_FRAMES": 5
+  }
+}
