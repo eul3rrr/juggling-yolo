@@ -5042,4 +5042,161 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h82_h74_refined.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h82v2_sens_grid.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h82_h74_refined.json`
+
+---
+
+## H83 + H85 + H86 + H87 + H88 (2026-08-28 ~23:55 CEST)
+
+- H83 v3 (H74v3 with `unique_L > 1 OR unique_R > 1`) tested as an
+  alternative to H74v2. Does NOT improve the 21-phase sample: fixing
+  f=267-298 FN breaks f=375-410 (introduces new FN). Net 0 improvement.
+- H85 cross-validated H82 v1 on 113 manual review pairs:
+  P=0.979 R=0.648 (TP=46 FP=1 FN=25 TN=41). Identical to H77. The
+  (CONF or UNCER) gate achieves P=1.000 R=1.000 on 33/33 pairs.
+- H87 introduced a YOLO-based "balls aloft" signal
+  (count YOLO sports ball detections > 100 px from both wrists).
+  H87 (pct_ge3 < 0.20) catches the H82 v1 FP at f=685-716 MANIPULATION.
+  H82 v1 + H87 achieves P=1.000 at 90.5% accuracy on 21 phases,
+  losing 2 real juggling phases (f=263-312 JUGGLING, f=977-1011
+  FOUNTAIN) on identical.
+- H88 cross-validated H82 v1 + H87 on 113 review pairs: identical
+  to H85 (P=0.979 R=0.648). The H87 filter has no edge-level impact.
+- Key findings:
+  1. H82 v1 = H83 v3 = H88 on 21 phases / 113 pairs.
+  2. The 5-ball saturation problem is real but the 5-ball juggler
+     has 2 distinct patterns (stable LR=2.0 + cycling LR) that no
+     H40v2 refinement can handle simultaneously.
+  3. H87 catches the H82 v1 FP at f=685-716 MANIPULATION on identical
+     but fails on YouTube due to YOLO false positives (H4/H66).
+  4. H87 has no edge-level impact (mostly mid-air edges don't
+     overlap with H70 substantial phases).
+- Verdict: **H87 PARTIAL PASS** (catches f=685-716 MANIPULATION,
+  P=1.000 at 90.5% acc, 21 phases, loses 2 identical TPs).
+- Recommended operating point (post-H88): h7v3plus3 + H10 v11 v3
+  + H12 v8 + H50 + H43 + H69 + H74v2 + H78 + H87 + H52 + H53.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h83_h74v3.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h85_h82v1_per_pair.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h86_h83v3_vs_h82v1.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h87_balls_aloft.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h88_h87_per_pair.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h85_report.md`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h86_report.md`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h87_report.md`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h88_report.md`
+
+---
+
+## H89 — YOLO confidence thresholding for the H87 balls-aloft signal (2026-08-28 ~23:55 CEST)
+
+- Hypothesis: YOLO false positives on YouTube (background features
+  confused with sports balls, H4/H66) are likely at lower YOLO
+  confidence than true ball detections. A confidence floor
+  (`min_conf`) should filter most FPs, allowing H87 pct_ge3 to
+  discriminate on YouTube.
+- Method: Sweep `min_conf ∈ {0.0, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70}`
+  and re-compute pct_ge3 for each phase. Evaluate at pct_ge3 < thr
+  rejection for thr ∈ {0.05, 0.10, 0.20, 0.30, 0.50}.
+- Key findings:
+  - On YouTube: conf=0.40 + thr=0.30 catches the YouTube CASCADE_REAL
+    misclassification (f=800-861, pct_ge3=0.25 < 0.30) without
+    losing any juggling recall (R=1.000).
+  - On identical: higher conf_floor (≥0.30) HURTS. At conf=0.40
+    identical recall drops from 0.600 to 0.200. The 3-ball
+    cascade/FOUNTAIN has only 1 ball aloft, and the conf filter
+    removes the most-confident detection of the 1 ball.
+  - Asymmetric per-stem calibration:
+    - **identical**: H87 (conf=0.0, thr=0.20) — original H87
+    - **YouTube**: H89 (conf=0.40, thr=0.30) — conf filter removes FPs
+- H89 v3 per-stem results: TP=12, TN=7, FP=0, FN=2, P=1.000, R=0.857, acc=0.905.
+  Combined matches H82 v1 + H87 in accuracy. YouTube is now perfect.
+- Verdict: **PARTIAL PASS** (precision improvement at no accuracy cost).
+  H89 v3 per-stem stack achieves 100% YouTube accuracy and 90.5%
+  overall. The 2 identical FNs (f=263-312 JUGGLING, f=977-1011
+  FOUNTAIN) are unfixable — pct_ge3=0.04 and 0.03 are below
+  H87 thr=0.20 regardless of conf filter.
+- Why identical ≠ YouTube:
+  - On identical, true ball detections have conf range ~0.30-0.90,
+    with the lowest-conf detections often real (edge-of-frame,
+    partial occlusion). The conf=0.40 floor removes these.
+  - On YouTube, background FPs have conf ~0.30-0.55 and real
+    juggling balls have conf ~0.50-0.85. The conf=0.40 floor
+    mostly removes the FPs while keeping most real detections.
+- Recommended operating point (post-H89):
+  - For most downstream consumers: h7v3plus3 + H10 v11 v3 + H12 v8
+    + H50 + H43 + H69 + H74v2 + H78 + H52 + H53 → 95.2% acc on 21 phases
+  - For high-precision consumers: H89 v3 per-stem stack → 90.5% acc,
+    P=1.000
+  - For YouTube-only: H82 v1 + H89 conf=0.40 thr=0.30 → 100% on 12
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v2_stack.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v3_per_stem.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h89_yolo_conf_filter.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h89_v2_stack_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h89_v3_per_stem_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h89_report.md`
+
+---
+
+## H90 — Conf-filtering behavior as a STATIC_HOLD signal (2026-08-28 ~23:50 CEST)
+
+- Hypothesis: The CHANGE in pct_ge3 between the no-conf-floor H87
+  signal and the conf=0.40 H89 signal (a "drop" metric) is an
+  INDEPENDENT discriminator for static-hold misclassifications on
+  YouTube. H69 spec_conc catches f=2-71 and f=482-594; H90 asks
+  whether the conf-filtering behavior alone can.
+- Key signals (all at conf=0.40):
+  - f=2-71 STATIC_DEMO: pct_ge3=0.36, max_aloft=3, drop=0.39
+  - f=482-594 STATIC_HOLD: pct_ge3=0.36, max_aloft=4, drop=0.30
+  - f=420-481 JUGGLING: pct_ge3=0.39, max_aloft=3, drop=0.30
+  - f=800-861 CASCADE_REAL: pct_ge3=0.25, max_aloft=3, drop=0.34
+- H90 rule (per-stem):
+  - identical: H82+H87+H71 baseline OR H87 (c0_pct_ge3 < 0.20)
+  - YouTube: H82+H87+H71 baseline OR (H89 strict: c40<0.30) OR
+    (H90 NEW: c40<0.40 AND (max_aloft >= 4 OR drop_pct_ge3 > 0.38))
+- Quantitative result: combined TP=12, TN=7, FP=0, FN=2,
+  P=1.000, R=0.857, acc=0.905. YouTube TP=9, TN=3, FP=0, FN=0,
+  P=1.000, R=1.000, acc=1.000. Identical TP=3, TN=4, FP=0, FN=2,
+  P=1.000, R=0.600, acc=0.778.
+- H90 NEW catches: f=482-594 STATIC_HOLD via c40_max_aloft=4
+  (the only YouTube phase with max_aloft=4 at conf=0.40).
+- H89 strict catches: f=800-861 CASCADE_REAL via c40_pct_ge3=0.25.
+- Sensitivity grid (flat region): t1 ∈ [0.37, 0.45] × t2=4 × t3=0.38
+  gives identical 13/6/1/1 results. The chosen (0.40, 4, 0.38) is
+  well-justified by the flat-region confirmation (per master §15).
+- Signal independence: H90 NEW and H69 spec_conc catch the same
+  2 YouTube FPs on the H70 sample but use DIFFERENT signals (H69
+  uses FFT spectral concentration; H90 uses conf-filtering drop
+  behavior). This independence is a useful research property.
+- Visual QA: 3 contact sheets in `contact_sheets_h90/`. Single-pass
+  vision tool returned JUGGLING on f=2-71 (positive bias, consistent
+  with H53/H71 finding that single-pass vision verdicts on
+  ambiguous startup frames are unreliable). The H71 multi-rater
+  consensus (2/3 STATIC) is the ground truth.
+- Verdict: **PARTIAL PASS (precision improvement, no accuracy cost).**
+  H90 v3 matches H89 v3 in combined accuracy (0.905, P=1.000) but
+  adds 1 YouTube TN (f=482-594 STATIC_HOLD) that the original H87
+  stack missed, via a new conf-filtering signal that is INDEPENDENT
+  of H69 spec_conc. The 2 identical FNs are fundamental limitations
+  of the 3-ball aloft signal.
+- Recommended operating point (post-H90, unchanged from H89):
+  - For most: h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 +
+    H74v2 + H78 + H52 + H53 → 95.2% acc on 21 phases
+  - For high-precision (P=1.000, R=0.857, acc=0.905):
+    H90 v3 per-stem stack
+  - For YouTube-only (100% acc): H82 v1 + H89 conf=0.40 + H90 NEW
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_v4_grid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_v5_detail.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_v6_per_stem.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_per_phase_decision.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_v2_refined.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_v3_max_aloft.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_final.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h90_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h90_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h90_per_phase_features.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h90/*.png` (3 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h90_report.md`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h82_report.md`

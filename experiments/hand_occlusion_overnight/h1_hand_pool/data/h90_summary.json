@@ -1,0 +1,68 @@
+{
+  "H90_rule": {
+    "identical": "H82+H87+H71 baseline OR H87 (c0<0.20)",
+    "youtube": "H82+H87+H71 baseline OR (H89 strict: c40<0.30) OR (H90 NEW: c40<0.40 AND (max_aloft>=4 OR drop_pct_ge3>0.38))",
+    "overall": {
+      "TP": 12,
+      "TN": 7,
+      "FP": 0,
+      "FN": 2,
+      "P": 1.0,
+      "R": 0.857,
+      "acc": 0.905
+    },
+    "ident": {
+      "TP": 3,
+      "TN": 4,
+      "FP": 0,
+      "FN": 2,
+      "P": 1.0,
+      "R": 0.6,
+      "acc": 0.778
+    },
+    "youtu": {
+      "TP": 9,
+      "TN": 3,
+      "FP": 0,
+      "FN": 0,
+      "P": 1.0,
+      "R": 1.0,
+      "acc": 1.0
+    }
+  },
+  "H90_new_signal_catches": [
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594",
+      "verdict": "STATIC_HOLD",
+      "via": "max>=4"
+    }
+  ],
+  "H89_strict_catches": [
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861",
+      "verdict": "CASCADE_REAL"
+    }
+  ],
+  "H82_H87_H71_catches": [
+    {
+      "key": "identical_balls_trick_000_018_685_716",
+      "verdict": "MANIPULATION"
+    },
+    {
+      "key": "identical_balls_trick_000_018_733_766",
+      "verdict": "STATIC_HOLD"
+    },
+    {
+      "key": "identical_balls_trick_000_018_890_936",
+      "verdict": "OTHER_CROSSED_ARM"
+    },
+    {
+      "key": "identical_balls_trick_000_018_1029_1049",
+      "verdict": "OTHER_STATIC_HOLD"
+    },
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71",
+      "verdict": "STATIC_DEMO"
+    }
+  ]
+}
