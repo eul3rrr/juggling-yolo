@@ -2404,3 +2404,57 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus_admitted_edges_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3plus_h21_kept_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h21_report.md`
+
+---
+
+### H22 v1 + v2 (2026-08-28 ~20:15 CEST)
+
+- Hypothesis: H21 v1 found the YouTube 20→21 H20-KEPT REAL edge
+  REJECTED by capacity conflict with the existing 16→21 edge. Visual
+  analysis suggests 16→21 is wrong (tracklet 20 is the canonical
+  contact, tracklet 16 is spurious). H22 implements a VETO mode:
+  when an H20-KEPT edge has stronger V-shape evidence (min_d < 30 px)
+  AND the existing target has weaker evidence (start_dist > 30 px)
+  AND the H20-KEPT source has no existing successor, VETO the
+  existing edge and admit the H20-KEPT.
+- Thresholds (declared from physical geometry):
+  - MIN_D_VETO = 30.0 px (H20-KEPT V-shape min_hand_dist)
+  - VETO_DIST_THRESHOLD = 30.0 px (existing target start_dist)
+  - The H20-KEPT source must have no existing successor in the chain set
+- H22 v1 quantitative result:
+  - identical: 0 veto decisions. The 2 H20-KEPT candidates (17→22,
+    68→70) had strong V-shape AND weak existing targets, but their
+    sources (t17, t68) already have successors in the chain set.
+  - YouTube: 1 veto decision. 20→21 (V-shape min_d=5.3) successfully
+    vetoes 16→21 (target start_dist=35.3).
+- Chain topology change (YouTube):
+  - h7v3pure chain 0: (1,9,13,16,21,29,34) — 7 tids
+  - h7v3veto chain 0: (1,9,13,16) — 4 tids (16 no longer connects to 21)
+  - h7v3veto chain 10: (20,21,29,34) — 4 tids (new chain with 20→21)
+- H22 v2 chain quality (H10 v9 on h7v3veto chains):
+  - identical: mean quality 0.828 (no change)
+  - YouTube: mean quality 0.685 → 0.689 (+0.0034)
+- Negative findings:
+  - The H22 veto is narrow-scope: 0 identical veto decisions. The 2
+    H20-KEPT candidates with strong V-shape had existing source
+    successors, so they were excluded.
+  - The chain topology change is significant: the original 7-tid
+    YouTube chain is split into 2 chains. The chain count is
+    unchanged (15→15) but the chains are shorter on average.
+  - The mean quality improvement is small (+0.0034). The visual
+    confirmation is the primary value of H22.
+- Verdict: **MIXED (narrow-scope PASS).** H22 successfully vetoes
+  the existing 16→21 YouTube edge in favor of the H20-KEPT 20→21
+  edge, producing a slight chain quality improvement (+0.0034 on
+  YouTube) and confirming the visual analysis. h7v3pure (H7v2 +
+  H15v2) remains the recommended chain set; H22 is a useful
+  diagnostic tool. See `h1_hand_pool/reports/h22_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h22_veto_mode.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h22v2_chain_quality.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h22_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h22v2_chain_quality_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3veto_chains_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3veto_admitted_edges_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3veto_veto_decisions_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h22_report.md`

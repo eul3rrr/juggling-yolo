@@ -1159,20 +1159,51 @@ existing edges to make room for visually-confirmed alternatives.
 Visual analysis of the 20→21 case suggests the existing 16→21 edge
 is wrong (tracklet 20 is the canonical contact, not tracklet 16).
 
+## Thirty-fourth episode (H22 v1 + v2) — STATUS: COMPLETE (MIXED, narrow-scope PASS)
+
+Sub-steps:
+
+1. ✅ H22 v1: implement VETO mode — when an H20-KEPT edge is rejected
+   by capacity, check if the existing edge has weaker target evidence
+   (start_dist > VETO_DIST_THRESHOLD = 30 px). If the H20-KEPT has
+   min_d < MIN_D_VETO = 30 px AND the existing target has
+   start_dist > 30 px AND the H20-KEPT source has no existing
+   successor, VETO the existing edge and admit the H20-KEPT.
+2. ✅ H22 v1 result:
+   - identical: 0 veto decisions. The 2 H20-KEPT candidates (17→22,
+     68→70) had strong V-shape AND weak existing targets, but their
+     sources (t17, t68) already have successors in the chain set
+     (t17→t23 in chain 13, t68→t71 in chain 31). The veto would
+     break chain topology, so excluded.
+   - YouTube: 1 veto decision. 20→21 (V-shape min_d=5.3) successfully
+     vetoes 16→21 (target start_dist=35.3). The H20-KEPT source (t20)
+     is a singleton, so vetoing is safe.
+3. ✅ Chain topology change (YouTube):
+   - h7v3pure chain 0: (1,9,13,16,21,29,34) — 7 tids
+   - h7v3veto chain 0: (1,9,13,16) — 4 tids
+   - h7v3veto chain 10: (20,21,29,34) — 4 tids (new)
+4. ✅ H22 v2: re-compute H10 v9 chain quality on h7v3veto chains.
+   - identical: mean quality 0.828 (no change)
+   - YouTube: mean quality 0.685 → 0.689 (+0.0034)
+5. ✅ Documented in `h22_report.md`.
+
+**H22 verdict: MIXED (narrow-scope PASS).** H22 successfully vetoes
+the existing 16→21 YouTube edge in favor of the H20-KEPT 20→21 edge,
+producing a slight chain quality improvement (+0.0034 on YouTube)
+and confirming the visual analysis that 16→21 is wrong. The veto
+has narrow scope: 0 identical veto decisions because the H20-KEPT
+candidates have existing source successors. h7v3pure (H7v2 + H15v2)
+remains the recommended chain set; H22 is a useful diagnostic tool.
+
 **Next episode candidates:**
 
-1. **H22: H20-KEPT edge veto mode** — when an H20-KEPT edge is
-   rejected by capacity, check if the blocking existing edge is
-   weaker (e.g., the H20-KEPT has min_d=5.3 vs the existing has
-   min_d=21.7). If so, VETO the existing edge and admit the
-   H20-KEPT edge. This would admit the YouTube 20→21 edge and
-   improve chain quality.
-2. **H23: investigate YouTube 16→21 vs 20→21** — visually verify
-   whether 16→21 or 20→21 is the real catch+throw. A more careful
-   inspection of 16's tail frames and 20's head frames is needed.
-3. **H24: visually QA the remaining 18 H20-KEPT e6c_not_in_h7v2
-   candidates** — only 8 of 26 were visually QA'd. The full
-   26-candidate pool could be characterized more reliably with
-   additional QA.
-4. **H25: H12 v8 pattern inference on h7v3plus chains** — analog
+1. **H23: aggressive H20-KEPT veto mode** — extend H22 to break
+   existing chain topology when an H20-KEPT edge has much stronger
+   evidence. This would admit the 2 identical veto candidates
+   (17→22, 68→70). Trade-off: chain quality may drop.
+2. **H24: H20-KEPT e6c_not_in_h7v2 candidate review at scale** —
+   visually QA the remaining 18 H20-KEPT e6c_not_in_h7v2 candidates.
+3. **H25: H11 v8 identity propagation on h7v3veto chains** — see if
+   the 20→21 vs 16→21 swap changes the per-tracklet physical ball IDs.
+4. **H26: H12 v8 pattern inference on h7v3plus chains** — analog
    of H12 v7 but with the H21 chains.

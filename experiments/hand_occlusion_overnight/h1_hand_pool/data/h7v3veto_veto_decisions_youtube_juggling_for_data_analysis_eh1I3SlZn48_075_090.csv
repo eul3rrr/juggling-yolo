@@ -1,0 +1,2 @@
+h22_from_tid,h22_to_tid,blocking_from_tid,blocking_to_tid,blocking_edge_type,blocking_target_start_dist,h20_min_d,h22_reason
+20,21,16,21,RECLASSIFIED_HAND_TRANSITION,35.34,5.32,veto: H20-KEPT min_d=5.3 overrides existing 16->21 (target start_dist=35.3)

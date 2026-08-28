@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 20:00 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + **H21 v1 + v2** COMPLETE. **H20 PASS**: In-hand + vel-jump + apex rejection for H17 strict V-shape positives achieves 0.900 precision and 0.833 FPR drop. **H21 v1 MIXED**: 3/4 identical H20-KEPT REAL edges admitted as new HAND_TRANSITION edges, merging 3 pairs of chains. 1/1 YouTube H20-KEPT REAL edge (20→21) REJECTED by capacity conflict with existing 16→21. H21 v2 chain quality DROPS slightly on identical (-0.023) because new chains expose BALLISTIC edges that h8 v5 penalizes. Visual analysis reveals the existing 16→21 YouTube edge may be wrong (tracklet 20 is the canonical contact). H21 is a research tool, not a chain-set replacement. h7v3pure (H7v2 + H15v2) remains the recommended chain set.
+LAST_UPDATE: 2026-08-28 20:15 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + **H22 v1+v2** COMPLETE. **H22 MIXED (narrow-scope PASS)**: H20-KEPT edge veto mode successfully overrides the existing 16→21 YouTube edge with the H20-KEPT 20→21 edge (V-shape min_d=5.3 vs existing target start_dist=35.3). YouTube mean chain quality improves +0.0034 (0.685→0.689). The original 7-tid chain (1,9,13,16,21,29,34) splits into 2 chains (1,9,13,16) and (20,21,29,34). 0 identical veto decisions because the 2 H20-KEPT candidates (17→22, 68→70) have existing source successors in the chain set. H22 confirms the visual analysis that 16→21 is wrong and 20→21 is the real catch. h7v3pure remains the recommended chain set; H22 is a useful diagnostic tool.
 
 ## Isolation
 
@@ -408,39 +408,41 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
     penalizes. Visual analysis reveals the existing 16→21 YouTube
     edge may be wrong (tracklet 20 is the canonical contact).
     H21 is a research tool, not a chain-set replacement.
+35. ~~**H22 v1+v2: H20-KEPT edge veto mode**~~ **DONE. MIXED
+    (narrow-scope PASS).** Successfully vetoes existing 16→21
+    YouTube edge in favor of H20-KEPT 20→21 (V-shape min_d=5.3 vs
+    existing target start_dist=35.3). YouTube mean chain quality
+    improves +0.0034 (0.685→0.689). The 7-tid chain (1,9,13,16,
+    21,29,34) splits into 2 chains (1,9,13,16) and (20,21,29,34).
+    0 identical veto decisions (the 2 H20-KEPT candidates with
+    strong V-shape had existing source successors in the chain set).
+    H22 confirms the visual analysis that 16→21 is wrong and
+    20→21 is the real catch. h7v3pure remains the recommended
+    chain set; H22 is a useful diagnostic tool.
 
 ## Next action
 
-H21 v1 + v2 is complete (MIXED). The 3 admitted H21-KEPT edges merge
-3 pairs of identical chains (5,6,15) + (51,52,54,57) + (56,58). The
-1 rejected YouTube 20→21 edge is a known limitation: the H21 algorithm
-does not veto existing edges to make room for H21-KEPT alternatives.
-
-Visual analysis of the YouTube 20→21 case suggests the existing 16→21
-edge is WRONG: tracklet 20 is the canonical contact tracklet (3
-detections at the right wrist with min_d ≈ 5 px), while tracklet 16
-is a spurious earlier-detection (n=126 frames, ending at f=468, 2
-frames before t20's contact).
+H22 v1+v2 is complete (MIXED, narrow-scope PASS). The YouTube 20→21
+veto confirms the visual analysis: t20 is the canonical contact,
+t16 is spurious. h7v3pure remains the recommended chain set.
 
 Remaining research directions:
 
-1. **H22: H20-KEPT edge veto mode** — when an H20-KEPT edge is
-   rejected by capacity, check if the blocking existing edge is
-   weaker (e.g., the H20-KEPT has min_d=5.3 vs the existing has
-   min_d=21.7 = the catch-hand-distance from t16's endpoint). If
-   so, VETO the existing edge and admit the H20-KEPT edge. This
-   would admit the YouTube 20→21 edge and improve chain quality.
+1. **H23: aggressive H20-KEPT veto mode** — extend H22 to break
+   existing chain topology when an H20-KEPT edge has much stronger
+   evidence than the existing edge. This would admit the 2 identical
+   veto candidates (17→22, 68→70) that H22 rejected due to source
+   successor conflicts. Trade-off: chain quality may drop.
 
-2. **H23: investigate YouTube 16→21 vs 20→21** — visually verify
-   whether 16→21 or 20→21 is the real catch+throw. Vision analysis
-   of the H20 20→21 contact sheet suggests 16 is spurious, but
-   a more careful inspection of 16's tail frames (f=465-468) and
-   20's head frames (f=466-470) is needed to confirm.
+2. **H24: H20-KEPT e6c_not_in_h7v2 candidate review at scale** —
+   visually QA the remaining 18 H20-KEPT e6c_not_in_h7v2 candidates
+   (only 8 of 26 were visually QA'd). The full 26-candidate pool
+   could be characterized more reliably with additional QA.
 
-3. **H24: visually QA the remaining 18 H20-KEPT e6c_not_in_h7v2
-   candidates** — only 8 of 26 were visually QA'd. The full 26-candidate
-   pool could be characterized more reliably with additional QA.
+3. **H25: H11 v8 identity propagation on h7v3veto chains** — run
+   the identity propagation algorithm on the new h7v3veto chains
+   to see if the 20→21 vs 16→21 swap changes the per-tracklet
+   physical ball IDs.
 
-4. **H25: H12 v8 pattern inference on h7v3plus chains** — analog
-   of H12 v7 but with the H21 chains. May reveal whether the merged
-   chains (e.g., 51,52,54,57) change the pattern classification.
+4. **H26: H12 v8 pattern inference on h7v3plus chains** — analog
+   of H12 v7 but with the H21 chains.

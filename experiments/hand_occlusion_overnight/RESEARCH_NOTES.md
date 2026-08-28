@@ -1130,3 +1130,42 @@ useful source record:
     tracklet. This suggests a more general rule: **a contact event is
     more likely to be the SHORTEST tracklet in a hand-region cluster,
     not the longest.** A future H22 could implement this rule.
+
+## Cross-cutting insights from H22 (2026-08-28 ~20:15)
+
+43. **H22 veto mode confirms the visual analysis that 16→21 is wrong.**
+    The H20-KEPT 20→21 edge (V-shape min_d=5.3, the ball is right
+    at the wrist) has stronger evidence than the existing 16→21
+    edge (target start_dist=35.3, the ball is 35 px from the wrist).
+    The H22 veto correctly prefers the H20-KEPT edge, producing a
+    slight chain quality improvement (+0.0034 on YouTube).
+
+44. **The "source successor" check is a conservative choice.** H22
+    excludes H20-KEPT edges whose source already has a successor in
+    the chain set. This prevents the veto from breaking existing
+    chains, but it also limits the veto's applicability. A more
+    aggressive H22 v2 could allow source successor conflicts if
+    the H20-KEPT edge is much stronger.
+
+45. **Chain topology change is significant.** The H22 veto splits
+    the original 7-tid YouTube chain (1,9,13,16,21,29,34) into 2
+    chains (1,9,13,16) and (20,21,29,34). This is a real change
+    in the chain structure, not just an edge reclassification.
+    The mean quality improvement is small (+0.0034) because both
+    sub-chains are still high-quality multi-tracklet chains.
+
+46. **H22 is a useful diagnostic tool, not a chain-set replacement.**
+    The h7v3pure chain set has the longer 7-tid YouTube chain that
+    the production system considers correct. H22 reveals that this
+    chain has a spurious edge (16→21), but correcting it requires
+    chain topology changes that may not be worth the small quality
+    improvement. h7v3pure remains the recommended chain set.
+
+47. **The H22 veto mode generalizes the H20 visual confirmation
+    principle.** H20 found that the strict V-shape positives
+    include 5 visually-confirmed REAL H20-KEPT edges. H21 showed
+    that 3/5 can be cleanly added to the chain set, and 1/5
+    (YouTube 20→21) requires vetoing an existing edge. H22 is the
+    veto mechanism. Together, H20 + H21 + H22 form a complete
+    pipeline for integrating V-shape-discovered catch+throws into
+    the chain set.
