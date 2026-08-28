@@ -28,11 +28,12 @@ WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
 H1_DIR = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool"
 H1_DATA = H1_DIR / "data"
 
-# v3 settings
-MIN_ARCS_FOR_PENALTY = 3
+DEADZONE = 0.5
+RAMP_END = 1.0
 W54 = 0.30
-G_CV_DEADZONE = 0.5  # no penalty below this
-G_CV_RAMP_END = 1.0  # full penalty at this g_cv
+HIGH_CV_FLOOR = 1.0
+PARTIAL_W54 = 0.15
+MIN_ARCS_FOR_PENALTY = 3
 STEMS = [
     "identical_balls_trick_000_018",
     "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
@@ -80,11 +81,11 @@ def non_linear_penalty(g_cv, w54, deadzone=0.5, ramp_end=1.0):
 def main():
     summary = {"videos": {}, "config": {
         "MIN_ARCS_FOR_PENALTY": MIN_ARCS_FOR_PENALTY, "W54": W54,
-        "G_CV_DEADZONE": G_CV_DEADZONE, "G_CV_RAMP_END": G_CV_RAMP_END,
+        "G_CV_DEADZONE": DEADZONE, "G_CV_RAMP_END": RAMP_END,
     }}
     for stem in STEMS:
         print(f"\n=== {stem} (H56 v1 non-linear penalty, "
-              f"deadzone={G_CV_DEADZONE}, ramp_end={G_CV_RAMP_END}, w54={W54}) ===")
+              f"deadzone={DEADZONE}, ramp_end={RAMP_END}, w54={W54}) ===")
         h10 = load_h10v10(stem)
         h54 = load_h54_gcv(stem)
         chains = []
@@ -96,7 +97,7 @@ def main():
             n_arcs = h54_info["n_arcs_clean"]
             g_cv = h54_info["g_cv"]
             if n_arcs >= MIN_ARCS_FOR_PENALTY and g_cv is not None:
-                g_pen = non_linear_penalty(g_cv, W54, G_CV_DEADZONE, G_CV_RAMP_END)
+                g_pen = non_linear_penalty(g_cv, W54, DEADZONE, RAMP_END)
                 penalized = g_pen > 0
             else:
                 g_pen = 0.0
