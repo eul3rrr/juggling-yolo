@@ -1,0 +1,5 @@
+from_tid,to_tid,h14_class,h14_min_d,h14_hand,reason
+39,47,V_SHALLOW,74.86,left,v_shape_v_shallow_hand=left
+51,52,V_DEEP,26.65,left,v_shape_v_deep_hand=left
+23,25,V_DEEP,18.39,right,v_shape_v_deep_hand=right
+30,33,V_SHALLOW,58.52,left,v_shape_v_shallow_hand=left

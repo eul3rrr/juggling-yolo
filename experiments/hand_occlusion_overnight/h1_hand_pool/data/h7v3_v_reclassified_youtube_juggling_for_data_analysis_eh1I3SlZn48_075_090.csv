@@ -1,0 +1,2 @@
+from_tid,to_tid,gap,h14_class,h14_min_d,h14_hand,jump_px_per_frame,reason
+27,28,5,V_DEEP,21.81,left,14.48,v_shape_v_deep_jump_14.5_hand=left

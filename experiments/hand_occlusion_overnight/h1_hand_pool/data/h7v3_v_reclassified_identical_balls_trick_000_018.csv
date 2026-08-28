@@ -1,0 +1,4 @@
+from_tid,to_tid,gap,h14_class,h14_min_d,h14_hand,jump_px_per_frame,reason
+39,47,4,V_SHALLOW,74.86,left,8.0,v_shape_v_shallow_jump_8.0_hand=left
+51,52,5,V_DEEP,26.65,left,11.42,v_shape_v_deep_jump_11.4_hand=left
+30,33,6,V_SHALLOW,58.52,left,6.04,v_shape_v_shallow_jump_6.0_hand=left
