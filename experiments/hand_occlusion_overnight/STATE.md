@@ -2283,3 +2283,72 @@ on the 20 substantial phases. Remaining directions:
    H71 v1 for MIXED_3+) is precision-optimized. Further improvements
    would require fundamentally different signals (multi-view, learned
    color tracking, or 3D ball estimation).
+
+## H73 conclusion (2026-08-28 ~21:00 CEST)
+
+**H73: H40v2 sustained-occupancy as CASCADE_3+ / FOUNTAIN_3+ validator** —
+DONE. NEGATIVE. H40v2 is NOT a useful discriminator for CASCADE_3+ /
+FOUNTAIN_3+ accuracy. The hypothesis was wrong: H40v2 measures "balls
+within 100 px of hands", not "actively juggling".
+
+**Key findings:**
+
+1. **All 9 substantial CASCADE_3+ / FOUNTAIN_3+ phases have both hands
+   occupied** (mean L+R > 1.0). This is true for real FOUNTAIN,
+   misclassified FOUNTAIN_3+, AND misclassified CASCADE_3+ phases.
+   H40v2 cannot distinguish them.
+
+2. **BOTH CASCADE_3+ identical phases are misclassified** (NEW FINDING).
+   H72 found f=685-716 is a 3-ball manipulation trick. H73 confirms
+   via multi-rater visual QA that f=733-766 is also a static hold /
+   contact juggling pose (2 balls visible, 1 held, 1 "suspended" in
+   upper-left, hands not actively throwing/catching). **H12 v8
+   CASCADE_3+ accuracy on substantial phases: 0/2 = 0%**.
+
+3. **H73's original hypothesis (per-frame census L+R=0) was wrong.**
+   The per-frame census only updates L+R at chain events, so L+R=0
+   is the default for 97% of frames. H40v2 sustained-occupancy
+   is a better signal, but still not useful for CASCADE/FOUNTAIN
+   discrimination.
+
+4. **H12 v8 FOUNTAIN_3+ accuracy on substantial phases: 3/5 = 60%**
+   on the H65 sample (3 real FOUNTAIN, 2 misclassified as OTHER).
+   This is consistent with H39 (~30%) and H65 (~43%).
+
+5. **H40v2 misclassifies f=733-766 as FOUNTAIN_3+** (vs H12 v8's
+   CASCADE_3+). H40v2 and H12 v8 use different classification
+   pipelines that disagree on this phase.
+
+**Recommended operating point (post-H73):**
+
+For FOUNTAIN_3+ post-filter (unchanged from H69):
+- H43 OR H69(spec_conc < 0.15) is the best filter on the H65 sample
+
+For CASCADE_3+ post-filter:
+- No reliable filter exists with current signals
+- H12 v8's 0/2 accuracy on substantial CASCADE_3+ phases means any
+  "CASCADE_3+ detection" should be treated as research-only
+- H40v2 sustained-occupancy is NOT a useful discriminator
+
+For MIXED_3+ post-filter (unchanged from H71):
+- KEEP at spec_conc >= 0.15 (91% precision)
+- REJECT at spec_conc < 0.10 (1/1 correct on H71)
+
+**Negative findings:**
+- H40v2 sustained-occupancy does NOT distinguish real from
+  misclassified CASCADE/FOUNTAIN phases
+- H12 v8 CASCADE_3+ has 0/2 accuracy on substantial phases
+- H40v2 and H12 v8 use different classification pipelines that
+  disagree on some phases (e.g. f=733-766)
+
+**Future research directions (post-H73):**
+1. H74: L+R temporal variance as static-hold detector — measure
+   the variance of H40v2 L+R across frames. A real FOUNTAIN would
+   have L+R cycling 0-2-1-2-...; a static hold would have stable
+   L+R. This could be a precision-improving filter.
+2. H75: CASCADE_3+ as "research signal only" — accept that
+   CASCADE_3+ cannot be reliably detected by current signals.
+3. H76: re-run H59 precision/recall on the FULL H70 sample with
+   ground truth.
+
+See `h1_hand_pool/reports/h73_report.md` for full analysis.

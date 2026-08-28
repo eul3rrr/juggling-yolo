@@ -1761,3 +1761,65 @@ section identifies two remaining experiments:
    ground truth** — characterize end-to-end quality of the
    h7v3plus3 + H10 v11 v3 + H12 v8 + H70/H71 v1 stack.
 
+
+## H73 episode — STATUS: COMPLETE (NEGATIVE)
+
+Sub-steps:
+
+1. ✅ Implemented H73 v1: per-frame census L+R=0 detector on
+   CASCADE_3+ / FOUNTAIN_3+ phases. Found that L+R=0 is the
+   default for 97% of frames (per-frame census only updates at
+   chain events). H73 v1 hypothesis was wrong.
+2. ✅ Implemented H73 v2: H40v2 sustained-occupancy analysis on
+   9 substantial CASCADE_3+ / FOUNTAIN_3+ phases. All 9 have
+   BOTH hands occupied (mean L+R > 1.0), so H40v2 cannot
+   distinguish real from misclassified.
+3. ✅ Visual QA on f=733-766 (the other CASCADE_3+ identical phase):
+   confirmed as static hold / contact juggling pose (NEW FINDING).
+4. ✅ Documented in `h73_report.md` and updated STATE.md / RESULTS_LOG.md.
+
+**H73 verdict: NEGATIVE.** H40v2 sustained-occupancy is NOT a useful
+discriminator for CASCADE_3+ / FOUNTAIN_3+ accuracy.
+
+**Key findings:**
+- All 9 substantial CASCADE_3+ / FOUNTAIN_3+ phases have BOTH hands
+  occupied (mean L+R > 1.0)
+- H40v2 measures "balls within 100 px of hands", not "actively
+  juggling" — a static hold of 2 balls looks the same as a real
+  FOUNTAIN to H40v2
+- BOTH CASCADE_3+ identical phases are misclassified (H72 + H73):
+  0/2 = 0% H12 v8 CASCADE_3+ accuracy on substantial phases
+- H12 v8 FOUNTAIN_3+ accuracy: 3/5 = 60% on H65-verified substantial
+  phases (consistent with H39 ~30%, H65 ~43%)
+
+**Recommended operating point (post-H73):**
+- FOUNTAIN_3+: H43 OR H69(spec_conc < 0.15) (unchanged from H69)
+- MIXED_3+: KEEP at spec_conc >= 0.15, REJECT at spec_conc < 0.10
+  (unchanged from H71)
+- CASCADE_3+: NO reliable filter — treat as research signal only
+
+**Future research directions (post-H73):**
+1. H74: L+R temporal variance as static-hold detector (a real
+   FOUNTAIN cycles L+R; a static hold is stable)
+2. H75: CASCADE_3+ as "research signal only"
+3. H76: re-run H59 precision/recall on FULL H70 sample
+
+See `h1_hand_pool/reports/h73_report.md` for full analysis.
+
+## H74 episode — PLANNED
+
+H74: H40v2 L+R temporal variance as static-hold detector.
+
+For each substantial FOUNTAIN_3+ / CASCADE_3+ phase, compute the
+variance of L40v2 and R40v2 across frames in the phase. A real
+FOUNTAIN would have high variance (balls cycling through hands);
+a static hold would have low variance (balls stable in hands).
+
+Hypothesis: low L+R variance correlates with H12 v8 misclassifications
+(static hold / manipulation trick labeled as FOUNTAIN_3+).
+
+Test on the 9 H73 phases with ground truth from H65 (3 real FOUNTAIN,
+4 misclassified FOUNTAIN_3+, 2 misclassified CASCADE_3+).
+
+If H74 v1 shows separation between real and misclassified, it would
+be a precision-improving filter for FOUNTAIN_3+ and CASCADE_3+.

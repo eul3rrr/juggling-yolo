@@ -4648,3 +4648,69 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h72/*.png` (6 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h72_report.md`
 
+
+### H73 (2026-08-28 ~21:00 CEST)
+
+- Hypothesis: H40v2 sustained-occupancy (per-frame L+R) can distinguish
+  real CASCADE_3+ / FOUNTAIN_3+ phases from H12 v8 misclassifications.
+  The H72 finding on identical f=685-716 (3-ball manipulation trick
+  misclassified as CASCADE_3+) suggests L+R signals might catch this.
+
+- Method: for each substantial CASCADE_3+ / FOUNTAIN_3+ phase
+  (>= 20 frames) in both videos, compute H40v2 statistics:
+  - mean_L40v2, mean_R40v2, mean_LR40v2 (sustained-occupancy per hand)
+  - pct_both_pos, pct_one_pos, pct_both_zero (frame-level occupancy)
+  - Cross-reference with H65 ground truth and H72 visual QA
+
+- Quantitative result:
+
+| Phase | Pattern | H40v2 L | H40v2 R | LR | both+ | both0 | h65 | h72 |
+|-------|---------|---------|---------|----|----|------|-----|-----|
+| f631-669 identical | FOUNTAIN_3+ | 0.82 | 0.62 | 1.44 | 0.62 | 0.18 | FOUNTAIN | N/A |
+| f685-716 identical | CASCADE_3+ | 0.84 | 0.62 | 1.47 | 0.53 | 0.06 | N/A | MANIPULATION |
+| f733-766 identical | CASCADE_3+ | 1.00 | 0.81 | 1.81 | 0.81 | 0.00 | N/A | STATIC_HOLD |
+| f890-936 identical | FOUNTAIN_3+ | 0.64 | 0.58 | 1.22 | 0.42 | 0.20 | OTHER | N/A |
+| f977-1011 identical | FOUNTAIN_3+ | 0.41 | 0.94 | 1.35 | 0.38 | 0.03 | FOUNTAIN | N/A |
+| f1029-1049 identical | FOUNTAIN_3+ | 0.58 | 0.89 | 1.47 | 0.53 | 0.05 | OTHER | N/A |
+| f339-374 YouTube | FOUNTAIN_3+ | 0.86 | 0.94 | 1.81 | 0.83 | 0.03 | FOUNTAIN | N/A |
+| f482-594 YouTube | FOUNTAIN_3+ | 0.99 | 0.85 | 1.84 | 0.84 | 0.00 | OTHER | N/A |
+| f800-861 YouTube | FOUNTAIN_3+ | 0.94 | 0.79 | 1.73 | 0.73 | 0.00 | CASCADE | N/A |
+
+**Phases with H40v2 anomalies: 0/9.** All phases have both hands
+occupied for the majority of frames. H40v2 cannot distinguish real
+from misclassified.
+
+- Key findings:
+  - H40v2 sustained-occupancy is NOT a useful discriminator for
+    CASCADE_3+ / FOUNTAIN_3+ accuracy. It only detects "balls
+    within 100 px of hands", not "actively juggling".
+  - BOTH CASCADE_3+ identical phases are misclassified (NEW FINDING):
+    f=685-716 is a 3-ball manipulation trick, f=733-766 is a static
+    hold / contact juggling pose. H12 v8 CASCADE_3+ accuracy on
+    substantial phases: 0/2 = 0%.
+  - H12 v8 FOUNTAIN_3+ accuracy on substantial phases: 3/5 = 60%
+    on H65-verified sample (consistent with H39 ~30%, H65 ~43%).
+  - H40v2 misclassifies f=733-766 as FOUNTAIN_3+ (vs H12 v8's
+    CASCADE_3+). The two pipelines disagree on this phase.
+
+- Negative findings:
+  - H40v2 sustained-occupancy does NOT distinguish real from
+    misclassified CASCADE/FOUNTAIN phases
+  - H12 v8 CASCADE_3+ has 0/2 accuracy on substantial phases
+  - H40v2 and H12 v8 use different classification pipelines that
+    disagree on some phases
+  - H73's original per-frame census L+R hypothesis was wrong: the
+    census only updates at chain events, so L+R=0 is the default
+    for 97% of frames
+
+- Verdict: **NEGATIVE.** H40v2 sustained-occupancy is not a useful
+  discriminator. CASCADE_3+ class is fundamentally unreliable
+  (0/2 on substantial phases). The recommended operating point
+  remains H43 + H69 for FOUNTAIN_3+ and H71 v1 for MIXED_3+.
+  See `h1_hand_pool/reports/h73_report.md` for full analysis.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h73_lr_zero_cascade_validator.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h73_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h72/phase_identical_balls_trick_000_018_f733-766_CASCADE_3+_h73.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h73_report.md`
