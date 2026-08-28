@@ -1,0 +1,11 @@
+h31_idx,stem,from_tid,to_tid,gap,vshape,which_hand,min_hand_dist,kind,src_to_apex_dy,src_descending,src_above
+1,identical_balls_trick_000_018,17,21,5,V_DEEP,right,22.44,adjacent,-79.4,True,True
+2,identical_balls_trick_000_018,17,22,13,V_DEEP,right,22.44,e6c_not_in_h7v2,-79.4,True,True
+3,identical_balls_trick_000_018,12,17,16,V_DEEP,left,38.25,e6c_not_in_h7v2,-31.0,True,True
+4,identical_balls_trick_000_018,12,18,17,V_DEEP,left,38.25,adjacent,-31.0,True,True
+5,identical_balls_trick_000_018,15,18,17,V_SHALLOW,right,50.94,adjacent,-24.7,True,True
+6,identical_balls_trick_000_018,20,23,24,V_SHALLOW,right,65.59,adjacent,-57.7,True,True
+7,identical_balls_trick_000_018,54,58,25,V_DEEP,right,8.51,adjacent,-89.7,True,True
+8,identical_balls_trick_000_018,17,24,25,V_DEEP,right,22.44,adjacent,-79.4,True,True
+9,identical_balls_trick_000_018,56,59,27,V_DEEP,left,7.11,adjacent,-40.6,True,True
+10,identical_balls_trick_000_018,54,60,30,V_DEEP,right,8.51,adjacent,-89.7,True,True

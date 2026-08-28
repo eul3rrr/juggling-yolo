@@ -1,0 +1,16 @@
+kind,stem,from_tid,to_tid,gap,vshape,min_hand_dist,ratio,which_hand,in_h7v2,apex_frame,apex_x,apex_y,src_to_apex_dy,tgt_to_apex_dy,src_to_apex_dist,tgt_to_apex_dist,src_above,tgt_above,both_above,src_descending,tgt_ascending,h30_pass,h30_catch_ok,h30_throw_ok
+e6c_not_in_h7v2,identical_balls_trick_000_018,12,17,16,V_DEEP,38.25,4.488,left,False,151,781.0,539.6,-31.0,-175.0,31.4,265.2,True,True,True,True,True,True,True,True
+e6c_not_in_h7v2,identical_balls_trick_000_018,17,22,13,V_DEEP,22.44,17.243,right,False,208,606.1,505.6,-79.4,-380.8,80.5,381.1,True,True,True,True,True,True,True,True
+e6c_not_in_h7v2,identical_balls_trick_000_018,54,57,9,V_DEEP,8.51,38.118,right,False,831,576.4,496.7,-89.7,-298.2,89.8,298.4,True,True,True,True,True,True,True,True
+e6c_not_in_h7v2,identical_balls_trick_000_018,56,57,10,V_DEEP,7.11,65.473,left,False,830,684.7,521.5,-40.6,-323.0,41.0,337.2,True,True,True,True,True,True,True,True
+adjacent,identical_balls_trick_000_018,12,18,17,V_DEEP,38.25,11.247,left,False,151,781.0,539.6,-31.0,-404.0,31.4,448.4,True,True,True,True,True,True,True,True
+adjacent,identical_balls_trick_000_018,13,15,5,V_DEEP,2.1,56.641,right,False,140,527.2,527.2,-81.7,-36.0,133.2,36.1,True,True,True,True,True,True,True,True
+adjacent,identical_balls_trick_000_018,15,18,17,V_SHALLOW,50.94,6.131,right,False,150,588.6,554.8,-24.7,-419.2,34.6,419.2,True,True,True,True,True,True,True,True
+adjacent,identical_balls_trick_000_018,17,21,5,V_DEEP,22.44,7.957,right,False,208,606.1,505.6,-79.4,-161.7,80.5,161.8,True,True,True,True,False,True,True,True
+adjacent,identical_balls_trick_000_018,17,24,25,V_DEEP,22.44,7.281,right,False,208,606.1,505.6,-79.4,16.9,80.5,163.7,True,False,False,True,False,True,True,False
+adjacent,identical_balls_trick_000_018,20,23,24,V_SHALLOW,65.59,4.809,right,False,229,565.3,337.2,-57.7,28.8,93.6,46.8,True,False,False,True,True,True,True,False
+adjacent,identical_balls_trick_000_018,29,33,1,V_DEEP,5.63,16.183,left,False,469,699.7,489.7,-50.7,25.3,58.6,29.3,True,False,False,True,True,True,True,False
+adjacent,identical_balls_trick_000_018,54,58,25,V_DEEP,8.51,23.391,right,False,831,576.4,496.7,-89.7,31.0,89.8,123.2,True,False,False,True,False,True,True,False
+adjacent,identical_balls_trick_000_018,54,60,30,V_DEEP,8.51,33.41,right,False,831,576.4,496.7,-89.7,-103.4,89.8,163.7,True,True,True,True,False,True,True,True
+adjacent,identical_balls_trick_000_018,56,58,26,V_DEEP,7.11,13.656,left,False,830,684.7,521.5,-40.6,6.2,41.0,227.6,True,False,False,True,False,True,True,False
+adjacent,identical_balls_trick_000_018,56,59,27,V_DEEP,7.11,29.519,left,False,830,684.7,521.5,-40.6,-178.7,41.0,180.1,True,True,True,True,True,True,True,True

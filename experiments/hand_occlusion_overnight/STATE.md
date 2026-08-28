@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 12:05 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + H22 v1+v2 + H24 + H26 + **H28** COMPLETE. **H28 NEGATIVE**: 12-candidate visual QA of H20-KEPT `adjacent` pool (NOT in E6c, NOT in h7v2, NOT in H17's e6c_not_in_h7v2 set) finds REAL precision 17% (2/12), REAL+PARTIAL precision 50% (6/12). 4/12 FALSE positives dominated by "continuous upward path through hand region" (3) and "cross-hand pairing" (1). V_SHALLOW 0/2 = 0% (opposite of H24's 1/1=100%, which was too small). The H17 V-shape criterion is biased toward throwing evidence: 6/12 candidates have a real throw visible but only 2/12 have a real catch+throw pair. The 88 H20-KEPT adjacent candidates should NOT be auto-incorporated into the chain set. Recommended operating point remains h7v3plus2 (H26). H28 confirms the H17→H20→H24 negative finding chain: V-shape + in-hand + vel-jump + apex filters admit too many false positives in the noisiest pool.
+LAST_UPDATE: 2026-08-28 12:25 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + H22 v1+v2 + H24 + H26 + H28 + **H30 + H31** COMPLETE. **H30/H31 NEGATIVE**: H30 src_above+src_desc directional check had 0/14 FALSE on the deduplicated known-label set (n=30 candidates), suggesting it was a precision-optimized filter. H31 visual QA on 10 NEW H20+H30-AND candidates contradicts this: 0/10 REAL, 2/10 PARTIAL, 8/10 FALSE (REAL+PARTIAL precision 20%). The H30 claim was overfitted to a small biased known-label set. H31 confirms the H17→H20→H24→H28→H31 negative finding chain: every geometric post-filter on the H17 V-shape pool fails to produce a reliable high-precision candidate set. The 5 already-QA'd H20+H30-AND candidates (4 REAL + 1 PARTIAL) were a biased sample. Recommended operating point remains h7v3plus2 (H26).
 
 ## Isolation
 
@@ -454,39 +454,66 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
     finding chain: V-shape + in-hand + vel-jump + apex filters
     admit too many false positives in the noisiest pool.
     See `h1_hand_pool/reports/h28_report.md`.
+39. **H30: direction-reversal check on H17 strict pool** —
+    DONE. CLAIMED PARTIAL PASS (overfit). H30 src_above+src_desc
+    had 0/14 FALSE on the deduplicated known-label set (n=30),
+    suggesting it was a precision-optimized filter. The H30
+    report's claim was based on a small biased known-label sample
+    that included 5 H20+H30-AND candidates with 4 REAL + 1
+    PARTIAL (100% precision on the QA'd subset).
+40. **H31: visual QA of H20+H30-AND intersection** —
+    DONE. NEGATIVE. H31 visual QA on 10 NEW H20+H30-AND
+    candidates (not in the known-label set) finds 0/10 REAL,
+    2/10 PARTIAL, 8/10 FALSE. The H30 claim of "0/14 FALSE on
+    known labels" was overfitted to a biased sample; on a
+    more representative sample, H30 has 0% REAL precision.
+    H31 confirms the H17→H20→H24→H28→H31 negative finding
+    chain: every geometric post-filter on the H17 V-shape pool
+    fails to produce a reliable high-precision candidate set.
+    The recommended operating point remains h7v3plus2 (H26).
+    See `h1_hand_pool/reports/h31_report.md`.
 
 ## Next action
 
-H28 is complete (NEGATIVE). All three H20-KEPT subset QA campaigns
-(H20, H24, H28) have been conducted; the conclusion is that the
-H20-KEPT `e6c_not_in_h7v2` pool is the only reliable augmentation
-source (H21, H26 used it). The H20-KEPT `adjacent` pool (H28) and
-the H17 strict pool beyond the 5 H20-KEPT REAL candidates should
-NOT be auto-incorporated.
+H31 is complete (NEGATIVE). The H17→H20→H30 pipeline is now
+established as a negative finding chain: every geometric post-filter
+on the H17 V-shape pool fails to produce a reliable high-precision
+candidate set on a larger visual QA sample.
+
+The 5 already-QA'd H20+H30-AND candidates (4 REAL + 1 PARTIAL) were
+a biased sample that over-represented the precision of the pool.
+On the larger 10-candidate H31 sample, the pool has 0% REAL
+precision.
 
 Recommended operating point remains h7v3plus2 (H26).
 
 Remaining research directions (priorities):
-1. **H25: cross-ball artifact rejection filter** — add a
-   color-continuity check (source-end and target-start ball
-   color histogram should match) or trajectory-overlap check
-   (source and target tracklets should intersect spatially
-   within the gap region). If H25 can reject the 4 cross-ball
-   FALSE positives from H24 and the "continuous upward path"
-   FALSE positives from H28, the H17→H20→H25 combined pool
-   would have much higher precision. Implementation requires
-   either re-running the detector with color output, or using
-   the existing tracklet's bbox color statistics if available.
-2. **H27: H22+H26 combined chain set** — apply H22's YouTube
+1. **H32: stop trying to filter the H17 V-shape pool.** The H17
+   V-shape strict pool has fundamental geometric limitations that
+   no amount of post-filtering can fix. Future work should focus
+   on:
+   - Using ONLY the H17+H20-KEPT visually-confirmed REAL subset
+     (used by H21+H26)
+   - Or building a fundamentally different candidate mining
+     approach (e.g. trained model, or different geometry)
+2. **H33: literature search for multi-ball juggling tracking
+   methods.** The H17 V-shape approach is hand-crafted and has
+   known limitations. A literature search may reveal methods
+   that handle the ball+hand interaction more robustly. Possible
+   directions:
+   - Where Is The Ball (Ponglertnapakorn 2025) — 3D trajectory
+     estimation, but requires LSTM training
+   - Physics-based ball tracking (2009) — 3D motion, requires
+     marker positions
+   - TOTNet (2025) — learned temporal tracking, requires
+     sports-tracking dataset
+   - Cooperative Trajectory Matching (2024) — Kalman filter
+     prediction, requires feature extractor training
+3. **H34: H22+H26 combined chain set** — apply H22's YouTube
    20→21 veto on top of H26's 2 NEW REAL H24 edges. This tests
    whether H22's YouTube improvement and H26's identical
-   improvement are additive. (Lower priority — H22's
-   improvement is small +0.0034 and H26's is +0.0061, so the
-   combined improvement is likely ≤ +0.01.)
-3. **H29: 2D ball-color-histogram per-detection check** — the
-   cross-ball artifacts (H24, H28) are characterized by color
-   mismatch between source and target. A simple HSV-histogram
-   check on the source-tail and target-head detections could
-   reject cross-ball artifacts automatically. Could be done
-   with the existing tracklet data if color info is in the
-   tracklet_features.csv.
+   improvement are additive. (Lower priority — both improvements
+   are small: H22 +0.0034, H26 +0.0061.)
+4. **H35: pattern inference on h7v3plus2.** Apply H12's
+   per-frame pattern inference to the recommended chain set
+   (h7v3plus2) to characterize the final juggling pattern.

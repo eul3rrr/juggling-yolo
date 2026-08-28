@@ -2629,3 +2629,70 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h28_visual_qa_verdicts.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h28_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h28_report.md`
+
+### H30 (2026-08-28 ~12:15 CEST)
+
+- Hypothesis: H30 src_above+src_desc directional check (source end
+  y < apex y - 20 AND source end y > source first y + 10) is a
+  precision-optimized filter that rejects H17 V-shape throw-only
+  false positives without rejecting real catch+throws.
+- Approach: v1 (velocity-based) was rejected; v2 (positional) is
+  the recommended version.
+- Quantitative result (H17 strict pool n=151, 108 unique after dedup):
+  - src_above+src_desc: 21 candidates (14.8% of unique strict)
+  - H30-AND-H20-KEPT: 15 candidates
+- Correlation with deduplicated known labels (REAL=9, PARTIAL=7, FALSE=14):
+  - REAL: 4/9 caught by src_above+src_desc (44% recall)
+  - PARTIAL: 1/7 caught
+  - FALSE: 0/14 caught (perfect precision on the small sample)
+- Verdict: **CLAIMED PARTIAL PASS** at the time. src_above+src_desc
+  appeared to be a precision-optimized filter with 0/14 FALSE on the
+  known-label set.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h30_direction_reversal.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_direction_metrics.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_h20_h30_kept.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h30_report.md`
+
+### H31 (2026-08-28 ~12:20 CEST)
+
+- Hypothesis: the H20+H30-AND intersection (15 candidates) is a
+  precision-optimized pool. 10 NEW candidates (not in known labels)
+  should have similar or higher REAL precision than H24 (22% REAL on
+  9) and H28 (17% REAL on 12).
+- Approach: rendered 10 contact sheets via `h31_h20_h30_kept_qa.py`,
+  visually QA'd each via `vision_analyze`.
+- Quantitative result:
+  - 0/10 REAL, 2/10 PARTIAL, 8/10 FALSE
+  - P (REAL+PARTIAL) = 0.200
+  - P (REAL only) = 0.000
+- H31 vs H20/H24/H28:
+  - H20: 62.5% REAL on 8 e6c_not_in_h7v2 candidates
+  - H24: 22% REAL on 9 e6c_not_in_h7v2 candidates
+  - H28: 17% REAL on 12 adjacent candidates
+  - H31: **0% REAL on 10 H20+H30-AND candidates** (LOWEST precision)
+- Negative findings:
+  - **H31 fails the H30-derived hypothesis.** H30's "0/14 FALSE on
+    known labels" was overfitted to a small biased sample.
+  - The 5 already-QA'd H20+H30-AND candidates (4 REAL + 1 PARTIAL)
+    were a biased sample that over-represented the pool's precision.
+  - On a more representative sample (H31, 10 NEW candidates), the
+    pool has 0% REAL precision.
+  - H30 src_above+src_desc does NOT address cross-hand or cross-ball
+    pairing failures.
+  - H30 correctly identifies the throw-bias in H17 (the original
+    hypothesis) but is not enough to produce a high-precision pool.
+- Verdict: **NEGATIVE.** H31 confirms the H17→H20→H24→H28→H31
+  negative finding chain: every geometric post-filter on the H17
+  V-shape pool fails to produce a reliable high-precision candidate
+  set. The recommended operating point remains h7v3plus2 (H26).
+  See `h1_hand_pool/reports/h31_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h31_h20_h30_kept_qa.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h31/*.png` (10 sheets)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_h20_h30_kept.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_selected_candidates.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_visual_qa_verdicts.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_h31_combined_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h31_report.md`

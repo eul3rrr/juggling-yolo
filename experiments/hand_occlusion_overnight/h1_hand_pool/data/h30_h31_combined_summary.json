@@ -1,0 +1,60 @@
+{
+  "experiment": "H30 + H31",
+  "date": "2026-08-28 12:20 CEST",
+  "status": "NEGATIVE - H30 src_above+src_desc claim of 0/14 FALSE on known labels was overfitted to a small biased sample. H31 visual QA of 10 NEW H20+H30-AND candidates finds 0/10 REAL, 2/10 PARTIAL, 8/10 FALSE (REAL+PARTIAL precision 0.20).",
+  "h30_hypothesis": "H30 hypothesizes that requiring the SOURCE's last position to be above the V-apex AND the source's trajectory to be descending (last y > first y) will reject the throw-only false positives without rejecting real catch+throws.",
+  "h31_hypothesis": "H20+H30-AND intersection should be a precision-optimized pool. The 10 NEW candidates should have similar or higher REAL precision than the H20-KEPT-not-in-h7v2 pool (H24: 22% REAL on 9) and the H20-KEPT adjacent pool (H28: 17% REAL on 12).",
+  "h30_v1_rejected": "v1 (velocity-based) was rejected: real catch+throws have short source/target tracklets where velocity is dominated by noise. v2 (positional) was adopted.",
+  "h30_v2_metrics": {
+    "n_strict": 151,
+    "n_unique_dedup": 108,
+    "n_src_above_plus_desc": 21,
+    "n_h30_kept": 16,
+    "intersection_with_h20_kept": 15
+  },
+  "h30_v2_known_labels_dedup": {
+    "REAL_n9": {"both_above": 3, "src_above_plus_desc": 4, "h30_pass": 7},
+    "PARTIAL_n7": {"both_above": 0, "src_above_plus_desc": 1, "h30_pass": 5},
+    "FALSE_n14": {"both_above": 2, "src_above_plus_desc": 0, "h30_pass": 11}
+  },
+  "h31_visual_qa_10_NEW_candidates": {
+    "n": 10,
+    "real": 0,
+    "partial": 2,
+    "false": 8,
+    "precision_real_only": 0.0,
+    "precision_real_plus_partial": 0.2
+  },
+  "interpretation": [
+    "H30 src_above+src_desc has 0/14 FALSE on the dedup'd known-label set BUT 8/10 FALSE on the H31 NEW sample. The H30 claim of '0/14 FALSE' was an artifact of overfitting to a small biased sample of known labels (which were themselves a mix of H17 visual QA, H20 visual QA, H24 visual QA, and H28 visual QA - all biased toward 'interesting' candidates).",
+    "The H30 src_above+src_desc check is NOT precision-optimized. The check rejects some FALSE positives (those where the source is not descending) but admits many others (where the source is descending but it's still a cross-ball or tracklet-break artifact).",
+    "The H31 finding confirms the H17→H20→H24→H28→H31 negative finding chain: every additional filter on the H17 V-shape strict pool reduces the candidate count but the remaining candidates are still not high-precision. The H17 V-shape strict pool itself has fundamental limitations that no amount of geometric post-filtering can fix.",
+    "The H20-AND-H30-AND intersection (15 candidates) is even lower precision than H20 alone (115 candidates at 38% H20+H24 visual precision). H30 ADDS false positives in the larger sample."
+  ],
+  "h31_per_candidate_verdicts": [
+    {"edge": "17->21 R", "verdict": "FALSE", "reason": "Source ascending; target ascending; no V"},
+    {"edge": "17->22 R", "verdict": "FALSE", "reason": "Source at R hand moving away; target 380 px above R hand"},
+    {"edge": "12->17 L", "verdict": "FALSE", "reason": "Source at L hand stationary; target 175 px right of L hand"},
+    {"edge": "12->18 L", "verdict": "FALSE", "reason": "Source ascending; target 400 px above L hand"},
+    {"edge": "15->18 R", "verdict": "FALSE", "reason": "Source at R hand; target 300 px above R hand"},
+    {"edge": "20->23 R", "verdict": "PARTIAL", "reason": "Source descending but far above; target 90 px right of R hand"},
+    {"edge": "54->58 R", "verdict": "PARTIAL", "reason": "Source at R hand moving up; target approaching from lower-left"},
+    {"edge": "17->24 R", "verdict": "FALSE", "reason": "Source at R hand; target at L hand (cross-hand)"},
+    {"edge": "56->59 L", "verdict": "FALSE", "reason": "Source rising at L hand; target descending toward hands (not leaving)"},
+    {"edge": "54->60 R", "verdict": "FALSE", "reason": "Source ascending; target 40 px left of R hand ascending"}
+  ],
+  "conclusion": "H30 src_above+src_desc is NOT a precision-optimized filter despite the H30 report's '0/14 FALSE on known labels' claim. H31 visual QA on 10 NEW H20+H30-AND candidates finds 0/10 REAL, 2/10 PARTIAL, 8/10 FALSE. The H30 result was overfitted to a small biased known-label set. This is a useful NEGATIVE finding: even a 'precision-optimized' geometric filter (H30 src_above+src_desc) cannot rescue the H17 V-shape pool from its fundamental limitations. The H17 V-shape strict pool should NOT be used for chain-set augmentation; only the H17+H20-KEPT-REAL visually-confirmed subset (used by H21+H26) is reliable.",
+  "recommendation": "h7v3plus2 (H26) remains the recommended chain set. H30 src_above+src_desc is NOT a useful filter on the larger sample. H31 visual QA confirms the H17→H20→H24→H28→H31 negative finding chain: every geometric post-filter on the H17 V-shape pool fails to produce a reliable high-precision candidate set.",
+  "artifacts": [
+    "experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h30_direction_reversal.py",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h31_h20_h30_kept_qa.py",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_direction_metrics.csv",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_summary.json",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_h20_h30_kept.csv",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_selected_candidates.csv",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_visual_qa_verdicts.csv",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h31/*.png (10 sheets)",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/reports/h30_report.md",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/reports/h31_report.md"
+  ]
+}

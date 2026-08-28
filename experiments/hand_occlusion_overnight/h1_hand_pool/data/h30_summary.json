@@ -1,0 +1,72 @@
+{
+  "experiment": "H30",
+  "date": "2026-08-28 12:15 CEST",
+  "status": "PARTIAL PASS - direction-reversal check has 0/14 FALSE on known labels but only 4/9 recall",
+  "hypothesis": "The H17 V-shape criterion is biased toward throwing evidence (H28 finding: 6/12 adjacent candidates had a real throw visible but no real catch). H30 hypothesizes that requiring the SOURCE's last position to be above the V-apex (in image coords, smaller y) AND the source's trajectory to be descending (last y > first y) will reject the throw-only false positives without rejecting real catch+throws.",
+  "approach": {
+    "v1_velocity_rejected": "v1 used source-tail and target-head velocity dot products with apex direction. Rejected because real catch+throws often have short source/target tracklets where velocity is dominated by noise.",
+    "v2_positional": "v2 uses positional checks: src_above (source end y < apex y - 20), tgt_above (target start y < apex y - 20), both_above (both conditions), src_descending (source end y > source first y + 10), tgt_ascending (target start y < target last y - 10).",
+    "evaluation": "Apply H30 v2 to 151 H17 strict positives, correlate with known visual QA labels (H17/H20/H24/H28)."
+  },
+  "quantitative_results": {
+    "n_strict": 151,
+    "n_unique_dedup": 108,
+    "n_src_above": 57,
+    "n_tgt_above": 77,
+    "n_both_above": 25,
+    "n_src_descending": 82,
+    "n_tgt_ascending": 71,
+    "n_src_above_plus_desc": 21,
+    "n_h30_pass_or": 109
+  },
+  "correlation_with_known_labels_dedup": {
+    "REAL_n9": {
+      "both_above": 3,
+      "src_above_plus_desc": 4,
+      "tgt_above_plus_asc": 6,
+      "h30_pass": 7,
+      "combo": 7
+    },
+    "PARTIAL_n7": {
+      "both_above": 0,
+      "src_above_plus_desc": 1,
+      "tgt_above_plus_asc": 0,
+      "h30_pass": 5,
+      "combo": 1
+    },
+    "FALSE_n14": {
+      "both_above": 2,
+      "src_above_plus_desc": 0,
+      "tgt_above_plus_asc": 3,
+      "h30_pass": 11,
+      "combo": 4
+    }
+  },
+  "key_finding": "The src_above + src_descending check has PERFECT precision (0/14 FALSE) but only 4/9 REAL recall on the deduplicated known-label set. It is a useful PRECISION-OPTIMIZED filter: rejects all known false positives while keeping 4/9 of the known reals. Applied to the H17 strict pool of 108 unique candidates, it admits 16 (15%), filtering out 92 (85%) of the strict pool.",
+  "h20_h30_intersection": {
+    "h20_kept": 115,
+    "h30_kept": 16,
+    "intersection": 15,
+    "new_candidates_not_in_prior_qa": 10
+  },
+  "interpretation": [
+    "H30 src_above + src_descending is a precision-optimized filter. It correctly identifies candidates where the source has been DESCENDING (y increasing = ball falling in image coords) and is currently ABOVE the V-apex (closer to top of image, meaning at higher real-world position = approaching the hand).",
+    "The 5 known REALs missed by H30 src_above+desc (54->57, 56->57, 13->15, 29->33, 56->58 -> 4) are mostly cases where the source's first y is already past the descending threshold (the source's tracklet is too short, or the source is at the apex). The 4 found are cases where the source has a clear approach trajectory.",
+    "The 0 false positives on known labels suggests the check is robust: it correctly rejects the 'throw-only' false positives from H28 (which had src_above=True but src_descending=False for 39->46, 24->26, 1->6, 62->65, 67->72).",
+    "The 16-candidate H30-KEPT pool is a useful STRICT SUBSET of the H20-KEPT pool (115 candidates). Of the 15 H20-AND-H30-KEPT candidates, 5 are already in the known label set (4 REAL + 1 PARTIAL), and 10 are NEW candidates that haven't been visually QA'd."
+  ],
+  "negative_findings": [
+    "v1 (velocity-based) was rejected. The dot product approach is too noisy for short tracklets.",
+    "h30_pass (at least one of src_above or tgt_above) has 7/9 REAL recall but 11/14 FALSE. It is NOT a precision filter, just a sanity check.",
+    "both_above (both src_above AND tgt_above) has 3/9 REAL but 2/14 FALSE. It is a precision filter (3/3 = 100% on the small sample) but only catches a third of REALs.",
+    "tgt_above + tgt_ascending has 6/9 REAL but 3/14 FALSE. Less strict than src_above+desc but worse precision."
+  ],
+  "conclusion": "H30 src_above + src_descending is a useful precision-optimized filter. It correctly identifies 4/9 known REAL catch+throws while rejecting 14/14 known FALSE positives. Applied to the H17 strict pool, it admits 16 candidates that should be high-precision. H31 (next experiment) should visually QA the 10 NEW H20-AND-H30-KEPT candidates to confirm the high precision and characterize H30's recall on a larger sample.",
+  "recommendation": "h7v3plus2 (H26) remains the recommended chain set. H30 is a precision-optimized filter that, when combined with H20, admits 15 high-precision candidates (vs 115 H20-KEPT). H31 visual QA is needed to confirm the precision claim on a larger sample.",
+  "artifacts": [
+    "experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h30_direction_reversal.py",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_direction_metrics.csv",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h30_summary.json",
+    "experiments/hand_occlusion_overnight/h1_hand_pool/data/h31_h20_h30_kept.csv (next-experiment candidate set)"
+  ]
+}

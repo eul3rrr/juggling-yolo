@@ -1,0 +1,11 @@
+h31_idx,stem,from_tid,to_tid,gap,vshape,which_hand,min_d,vision_verdict,visual_reason
+1,identical_balls_trick_000_018,17,21,5,V_DEEP,right,22.4,FALSE,Source ascending (not descending to R hand); target ascending away from R hand. No V-shape.
+2,identical_balls_trick_000_018,17,22,13,V_DEEP,right,22.4,FALSE,Source ball at R hand moving away; target ball 380 px above R hand. No connection.
+3,identical_balls_trick_000_018,12,17,16,V_DEEP,left,38.2,FALSE,Source ball stationary at L hand; target ball 175 px right of L hand, stationary. Cross-hand/cross-ball artifact.
+4,identical_balls_trick_000_018,12,18,17,V_DEEP,left,38.2,FALSE,Source ball ascending from L hand; target ball 400 px above L hand, stationary. No V.
+5,identical_balls_trick_000_018,15,18,17,V_SHALLOW,right,50.9,FALSE,Source ball at R hand stationary; target ball 300 px above R hand, stationary. No V.
+6,identical_balls_trick_000_018,20,23,24,V_SHALLOW,right,65.6,PARTIAL,Source ball descending but 165 px above R hand; target ball 90 px right of R hand. Weak V.
+7,identical_balls_trick_000_018,54,58,25,V_DEEP,right,8.5,PARTIAL,Source ball at R hand moving up; target ball approaching R hand from lower-left. min_d=8.5 but wrong geometry.
+8,identical_balls_trick_000_018,17,24,25,V_DEEP,right,22.4,FALSE,Source ball at R hand; target ball at L hand. Cross-hand artifact (V-apex at R hand but target is at L hand).
+9,identical_balls_trick_000_018,56,59,27,V_DEEP,left,7.1,FALSE,Source ball at L hand rising; target ball descending toward hands (not leaving L hand). V-apex at L hand but target descends, doesn't leave.
+10,identical_balls_trick_000_018,54,60,30,V_DEEP,right,8.5,FALSE,Source ball ascending from R hand; target ball ascending 40 px left of R hand. No V.
