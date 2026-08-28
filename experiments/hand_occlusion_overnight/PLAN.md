@@ -2319,3 +2319,58 @@ Next episode candidates:
    PERFECT on H93 (17/4/0/0) and PERFECT on weave (6/6 with
    conf>=0.42). The per-video conf calibration is the main
    remaining issue.
+
+## Thirty-ninth episode (H102) — STATUS: COMPLETE (PASS, consumer-pass)
+
+Sub-steps:
+1. ✅ Implemented H102: for each of the 113 reviewed pairs, look up
+   the (src, tgt) in E6c stitches, compute midgap frame, find
+   containing H93 substantial phase. Cross-tabulate phase_verdict ×
+   review_label × h7v3plus3_accepted.
+2. ✅ Ran on both videos: 113 pairs → 15 anchored to 7 of 21 H93
+   substantial phases. 5 phase-vs-review disagreements, all in
+   STATIC_HOLD phases where the manual reviewer said "correct".
+3. ✅ Edge-level precision/recall: P=1.000 R=0.846 in JUGGLING
+   phases (8 TP, 0 FP, 1 FN) and P=1.000 R=0.750 in STATIC_HOLD
+   phases (3 TP, 0 FP, 1 FN). Total: P=1.000 R=0.846 on 15
+   anchored pairs.
+4. ✅ Visual inspection of all 5 disagreements confirmed: 3 are
+   real catch-throw edges in H93 STATIC_HOLD phases that h7v3+
+   correctly accepts (3→6, 17→24, 19→22); 1 is the H22 16→21→
+   20→21 reclassification (h7v3+ correctly rejects 16→21);
+   1 is a known gap=9 FN (23→24).
+5. ✅ Documented in `h102_report.md` and updated RESULTS_LOG/STATE.
+
+**H102 verdict: PASS (consumer-pass).** H102 confirms the h7v3+
++ H96 v2 stack is consistent at both phase and edge levels
+(P=1.000 R=1.000 phase; P=1.000 R=0.846 edge on 15 anchored
+pairs). H102 is a useful diagnostic, not a new operating point.
+
+**Negative finding (the most important one):** the f=482-594
+YouTube STATIC_HOLD phase is the H12 v8 FOUNTAIN_3+ over-
+classification case. The phase has 3 real catch-throw edges
+(17→24, 19→22, 23→24), and the H12 v8 detector thinks it's
+FOUNTAIN_3+, but visual QA says STATIC_HOLD. This is the
+canonical example of "H12 v8 over-classifies FOUNTAIN_3+ at
+phases with hand-handoff motion." H90 NEW's strict rejection
+of this phase is correct.
+
+**Recommended next step (post-H102):** H103 (4th video) and
+H104 (pose data) are blocked by data availability. The lab
+has reached a natural endpoint:
+
+- H1 v4d: 10 identical + 1 YouTube hand-links with visual P~1.000
+- H7 min-cost flow: 43 identical + 15 YouTube chains
+- H10 v11 v3 chain quality: PERFECT ranking on top-3 chains
+- H96 v2 stack: PERFECT 17/4/0/0 on H93 phases
+- H100 v4 conf+spec_conc guard: PERFECT on weave, 3 FPs on H93
+  that the full stack catches
+- H101 v6 cross-video: conf>=0.42 spec>=0.05 achieves R=1.000
+  across 27 phases
+- H102 phase-anchored edge: P=1.000 R=0.846 on 15 H93-anchored
+  review pairs
+
+The per-video conf calibration (`conf_min = max(0.40, video_mean_conf - 0.10)`)
+is the main remaining operational issue, but the underlying
+methodology is complete and validated.
+

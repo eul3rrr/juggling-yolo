@@ -1,0 +1,63 @@
+{
+  "n_anchored": 15,
+  "n_agree": 10,
+  "n_disagree": 5,
+  "agreement_rate": 0.6667,
+  "agree_per_phase": {
+    "STATIC_HOLD": 1,
+    "JUGGLING": 9
+  },
+  "disagree_per_phase": {
+    "STATIC_HOLD": 4,
+    "JUGGLING": 1
+  },
+  "by_phase_anchor": {
+    "JUGGLING": {
+      "n_total": 10,
+      "n_correct": 9,
+      "n_wrong": 1,
+      "n_in_h7v3plus3": 8,
+      "TP": 8,
+      "FP": 0,
+      "FN": 1,
+      "precision": 1.0,
+      "recall": 0.8889
+    },
+    "STATIC_HOLD": {
+      "n_total": 5,
+      "n_correct": 4,
+      "n_wrong": 1,
+      "n_in_h7v3plus3": 3,
+      "TP": 3,
+      "FP": 0,
+      "FN": 1,
+      "precision": 1.0,
+      "recall": 0.75
+    },
+    "OTHER_CROSSED_ARM": {
+      "n_total": 0,
+      "n_correct": 0,
+      "n_wrong": 0,
+      "n_in_h7v3plus3": 0,
+      "TP": 0,
+      "FP": 0,
+      "FN": 0,
+      "precision": 0.0,
+      "recall": 0.0
+    }
+  },
+  "cell3d": {
+    "STATIC_HOLD|wrong|False": 1,
+    "STATIC_HOLD|correct|True": 3,
+    "JUGGLING|wrong|False": 1,
+    "JUGGLING|correct|True": 8,
+    "JUGGLING|correct|False": 1,
+    "STATIC_HOLD|correct|False": 1
+  },
+  "cell2d": {
+    "STATIC_HOLD|wrong": 1,
+    "STATIC_HOLD|correct": 4,
+    "JUGGLING|wrong": 1,
+    "JUGGLING|correct": 9
+  }
+}

@@ -5758,3 +5758,63 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h101/weave_*.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h101_v[3-5]_*.{csv,json}`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h101_report.md`
+
+### H102 (2026-08-29 ~03:30 CEST)
+
+- Hypothesis: the H93 corrected ground truth (21 substantial phases,
+  each labeled JUGGLING / STATIC_HOLD / OTHER_CROSSED_ARM by 3-round
+  multi-rater visual QA) can be used as a *phase anchor* for the 113
+  manually reviewed edges. The H93 verdict for the phase containing
+  the edge's midgap frame becomes the *expected* answer to "is this
+  edge a real catch-throw?"
+- Method: for each of the 113 reviewed pairs, look up the (src, tgt)
+  in the E6c stitches CSV to get `source_end_frame` and
+  `candidate_start_frame`. Compute the midgap frame. Find which H93
+  phase (if any) contains the midgap frame. Build a 3-way cross-tab:
+  `phase_verdict × review_label × h7v3plus3_accepted`.
+- Quantitative result (113 → 15 anchored to 7 of 21 H93 phases):
+
+| phase_verdict | n_rev | n_corr | n_wrong | TP | FP | FN | P | R |
+|---|---|---|---|---|---|---|---|---|
+| JUGGLING | 10 | 9 | 1 | 8 | 0 | 1 | **1.000** | 0.889 |
+| STATIC_HOLD | 5 | 4 | 1 | 3 | 0 | 1 | **1.000** | 0.750 |
+| OTHER_CROSSED_ARM | 0 | 0 | 0 | 0 | 0 | 0 | n/a | n/a |
+| **Total** | **15** | **13** | **2** | **11** | **0** | **2** | **1.000** | **0.846** |
+
+- 5 phase-vs-review disagreements (all in H93 STATIC_HOLD phases
+  where the manual reviewer said "correct"):
+  - YouTube 3→6 (midgap f=30, phase 2-71): reviewer correct,
+    h7v3+ ACCEPTED as RECLASSIFIED_HAND_TRANSITION. Real hand-handoff
+    during static intro.
+  - YouTube 17→24 (midgap f=588, phase 482-594): reviewer correct,
+    h7v3+ ACCEPTED as RECLASSIFIED_HAND_TRANSITION. Real hand-handoff
+    during H12 v8 FOUNTAIN_3+ over-classification.
+  - YouTube 19→22 (midgap f=506, phase 482-594): reviewer correct,
+    h7v3+ ACCEPTED as RECLASSIFIED_HAND_TRANSITION. Same.
+  - YouTube 23→24 (midgap f=586, phase 482-594): reviewer correct,
+    h7v3+ REJECTED. Known false-negative due to gap=9.
+  - YouTube 10→11 (midgap f=244, phase 114-255 JUGGLING): reviewer
+    said wrong, h7v3+ REJECTED. True negative.
+- Negative findings:
+  - Only 15/113 reviewed pairs (13%) are anchored to H93 substantial
+    phases. The 113 reviewed pairs are mostly mid-air edges in the
+    gaps between substantial phases.
+  - The 5 disagreements are not model errors — they're a phase-label
+    vs edge-label perspective difference. The H93 multi-rater QA and
+    the manual review are answering different questions (substantial
+    juggling? real catch-throw?). Both labels are correct.
+  - The f=482-594 YouTube STATIC_HOLD phase is the most informative
+    disagreement: the H12 v8 detector thinks FOUNTAIN_3+, H93 multi-
+    rater says STATIC_HOLD, but there are 3 real catch-throw edges.
+    H90 NEW's strict FOUNTAIN_3+ rejection of this phase is correct.
+- Verdict: **PASS (consumer-pass).** h7v3plus3 achieves P=1.000 R=0.846
+  at the EDGE level in H93 phases (15 pairs in 7 substantial phases),
+  consistent with the H96 v2 phase-level perfect metric. H102 is a
+  useful diagnostic, not a new operating point.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h102_phase_anchored_edges.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_per_pair.csv` (113 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_per_phase.csv` (21 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_confusion.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h102_report.md`

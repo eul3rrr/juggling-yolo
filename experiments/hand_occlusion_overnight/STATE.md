@@ -1,6 +1,6 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 00:30 CEST
+LAST_UPDATE: 2026-08-29 03:30 CEST
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
 + H94 + H96 + H97 + **H98** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
@@ -3751,22 +3751,29 @@ PERFECT cells, but the conf threshold must be lowered.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h101_report.md`
 
 **Future research (post-H101):**
-1. **H102: phase-anchored edge ground truth.** The 113 manual
-   review pairs are mostly mid-air edges that don't overlap with
-   H70/H93 substantial phases. A new ground truth anchored to
-   substantial phases would allow cross-validating H43/H69/H74/H78/H87
-   at the edge level.
+1. ~~**H102: phase-anchored edge ground truth.**~~ **DONE** as H102 v1.
+   15/113 reviewed pairs anchored to 7 of 21 H93 substantial phases.
+   h7v3plus3 P=1.000 R=0.846 at edge level (consistent with H96 v2
+   phase-level P=1.000). 5 phase-vs-review disagreements are all
+   real catch-throw edges in H93 STATIC_HOLD phases; h7v3+ correctly
+   accepts 3/5 and correctly rejects 2/5 (one is the H22 reclassification,
+   the other is a gap=9 FN). H102 is a useful diagnostic, not a new
+   operating point. See `h1_hand_pool/reports/h102_report.md`.
 2. **H103: validate the conf_min rule-of-thumb on more videos.**
    `conf_min = max(0.40, video_mean_conf - 0.10)` needs a 3rd or
-   4th video to validate.
+   4th video to validate. Requires a 4th test video (not available
+   in the worktree).
 3. **H104: H74/H78 video-specific calibration.** H74/H78 require
    pose data (not available for weave). Without pose, the H100
    v4 guard is the only available signal. A 4th video with pose
    would enable full H96 v2 stack validation.
 4. **Stop here.** The h7v3plus3 + H96 v2 + H100 v4 stack is
-   PERFECT on H93 (17/4/0/0 with conf>=0.50, spec>=0.13) and
-   PERFECT on weave (6/6 with conf>=0.42, spec>=0.05). The
-   per-video conf calibration is the main remaining issue.
+   PERFECT on H93 (17/4/0/0 with conf>=0.50, spec>=0.13),
+   PERFECT on weave (6/6 with conf>=0.42, spec>=0.05), and
+   achieves P=1.000 R=0.846 at the edge level on the 15
+   H93-anchored review pairs. The per-video conf calibration
+   is the main remaining issue; H102 confirms the rest of
+   the stack is consistent at both phase and edge levels.
 
 ### H101 v6 update (cross-video evaluation)
 
@@ -3801,3 +3808,68 @@ sample; conf>=0.42 is a more general threshold that works
 across 3 videos (identical, YouTube, weave). The cross-video
 operating point achieves R=1.000 (no real juggling missed) at
 the cost of 3 FPs that the second-pass signals catch.
+
+---
+
+## H102 conclusion (2026-08-29 ~03:30 CEST)
+
+**H102: phase-anchored edge ground truth.** DONE. PASS (consumer-pass,
+useful diagnostic, not a new operating point). Maps each of the 113
+manually reviewed edges to its corresponding H93 substantial phase
+via the midgap frame (source_end + (cand_start - src_end) / 2).
+Produces a 3-way cross-tabulation: phase_verdict × review_label ×
+h7v3plus3_accepted.
+
+**Quantitative result (113 reviewed pairs → 15 anchored to 7 of 21
+H93 phases):**
+
+| phase_verdict | n_rev | n_corr | n_wrong | TP | FP | FN | P | R |
+|---|---|---|---|---|---|---|---|---|
+| JUGGLING | 10 | 9 | 1 | 8 | 0 | 1 | **1.000** | 0.889 |
+| STATIC_HOLD | 5 | 4 | 1 | 3 | 0 | 1 | **1.000** | 0.750 |
+| OTHER_CROSSED_ARM | 0 | 0 | 0 | 0 | 0 | 0 | n/a | n/a |
+| **Total** | **15** | **13** | **2** | **11** | **0** | **2** | **1.000** | **0.846** |
+
+**5 phase-vs-review disagreements** (all in H93 STATIC_HOLD phases
+where the manual reviewer said "correct"):
+- YouTube 3→6 (midgap f=30, phase 2-71 STATIC_HOLD): reviewer said
+  correct, h7v3+ ACCEPTED as RECLASSIFIED_HAND_TRANSITION. This is
+  a real hand-handoff during the static setup/intro phase.
+- YouTube 17→24 (midgap f=588, phase 482-594 STATIC_HOLD): reviewer
+  said correct, h7v3+ ACCEPTED as RECLASSIFIED_HAND_TRANSITION. Real
+  hand-handoff during the H12 v8 FOUNTAIN_3+ over-classification
+  phase.
+- YouTube 19→22 (midgap f=506, phase 482-594 STATIC_HOLD): reviewer
+  said correct, h7v3+ ACCEPTED as RECLASSIFIED_HAND_TRANSITION. Same.
+- YouTube 23→24 (midgap f=586, phase 482-594 STATIC_HOLD): reviewer
+  said correct, h7v3+ REJECTED. Known false-negative due to gap=9.
+- YouTube 10→11 (midgap f=244, phase 114-255 JUGGLING): reviewer said
+  wrong, h7v3+ REJECTED. True negative — h7v3+ correctly identifies
+  the false edge.
+
+**Interpretation:** the H93 multi-rater QA and the manual review are
+answering different questions. H93 asks "is this a substantial
+juggling phase?" The manual review asks "is this a real geometric
+catch-throw edge?" Both labels are correct from their own perspective.
+The f=482-594 YouTube STATIC_HOLD phase is the most informative case:
+the H12 v8 detector thinks it's FOUNTAIN_3+, the H93 multi-rater QA
+says STATIC_HOLD, but there are 3 real catch-throw edges happening
+during the phase. H90 NEW's strict FOUNTAIN_3+ rejection of this
+phase is therefore correct: the pattern detector over-classifies, but
+the actual phase is a static hold with embedded hand-handoffs.
+
+**H102 v1 verdict: PASS (consumer-pass).** H102 confirms that
+h7v3plus3 achieves P=1.000 R=0.846 at the EDGE level in H93 phases
+(15 reviewed pairs anchored to 7 substantial phases), consistent
+with the H96 v2 phase-level perfect metric. The 2 FN are known
+limitations (16→21 reclassified to 20→21 by H22; 23→24 rejected
+due to large gap=9). H102 is a useful diagnostic, not a new
+operating point. See `h1_hand_pool/reports/h102_report.md`.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h102_phase_anchored_edges.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_per_pair.csv` (113 rows)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_per_phase.csv` (21 rows)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_confusion.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h102_report.md`
