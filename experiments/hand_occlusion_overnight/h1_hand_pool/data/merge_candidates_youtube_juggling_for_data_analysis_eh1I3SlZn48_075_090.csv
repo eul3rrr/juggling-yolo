@@ -1,0 +1,3 @@
+candidate_merge,cs_chain_id,cs_first_tid,cs_first_frame,cs_quality,event_chain_id,event,event_tid,event_frame,frame_diff,hand,h3_confirmed
+chain7->chain6,7,11,247,0.5419,6,CATCH,12,246,-1,right,True
+chain7->chain6,7,11,247,0.5419,6,THROW,12,246,-1,right,True

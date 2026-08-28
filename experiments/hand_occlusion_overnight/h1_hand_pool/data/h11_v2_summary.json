@@ -1,0 +1,32 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_events": 16,
+      "n_census_frames": 1077,
+      "census": {
+        "pct_0": 3.2497678737233056,
+        "pct_1": 20.33426183844011,
+        "pct_2": 25.44103992571959,
+        "pct_3": 49.48932219127205,
+        "pct_4+": 1.4856081708449396,
+        "pct_cascade": 50.97493036211699
+      },
+      "n_merge_candidates": 42,
+      "n_confident_merge_candidates": 2
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_events": 2,
+      "n_census_frames": 898,
+      "census": {
+        "pct_0": 0.0,
+        "pct_1": 0.0,
+        "pct_2": 0.0,
+        "pct_3": 2.4498886414253898,
+        "pct_4+": 97.55011135857461,
+        "pct_cascade": 100.0
+      },
+      "n_merge_candidates": 2,
+      "n_confident_merge_candidates": 0
+    }
+  }
+}

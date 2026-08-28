@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 08:35 CEST
-STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge). H8v4 (short-tracklet-only) NEGATIVE: trades false positives on YouTube long-tracklets for false negatives on identical long-tracklet identity switches (5→6). H8v5 (parabolic fit + gravity) MIXED: catches 2 NEW identity switches on identical that v3 missed (60→64, 21→22). YouTube limitation persists (long-tracklet phase changes look like identity switches to v5). H10v5 (H8 v5 instead of v3 in H10) PASS: v5 correctly demotes 2 v3-false-positives (chains 24, 29) and promotes 1 v3-false-negative (chain 36). H10 v5 is the new recommended chain quality score. H237v5 enriches the unified chain representation with H10 v5 quality columns. H8v6 (per-bounce segmentation) NEGATIVE: apex detection too coarse for YouTube long tracklets; the juggler's catch-throw motion within a long tracklet contaminates any naive parabolic tail fit. v6 produces the same YouTube result as v5.
+LAST_UPDATE: 2026-08-28 08:55 CEST
+STATUS: H7 + H8 + H9 + H10 + H8v4 + H8v5 + H10v5 + H237v5 + H8v6 + H11 COMPLETE. v4d is the recommended hand-link extractor. H2 records 1 conflict (tracklet 3 → {9, 8}). H3 stationary-cluster confirms 6/6 identical-video v4d held phases as real held balls. H4 face-mask FAILED (false positive is a stationary high-up object, not a face). H5 applies H3 as a downstream confidence flag (6/11 links h3_confirmed=True). H6 simplified min-cost flow correctly resolves the H2 conflict (hand-edge wins on cost). H7 full min-cost flow with capacity constraints + gap/error-aware cost: also resolves H2 conflict, produces strict path-based chains (longest 7 on identical, 6 on YouTube). Sensitivity grid is PERFECTLY FLAT across 48 parameter settings (H7 is robust). H2+H3+H7 unified chain representation built (most informative possible). H8 physics consistency check (per-edge y-velocity discontinuity) successfully identifies 2 confirmed E6c false positives on identical (5→6 and 50→55 identity switches) that H2/H6/H7 all accepted. H9 object permanence: chain coverage is 82.9% on identical, 94.7% on YouTube. All 4 gaps in chain 30 (worst case on identical) are real hand-hold phases. H10 per-chain quality score: quality = 0.30*h3 + 0.30*h8 + 0.40*h9. Top-quality chains (chain 23, chain 6) are real juggling cycles. Low-quality chains (chain 13) are dominated by false ballistic edges. Mid-quality chains (chain 30) contain identity switches. H10 has 1 false positive (chain 38: real single ball misclassified as low quality due to H3 not corroborating hand-edge and H8 over-penalizing the air edge). H8v4 (short-tracklet-only) NEGATIVE: trades false positives on YouTube long-tracklets for false negatives on identical long-tracklet identity switches (5→6). H8v5 (parabolic fit + gravity) MIXED: catches 2 NEW identity switches on identical that v3 missed (60→64, 21→22). YouTube limitation persists (long-tracklet phase changes look like identity switches to v5). H10v5 (H8 v5 instead of v3 in H10) PASS: v5 correctly demotes 2 v3-false-positives (chains 24, 29) and promotes 1 v3-false-negative (chain 36). H10 v5 is the new recommended chain quality score. H237v5 enriches unified chain representation with H10 v5 quality. H8v6 (per-bounce segmentation) NEGATIVE: apex detection too coarse for YouTube long tracklets. H11 (tracklet-level identity propagation) PASS: assigns physical ball IDs to 9 CONFIDENT identical + 1 CONFIDENT YouTube chains, extracts 8 catch/throw events on identical + 1 on YouTube, builds per-frame census (51% cascade time on identical, 100% on YouTube = over-counting artifact). H11 v2 identity-merge candidate (chain 36 ↔ chain 30) is a FALSE POSITIVE (t62 and t63 are 73 pixels apart at f=890, not co-located) — algorithm needs stricter spatial proximity. H11 v3 quality-filtered census confirms YouTube over-counting is caused by H10 v5 quality being mostly UNCERTAIN (q < 0.6) on YouTube long tracklets.
 
 ## Isolation
 
@@ -215,11 +215,19 @@ extraction: 10 identical + 1 youtube links with visual precision
    **DONE.** Adds h10_v5_quality, h10_v5_rank columns to
    h237_unified_chains. Top chain in v5 is now chain 36
    (real single ball, v3 over-penalized its 33-frame gap).
-10. **H11: tracklet-level identity propagation** — given
-    a high-quality H10 v5 chain, propagate identity labels
-    across the chain to enable juggling-pattern analysis.
-    This would be a downstream consumer of the H10 v5
-    quality score.
+10. ~~**H11: tracklet-level identity propagation**~~ **DONE. PASS.**
+    Three implementations:
+    - h11 v1: per-tracklet ball_id assignment + catch/throw events
+    - h11 v2: per-frame census + identity-merge candidates
+    - h11 v3: quality-filtered census (sensitivity grid)
+    9 CONFIDENT identical chains + 1 CONFIDENT YouTube chain
+    with correct physical ball ID. 8 catch/throw events on
+    identical, 1 on YouTube. Per-frame census: 51% cascade
+    time on identical, 100% on YouTube (over-counting
+    artifact). 1 CONFIDENT identity-merge candidate is a
+    FALSE POSITIVE — algorithm needs stricter spatial
+    proximity (chain 36 ↔ chain 30: t62 and t63 are 73
+    pixels apart at f=890, not co-located).
 11. **H8 v7: fundamentally different approach for YouTube
     long tracklets** — per-bounce segmentation at frame
     level (not just apexes), or 3D ball trajectory
@@ -227,6 +235,18 @@ extraction: 10 identical + 1 youtube links with visual precision
     or accept the limitation and use H8 only for short
     tracklets. H8 v6's apex-level segmentation was too
     coarse.
+12. **H11 v4: stricter spatial proximity for identity-merge
+    candidates** — extend H11 v2's merge algorithm with
+    explicit ball-position spatial proximity (e.g., within
+    30 px of the hand at merge time). The H11 v2 chain 36
+    ↔ chain 30 false positive shows the current temporal-
+    only criterion is insufficient.
+13. **H12: per-catch-frame juggling pattern inference** —
+    use H11's catch/throw events to infer the juggling
+    pattern at each frame (3-ball cascade, 2-ball,
+    shower, etc.). Combined with H11 v3's quality-filtered
+    census, this could distinguish true cascade phases
+    from detector artifacts.
 
 ## Important artifact paths
 

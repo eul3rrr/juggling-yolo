@@ -1,0 +1,114 @@
+[
+  {
+    "confident": 0.5,
+    "trustable": 0.3,
+    "n_confident": 11,
+    "n_uncertain": 31,
+    "n_low": 1,
+    "n_hand_events": 9
+  },
+  {
+    "confident": 0.5,
+    "trustable": 0.4,
+    "n_confident": 11,
+    "n_uncertain": 30,
+    "n_low": 2,
+    "n_hand_events": 8
+  },
+  {
+    "confident": 0.6,
+    "trustable": 0.3,
+    "n_confident": 10,
+    "n_uncertain": 32,
+    "n_low": 1,
+    "n_hand_events": 9
+  },
+  {
+    "confident": 0.6,
+    "trustable": 0.4,
+    "n_confident": 10,
+    "n_uncertain": 31,
+    "n_low": 2,
+    "n_hand_events": 8
+  },
+  {
+    "confident": 0.6,
+    "trustable": 0.5,
+    "n_confident": 10,
+    "n_uncertain": 1,
+    "n_low": 32,
+    "n_hand_events": 3
+  },
+  {
+    "confident": 0.7,
+    "trustable": 0.3,
+    "n_confident": 9,
+    "n_uncertain": 33,
+    "n_low": 1,
+    "n_hand_events": 9
+  },
+  {
+    "confident": 0.7,
+    "trustable": 0.4,
+    "n_confident": 9,
+    "n_uncertain": 32,
+    "n_low": 2,
+    "n_hand_events": 8
+  },
+  {
+    "confident": 0.7,
+    "trustable": 0.5,
+    "n_confident": 9,
+    "n_uncertain": 2,
+    "n_low": 32,
+    "n_hand_events": 3
+  },
+  {
+    "confident": 0.8,
+    "trustable": 0.3,
+    "n_confident": 7,
+    "n_uncertain": 35,
+    "n_low": 1,
+    "n_hand_events": 9
+  },
+  {
+    "confident": 0.8,
+    "trustable": 0.4,
+    "n_confident": 7,
+    "n_uncertain": 34,
+    "n_low": 2,
+    "n_hand_events": 8
+  },
+  {
+    "confident": 0.8,
+    "trustable": 0.5,
+    "n_confident": 7,
+    "n_uncertain": 4,
+    "n_low": 32,
+    "n_hand_events": 3
+  },
+  {
+    "confident": 0.9,
+    "trustable": 0.3,
+    "n_confident": 5,
+    "n_uncertain": 37,
+    "n_low": 1,
+    "n_hand_events": 9
+  },
+  {
+    "confident": 0.9,
+    "trustable": 0.4,
+    "n_confident": 5,
+    "n_uncertain": 36,
+    "n_low": 2,
+    "n_hand_events": 8
+  },
+  {
+    "confident": 0.9,
+    "trustable": 0.5,
+    "n_confident": 5,
+    "n_uncertain": 6,
+    "n_low": 32,
+    "n_hand_events": 3
+  }
+]

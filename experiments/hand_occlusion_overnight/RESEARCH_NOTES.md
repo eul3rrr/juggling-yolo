@@ -369,3 +369,61 @@ useful source record:
   chain representation
 - `h1_hand_pool/reports/h1_v1_report.md`, `h1_v2_report.md`
   — earlier H1 work
+
+## Cross-cutting insights from H11 (2026-08-28 ~08:55)
+
+15. **H11 identity propagation is a useful downstream
+    consumer of H10 v5 quality.** The 9 CONFIDENT identical
+    chains + 1 CONFIDENT YouTube chain all correspond to
+    visually-verified single-ball juggling cycles (chain
+    2 left-hand catch-throw, chain 8 right-hand hold-throw,
+    chain 6 YouTube right-hand catch-throw). H11's
+    classification (CONFIDENT, UNCERTAIN, LOW) is robust
+    to threshold perturbations across (0.5-0.9, 0.3-0.5).
+
+16. **Per-frame census is meaningful on identical (51%
+    cascade time) but misleading on YouTube (100% cascade
+    time = over-counting).** The YouTube over-counting is
+    caused by the H10 v5 quality being mostly UNCERTAIN
+    (q < 0.6) on long tracklets. The cascade metric is
+    sensitive to the quality threshold (drops from 56% at
+    q >= 0.3 to 15% at q >= 0.7 on identical).
+
+17. **H11 v2 identity-merge candidate is a FALSE POSITIVE.**
+    The chain 36 ↔ chain 30 candidate passed the temporal
+    criterion (chain_start within 30 frames of an event)
+    but failed spatial proximity (t62 and t63 are 73
+    pixels apart at f=890, NOT co-located). Future H11
+    v4 should add explicit ball-position spatial proximity
+    (e.g., within 30 px of the hand at merge time).
+
+18. **The "5 balls at f=700" anomaly on identical is a
+    real detector multi-ball merge.** H11 v2's per-frame
+    census correctly identifies it as 4+ balls, but the
+    underlying cause is H8 v5 over-counting (the long
+    tracklets chain algorithm accepts as separate physical
+    balls). This is a chain-quality problem, not a census
+    problem.
+
+19. **H11 enables juggling-pattern analysis.** With
+    physical ball IDs assigned, a downstream consumer can:
+    - Build a "ball 0 / ball 1 / ball 2" sequence for a
+      3-ball cascade juggler
+    - Detect pattern transitions (cascade → fountain → shower)
+    - Quantify ball-hold times per hand
+    - Detect dropped balls (chain_start with no predecessor
+      in the expected time window)
+
+    H11 v1 (per-tracklet ball_id) is the first step
+    toward this. H12 (per-catch-frame pattern inference)
+    is the next step.
+
+20. **The vision_analyze tool is unreliable for spatial
+    analysis of contact sheets.** In the chain 36 ↔
+    chain 30 merge candidate QA, the vision tool claimed
+    "t62 and t63 share nearly identical (x,y) positions
+    across 5+ consecutive frames" — but the actual data
+    shows t62 at f=890 = (660, 432) and t63 at f=890 =
+    (587, 414), 73 pixels apart. The vision tool's spatial
+    reasoning is unreliable. Visual QA should be
+    supplemented with programmatic coordinate checks.

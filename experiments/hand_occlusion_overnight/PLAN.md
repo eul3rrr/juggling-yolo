@@ -368,3 +368,49 @@ Remaining ideas:
    `h237v5_unified_chains_*.csv` with the H10 v5 quality
    as per-chain fields. Downstream consumers can use it
    directly.
+
+## Fourteenth episode (H11) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Implemented H11 v1: per-tracklet ball_id assignment
+   + per-chain catch/throw events. Quality thresholds:
+   - QUALITY_CONFIDENT = 0.7
+   - QUALITY_TRUSTABLE = 0.4
+2. ✅ Implemented H11 v2: per-frame census + identity-merge
+   candidates. Census: 51% cascade time on identical,
+   100% on YouTube (over-counting).
+3. ✅ Implemented H11 v3: quality-filtered census sweep.
+   Confirms YouTube over-counting is due to UNCERTAIN
+   chain quality.
+4. ✅ Rendered 6 contact sheets for CONFIDENT and UNCERTAIN
+   chains. Visual QA confirmed:
+   - chain 2 (CONFIDENT): real catch-throw
+   - chain 8 (CONFIDENT): real hold-throw
+   - chain 30 (UNCERTAIN): identity switches (correctly
+     flagged as suspect)
+   - chain 6 YouTube (CONFIDENT): real catch-throw
+5. ✅ Rendered 1 merge-candidate contact sheet. Visual QA
+   showed the chain 36 ↔ chain 30 candidate is a FALSE
+   POSITIVE (t62 and t63 are 73 pixels apart at f=890).
+6. ✅ Sensitivity grid: n_events is stable at 8 across
+   all reasonable (confident, trustable) settings.
+7. ✅ Documented in `h11_report.md` and updated
+   RESULTS_LOG.
+
+**H11 verdict: PASS.** H11 is a useful downstream
+consumer of H10 v5 quality:
+- 9 CONFIDENT identical + 1 CONFIDENT YouTube chain
+  with correct physical ball ID.
+- 8 catch/throw events on identical + 1 on YouTube.
+- Per-frame census: 51% cascade on identical, 100% on
+  YouTube (over-counting artifact).
+- 1 CONFIDENT identity-merge candidate is a FALSE
+  POSITIVE — algorithm needs stricter spatial proximity.
+
+Next episode candidates:
+1. H11 v4: stricter spatial proximity for identity-merge
+   candidates (use ball position, not just hand-event time).
+2. H12: per-catch-frame juggling pattern inference.
+3. H8 v7: per-frame per-bounce segmentation for YouTube
+   long tracklets.

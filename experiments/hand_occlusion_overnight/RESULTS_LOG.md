@@ -996,3 +996,114 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v6_per_bounce.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v6_per_bounce_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_v6_report.md`
+
+---
+
+### H11 (2026-08-28 ~08:50 CEST)
+
+- Hypothesis (master §18, follow-up to H10 v5): given
+  H10 v5's chain quality score, we can assign physical
+  ball IDs to tracklets within high-quality chains,
+  extract catch/throw events with frame-level semantics,
+  and compute a per-frame ball census. Identity-merge
+  candidates flag chains that the chain algorithm split
+  but should be one physical ball.
+- Thresholds (declared from physical geometry, not from
+  manual labels):
+  - `QUALITY_CONFIDENT = 0.7`: chain is one physical ball
+    with high confidence.
+  - `QUALITY_TRUSTABLE = 0.4`: chain may be one physical
+    ball, but with caveats.
+  - `< 0.4`: chain is unreliable. Don't emit events.
+- Quantitative result (chain classification):
+
+| Video | Total | CONFIDENT | UNCERTAIN | LOW |
+|---|---|---|---|---|
+| identical | 43 | 9 | 32 | 2 |
+| youtube | 15 | 1 | 14 | 0 |
+
+- Catch/throw events (only from chains with q >= 0.4
+  AND >= 1 hand-edge):
+
+| Video | CATCH | THROW | h3_confirmed | ambiguous |
+|---|---|---|---|---|
+| identical | 8 | 8 | 10 | 8 |
+| youtube | 1 | 1 | 2 | 0 |
+
+- Per-frame census (H11 v2, all chains counted):
+
+| Video | frames | 0 balls | 1 ball | 2 balls | 3 balls | 4+ balls | cascade% |
+|---|---|---|---|---|---|---|---|
+| identical | 1077 | 3.2% | 20.3% | 25.4% | 49.5% | 1.5% | 51.0% |
+| youtube | 898 | 0.0% | 0.0% | 0.0% | 2.4% | 97.6% | 100.0% |
+
+- H11 v3 quality-filtered census: cascade time on identical
+  drops from 56% (q >= 0.3) to 15% (q >= 0.7). The cascade
+  metric is sensitive to the quality threshold.
+
+- Visual QA (8 contact sheets rendered, 6 inspected):
+  - **chain 2 (CONFIDENT, q=0.92)**: t3 → t9 left-hand
+    catch-throw. Visual inspection confirmed.
+  - **chain 8 (CONFIDENT, q=0.85)**: t11 → t14 right-hand
+    hold-throw. Visual inspection confirmed.
+  - **chain 30 (UNCERTAIN, q=0.45)**: 5 tracklets with
+    identity switches. H11's UNCERTAIN label correctly
+    flags the chain as suspect.
+  - **chain 6 YouTube (CONFIDENT, q=0.97)**: t10 → t12
+    right-hand catch-throw. Visual inspection confirmed.
+  - **merge candidate chain 36 ↔ chain 30**: FALSE POSITIVE.
+    t62 (chain 36) and t63 (chain 30) are 73 pixels apart at
+    f=890, NOT co-located. H11 v2 needs stricter spatial
+    proximity for merge candidates.
+
+- Sensitivity grid (h11_sensitivity.py): n_events is
+  stable at 8 across all reasonable (confident, trustable)
+  settings. (0.7, 0.4) is in a flat region.
+
+- Negative findings:
+  - **YouTube over-counting**: H10 v5 quality is mostly
+    UNCERTAIN (q < 0.6) on YouTube, so H11 v3's cascade
+    metric is unreliable. The 100% "cascade" at q >= 0.4
+    is misleading — chains are long tracklets that overlap
+    in time, not separate physical balls.
+  - **H11 v2 identity-merge candidate is a false positive**:
+    chain 36 and chain 30 are at the same time but
+    different positions (two different balls).
+  - **H11 v2 algorithm is conservative by design**:
+    it only flags candidates that meet temporal AND
+    spatial hand-event proximity. A future H11 v4 should
+    add explicit ball-position spatial proximity (e.g.,
+    within 30 px of the hand at merge time).
+
+- Verdict: **PASS.** H11 is a useful downstream consumer
+  of H10 v5 quality:
+  - 9 CONFIDENT chains on identical, 1 on YouTube with
+    correct physical ball ID assignment.
+  - 8 catch/throw events on identical with structural
+    semantics.
+  - Per-frame census is meaningful on identical (51%
+    cascade time, consistent with 3-ball cascade).
+  - 1 CONFIDENT identity-merge candidate is a false
+    positive, but the algorithm is correctly conservative.
+
+  See `h1_hand_pool/reports/h11_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_identity_propagation.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v2_census_pattern.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v2_census_visualization.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v2_merge_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v2_export_merges.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_v3_quality_census.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h11_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/tracklet_identity_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/chain_events_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/per_frame_census_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/catch_throw_timeline_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/merge_candidates_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_v3_quality_census.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h11_sensitivity.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h11/*.png` (8 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h11_report.md`

@@ -1,0 +1,3 @@
+chain_id,event,tid,prev_tid,frame,hand,tok_age,h3_confirmed,ambiguous,chain_quality,chain_classification,edge_type
+6,CATCH,12,10,0,right,17,True,False,0.9668,CONFIDENT,HAND_TRANSITION
+6,THROW,12,10,0,right,17,True,False,0.9668,CONFIDENT,HAND_TRANSITION
