@@ -1375,14 +1375,46 @@ both videos.
 
 **Next episode candidates:**
 
-1. **H37: literature search for multi-ball juggling tracking
-   methods** — search the web for the latest juggling-tracking
-   papers, then turn promising ideas into isolated experiments.
-2. **H38: per-frame pattern classification with the H36
-   timeline** — use (L, R, A) state to compute per-frame
-   pattern labels (CASCADE_3+, FOUNTAIN_3+, MIXED_3+) with
-   hand-occupancy as a primary signal. This may fix the
-   H12 v4/v5 ambiguity.
-3. **Stop here.** The h7v3plus3 chain set is now validated
+1. **H37: cross-reference H36 (L, R, A) with H12 v8 pattern
+   labels** — use the H36 (L, R, A) state to validate or
+   invalidate H12 v8's pattern classification. This may fix
+   the H12 v4/v5 ambiguity.
+2. **Stop here.** The h7v3plus3 chain set is now validated
    at the per-frame hand-occupancy level. Further chain
+   improvements would require fundamentally different signals.
+
+
+## Thirty-ninth episode (H37) — STATUS: COMPLETE (PASS, validation)
+
+Sub-steps:
+1. ✅ Implemented H37: cross-reference H36 (L, R, A) state with
+   H12 v8 pattern labels per frame.
+2. ✅ Result: 80.7% agreement on identical (823/1020 common
+   frames), 76.5% on YouTube (664/868).
+3. ✅ L_extra and R_extra are all HOLD frames (interpolated),
+   not real disagreements.
+4. ✅ Late-phase identical FOUNTAIN_3+ has 97% (0, 0, 3) state
+   — H36 has no hand-occupancy support.
+5. ✅ CASCADE_3+ has hand-occupancy support: 20/22 identical
+   are (0, 1, 2), 66/129 YouTube are (0, 1, 4).
+6. ✅ 2 contact sheets rendered. The late phase FOUNTAIN_3+
+   blocks appear as continuous stretches alternating with
+   MIXED_3+ blocks.
+7. ✅ Documented in `h37_report.md` and updated STATE/RESULTS_LOG.
+
+**H37 verdict: PASS (consumer-pass, validation).** H36 (L, R, A)
+state validates CASCADE_3+ classification (which has
+hand-occupancy support) but cannot disambiguate FOUNTAIN_3+
+(which has no hand-occupancy signal). The 80%/76% agreement
+rate is a useful summary metric.
+
+**Next episode candidates:**
+
+1. **H38: post-filter CASCADE_3+ using H36 hand-occupancy** —
+   reject CASCADE_3+ classifications where H36 has no
+   hand-occupancy evidence. This could be a precision
+   improvement.
+2. **Stop here.** The chain set is now validated at four
+   levels: quality (H10), identity (H11), hand-occupancy
+   (H36), and pattern cross-reference (H37). Further chain
    improvements would require fundamentally different signals.

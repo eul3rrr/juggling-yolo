@@ -1,0 +1,22 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_common_frames": 1020,
+      "n_agree": 823,
+      "n_l_disagree": 60,
+      "n_r_disagree": 137,
+      "n_l_extra": 60,
+      "n_l_missing": 0,
+      "pct_agreement": 80.7
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_common_frames": 868,
+      "n_agree": 664,
+      "n_l_disagree": 85,
+      "n_r_disagree": 119,
+      "n_l_extra": 85,
+      "n_l_missing": 0,
+      "pct_agreement": 76.5
+    }
+  }
+}

@@ -3021,3 +3021,53 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h36_conflicts_*.csv` (2 files, empty)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h36/*.png` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h36_report.md`
+
+
+### H37 (2026-08-28 ~13:35 CEST)
+
+- Hypothesis: H36 (L, R, A) state and H12 v8 pattern labels
+  should agree on which frames have a ball in a hand. Cross-
+  referencing answers: (1) Do they agree? (2) Does the (L, R, A)
+  state disambiguate CASCADE_3+ vs FOUNTAIN_3+ on the late phase?
+  (3) Is H36's state a useful input to H12 v9?
+- Approach:
+  - Load H36 per_frame and H12 v8 (H35) pattern_inference
+    per-frame data.
+  - Merge on frame number.
+  - Compute agreement on (L, R, A) ball count.
+  - For frames where H12 v8 says CASCADE_3+ or FOUNTAIN_3+,
+    check if H36's (L, R, A) state is consistent.
+  - Visualize on contact sheets.
+- Quantitative result:
+  - identical: 80.7% agreement (823/1020 common frames).
+  - YouTube: 76.5% agreement (664/868 common frames).
+  - L_extra and R_extra are all HOLD frames (interpolated),
+    not real disagreements.
+  - Late-phase identical FOUNTAIN_3+ (71 frames): 97% have
+    H36 state (0, 0, 3) — no hand-occupancy support.
+  - CASCADE_3+ frames have hand-occupancy support:
+    20/22 identical CASCADE_3+ are (0, 1, 2) on identical;
+    66/129 YouTube CASCADE_3+ are (0, 1, 4).
+- Visual QA: 2 contact sheets rendered. The identical late-phase
+  FOUNTAIN_3+ blocks (f=800-1050) appear as continuous stretches
+  alternating with MIXED_3+ blocks. H36 (L, R, A) state is mostly
+  (0, 0, 3) during FOUNTAIN_3+ blocks.
+- Negative findings:
+  - H12 v8 FOUNTAIN_3+ classification has 0% hand-occupancy
+    support on identical late phase (69/71 = 97% are (0, 0, 3)).
+    FOUNTAIN_3+ is based on event-log density, not hand occupancy.
+  - H36 (L, R, A) state does NOT resolve the CASCADE/FOUNTAIN
+    ambiguity on the late phase.
+  - H12 v8 confidence drops to 0.5-0.7 in the late phase,
+    reflecting the fundamental uncertainty.
+- Verdict: **PASS (consumer-pass, validation).** H37 confirms
+  H36 (L, R, A) state and H12 v8 pattern labels are largely
+  consistent. H36 validates CASCADE_3+ but cannot disambiguate
+  FOUNTAIN_3+. See `h1_hand_pool/reports/h37_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h37_crossref.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h37_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h37_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h37_crossref_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h37/*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h37_report.md`

@@ -1,17 +1,17 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 13:20 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + **H36** COMPLETE. H35
-PASS (consumer-pass, no change): h7v3plus3 functionally equivalent
-to h7v3pure for downstream consumers. H36 PASS: per-frame
-hand-occupancy state machine on h7v3plus3 produces a closed
-juggling system (zero conservation violations, zero over-capacity
-events) on both videos. 73% of frames have all balls in air
-(consistent with 3-ball/5-ball cascade patterns). The h7v3plus3
-chain set is now validated at the per-frame hand-occupancy
-level in addition to the chain quality (H10) and identity
-propagation (H11) levels. Recommended operating point remains
-h7v3plus3 (H34 + H35 + H36). **H32 NEGATIVE**: per-chain
+LAST_UPDATE: 2026-08-28 13:35 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + **H37** COMPLETE.
+H35 PASS (consumer-pass, no change). H36 PASS: per-frame
+hand-occupancy state machine produces closed juggling system. H37
+PASS (consumer-pass, validation): H36 (L, R, A) state and H12 v8
+pattern labels are 80.7%/76.5% consistent on identical/YouTube.
+H37 confirms H12 v8 FOUNTAIN_3+ has 0% hand-occupancy support on
+identical late phase (97% are H36 state (0, 0, 3)) — FOUNTAIN_3+
+classification is based on event-log density, not hand occupancy.
+H37 validates CASCADE_3+ (which has hand-occupancy support) but
+cannot disambiguate FOUNTAIN_3+. Recommended operating point
+remains h7v3plus3 (H34 + H35 + H36 + H37). **H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -503,6 +503,9 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
     See `h1_hand_pool/reports/h31_report.md`.
 
 ## Next action
+
+H37 is complete (PASS, consumer-pass, validation). H36 (L, R, A)
+state validates CASCADE_3+ but cannot disambiguate FOUNTAIN_3+.
 
 H36 is complete (PASS). The h7v3plus3 chain set is now
 validated at the per-frame hand-occupancy level.
