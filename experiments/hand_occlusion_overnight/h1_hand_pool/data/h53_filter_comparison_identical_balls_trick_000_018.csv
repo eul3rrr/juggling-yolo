@@ -1,0 +1,12 @@
+chain_id,from_tid,to_tid,flight_time,h50_drop,h52_min2_drop,h52_verdict,v_disc,src_n,tgt_n
+13,23,25,28,False,False,OK,0.675,4,6
+23,37,40,12,False,True,VIOLATING,9.671,2,33
+23,40,41,48,False,True,VIOLATING,22.839,33,14
+23,41,45,40,False,True,VIOLATING,17.945,14,40
+23,45,46,48,False,True,VIOLATING,20.39,40,30
+24,39,47,142,False,True,VIOLATING,62.565,127,72
+30,52,54,14,False,False,OK,0.117,6,31
+30,54,59,50,False,True,VIOLATING,19.966,31,11
+30,59,63,42,False,True,VIOLATING,81.328,11,52
+31,60,68,125,False,True,VIOLATING,93.007,71,37
+31,68,71,51,False,True,VIOLATING,94.188,37,43

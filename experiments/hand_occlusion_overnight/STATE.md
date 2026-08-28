@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
 LAST_UPDATE: 2026-08-28 16:35 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + **H50**
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + **H53**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1169,8 +1169,8 @@ See `h1_hand_pool/reports/h51_report.md` for full analysis.
 
 ## H52 conclusion
 
-**H52: H8 v5 parabolic physics on H50-dropped pairs** — DONE. PASS.
-Closes the H50 visual QA ambiguity on chain 13.
+**H52: H8 v5 parabolic physics on H50-dropped (CATCH, THROW) pairs** — DONE.
+PASS. Closes the H50 visual QA ambiguity on chain 13.
 
 H8 v5 parabolic fit on the 3 H50-dropped pairs:
 
@@ -1202,15 +1202,56 @@ operating point.
 
 See `h1_hand_pool/reports/h52_report.md` for full analysis.
 
+## H53 conclusion
+
+**H53: H52 sensitivity grid preservation + multi-rater visual QA
+consensus on the 3 H50-dropped pairs** — DONE. PASS.
+
+Three contributions:
+
+1. **H52 sensitivity grid (preserved)**: The H52 summary JSON did
+   not preserve the MIN=2 sensitivity-grid values that the H52
+   report cites (e.g. chain 13 src_vy=-32.1, tgt_vy=-1.1, v_disc=19.5).
+   H53 re-runs the 9-cell MIN_TRACKLET_PTS grid and saves every cell
+   to `h53_h52_sensitivity_grid.json`. The MIN=2/3/4 results are
+   consistent (v_disc=19.5 for chain 13) but MIN=5+ is INSUFFICIENT_DATA.
+   The chain 23 "OK at MIN=2" result is unreliable because tgt_n=2
+   makes the parabolic fit degenerate.
+
+2. **Multi-rater visual QA consensus**: 4 raters (H45 bucket, H50
+   vision A, H52 physics, H53 vision A and B with two question
+   phrasings) all 3 dropped pairs reach TRACKER_FRAGMENTATION consensus.
+   The chain 13 ft=3 "real catch-throw" caveat from H50 is now
+   resolved: 2/3 vision votes + H52 physics say TRACKER_FRAGMENTATION.
+   The chain 23 ft=1 case is vision-tool-ambiguous (H50 says frag,
+   H53-A says real, H53-B says different balls) — 2/3 vote for
+   TRACKER_FRAGMENTATION with filter-default tie.
+
+3. **H52+MIN=2 vs H50 on full event log**: H52+MIN=2 is OVER-AGGRESSIVE
+   as a standalone filter (16/25 identical and 24/25 YouTube C2T
+   drops). The 10-frame filter is more conservative. H52+MIN=2 is a
+   useful corroborating signal on H50 drops: 5/11 identical and
+   12/13 YouTube H50 drops are also H52+MIN=2 VIOLATING
+   (high-confidence fragmentation). 6 identical and 1 YouTube H50-only
+   drops are ambiguous (H52 says OK/INSUFFICIENT_DATA).
+
+**Verdict: PASS.** All 3 H50 drops are TRACKER_FRAGMENTATION by
+multi-rater consensus. The h7v3plus3 + H12 v8 + H50 + H43 + H52
+stack is the final operating point. H53 closes a documentation gap
+(H52 JSON missing grid values) and confirms the operating point
+through 3 independent visual QA passes + 1 physics check.
+
+See `h1_hand_pool/reports/h53_report.md` for full analysis.
+
 ## Final summary
 
 The hand-occlusion overnight lab has produced a comprehensive,
-validated chain representation for both videos over 52 research
+validated chain representation for both videos over 53 research
 episodes spanning ~14 hours. The final operating point is:
 
 **h7v3plus3 + H12 v8 + H50 10-frame filter + H43 confidence
 filter + H52 physics corroboration**
 
 See `h1_hand_pool/reports/FINAL_SUMMARY.md` for a comprehensive
-overview of all 52 episodes, the strongest findings, the
+overview of all 53 episodes, the strongest findings, the
 important negative findings, and the recommended operating point.

@@ -1,0 +1,47 @@
+{
+  "config": {
+    "PARABOLA_N": 8,
+    "MIN_TRACKLET_PTS": 2,
+    "GRAVITY_PX_PER_FRAME2": 0.46,
+    "DISCONTINUITY_TOLERANCE": 5.0
+  },
+  "h50_min_flight": 10,
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "c2c": {
+        "n_pairs": 11,
+        "h50_drops": 0,
+        "h52_min2_drops": 9,
+        "both_drop": 0,
+        "h50_only_drops": 0,
+        "h52_only_drops": 9
+      },
+      "c2t": {
+        "n_pairs": 25,
+        "h50_drops": 11,
+        "h52_min2_drops": 16,
+        "both_drop": 5,
+        "h50_only_drops": 6,
+        "h52_only_drops": 11
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "c2c": {
+        "n_pairs": 16,
+        "h50_drops": 0,
+        "h52_min2_drops": 16,
+        "both_drop": 0,
+        "h50_only_drops": 0,
+        "h52_only_drops": 16
+      },
+      "c2t": {
+        "n_pairs": 25,
+        "h50_drops": 13,
+        "h52_min2_drops": 24,
+        "both_drop": 12,
+        "h50_only_drops": 1,
+        "h52_only_drops": 12
+      }
+    }
+  }
+}

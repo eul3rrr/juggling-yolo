@@ -1,0 +1,422 @@
+{
+  "config": {
+    "PARABOLA_N": 8,
+    "MIN_TRACKLET_PTS": 6,
+    "GRAVITY_PX_PER_FRAME2": 0.46,
+    "DISCONTINUITY_TOLERANCE": 5.0
+  },
+  "min_pts_grid": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    12
+  ],
+  "videos": {
+    "identical_balls_trick_000_018": [
+      {
+        "chain_id": 13,
+        "from_tid": 17,
+        "to_tid": 23,
+        "f_catch": 207,
+        "f_throw": 232,
+        "flight_time": 3,
+        "gap": 25,
+        "src_n_pts": 36,
+        "tgt_n_pts": 4,
+        "h52_default_min6": {
+          "min_pts": 6,
+          "verdict": "INSUFFICIENT_DATA",
+          "src_vy": 0.0,
+          "tgt_vy": 0.0,
+          "predicted_tgt_vy": 0.0,
+          "velocity_discontinuity": 0.0,
+          "src_n_used": 36,
+          "tgt_n_used": 4,
+          "src_a_parabolic": 0.0,
+          "tgt_a_parabolic": 0.0
+        },
+        "h52_sensitivity_grid": [
+          {
+            "min_pts": 6,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 36,
+            "tgt_n_used": 4,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 2,
+            "verdict": "VIOLATING",
+            "src_vy": -32.114,
+            "tgt_vy": -1.071,
+            "predicted_tgt_vy": -20.614,
+            "velocity_discontinuity": 19.544,
+            "src_n_used": 8,
+            "tgt_n_used": 4,
+            "src_a_parabolic": -2.107,
+            "tgt_a_parabolic": 0.964
+          },
+          {
+            "min_pts": 3,
+            "verdict": "VIOLATING",
+            "src_vy": -32.114,
+            "tgt_vy": -1.071,
+            "predicted_tgt_vy": -20.614,
+            "velocity_discontinuity": 19.544,
+            "src_n_used": 8,
+            "tgt_n_used": 4,
+            "src_a_parabolic": -2.107,
+            "tgt_a_parabolic": 0.964
+          },
+          {
+            "min_pts": 4,
+            "verdict": "VIOLATING",
+            "src_vy": -32.114,
+            "tgt_vy": -1.071,
+            "predicted_tgt_vy": -20.614,
+            "velocity_discontinuity": 19.544,
+            "src_n_used": 8,
+            "tgt_n_used": 4,
+            "src_a_parabolic": -2.107,
+            "tgt_a_parabolic": 0.964
+          },
+          {
+            "min_pts": 5,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 36,
+            "tgt_n_used": 4,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 7,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 36,
+            "tgt_n_used": 4,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 8,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 36,
+            "tgt_n_used": 4,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 10,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 36,
+            "tgt_n_used": 4,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 12,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 36,
+            "tgt_n_used": 4,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          }
+        ]
+      },
+      {
+        "chain_id": 23,
+        "from_tid": 35,
+        "to_tid": 37,
+        "f_catch": 522,
+        "f_throw": 533,
+        "flight_time": 1,
+        "gap": 11,
+        "src_n_pts": 14,
+        "tgt_n_pts": 2,
+        "h52_default_min6": {
+          "min_pts": 6,
+          "verdict": "INSUFFICIENT_DATA",
+          "src_vy": 0.0,
+          "tgt_vy": 0.0,
+          "predicted_tgt_vy": 0.0,
+          "velocity_discontinuity": 0.0,
+          "src_n_used": 14,
+          "tgt_n_used": 2,
+          "src_a_parabolic": 0.0,
+          "tgt_a_parabolic": 0.0
+        },
+        "h52_sensitivity_grid": [
+          {
+            "min_pts": 6,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 2,
+            "verdict": "OK",
+            "src_vy": -3.761,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 1.299,
+            "velocity_discontinuity": 1.299,
+            "src_n_used": 8,
+            "tgt_n_used": 2,
+            "src_a_parabolic": -0.236,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 3,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 4,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 5,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 7,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 8,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 10,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 12,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 14,
+            "tgt_n_used": 2,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          }
+        ]
+      },
+      {
+        "chain_id": 30,
+        "from_tid": 51,
+        "to_tid": 52,
+        "f_catch": 766,
+        "f_throw": 775,
+        "flight_time": 5,
+        "gap": 9,
+        "src_n_pts": 2,
+        "tgt_n_pts": 6,
+        "h52_default_min6": {
+          "min_pts": 6,
+          "verdict": "INSUFFICIENT_DATA",
+          "src_vy": 0.0,
+          "tgt_vy": 0.0,
+          "predicted_tgt_vy": 0.0,
+          "velocity_discontinuity": 0.0,
+          "src_n_used": 2,
+          "tgt_n_used": 6,
+          "src_a_parabolic": 0.0,
+          "tgt_a_parabolic": 0.0
+        },
+        "h52_sensitivity_grid": [
+          {
+            "min_pts": 6,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 2,
+            "verdict": "VIOLATING",
+            "src_vy": 0.0,
+            "tgt_vy": -13.971,
+            "predicted_tgt_vy": 4.14,
+            "velocity_discontinuity": 18.111,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.698
+          },
+          {
+            "min_pts": 3,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 4,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 5,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 7,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 8,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 10,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          },
+          {
+            "min_pts": 12,
+            "verdict": "INSUFFICIENT_DATA",
+            "src_vy": 0.0,
+            "tgt_vy": 0.0,
+            "predicted_tgt_vy": 0.0,
+            "velocity_discontinuity": 0.0,
+            "src_n_used": 2,
+            "tgt_n_used": 6,
+            "src_a_parabolic": 0.0,
+            "tgt_a_parabolic": 0.0
+          }
+        ]
+      }
+    ]
+  }
+}

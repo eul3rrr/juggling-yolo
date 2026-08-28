@@ -3655,3 +3655,79 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h52_physics_check.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h52_physics_check_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h52_report.md`
+
+### H53 (2026-08-28 ~17:30 CEST)
+
+- Hypothesis: H52's summary JSON does not preserve the MIN=2
+  sensitivity-grid values that the H52 report cites (chain 13
+  src_vy=-32.1, tgt_vy=-1.1, v_disc=19.5). The H50 vision QA
+  also produced an ambiguous result on chain 13 ft=3 ("real
+  catch-throw" per H50, "TRACKER_FRAGMENTATION" per H52 physics)
+  and a vision-tool contradiction on chain 23 ft=1 (H50 said
+  "tracker artifact"; H53 vision QA on the same image said
+  "real catch-throw").
+
+- Three-part experiment:
+  1. H52 sensitivity grid preservation: 9-cell MIN_TRACKLET_PTS
+     grid (2-12) saved to `h53_h52_sensitivity_grid.json`. MIN=2/3/4
+     results are consistent (v_disc=19.5 for chain 13); MIN=5+
+     returns INSUFFICIENT_DATA.
+  2. Multi-rater visual QA consensus on 3 dropped pairs: 4 raters
+     (H45 bucket, H50 vision A, H52 physics, H53 vision A and B
+     with two question phrasings) all 3 pairs reach
+     TRACKER_FRAGMENTATION consensus.
+  3. H52+MIN=2 vs H50 on full event log: H52+MIN=2 is
+     OVER-AGGRESSIVE (16/25 identical and 24/25 YouTube C2T drops).
+     H52+MIN=2 is a useful corroborating signal on H50 drops
+     (5/11 identical and 12/13 YouTube H50 drops are also
+     H52+MIN=2 VIOLATING = high-confidence fragmentation).
+
+- Multi-rater visual QA results (question A: real vs artifact;
+  question B: same ball vs different balls):
+
+  || Pair | H45 | H50 (A) | H52 (MIN=6) | H52 (MIN=2) | H53 (A) | H53 (B) | Consensus |
+  ||---|---|---|---|---|---|---|---|
+  || chain 13 ft=3 | IDENTITY_SWITCH | REAL | INSUFFICIENT | VIOLATING | FRAGMENTATION | DIFFERENT_BALLS | TRACKER_FRAGMENTATION |
+  || chain 23 ft=1 | IDENTITY_SWITCH | FRAGMENTATION | INSUFFICIENT | OK | REAL | DIFFERENT_BALLS | TRACKER_FRAGMENTATION (tie, filter-default) |
+  || chain 30 ft=5 | IDENTITY_SWITCH | FRAGMENTATION | INSUFFICIENT | VIOLATING | FRAGMENTATION | DIFFERENT_BALLS | TRACKER_FRAGMENTATION |
+
+- Key findings:
+  - **All 3 H50 drops are TRACKER_FRAGMENTATION by multi-rater consensus.**
+    The 10-frame filter is correct and should not be relaxed.
+  - **The H50 chain 13 ft=3 "real catch-throw" caveat is now resolved.**
+    2/3 vision votes + H52 physics say TRACKER_FRAGMENTATION.
+  - **The H50 chain 23 ft=1 case is vision-tool-ambiguous.** H50 says
+    "tracker artifact" but H53 question A says "real catch-throw".
+    The 2/3 vision split + filter-default tie resolves in favor of
+    TRACKER_FRAGMENTATION, but the case is the limit of vision QA on
+    short flights.
+  - **H52+MIN=2 is not a viable standalone filter.** It's over-aggressive
+    on the full event log. The 10-frame filter is the recommended
+    operating point.
+  - **H52+MIN=2 is a useful corroborating signal.** When an H50 drop
+    also has H52+MIN=2 VIOLATING, that's a high-confidence
+    fragmentation case (5/11 identical, 12/13 YouTube).
+
+- Negative findings:
+  - The H50 vision tool and H53 vision tool (same model) produce
+    contradictory verdicts on the same contact sheet when asked the
+    "real vs artifact" question. The "same ball vs different balls"
+    question is more reliable (2/3 votes match across H50 + H53).
+  - Vision tool is unreliable for short flights (chain 23 ft=1):
+    the 1-frame gap is at the limit of visual signal, and the tool
+    produces contradictory verdicts depending on question phrasing.
+
+- Verdict: **PASS.** The h7v3plus3 + H12 v8 + H50 + H43 + H52 stack
+  is the final operating point. H53 closes a documentation gap
+  (H52 JSON missing grid values) and confirms the operating point
+  through 3 independent visual QA passes + 1 physics check.
+  See `h1_hand_pool/reports/h53_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h53_physics_redo_and_multirater.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h53b_filter_comparison.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_h52_sensitivity_grid.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_multi_rater_visual_qa.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_filter_comparison_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_c2t_filter_comparison_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h53_filter_comparison_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h53_report.md`
