@@ -954,3 +954,45 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v5_unified_chains_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h237v5_unified_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h237v5_report.md`
+
+### H8 v6 (2026-08-28 ~08:35 CEST)
+
+- Hypothesis: H8 v5's problem on YouTube long tracklets is
+  that the parabolic fit on the last 8 frames of source and
+  first 8 frames of target may be at different points in
+  the juggling cycle. Per-bounce segmentation would isolate
+  the relevant parabolic arc.
+- Thresholds (declared from physical geometry):
+  - APEX_HALFWIN = 6
+  - ARC_N = 8
+  - GRAVITY_PX_PER_FRAME2 = 0.5
+  - DISCONTINUITY_TOLERANCE = 8.0
+- Quantitative result:
+
+|| Method | identical OK | identical VIOL | youtube OK | youtube VIOL |
+||---|---|---|---|---|
+|| v5 (whole-tracklet) | 12 | 10 | 0 | 23 |
+|| **v6 (per-bounce)** | **13** | **9** | **0** | **23** |
+
+  v6 catches 1 fewer identical violation (38→39) but
+  YouTube is unchanged (still 23/24 VIOLATING).
+
+- Negative findings:
+  - The apex detection (APEX_HALFWIN=6) only finds major
+    apexes. Within each arc, the ball can still go up and
+    down multiple times due to the juggler's catch-throw
+    motion. The "last arc's tail" of t4 (frames 409-416)
+    shows the ball RISING (y=450 → 507), not falling.
+  - Per-bounce segmentation at the apex level is too
+    coarse. A fundamentally different approach is needed
+    for YouTube long tracklets (e.g. per-bounce segmentation
+    at frame level, or 3D ball trajectory estimation).
+
+- Verdict: **NEGATIVE.** Per-bounce segmentation does not
+  solve the YouTube long-tracklet problem. See
+  `h1_hand_pool/reports/h8_v6_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h8_v6_per_bounce.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h8_v6_per_bounce_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h8_v6_report.md`
