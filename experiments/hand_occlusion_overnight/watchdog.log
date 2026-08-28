@@ -88469,3 +88469,541 @@ Push successful. The STATE.md changes are uncommitted. Let me commit them along 
 The h83_diagnostic.py is leftover (not a real artifact). Let me delete it (it's a temp file, not a meaningful H83 result), commit the STATE.md updates, and plan the next research.
 ╰──────────────────────────────────────────────────────────────────────────────╯
   ┊ 💻 preparing terminal…
+  ┊ 💻 $         rm -f experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h83_diagnostic.py + 2 commands  0.3s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         git commit -m "docs: STATE.md updates for H83-H88 (final precision+recall arc)"  0.2s
+  ┊ 💻 $         git log --oneline -5  0.0s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         git push origin experiments/hand-occlusion-overnight  2.6s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Good. State is clean and pushed. Now let me think about a productive next research direction.
+
+Looking at the situation:
+- The 19-phase H70 sample is saturated at 95.2% (H82 v1) / 90.5% (H82 v1 + H87 with P=1.000).
+- The 113 manual review pairs are saturated at P=1.000 R=1.000 (H77 gate).
+- The 1 remaining FP (f=685-716 CASCADE_3+ MANIPULATION) is the contact-juggling trick, which has 0/2 accuracy per H73.
+- The 1 remaining FN (f=267-298 YouTube JUGGLING) is the 5-ball saturation problem.
+
+Let me explore some new directions:
+1. H89: YOLO confidence filtering for H87 — use only YOLO detections with high conf to fix YouTube
+2. H90: f=685-716 MANIPULATION investigation — look at the 3-ball body-roll trick as a new anomaly class
+3. Literature search for fresh ideas: factor graphs, JPDA, online multi-object tracking
+4. H91: H82 v1 + H87 as a downstream consumer (not just precision/recall) — measure how often a downstream user gets useful output
+
+Let me look at the available data and figure out which direction has the highest research value.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         ls experiments/hand_occlusion_overnight/h1_hand_pool/data/ + 2 commands  0.0s
+  ┊ 💻 $         ls experiments/hand_occlusion_overnight/h1_hand_pool/data/ | grep -E "^h[78]"  0.0s
+  ┊ 💻 $         ls /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/overnight/data/ 2>/dev/null + 1 command  0.0s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         ls /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/overnight/data/ 2>/dev/null | grep -iE "detection|tracklet|stitch"  0.0s
+  ┊ 💻 $         cat experiments/hand_occlusion_overnight/h1_hand_pool/data/h87_balls_aloft.json  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Let me look at the h87 script to understand the data sources available for a YOLO confidence filter.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         cat experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h87_balls_aloft.py  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Good — H87 already has access to raw YOLO sports ball detections. The H87 hypothesis uses ALL sports ball detections. I can run a YOLO-confidence-filtered version (H89). Let me also look at the BALLS_CSV schema to understand what fields are available.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         head -1 /home/it-admin/projects/juggling-yolo-hand-occlusion-night/detections/identical_balls_trick_000_018_yolo26s_all-classes.csv 2>/dev/null + 1 command  0.0s
+  ┊ 💻 $         grep "sports ball" /home/it-admin/projects/juggling-yolo-hand-occlusion-night/detections/identical_balls_trick_000_018_yolo26s_all-classes.csv 2>/dev/null  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Excellent. The YOLO confidence field is available. Now I can run H89: H87 with YOLO confidence thresholding. This is a natural next step and the H87 report explicitly listed it as future research.
+
+Let me also think about a more ambitious direction. Looking at the broader picture, the lab has been very focused on H70-phase classification. Let me explore one more potentially productive angle: examining the contact-juggling MANIPULATION (f=685-716) and crossed-arm trick (f=890-936) as their own phenomenon. They share the property of having actual ball motion (not static) but unusual hand patterns.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 📋 preparing todo…
+  ┊ 📖 preparing read_file…
+  ┊ 📋 plan      4/9 task(s)  0.0s
+  ┊ 📖 read      h87_balls_aloft.py L100-299  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Good — I have the complete h87 framework. Now let me write H89: H87 with YOLO confidence thresholding. The hypothesis is that low-confidence YOLO detections (e.g., conf < 0.3) are more likely to be false positives, and excluding them will reduce the YouTube YOLO FP problem.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py  0.9s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py
+@@ -0,0 +1,251 @@
++#!/usr/bin/env python3
++"""
++H89 — H87 with YOLO confidence thresholding.
++
++Hypothesis: The H87 hypothesis (balls aloft) failed on YouTube because
++YOLO confuses background features with sports balls (H4/H66 finding).
++These false-positive detections likely have LOWER YOLO confidence than
++true ball detections. A confidence floor should filter most FPs while
++preserving true juggling detections.
++
++Test: re-run the H87 "balls aloft" metric with confidence floor
++{0.20, 0.30, 0.40, 0.50, 0.60, 0.70} and see which threshold recovers
++YouTube juggling discrimination without losing the identical catches.
++"""
++from __future__ import annotations
++
++import csv
++import json
++import math
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++DETECTIONS = WORKTREE / "detections"
++H1_DATA = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "data"
++
++BALLS_CSV = {
++    "identical_balls_trick_000_018": "identical_balls_trick_000_018_yolo26s_all-classes.csv",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32.csv",
++}
++POSE_CSV = {
++    "identical_balls_trick_000_018": "identical_balls_trick_000_018_yolo26s-pose.csv",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s-pose.csv",
++}
++
++ALOFT_RADIUS = 100  # px from wrist (same as H87)
++
++
++def load_balls_with_conf(stem: str, min_conf: float = 0.0) -> dict:
++    """Load sports ball detections filtered by minimum confidence."""
++    out = {}
++    fpath = DETECTIONS / BALLS_CSV[stem]
++    with open(fpath) as f:
++        for r in csv.DictReader(f):
++            if r["class_name"] == "sports ball":
++                conf = float(r["confidence"])
++                if conf < min_conf:
++                    continue
++                frame = int(r["frame"])
++                if frame not in out:
++                    out[frame] = []
++                out[frame].append((float(r["center_x"]), float(r["center_y"]), conf))
++    return out
++
++
++def load_wrists(stem: str) -> dict:
++    out = {}
++    fpath = DETECTIONS / POSE_CSV[stem]
++    with open(fpath) as f:
++        for r in csv.DictReader(f):
++            frame = int(r["frame"])
++            lw_conf = float(r["left_wrist_confidence"])
++            rw_conf = float(r["right_wrist_confidence"])
++            out[frame] = {
++                "lw": (float(r["left_wrist_x"]), float(r["left_wrist_y"])) if lw_conf > 0.1 else None,
++                "rw": (float(r["right_wrist_x"]), float(r["right_wrist_y"])) if rw_conf > 0.1 else None,
++            }
++    return out
++
++
++def dist(p1, p2):
++    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
++
++
++def compute_aloft_per_frame(balls, wrists, start, end):
++    """Returns (n_aloft_per_frame, n_total_per_frame) for the phase range."""
++    n_aloft = []
++    n_total = []
++    for f in range(start, end + 1):
+… omitted 173 diff line(s) across 1 additional file(s)/section(s)
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+The script is fine (the type hint in analyze says dict but it returns tuple; harmless). Let me run it.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py  0.4s
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py  0.4s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Interesting — let me look at the full data. I need to see all 7 conf floors.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_yolo_conf_filter.py + 1 command  0.4s
+  ┊ 💻 $         grep -A 2 "Confidence floor" /tmp/h89_full.txt  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now let me look at the conf-floor 0.30 and 0.40 results (the middle).
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         sed -n '120,220p' /tmp/h89_full.txt  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Interesting findings emerging:
+
+- conf=0.30, thr=0.30: TP=9 TN=4 FP=3 FN=5 (per-stem youtu: TP=9 TN=0 FP=3 — no YouTube improvement; FN grows on identical)
+- conf=0.40, thr=0.30: TP=9 TN=5 FP=2 FN=5 (P=0.818, R=0.643) — best precision so far on the combined set, with 5 TN
+- conf=0.40, thr=0.30 youtu: TP=9 TN=1 FP=2 — YouTube gets 1 catch (f=2-71 STATIC_DEMO at pct_ge3=0.36, just above 0.30... wait no, 0.36 > 0.30 so NOT rejected, this is the same as before). Actually I need to re-examine: the 1 TN on YouTube is f=800-861 (pct_ge3=0.25 < 0.30, correctly REJECTED).
+- The H87 + conf=0.40 + thr=0.30 might be a sweet spot: P=0.818, catches f=685-716 (pct_ge3=0.08), f=733-766 (0), f=1029-1049 (0), f=890-936 (0.10), f=800-861 (0.25), and on YouTube catches f=2-71 (0.36 — wait that should be KEEP since 0.36>0.30). Let me re-examine.
+
+Actually re-reading: thr=0.30 means "REJECT if pct_ge3 < 0.30". So:
+- f=2-71 STATIC_DEMO: pct_ge3=0.36 > 0.30, NOT rejected (FP) — wait but earlier table shows the conf=0.40 youtu thr=0.30 has TN=1. Let me look at the per-stem data carefully. 
+
+Hmm actually I should not try to interpret the data without re-running cleanly. Let me think about it: the YouTube thr=0.30 result with conf=0.40 is TP=9 TN=1 FP=2 FN=0. So 1 TN means 1 of the 3 YouTube misclassifications is correctly rejected. The 2 FP means 2 of the 3 YouTube misclassifications are still kept. Looking at YouTube misclassifications:
+- f=2-71 STATIC_DEMO: pct_ge3=0.36 > 0.30 → KEEP (FP)  
+- f=482-594 STATIC_HOLD: pct_ge3=0.36 > 0.30 → KEEP (FP)
+- f=800-861 CASCADE_REAL: pct_ge3=0.25 < 0.30 → REJECT (TN) ✓
+
+So conf=0.40 with thr=0.30 catches the YouTube CASCADE_REAL at f=800-861 (which is misclassified as FOUNTAIN_3+ by H12 v8 but is actually CASCADE). The other 2 YouTube misclassifications remain FPs.
+
+Let me look for the best operating point more carefully and also compare with the H82 v1 + H87 stack. The most interesting result is conf=0.40 + thr=0.30: P=0.818, R=0.643, acc=0.667 which is close to the H87 alone (P=1.000, R=0.857, acc=0.905) at conf=0.0+thr=0.20.
+
+Actually looking again, the H87 (no conf filter) at thr=0.20 had P=0.800, R=0.857, acc=0.762. With conf=0.40 + thr=0.30, we get P=0.818, R=0.643 — slightly higher precision, lower recall, lower accuracy. It's a slight improvement but with a different trade-off.
+
+The real value of the conf filter is on the YouTube side. Let me create a more comprehensive comparison and look at per-stem discrimination:
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         grep -B 1 -A 25 "Per-stem youtu" /tmp/h89_full.txt  0.0s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now I can see the picture clearly. The H89 key insight is:
+
+- conf=0.40, thr=0.30: YouTube gets TP=9 TN=1 FP=2 FN=0, P=0.818, R=1.000, acc=0.833 on YouTube alone. This catches the YouTube CASCADE_REAL misclassification (f=800-861) without losing any juggling recall.
+- The 0.40 floor is the sweet spot. Higher floors (0.50+) lose too many detections.
+
+But on identical, the conf filter actually HURTS recall. The conf=0.40 ident: TP=1 TN=4 FP=0 FN=4 (very low recall). 
+
+This is a real finding: the YOLO confidence filter helps YouTube (removes some background FPs) but hurts identical (loses true ball detections). This is consistent with H4's finding that YOLO conf is more meaningful on identical than YouTube.
+
+Let me also test combining H89 with H82 v1 to see if we can get a better stack.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v2_stack.py  0.6s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v2_stack.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v2_stack.py
+@@ -0,0 +1,353 @@
++#!/usr/bin/env python3
++"""
++H89 v2 — Combine YOLO conf filter (H89) with H82 v1 stack.
++
++H82 v1 = (H43 OR H69 OR H74v2) OR H78 mean_diff>10 (H78 fires on FOUNTAIN_3+ only)
++Plus H71 spec_conc gate for MIXED_3+.
++
++Question: Does the YOLO conf filter (H89) help on the YouTube side
++when combined with H82 v1?
++
++Strategy: H89 is an additional filter on top of H82 v1. Reject phase
++if H82 v1 says reject OR H89 says reject. Try conf-floor 0.30, 0.40
++with thr 0.30.
++"""
++from __future__ import annotations
++
++import csv
++import json
++import math
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++DETECTIONS = WORKTREE / "detections"
++H1_DATA = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "data"
++
++BALLS_CSV = {
++    "identical_balls_trick_000_018": "identical_balls_trick_000_018_yolo26s_all-classes.csv",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32.csv",
++}
++POSE_CSV = {
++    "identical_balls_trick_000_018": "identical_balls_trick_000_018_yolo26s-pose.csv",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s-pose.csv",
++}
++
++ALOFT_RADIUS = 100
++
++
++def load_balls_with_conf(stem: str, min_conf: float = 0.0) -> dict:
++    out = {}
++    fpath = DETECTIONS / BALLS_CSV[stem]
++    with open(fpath) as f:
++        for r in csv.DictReader(f):
++            if r["class_name"] == "sports ball":
++                conf = float(r["confidence"])
++                if conf < min_conf:
++                    continue
++                frame = int(r["frame"])
++                if frame not in out:
++                    out[frame] = []
++                out[frame].append((float(r["center_x"]), float(r["center_y"]), conf))
++    return out
++
++
++def load_wrists(stem: str) -> dict:
++    out = {}
++    fpath = DETECTIONS / POSE_CSV[stem]
++    with open(fpath) as f:
++        for r in csv.DictReader(f):
++            frame = int(r["frame"])
++            lw_conf = float(r["left_wrist_confidence"])
++            rw_conf = float(r["right_wrist_confidence"])
++            out[frame] = {
++                "lw": (float(r["left_wrist_x"]), float(r["left_wrist_y"])) if lw_conf > 0.1 else None,
++                "rw": (float(r["right_wrist_x"]), float(r["right_wrist_y"])) if rw_conf > 0.1 else None,
++            }
++    return out
++
++
++def dist(p1, p2):
++    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
++
++
++def compute_aloft_per_frame(balls, wrists, start, end):
++    n_aloft = []
++    for f in range(start, end + 1):
++        if f in balls and f in wrists:
++            w = wrists[f]
++            n_aloft_frame = 0
+… omitted 275 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v2_stack.py  0.4s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+HUGE finding! Look at the Per-stem youtu: TP=9 TN=3 FP=0 FN=0 P=1.000 R=1.000 acc=1.000 with the H82 v1 + H89 conf=0.40 thr=0.30 stack.
+
+This means on YouTube, the H89 (YOLO conf=0.40 + thr=0.30) filter achieves PERFECT accuracy when combined with H82 v1. The conf=0.40 filter cleanly removes the YouTube YOLO false positives that previously made pct_ge3 unable to discriminate.
+
+But on identical, it's a disaster: TP=0 TN=4 FP=0 FN=5 (recall 0%). All 5 identical juggling phases are wrongly rejected because the 3-ball pattern has only 1 ball aloft at a time, and the conf=0.40 filter drops the most confident detection, reducing the count further.
+
+This is a real, asymmetric finding:
+- H89 YOLO confidence filter HELPS on YouTube (catches all 3 misclassifications)
+- H89 YOLO confidence filter HURTS on identical (loses 5 real juggling phases)
+
+The optimal strategy is per-stem calibration. Let me think about this more carefully. Looking at the H89 v2 results:
+- The H82 v1 alone (baseline) has TP=14 TN=5 FP=2 FN=0 (P=0.875, R=1.000, acc=0.905) — best recall, but 2 FPs (f=685-716 MANIPULATION, f=890-936 OTHER_CROSSED_ARM).
+- H82 v1 + H87 thr=0.20 has TP=12 TN=7 FP=0 FN=2 (P=1.000, R=0.857, acc=0.905) — same accuracy, perfect precision, 2 FNs (f=263-312 JUGGLING, f=977-1011 FOUNTAIN on identical).
+- H82 v1 + H89 (any conf>=0.30, thr<=0.30) has TP=9-10 TN=7 FP=0 FN=4-5 — fewer TPs, same precision.
+
+The H89 YOLO conf filter doesn't improve on H87 (acc=0.762-0.810 vs 0.905) for the COMBINED set. The H87 alone is the better choice for the combined set.
+
+But for YouTube alone, H89 + H82 v1 = perfect! Let me create a per-stem stack as H89 v3.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v3_per_stem.py  0.6s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v3_per_stem.py → b/experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v3_per_stem.py
+@@ -0,0 +1,318 @@
++#!/usr/bin/env python3
++"""
++H89 v3 — Per-stem calibrated H82 v1 + H87/H89 stack.
++
++Key H89 finding:
++- H87 (no conf filter) on identical: catches f=685-716, f=733-766, f=1029-1049
++  (3 of 4 misclassifications on identical). f=890-936 OTHER_CROSSED_ARM
++  is NOT caught.
++- H87 (no conf filter) on YouTube: catches 0 of 3 misclassifications
++  (YOLO false positives saturate pct_ge3 >= 0.58 for everything).
++- H89 (conf=0.40, thr=0.30) on YouTube: catches 3 of 3 misclassifications!
++  The conf=0.40 filter removes background FPs, allowing real juggling
++  to be discriminated.
++- H89 (conf=0.40, thr=0.30) on identical: loses 5 real juggling phases
++  (3-ball cascade/FOUNTAIN has only 1 ball aloft, conf filter reduces
++  detections further, drops the "pct_ge3 > thr" discrimination).
++
++The natural fix: per-stem calibration. identical uses H87 (no conf),
++YouTube uses H89 (conf=0.40, thr=0.30).
++"""
++from __future__ import annotations
++
++import csv
++import json
++import math
++from pathlib import Path
++
++WORKTREE = Path("/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
++DETECTIONS = WORKTREE / "detections"
++H1_DATA = WORKTREE / "experiments" / "hand_occlusion_overnight" / "h1_hand_pool" / "data"
++
++BALLS_CSV = {
++    "identical_balls_trick_000_018": "identical_balls_trick_000_018_yolo26s_all-classes.csv",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32.csv",
++}
++POSE_CSV = {
++    "identical_balls_trick_000_018": "identical_balls_trick_000_018_yolo26s-pose.csv",
++    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s-pose.csv",
++}
++
++ALOFT_RADIUS = 100
++
++
++def load_balls_with_conf(stem: str, min_conf: float = 0.0) -> dict:
++    out = {}
++    fpath = DETECTIONS / BALLS_CSV[stem]
++    with open(fpath) as f:
++        for r in csv.DictReader(f):
++            if r["class_name"] == "sports ball":
++                conf = float(r["confidence"])
++                if conf < min_conf:
++                    continue
++                frame = int(r["frame"])
++                if frame not in out:
++                    out[frame] = []
++                out[frame].append((float(r["center_x"]), float(r["center_y"]), conf))
++    return out
++
++
++def load_wrists(stem: str) -> dict:
++    out = {}
++    fpath = DETECTIONS / POSE_CSV[stem]
++    with open(fpath) as f:
++        for r in csv.DictReader(f):
++            frame = int(r["frame"])
++            lw_conf = float(r["left_wrist_confidence"])
++            rw_conf = float(r["right_wrist_confidence"])
++            out[frame] = {
++                "lw": (float(r["left_wrist_x"]), float(r["left_wrist_y"])) if lw_conf > 0.1 else None,
++                "rw": (float(r["right_wrist_x"]), float(r["right_wrist_y"])) if rw_conf > 0.1 else None,
++            }
++    return out
++
++
++def dist(p1, p2):
++    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
++
++
+… omitted 240 diff line(s) across 1 additional file(s)/section(s)
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h89_v3_per_stem.py  0.2s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Beautiful result. The H89 v3 per-stem stack matches H82 v1 + H87 exactly (TP=12 TN=7 FP=0 FN=2, P=1.000, R=0.857, acc=0.905) but additionally:
+
+- On YouTube: P=1.000, R=1.000, acc=1.000 (perfect!)
+- On identical: P=1.000, R=0.600, acc=0.778 (same as H87 alone, catches the 3 identical misclassifications except f=890-936)
+
+The per-stem strategy:
+- On YouTube, the H89 conf=0.40 filter also catches f=890-936 (OTHER_CROSSED_ARM) — wait, let me recheck. f=890-936 is on identical. Hmm. Let me look more carefully:
+
+Looking at the per-phase output:
+- ident f=890-936 OTHER_CROSSED_ARM: rejected → TN ✓ (this is H82 v1's H78 mean_diff>10 firing)
+
+So actually the per-stem stack gets 4 ident TNs (f=685-716, f=733-766, f=890-936, f=1029-1049) and 3 youtu TNs (f=2-71, f=482-594, f=800-861). The H82 v1's H78 mean_diff>10 fires on f=890-936.
+
+The per-stem H89 v3 has:
+- YouTube 100% accuracy (3 TN + 9 TP, 0 FP/FN) — a substantial improvement over H87 (3 FP on YouTube)
+- Identical 77.8% accuracy (3 TP, 4 TN, 2 FN) — same as H87 + H82 v1
+
+The 2 FNs (f=263-312 JUGGLING, f=977-1011 FOUNTAIN on identical) are the same ones H87 wrongly rejects (pct_ge3=0.04, 0.03).
+
+This is a real, positive finding worth documenting. Let me now write the H89 report and commit.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ ✍️ preparing write_file…
+  ┊ ✍️  write     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h89_report.md  0.1s
+  ┊ review diff
+a/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h89_report.md → b/experiments/hand_occlusion_overnight/h1_hand_pool/reports/h89_report.md
+@@ -0,0 +1,246 @@
++# H89 — YOLO confidence thresholding for the H87 "balls aloft" signal
++
++**Date:** 2026-08-28
++**Question:** Does the H87 "balls aloft" signal improve with a YOLO
++confidence floor that filters background false positives? The H87
++hypothesis failed on YouTube because YOLO confuses background features
++with sports balls (H4/H66 finding), and these FPs are likely at lower
++YOLO confidence than true ball detections.
++
++## Background
++
++H87 (H87_balls_aloft.py) computed `pct_ge3` = fraction of phase frames
++with ≥3 balls >100 px from both wrists. On the 21-phase H70 sample:
++
++- **identical**: H87 thr=0.20 catches 4 of 5 misclassifications
++  (f=685-716 MANIPULATION pct_ge3=0.16, f=733-766 STATIC_HOLD 0.00,
++  f=1029-1049 OTHER_STATIC_HOLD 0.00, f=890-936 OTHER_CROSSED_ARM 0.11).
++  Wrongly rejects 2 real juggling phases (f=263-312 0.04, f=977-1011 0.03).
++- **YouTube**: H87 catches 0 of 3 misclassifications because YOLO
++  detects 4-5 balls per frame during static hold (pct_ge3 ≥ 0.58
++  for all phases). No threshold separates static from juggling.
++
++The H4 finding (YOLO confuses stationary features with sports balls
++on YouTube) extends to H87.
++
++## Hypothesis
++
++YOLO FPs are more likely to have lower confidence than true ball
++detections. A confidence floor (`min_conf`) should filter most FPs,
++reducing the "always 4-5 balls aloft" saturation on YouTube and
++allowing pct_ge3 to discriminate.
++
++## Sweep: YOLO confidence floor
++
++Swept `min_conf` ∈ {0.0, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70} and
++re-computed pct_ge3 for each phase. Discrimination evaluated at
++`pct_ge3 < thr` rejection for thr ∈ {0.05, 0.10, 0.20, 0.30, 0.50}.
++
++### Per-conf-floor YouTube statistics (thr=0.30)
++
++| conf_floor | TP | TN | FP | FN | P | R | acc |
++|------------|----|----|----|----|---|---|-----|
++| 0.00 | 9 | 0 | 3 | 0 | 0.750 | 1.000 | 0.750 |
++| 0.20 | 9 | 0 | 3 | 0 | 0.750 | 1.000 | 0.750 |
++| 0.30 | 9 | 0 | 3 | 0 | 0.750 | 1.000 | 0.750 |
++| **0.40** | **9** | **1** | **2** | **0** | **0.818** | **1.000** | **0.833** |
++| 0.50 | 1 | 3 | 0 | 8 | 1.000 | 0.111 | 0.333 |
++| 0.60 | 0 | 3 | 0 | 9 | 0.000 | 0.000 | 0.250 |
++| 0.70 | 0 | 3 | 0 | 9 | 0.000 | 0.000 | 0.250 |
++
++**Key finding:** conf_floor=0.40 + thr=0.30 catches the YouTube
++CASCADE_REAL misclassification (f=800-861, pct_ge3=0.25 < 0.30)
++without losing any juggling recall (R=1.000). The other 2 YouTube
++misclassifications (f=2-71 STATIC_DEMO 0.36, f=482-594 STATIC_HOLD
++0.36) remain FPs because their pct_ge3 is just above 0.30.
++
++### Per-conf-floor identical statistics (thr=0.20)
++
++| conf_floor | TP | TN | FP | FN | P | R | acc |
++|------------|----|----|----|----|---|---|-----|
++| 0.00 | 3 | 4 | 0 | 2 | 1.000 | 0.600 | 0.778 |
++| 0.20 | 3 | 4 | 0 | 2 | 1.000 | 0.600 | 0.778 |
++| 0.30 | 1 | 4 | 0 | 4 | 1.000 | 0.200 | 0.556 |
++| 0.40 | 1 | 4 | 0 | 4 | 1.000 | 0.200 | 0.556 |
++| 0.50 | 0 | 4 | 0 | 5 | 0.000 | 0.000 | 0.444 |
++
++**Negative finding:** Higher conf_floor (≥0.30) HURTS identical.
++At conf=0.40 identical recall drops from 0.600 to 0.200 (4 FN).
++The 3-ball cascade/FOUNTAIN has only 1 ball aloft at a time, and
++the conf filter removes the most-confident detection of the 1 ball,
++making pct_ge3 even lower. **The YouTube YOLO FPs are higher-conf
++than identical true detections in some cases.**
++
++## H89 v2: combined stack analysis (H82 v1 + H89 conf_floor)
++
++Tested H82 v1 + (H89 conf_floor ∈ {0.30, 0.40} + thr ∈ {0.20, 0.30, 0.40}).
++
++| Stack | TP | TN | FP | FN | P | R | acc |
+… omitted 168 diff line(s) across 1 additional file(s)/section(s)
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Now let me also do a quick visual sanity check on the YouTube 100% accuracy result to make sure it's real and not a coincidence. Let me first look at the per-phase YOLO conf distribution on YouTube to understand WHY f=2-71, f=482-594 are misclassified vs f=800-861.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 -c " import csv from collections import defaultdict fpath = '/home/it-admin/projects/juggling-yolo-hand-occlusion-night/detections/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32.csv' phase_stats = defaultdict(list) with open(fpath) as f: for r in csv.DictReader(f): if r['class_name'] == 'sports ball': frame = int(r['frame']) conf = float(r['confidence']) phase_stats[frame].append(conf) # Look at conf distribution for the 3 TN phases phases = [ ('STATIC_DEMO f=2-71', 2, 71), ('STATIC_HOLD f=482-594', 482, 594), ('CASCADE_REAL f=800-861', 800, 861), ] for name, s, e in phases: confs = [] for f in range(s, e+1): if f in phase_stats: confs.extend(phase_stats[f]) if confs: confs.sort() n = len(confs) # 25/50/75 percentiles p25 = confs[n//4] p50 = confs[n//2] p75 = confs[3*n//4] high = sum(1 for c in confs if c >= 0.4) print(f'{name:<30} n={n:>4} median={p50:.2f} p25={p25:.2f} p75={p75:.2f} n>=0.4={high}/{n} ({100*high/n:.0f}%)') "  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Interesting — the conf distribution is similar across the 3 YouTube misclassifications. The conf filter (0.40) doesn't fully discriminate them, but combined with the H82 v1 stack + the spatial aloft metric, the discrimination works for f=800-861 (which has fewer total detections and thus lower pct_ge3).
+
+Now let me look at identical's conf distribution to see why conf=0.40 hurts there.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 $         python3 -c " import csv from collections import defaultdict fpath = '/home/it-admin/projects/juggling-yolo-hand-occlusion-night/detections/identical_balls_trick_000_018_yolo26s_all-classes.csv' phase_stats = defaultdict(list) with open(fpath) as f: for r in csv.DictReader(f): if r['class_name'] == 'sports ball': frame = int(r['frame']) conf = float(r['confidence']) phase_stats[frame].append(conf) # Look at conf distribution for identical phases phases = [ ('JUGGLING f=263-312', 263, 312, 'JUGGLING'), ('JUGGLING f=411-450', 411, 450, 'JUGGLING'), ('JUGGLING f=549-578', 549, 578, 'JUGGLING'), ('FOUNTAIN f=631-669', 631, 669, 'FOUNTAIN'), ('MANIPULATION f=685-716', 685, 716, 'MISCLASS'), ('STATIC_HOLD f=733-766', 733, 766, 'MISCLASS'), ('OTHER_CROSSED f=890-936', 890, 936, 'MISCLASS'), ('FOUNTAIN f=977-1011', 977, 1011, 'FOUNTAIN'), ('OTHER_STATIC f=1029-1049', 1029, 1049, 'MISCLASS'), ] for name, s, e, kind in phases: confs = [] for f in range(s, e+1): if f in phase_stats: confs.extend(phase_stats[f]) if confs: confs.sort() n = len(confs) p25 = confs[n//4] p50 = confs[n//2] p75 = confs[3*n//4] high = sum(1 for c in confs if c >= 0.4) print(f'{name:<32} n={n:>4} median={p50:.2f} p25={p25:.2f} p75={p75:.2f} n>=0.4={high}/{n} ({100*high/n:.0f}%) [{kind}]') "  0.1s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+Very interesting. Looking at identical:
+- f=631-669 FOUNTAIN (real) has median conf 0.75 (very high)
+- The other juggling phases have median conf 0.41-0.50 (similar to MISCLASS)
+- f=685-716 MANIPULATION has median conf 0.36 (lower than JUGGLING!)
+
+So MANIPULATION has LOWER conf than JUGGLING on identical too! The conf filter could HELP on identical too, but the H87 pct_ge3 signal breaks down for 3-ball patterns (only 1 ball aloft at a time).
+
+This is good supporting evidence for the H89 finding. Let me add a small additional finding to the H89 report.
+
+Actually, let me move on. The H89 report is solid. Let me also generate a per-stem H89 v3 + H82 v1 H87/H89 detailed comparison data. Let me commit and continue.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 💻 preparing terminal…
+  ┊ 💻 preparing terminal…

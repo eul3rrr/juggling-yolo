@@ -1,0 +1,15 @@
+{
+  "H89_v3_per_stem": {
+    "identical_config": "H87 conf=0.0 thr=0.20",
+    "youtube_config": "H89 conf=0.40 thr=0.30",
+    "overall": {
+      "TP": 12,
+      "TN": 7,
+      "FP": 0,
+      "FN": 2
+    },
+    "P": 1.0,
+    "R": 0.857,
+    "acc": 0.905
+  }
+}

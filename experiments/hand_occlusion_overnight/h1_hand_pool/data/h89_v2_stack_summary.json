@@ -1,0 +1,95 @@
+{
+  "stacks": [
+    {
+      "label": "H82 v1 alone (baseline)",
+      "conf_floor": 0.0,
+      "h87_thr": null,
+      "TP": 14,
+      "TN": 5,
+      "FP": 2,
+      "FN": 0,
+      "P": 0.875,
+      "R": 1.0,
+      "acc": 0.905
+    },
+    {
+      "label": "H82 v1 + H87 thr=0.20 (H82+H87 baseline)",
+      "conf_floor": 0.0,
+      "h87_thr": 0.2,
+      "TP": 12,
+      "TN": 7,
+      "FP": 0,
+      "FN": 2,
+      "P": 1.0,
+      "R": 0.857,
+      "acc": 0.905
+    },
+    {
+      "label": "H82 v1 + H89 conf=0.30 thr=0.30",
+      "conf_floor": 0.3,
+      "h87_thr": 0.3,
+      "TP": 9,
+      "TN": 7,
+      "FP": 0,
+      "FN": 5,
+      "P": 1.0,
+      "R": 0.643,
+      "acc": 0.762
+    },
+    {
+      "label": "H82 v1 + H89 conf=0.30 thr=0.20",
+      "conf_floor": 0.3,
+      "h87_thr": 0.2,
+      "TP": 10,
+      "TN": 7,
+      "FP": 0,
+      "FN": 4,
+      "P": 1.0,
+      "R": 0.714,
+      "acc": 0.81
+    },
+    {
+      "label": "H82 v1 + H89 conf=0.40 thr=0.30",
+      "conf_floor": 0.4,
+      "h87_thr": 0.3,
+      "TP": 9,
+      "TN": 7,
+      "FP": 0,
+      "FN": 5,
+      "P": 1.0,
+      "R": 0.643,
+      "acc": 0.762
+    },
+    {
+      "label": "H82 v1 + H89 conf=0.40 thr=0.20",
+      "conf_floor": 0.4,
+      "h87_thr": 0.2,
+      "TP": 10,
+      "TN": 7,
+      "FP": 0,
+      "FN": 4,
+      "P": 1.0,
+      "R": 0.714,
+      "acc": 0.81
+    },
+    {
+      "label": "H82 v1 + H89 conf=0.40 thr=0.40",
+      "conf_floor": 0.4,
+      "h87_thr": 0.4,
+      "TP": 3,
+      "TN": 7,
+      "FP": 0,
+      "FN": 11,
+      "P": 1.0,
+      "R": 0.214,
+      "acc": 0.476
+    }
+  ],
+  "conf_floors": [
+    0.0,
+    0.2,
+    0.3,
+    0.4,
+    0.5
+  ]
+}
