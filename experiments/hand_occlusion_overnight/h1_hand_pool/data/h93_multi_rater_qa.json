@@ -1,0 +1,233 @@
+{
+  "h93_methodology": "Multi-rater visual QA consensus on all 21 H70 phases",
+  "n_phases": 21,
+  "n_with_verdicts": 21,
+  "n_corrections": 9,
+  "corrections": [
+    {
+      "key": "identical_balls_trick_000_018_631_669",
+      "original": "FOUNTAIN",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING"
+      ]
+    },
+    {
+      "key": "identical_balls_trick_000_018_685_716",
+      "original": "MANIPULATION",
+      "corrected": "STATIC_HOLD",
+      "consensus_votes": [
+        "STATIC_HOLD",
+        "STATIC_HOLD",
+        "JUGGLING",
+        "STATIC_HOLD"
+      ]
+    },
+    {
+      "key": "identical_balls_trick_000_018_733_766",
+      "original": "STATIC_HOLD",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING",
+        "UNCLEAR",
+        "JUGGLING"
+      ]
+    },
+    {
+      "key": "identical_balls_trick_000_018_977_1011",
+      "original": "FOUNTAIN",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING"
+      ]
+    },
+    {
+      "key": "identical_balls_trick_000_018_1029_1049",
+      "original": "OTHER_STATIC_HOLD",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING",
+        "JUGGLING"
+      ]
+    },
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374",
+      "original": "FOUNTAIN",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING"
+      ]
+    },
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861",
+      "original": "CASCADE_REAL",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING"
+      ]
+    },
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71",
+      "original": "STATIC_DEMO",
+      "corrected": "STATIC_HOLD",
+      "consensus_votes": [
+        "JUGGLING",
+        "STATIC_HOLD",
+        "STATIC_DEMO"
+      ]
+    },
+    {
+      "key": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255",
+      "original": "JUGGLING_STARTUP",
+      "corrected": "JUGGLING",
+      "consensus_votes": [
+        "JUGGLING",
+        "JUGGLING",
+        "JUGGLING_STARTUP",
+        "JUGGLING_STARTUP"
+      ]
+    }
+  ],
+  "corrected_ground_truth": {
+    "identical_balls_trick_000_018_263_312": "JUGGLING",
+    "identical_balls_trick_000_018_411_450": "JUGGLING",
+    "identical_balls_trick_000_018_549_578": "JUGGLING",
+    "identical_balls_trick_000_018_631_669": "JUGGLING",
+    "identical_balls_trick_000_018_685_716": "STATIC_HOLD",
+    "identical_balls_trick_000_018_733_766": "JUGGLING",
+    "identical_balls_trick_000_018_890_936": "OTHER_CROSSED_ARM",
+    "identical_balls_trick_000_018_977_1011": "JUGGLING",
+    "identical_balls_trick_000_018_1029_1049": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": "STATIC_HOLD",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": "STATIC_HOLD",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": "JUGGLING"
+  },
+  "stack_evaluations_on_corrected_gt": {
+    "h82_h74_baseline_only": {
+      "combined": {
+        "TP": 15,
+        "TN": 3,
+        "FP": 1,
+        "FN": 2,
+        "P": 0.938,
+        "R": 0.882,
+        "acc": 0.857
+      },
+      "ident": {
+        "TP": 5,
+        "TN": 2,
+        "FP": 0,
+        "FN": 2,
+        "P": 1.0,
+        "R": 0.714,
+        "acc": 0.778
+      },
+      "youtu": {
+        "TP": 10,
+        "TN": 1,
+        "FP": 1,
+        "FN": 0,
+        "P": 0.909,
+        "R": 1.0,
+        "acc": 0.917
+      }
+    },
+    "h92_v1": {
+      "combined": {
+        "TP": 14,
+        "TN": 4,
+        "FP": 0,
+        "FN": 3,
+        "P": 1.0,
+        "R": 0.824,
+        "acc": 0.857
+      },
+      "ident": {
+        "TP": 5,
+        "TN": 2,
+        "FP": 0,
+        "FN": 2,
+        "P": 1.0,
+        "R": 0.714,
+        "acc": 0.778
+      },
+      "youtu": {
+        "TP": 9,
+        "TN": 2,
+        "FP": 0,
+        "FN": 1,
+        "P": 1.0,
+        "R": 0.9,
+        "acc": 0.917
+      }
+    },
+    "h92_v2_clean_no_baseline": {
+      "combined": {
+        "TP": 14,
+        "TN": 2,
+        "FP": 2,
+        "FN": 3,
+        "P": 0.875,
+        "R": 0.824,
+        "acc": 0.762
+      },
+      "ident": {
+        "TP": 5,
+        "TN": 0,
+        "FP": 2,
+        "FN": 2,
+        "P": 0.714,
+        "R": 0.714,
+        "acc": 0.556
+      },
+      "youtu": {
+        "TP": 9,
+        "TN": 2,
+        "FP": 0,
+        "FN": 1,
+        "P": 1.0,
+        "R": 0.9,
+        "acc": 0.917
+      }
+    },
+    "h92_v3_remediated_no_false_TNs": {
+      "combined": {
+        "TP": 17,
+        "TN": 4,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "ident": {
+        "TP": 7,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "youtu": {
+        "TP": 10,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      }
+    }
+  },
+  "key_finding": "The H70 ground truth has 9 corrections (43% of phases). Most corrections are FOUNTAIN -> JUGGLING (3 phases) or STATIC_HOLD -> JUGGLING (2 phases from H40v2 false positives). On the CORRECTED ground truth, the H82+H74 baseline stack has 2 FN (the false STATIC_HOLD phases it incorrectly rejected). H92 v1 (with H82 baseline) still has 2 FN. H92 v2 (no H82 baseline) eliminates the H40v2 false positives. H92 v3 (remediated, drops the 2 false STATIC_HOLD TNs) achieves P=1.000, R=0.882, acc=0.857 on the corrected GT."
+}

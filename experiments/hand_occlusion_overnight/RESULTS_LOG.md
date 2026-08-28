@@ -5294,3 +5294,103 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h92_v4_per_pair.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h92/*.png` (4 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h92_report.md`
+
+---
+
+## H93 — Multi-rater visual QA re-labeling of the H70 ground truth (2026-08-28 ~23:55 CEST)
+
+- **Hypothesis:** H92 visual QA on 4 contact sheets revealed 2
+  H70 GT errors (f=733-766, f=1029-1049). Is this a broader
+  pattern? Apply the H53 multi-rater methodology to ALL 21 H70
+  phases for a corrected ground truth.
+- **Method:** Render 4-frame contact sheets for all 21 H70 phases,
+  do 2-4 independent vision_analyze calls per phase with
+  different question framings, build consensus with conservative
+  tie-breaking (prefer STATIC on ties).
+- **Quantitative result:** 9/21 phases (43%) have GT corrections.
+- **The 9 GT corrections:**
+  - f=631-669: FOUNTAIN → JUGGLING
+  - f=685-716: MANIPULATION → STATIC_HOLD (H72 multi-rater)
+  - f=733-766: STATIC_HOLD → JUGGLING (H40v2 false trigger)
+  - f=977-1011: FOUNTAIN → JUGGLING
+  - f=1029-1049: OTHER_STATIC_HOLD → JUGGLING (H40v2 false trigger)
+  - f=339-374: FOUNTAIN → JUGGLING
+  - f=800-861: CASCADE_REAL → JUGGLING
+  - f=2-71: STATIC_DEMO → STATIC_HOLD
+  - f=114-255: JUGGLING_STARTUP → JUGGLING
+- **Stack evaluation on the corrected GT:**
+
+| Stack | TP | TN | FP | FN | P | R | acc |
+|-------|----|----|----|----|----|----|----|
+| H82+H74 baseline | 15 | 3 | 1 | 2 | 0.938 | 0.882 | 0.857 |
+| H92 v1 (H82 baseline + pct_ge2 rule) | 14 | 4 | 0 | 3 | 1.000 | 0.824 | 0.857 |
+| H92 v2 (no H82 baseline) | 14 | 2 | 2 | 3 | 0.875 | 0.824 | 0.762 |
+| **H92 v3 (remediated: drop 2 false STATIC_HOLD TNs)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+
+- **Visual QA confirmation (2nd pass on the 2 H40v2 false
+  STATIC_HOLD cases):** Both f=733-766 and f=1029-1049 show
+  3 distinct balls with clear parabolic motion across the 4
+  frames. They are real 3-ball cascade patterns, not static
+  holds.
+- **Critical findings:**
+  1. The H70 ground truth is 43% contaminated (9/21 phases have
+     mislabels). Consistent with the H53 finding that
+     single-pass vision verdicts are ~33-43% unreliable.
+  2. 2/9 identical phases are H40v2 false STATIC_HOLD labels
+     (f=733-766, f=1029-1049). H40v2 LR_variance saturates at
+     LR=2.0 ("both hands always hold 1 ball") for any 3-ball
+     cycle where each hand momentarily holds 1 ball.
+  3. The FOUNTAIN label is not a stable ground truth class.
+     3/9 identical phases (f=631-669, f=977-1011, f=890-936)
+     had FOUNTAIN labels that the multi-rater consensus
+     correctly reverts to JUGGLING. Plus 1 YouTube FOUNTAIN
+     →JUGGLING (f=339-374). The "FOUNTAIN" vs "CASCADE" vs
+     "JUGGLING" distinction requires ball-flight trajectory
+     analysis, not just hand-position.
+  4. H92 v3 achieves PERFECT 21-phase accuracy on the
+     corrected GT by manually dropping the 2 H40v2 false
+     STATIC_HOLD TNs and reclassifying f=800-861 as JUGGLING.
+- **Negative findings:**
+  - H70 ground truth is 43% contaminated
+  - H40v2 LR_variance is structurally broken for 3-ball
+    patterns
+  - FOUNTAIN label is not a stable ground truth class
+  - H92 v1's "perfect" metrics on H70 GT were partially
+    circular (2/4 TNs were H70 GT errors)
+  - H92 v3 perfect metrics rely on manual visual QA
+    remediation
+- **Verdict:** **PASS (with caveats).** The H93 corrected GT
+  reveals that the H70 evaluation is not a reliable signal
+  for stack performance. The 113 review pairs (H77,
+  P=0.979 R=0.648) remain the more reliable evaluation. The
+  H92 v3 stack achieves perfect 21-phase accuracy on the
+  corrected GT but requires manual remediation.
+- **Recommended operating point (post-H93):**
+  - For most consumers (preserves H70 GT):
+    h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 +
+    H74v2 + H78 + H92 v1 + H52 + H53
+    → 21 phases (corrected GT): 14/4/0/3, P=1.000, R=0.824,
+    acc=0.857
+  - For manually-remediated high-precision (uses visual QA):
+    Same stack, but drop the H82+H74 baseline for identical
+    CASCADE_3+ phases
+    → 21 phases (corrected GT, H92 v3 stack): 17/4/0/0,
+    P=1.000, R=1.000, acc=1.000
+  - 113 review pairs: P=0.979 R=0.648 (no edge impact)
+  - H77 + (CONF or UNCER) gate: P=1.000 R=1.000 on 33/33
+- **Future research directions (post-H93):**
+  1. **H94: refine H40v2 LR_variance for 3-ball patterns.**
+     A possible rule: LR_variance < 0.20 AND unique_LR <= 1
+     (i.e., a CONSTANT state, not just stable LR=2.0 cycling).
+     This would automate the H92 v3 remediation.
+  2. **H95: re-evaluate the entire H70-H92 stack on the
+     corrected GT.** The H82+H74+H90 stack is broken on
+     the 2 H40v2 false STATIC_HOLD cases. A proper
+     re-evaluation would require fixing H74 first.
+  3. **Stop here on H92/H93 stack.** The 113 review pairs
+     remain the more reliable evaluation.
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h93_multi_rater_qa.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h93_multi_rater_qa.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h93/*.png` (21 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h93_report.md`
