@@ -1,0 +1,682 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "video_key": "videos/identical_balls_trick_000_018.mp4",
+      "n_tracklets": 76,
+      "n_hand_links": 10,
+      "n_air_edges": 27,
+      "n_chains": 40,
+      "n_chains_multi": 15,
+      "n_edges": 37,
+      "n_conflicts": 1,
+      "conflicts": [
+        {
+          "from_tid": 3,
+          "hand_target": 9,
+          "air_target": 8
+        }
+      ],
+      "chains": [
+        {
+          "chain_id": 1,
+          "n_tracklets": 1,
+          "first_frame": 2,
+          "last_frame": 17,
+          "tids": [
+            1
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 2,
+          "n_tracklets": 1,
+          "first_frame": 2,
+          "last_frame": 17,
+          "tids": [
+            2
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 3,
+          "n_tracklets": 3,
+          "first_frame": 3,
+          "last_frame": 98,
+          "tids": [
+            3,
+            8,
+            9
+          ],
+          "n_hand_edges": 1,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 4,
+          "n_tracklets": 1,
+          "first_frame": 21,
+          "last_frame": 33,
+          "tids": [
+            4
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 5,
+          "n_tracklets": 2,
+          "first_frame": 21,
+          "last_frame": 122,
+          "tids": [
+            5,
+            6
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 7,
+          "n_tracklets": 1,
+          "first_frame": 39,
+          "last_frame": 56,
+          "tids": [
+            7
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 10,
+          "n_tracklets": 1,
+          "first_frame": 64,
+          "last_frame": 79,
+          "tids": [
+            10
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 11,
+          "n_tracklets": 2,
+          "first_frame": 87,
+          "last_frame": 160,
+          "tids": [
+            11,
+            14
+          ],
+          "n_hand_edges": 1,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 12,
+          "n_tracklets": 1,
+          "first_frame": 104,
+          "last_frame": 149,
+          "tids": [
+            12
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 13,
+          "n_tracklets": 1,
+          "first_frame": 104,
+          "last_frame": 133,
+          "tids": [
+            13
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 15,
+          "n_tracklets": 1,
+          "first_frame": 138,
+          "last_frame": 149,
+          "tids": [
+            15
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 16,
+          "n_tracklets": 1,
+          "first_frame": 157,
+          "last_frame": 166,
+          "tids": [
+            16
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 17,
+          "n_tracklets": 6,
+          "first_frame": 165,
+          "last_frame": 312,
+          "tids": [
+            17,
+            21,
+            22,
+            23,
+            25,
+            27
+          ],
+          "n_hand_edges": 1,
+          "n_air_edges": 4
+        },
+        {
+          "chain_id": 18,
+          "n_tracklets": 1,
+          "first_frame": 166,
+          "last_frame": 206,
+          "tids": [
+            18
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 19,
+          "n_tracklets": 2,
+          "first_frame": 174,
+          "last_frame": 208,
+          "tids": [
+            19,
+            20
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 24,
+          "n_tracklets": 1,
+          "first_frame": 232,
+          "last_frame": 328,
+          "tids": [
+            24
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 26,
+          "n_tracklets": 1,
+          "first_frame": 257,
+          "last_frame": 334,
+          "tids": [
+            26
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 28,
+          "n_tracklets": 3,
+          "first_frame": 333,
+          "last_frame": 472,
+          "tids": [
+            28,
+            29,
+            34
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 2
+        },
+        {
+          "chain_id": 30,
+          "n_tracklets": 2,
+          "first_frame": 399,
+          "last_frame": 472,
+          "tids": [
+            30,
+            33
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 31,
+          "n_tracklets": 2,
+          "first_frame": 411,
+          "last_frame": 578,
+          "tids": [
+            31,
+            36
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 32,
+          "n_tracklets": 1,
+          "first_frame": 425,
+          "last_frame": 428,
+          "tids": [
+            32
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 35,
+          "n_tracklets": 7,
+          "first_frame": 507,
+          "last_frame": 716,
+          "tids": [
+            35,
+            37,
+            40,
+            41,
+            43,
+            45,
+            46
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 6
+        },
+        {
+          "chain_id": 38,
+          "n_tracklets": 8,
+          "first_frame": 533,
+          "last_frame": 945,
+          "tids": [
+            38,
+            39,
+            47,
+            51,
+            52,
+            54,
+            59,
+            63
+          ],
+          "n_hand_edges": 3,
+          "n_air_edges": 4
+        },
+        {
+          "chain_id": 42,
+          "n_tracklets": 1,
+          "first_frame": 593,
+          "last_frame": 598,
+          "tids": [
+            42
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 44,
+          "n_tracklets": 1,
+          "first_frame": 623,
+          "last_frame": 780,
+          "tids": [
+            44
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 48,
+          "n_tracklets": 1,
+          "first_frame": 691,
+          "last_frame": 700,
+          "tids": [
+            48
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 49,
+          "n_tracklets": 1,
+          "first_frame": 697,
+          "last_frame": 697,
+          "tids": [
+            49
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 50,
+          "n_tracklets": 2,
+          "first_frame": 733,
+          "last_frame": 811,
+          "tids": [
+            50,
+            55
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 53,
+          "n_tracklets": 5,
+          "first_frame": 791,
+          "last_frame": 1074,
+          "tids": [
+            53,
+            60,
+            64,
+            68,
+            71
+          ],
+          "n_hand_edges": 2,
+          "n_air_edges": 3
+        },
+        {
+          "chain_id": 56,
+          "n_tracklets": 1,
+          "first_frame": 814,
+          "last_frame": 829,
+          "tids": [
+            56
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 57,
+          "n_tracklets": 1,
+          "first_frame": 839,
+          "last_frame": 880,
+          "tids": [
+            57
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 58,
+          "n_tracklets": 1,
+          "first_frame": 855,
+          "last_frame": 856,
+          "tids": [
+            58
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 61,
+          "n_tracklets": 1,
+          "first_frame": 883,
+          "last_frame": 885,
+          "tids": [
+            61
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 62,
+          "n_tracklets": 2,
+          "first_frame": 885,
+          "last_frame": 965,
+          "tids": [
+            62,
+            66
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 65,
+          "n_tracklets": 1,
+          "first_frame": 956,
+          "last_frame": 970,
+          "tids": [
+            65
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 69,
+          "n_tracklets": 1,
+          "first_frame": 977,
+          "last_frame": 1011,
+          "tids": [
+            69
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 70,
+          "n_tracklets": 3,
+          "first_frame": 968,
+          "last_frame": 1078,
+          "tids": [
+            67,
+            70,
+            74
+          ],
+          "n_hand_edges": 1,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 72,
+          "n_tracklets": 2,
+          "first_frame": 1029,
+          "last_frame": 1060,
+          "tids": [
+            72,
+            73
+          ],
+          "n_hand_edges": 1,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 75,
+          "n_tracklets": 1,
+          "first_frame": 1070,
+          "last_frame": 1077,
+          "tids": [
+            75
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 76,
+          "n_tracklets": 1,
+          "first_frame": 1077,
+          "last_frame": 1077,
+          "tids": [
+            76
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "video_key": "videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4",
+      "n_tracklets": 40,
+      "n_hand_links": 1,
+      "n_air_edges": 26,
+      "n_chains": 13,
+      "n_chains_multi": 9,
+      "n_edges": 27,
+      "n_conflicts": 0,
+      "conflicts": [],
+      "chains": [
+        {
+          "chain_id": 1,
+          "n_tracklets": 8,
+          "first_frame": 2,
+          "last_frame": 899,
+          "tids": [
+            1,
+            9,
+            13,
+            16,
+            20,
+            21,
+            29,
+            34
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 7
+        },
+        {
+          "chain_id": 2,
+          "n_tracklets": 2,
+          "first_frame": 2,
+          "last_frame": 426,
+          "tids": [
+            2,
+            8
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 3,
+          "n_tracklets": 2,
+          "first_frame": 2,
+          "last_frame": 97,
+          "tids": [
+            3,
+            6
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 1
+        },
+        {
+          "chain_id": 4,
+          "n_tracklets": 4,
+          "first_frame": 2,
+          "last_frame": 899,
+          "tids": [
+            4,
+            18,
+            30,
+            37
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 3
+        },
+        {
+          "chain_id": 5,
+          "n_tracklets": 1,
+          "first_frame": 2,
+          "last_frame": 228,
+          "tids": [
+            5
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 7,
+          "n_tracklets": 1,
+          "first_frame": 58,
+          "last_frame": 62,
+          "tids": [
+            7
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 10,
+          "n_tracklets": 2,
+          "first_frame": 117,
+          "last_frame": 309,
+          "tids": [
+            10,
+            12
+          ],
+          "n_hand_edges": 1,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 11,
+          "n_tracklets": 5,
+          "first_frame": 247,
+          "last_frame": 653,
+          "tids": [
+            11,
+            14,
+            17,
+            23,
+            24
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 4
+        },
+        {
+          "chain_id": 15,
+          "n_tracklets": 4,
+          "first_frame": 329,
+          "last_frame": 899,
+          "tids": [
+            15,
+            25,
+            33,
+            36
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 3
+        },
+        {
+          "chain_id": 19,
+          "n_tracklets": 6,
+          "first_frame": 445,
+          "last_frame": 899,
+          "tids": [
+            19,
+            22,
+            26,
+            31,
+            35,
+            38
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 5
+        },
+        {
+          "chain_id": 27,
+          "n_tracklets": 3,
+          "first_frame": 670,
+          "last_frame": 878,
+          "tids": [
+            27,
+            28,
+            32
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 2
+        },
+        {
+          "chain_id": 39,
+          "n_tracklets": 1,
+          "first_frame": 878,
+          "last_frame": 882,
+          "tids": [
+            39
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        },
+        {
+          "chain_id": 40,
+          "n_tracklets": 1,
+          "first_frame": 883,
+          "last_frame": 899,
+          "tids": [
+            40
+          ],
+          "n_hand_edges": 0,
+          "n_air_edges": 0
+        }
+      ]
+    }
+  }
+}

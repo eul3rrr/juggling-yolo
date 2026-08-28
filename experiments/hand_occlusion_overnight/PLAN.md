@@ -132,20 +132,37 @@ filter) is the new recommended operating point: 10 identical +
 1 youtube links with visual precision ~1.000. 4x recall gain
 on identical vs v2; first youtube links emitted.
 
-## Fifth episode (H2) — PLANNED
+## Fifth episode (H2) — STATUS: COMPLETE
 
 Sub-steps:
 
-1. Read E6c mid-air edge artifacts (read-only from main).
-2. Build a chain representation that combines:
-   - v4 hand-links (HAND_TRANSITION / AMBIGUOUS_HAND_TRANSITION
-     edges)
-   - E6c mid-air edges (BALLISTIC edges)
-   - v2 continuous observations (CONTINUOUS edges)
-3. Tag each chain edge with provenance.
-4. Record conflicts (where hand and air logic disagree) instead
-   of silently resolving.
-5. Visual QA on a sample of multi-edge chains to confirm the
-   combined representation is correct.
-6. If time permits, also test v4 sensitivity grid
-   (MIN_FROM_SLOPE ∈ {2.0, 2.5, 3.0, 4.0}).
+1. ✅ Read E6c accepted mid-air edges (from
+   `detections/<stem>_norfair_dt50_hc5_accepted_stitches.csv`).
+2. ✅ Built a chain representation that combines:
+   - v4d hand-links (HAND_TRANSITION / AMBIGUOUS_HAND_TRANSITION)
+   - E6c mid-air edges (BALLISTIC)
+3. ✅ Tagged each chain edge with provenance.
+4. ✅ Recorded 1 conflict on identical (tracklet 3 → {hand=9, air=8})
+   instead of silently resolving.
+5. ✅ Identical: 76 tracklets → 40 chains (13 multi-tracklet,
+   longest 8 tracklets). YouTube: 40 tracklets → 13 chains,
+   0 conflicts.
+6. ✅ Documented in `h2_report.md`.
+
+**H2 verdict: PASS.** The combined chain representation
+correctly merges hand and air edges, and records the one
+genuine conflict for post-hoc review.
+
+## Sixth episode — PLANNED
+
+Sub-steps:
+
+1. Visual QA on chain 38 (the 8-tracklet chain) and chain 53
+   to confirm H2's combined edges are visually correct.
+2. Build H2 contact sheets showing the full chain with both
+   hand-edges and air-edges highlighted.
+3. If time permits, low-confidence hand-region evidence
+   (master §14): a lower-confidence evidence tier only near
+   an active hand event, to fill detector dropouts.
+4. Or: v4 sensitivity grid (MIN_FROM_SLOPE ∈ {2.0, 2.5, 3.0, 4.0})
+   to verify the v4 threshold is well-chosen.

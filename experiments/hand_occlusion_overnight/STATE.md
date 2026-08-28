@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 04:55 CEST
-STATUS: H1 v4 COMPLETE (multi-feature filter: throw=7 + MIN_FROM_SLOPE=2.5). v4d is the new recommended operating point: 10 identical + 1 youtube links, ~1.000 visual precision.
+LAST_UPDATE: 2026-08-28 05:05 CEST
+STATUS: H1 v4 + H2 COMPLETE. v4d is the recommended hand-link extractor (10 identical + 1 youtube, ~1.000 visual precision). H2 combines v4d hand-links with E6c mid-air edges into 40 chains (identical) + 13 chains (youtube), with 1 conflict (tracklet 3) recorded for review.
 
 ## Isolation
 
@@ -55,11 +55,20 @@ STATUS: H1 v4 COMPLETE (multi-feature filter: throw=7 + MIN_FROM_SLOPE=2.5). v4d
   See `h1_hand_pool/reports/h1_v3_report.md` for full analysis.
   16 v3 contact sheets at `contact_sheets_v3/`.
 
-- **H1 v4** — Multi-feature filter on v3c (committed, see v4 hash).
+- **H1 v4** — Multi-feature filter on v3c (committed, `05deab2`).
   Adds `MIN_FROM_SLOPE = 2.5` to v3c. Rejects 2 false positives
   (15→25, 35→40) and keeps all 8 other v3 links + 2 more from v2.
   See `h1_hand_pool/reports/h1_v4_report.md` for full analysis.
   11 v4 contact sheets at `contact_sheets_v4/`.
+
+- **H2** — Combined AIR + HAND chain representation (committed).
+  Union-finds v4d hand-links with E6c mid-air edges. Records
+  conflicts (where hand and air logic disagree) rather than
+  silently resolving. Identical: 76 tracklets → 40 chains
+  (13 multi-tracklet, longest 8 tracklets). 1 conflict
+  (tracklet 3 → {hand=9, air=8}). YouTube: 40 tracklets →
+  13 chains. 0 conflicts.
+  See `h1_hand_pool/reports/h2_report.md` for full analysis.
 
 ## Strongest findings so far
 
@@ -126,16 +135,17 @@ extraction: 10 identical + 1 youtube links with visual precision
 | v3c (throw=7)       | 11 | 2 | ~0.875 (7/8 inspected) |
 | **v4d (throw=7+slope)** | **10** | **1** | **~1.000 (11/11 inspected)** |
 
-## Next action (H2)
+## Next action
 
-1. **H2: combine E6c mid-air edges with H1 v4d hand-links into
-   a single chain representation** (master §11). Preserve edge
-   provenance (each chain edge tagged CONTINUOUS / BALLISTIC /
-   HAND_TRANSITION / AMBIGUOUS_HAND_TRANSITION). Record
-   conflicts instead of silently resolving.
-2. If H2 doesn't fit in the next episode, consider a
-   sensitivity grid on `MIN_FROM_SLOPE` ∈ {2.0, 2.5, 3.0, 4.0}
-   to verify the v4 threshold is well-chosen.
+1. **Visual QA on chain 38 and chain 53** (the longest
+   juggling chains from H2) to confirm the combined edges
+   are visually correct. Generate H2 contact sheets.
+2. **Resolve the tracklet-3 conflict** in H2 by re-examining
+   the actual tracklet 8 trajectory and the 4-frame gap.
+3. **If time permits, explore low-confidence hand-region
+   evidence (master §14)**: a lower-confidence evidence tier
+   only near an active hand event, to fill detector dropouts
+   around the v4 hand-links.
 
 ## Important artifact paths
 

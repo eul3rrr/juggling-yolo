@@ -30,7 +30,7 @@ quantitative result, visual QA result, verdict, and links to artifacts.
 
 ## H1 — Hand-pool baseline
 
-Status: **v1 COMMITTED (98c0375), v2 COMMITTED (this episode)**.
+Status: **v1 COMMITTED (98c0375), v2 COMMITTED (a9a5464), v3 COMMITTED (0fd4bb0, 599acd7), v4 COMMITTED (05deab2)**.
 
 ### v1 (2026-08-28 ~03:40 CEST)
 
@@ -266,5 +266,44 @@ links and 1 surviving youtube link are real catch-throws.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/summary_v4_*.json` (4 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_v4/*.png` (11 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h1_v4_report.md`
+
+### H2 (2026-08-28 ~05:00 CEST)
+
+- Hypothesis: v4 hand-links (HAND_TRANSITION) and E6c mid-air
+  edges (BALLISTIC) are largely complementary; a union-find
+  over the tracklets, using both edge types, produces a single
+  chain representation that has more multi-tracklet chains than
+  either input alone, and records (not silently resolves)
+  conflicts where hand and air logic disagree.
+- Quantitative result:
+
+| Video | n_tracklets | E6c chains | H2 chains | H2 multi | Edges (B+H) | Conflicts |
+|---|---|---|---|---|---|---|
+| identical | 76 | 13 | 40 | 13 | 27 + 10 = 37 | **1** (tracklet 3) |
+| youtube  | 40 | 9 | 13 | 9 | 26 + 1 = 27 | 0 |
+
+- Notable chain: chain 38 on identical has 8 tracklets with
+  3 hand-edges (52→54, 54→59, 59→63) and 4 air-edges
+  (38→39, 39→47, 47→51, 51→52). This is a sustained juggling
+  sequence.
+- The 1 conflict (tracklet 3 → {hand=9, air=8}) is recorded
+  for post-hoc review rather than silently resolved. Both
+  inferences are geometrically plausible from limited data.
+- Negative findings:
+  - H2 does not resolve the 3→{8,9} conflict without
+    additional 3D hand-motion or temporal-continuity reasoning.
+  - The v4 hand-links are mostly subsumed by longer H2 chains;
+    only 11→14 and 72→73 remain as standalone hand-links.
+- Verdict: **PASS.** H2 is the recommended chain
+  representation, replacing E6c alone. Longest chain has 8
+  tracklets. See `h1_hand_pool/reports/h2_report.md` for
+  full analysis.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h2_chain_combination.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_chains_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_edges_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h2_conflicts_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h2_report.md`
 
 ---
