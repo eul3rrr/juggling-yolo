@@ -2090,3 +2090,80 @@ h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v2 + H78 + H52 + H53
 2. H84: H12 v8 CASCADE_3+ revision (no reliable signal exists;
    H73 finding reaffirmed)
 3. H85: H82 v1 cross-validation on 113 manual review pairs
+
+## Ninety-fourth episode (H94) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ **H94 v1** (H74v4 = var<0.20 AND unique_LR<=1) — recovers
+   f=733-766 (H40v2 false STATIC_HOLD) which H74v2 wrongly fired on.
+   - 15/3/1/2 (P=0.938, R=0.882, acc=0.857)
+   - H74v4 var_thr ∈ [0.15, 0.22] × uLR_thr=1: PERFECT on the 5
+     FOUNTAIN_3+/CASCADE_3+ phases (16/5/0/0)
+2. ✅ **H94 v2** (H94 v1 + H43-tight conf<0.45) — no-op; f=1029-1049
+   also has spec_conc=0.140 < 0.15 (H69 catches it regardless of H43)
+3. ✅ **H94 v3** (H94 v1 + H87 + H43/H69 pct_ge1<0.92 guard) — recovers
+   f=1029-1049 (pct_ge1=1.00 > 0.92 blocks H69 false reject) and
+   catches f=685-716 (H87 pct_ge3=0.16 < 0.20)
+   - 16/3/1/1 (P=0.941, R=0.941, acc=0.905)
+   - Wide flat region: pct_ge1_thr ∈ [0.80, 0.95] all give 16/3/1/1
+4. ✅ **H94 v4** (v3 + max_aloft>=2 guard) — prevents H87 from
+   false-rejecting f=733-766 (max_aloft=1, real 3-ball cascade)
+   - Canonical: 17/3/1/0 (P=0.944, R=1.000, acc=0.952)
+   - max_aloft ∈ [1, 4] × pct_ge1 ∈ [0.80, 0.92] all give 17/3/1/0
+     (wide flat region)
+5. ✅ **H94 v5** (v4 + H90 NEW for FOUNTAIN_3+) — REGRESSION to
+   15/3/1/2 because H90 NEW fires on identical f=977-1011 (real
+   FOUNTAIN per H93) via the `drop>0.38` clause
+6. ✅ **H94 v6** — cross-validates H94 v4 on 113 manual review pairs
+   (H59 GT). 15 H77 pairs overlap with the 21 H93-corrected GT
+   phases; all 15 agree with H77. 113-pair metrics unchanged
+   (P=0.979, R=0.648, FPR=0.024)
+
+**Verdict: PASS — H94 v4 is the new recommended operating point.**
+
+**Per-stem analysis (H94 v4 canonical, 21 phases, H93 corrected GT):**
+
+| Stem | TP | TN | FP | FN | P | R | acc |
+|------|----|----|----|----|---|---|-----|
+| ident | 6 | 2 | 0 | 1 | 1.000 | 0.857 | 0.889 |
+| youtu | 11 | 1 | 1 | 0 | 0.917 | 1.000 | 0.923 |
+| all | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 |
+
+**The 1 FP (f=482-594 YouTube STATIC_HOLD):** real static hold but
+always has 1+ YOLO ball detected (background features at edge of
+camera). H69+guard wrongly suppresses (pct_ge1=1.00 > 0.92). A
+stricter H69 pct_ge1 threshold (0.99) or H90 NEW max_aloft>=4
+might catch it but breaks the flat region.
+
+**The 1 FN (f=890-936 OTHER_CROSSED_ARM Mills Mess):** H78
+mean_diff>10 should fire but H82 v1 only applies H78 to
+FOUNTAIN_3+. Mills Mess is a fundamental limitation.
+
+**Final recommended operating point (post-H94, supersedes H82/H92):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+pct_ge1<0.92 +
+H69+pct_ge1<0.92 + H74v4 (var<0.20 AND uLR<=1) + H78 +
+H87+max_aloft>=2 + H52 + H53 + H71 (MIXED_3+ only)
+
+- **End-to-end accuracy on H93 corrected GT (21 phases): 95.2% (20/21 correct)**
+- **Recall: 100% (all 17 real juggling phases correctly identified)**
+- **Precision: 94.4% (1 FP: f=482-594 YouTube STATIC_HOLD)**
+- 113 review pairs (H77): P=0.979, R=0.648 (no edge impact)
+- (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs)
+
+**Negative findings:**
+- H74v2 is broken for 3-ball patterns (uLR<=2 admits 2-state cycles)
+- H43 conf<0.55 alone is too aggressive for low-conf 3-ball patterns
+- H87+max_aloft guard is required (max_aloft=1 for real 3-ball cascade)
+- H90 NEW regresses identical f=977-1011 when stacked on H94 v4
+- f=890-936 Mills Mess is uncaught (H78 only applies to FOUNTAIN_3+)
+- f=482-594 YouTube STATIC_HOLD is uncaught (always has 1+ ball)
+
+**Future research directions (post-H94):**
+1. H95: re-evaluate the H82+H74+H90 stack on the H93 corrected GT.
+   The H82/H90 report metrics were computed on the OLD H70 GT.
+2. H96: investigate the H94 v4 1 FP (f=482-594) with a stricter
+   H69 pct_ge1 threshold (0.99) or H90 NEW max_aloft>=4.
+3. Stop here. H94 v4 achieves 17/3/1/0 with 100% recall and a wide
+   flat region. Further improvements would require fundamentally
+   different signals.

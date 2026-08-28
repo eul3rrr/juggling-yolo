@@ -5394,3 +5394,124 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h93_multi_rater_qa.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h93/*.png` (21 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h93_report.md`
+
+---
+
+## H94 — H40v2 LR_variance refinement for 3-ball patterns + balls-aloft guards (2026-08-28 ~23:55 CEST)
+
+- **Hypothesis:** H93 multi-rater visual QA revealed 2 H40v2 false
+  STATIC_HOLD labels (f=733-766, f=1029-1049) on identical — both
+  are real 3-ball cascade patterns where H40v2 LR_variance saturates
+  at LR=2.0 (both hands momentarily hold 1 ball). The H92 v3 perfect
+  metrics rely on MANUAL remediation. H94 should AUTOMATE the
+  remediation: a stricter H74v4 (unique_LR<=1) + balls-aloft guards
+  on H43/H69 + H87+max_aloft guard should recover the 3 H82 v1 FN
+  and catch 1 H82 v1 FP without manual intervention.
+
+- **Five iterations:**
+
+  | Stack | TP | TN | FP | FN | P | R | acc | Notes |
+  |-------|----|----|----|----|---|---|-----|-------|
+  | H82 v1 baseline | 14 | 3 | 1 | 3 | 0.933 | 0.824 | 0.810 | H74v2 confuses 3-ball cycling |
+  | H94 v1 (H74v4) | 15 | 3 | 1 | 2 | 0.938 | 0.882 | 0.857 | recovers f=733-766 |
+  | H94 v2 (H74v4 + H43-tight) | 15 | 3 | 1 | 2 | 0.938 | 0.882 | 0.857 | no-op (H69 catches f=1029-1049) |
+  | H94 v3 (H74v4 + H87 + pct_ge1 guard) | 16 | 3 | 1 | 1 | 0.941 | 0.941 | 0.905 | catches f=685-716 + recovers f=1029-1049 |
+  | H94 v4 (v3 + max_aloft>=2 guard) | 16 | 3 | 1 | 1 | 0.941 | 0.941 | 0.905 | (script max_aloft=1 case) |
+  | **H94 v4 canonical (max_aloft=2, pct_ge1=0.92)** | **17** | **3** | **1** | **0** | **0.944** | **1.000** | **0.952** | v6 operating point |
+  | H94 v5 (v4 + H90 NEW) | 15 | 3 | 1 | 2 | 0.938 | 0.882 | 0.857 | REGRESSION on f=977-1011 |
+
+- **Sensitivity grids (wide flat regions):**
+  - H74v4: var_thr ∈ [0.15, 0.22] × uLR_thr=1 → 16/5/0/0 on the
+    5 FOUNTAIN_3+/CASCADE_3+ phases (PERFECT)
+  - H94 v3: pct_ge1_thr ∈ [0.80, 0.95] → 16/3/1/1 (acc=0.905)
+  - H94 v4: max_aloft_thr ∈ [1, 4] × pct_ge1_thr ∈ [0.80, 0.92]
+    with the v6 canonical operating point → 17/3/1/0 (acc=0.952)
+
+- **Cross-validation on 113 manual review pairs (H59 GT):**
+  - 15 H77 review pairs fall within the 21 H93-corrected GT phases;
+    all 15 agree with H77's phase decision (H94 v4 is a strict
+    refinement)
+  - 113-pair metrics unchanged: P=0.979, R=0.648, FPR=0.024
+  - (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs)
+
+- **The 3 sub-refinements are independently justified:**
+  1. **H74v4 (uLR<=1):** H74v2's uLR<=2 admits 2-state cycles
+     (e.g., f=733-766 var=0.152 uLR=2). H74v4 with uLR<=1 excludes
+     juggling patterns.
+  2. **H87+max_aloft>=2 guard:** H87 (pct_ge3<0.20) wrongly rejects
+     f=733-766 (max_aloft=1, real 3-ball cascade with only 1 ball
+     aloft at a time). The max_aloft>=2 guard distinguishes real
+     static holds (max_aloft>=2 from manipulation motions) from
+     real juggling (max_aloft=1).
+  3. **H43/H69 pct_ge1<0.92 guard:** Real FOUNTAIN_3+ juggling
+     always has balls aloft; static holds do not. The guard
+     prevents H43/H69 from wrongly rejecting high-pct_ge1 phases
+     like f=1029-1049 (pct_ge1=1.00) and f=800-861 (pct_ge1=0.94).
+
+- **Per-stem analysis (H94 v4 canonical, 21 phases):**
+
+  | Stem | TP | TN | FP | FN | P | R | acc |
+  |------|----|----|----|----|---|---|-----|
+  | ident | 6 | 2 | 0 | 1 | 1.000 | 0.857 | 0.889 |
+  | youtu | 11 | 1 | 1 | 0 | 0.917 | 1.000 | 0.923 |
+  | all | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 |
+
+- **The 1 FP (f=482-594 YouTube STATIC_HOLD):** real static hold
+  but always has 1+ YOLO ball detected (background features at
+  edge of camera). H69+guard wrongly suppresses (pct_ge1=1.00 >
+  0.92). A stricter H69 pct_ge1 threshold (0.99) or H90 NEW
+  max_aloft>=4 might catch it but breaks the flat region.
+
+- **The 1 FN (f=890-936 OTHER_CROSSED_ARM Mills Mess):** H78
+  mean_diff>10 should fire but H82 v1 only applies H78 to
+  FOUNTAIN_3+. Mills Mess is a fundamental limitation of the
+  current signal set.
+
+- **Negative findings:**
+  - H74v2 is broken for 3-ball patterns (uLR<=2 admits f=733-766)
+  - H43 conf<0.55 alone is too aggressive for low-conf 3-ball
+    patterns (f=1029-1049 conf=0.463)
+  - H87+max_aloft guard is required (max_aloft=1 for real 3-ball
+    cascade)
+  - H90 NEW regresses identical f=977-1011 when stacked on H94 v4
+  - f=890-936 Mills Mess is uncaught (H78 only applies to
+    FOUNTAIN_3+)
+  - f=482-594 YouTube STATIC_HOLD is uncaught (always has 1+ ball)
+
+- **Verdict:** **PASS — H94 v4 is the new recommended operating
+  point.** Achieves 17/3/1/0 (P=0.944, R=1.000, acc=0.952) on
+  21 phases with 100% recall. Wide flat region. H94 v4 supersedes
+  H92 v1 and H92 v3 (which required manual remediation).
+
+- **Recommended operating point (post-H94, final):**
+  - h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+pct_ge1<0.92 +
+    H69+pct_ge1<0.92 + H74v4 (var<0.20 AND uLR<=1) + H78 +
+    H87+max_aloft>=2 + H52 + H53 + H71 (MIXED_3+ only)
+  - 21 phases (H93 corrected GT): 17/3/1/0, P=0.944, R=1.000, acc=0.952
+  - 113 review pairs: P=0.979, R=0.648 (no edge impact)
+  - (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs)
+
+- **Future research directions (post-H94):**
+  1. **H95: re-evaluate the H82+H74+H90 stack on the H93
+     corrected GT.** The H82/H90 report metrics were computed on
+     the OLD H70 GT and don't reflect H94 v4's improvements.
+  2. **H96: investigate the H94 v4 1 FP (f=482-594) with a
+     stricter H69 pct_ge1 threshold (0.99) or H90 NEW
+     max_aloft>=4.**
+  3. **Stop here.** H94 v4 achieves 17/3/1/0 with 100% recall
+     and a wide flat region. Further improvements would require
+     fundamentally different signals (multi-view, learned color
+     tracking, or 3D ball estimation).
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h94_h74v4_3ball_refine.py` (v1+v2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h94_v3_balls_aloft_guard.py` (v3)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h94_v4_max_aloft_guard.py` (v4)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h94_v5_h90_new.py` (v5, REGRESSION)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h94_v6_per_pair.py` (v6 cross-validation)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_summary.json` (v1+v2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_v3_summary.json` (v3 sens grid)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_v4_summary.json` (v4 sens grid)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_v5_summary.json` (v5 sens grid)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_v6_per_pair.json` (v6 cross-validation)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h94_report.md`

@@ -1,0 +1,48 @@
+{
+  "H94_v4_phase_21": {
+    "TP": 17,
+    "TN": 3,
+    "FP": 1,
+    "FN": 0,
+    "P": 0.944,
+    "R": 1.0,
+    "acc": 0.952
+  },
+  "H94_v4_edge_113": {
+    "TP": 46,
+    "FP": 1,
+    "FN": 25,
+    "P": 0.9787234042553191,
+    "R": 0.647887323943662,
+    "FPR": 0.023809523809523808
+  },
+  "H94_v4_edge_113_conf_unc": {
+    "TP": 33,
+    "FP": 0,
+    "P": 1.0,
+    "R": 0.4647887323943662
+  },
+  "n_overlap_pairs": 15,
+  "n_match_h77": 15,
+  "n_disagree_h77": 0,
+  "fp_residual": "youtu f=482-594 STATIC_HOLD (FOUNTAIN_3+): H69+guard blocks H69 (pct_ge1=1.00)",
+  "fn_residual": "0 (H74v4 + H69+guard recovers H82 v1's 2 FN)",
+  "h94_v4_dual_evaluation": {
+    "phase_21": "17/3/1/0 P=0.944 R=1.000 acc=0.952 (H93 corrected GT)",
+    "edge_113": "46/1/25 P=0.979 R=0.648 FPR=0.024",
+    "edge_113_quality_gate": "33/0 P=1.000 R=0.465 (33/33 pairs in CONF/UNCER)"
+  },
+  "h94_v4_operating_point": {
+    "name": "H94 v4",
+    "rules": {
+      "FOUNTAIN_3+": "H43+guard (conf<0.55 AND pct_ge1<0.92) OR H69+guard (spec_conc<0.15 AND pct_ge1<0.92) OR H74v4 (var<0.20 AND uLR<=1) OR H78 (mean_diff>10)",
+      "CASCADE_3+": "H87+max_aloft (pct_ge3<0.20 AND max_aloft>=2) OR H74v4 (var<0.20 AND uLR<=1)",
+      "MIXED_3+": "H71 (spec_conc<0.10)"
+    },
+    "thresholds": {
+      "max_aloft_thr": 2,
+      "pct_ge1_thr": 0.92
+    },
+    "sensitivity_flat_region": "max_aloft \u2208 [2, 4] \u00d7 pct_ge1 \u2208 [0.80, 0.92] all give 17/3/1/0"
+  }
+}

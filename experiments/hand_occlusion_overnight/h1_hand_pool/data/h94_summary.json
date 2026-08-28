@@ -1,0 +1,306 @@
+{
+  "H94_methodology": "H74v4 (unique_LR<=1) + H43-tight (conf<0.45) refinements on H93 corrected GT",
+  "corrected_gt": {
+    "identical_balls_trick_000_018_263_312": "JUGGLING",
+    "identical_balls_trick_000_018_411_450": "JUGGLING",
+    "identical_balls_trick_000_018_549_578": "JUGGLING",
+    "identical_balls_trick_000_018_631_669": "JUGGLING",
+    "identical_balls_trick_000_018_685_716": "STATIC_HOLD",
+    "identical_balls_trick_000_018_733_766": "JUGGLING",
+    "identical_balls_trick_000_018_890_936": "OTHER_CROSSED_ARM",
+    "identical_balls_trick_000_018_977_1011": "JUGGLING",
+    "identical_balls_trick_000_018_1029_1049": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": "STATIC_HOLD",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": "STATIC_HOLD",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": "JUGGLING",
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": "JUGGLING"
+  },
+  "h74_signals": {
+    "identical_balls_trick_000_018_263_312": {
+      "var": 0.5524,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.26,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_411_450": {
+      "var": 0.7100000000000001,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 0.7,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_549_578": {
+      "var": 0.5038265306122449,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 0.6785714285714286,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_631_669": {
+      "var": 0.6048652202498357,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.435897435897436,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_685_716": {
+      "var": 0.3740234375,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.46875,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_733_766": {
+      "var": 0.15234375,
+      "unique_LR": 2,
+      "unique_L": 1,
+      "unique_R": 2,
+      "mean_LR": 1.8125,
+      "max_LR": 2.0,
+      "min_LR": 1.0
+    },
+    "identical_balls_trick_000_018_890_936": {
+      "var": 0.5728395061728394,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.2222222222222223,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_977_1011": {
+      "var": 0.28719723183391005,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.3529411764705883,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "identical_balls_trick_000_018_1029_1049": {
+      "var": 0.3545706371191136,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.4736842105263157,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": {
+      "var": 0.21219135802469136,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.8055555555555556,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+      "var": 0.1339180828569191,
+      "unique_LR": 2,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.8407079646017699,
+      "max_LR": 2.0,
+      "min_LR": 1.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": {
+      "var": 0.1990114464099896,
+      "unique_LR": 2,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.7258064516129032,
+      "max_LR": 2.0,
+      "min_LR": 1.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71": {
+      "var": 0.12244897959183673,
+      "unique_LR": 2,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.8571428571428572,
+      "max_LR": 2.0,
+      "min_LR": 1.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_114_255": {
+      "var": 0.20381268547859765,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.7730496453900708,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_267_298": {
+      "var": 0.0,
+      "unique_LR": 1,
+      "unique_L": 1,
+      "unique_R": 1,
+      "mean_LR": 2.0,
+      "max_LR": 2.0,
+      "min_LR": 2.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_308_338": {
+      "var": 0.5702393340270551,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.5483870967741935,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_375_410": {
+      "var": 0.15432098765432098,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.8888888888888888,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_420_481": {
+      "var": 0.20048374092985755,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.7868852459016393,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_595_643": {
+      "var": 0.21990837151187004,
+      "unique_LR": 2,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.6734693877551021,
+      "max_LR": 2.0,
+      "min_LR": 1.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_769_799": {
+      "var": 0.30801248699271594,
+      "unique_LR": 3,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.4193548387096775,
+      "max_LR": 2.0,
+      "min_LR": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_862_899": {
+      "var": 0.2326869806094183,
+      "unique_LR": 2,
+      "unique_L": 2,
+      "unique_R": 2,
+      "mean_LR": 1.631578947368421,
+      "max_LR": 2.0,
+      "min_LR": 1.0
+    }
+  },
+  "stack_results": {
+    "H82 v1 (H74v2 baseline)": {
+      "combined": {
+        "TP": 14,
+        "TN": 3,
+        "FP": 1,
+        "FN": 3,
+        "P": 0.933,
+        "R": 0.824,
+        "acc": 0.81
+      },
+      "ident": {
+        "TP": 5,
+        "TN": 1,
+        "FP": 1,
+        "FN": 2,
+        "P": 0.833,
+        "R": 0.714,
+        "acc": 0.667
+      },
+      "youtu": {
+        "TP": 9,
+        "TN": 2,
+        "FP": 0,
+        "FN": 1,
+        "P": 1.0,
+        "R": 0.9,
+        "acc": 0.917
+      }
+    },
+    "H94 v1 (H74v4 = var<0.20 AND uLR<=1)": {
+      "combined": {
+        "TP": 15,
+        "TN": 3,
+        "FP": 1,
+        "FN": 2,
+        "P": 0.938,
+        "R": 0.882,
+        "acc": 0.857
+      },
+      "ident": {
+        "TP": 6,
+        "TN": 1,
+        "FP": 1,
+        "FN": 1,
+        "P": 0.857,
+        "R": 0.857,
+        "acc": 0.778
+      },
+      "youtu": {
+        "TP": 9,
+        "TN": 2,
+        "FP": 0,
+        "FN": 1,
+        "P": 1.0,
+        "R": 0.9,
+        "acc": 0.917
+      }
+    },
+    "H94 v2 (H74v4 + H43-tight conf<0.45)": {
+      "combined": {
+        "TP": 15,
+        "TN": 3,
+        "FP": 1,
+        "FN": 2,
+        "P": 0.938,
+        "R": 0.882,
+        "acc": 0.857
+      },
+      "ident": {
+        "TP": 6,
+        "TN": 1,
+        "FP": 1,
+        "FN": 1,
+        "P": 0.857,
+        "R": 0.857,
+        "acc": 0.778
+      },
+      "youtu": {
+        "TP": 9,
+        "TN": 2,
+        "FP": 0,
+        "FN": 1,
+        "P": 1.0,
+        "R": 0.9,
+        "acc": 0.917
+      }
+    }
+  }
+}
