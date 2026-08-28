@@ -1,0 +1,152 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_catch_events": 21,
+      "n_throw_events": 21,
+      "catch_hand_sequence": [
+        "right",
+        "left",
+        "right",
+        "right",
+        "left",
+        "left",
+        "left",
+        "left",
+        "right",
+        "right",
+        "right",
+        "left",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "left",
+        "right"
+      ],
+      "throw_hand_sequence": [
+        "right",
+        "left",
+        "right",
+        "right",
+        "left",
+        "left",
+        "left",
+        "right",
+        "left",
+        "right",
+        "right",
+        "left",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "right",
+        "left"
+      ],
+      "catch_alt_rate": 0.4,
+      "throw_alt_rate": 0.45,
+      "n_throw_catch_pairs": 19,
+      "n_same_hand_pairs": 12,
+      "n_alt_hand_pairs": 7,
+      "same_hand_rate": 0.632,
+      "pattern_verdict": "MIXED",
+      "throw_intervals": {
+        "min": 2,
+        "max": 208,
+        "mean": 51.45,
+        "median": 41.0
+      },
+      "by_hand_catch": {
+        "right": 14,
+        "left": 7
+      },
+      "by_hand_throw": {
+        "right": 14,
+        "left": 7
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_catch_events": 24,
+      "n_throw_events": 24,
+      "catch_hand_sequence": [
+        "left",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "right",
+        "left",
+        "right",
+        "right",
+        "right",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "right",
+        "right",
+        "right",
+        "left"
+      ],
+      "throw_hand_sequence": [
+        "left",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "right",
+        "left",
+        "right",
+        "right",
+        "right",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "left",
+        "right",
+        "right",
+        "right",
+        "right",
+        "left"
+      ],
+      "catch_alt_rate": 0.696,
+      "throw_alt_rate": 0.696,
+      "n_throw_catch_pairs": 23,
+      "n_same_hand_pairs": 7,
+      "n_alt_hand_pairs": 16,
+      "same_hand_rate": 0.304,
+      "pattern_verdict": "MIXED",
+      "throw_intervals": {
+        "min": 12,
+        "max": 141,
+        "mean": 36.3,
+        "median": 31
+      },
+      "by_hand_catch": {
+        "left": 9,
+        "right": 15
+      },
+      "by_hand_throw": {
+        "left": 9,
+        "right": 15
+      }
+    }
+  }
+}
