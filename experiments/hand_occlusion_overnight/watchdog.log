@@ -72719,3 +72719,42 @@ a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_oc
 +  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h63_report.md`
 +
   ┊ 💻 preparing terminal…
+  ┊ 💻 $         git -C /home/it-admin/projects/juggling-yolo-hand-occlusion-night add -A git -C /home/it-admin/projects/juggling-yolo-hand-occlusion-night commit -m "docs: STATE.md and RESULTS_LOG.md updates for H63"  2.6s
+
+╭─ ⚕ Hermes ───────────────────────────────────────────────────────────────────╮
+All 7 of this episode's commits are pushed. Time: 03:56, ~23 min used. ~52 min left.
+
+I've now done 7 successful experiments this episode (H58 v1, H59, H60, H61, H62, H63, FINAL_SUMMARY update). Let me also update the FINAL_SUMMARY with the H62 + H63 findings, and consider if I should stop here.
+╰──────────────────────────────────────────────────────────────────────────────╯
+  ┊ 🔧 preparing patch…
+  ┊ 🔧 preparing patch…
+  ┊ 💻 preparing terminal…
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md
+@@ -423,6 +423,9 @@
+ 
+ ## Episodes 53-61 timeline
+ 
++- H62 — 5-ball pattern characterization (CASCADE, not SHOWER)
++- H63 — CASCADE-SHOWER mix (SHOWER bursts within CASCADE)
++
+ The H53-H61 extension was a single autonomous worker episode
+ (2026-08-28 16:30-16:50 CEST, ~20 minutes) that:
+ 1. Rendered the 4 H58 contact sheets and visually verified the
+  ┊ 🔧 patch     /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md  0.2s
+  ┊ review diff
+a//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md → b//home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/reports/FINAL_SUMMARY.md
+@@ -420,6 +420,12 @@
+ 5. **The 2024 manual review has 1 known label error** (YouTube
+    16->21, corrected to 20->21 in the h7v3plus3 chain set by H22
+    and confirmed by H61).
++6. **YouTube 5-ball is a CASCADE-SHOWER mix (H62, H63)**, not a
++   pure SHOWER as H58 originally interpreted. The pattern is
++   70% CASCADE (alt-hand) with 2 SHOWER bursts (right-hand
++   same-hand events). The 17-frame chain 6 hold is a real
++   signature feature but is part of a SHOWER burst, not the
++   dominant pattern.
+ 
+ ## Episodes 53-61 timeline
+ 

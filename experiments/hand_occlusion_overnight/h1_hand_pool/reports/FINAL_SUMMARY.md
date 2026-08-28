@@ -420,8 +420,17 @@ that produced 4 experiments) added the following:
 5. **The 2024 manual review has 1 known label error** (YouTube
    16->21, corrected to 20->21 in the h7v3plus3 chain set by H22
    and confirmed by H61).
+6. **YouTube 5-ball is a CASCADE-SHOWER mix (H62, H63)**, not a
+   pure SHOWER as H58 originally interpreted. The pattern is
+   70% CASCADE (alt-hand) with 2 SHOWER bursts (right-hand
+   same-hand events). The 17-frame chain 6 hold is a real
+   signature feature but is part of a SHOWER burst, not the
+   dominant pattern.
 
 ## Episodes 53-61 timeline
+
+- H62 — 5-ball pattern characterization (CASCADE, not SHOWER)
+- H63 — CASCADE-SHOWER mix (SHOWER bursts within CASCADE)
 
 The H53-H61 extension was a single autonomous worker episode
 (2026-08-28 16:30-16:50 CEST, ~20 minutes) that:
