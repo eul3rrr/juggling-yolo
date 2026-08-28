@@ -1593,3 +1593,33 @@ post-filter. Apply H43's confidence-based FOUNTAIN_3+ filter
 filter should be the final precision-optimized stack.
 
 See `h1_hand_pool/reports/h50_report.md` for full analysis.
+
+## H51 — H12 v8 + H50 + H43 combined filter — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ Implemented H51: apply H43's FOUNTAIN_3+ confidence
+   < 0.55 filter on top of H50's filtered event log.
+2. ✅ Compared to H12 v8 unfiltered + H43 (baseline).
+3. ✅ Per-frame diff: identical 1.0%, YouTube 0.0%.
+4. ✅ Per-pattern delta on identical:
+   - FOUNTAIN_3+ -2.3% (combined H50 + H43)
+   - CASCADE_3+ +0.7% (from H50)
+   - FOUNTAIN_LOW_CONF +0 (H43 unchanged)
+5. ✅ Substantial phases: 15 -> 15 (unchanged)
+6. ✅ Documented in `h51_report.md` and updated
+   STATE/RESULTS_LOG.
+
+**H51 verdict: PASS.** H50 and H43 compose cleanly. The
+combined filter is a strict improvement over either alone.
+
+**Recommended operating point:** h7v3plus3 + H12 v8 +
+H50 + H43. Final precision-optimized configuration.
+
+**Most important finding:** H50 (event-log filter) and
+H43 (confidence filter) are independent and commutative.
+The 1.0% H50 frame change is independent of H43 because
+the changed frames are not in the H43 rejection region
+(conf < 0.55). The two filters address two independent
+error modes.
+
+See `h1_hand_pool/reports/h51_report.md` for full analysis.

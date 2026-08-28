@@ -1141,3 +1141,28 @@ indeed an upper bound, as H49 suspected. The real downstream impact
 of the 10-frame filter is small (1% identical, 0% YouTube), so the
 filter is a SAFE post-filter that improves precision without breaking
 substantial phases.
+
+## H51 conclusion
+
+**H51: H12 v8 + H50 10-frame filter + H43 FOUNTAIN confidence
+filter** — DONE. PASS. H50 and H43 compose cleanly.
+
+The two filters operate at different stages and don't interfere:
+- H50 modifies the input event log (drops 6 events on identical)
+- H43 modifies the output pattern labels (rejects 21 FOUNTAIN_3+ frames on identical)
+
+**Per-frame diff (H50+H43 vs H43 only):**
+- identical: 10/1042 (1.0%) — same as H50 alone
+- YouTube: 0/898 (0.0%) — same as H50 alone
+
+**Combined precision improvement on identical:**
+- FOUNTAIN_3+: -2.3% (24 frames, down from H12 v8 baseline 16.4%)
+- CASCADE_3+: +0.7% (7 frames, up from baseline 6.7%)
+- Substantial phases: 15 -> 15 (unchanged)
+
+**YouTube**: 0% change (both filters are no-ops on YouTube).
+
+**Recommended operating point**: h7v3plus3 + H12 v8 + H50 +
+H43. This is the final precision-optimized stack.
+
+See `h1_hand_pool/reports/h51_report.md` for full analysis.

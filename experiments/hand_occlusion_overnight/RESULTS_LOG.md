@@ -3569,3 +3569,43 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h50_filtered_patterns_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h50/*.png` (3 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h50_report.md`
+
+### H51 (2026-08-28 ~16:45 CEST)
+
+- Hypothesis: H50 (event-log filter) and H43 (confidence filter)
+  operate at different stages. Do they compose cleanly?
+- Implementation: `h51_combined_filter.py` loads H50's
+  filtered pattern_inference, applies H43's confidence
+  < 0.55 filter to FOUNTAIN_3+ frames, and compares to
+  H12 v8 unfiltered + H43 as the baseline.
+- Quantitative result:
+
+  Per-frame diff (H50+H43 vs H43 only):
+  - identical: 10/1042 (1.0%)
+  - YouTube: 0/898 (0.0%)
+
+  Combined precision improvement on identical:
+  - FOUNTAIN_3+ -2.3% (24 frames, down from 16.4%)
+  - CASCADE_3+ +0.7% (7 frames, up from 6.7%)
+  - Substantial phases: 15 -> 15 (unchanged)
+
+  YouTube: 0% change.
+
+- Key findings:
+  - H50 and H43 compose cleanly. The 10 H50-changed
+    frames don't trigger H43 (they're not in the
+    conf < 0.55 region).
+  - H50+H43 is a strict improvement over either alone.
+  - The combined filter addresses two independent error
+    modes: identity switches (H50) and low-confidence
+    FOUNTAIN_3+ (H43).
+
+- Verdict: **PASS.** h7v3plus3 + H12 v8 + H50 + H43 is
+  the final precision-optimized operating point.
+  See `h1_hand_pool/reports/h51_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h51_combined_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h51_filtered_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h51_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h51_combined_filter_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h51_report.md`
