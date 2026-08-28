@@ -1,0 +1,78 @@
+{
+  "method": "H108: per-phase structural signature catalog of all 21 H93 phases + R4 candidate search",
+  "n_phases": 21,
+  "n_tns": 4,
+  "r4_candidates": [
+    {
+      "rule": "R4a_max_events_eq_0",
+      "n_caught": 0,
+      "n_tn_caught": 0,
+      "n_fp": 0,
+      "total_tns": 4,
+      "total_tps": 17,
+      "caught_tns": [],
+      "caught_fps": []
+    },
+    {
+      "rule": "R4b_unconf_frac_eq_1",
+      "n_caught": 1,
+      "n_tn_caught": 1,
+      "n_fp": 0,
+      "total_tns": 4,
+      "total_tps": 17,
+      "caught_tns": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71"
+      ],
+      "caught_fps": []
+    },
+    {
+      "rule": "R4c_mean_conf_lt_0.4",
+      "n_caught": 1,
+      "n_tn_caught": 1,
+      "n_fp": 0,
+      "total_tns": 4,
+      "total_tps": 17,
+      "caught_tns": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71"
+      ],
+      "caught_fps": []
+    },
+    {
+      "rule": "R4d_maxA_ge3_AND_maxEvents_eq0",
+      "n_caught": 0,
+      "n_tn_caught": 0,
+      "n_fp": 0,
+      "total_tns": 4,
+      "total_tps": 17,
+      "caught_tns": [],
+      "caught_fps": []
+    },
+    {
+      "rule": "R4e_maxA_ge3_AND_meanConf_lt0.5",
+      "n_caught": 3,
+      "n_tn_caught": 2,
+      "n_fp": 1,
+      "total_tns": 4,
+      "total_tps": 17,
+      "caught_tns": [
+        "identical_balls_trick_000_018_890_936",
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71"
+      ],
+      "caught_fps": [
+        "identical_balls_trick_000_018_1029_1049"
+      ]
+    },
+    {
+      "rule": "R4f_unconf95_AND_maxA3",
+      "n_caught": 1,
+      "n_tn_caught": 1,
+      "n_fp": 0,
+      "total_tns": 4,
+      "total_tps": 17,
+      "caught_tns": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_2_71"
+      ],
+      "caught_fps": []
+    }
+  ]
+}

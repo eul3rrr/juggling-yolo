@@ -1,0 +1,19 @@
+{
+  "method": "H108 v1: H106 v2 per-pattern + R4b (unconf_frac >= 0.50)",
+  "thresholds": {
+    "H108_UNCONF_FRAC_THR": 0.5,
+    "H108_MEAN_CONF_THR": 0.45,
+    "H108_R4_USE": "R4b"
+  },
+  "h93_results": {
+    "TP": 17,
+    "TN": 4,
+    "FP": 0,
+    "FN": 0,
+    "P": 1.0,
+    "R": 1.0,
+    "acc": 1.0,
+    "n": 21,
+    "PERFECT": true
+  }
+}
