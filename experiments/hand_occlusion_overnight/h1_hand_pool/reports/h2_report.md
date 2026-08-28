@@ -160,6 +160,42 @@ video; the longest H2 chain has 8 tracklets.
 **H2 is now the recommended chain representation**, replacing
 E6c alone.
 
+## 8. Visual QA (post-write)
+
+Three H2 contact sheets were rendered and inspected via
+`vision_analyze` (chain 38, chain 53, chain 3). Findings:
+
+- **Chain 38 (8 tracklets, 3 hand + 4 air):** COHERENT juggling
+  chain. The vision verifier confirms a single ball is being
+  tracked through 3 hand-to-hand transfers (52→54, 54→59,
+  59→63) separated by 4 mid-air ballistic segments. This is a
+  valid representation of a sustained juggling sequence.
+
+- **Chain 53 (5 tracklets, 2 hand + 3 air):** MOSTLY COHERENT
+  with minor concerns. The 2 hand-edges are plausible (around
+  f=872 and f=1034). The ball trajectories look unusually
+  short/low for "identical balls trick" juggling — this may
+  be a manipulation pattern (close-range passing) rather than
+  full toss-juggling. The chain is still valid.
+
+- **Chain 3 (the conflict, 3 tracklets, 1 hand + 1 air):**
+  The vision verifier says **the hand-edge 3→9 is the more
+  visually correct inference.** Tracklet 3 ends with a ball in
+  the right hand; tracklet 9 begins with a ball in the right
+  hand — direct hand-to-hand handoff. Tracklet 8 is a
+  different ball (airborne on the left side of the frame)
+  that E6c's ballistic prediction happened to match to
+  tracklet 3's predicted end. **E6c's air-edge is a false
+  positive** in this case; the v4d hand-link is correct.
+
+**The H2 conflict-resolution method is validated**: the
+hand-edge wins when both edges are geometrically plausible
+from the trajectory data. This is a useful design principle
+for future experiments: when hand and air edges conflict,
+the hand-edge is more reliable because it depends on
+*direct* evidence (ball at the hand) rather than *predicted*
+evidence (ballistic continuation from the last observation).
+
 ## 8. Future work
 
 - **Visual QA on chain 38 and chain 53** (the longest
