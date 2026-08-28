@@ -1,0 +1,288 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_events": 48,
+      "n_flights": 11,
+      "flight_time_min": 1,
+      "flight_time_max": 131,
+      "flight_time_median": 33,
+      "h45_label_counts": {
+        "REAL": 4,
+        "IDENTITY_SWITCH": 3,
+        "TRACKER_FRAGMENTATION": 0
+      },
+      "threshold_results": [
+        {
+          "threshold": 5,
+          "n_dropped": 2,
+          "kept_REAL": 4,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 1,
+          "dropped_IDENTITY_SWITCH": 2,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 10,
+          "n_dropped": 3,
+          "kept_REAL": 4,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 15,
+          "n_dropped": 3,
+          "kept_REAL": 4,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 20,
+          "n_dropped": 4,
+          "kept_REAL": 4,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 30,
+          "n_dropped": 4,
+          "kept_REAL": 4,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 40,
+          "n_dropped": 8,
+          "kept_REAL": 0,
+          "dropped_REAL": 4,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 50,
+          "n_dropped": 9,
+          "kept_REAL": 0,
+          "dropped_REAL": 4,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 60,
+          "n_dropped": 9,
+          "kept_REAL": 0,
+          "dropped_REAL": 4,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 3,
+          "kept_TRACKER_FRAGMENTATION": 0,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        }
+      ],
+      "per_thr_events_impact": [
+        {
+          "threshold": 5,
+          "n_events_dropped": 4,
+          "pct_dropped": 8.3
+        },
+        {
+          "threshold": 10,
+          "n_events_dropped": 6,
+          "pct_dropped": 12.5
+        },
+        {
+          "threshold": 15,
+          "n_events_dropped": 6,
+          "pct_dropped": 12.5
+        },
+        {
+          "threshold": 20,
+          "n_events_dropped": 8,
+          "pct_dropped": 16.7
+        },
+        {
+          "threshold": 30,
+          "n_events_dropped": 8,
+          "pct_dropped": 16.7
+        },
+        {
+          "threshold": 40,
+          "n_events_dropped": 16,
+          "pct_dropped": 33.3
+        },
+        {
+          "threshold": 50,
+          "n_events_dropped": 18,
+          "pct_dropped": 37.5
+        },
+        {
+          "threshold": 60,
+          "n_events_dropped": 18,
+          "pct_dropped": 37.5
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_events": 50,
+      "n_flights": 15,
+      "flight_time_min": 58,
+      "flight_time_max": 289,
+      "flight_time_median": 67,
+      "h45_label_counts": {
+        "REAL": 0,
+        "IDENTITY_SWITCH": 0,
+        "TRACKER_FRAGMENTATION": 4
+      },
+      "threshold_results": [
+        {
+          "threshold": 5,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 10,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 15,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 20,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 30,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 40,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 50,
+          "n_dropped": 0,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 4,
+          "dropped_TRACKER_FRAGMENTATION": 0
+        },
+        {
+          "threshold": 60,
+          "n_dropped": 1,
+          "kept_REAL": 0,
+          "dropped_REAL": 0,
+          "kept_IDENTITY_SWITCH": 0,
+          "dropped_IDENTITY_SWITCH": 0,
+          "kept_TRACKER_FRAGMENTATION": 3,
+          "dropped_TRACKER_FRAGMENTATION": 1
+        }
+      ],
+      "per_thr_events_impact": [
+        {
+          "threshold": 5,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 10,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 15,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 20,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 30,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 40,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 50,
+          "n_events_dropped": 0,
+          "pct_dropped": 0.0
+        },
+        {
+          "threshold": 60,
+          "n_events_dropped": 2,
+          "pct_dropped": 4.0
+        }
+      ]
+    }
+  },
+  "config": {
+    "THRESHOLDS": [
+      5,
+      10,
+      15,
+      20,
+      30,
+      40,
+      50,
+      60
+    ]
+  }
+}
