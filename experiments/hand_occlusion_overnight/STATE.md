@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 16:50 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61**
+LAST_UPDATE: 2026-08-28 16:53 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + H42 + H43 + H45 + H46 + H47 + H48 + H49 + H50 + H51 + H52 + H53 + **H58 v1** + **H59** + **H60** + **H61** + **H62**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -1663,3 +1663,39 @@ Implications:
   characteristic 5-ball hold.
 
 See `h1_hand_pool/reports/h61_report.md` for full analysis.
+
+## H62 conclusion (2026-08-28 ~17:00 CEST)
+
+**H62: YouTube 5-ball pattern characterization — CASCADE, not SHOWER**
+— DONE. PASS. H58 SHOWER interpretation corrected.
+
+H58 (and H58 v1) interpreted the YouTube 5-ball pattern as
+SHOWER based on the 1 CONFIDENT chain (chain 6) with
+right-hand-only events. H62 systematically examines all 24
+YouTube catch+throw events to test the SHOWER hypothesis.
+
+**Result: YouTube 5-ball is 70% ALT-HAND (CASCADE), 30%
+same-hand. Identical 3-ball is 63% same-hand, 37% alt-hand
+(MIXED).** The two videos have OPPOSITE hand-pattern biases.
+
+Key findings:
+1. H58 SHOWER interpretation was based on n=1 (chain 6). The
+   broader YouTube pattern is 70% alt-hand, consistent with
+   CASCADE.
+2. The YouTube 5-ball pattern is CASCADE, not SHOWER. The 17-frame
+   hold (chain 6) is still a real signature feature but it's an
+   exception in an otherwise CASCADE pattern.
+3. The H60 hand-asymmetry reversal is consistent with CASCADE
+   (a left-biased juggler) rather than SHOWER.
+
+Implication: H58 report's "5-ball shower signature" should be
+replaced with "5-ball cascade signature" in any downstream
+consumer. The 17-frame hold remains a real signature of the
+5-ball cascade (vs 11-frame for 3-ball).
+
+This is a useful correction: the H58 SHOWER interpretation
+was over-generalized from 1 CONFIDENT chain to the whole video.
+The H58 v1 vision tool was misled by the chain 6 anomaly.
+H62 uses the full 24-event dataset to characterize the pattern.
+
+See `h1_hand_pool/reports/h62_report.md` for full analysis.

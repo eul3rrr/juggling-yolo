@@ -4063,3 +4063,40 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h61_pair_metadata.csv`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h61_report.md`
 
+### H62 (2026-08-28 ~17:00 CEST)
+
+- Hypothesis: H58 (and H58 v1) interpreted the YouTube 5-ball
+  pattern as SHOWER (same-hand throw+catch) based on the 1
+  CONFIDENT chain (chain 6) with right-hand-only events. H62
+  systematically examines all 24 YouTube catch+throw events to
+  test the SHOWER hypothesis vs CASCADE.
+- Implementation: `h62_pattern_characterization.py` computes the
+  (THROW, CATCH) pair analysis — for each THROW, find the next
+  CATCH and check if it's on the same hand or the alternate hand.
+  Compute the same-hand rate.
+- Quantitative result:
+  - YouTube (5-ball): 23 pairs, 7 same-hand (0.30), 16 alt-hand
+    (0.70). Pattern verdict: MIXED (alt-hand bias).
+  - identical (3-ball): 19 pairs, 12 same-hand (0.63), 7 alt-hand
+    (0.37). Pattern verdict: MIXED (same-hand bias).
+- Key findings:
+  - The two videos have OPPOSITE hand-pattern biases.
+  - YouTube is 70% alt-hand — consistent with CASCADE, NOT SHOWER.
+  - H58 SHOWER interpretation was based on n=1 (chain 6). The
+    broader YouTube pattern is dominantly CASCADE.
+  - The 17-frame hold (chain 6) is a real exception in an
+    otherwise CASCADE pattern.
+- Implication: H58 report's "5-ball shower signature" should be
+  replaced with "5-ball cascade signature" in any downstream
+  consumer. The 17-frame hold remains a real signature of the
+  5-ball cascade (vs 11-frame for 3-ball).
+- Verdict: PASS — H58 SHOWER interpretation is corrected to CASCADE.
+  The chain 6 same-hand events are a real anomaly in an otherwise
+  CASCADE pattern. The H58 v1 vision tool was misled by the
+  chain 6 anomaly; H62 uses the full 24-event dataset.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h62_pattern_characterization.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h62_pattern_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h62_youtube_pattern.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h62_report.md`
+
