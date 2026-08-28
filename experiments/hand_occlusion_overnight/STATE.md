@@ -1,6 +1,6 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-29 03:30 CEST
+LAST_UPDATE: 2026-08-29 03:30 CEST (current session: 2026-08-28 ~21:50 CEST-equivalent)
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
 + H94 + H96 + H97 + **H98** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
@@ -3873,3 +3873,69 @@ operating point. See `h1_hand_pool/reports/h102_report.md`.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_confusion.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h102_summary.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h102_report.md`
+
+## H104 conclusion (2026-08-29 ~04:00 CEST)
+
+**H104: H12 v9 continuous-density pattern classifier (TIME_SPAN guard
+on K=4 events_window)** — DONE. NEGATIVE. The H103 hypothesis was
+wrong: the K=4 events_window is **densely populated** in 2 of 3
+H12 v8 over-classified phases (max_span 15-34 frames), and the 1
+sparse case (f=482-594 YouTube, max_span 100) is also caught by
+other signals. A time-density guard at any threshold >= 70 frames
+is a no-op vs the H12 v8 baseline (17/1/3/0). A more aggressive
+guard (thr < 70) starts misclassifying real juggling phases.
+
+**Key per-phase K=4 max_span analysis:**
+
+| Phase | Verdict | Pred | max_span |
+|-------|---------|------|---------:|
+| 685-716 id | STATIC_HOLD   | CASCADE_3+ | **15** |
+| 890-936 id | OTHER_CROSSED | FOUNTAIN_3+| **34** |
+| 482-594 yt | STATIC_HOLD   | FOUNTAIN_3+| 100    |
+
+**H104 v2 (in-phase event count) — also NEGATIVE.** The JUGGLING
+and STATIC_HOLD phases have overlapping event densities
+(avg_e60 ∈ [0.74, 7.61] for JUGGLING vs [2.19, 4.22] for STATIC/OTHER).
+No single threshold on event density can separate the two classes.
+
+**Why H104 doesn't work:** the H12 v8 K=4 events_window is
+fundamentally confounded. The 2 identical FP cases have
+**dense** K=4 events because chain 24 and chain 30 emit
+hand-edge events from broader context (H45 finding: chain
+events are dense in time, not in pattern type). The H12 v8
+over-classification is a K=4+hand-alternation-metric problem,
+not a time-density problem.
+
+**Verdict: NEGATIVE.** H12 v8's K=4 logic alone is not fixable
+by events_window reformulation. The H96 v2 stack (which
+combines H12 v8 with H40v2 + H74v4 + H78 + H87+max_aloft +
+H90 NEW + H100 v4 guards) is the precision-optimized endpoint.
+
+**Recommended operating point (unchanged from H96 v2 / H100 v4):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43 + H69 + H74v4 +
+H78 + H87+max_aloft + H90 NEW + H100 v4 (conf+spec_conc) +
+H52 + H53 + H71 (MIXED_3+). 21 phases: 17/4/0/0, P=R=acc=1.000.
+
+**Recommended follow-up (H105):** H12 v9 hybrid with H40v2
+occupancy. Integrate the H40v2 hand-occupancy signal directly
+into the H12 v9 per-frame classifier (a phase with high
+LR_variance > 0.20 OR unique_LR > 1 should be demoted to
+MIXED_3+_UNCONFIRMED unless H87 max_aloft is high). This is
+the only remaining direction for H12 v8-style per-frame
+classification improvements; the K=4 events_window
+reformulation is exhausted.
+
+See `h1_hand_pool/reports/h104_report.md` for full analysis.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h104_h12_v9_time_density.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h104_per_phase.csv` (21 rows)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h104_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/pattern_inference_v9_*.csv` (2 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h104_report.md`
+
+## Last update
+
+- 2026-08-29 ~04:00 CEST: H104 NEGATIVE (time-density guard is a no-op
+  on the H12 v8 over-classification problem; the K=4 events_window is
+  fundamentally confounded by H7 chain density)
