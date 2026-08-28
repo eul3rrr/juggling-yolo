@@ -94,17 +94,21 @@ preflight_ok() {
 
 is_worker_alive() {
     # pgrep on the distinctive combination of flags we always pass.
-    # Match the actual provider+model flags (escaped for the regex).
-    local pat="hermes chat.*-p ${PROFILE}.*--provider ${PROVIDER}.*--model ${MODEL}.*--query-file ${WORKER_PROMPT_FILE}"
+    # Match the actual provider+model+--in flags (escaped for the regex).
+    local pat="hermes chat.*-p ${PROFILE}.*--provider ${PROVIDER}.*--model ${MODEL}.*--in .*--query-file ${WORKER_PROMPT_FILE}"
     pgrep -f -- "$pat" >/dev/null 2>&1
 }
 
 # Build the hermes command line. Echoes a single command line ready to be eval'd
 # inside a transient systemd scope if available. Uses --query-file and
 # --reasoning ultra; the per-model override is also configured in config.yaml.
+# --in $worktree_root pins the worker's cwd regardless of how the watchdog was
+# launched, so file-relative paths in worker_prompt.txt resolve correctly.
 build_hermes_cmd() {
-    printf "%s chat -p %s --provider %s --model %s --reasoning ultra --query-file %s --no-restore-cwd --accept-hooks --yolo --pass-session-id" \
-        "$HERMES" "$PROFILE" "$PROVIDER" "$MODEL" "$WORKER_PROMPT_FILE"
+    local worktree_root
+    worktree_root=$(git -C "$LAB_DIR" rev-parse --show-toplevel 2>/dev/null || echo "/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
+    printf "%s chat -p %s --provider %s --model %s --reasoning ultra --in %s --query-file %s --no-restore-cwd --accept-hooks --yolo --pass-session-id" \
+        "$HERMES" "$PROFILE" "$PROVIDER" "$MODEL" "$worktree_root" "$WORKER_PROMPT_FILE"
 }
 
 run_one_episode() {
@@ -118,7 +122,7 @@ run_one_episode() {
     cmd=$(build_hermes_cmd)
 
     log "episode: starting fresh MiniMax worker"
-    log "episode: command => hermes chat -p ${PROFILE} --provider ${PROVIDER} --model ${MODEL} --reasoning ultra --query-file ${WORKER_PROMPT_FILE} (provider=${PROVIDER}, per-model override ${MODEL}=ultra)"
+    log "episode: command => hermes chat -p ${PROFILE} --provider ${PROVIDER} --model ${MODEL} --reasoning ultra --in <worktree_root> --query-file ${WORKER_PROMPT_FILE} (provider=${PROVIDER}, per-model override ${MODEL}=ultra)"
 
     # Use systemd-run user scope if available (best effort, conservative limits).
     local pre_cmd=""
@@ -131,7 +135,13 @@ run_one_episode() {
 
     # Launch the worker; capture PID via $! of the systemd-run wrapper or of nice.
     # We always run in background, then monitor.
-    local wrapped_cmd="nice -n 10 ionice -c2 -n7 $pre_cmd bash -c 'cd $LAB_DIR/.. && exec $cmd'"
+    # build_hermes_cmd pins the worker's cwd via --in <worktree_root>, so we
+    # don't strictly need a cd here. We still cd for the watchdog-side checks
+    # (HEAD, STATE.md mtime) and for any preflight that wants to be in the
+    # worktree.
+    local worktree_root
+    worktree_root=$(git -C "$LAB_DIR" rev-parse --show-toplevel 2>/dev/null || echo "/home/it-admin/projects/juggling-yolo-hand-occlusion-night")
+    local wrapped_cmd="nice -n 10 ionice -c2 -n7 $pre_cmd bash -c 'cd $worktree_root && exec $cmd'"
 
     # We want the actual worker PID for monitoring. systemd-run --scope doesn't
     # return a useful $! because the scope itself forks; instead we use pgrep in
