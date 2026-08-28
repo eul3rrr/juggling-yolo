@@ -1,0 +1,166 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_events": 48,
+      "n_events_dropped": 12,
+      "n_dropped_pairs": 6,
+      "n_frames_total": 1042,
+      "n_frames_changed": 471,
+      "pct_frames_changed": 45.202,
+      "n_sample_changes": 10,
+      "sample_changes": [
+        {
+          "frame": 233,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "FOUNTAIN_3+",
+          "h12v8_confidence": 0.593
+        },
+        {
+          "frame": 234,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "FOUNTAIN_3+",
+          "h12v8_confidence": 0.593
+        },
+        {
+          "frame": 235,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "FOUNTAIN_3+",
+          "h12v8_confidence": 0.593
+        },
+        {
+          "frame": 236,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        },
+        {
+          "frame": 237,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        },
+        {
+          "frame": 238,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        },
+        {
+          "frame": 239,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        },
+        {
+          "frame": 240,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        },
+        {
+          "frame": 241,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        },
+        {
+          "frame": 242,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "TWO_BALL",
+          "h12v8_confidence": 0.637
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_events": 50,
+      "n_events_dropped": 0,
+      "n_dropped_pairs": 0,
+      "n_frames_total": 898,
+      "n_frames_changed": 143,
+      "pct_frames_changed": 15.924,
+      "n_sample_changes": 10,
+      "sample_changes": [
+        {
+          "frame": 309,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.682
+        },
+        {
+          "frame": 310,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 311,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 312,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 313,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 314,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 315,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 316,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 317,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        },
+        {
+          "frame": 318,
+          "orig_pattern": "FOUNTAIN_3+",
+          "filt_pattern": "CASCADE_3+",
+          "h12v8_pattern": "MIXED_3+",
+          "h12v8_confidence": 0.642
+        }
+      ]
+    }
+  }
+}
