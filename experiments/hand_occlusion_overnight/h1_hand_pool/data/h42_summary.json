@@ -1,0 +1,81 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_total": 1079,
+      "n_h36_used": 256,
+      "n_h40_used": 556,
+      "n_hold": 267,
+      "pct_h36_used": 23.7,
+      "pct_h40_used": 51.5,
+      "pct_hold": 24.7,
+      "pattern_hand_occupancy": {
+        "TWO_BALL": {
+          "L_pct": 40.4,
+          "R_pct": 48.6,
+          "both_pct": 12.5
+        },
+        "MIXED_3+_UNCONFIRMED": {
+          "L_pct": 60.0,
+          "R_pct": 84.0,
+          "both_pct": 48.0
+        },
+        "SINGLE_BALL": {
+          "L_pct": 7.9,
+          "R_pct": 47.2,
+          "both_pct": 4.2
+        },
+        "CASCADE_3+": {
+          "L_pct": 9.1,
+          "R_pct": 95.5,
+          "both_pct": 4.5
+        },
+        "MIXED_3+": {
+          "L_pct": 72.1,
+          "R_pct": 75.5,
+          "both_pct": 61.5
+        },
+        "TWO_BALL_ONE_HAND": {
+          "L_pct": 27.8,
+          "R_pct": 66.7,
+          "both_pct": 0.0
+        },
+        "FOUNTAIN_3+": {
+          "L_pct": 62.1,
+          "R_pct": 63.1,
+          "both_pct": 45.3
+        }
+      }
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_total": 900,
+      "n_h36_used": 232,
+      "n_h40_used": 657,
+      "n_hold": 11,
+      "pct_h36_used": 25.8,
+      "pct_h40_used": 73.0,
+      "pct_hold": 1.2,
+      "pattern_hand_occupancy": {
+        "MIXED_3+_UNCONFIRMED": {
+          "L_pct": 95.7,
+          "R_pct": 81.4,
+          "both_pct": 77.1
+        },
+        "CASCADE_3+": {
+          "L_pct": 48.1,
+          "R_pct": 57.4,
+          "both_pct": 6.2
+        },
+        "MIXED_3+": {
+          "L_pct": 81.5,
+          "R_pct": 86.4,
+          "both_pct": 68.9
+        },
+        "FOUNTAIN_3+": {
+          "L_pct": 76.4,
+          "R_pct": 93.6,
+          "both_pct": 71.8
+        }
+      }
+    }
+  }
+}

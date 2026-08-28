@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 14:50 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + **H40 + H41**
+LAST_UPDATE: 2026-08-28 14:55 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + H39 + H40 + H41 + **H42**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -513,26 +513,29 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
-H40 + H41 complete. H40 is a useful diagnostic (3-4x more
-hand-occupancy coverage than H36). H41 is NEGATIVE — does
-not solve H12 v8 FOUNTAIN_3+ classification problem.
+H42 complete (MIXED). Hybrid state is technically working
+but doesn't significantly improve CASCADE/FOUNTAIN
+discrimination.
 
 Recommended operating point remains h7v3plus3 (H34).
 
-Remaining research directions (priorities):
-1. **H42: H40 v2 enrichment of H36 (L, R, A) state.** Replace
-   H36's chain-driven HOLD state with H40 v2 sustained-occupancy
-   when no chain event has fired recently. This would give a
-   truly continuous (L, R, A) state that combines chain events
-   with raw hand-occupancy.
-2. **H43: H12 v9 with H40 signal.** Re-run H12 pattern inference
-   using H40 v2 continuous hand-occupancy to disambiguate
-   CASCADE from FOUNTAIN. May produce better pattern
-   classification than H12 v8's K=4 window.
-3. **H44: combined H40 + H12 v8 confidence.** Filter FOUNTAIN_3+
-   classifications that have H40 v2 sustained-occupancy in
-   BOTH hands (>50% both-hands rate). This is a more
-   permissive version of H41.
+The H39→H40→H41→H42 series has shown that the H12 v8
+FOUNTAIN_3+ over-classification problem is fundamentally
+hard to fix with hand-occupancy signals. The H12 v8 K=4
+sliding window is the root cause. A reliable fix would
+require a fundamentally different approach.
+
+Remaining research directions (lower priority):
+1. **H43: H12 v9 with H12 v8 confidence-based filter.**
+   Use H12 v8's own confidence values (currently 0.42-0.97
+   range) to filter low-confidence FOUNTAIN_3+ classifications.
+   This is a H12 v8 self-filter, not a new signal.
+2. **H44: literature search for multi-ball juggling tracking.**
+   The H17→H20→H31 chain and H32's finding that the chain set
+   is mostly multi-ball merges suggest that we need fundamentally
+   different signals (per-point color tracking, multi-view 3D,
+   learned color tracking) to distinguish single balls from
+   multi-ball merges.
 
 H37 is complete (PASS, consumer-pass, validation). H36 (L, R, A)
 state validates CASCADE_3+ but cannot disambiguate FOUNTAIN_3+.
@@ -781,6 +784,25 @@ FOUNTAIN_3+ post-filter. H12 v8 FOUNTAIN_3+ classification
 remains fundamentally unreliable (per H39).
 
 See `h1_hand_pool/reports/h40_h41_report.md` for full
+analysis.
+
+## H42 conclusion
+
+**H42: hybrid H36 + H40 v2 (L, R, A) state.** H42 uses
+H36 chain events where available (23.7% identical,
+25.8% YouTube) and H40 v2 sustained-occupancy as fallback
+(51.5% identical, 73.0% YouTube). H42 hybrid state is
+useful for diagnostic purposes — it gives a more complete
+hand-occupancy picture than H36 alone.
+
+**Verdict: MIXED.** H42 hybrid doesn't significantly
+improve CASCADE/FOUNTAIN discrimination over H40 v2.
+The H36 chain events dominate the L+R decision and carry
+the same handedness bias. H42 is useful as a diagnostic
+for downstream consumers needing a complete (L, R, A)
+timeline.
+
+See `h1_hand_pool/reports/h42_report.md` for full
 analysis.
 
 ## Future research directions (post H34)
