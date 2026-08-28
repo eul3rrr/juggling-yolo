@@ -1823,3 +1823,62 @@ Test on the 9 H73 phases with ground truth from H65 (3 real FOUNTAIN,
 
 If H74 v1 shows separation between real and misclassified, it would
 be a precision-improving filter for FOUNTAIN_3+ and CASCADE_3+.
+
+## H74 episode — STATUS: COMPLETE (MIXED)
+
+Sub-steps:
+
+1. ✅ Implemented H74 v1: H40v2 L+R temporal variance on 9
+   substantial CASCADE_3+ / FOUNTAIN_3+ phases. Computed
+   LR_variance, n_unique_states, n_transitions, max_run, frac_max.
+2. ✅ Cross-referenced with H65 + H72 ground truth.
+3. ✅ Threshold search: LR_var >= 0.20 catches 2/6 misclassified
+   while keeping 3/3 real FOUNTAIN.
+4. ✅ Documented in `h74_report.md` and updated
+   STATE.md / RESULTS_LOG.md.
+
+**H74 verdict: MIXED.** H74 v1 LR_variance correctly identifies
+static-hold-like misclassifications (2/4 on the H65 sample) but
+cannot detect manipulation tricks or high-variance misclassifications.
+
+**Key findings:**
+- STATIC_HOLD (f=733-766) has lowest variance (0.157) — correctly caught
+- YouTube f=482-594 also has low variance (0.135) — NEW INTERPRETATION
+  as 5-ball static hold (consistent with H65's "OTHER_NOT_FOUNTAIN")
+- MANIPULATION_TRICK (f=685-716) has high variance (0.386) — NOT caught
+- n_unique_states, frac_max metrics also overlap between real and
+  misclassified
+
+**Recommended operating point (post-H74, updated FOUNTAIN_3+):**
+- (H43 OR H69(spec_conc < 0.15)) AND NOT H74_static_hold
+  where H74_static_hold = LR_variance < 0.20
+- Catches 4/4 misclassified FOUNTAIN_3+ on H65 sample (vs 3/4 for
+  H43+H69 alone)
+- 0/3 real FOUNTAIN falsely rejected at threshold 0.20
+
+**Future research (post-H74):**
+1. H75: H43 + H69 + H74 stacked FOUNTAIN_3+ filter
+2. H76: CASCADE_3+ as research signal
+3. H77: re-run H59 precision/recall on FULL H70 sample
+
+See `h1_hand_pool/reports/h74_report.md` for full analysis.
+
+## H75 episode — PLANNED
+
+H75: H43 + H69 + H74 stacked FOUNTAIN_3+ filter.
+
+Apply H74 (LR_variance < 0.20) as an additional rejection criterion
+on top of the H43 + H69 spec_conc < 0.15 stack. The combined filter
+should catch all 4 misclassified FOUNTAIN_3+ phases on the H65 sample
+while preserving all 3 real FOUNTAIN phases.
+
+Hypothesis: The H43 + H69 + H74 stack is the new recommended
+operating point for FOUNTAIN_3+ post-filter. It combines:
+- H43: confidence-based (catches f=1029-1049 conf=0.463)
+- H69: periodicity-based (catches f=800-861, f=482-594)
+- H74: variance-based (catches f=482-594 again as backup, plus
+  the f=733-766 CASCADE_3+ misclassification)
+
+Test on:
+- H65 sample: 7 FOUNTAIN_3+ phases (3 real, 4 misclassified)
+- H70 sample: 7 FOUNTAIN_3+ phases (already covered by H65 + H72/H73)

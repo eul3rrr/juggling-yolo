@@ -4714,3 +4714,64 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h73_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h72/phase_identical_balls_trick_000_018_f733-766_CASCADE_3+_h73.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h73_report.md`
+
+### H74 (2026-08-28 ~21:30 CEST)
+
+- Hypothesis: H40v2 L+R temporal variance can distinguish static holds
+  from real FOUNTAIN_3+ patterns. A real FOUNTAIN has balls cycling
+  through the hands (high L+R variance). A static hold has balls
+  stable near hands (low L+R variance).
+
+- Method: for each substantial CASCADE_3+ / FOUNTAIN_3+ phase
+  (>= 20 frames) in both videos, compute H40v2 L+R temporal
+  statistics: mean, variance, stdev, n_unique_states, n_transitions,
+  max_run, frac_max. Cross-reference with H65 ground truth.
+
+- Quantitative result:
+
+| Phase | Pattern | gt | LR_var | LR_stdev | n_unique | n_trans |
+|-------|---------|----|----|----|----|----|
+| f631-669 identical | FOUNTAIN_3+ | REAL_FOUNTAIN | 0.621 | 0.788 | 3 | 2 |
+| f685-716 identical | CASCADE_3+ | MANIPULATION_TRICK | 0.386 | 0.621 | 4 | 6 |
+| f733-766 identical | CASCADE_3+ | STATIC_HOLD | 0.157 | 0.397 | 2 | 2 |
+| f890-936 identical | FOUNTAIN_3+ | OTHER_NOT_FOUNTAIN | 0.586 | 0.765 | 4 | 14 |
+| f977-1011 identical | FOUNTAIN_3+ | REAL_FOUNTAIN | 0.296 | 0.544 | 4 | 6 |
+| f1029-1049 identical | FOUNTAIN_3+ | OTHER_NOT_FOUNTAIN | 0.374 | 0.612 | 4 | 6 |
+| f339-374 YouTube | FOUNTAIN_3+ | REAL_FOUNTAIN | 0.218 | 0.467 | 4 | 7 |
+| f482-594 YouTube | FOUNTAIN_3+ | OTHER_NOT_FOUNTAIN | 0.135 | 0.368 | 3 | 10 |
+| f800-861 YouTube | FOUNTAIN_3+ | OTHER_NOT_FOUNTAIN | 0.202 | 0.450 | 3 | 9 |
+
+- Per-verdict LR_variance mean:
+  - STATIC_HOLD: 0.157 (n=1)
+  - OTHER_NOT_FOUNTAIN: 0.324 (n=4)
+  - REAL_FOUNTAIN: 0.378 (n=3)
+  - MANIPULATION_TRICK: 0.386 (n=1)
+
+- Threshold search (LR_variance threshold to keep all REAL_FOUNTAIN):
+  - LR_var >= 0.15: 3/3 real kept, 1/6 misclassified rejected (STATIC_HOLD)
+  - LR_var >= 0.20: 3/3 real kept, 2/6 misclassified rejected
+  - LR_var >= 0.25: 2/3 real kept (drops f=977-1011), 3/6 rejected
+
+- Key findings:
+  - LR_variance correctly identifies 1/1 STATIC_HOLD (f=733-766)
+  - LR_variance correctly identifies 1/4 OTHER_NOT_FOUNTAIN
+    (f=482-594, NEW INTERPRETATION as 5-ball static hold)
+  - MANIPULATION_TRICK (f=685-716) has high variance (0.386),
+    NOT caught by H74
+  - H74 v1 is a MIXED pass for static-hold detection only
+
+- Negative findings:
+  - LR_variance does not reliably separate real from misclassified
+  - n_unique_states, frac_max metrics also overlap
+  - MANIPULATION_TRICK has high variance, same as real FOUNTAIN
+
+- Verdict: **MIXED.** H74 v1 LR_variance is useful for static-hold
+  detection (1/1 caught) and catches 1 additional misclassified
+  phase (f=482-594) compared to H43+H69 alone. Recommended
+  operating point: (H43 OR H69) AND NOT H74_static_hold (var<0.20).
+  On the H65 sample: 4/4 misclassified caught, 0/3 real rejected.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h74_lr_variance_static_hold.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h74_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h74_report.md`

@@ -2352,3 +2352,68 @@ For MIXED_3+ post-filter (unchanged from H71):
    ground truth.
 
 See `h1_hand_pool/reports/h73_report.md` for full analysis.
+
+## H74 conclusion (2026-08-28 ~21:30 CEST)
+
+**H74: H40v2 L+R temporal variance as static-hold detector** — DONE.
+MIXED. LR_variance correctly identifies static-hold-like misclassifications
+(2/4 on the H65 sample) but cannot detect manipulation tricks or
+high-variance misclassifications.
+
+**Key findings:**
+
+1. **LR_variance partially discriminates static hold** (MIXED result).
+   The 1 STATIC_HOLD phase (f=733-766) has var=0.157 (lowest). The 1
+   YouTube static hold (f=482-594) has var=0.135 (second-lowest). At
+   threshold 0.15-0.20, both are correctly rejected.
+
+2. **MANIPULATION_TRICK (f=685-716) has high variance** (var=0.386),
+   same range as real FOUNTAIN. H74 v1 cannot detect manipulation tricks
+   because the trick has actual ball motion (hands moving between L+R
+   states as balls are rolled).
+
+3. **The 5-ball phase f=482-594 is a static hold** (NEW INTERPRETATION).
+   H40v2 data shows it has n_unique=3 states, max_run=27, frac_max=0.84
+   — very stable, similar to f=733-766 STATIC_HOLD. Consistent with
+   H65's "OTHER_NOT_FOUNTAIN" verdict.
+
+4. **H74 v1 catches 2/4 misclassified FOUNTAIN_3+ phases** on the H65
+   sample (the 2 static-hold-like ones: f=482-594 with var=0.135, and
+   f=733-766 with var=0.157). The other 2 misclassified FOUNTAIN_3+
+   (f=890-936 with var=0.586, f=1029-1049 with var=0.374) have higher
+   variance and are NOT caught.
+
+5. **n_unique_states and frac_max metrics also overlap significantly**
+   between real and misclassified phases. No single H40v2-derived
+   metric cleanly discriminates.
+
+**Recommended operating point (post-H74, updated for FOUNTAIN_3+):**
+
+For FOUNTAIN_3+ post-filter:
+- (H43 OR H69(spec_conc < 0.15)) AND NOT H74_static_hold
+  where H74_static_hold = LR_variance < 0.20
+- On the H65 sample: catches 3/4 misclassified phases (H43+H69) +
+  1 more (f=482-594 via H74) = 4/4
+- 0/3 real FOUNTAIN phases falsely rejected at threshold 0.20
+
+For CASCADE_3+ post-filter (unchanged from H73):
+- No reliable filter exists with current signals
+- Treat as research signal only
+
+For MIXED_3+ post-filter (unchanged from H71):
+- KEEP at spec_conc >= 0.15 (91% precision)
+- REJECT at spec_conc < 0.10 (1/1 correct on H71)
+
+**Negative findings:**
+- H74 v1 LR_variance does NOT reliably separate real from
+  misclassified FOUNTAIN_3+ / CASCADE_3+ phases (only 2/9 caught)
+- MANIPULATION_TRICK (f=685-716) has high variance, same as real
+- n_unique_states, frac_max metrics also overlap
+
+**Future research directions (post-H74):**
+1. H75: H43 + H69 + H74 stacked FOUNTAIN_3+ filter — apply H74
+   as additional rejection on top of H43 + H69 stack
+2. H76: CASCADE_3+ as research signal
+3. H77: re-run H59 precision/recall on FULL H70 sample
+
+See `h1_hand_pool/reports/h74_report.md` for full analysis.
