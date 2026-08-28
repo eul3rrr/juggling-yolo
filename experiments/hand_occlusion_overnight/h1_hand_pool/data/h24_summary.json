@@ -1,0 +1,167 @@
+{
+  "n_qa": 9,
+  "n_real": 2,
+  "n_partial": 2,
+  "n_false": 5,
+  "n_unclear": 0,
+  "precision_partial_as_tp": 0.4444,
+  "precision_real_only": 0.2222,
+  "per_stem": {
+    "identical_balls_trick_000_018": {
+      "n": 8,
+      "real": 2,
+      "partial": 1,
+      "false": 5,
+      "unclear": 0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n": 1,
+      "real": 0,
+      "partial": 1,
+      "false": 0,
+      "unclear": 0
+    }
+  },
+  "per_hand": {
+    "left": {
+      "n": 4,
+      "real": 1,
+      "partial": 0,
+      "false": 3,
+      "unclear": 0
+    },
+    "right": {
+      "n": 5,
+      "real": 1,
+      "partial": 2,
+      "false": 2,
+      "unclear": 0
+    }
+  },
+  "per_vshape": {
+    "V_DEEP": {
+      "n": 8,
+      "real": 1,
+      "partial": 2,
+      "false": 5,
+      "unclear": 0
+    },
+    "V_SHALLOW": {
+      "n": 1,
+      "real": 1,
+      "partial": 0,
+      "false": 0,
+      "unclear": 0
+    }
+  },
+  "verdicts": [
+    {
+      "h24_idx": 1,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 9,
+      "to_tid": 12,
+      "gap": 6,
+      "vshape": "V_DEEP",
+      "hand": "left",
+      "min_d": 15.43,
+      "verdict": "FALSE",
+      "reason": "Source 'ball' held at L hand (4 px/frame motion, no descent); target 'ball' high in frame (170 px above L hand) is a stationary or pre-existing different-color ball. Cross-ball artifact."
+    },
+    {
+      "h24_idx": 2,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 62,
+      "to_tid": 65,
+      "gap": 8,
+      "vshape": "V_DEEP",
+      "hand": "right",
+      "min_d": 32.58,
+      "verdict": "FALSE",
+      "reason": "Source ball descending to R hand plausibly but catch not completed in source frames. Target ball at +130 px x-displacement, R hand moving down-left (opposite of post-catch rebound). Cross-ball artifact."
+    },
+    {
+      "h24_idx": 3,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 10,
+      "to_tid": 11,
+      "gap": 8,
+      "vshape": "V_DEEP",
+      "hand": "right",
+      "min_d": 34.72,
+      "verdict": "PARTIAL",
+      "reason": "Source ball near apex drifting horizontally (not descending). Target ball at R wrist. Both events within the 8-frame gap, not visible. min_d=34.7 is plausible but V-shape artifact is not confirmed."
+    },
+    {
+      "h24_idx": 4,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 7,
+      "to_tid": 10,
+      "gap": 8,
+      "vshape": "V_SHALLOW",
+      "hand": "left",
+      "min_d": 57.35,
+      "verdict": "REAL",
+      "reason": "R hand has thrown (blue ball in air), L hand has caught (orange ball adjacent to L wrist in target frames). Hand ownership inverts from R to L. Shallow V-throw consistent with V_SHALLOW."
+    },
+    {
+      "h24_idx": 5,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 67,
+      "to_tid": 72,
+      "gap": 9,
+      "vshape": "V_DEEP",
+      "hand": "left",
+      "min_d": 26.14,
+      "verdict": "FALSE",
+      "reason": "Source ball at high apex y=200 (blue, large). Target ball at y=475 (orange, small). Different colors, 270 px y-jump across 9 frames. The V-apex (705,474) does not match the airborne ball position. Cross-ball artifact."
+    },
+    {
+      "h24_idx": 6,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 73,
+      "to_tid": 75,
+      "gap": 10,
+      "vshape": "V_DEEP",
+      "hand": "left",
+      "min_d": 35.2,
+      "verdict": "FALSE",
+      "reason": "Ball held at L wrist in BOTH source and target frames. No throw event between R and L hand visible. Held-ball artifact."
+    },
+    {
+      "h24_idx": 7,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 1,
+      "to_tid": 6,
+      "gap": 10,
+      "vshape": "V_DEEP",
+      "hand": "right",
+      "min_d": 41.88,
+      "verdict": "FALSE",
+      "reason": "Source ball far below R hand (y=680, wrist at y=540). Target ball well above L hand (y=400, wrist at y=490). Hands empty in all frames. No catch+throw event. Cross-ball artifact."
+    },
+    {
+      "h24_idx": 8,
+      "stem": "identical_balls_trick_000_018",
+      "from_tid": 59,
+      "to_tid": 61,
+      "gap": 11,
+      "vshape": "V_DEEP",
+      "hand": "right",
+      "min_d": 18.94,
+      "verdict": "REAL",
+      "reason": "Source R hand holds ball, L hand held high (wind-up pose). Target L hand now holds ball, R hand moved away (post-catch pose). Wrist-relative-to-ball configurations invert across the gap. min_d=18.9 is tight. Clear R->L transfer."
+    },
+    {
+      "h24_idx": 9,
+      "stem": "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+      "from_tid": 10,
+      "to_tid": 11,
+      "gap": 9,
+      "vshape": "V_DEEP",
+      "hand": "right",
+      "min_d": 4.69,
+      "verdict": "PARTIAL",
+      "reason": "Catch visible in source (ball descending to R hand, co-located at f=241). Ball-in-flight-after-throw visible in target (ball high above hands, rising). Throw moment hidden in the 9-frame gap."
+    }
+  ]
+}

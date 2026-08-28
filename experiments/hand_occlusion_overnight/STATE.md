@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 20:15 CEST
-STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + **H22 v1+v2** COMPLETE. **H22 MIXED (narrow-scope PASS)**: H20-KEPT edge veto mode successfully overrides the existing 16→21 YouTube edge with the H20-KEPT 20→21 edge (V-shape min_d=5.3 vs existing target start_dist=35.3). YouTube mean chain quality improves +0.0034 (0.685→0.689). The original 7-tid chain (1,9,13,16,21,29,34) splits into 2 chains (1,9,13,16) and (20,21,29,34). 0 identical veto decisions because the 2 H20-KEPT candidates (17→22, 68→70) have existing source successors in the chain set. H22 confirms the visual analysis that 16→21 is wrong and 20→21 is the real catch. h7v3pure remains the recommended chain set; H22 is a useful diagnostic tool.
+LAST_UPDATE: 2026-08-28 20:35 CEST
+STATUS: H7v2 + H10 v8 + H12 v7 + H237 v6 + H11 v6 + H13 + H14 v1 + H15 v1+v2 + H10 v9 + H16 + H17 v1 + H20 + H21 v1+v2 + H22 v1+v2 + **H24** COMPLETE. **H24 NEGATIVE**: 9-candidate H20-KEPT `e6c_not_in_h7v2` visual QA finds 2 REAL + 2 PARTIAL + 5 FALSE. Precision 22.2% (REAL only) or 44.4% (PARTIAL=TP) on the H24 sample, vs 62.5% (REAL) or 100% (PARTIAL=TP) on the H20 8-candidate sample. Combined H20+H24 17-candidate REAL precision is 41.2%. Dominant failure mode is **cross-ball artifacts** (4/5 FALSE): V-shape trajectories are plausible but source and target tracklets are DIFFERENT physical balls (color/size mismatch in contact sheets). V_SHALLOW (1/1 REAL) is more reliable than V_DEEP (1/8 REAL). 2 NEW REAL H20-KEPT candidates identified: 7→10 identical (R→L hand-off, V_SHALLOW) and 59→61 identical (R→L hand-off, V_DEEP). These are real missed catch+throws that h7v2 missed, but the 4 cross-ball false positives make H20-KEPT-not-in-h7v2 an UNRELIABLE augmentation source. Future H25 could add color-continuity or trajectory-overlap filter to reject cross-ball artifacts.
 
 ## Isolation
 
@@ -419,30 +419,47 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
     H22 confirms the visual analysis that 16→21 is wrong and
     20→21 is the real catch. h7v3pure remains the recommended
     chain set; H22 is a useful diagnostic tool.
+36. **H24: H20-KEPT e6c_not_in_h7v2 candidate review at scale** —
+    DONE. NEGATIVE. 9-candidate H20-KEPT-not-in-h7v2 visual QA
+    finds 2 REAL (7→10, 59→61 identical) + 2 PARTIAL + 5 FALSE.
+    REAL precision drops from H20's 62.5% to 22.2% on the H24
+    sample. Cross-ball artifacts are the dominant failure mode
+    (4/5 FALSE). V_SHALLOW (1/1 REAL) is more reliable than
+    V_DEEP (1/8 REAL). 2 NEW REAL H20-KEPT candidates
+    identified (7→10, 59→61 identical) but the 4 cross-ball
+    false positives make H20-KEPT-not-in-h7v2 an UNRELIABLE
+    augmentation source. H25 should add color-continuity or
+    trajectory-overlap filter to reject cross-ball artifacts.
 
 ## Next action
 
-H22 v1+v2 is complete (MIXED, narrow-scope PASS). The YouTube 20→21
-veto confirms the visual analysis: t20 is the canonical contact,
-t16 is spurious. h7v3pure remains the recommended chain set.
+H24 is complete (NEGATIVE). The 26-candidate H20-KEPT-not-in-
+h7v2 pool has been characterized as ~22-44% precision (REAL only
+or PARTIAL=TP). The dominant failure mode is cross-ball
+artifacts. The 2 NEW REAL candidates (7→10, 59→61 identical) are
+documented but not integrated.
 
 Remaining research directions:
 
-1. **H23: aggressive H20-KEPT veto mode** — extend H22 to break
-   existing chain topology when an H20-KEPT edge has much stronger
-   evidence than the existing edge. This would admit the 2 identical
-   veto candidates (17→22, 68→70) that H22 rejected due to source
-   successor conflicts. Trade-off: chain quality may drop.
-
-2. **H24: H20-KEPT e6c_not_in_h7v2 candidate review at scale** —
-   visually QA the remaining 18 H20-KEPT e6c_not_in_h7v2 candidates
-   (only 8 of 26 were visually QA'd). The full 26-candidate pool
-   could be characterized more reliably with additional QA.
-
-3. **H25: H11 v8 identity propagation on h7v3veto chains** — run
-   the identity propagation algorithm on the new h7v3veto chains
-   to see if the 20→21 vs 16→21 swap changes the per-tracklet
-   physical ball IDs.
-
-4. **H26: H12 v8 pattern inference on h7v3plus chains** — analog
-   of H12 v7 but with the H21 chains.
+1. **H25: cross-ball artifact rejection filter** — add a
+   color-continuity check (source-end and target-start ball
+   color histogram should match) or trajectory-overlap check
+   (source and target tracklets should intersect spatially
+   within the gap region). If H25 can reject the 4 cross-ball
+   FALSE positives from H24, the H20+H24 combined pool would
+   reach 7/7 = 100% REAL precision (5 from H20 + 2 from H24).
+2. **H26: H20-KEPT e6c_not_in_h7v2 chain-set augmentation with
+   the 2 NEW REAL candidates (7→10, 59→61 identical)** —
+   analogous to H21 v1 but with the 2 H24 REAL edges. The
+   trade-off (chain quality drop) should be measured.
+3. **H27: H20-KEPT adjacent candidate pool review at scale** —
+   the H20 report found 88 H20-KEPT adjacent candidates. H24's
+   methodology (sort by gap, take first 8+4) could be applied
+   to characterize the adjacent pool's precision. The adjacent
+   pool was NOT in h7v2's input (it's outside E6c's accepted
+   set), so it represents TRULY novel candidates.
+4. **H28: 2D ball-color-histogram per-detection check** — the
+   cross-ball artifacts are characterized by color mismatch
+   between source and target. A simple HSV-histogram check on
+   the source-tail and target-head detections could reject
+   cross-ball artifacts automatically.

@@ -2458,3 +2458,69 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3veto_admitted_edges_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h7v3veto_veto_decisions_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h22_report.md`
+
+### H24 (2026-08-28 ~20:35 CEST)
+
+- Hypothesis: the 26 H20-KEPT `e6c_not_in_h7v2` candidates that
+  survive H20's in-hand + vel-jump + apex filters represent a pool
+  of "missed catch+throws" that the production h7v2 chain set
+  failed to capture. H20 visually QA'd 8 of the 26 (5 REAL + 3
+  PARTIAL). H24 hypothesis: a larger visual QA sample will confirm
+  the 5/8 = 62.5% REAL precision observed in the H20 sample.
+- Methodology: selected 9 H20-KEPT `e6c_not_in_h7v2` candidates
+  (8 identical + 1 YouTube) NOT in the H20 visual QA set, sorted
+  by gap ascending. Rendered contact sheets and visually QA'd via
+  `vision_analyze` with structured verdicts.
+- Quantitative result:
+
+  | Metric | H20 (n=8) | H24 (n=9) | Combined (n=17) |
+  |---|---|---|---|
+  | REAL | 5 | 2 | 7 |
+  | PARTIAL | 3 | 2 | 5 |
+  | FALSE | 0 | 5 | 5 |
+  | **REAL precision** | **0.625** | **0.222** | **0.412** |
+  | PARTIAL=TP precision | 1.000 | 0.444 | 0.706 |
+
+- The 2 H24 NEW REAL candidates are 7→10 identical (R→L hand-off,
+  V_SHALLOW) and 59→61 identical (R→L hand-off, V_DEEP). Both
+  represent real missed catch+throws that h7v2 missed.
+- Dominant failure mode: **cross-ball artifacts** (4/5 H24 FALSE).
+  V-shape trajectories are plausible but source and target tracklets
+  are DIFFERENT physical balls (color/size mismatch in contact sheets).
+  H20's in-hand + vel-jump + apex filters do NOT reject cross-ball
+  artifacts because:
+  1. Neither source nor target is held in a hand (the false positives
+     are airborne balls, not held balls).
+  2. The vel-jump criterion is permissive enough (70 px/frame) that
+     some V-shaped cross-ball trajectories pass.
+  3. The apex-criterion is permissive (20 px) that some V-apex
+     positions near a hand pass.
+- V_SHALLOW (1/1 REAL) is more reliable than V_DEEP (1/8 REAL).
+  A shallow V-throw between adjacent hands has fewer opportunities
+  for cross-ball contamination than a deep V-throw spanning a long
+  airborne arc.
+- Negative findings:
+  - **H24 fails the hypothesis.** The 26-candidate H20-KEPT
+    `e6c_not_in_h7v2` pool is NOT a high-precision pool for chain
+    set augmentation. Combined H20+H24 REAL precision is 41.2%
+    (7/17), much lower than H20 alone.
+  - The 5 H20-KEPT REAL `e6c_not_in_h7v2` edges already integrated
+    by H21 (6→15, 54→57, 56→57, 56→58, 20→21) remain the only
+    safe additions to the chain set.
+  - The 2 H24 NEW REAL candidates (7→10, 59→61) are documented
+    but not integrated. A future H26 could integrate them and
+    measure the trade-off.
+- Verdict: **NEGATIVE.** The 26-candidate H20-KEPT-not-in-h7v2
+  pool has lower precision than H20's 8-candidate sample suggested.
+  The dominant failure mode is cross-ball artifacts, which H20's
+  filters cannot reject. A future H25 should add color-continuity
+  or trajectory-overlap filter to reject cross-ball artifacts.
+  See `h1_hand_pool/reports/h24_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h24_candidate_qa_at_scale.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h24_visual_qa.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h24/*.png` (9)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h24_selected_candidates.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h24_visual_qa_verdicts.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h24_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h24_report.md`
