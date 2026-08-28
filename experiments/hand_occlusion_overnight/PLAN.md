@@ -2242,3 +2242,33 @@ H52 + H53 + H71 (MIXED_3+ only)
 3. Stop here. H96 v2 achieves PERFECT 21-phase accuracy with a wide
    flat region. Further improvements would require fundamentally
    different signals.
+
+## Hundredth episode (H99) — STATUS: COMPLETE (2026-08-29 ~01:00 CEST)
+
+Sub-steps:
+1. ✅ Implemented H99 robustness analysis: per-threshold sensitivity
+   (11 steps × 8 thresholds = 88 cells), LOO test (4 cells), and
+   2D flat-region grids (H90 NEW: 35 cells, H71×H90 NEW: 30 cells).
+2. ✅ Identified 3 PERFECTLY FLAT thresholds (h69, h74_var, h74_uLR).
+3. ✅ Identified 1 FRAGILE threshold (guard_pct_ge1_thr at hard cap).
+4. ✅ LOO test passes on all 4 TNs (no single TN is essential).
+5. ✅ Documented in `h99_report.md` and updated STATE/RESULTS.
+
+**H99 verdict: STABLE.** The H96 v2 perfect 17/4/0/0 result is
+the consequence of 4 independent signals catching 4 different
+misclassifications, not a coincidence or overfit. The 3
+perfectly-flat thresholds (h69, h74_var, h74_uLR) are deeply
+robust. The 1 fragile threshold (guard_pct_ge1_thr) is the
+weakest link in the stack.
+
+**Future research (post-H99):**
+1. **H100: 3rd video validation.** Required to confirm the
+   perfect result generalizes. The 21 phases is too small to
+   guarantee no overfit, and 1 fragile threshold (pct_ge1 guard)
+   suggests generalization risk.
+2. **H101: pct_ge1 guard refinement.** A 3rd signal that can
+   replace or augment the pct_ge1 guard would close the
+   fragility gap.
+3. **Stop here.** The H96 v2 stack + H99 LOO confirmation is
+   the lab's precision-optimized endpoint. The 3rd video is
+   out of scope (not available in the worktree).

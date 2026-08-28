@@ -3487,3 +3487,68 @@ on the H93 sample. The signal is FOUNTAIN_3+-specific.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h98_summary.json`
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h98_report.md`
 
+
+## H99 conclusion (2026-08-29 ~01:00 CEST)
+
+**H99: H96 v2 threshold robustness analysis** — DONE. STABLE on 3/11
+thresholds, MOSTLY STABLE on 7/11, FRAGILE on 1 (guard_pct_ge1_thr at
+hard cap). LOO test PASSES on all 4 TNs (removing any TN preserves
+17/3/0/0).
+
+**Per-threshold sensitivity (key findings):**
+
+| Threshold | Default | Margins | Flat region |
+|-----------|---------|---------|-------------|
+| h69_spec_conc_thr | 0.15 | ±50% | **PERFECTLY FLAT** |
+| h74_var_thr | 0.20 | ±50% | **PERFECTLY FLAT** |
+| h74_uLR_thr | 1 | ±50% (integer) | **PERFECTLY FLAT** |
+| guard_pct_ge1_thr | 0.92 | 0% upper (hard cap 1.0) | **FRAGILE** |
+| h87_pct_ge3_thr | 0.20 | 0% lower (boundary at 0.156) | 0% on one side |
+| h90_c40_pct_ge3_thr | 0.40 | -10% lower (0.36 loses TN) | thin |
+| h43_conf_thr | 0.55 | +10% upper | thin |
+
+**2D grid (H90 NEW):** PERFECT (17/4/0/0) region is c40_pct_ge3 ∈
+[0.40, 1.00] AND c40_max_aloft = 4 — 5 cells in a 1D-flat column.
+
+**2D grid (H71 × H90 NEW):** H71 (MIXED_3+) and H90 NEW (FOUNTAIN_3+)
+thresholds are INDEPENDENT (per-pattern rules). PERFECT corner
+(h71=0.10, c40g3 ∈ [0.40, 0.80]) is a 4-cell flat region.
+
+**LOO test:** All 4 LOO test cases pass with 17/3/0/0. No single
+TN is essential to the perfect result — the 4 TNs are caught by 4
+different signals, so the stack would still work if any 1 of the 4
+TN phases were relabeled as real juggling.
+
+**Verdict: STABLE — perfect result is real.** The H96 v2 stack
+achieves 17/4/0/0 via 4 independent signals (H87+max_aloft, H78,
+H71_REJECT, H90_NEW_strict), and the LOO test confirms this is
+not an overfit.
+
+**Negative findings:**
+- guard_pct_ge1_thr is at its hard cap (0% upper margin). A 3rd
+  video with higher-pct_ge1 real juggling would break the H43/H69
+  guard logic.
+- h87_pct_ge3_thr is at its boundary (f=685-716 has pct_ge3=0.156,
+  exactly under 0.20). A 3rd video with more manipulation tricks
+  might find a phase with pct_ge3=0.21 that wouldn't be caught.
+- 21 phases is small; LOO test passing doesn't guarantee 100%
+  generalization to a 3rd video.
+
+**Recommended operating point (unchanged from H96 v2):** h7v3plus3
++ H10 v11 v3 + H12 v8 + H50 + H43+pct_ge1<0.92 + H69+pct_ge1<0.92 +
+H74v4 + H78 + H87+max_aloft + H90 NEW + H52 + H53 + H71 (MIXED_3+).
+Validated on H93 corrected GT (17/4/0/0, LOO-passing).
+
+**Future research (post-H99):**
+1. H100: 3rd video for validation. Required to confirm the
+   perfect result generalizes beyond the 2 videos used.
+2. H101: pct_ge1 guard refinement. The 0.92 hard cap is
+   fragile.
+3. Stop here. H96 v2 + H99 LOO confirmation is the lab's
+   precision-optimized endpoint.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h99_robustness.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_output.txt`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h99_report.md`

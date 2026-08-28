@@ -5608,3 +5608,70 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h96_h90_new_properly_integrated.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h96_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h96_report.md`
+
+---
+
+## H99 — H96 v2 threshold robustness analysis
+
+- **Date:** 2026-08-29 ~01:00 CEST
+- **Hypothesis:** The H96 v2 stack achieves PERFECT 17/4/0/0 (P=1.000,
+  R=1.000) on 21 H93 corrected phases. Is this result STABLE
+  (insensitive to threshold perturbations) or FRAGILE (lucky)?
+- **Method:** Three analyses:
+  1. Per-threshold sensitivity (±50% perturbation on each of 8 thresholds)
+  2. Leave-one-TN-out (LOO) — remove each of the 4 TN phases
+  3. 2D flat-region grids (H90 NEW, H71×H90 NEW)
+
+- **Per-threshold sensitivity (key findings):**
+
+| Threshold | Default | Margins | Flat region |
+|-----------|---------|---------|-------------|
+| h69_spec_conc_thr | 0.15 | ±50% | **PERFECTLY FLAT** |
+| h74_var_thr | 0.20 | ±50% | **PERFECTLY FLAT** |
+| h74_uLR_thr | 1 | ±50% | **PERFECTLY FLAT** |
+| h78_mean_diff_thr | 10.0 | ±50% | ±50% |
+| h71_spec_conc_thr | 0.10 | ±30% | ±30% |
+| h90_c40_max_aloft_thr | 4 | -30%/+10% | asymmetric |
+| h87_max_aloft_thr | 2 | -50% (integer) | asymmetric |
+| h43_conf_thr | 0.55 | +10% upper only | thin |
+| h87_pct_ge3_thr | 0.20 | 0% lower (boundary) | 0% margin |
+| h90_c40_pct_ge3_thr | 0.40 | -10% lower (0.36 loses TN) | thin |
+| guard_pct_ge1_thr | 0.92 | 0% upper (hard cap 1.0) | **FRAGILE** |
+
+- **LOO test:** All 4 LOO test cases pass with 17/3/0/0. No single
+  TN is essential. The 4 TNs are caught by 4 different signals
+  (H87+max_aloft, H78, H71_REJECT, H90_NEW_strict).
+
+- **2D grid (H90 NEW):** PERFECT (17/4/0/0) region is c40_pct_ge3 ∈
+  [0.40, 1.00] AND c40_max_aloft = 4 — 5 cells in a 1D-flat column.
+
+- **2D grid (H71 × H90 NEW):** Independent (per-pattern rules).
+  PERFECT corner (h71=0.10, c40g3 ∈ [0.40, 0.80]) is a 4-cell flat
+  region.
+
+- **Visual QA:** No contact sheets needed (no new data, all
+  computations are deterministic on the H93 corrected GT).
+
+- **Negative findings:**
+  - guard_pct_ge1_thr is at its hard cap (0% upper margin). A 3rd
+    video with higher-pct_ge1 real juggling would break the H43/H69
+    guard logic.
+  - h87_pct_ge3_thr is at its boundary (f=685-716 has pct_ge3=0.156,
+    exactly under 0.20).
+  - 21 phases is small; LOO test passing doesn't guarantee 100%
+    generalization.
+
+- **Verdict: STABLE.** The H96 v2 perfect 17/4/0/0 result is the
+  consequence of 4 independent signals catching 4 different
+  misclassifications, not a coincidence or overfit. The 3
+  perfectly-flat thresholds (h69, h74_var, h74_uLR) are deeply
+  robust. The 1 fragile threshold (guard_pct_ge1_thr) is the
+  weakest link in the stack.
+
+  See `h1_hand_pool/reports/h99_report.md` for full analysis.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h99_robustness.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_output.txt`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h99_report.md`

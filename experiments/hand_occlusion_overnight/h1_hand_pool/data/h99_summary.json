@@ -1,0 +1,90 @@
+{
+  "h99_methodology": "H96 v2 threshold robustness (per-threshold sensitivity + LOO + 2D grids)",
+  "baseline": {
+    "TP": 17,
+    "TN": 4,
+    "FP": 0,
+    "FN": 0,
+    "P": 1.0,
+    "R": 1.0,
+    "acc": 1.0
+  },
+  "tn_captures": [
+    {
+      "key": [
+        "identical_balls_trick_000_018",
+        685,
+        716
+      ],
+      "verdict": "STATIC_HOLD",
+      "reason": "H87+max_aloft",
+      "conf": 0.738,
+      "spec_conc": 0.498,
+      "pct_ge1": 0.96875,
+      "pct_ge3": 0.15625,
+      "max_aloft": 4,
+      "c40_pct_ge3": 0.08333333333333333,
+      "c40_max_aloft": 3,
+      "var": 0.3740234375,
+      "unique_LR": 3,
+      "mean_diff": 3.2
+    },
+    {
+      "key": [
+        "identical_balls_trick_000_018",
+        890,
+        936
+      ],
+      "verdict": "OTHER_CROSSED_ARM",
+      "reason": "H78",
+      "conf": 0.571,
+      "spec_conc": 0.308,
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.10869565217391304,
+      "max_aloft": 4,
+      "c40_pct_ge3": 0.10256410256410256,
+      "c40_max_aloft": 3,
+      "var": 0.5728395061728394,
+      "unique_LR": 3,
+      "mean_diff": 14.25
+    },
+    {
+      "key": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        2,
+        71
+      ],
+      "verdict": "STATIC_HOLD",
+      "reason": "H71_REJECT",
+      "conf": 0.333,
+      "spec_conc": 0.075,
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.7428571428571429,
+      "max_aloft": 4,
+      "c40_pct_ge3": 0.35714285714285715,
+      "c40_max_aloft": 3,
+      "var": 0.12244897959183673,
+      "unique_LR": 2,
+      "mean_diff": 4.98
+    },
+    {
+      "key": [
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090",
+        482,
+        594
+      ],
+      "verdict": "STATIC_HOLD",
+      "reason": "H90_NEW_strict",
+      "conf": 0.653,
+      "spec_conc": 0.14,
+      "pct_ge1": 1.0,
+      "pct_ge3": 0.6637168141592921,
+      "max_aloft": 4,
+      "c40_pct_ge3": 0.36363636363636365,
+      "c40_max_aloft": 4,
+      "var": 0.1339180828569191,
+      "unique_LR": 2,
+      "mean_diff": 5.08
+    }
+  ]
+}

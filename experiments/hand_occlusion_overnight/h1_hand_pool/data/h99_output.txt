@@ -1,0 +1,181 @@
+Loading ball detections and pose (at conf=0.0 and conf=0.4)...
+================================================================================
+H99 — Threshold robustness analysis of the H96 v2 stack
+================================================================================
+
+Baseline H96 v2: TP=17 TN=4 FP=0 FN=0 P=1.000 R=1.000 acc=1.000
+
+================================================================================
+Per-TN capture info (which signal catches each TN):
+================================================================================
+  identical_balls_trick_000_018  f=685- 716  STATIC_HOLD               caught by: H87+max_aloft
+  identical_balls_trick_000_018  f=890- 936  OTHER_CROSSED_ARM         caught by: H78
+  youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090 f=2-  71  STATIC_HOLD               caught by: H71_REJECT
+  youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090 f=482- 594  STATIC_HOLD               caught by: H90_NEW_strict
+
+================================================================================
+Per-TN signal values:
+================================================================================
+  f=685-716 (H87+max_aloft)
+    conf=0.738 spec_conc=0.498 var=0.374 uLR=3 mean_diff=3.20
+    pct_ge1=0.969 pct_ge3=0.156 max_aloft=4 c40_pct_ge3=0.083 c40_max_aloft=3
+  f=890-936 (H78)
+    conf=0.571 spec_conc=0.308 var=0.573 uLR=3 mean_diff=14.25
+    pct_ge1=1.000 pct_ge3=0.109 max_aloft=4 c40_pct_ge3=0.103 c40_max_aloft=3
+  f=2-71 (H71_REJECT)
+    conf=0.333 spec_conc=0.075 var=0.122 uLR=2 mean_diff=4.98
+    pct_ge1=1.000 pct_ge3=0.743 max_aloft=4 c40_pct_ge3=0.357 c40_max_aloft=3
+  f=482-594 (H90_NEW_strict)
+    conf=0.653 spec_conc=0.140 var=0.134 uLR=2 mean_diff=5.08
+    pct_ge1=1.000 pct_ge3=0.664 max_aloft=4 c40_pct_ge3=0.364 c40_max_aloft=4
+
+================================================================================
+Per-threshold sensitivity (±50% perturbation):
+================================================================================
+
+  Threshold h43_conf_thr (default = 0.55):
+    mult=1.10 val=0.6050  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=977-1011: TP->FN
+    mult=1.20 val=0.6600  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=977-1011: TP->FN
+    mult=1.30 val=0.7150  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=977-1011: TP->FN
+    mult=1.40 val=0.7700  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=977-1011: TP->FN
+    mult=1.50 val=0.8250  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=977-1011: TP->FN
+
+  Threshold h69_spec_conc_thr (default = 0.15):
+    NO CHANGES across ±50% (perfectly flat)
+
+  Threshold h87_pct_ge3_thr (default = 0.2):
+    mult=0.50 val=0.1000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=685-716: TN->FP
+    mult=0.60 val=0.1200  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=685-716: TN->FP
+    mult=0.70 val=0.1400  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=685-716: TN->FP
+
+  Threshold h87_max_aloft_thr (default = 2):
+    mult=0.50 val=1.0000  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=733-766: TP->FN
+
+  Threshold h90_c40_pct_ge3_thr (default = 0.4):
+    mult=0.50 val=0.2000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=0.60 val=0.2400  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=0.70 val=0.2800  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=0.80 val=0.3200  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=0.90 val=0.3600  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+
+  Threshold h90_c40_max_aloft_thr (default = 4):
+    mult=0.50 val=2.0000  TP=13 TN=4 FP=0 FN=4 acc=0.810  changes: f=631-669: TP->FN; f=977-1011: TP->FN; f=1029-1049: TP->FN; f=800-861: TP->FN
+    mult=0.60 val=2.4000  TP=14 TN=4 FP=0 FN=3 acc=0.857  changes: f=631-669: TP->FN; f=977-1011: TP->FN; f=800-861: TP->FN
+    mult=0.70 val=2.8000  TP=14 TN=4 FP=0 FN=3 acc=0.857  changes: f=631-669: TP->FN; f=977-1011: TP->FN; f=800-861: TP->FN
+    mult=1.10 val=4.4000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=1.20 val=4.8000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=1.30 val=5.2000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=1.40 val=5.6000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+    mult=1.50 val=6.0000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=482-594: TN->FP
+
+  Threshold h74_var_thr (default = 0.2):
+    NO CHANGES across ±50% (perfectly flat)
+
+  Threshold h74_uLR_thr (default = 1):
+    NO CHANGES across ±50% (perfectly flat)
+
+  Threshold h78_mean_diff_thr (default = 10.0):
+    mult=0.50 val=5.0000  TP=15 TN=4 FP=0 FN=2 acc=0.905  changes: f=631-669: TP->FN; f=339-374: TP->FN
+    mult=0.60 val=6.0000  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=631-669: TP->FN
+    mult=0.70 val=7.0000  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=631-669: TP->FN
+    mult=1.50 val=15.0000  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=890-936: TN->FP
+
+  Threshold guard_pct_ge1_thr (default = 0.92):
+    mult=1.10 val=1.0120  TP=15 TN=4 FP=0 FN=2 acc=0.905  changes: f=1029-1049: TP->FN; f=800-861: TP->FN
+    mult=1.20 val=1.1040  TP=15 TN=4 FP=0 FN=2 acc=0.905  changes: f=1029-1049: TP->FN; f=800-861: TP->FN
+    mult=1.30 val=1.1960  TP=15 TN=4 FP=0 FN=2 acc=0.905  changes: f=1029-1049: TP->FN; f=800-861: TP->FN
+    mult=1.40 val=1.2880  TP=15 TN=4 FP=0 FN=2 acc=0.905  changes: f=1029-1049: TP->FN; f=800-861: TP->FN
+    mult=1.50 val=1.3800  TP=15 TN=4 FP=0 FN=2 acc=0.905  changes: f=1029-1049: TP->FN; f=800-861: TP->FN
+
+  Threshold h71_spec_conc_thr (default = 0.1):
+    mult=0.50 val=0.0500  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=2-71: TN->FP
+    mult=0.60 val=0.0600  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=2-71: TN->FP
+    mult=0.70 val=0.0700  TP=17 TN=3 FP=1 FN=0 acc=0.952  changes: f=2-71: TN->FP
+    mult=1.30 val=0.1300  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=114-255: TP->FN
+    mult=1.40 val=0.1400  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=114-255: TP->FN
+    mult=1.50 val=0.1500  TP=16 TN=4 FP=0 FN=1 acc=0.952  changes: f=114-255: TP->FN
+
+================================================================================
+Leave-one-TN-out (LOO of each TN phase):
+================================================================================
+  LOO f=685-716 (identical_balls_trick_000_018): remaining TP=17 TN=3 FP=0 FN=0 acc=1.000
+  LOO f=890-936 (identical_balls_trick_000_018): remaining TP=17 TN=3 FP=0 FN=0 acc=1.000
+  LOO f=2-71 (youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090): remaining TP=17 TN=3 FP=0 FN=0 acc=1.000
+  LOO f=482-594 (youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090): remaining TP=17 TN=3 FP=0 FN=0 acc=1.000
+
+================================================================================
+2D flat-region grid: H90 NEW (c40_pct_ge3 x c40_max_aloft):
+================================================================================
+  c40_pct_ge3  c40_max_aloft   TP  TN  FP  FN  acc
+    0.20       2           15   3   1   2 0.857
+    0.20       3           16   3   1   1 0.905
+    0.20       4           17   3   1   0 0.952
+    0.20       5           17   3   1   0 0.952
+    0.20       6           17   3   1   0 0.952
+    0.30       2           13   3   1   4 0.762
+    0.30       3           14   3   1   3 0.810
+    0.30       4           17   3   1   0 0.952
+    0.30       5           17   3   1   0 0.952
+    0.30       6           17   3   1   0 0.952
+    0.40       2           13   4   0   4 0.810
+    0.40       3           14   4   0   3 0.857
+    0.40       4           17   4   0   0 1.000
+    0.40       5           17   3   1   0 0.952
+    0.40       6           17   3   1   0 0.952
+    0.50       2           12   4   0   5 0.762
+    0.50       3           13   4   0   4 0.810
+    0.50       4           17   4   0   0 1.000
+    0.50       5           17   3   1   0 0.952
+    0.50       6           17   3   1   0 0.952
+    0.60       2           12   4   0   5 0.762
+    0.60       3           13   4   0   4 0.810
+    0.60       4           17   4   0   0 1.000
+    0.60       5           17   3   1   0 0.952
+    0.60       6           17   3   1   0 0.952
+    0.80       2           12   4   0   5 0.762
+    0.80       3           13   4   0   4 0.810
+    0.80       4           17   4   0   0 1.000
+    0.80       5           17   3   1   0 0.952
+    0.80       6           17   3   1   0 0.952
+    1.00       2           12   4   0   5 0.762
+    1.00       3           13   4   0   4 0.810
+    1.00       4           17   4   0   0 1.000
+    1.00       5           17   3   1   0 0.952
+    1.00       6           17   3   1   0 0.952
+
+================================================================================
+2D flat-region grid: H71 spec_conc x H90 NEW c40_pct_ge3:
+================================================================================
+  h71_spec  c40_pct_ge3   TP  TN  FP  FN  acc
+    0.05       0.20       17   2   2   0 0.905
+    0.05       0.30       17   2   2   0 0.905
+    0.05       0.40       17   3   1   0 0.952
+    0.05       0.50       17   3   1   0 0.952
+    0.05       0.60       17   3   1   0 0.952
+    0.05       0.80       17   3   1   0 0.952
+    0.10       0.20       17   3   1   0 0.952
+    0.10       0.30       17   3   1   0 0.952
+    0.10       0.40       17   4   0   0 1.000
+    0.10       0.50       17   4   0   0 1.000
+    0.10       0.60       17   4   0   0 1.000
+    0.10       0.80       17   4   0   0 1.000
+    0.15       0.20       16   3   1   1 0.905
+    0.15       0.30       16   3   1   1 0.905
+    0.15       0.40       16   4   0   1 0.952
+    0.15       0.50       16   4   0   1 0.952
+    0.15       0.60       16   4   0   1 0.952
+    0.15       0.80       16   4   0   1 0.952
+    0.20       0.20       11   3   1   6 0.667
+    0.20       0.30       11   3   1   6 0.667
+    0.20       0.40       11   4   0   6 0.714
+    0.20       0.50       11   4   0   6 0.714
+    0.20       0.60       11   4   0   6 0.714
+    0.20       0.80       11   4   0   6 0.714
+    0.30       0.20        7   3   1  10 0.476
+    0.30       0.30        7   3   1  10 0.476
+    0.30       0.40        7   4   0  10 0.524
+    0.30       0.50        7   4   0  10 0.524
+    0.30       0.60        7   4   0  10 0.524
+    0.30       0.80        7   4   0  10 0.524
+
+Summary written to /home/it-admin/projects/juggling-yolo-hand-occlusion-night/experiments/hand_occlusion_overnight/h1_hand_pool/data/h99_summary.json
