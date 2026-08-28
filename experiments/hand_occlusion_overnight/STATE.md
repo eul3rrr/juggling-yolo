@@ -4058,20 +4058,45 @@ endpoint. Three equivalent implementations:
 
 ## Last update
 
-- 2026-08-29 ~05:00 CEST: H105 NEGATIVE (chain-event quality guard is
-  too aggressive, real juggling phases demoted). H106 PASS (H96 v2 stack
-  reproduced with cleaner per-pattern rule structure and wider flat region).
-  The h7v3plus3 + H10 v11 v3 + H96 v2 / H100 v4 / H106 v2 stack is the
-  precision-optimized endpoint (17/4/0/0 on 21 H93 phases, P=0.979 R=0.648
-  on 113 review pairs).
-- 2026-08-28 ~22:35 CEST: H107 NEGATIVE (2D combined guard misses f=2-71).
-  H108 PASS (R4b explicit signal, 17/4/0/0 PERFECT, three R4 candidates).
-  H109 NEGATIVE honest finding (R4b is uniquely tied to f=2-71 signature;
-  4 TNs have orthogonal signatures caught by 4 specific detectors).
-  H108 v1 is the new recommended implementation.
-- 2026-08-28 ~22:50 CEST: H110 CONSUMER-PASS (H108 v1 packaged as
-  importable module with clean API). The lab has reached a natural
-  endpoint: h7v3plus3 + H96 v2 / H100 v4 / H106 v2 / H108 v1 stack
-  achieves 17/4/0/0 PERFECT on 21 H93 corrected phases. 3rd-video
-  generalization is the only remaining research direction, blocked
-  by data availability.
+- 2026-08-29 (this episode): H111 PASS — relaxed edge-to-phase anchoring
+  (S2 union) surfaces 23 new pairs anchored to 18 phases (vs S1's 11).
+  1 actionable finding: h7v3plus3 has a 22→27 false positive (190-px
+  spatial jump in 11 frames, RECLASSIFIED_HAND_TRANSITION) and a 25→27
+  false negative (10-px spatial jump, NOT_IN_CHAIN) in the f=263-312
+  JUGGLING phase. The H108 v1 PERFECT 17/4/0/0 phase-level result does
+  NOT validate edge-level quality. S2 anchoring is the recommended
+  methodology for edge-level diagnostics.
+
+**H111 — Relaxed edge-to-phase anchoring (PASS, consumer-pass, useful
+diagnostic)**:
+  - H102 anchored only 15/113 review pairs to H93 phases (midgap-only).
+    H111 tests 3 anchoring strategies: S1 (midgap, H102 strict), S2
+    (union — midgap OR src_end OR cand_start in phase), S3 (interval
+    overlap). S2 and S3 produce identical results on the H93 sample.
+  - S2 surfaces 23 NEW pairs (12 correct, 11 wrong) anchored to
+    18 phases (vs S1's 11 phases). 11 of these are in h7v3plus3.
+  - **Key actionable finding:** the 22→27 wrong review edge in
+    f=263-312 JUGGLING is incorrectly accepted by h7v3plus3 as
+    a RECLASSIFIED_HAND_TRANSITION (190.4-px spatial jump in 11
+    frames — NOT a real catch-throw). Reviewer is correct; h7v3plus3
+    is WRONG. The 25→27 correct review edge (10.5-px spatial jump
+    in 8 frames) is correctly classified as a real catch by reviewer
+    but REJECTED by h7v3plus3 (FN). Both are in f=263-312 JUGGLING
+    phase. The H102 strict midgap-only anchoring missed both because
+    the midgap (260) is just before the phase (263-312).
+  - **Per-phase S2 surface (f=263-312):** 1 FP, 1 FN. h7v3plus3
+    incorrectly accepts a 190-px jump (22→27) and incorrectly rejects
+    a 10-px jump (25→27) within the same JUGGLING phase. This is a
+    real edge-level imperfection in h7v3plus3 that the H108 v1
+    PERFECT 17/4/0/0 phase-level result does NOT validate.
+  - **Per-phase S2 surface (f=977-1011):** 0 FP, 1 FN, 2 TN. h7v3plus3
+    correctly REJECTS wrong edges 64→69 (248-px) and 65→69 (231-px).
+  - **Conclusion:** the H108 v1 PERFECT phase-level result is real but
+    does not validate edge-level quality within the 5-frame phase
+    boundary. The 22→27 FP is the single actionable NEW edge-level
+    signal. A future H7 revision could add a 30-px spatial-jump check
+    at the hand-edge stage to filter 22→27-style boundary-crossing
+    false positives without affecting TP rate.
+  - **Recommended for downstream consumers:** use S2 (union) anchoring
+    for edge-level diagnostic; use S1 (midgap) for phase-level evaluation.
+  - See `h1_hand_pool/reports/h111_report.md`.
