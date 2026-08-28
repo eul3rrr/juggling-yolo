@@ -1,0 +1,20 @@
+{
+  "identical_balls_trick_000_018": {
+    "solid_missing_segments_skipped": 0,
+    "accepted_links": 31,
+    "inferred_link_records": 31,
+    "output_frames": 1079,
+    "output_width": 1280,
+    "output_height": 720,
+    "output_fps": 59.94
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "solid_missing_segments_skipped": 0,
+    "accepted_links": 17,
+    "inferred_link_records": 17,
+    "output_frames": 900,
+    "output_width": 1280,
+    "output_height": 720,
+    "output_fps": 59.94
+  }
+}

@@ -1,0 +1,7059 @@
+{
+  "identical_balls_trick_000_018": {
+    "video": "identical_balls_reconstruction.mp4",
+    "fps": 59.94005994005994,
+    "width": 1280,
+    "height": 720,
+    "frame_count": 1079,
+    "accepted_stitches": 31,
+    "long_gap_stitches": 10,
+    "trajectory_count": 45,
+    "events": [
+      {
+        "trajectory_id": 1,
+        "source_tracklet": 1,
+        "successor_tracklet": 6,
+        "source_end_frame": 17,
+        "successor_start_frame": 27,
+        "gap_frames": 9,
+        "error_px": 61.301063,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.415038,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 18,
+            "x": 559.926214,
+            "y": 638.804679
+          },
+          {
+            "frame": 19,
+            "x": 561.417095,
+            "y": 624.986893
+          },
+          {
+            "frame": 20,
+            "x": 562.907976,
+            "y": 606.28456
+          },
+          {
+            "frame": 21,
+            "x": 564.398857,
+            "y": 582.697679
+          },
+          {
+            "frame": 22,
+            "x": 565.889738,
+            "y": 554.22625
+          },
+          {
+            "frame": 23,
+            "x": 567.380619,
+            "y": 520.870274
+          },
+          {
+            "frame": 24,
+            "x": 568.8715,
+            "y": 482.62975
+          },
+          {
+            "frame": 25,
+            "x": 570.362381,
+            "y": 439.504679
+          },
+          {
+            "frame": 26,
+            "x": 571.853262,
+            "y": 391.49506
+          }
+        ]
+      },
+      {
+        "trajectory_id": 2,
+        "source_tracklet": 2,
+        "successor_tracklet": 8,
+        "source_end_frame": 17,
+        "successor_start_frame": 43,
+        "gap_frames": 25,
+        "error_px": 522.785387,
+        "q90_gate_px": 540.4,
+        "normalized_error": 0.967404,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 18,
+            "x": 919.485419,
+            "y": 547.450793
+          },
+          {
+            "frame": 19,
+            "x": 932.214738,
+            "y": 551.854438
+          },
+          {
+            "frame": 20,
+            "x": 944.944057,
+            "y": 555.716868
+          },
+          {
+            "frame": 21,
+            "x": 957.673375,
+            "y": 559.038083
+          },
+          {
+            "frame": 22,
+            "x": 970.402694,
+            "y": 561.818082
+          },
+          {
+            "frame": 23,
+            "x": 983.132013,
+            "y": 564.056866
+          },
+          {
+            "frame": 24,
+            "x": 995.861332,
+            "y": 565.754435
+          },
+          {
+            "frame": 25,
+            "x": 1008.590651,
+            "y": 566.910788
+          },
+          {
+            "frame": 26,
+            "x": 1021.31997,
+            "y": 567.525926
+          },
+          {
+            "frame": 27,
+            "x": 1034.049289,
+            "y": 567.599849
+          },
+          {
+            "frame": 28,
+            "x": 1046.778608,
+            "y": 567.132556
+          },
+          {
+            "frame": 29,
+            "x": 1059.507927,
+            "y": 566.124047
+          },
+          {
+            "frame": 30,
+            "x": 1072.237245,
+            "y": 564.574324
+          },
+          {
+            "frame": 31,
+            "x": 1084.966564,
+            "y": 562.483385
+          },
+          {
+            "frame": 32,
+            "x": 1097.695883,
+            "y": 559.85123
+          },
+          {
+            "frame": 33,
+            "x": 1110.425202,
+            "y": 556.67786
+          },
+          {
+            "frame": 34,
+            "x": 1123.154521,
+            "y": 552.963275
+          },
+          {
+            "frame": 35,
+            "x": 1135.88384,
+            "y": 548.707474
+          },
+          {
+            "frame": 36,
+            "x": 1148.613159,
+            "y": 543.910458
+          },
+          {
+            "frame": 37,
+            "x": 1161.342478,
+            "y": 538.572227
+          },
+          {
+            "frame": 38,
+            "x": 1174.071797,
+            "y": 532.69278
+          },
+          {
+            "frame": 39,
+            "x": 1186.801116,
+            "y": 526.272118
+          },
+          {
+            "frame": 40,
+            "x": 1199.530434,
+            "y": 519.31024
+          },
+          {
+            "frame": 41,
+            "x": 1212.259753,
+            "y": 511.807148
+          },
+          {
+            "frame": 42,
+            "x": 1224.989072,
+            "y": 503.762839
+          }
+        ]
+      },
+      {
+        "trajectory_id": 2,
+        "source_tracklet": 8,
+        "successor_tracklet": 9,
+        "source_end_frame": 46,
+        "successor_start_frame": 51,
+        "gap_frames": 4,
+        "error_px": 40.910882,
+        "q90_gate_px": 41.7,
+        "normalized_error": 0.981076,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 47,
+            "x": 740.067,
+            "y": 552.5035
+          },
+          {
+            "frame": 48,
+            "x": 743.4622,
+            "y": 525.9141
+          },
+          {
+            "frame": 49,
+            "x": 746.8574,
+            "y": 493.6367
+          },
+          {
+            "frame": 50,
+            "x": 750.2526,
+            "y": 455.6713
+          }
+        ]
+      },
+      {
+        "trajectory_id": 6,
+        "source_tracklet": 7,
+        "successor_tracklet": 10,
+        "source_end_frame": 56,
+        "successor_start_frame": 64,
+        "gap_frames": 7,
+        "error_px": 147.292902,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.997244,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 57,
+            "x": 769.642143,
+            "y": 432.416946
+          },
+          {
+            "frame": 58,
+            "x": 803.702202,
+            "y": 441.843375
+          },
+          {
+            "frame": 59,
+            "x": 837.762262,
+            "y": 453.444077
+          },
+          {
+            "frame": 60,
+            "x": 871.822321,
+            "y": 467.219054
+          },
+          {
+            "frame": 61,
+            "x": 905.882381,
+            "y": 483.168304
+          },
+          {
+            "frame": 62,
+            "x": 939.94244,
+            "y": 501.291827
+          },
+          {
+            "frame": 63,
+            "x": 974.0025,
+            "y": 521.589625
+          }
+        ]
+      },
+      {
+        "trajectory_id": 6,
+        "source_tracklet": 10,
+        "successor_tracklet": 11,
+        "source_end_frame": 79,
+        "successor_start_frame": 87,
+        "gap_frames": 7,
+        "error_px": 122.190536,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.827289,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 80,
+            "x": 565.979393,
+            "y": 449.607696
+          },
+          {
+            "frame": 81,
+            "x": 533.238369,
+            "y": 454.837101
+          },
+          {
+            "frame": 82,
+            "x": 500.497345,
+            "y": 462.331589
+          },
+          {
+            "frame": 83,
+            "x": 467.756321,
+            "y": 472.091161
+          },
+          {
+            "frame": 84,
+            "x": 435.015298,
+            "y": 484.115815
+          },
+          {
+            "frame": 85,
+            "x": 402.274274,
+            "y": 498.405554
+          },
+          {
+            "frame": 86,
+            "x": 369.53325,
+            "y": 514.960375
+          }
+        ]
+      },
+      {
+        "trajectory_id": 1,
+        "source_tracklet": 6,
+        "successor_tracklet": 14,
+        "source_end_frame": 122,
+        "successor_start_frame": 126,
+        "gap_frames": 3,
+        "error_px": 37.217019,
+        "q90_gate_px": 41.7,
+        "normalized_error": 0.892494,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 123,
+            "x": 592.237036,
+            "y": 549.545857
+          },
+          {
+            "frame": 124,
+            "x": 599.310405,
+            "y": 518.430476
+          },
+          {
+            "frame": 125,
+            "x": 606.383774,
+            "y": 481.88419
+          }
+        ]
+      },
+      {
+        "trajectory_id": 7,
+        "source_tracklet": 12,
+        "successor_tracklet": 18,
+        "source_end_frame": 149,
+        "successor_start_frame": 166,
+        "gap_frames": 16,
+        "error_px": 358.561761,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.706944,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 150,
+            "x": 787.954071,
+            "y": 539.429857
+          },
+          {
+            "frame": 151,
+            "x": 787.261893,
+            "y": 515.8265
+          },
+          {
+            "frame": 152,
+            "x": 786.569714,
+            "y": 489.472595
+          },
+          {
+            "frame": 153,
+            "x": 785.877536,
+            "y": 460.368143
+          },
+          {
+            "frame": 154,
+            "x": 785.185357,
+            "y": 428.513143
+          },
+          {
+            "frame": 155,
+            "x": 784.493179,
+            "y": 393.907595
+          },
+          {
+            "frame": 156,
+            "x": 783.801,
+            "y": 356.5515
+          },
+          {
+            "frame": 157,
+            "x": 783.108821,
+            "y": 316.444857
+          },
+          {
+            "frame": 158,
+            "x": 782.416643,
+            "y": 273.587667
+          },
+          {
+            "frame": 159,
+            "x": 781.724464,
+            "y": 227.979929
+          },
+          {
+            "frame": 160,
+            "x": 781.032286,
+            "y": 179.621643
+          },
+          {
+            "frame": 161,
+            "x": 780.340107,
+            "y": 128.51281
+          },
+          {
+            "frame": 162,
+            "x": 779.647929,
+            "y": 74.653429
+          },
+          {
+            "frame": 163,
+            "x": 778.95575,
+            "y": 18.0435
+          },
+          {
+            "frame": 164,
+            "x": 778.263571,
+            "y": -41.316976
+          },
+          {
+            "frame": 165,
+            "x": 777.571393,
+            "y": -103.428
+          }
+        ]
+      },
+      {
+        "trajectory_id": 12,
+        "source_tracklet": 19,
+        "successor_tracklet": 20,
+        "source_end_frame": 195,
+        "successor_start_frame": 202,
+        "gap_frames": 6,
+        "error_px": 33.675377,
+        "q90_gate_px": 74.8,
+        "normalized_error": 0.450206,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 196,
+            "x": 465.437383,
+            "y": 60.221581
+          },
+          {
+            "frame": 197,
+            "x": 466.743083,
+            "y": 57.372181
+          },
+          {
+            "frame": 198,
+            "x": 468.048782,
+            "y": 56.047151
+          },
+          {
+            "frame": 199,
+            "x": 469.354481,
+            "y": 56.246493
+          },
+          {
+            "frame": 200,
+            "x": 470.66018,
+            "y": 57.970206
+          },
+          {
+            "frame": 201,
+            "x": 471.96588,
+            "y": 61.21829
+          }
+        ]
+      },
+      {
+        "trajectory_id": 11,
+        "source_tracklet": 17,
+        "successor_tracklet": 21,
+        "source_end_frame": 207,
+        "successor_start_frame": 212,
+        "gap_frames": 4,
+        "error_px": 32.345288,
+        "q90_gate_px": 41.7,
+        "normalized_error": 0.775666,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 208,
+            "x": 605.948286,
+            "y": 492.402482
+          },
+          {
+            "frame": 209,
+            "x": 602.418405,
+            "y": 453.967649
+          },
+          {
+            "frame": 210,
+            "x": 598.888524,
+            "y": 411.319208
+          },
+          {
+            "frame": 211,
+            "x": 595.358643,
+            "y": 364.457161
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 23,
+        "successor_tracklet": 25,
+        "source_end_frame": 235,
+        "successor_start_frame": 243,
+        "gap_frames": 7,
+        "error_px": 3.126814,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.02117,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 236,
+            "x": 600.2195,
+            "y": 377.24175
+          },
+          {
+            "frame": 237,
+            "x": 599.7409,
+            "y": 384.84475
+          },
+          {
+            "frame": 238,
+            "x": 599.2623,
+            "y": 394.37525
+          },
+          {
+            "frame": 239,
+            "x": 598.7837,
+            "y": 405.83325
+          },
+          {
+            "frame": 240,
+            "x": 598.3051,
+            "y": 419.21875
+          },
+          {
+            "frame": 241,
+            "x": 597.8265,
+            "y": 434.53175
+          },
+          {
+            "frame": 242,
+            "x": 597.3479,
+            "y": 451.77225
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 25,
+        "successor_tracklet": 27,
+        "source_end_frame": 255,
+        "successor_start_frame": 263,
+        "gap_frames": 7,
+        "error_px": 86.369312,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.584762,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 256,
+            "x": 589.967417,
+            "y": 663.674358
+          },
+          {
+            "frame": 257,
+            "x": 589.721198,
+            "y": 674.533281
+          },
+          {
+            "frame": 258,
+            "x": 589.474979,
+            "y": 684.8435
+          },
+          {
+            "frame": 259,
+            "x": 589.22876,
+            "y": 694.605016
+          },
+          {
+            "frame": 260,
+            "x": 588.982542,
+            "y": 703.817827
+          },
+          {
+            "frame": 261,
+            "x": 588.736323,
+            "y": 712.481935
+          },
+          {
+            "frame": 262,
+            "x": 588.490104,
+            "y": 720.597339
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 27,
+        "successor_tracklet": 28,
+        "source_end_frame": 312,
+        "successor_start_frame": 333,
+        "gap_frames": 20,
+        "error_px": 30.105532,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.059356,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 313,
+            "x": 620.133714,
+            "y": 275.544964
+          },
+          {
+            "frame": 314,
+            "x": 620.449012,
+            "y": 267.364417
+          },
+          {
+            "frame": 315,
+            "x": 620.76431,
+            "y": 259.19844
+          },
+          {
+            "frame": 316,
+            "x": 621.079607,
+            "y": 251.047036
+          },
+          {
+            "frame": 317,
+            "x": 621.394905,
+            "y": 242.910202
+          },
+          {
+            "frame": 318,
+            "x": 621.710202,
+            "y": 234.78794
+          },
+          {
+            "frame": 319,
+            "x": 622.0255,
+            "y": 226.68025
+          },
+          {
+            "frame": 320,
+            "x": 622.340798,
+            "y": 218.587131
+          },
+          {
+            "frame": 321,
+            "x": 622.656095,
+            "y": 210.508583
+          },
+          {
+            "frame": 322,
+            "x": 622.971393,
+            "y": 202.444607
+          },
+          {
+            "frame": 323,
+            "x": 623.28669,
+            "y": 194.395202
+          },
+          {
+            "frame": 324,
+            "x": 623.601988,
+            "y": 186.360369
+          },
+          {
+            "frame": 325,
+            "x": 623.917286,
+            "y": 178.340107
+          },
+          {
+            "frame": 326,
+            "x": 624.232583,
+            "y": 170.334417
+          },
+          {
+            "frame": 327,
+            "x": 624.547881,
+            "y": 162.343298
+          },
+          {
+            "frame": 328,
+            "x": 624.863179,
+            "y": 154.36675
+          },
+          {
+            "frame": 329,
+            "x": 625.178476,
+            "y": 146.404774
+          },
+          {
+            "frame": 330,
+            "x": 625.493774,
+            "y": 138.457369
+          },
+          {
+            "frame": 331,
+            "x": 625.809071,
+            "y": 130.524536
+          },
+          {
+            "frame": 332,
+            "x": 626.124369,
+            "y": 122.606274
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 28,
+        "successor_tracklet": 29,
+        "source_end_frame": 382,
+        "successor_start_frame": 391,
+        "gap_frames": 8,
+        "error_px": 3.859663,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.026132,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 383,
+            "x": 642.444987,
+            "y": 18.085739
+          },
+          {
+            "frame": 384,
+            "x": 642.715553,
+            "y": 18.59311
+          },
+          {
+            "frame": 385,
+            "x": 642.986118,
+            "y": 19.200933
+          },
+          {
+            "frame": 386,
+            "x": 643.256684,
+            "y": 19.909208
+          },
+          {
+            "frame": 387,
+            "x": 643.52725,
+            "y": 20.717935
+          },
+          {
+            "frame": 388,
+            "x": 643.797816,
+            "y": 21.627114
+          },
+          {
+            "frame": 389,
+            "x": 644.068382,
+            "y": 22.636745
+          },
+          {
+            "frame": 390,
+            "x": 644.338947,
+            "y": 23.746828
+          }
+        ]
+      },
+      {
+        "trajectory_id": 17,
+        "source_tracklet": 30,
+        "successor_tracklet": 33,
+        "source_end_frame": 450,
+        "successor_start_frame": 461,
+        "gap_frames": 10,
+        "error_px": 13.858942,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.093832,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 451,
+            "x": 707.102206,
+            "y": 451.13109
+          },
+          {
+            "frame": 452,
+            "x": 707.886175,
+            "y": 458.07608
+          },
+          {
+            "frame": 453,
+            "x": 708.670145,
+            "y": 465.205874
+          },
+          {
+            "frame": 454,
+            "x": 709.454114,
+            "y": 472.520472
+          },
+          {
+            "frame": 455,
+            "x": 710.238083,
+            "y": 480.019874
+          },
+          {
+            "frame": 456,
+            "x": 711.022053,
+            "y": 487.704081
+          },
+          {
+            "frame": 457,
+            "x": 711.806022,
+            "y": 495.573092
+          },
+          {
+            "frame": 458,
+            "x": 712.589991,
+            "y": 503.626906
+          },
+          {
+            "frame": 459,
+            "x": 713.373961,
+            "y": 511.865525
+          },
+          {
+            "frame": 460,
+            "x": 714.15793,
+            "y": 520.288948
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 29,
+        "successor_tracklet": 34,
+        "source_end_frame": 460,
+        "successor_start_frame": 471,
+        "gap_frames": 10,
+        "error_px": 22.516658,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.152449,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 461,
+            "x": 667.03309,
+            "y": 404.863406
+          },
+          {
+            "frame": 462,
+            "x": 667.392653,
+            "y": 412.900352
+          },
+          {
+            "frame": 463,
+            "x": 667.752217,
+            "y": 420.842069
+          },
+          {
+            "frame": 464,
+            "x": 668.11178,
+            "y": 428.688557
+          },
+          {
+            "frame": 465,
+            "x": 668.471343,
+            "y": 436.439816
+          },
+          {
+            "frame": 466,
+            "x": 668.830906,
+            "y": 444.095846
+          },
+          {
+            "frame": 467,
+            "x": 669.190469,
+            "y": 451.656647
+          },
+          {
+            "frame": 468,
+            "x": 669.550032,
+            "y": 459.122219
+          },
+          {
+            "frame": 469,
+            "x": 669.909596,
+            "y": 466.492561
+          },
+          {
+            "frame": 470,
+            "x": 670.269159,
+            "y": 473.767675
+          }
+        ]
+      },
+      {
+        "trajectory_id": 18,
+        "source_tracklet": 31,
+        "successor_tracklet": 36,
+        "source_end_frame": 522,
+        "successor_start_frame": 533,
+        "gap_frames": 10,
+        "error_px": 10.826554,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.073301,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 523,
+            "x": 504.624788,
+            "y": 78.920798
+          },
+          {
+            "frame": 524,
+            "x": 504.305928,
+            "y": 81.278377
+          },
+          {
+            "frame": 525,
+            "x": 503.987068,
+            "y": 83.649931
+          },
+          {
+            "frame": 526,
+            "x": 503.668207,
+            "y": 86.03546
+          },
+          {
+            "frame": 527,
+            "x": 503.349347,
+            "y": 88.434965
+          },
+          {
+            "frame": 528,
+            "x": 503.030486,
+            "y": 90.848445
+          },
+          {
+            "frame": 529,
+            "x": 502.711626,
+            "y": 93.2759
+          },
+          {
+            "frame": 530,
+            "x": 502.392766,
+            "y": 95.71733
+          },
+          {
+            "frame": 531,
+            "x": 502.073905,
+            "y": 98.172736
+          },
+          {
+            "frame": 532,
+            "x": 501.755045,
+            "y": 100.642117
+          }
+        ]
+      },
+      {
+        "trajectory_id": 20,
+        "source_tracklet": 35,
+        "successor_tracklet": 37,
+        "source_end_frame": 522,
+        "successor_start_frame": 533,
+        "gap_frames": 10,
+        "error_px": 31.287825,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.211834,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 523,
+            "x": 726.274214,
+            "y": 516.734089
+          },
+          {
+            "frame": 524,
+            "x": 726.179512,
+            "y": 512.264637
+          },
+          {
+            "frame": 525,
+            "x": 726.08481,
+            "y": 507.323101
+          },
+          {
+            "frame": 526,
+            "x": 725.990107,
+            "y": 501.909482
+          },
+          {
+            "frame": 527,
+            "x": 725.895405,
+            "y": 496.02378
+          },
+          {
+            "frame": 528,
+            "x": 725.800702,
+            "y": 489.665994
+          },
+          {
+            "frame": 529,
+            "x": 725.706,
+            "y": 482.836125
+          },
+          {
+            "frame": 530,
+            "x": 725.611298,
+            "y": 475.534173
+          },
+          {
+            "frame": 531,
+            "x": 725.516595,
+            "y": 467.760137
+          },
+          {
+            "frame": 532,
+            "x": 725.421893,
+            "y": 459.514018
+          }
+        ]
+      },
+      {
+        "trajectory_id": 18,
+        "source_tracklet": 36,
+        "successor_tracklet": 42,
+        "source_end_frame": 578,
+        "successor_start_frame": 593,
+        "gap_frames": 14,
+        "error_px": 70.815058,
+        "q90_gate_px": 225.1,
+        "normalized_error": 0.314594,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 579,
+            "x": 488.933197,
+            "y": 444.927958
+          },
+          {
+            "frame": 580,
+            "x": 488.756224,
+            "y": 454.726573
+          },
+          {
+            "frame": 581,
+            "x": 488.57925,
+            "y": 464.615356
+          },
+          {
+            "frame": 582,
+            "x": 488.402276,
+            "y": 474.594307
+          },
+          {
+            "frame": 583,
+            "x": 488.225303,
+            "y": 484.663425
+          },
+          {
+            "frame": 584,
+            "x": 488.048329,
+            "y": 494.822711
+          },
+          {
+            "frame": 585,
+            "x": 487.871355,
+            "y": 505.072164
+          },
+          {
+            "frame": 586,
+            "x": 487.694382,
+            "y": 515.411785
+          },
+          {
+            "frame": 587,
+            "x": 487.517408,
+            "y": 525.841574
+          },
+          {
+            "frame": 588,
+            "x": 487.340434,
+            "y": 536.36153
+          },
+          {
+            "frame": 589,
+            "x": 487.163461,
+            "y": 546.971653
+          },
+          {
+            "frame": 590,
+            "x": 486.986487,
+            "y": 557.671945
+          },
+          {
+            "frame": 591,
+            "x": 486.809513,
+            "y": 568.462403
+          },
+          {
+            "frame": 592,
+            "x": 486.632539,
+            "y": 579.343029
+          }
+        ]
+      },
+      {
+        "trajectory_id": 23,
+        "source_tracklet": 40,
+        "successor_tracklet": 41,
+        "source_end_frame": 582,
+        "successor_start_frame": 591,
+        "gap_frames": 8,
+        "error_px": 17.706991,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.119885,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 583,
+            "x": 625.731536,
+            "y": 345.328786
+          },
+          {
+            "frame": 584,
+            "x": 624.323655,
+            "y": 345.974619
+          },
+          {
+            "frame": 585,
+            "x": 622.915774,
+            "y": 346.824667
+          },
+          {
+            "frame": 586,
+            "x": 621.507893,
+            "y": 347.878929
+          },
+          {
+            "frame": 587,
+            "x": 620.100012,
+            "y": 349.137405
+          },
+          {
+            "frame": 588,
+            "x": 618.692131,
+            "y": 350.600095
+          },
+          {
+            "frame": 589,
+            "x": 617.28425,
+            "y": 352.267
+          },
+          {
+            "frame": 590,
+            "x": 615.876369,
+            "y": 354.138119
+          }
+        ]
+      },
+      {
+        "trajectory_id": 18,
+        "source_tracklet": 42,
+        "successor_tracklet": 44,
+        "source_end_frame": 598,
+        "successor_start_frame": 623,
+        "gap_frames": 24,
+        "error_px": 161.739242,
+        "q90_gate_px": 540.4,
+        "normalized_error": 0.299295,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 599,
+            "x": 473.670824,
+            "y": 532.282794
+          },
+          {
+            "frame": 600,
+            "x": 471.974559,
+            "y": 535.537735
+          },
+          {
+            "frame": 601,
+            "x": 470.278294,
+            "y": 539.115676
+          },
+          {
+            "frame": 602,
+            "x": 468.582029,
+            "y": 543.016618
+          },
+          {
+            "frame": 603,
+            "x": 466.885765,
+            "y": 547.240559
+          },
+          {
+            "frame": 604,
+            "x": 465.1895,
+            "y": 551.7875
+          },
+          {
+            "frame": 605,
+            "x": 463.493235,
+            "y": 556.657441
+          },
+          {
+            "frame": 606,
+            "x": 461.796971,
+            "y": 561.850382
+          },
+          {
+            "frame": 607,
+            "x": 460.100706,
+            "y": 567.366324
+          },
+          {
+            "frame": 608,
+            "x": 458.404441,
+            "y": 573.205265
+          },
+          {
+            "frame": 609,
+            "x": 456.708176,
+            "y": 579.367206
+          },
+          {
+            "frame": 610,
+            "x": 455.011912,
+            "y": 585.852147
+          },
+          {
+            "frame": 611,
+            "x": 453.315647,
+            "y": 592.660088
+          },
+          {
+            "frame": 612,
+            "x": 451.619382,
+            "y": 599.791029
+          },
+          {
+            "frame": 613,
+            "x": 449.923118,
+            "y": 607.244971
+          },
+          {
+            "frame": 614,
+            "x": 448.226853,
+            "y": 615.021912
+          },
+          {
+            "frame": 615,
+            "x": 446.530588,
+            "y": 623.121853
+          },
+          {
+            "frame": 616,
+            "x": 444.834324,
+            "y": 631.544794
+          },
+          {
+            "frame": 617,
+            "x": 443.138059,
+            "y": 640.290735
+          },
+          {
+            "frame": 618,
+            "x": 441.441794,
+            "y": 649.359676
+          },
+          {
+            "frame": 619,
+            "x": 439.745529,
+            "y": 658.751618
+          },
+          {
+            "frame": 620,
+            "x": 438.049265,
+            "y": 668.466559
+          },
+          {
+            "frame": 621,
+            "x": 436.353,
+            "y": 678.5045
+          },
+          {
+            "frame": 622,
+            "x": 434.656735,
+            "y": 688.865441
+          }
+        ]
+      },
+      {
+        "trajectory_id": 23,
+        "source_tracklet": 41,
+        "successor_tracklet": 43,
+        "source_end_frame": 608,
+        "successor_start_frame": 621,
+        "gap_frames": 12,
+        "error_px": 8.230424,
+        "q90_gate_px": 225.1,
+        "normalized_error": 0.036563,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 609,
+            "x": 622.165903,
+            "y": 334.999938
+          },
+          {
+            "frame": 610,
+            "x": 621.856929,
+            "y": 334.001535
+          },
+          {
+            "frame": 611,
+            "x": 621.547955,
+            "y": 332.917531
+          },
+          {
+            "frame": 612,
+            "x": 621.238981,
+            "y": 331.747926
+          },
+          {
+            "frame": 613,
+            "x": 620.930007,
+            "y": 330.492722
+          },
+          {
+            "frame": 614,
+            "x": 620.621033,
+            "y": 329.151917
+          },
+          {
+            "frame": 615,
+            "x": 620.312059,
+            "y": 327.725511
+          },
+          {
+            "frame": 616,
+            "x": 620.003085,
+            "y": 326.213506
+          },
+          {
+            "frame": 617,
+            "x": 619.694111,
+            "y": 324.6159
+          },
+          {
+            "frame": 618,
+            "x": 619.385137,
+            "y": 322.932693
+          },
+          {
+            "frame": 619,
+            "x": 619.076163,
+            "y": 321.163887
+          },
+          {
+            "frame": 620,
+            "x": 618.767189,
+            "y": 319.30948
+          }
+        ]
+      },
+      {
+        "trajectory_id": 24,
+        "source_tracklet": 45,
+        "successor_tracklet": 46,
+        "source_end_frame": 670,
+        "successor_start_frame": 679,
+        "gap_frames": 8,
+        "error_px": 1.491456,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.010098,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 671,
+            "x": 608.707036,
+            "y": 393.635607
+          },
+          {
+            "frame": 672,
+            "x": 608.508571,
+            "y": 397.97194
+          },
+          {
+            "frame": 673,
+            "x": 608.310107,
+            "y": 402.42825
+          },
+          {
+            "frame": 674,
+            "x": 608.111643,
+            "y": 407.004536
+          },
+          {
+            "frame": 675,
+            "x": 607.913179,
+            "y": 411.700798
+          },
+          {
+            "frame": 676,
+            "x": 607.714714,
+            "y": 416.517036
+          },
+          {
+            "frame": 677,
+            "x": 607.51625,
+            "y": 421.45325
+          },
+          {
+            "frame": 678,
+            "x": 607.317786,
+            "y": 426.50944
+          }
+        ]
+      },
+      {
+        "trajectory_id": 22,
+        "source_tracklet": 39,
+        "successor_tracklet": 47,
+        "source_end_frame": 676,
+        "successor_start_frame": 685,
+        "gap_frames": 8,
+        "error_px": 12.344968,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.083581,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 677,
+            "x": 556.396157,
+            "y": 204.769731
+          },
+          {
+            "frame": 678,
+            "x": 555.978879,
+            "y": 211.236196
+          },
+          {
+            "frame": 679,
+            "x": 555.561601,
+            "y": 217.728818
+          },
+          {
+            "frame": 680,
+            "x": 555.144323,
+            "y": 224.247598
+          },
+          {
+            "frame": 681,
+            "x": 554.727045,
+            "y": 230.792534
+          },
+          {
+            "frame": 682,
+            "x": 554.309766,
+            "y": 237.363627
+          },
+          {
+            "frame": 683,
+            "x": 553.892488,
+            "y": 243.960877
+          },
+          {
+            "frame": 684,
+            "x": 553.47521,
+            "y": 250.584285
+          }
+        ]
+      },
+      {
+        "trajectory_id": 24,
+        "source_tracklet": 46,
+        "successor_tracklet": 50,
+        "source_end_frame": 716,
+        "successor_start_frame": 733,
+        "gap_frames": 16,
+        "error_px": 118.623953,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.23388,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 717,
+            "x": 582.2725,
+            "y": 602.423964
+          },
+          {
+            "frame": 718,
+            "x": 580.73025,
+            "y": 607.499798
+          },
+          {
+            "frame": 719,
+            "x": 579.188,
+            "y": 613.310917
+          },
+          {
+            "frame": 720,
+            "x": 577.64575,
+            "y": 619.857321
+          },
+          {
+            "frame": 721,
+            "x": 576.1035,
+            "y": 627.139012
+          },
+          {
+            "frame": 722,
+            "x": 574.56125,
+            "y": 635.155988
+          },
+          {
+            "frame": 723,
+            "x": 573.019,
+            "y": 643.90825
+          },
+          {
+            "frame": 724,
+            "x": 571.47675,
+            "y": 653.395798
+          },
+          {
+            "frame": 725,
+            "x": 569.9345,
+            "y": 663.618631
+          },
+          {
+            "frame": 726,
+            "x": 568.39225,
+            "y": 674.57675
+          },
+          {
+            "frame": 727,
+            "x": 566.85,
+            "y": 686.270155
+          },
+          {
+            "frame": 728,
+            "x": 565.30775,
+            "y": 698.698845
+          },
+          {
+            "frame": 729,
+            "x": 563.7655,
+            "y": 711.862821
+          },
+          {
+            "frame": 730,
+            "x": 562.22325,
+            "y": 725.762083
+          },
+          {
+            "frame": 731,
+            "x": 560.681,
+            "y": 740.396631
+          },
+          {
+            "frame": 732,
+            "x": 559.13875,
+            "y": 755.766464
+          }
+        ]
+      },
+      {
+        "trajectory_id": 22,
+        "source_tracklet": 47,
+        "successor_tracklet": 52,
+        "source_end_frame": 766,
+        "successor_start_frame": 775,
+        "gap_frames": 8,
+        "error_px": 36.293217,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.245723,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 767,
+            "x": 621.650125,
+            "y": 501.076035
+          },
+          {
+            "frame": 768,
+            "x": 620.792325,
+            "y": 496.518414
+          },
+          {
+            "frame": 769,
+            "x": 619.934525,
+            "y": 492.205526
+          },
+          {
+            "frame": 770,
+            "x": 619.076725,
+            "y": 488.13737
+          },
+          {
+            "frame": 771,
+            "x": 618.218925,
+            "y": 484.313947
+          },
+          {
+            "frame": 772,
+            "x": 617.361125,
+            "y": 480.735256
+          },
+          {
+            "frame": 773,
+            "x": 616.503325,
+            "y": 477.401298
+          },
+          {
+            "frame": 774,
+            "x": 615.645525,
+            "y": 474.312072
+          }
+        ]
+      },
+      {
+        "trajectory_id": 22,
+        "source_tracklet": 52,
+        "successor_tracklet": 54,
+        "source_end_frame": 780,
+        "successor_start_frame": 797,
+        "gap_frames": 16,
+        "error_px": 172.143182,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.339399,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 781,
+            "x": 565.161933,
+            "y": 380.5686
+          },
+          {
+            "frame": 782,
+            "x": 559.48939,
+            "y": 375.665057
+          },
+          {
+            "frame": 783,
+            "x": 553.816848,
+            "y": 372.156514
+          },
+          {
+            "frame": 784,
+            "x": 548.144305,
+            "y": 370.042971
+          },
+          {
+            "frame": 785,
+            "x": 542.471762,
+            "y": 369.324429
+          },
+          {
+            "frame": 786,
+            "x": 536.799219,
+            "y": 370.000886
+          },
+          {
+            "frame": 787,
+            "x": 531.126676,
+            "y": 372.072343
+          },
+          {
+            "frame": 788,
+            "x": 525.454133,
+            "y": 375.5388
+          },
+          {
+            "frame": 789,
+            "x": 519.78159,
+            "y": 380.400257
+          },
+          {
+            "frame": 790,
+            "x": 514.109048,
+            "y": 386.656714
+          },
+          {
+            "frame": 791,
+            "x": 508.436505,
+            "y": 394.308171
+          },
+          {
+            "frame": 792,
+            "x": 502.763962,
+            "y": 403.354629
+          },
+          {
+            "frame": 793,
+            "x": 497.091419,
+            "y": 413.796086
+          },
+          {
+            "frame": 794,
+            "x": 491.418876,
+            "y": 425.632543
+          },
+          {
+            "frame": 795,
+            "x": 485.746333,
+            "y": 438.864
+          },
+          {
+            "frame": 796,
+            "x": 480.07379,
+            "y": 453.490457
+          }
+        ]
+      },
+      {
+        "trajectory_id": 24,
+        "source_tracklet": 50,
+        "successor_tracklet": 55,
+        "source_end_frame": 805,
+        "successor_start_frame": 811,
+        "gap_frames": 5,
+        "error_px": 21.955044,
+        "q90_gate_px": 74.8,
+        "normalized_error": 0.293517,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 806,
+            "x": 583.5375,
+            "y": 144.689946
+          },
+          {
+            "frame": 807,
+            "x": 585.616,
+            "y": 174.746589
+          },
+          {
+            "frame": 808,
+            "x": 587.6945,
+            "y": 207.898887
+          },
+          {
+            "frame": 809,
+            "x": 589.773,
+            "y": 244.146839
+          },
+          {
+            "frame": 810,
+            "x": 591.8515,
+            "y": 283.490446
+          }
+        ]
+      },
+      {
+        "trajectory_id": 33,
+        "source_tracklet": 60,
+        "successor_tracklet": 64,
+        "source_end_frame": 936,
+        "successor_start_frame": 944,
+        "gap_frames": 7,
+        "error_px": 7.256442,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.04913,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 937,
+            "x": 423.329536,
+            "y": 100.532536
+          },
+          {
+            "frame": 938,
+            "x": 427.775571,
+            "y": 107.939869
+          },
+          {
+            "frame": 939,
+            "x": 432.221607,
+            "y": 117.409417
+          },
+          {
+            "frame": 940,
+            "x": 436.667643,
+            "y": 128.941179
+          },
+          {
+            "frame": 941,
+            "x": 441.113679,
+            "y": 142.535155
+          },
+          {
+            "frame": 942,
+            "x": 445.559714,
+            "y": 158.191345
+          },
+          {
+            "frame": 943,
+            "x": 450.00575,
+            "y": 175.90975
+          }
+        ]
+      },
+      {
+        "trajectory_id": 38,
+        "source_tracklet": 66,
+        "successor_tracklet": 69,
+        "source_end_frame": 965,
+        "successor_start_frame": 977,
+        "gap_frames": 11,
+        "error_px": 202.998787,
+        "q90_gate_px": 225.1,
+        "normalized_error": 0.901816,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 966,
+            "x": 746.737988,
+            "y": 504.772568
+          },
+          {
+            "frame": 967,
+            "x": 752.993529,
+            "y": 501.582045
+          },
+          {
+            "frame": 968,
+            "x": 759.24907,
+            "y": 497.777
+          },
+          {
+            "frame": 969,
+            "x": 765.504611,
+            "y": 493.357432
+          },
+          {
+            "frame": 970,
+            "x": 771.760152,
+            "y": 488.323341
+          },
+          {
+            "frame": 971,
+            "x": 778.015693,
+            "y": 482.674727
+          },
+          {
+            "frame": 972,
+            "x": 784.271233,
+            "y": 476.411591
+          },
+          {
+            "frame": 973,
+            "x": 790.526774,
+            "y": 469.533932
+          },
+          {
+            "frame": 974,
+            "x": 796.782315,
+            "y": 462.04175
+          },
+          {
+            "frame": 975,
+            "x": 803.037856,
+            "y": 453.935045
+          },
+          {
+            "frame": 976,
+            "x": 809.293397,
+            "y": 445.213818
+          }
+        ]
+      },
+      {
+        "trajectory_id": 38,
+        "source_tracklet": 69,
+        "successor_tracklet": 72,
+        "source_end_frame": 1011,
+        "successor_start_frame": 1029,
+        "gap_frames": 17,
+        "error_px": 288.618561,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.569043,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 1012,
+            "x": 696.078666,
+            "y": 461.877091
+          },
+          {
+            "frame": 1013,
+            "x": 713.565354,
+            "y": 456.577499
+          },
+          {
+            "frame": 1014,
+            "x": 731.052042,
+            "y": 452.016088
+          },
+          {
+            "frame": 1015,
+            "x": 748.53873,
+            "y": 448.192858
+          },
+          {
+            "frame": 1016,
+            "x": 766.025417,
+            "y": 445.107808
+          },
+          {
+            "frame": 1017,
+            "x": 783.512105,
+            "y": 442.76094
+          },
+          {
+            "frame": 1018,
+            "x": 800.998793,
+            "y": 441.152252
+          },
+          {
+            "frame": 1019,
+            "x": 818.485481,
+            "y": 440.281745
+          },
+          {
+            "frame": 1020,
+            "x": 835.972169,
+            "y": 440.149419
+          },
+          {
+            "frame": 1021,
+            "x": 853.458857,
+            "y": 440.755274
+          },
+          {
+            "frame": 1022,
+            "x": 870.945544,
+            "y": 442.099309
+          },
+          {
+            "frame": 1023,
+            "x": 888.432232,
+            "y": 444.181526
+          },
+          {
+            "frame": 1024,
+            "x": 905.91892,
+            "y": 447.001923
+          },
+          {
+            "frame": 1025,
+            "x": 923.405608,
+            "y": 450.560501
+          },
+          {
+            "frame": 1026,
+            "x": 940.892296,
+            "y": 454.85726
+          },
+          {
+            "frame": 1027,
+            "x": 958.378984,
+            "y": 459.8922
+          },
+          {
+            "frame": 1028,
+            "x": 975.865672,
+            "y": 465.665321
+          }
+        ]
+      },
+      {
+        "trajectory_id": 39,
+        "source_tracklet": 67,
+        "successor_tracklet": 70,
+        "source_end_frame": 1020,
+        "successor_start_frame": 1029,
+        "gap_frames": 8,
+        "error_px": 5.997377,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.040605,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 1021,
+            "x": 666.803036,
+            "y": 232.419179
+          },
+          {
+            "frame": 1022,
+            "x": 664.743405,
+            "y": 234.66044
+          },
+          {
+            "frame": 1023,
+            "x": 662.683774,
+            "y": 238.799536
+          },
+          {
+            "frame": 1024,
+            "x": 660.624143,
+            "y": 244.836464
+          },
+          {
+            "frame": 1025,
+            "x": 658.564512,
+            "y": 252.771226
+          },
+          {
+            "frame": 1026,
+            "x": 656.504881,
+            "y": 262.603821
+          },
+          {
+            "frame": 1027,
+            "x": 654.44525,
+            "y": 274.33425
+          },
+          {
+            "frame": 1028,
+            "x": 652.385619,
+            "y": 287.962512
+          }
+        ]
+      }
+    ],
+    "contact_events": [
+      {
+        "trajectory_id": 2,
+        "source_tracklet": 2,
+        "successor_tracklet": 8,
+        "source_end_frame": 17,
+        "successor_start_frame": 43,
+        "gap_frames": 25,
+        "error_px": 522.785387,
+        "q90_gate_px": 540.4,
+        "normalized_error": 0.967404,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 18,
+            "x": 919.485419,
+            "y": 547.450793
+          },
+          {
+            "frame": 19,
+            "x": 932.214738,
+            "y": 551.854438
+          },
+          {
+            "frame": 20,
+            "x": 944.944057,
+            "y": 555.716868
+          },
+          {
+            "frame": 21,
+            "x": 957.673375,
+            "y": 559.038083
+          },
+          {
+            "frame": 22,
+            "x": 970.402694,
+            "y": 561.818082
+          },
+          {
+            "frame": 23,
+            "x": 983.132013,
+            "y": 564.056866
+          },
+          {
+            "frame": 24,
+            "x": 995.861332,
+            "y": 565.754435
+          },
+          {
+            "frame": 25,
+            "x": 1008.590651,
+            "y": 566.910788
+          },
+          {
+            "frame": 26,
+            "x": 1021.31997,
+            "y": 567.525926
+          },
+          {
+            "frame": 27,
+            "x": 1034.049289,
+            "y": 567.599849
+          },
+          {
+            "frame": 28,
+            "x": 1046.778608,
+            "y": 567.132556
+          },
+          {
+            "frame": 29,
+            "x": 1059.507927,
+            "y": 566.124047
+          },
+          {
+            "frame": 30,
+            "x": 1072.237245,
+            "y": 564.574324
+          },
+          {
+            "frame": 31,
+            "x": 1084.966564,
+            "y": 562.483385
+          },
+          {
+            "frame": 32,
+            "x": 1097.695883,
+            "y": 559.85123
+          },
+          {
+            "frame": 33,
+            "x": 1110.425202,
+            "y": 556.67786
+          },
+          {
+            "frame": 34,
+            "x": 1123.154521,
+            "y": 552.963275
+          },
+          {
+            "frame": 35,
+            "x": 1135.88384,
+            "y": 548.707474
+          },
+          {
+            "frame": 36,
+            "x": 1148.613159,
+            "y": 543.910458
+          },
+          {
+            "frame": 37,
+            "x": 1161.342478,
+            "y": 538.572227
+          },
+          {
+            "frame": 38,
+            "x": 1174.071797,
+            "y": 532.69278
+          },
+          {
+            "frame": 39,
+            "x": 1186.801116,
+            "y": 526.272118
+          },
+          {
+            "frame": 40,
+            "x": 1199.530434,
+            "y": 519.31024
+          },
+          {
+            "frame": 41,
+            "x": 1212.259753,
+            "y": 511.807148
+          },
+          {
+            "frame": 42,
+            "x": 1224.989072,
+            "y": 503.762839
+          }
+        ]
+      },
+      {
+        "trajectory_id": 18,
+        "source_tracklet": 42,
+        "successor_tracklet": 44,
+        "source_end_frame": 598,
+        "successor_start_frame": 623,
+        "gap_frames": 24,
+        "error_px": 161.739242,
+        "q90_gate_px": 540.4,
+        "normalized_error": 0.299295,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 599,
+            "x": 473.670824,
+            "y": 532.282794
+          },
+          {
+            "frame": 600,
+            "x": 471.974559,
+            "y": 535.537735
+          },
+          {
+            "frame": 601,
+            "x": 470.278294,
+            "y": 539.115676
+          },
+          {
+            "frame": 602,
+            "x": 468.582029,
+            "y": 543.016618
+          },
+          {
+            "frame": 603,
+            "x": 466.885765,
+            "y": 547.240559
+          },
+          {
+            "frame": 604,
+            "x": 465.1895,
+            "y": 551.7875
+          },
+          {
+            "frame": 605,
+            "x": 463.493235,
+            "y": 556.657441
+          },
+          {
+            "frame": 606,
+            "x": 461.796971,
+            "y": 561.850382
+          },
+          {
+            "frame": 607,
+            "x": 460.100706,
+            "y": 567.366324
+          },
+          {
+            "frame": 608,
+            "x": 458.404441,
+            "y": 573.205265
+          },
+          {
+            "frame": 609,
+            "x": 456.708176,
+            "y": 579.367206
+          },
+          {
+            "frame": 610,
+            "x": 455.011912,
+            "y": 585.852147
+          },
+          {
+            "frame": 611,
+            "x": 453.315647,
+            "y": 592.660088
+          },
+          {
+            "frame": 612,
+            "x": 451.619382,
+            "y": 599.791029
+          },
+          {
+            "frame": 613,
+            "x": 449.923118,
+            "y": 607.244971
+          },
+          {
+            "frame": 614,
+            "x": 448.226853,
+            "y": 615.021912
+          },
+          {
+            "frame": 615,
+            "x": 446.530588,
+            "y": 623.121853
+          },
+          {
+            "frame": 616,
+            "x": 444.834324,
+            "y": 631.544794
+          },
+          {
+            "frame": 617,
+            "x": 443.138059,
+            "y": 640.290735
+          },
+          {
+            "frame": 618,
+            "x": 441.441794,
+            "y": 649.359676
+          },
+          {
+            "frame": 619,
+            "x": 439.745529,
+            "y": 658.751618
+          },
+          {
+            "frame": 620,
+            "x": 438.049265,
+            "y": 668.466559
+          },
+          {
+            "frame": 621,
+            "x": 436.353,
+            "y": 678.5045
+          },
+          {
+            "frame": 622,
+            "x": 434.656735,
+            "y": 688.865441
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 27,
+        "successor_tracklet": 28,
+        "source_end_frame": 312,
+        "successor_start_frame": 333,
+        "gap_frames": 20,
+        "error_px": 30.105532,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.059356,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 313,
+            "x": 620.133714,
+            "y": 275.544964
+          },
+          {
+            "frame": 314,
+            "x": 620.449012,
+            "y": 267.364417
+          },
+          {
+            "frame": 315,
+            "x": 620.76431,
+            "y": 259.19844
+          },
+          {
+            "frame": 316,
+            "x": 621.079607,
+            "y": 251.047036
+          },
+          {
+            "frame": 317,
+            "x": 621.394905,
+            "y": 242.910202
+          },
+          {
+            "frame": 318,
+            "x": 621.710202,
+            "y": 234.78794
+          },
+          {
+            "frame": 319,
+            "x": 622.0255,
+            "y": 226.68025
+          },
+          {
+            "frame": 320,
+            "x": 622.340798,
+            "y": 218.587131
+          },
+          {
+            "frame": 321,
+            "x": 622.656095,
+            "y": 210.508583
+          },
+          {
+            "frame": 322,
+            "x": 622.971393,
+            "y": 202.444607
+          },
+          {
+            "frame": 323,
+            "x": 623.28669,
+            "y": 194.395202
+          },
+          {
+            "frame": 324,
+            "x": 623.601988,
+            "y": 186.360369
+          },
+          {
+            "frame": 325,
+            "x": 623.917286,
+            "y": 178.340107
+          },
+          {
+            "frame": 326,
+            "x": 624.232583,
+            "y": 170.334417
+          },
+          {
+            "frame": 327,
+            "x": 624.547881,
+            "y": 162.343298
+          },
+          {
+            "frame": 328,
+            "x": 624.863179,
+            "y": 154.36675
+          },
+          {
+            "frame": 329,
+            "x": 625.178476,
+            "y": 146.404774
+          },
+          {
+            "frame": 330,
+            "x": 625.493774,
+            "y": 138.457369
+          },
+          {
+            "frame": 331,
+            "x": 625.809071,
+            "y": 130.524536
+          },
+          {
+            "frame": 332,
+            "x": 626.124369,
+            "y": 122.606274
+          }
+        ]
+      },
+      {
+        "trajectory_id": 38,
+        "source_tracklet": 69,
+        "successor_tracklet": 72,
+        "source_end_frame": 1011,
+        "successor_start_frame": 1029,
+        "gap_frames": 17,
+        "error_px": 288.618561,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.569043,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 1012,
+            "x": 696.078666,
+            "y": 461.877091
+          },
+          {
+            "frame": 1013,
+            "x": 713.565354,
+            "y": 456.577499
+          },
+          {
+            "frame": 1014,
+            "x": 731.052042,
+            "y": 452.016088
+          },
+          {
+            "frame": 1015,
+            "x": 748.53873,
+            "y": 448.192858
+          },
+          {
+            "frame": 1016,
+            "x": 766.025417,
+            "y": 445.107808
+          },
+          {
+            "frame": 1017,
+            "x": 783.512105,
+            "y": 442.76094
+          },
+          {
+            "frame": 1018,
+            "x": 800.998793,
+            "y": 441.152252
+          },
+          {
+            "frame": 1019,
+            "x": 818.485481,
+            "y": 440.281745
+          },
+          {
+            "frame": 1020,
+            "x": 835.972169,
+            "y": 440.149419
+          },
+          {
+            "frame": 1021,
+            "x": 853.458857,
+            "y": 440.755274
+          },
+          {
+            "frame": 1022,
+            "x": 870.945544,
+            "y": 442.099309
+          },
+          {
+            "frame": 1023,
+            "x": 888.432232,
+            "y": 444.181526
+          },
+          {
+            "frame": 1024,
+            "x": 905.91892,
+            "y": 447.001923
+          },
+          {
+            "frame": 1025,
+            "x": 923.405608,
+            "y": 450.560501
+          },
+          {
+            "frame": 1026,
+            "x": 940.892296,
+            "y": 454.85726
+          },
+          {
+            "frame": 1027,
+            "x": 958.378984,
+            "y": 459.8922
+          },
+          {
+            "frame": 1028,
+            "x": 975.865672,
+            "y": 465.665321
+          }
+        ]
+      },
+      {
+        "trajectory_id": 24,
+        "source_tracklet": 46,
+        "successor_tracklet": 50,
+        "source_end_frame": 716,
+        "successor_start_frame": 733,
+        "gap_frames": 16,
+        "error_px": 118.623953,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.23388,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 717,
+            "x": 582.2725,
+            "y": 602.423964
+          },
+          {
+            "frame": 718,
+            "x": 580.73025,
+            "y": 607.499798
+          },
+          {
+            "frame": 719,
+            "x": 579.188,
+            "y": 613.310917
+          },
+          {
+            "frame": 720,
+            "x": 577.64575,
+            "y": 619.857321
+          },
+          {
+            "frame": 721,
+            "x": 576.1035,
+            "y": 627.139012
+          },
+          {
+            "frame": 722,
+            "x": 574.56125,
+            "y": 635.155988
+          },
+          {
+            "frame": 723,
+            "x": 573.019,
+            "y": 643.90825
+          },
+          {
+            "frame": 724,
+            "x": 571.47675,
+            "y": 653.395798
+          },
+          {
+            "frame": 725,
+            "x": 569.9345,
+            "y": 663.618631
+          },
+          {
+            "frame": 726,
+            "x": 568.39225,
+            "y": 674.57675
+          },
+          {
+            "frame": 727,
+            "x": 566.85,
+            "y": 686.270155
+          },
+          {
+            "frame": 728,
+            "x": 565.30775,
+            "y": 698.698845
+          },
+          {
+            "frame": 729,
+            "x": 563.7655,
+            "y": 711.862821
+          },
+          {
+            "frame": 730,
+            "x": 562.22325,
+            "y": 725.762083
+          },
+          {
+            "frame": 731,
+            "x": 560.681,
+            "y": 740.396631
+          },
+          {
+            "frame": 732,
+            "x": 559.13875,
+            "y": 755.766464
+          }
+        ]
+      },
+      {
+        "trajectory_id": 22,
+        "source_tracklet": 52,
+        "successor_tracklet": 54,
+        "source_end_frame": 780,
+        "successor_start_frame": 797,
+        "gap_frames": 16,
+        "error_px": 172.143182,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.339399,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 781,
+            "x": 565.161933,
+            "y": 380.5686
+          },
+          {
+            "frame": 782,
+            "x": 559.48939,
+            "y": 375.665057
+          },
+          {
+            "frame": 783,
+            "x": 553.816848,
+            "y": 372.156514
+          },
+          {
+            "frame": 784,
+            "x": 548.144305,
+            "y": 370.042971
+          },
+          {
+            "frame": 785,
+            "x": 542.471762,
+            "y": 369.324429
+          },
+          {
+            "frame": 786,
+            "x": 536.799219,
+            "y": 370.000886
+          },
+          {
+            "frame": 787,
+            "x": 531.126676,
+            "y": 372.072343
+          },
+          {
+            "frame": 788,
+            "x": 525.454133,
+            "y": 375.5388
+          },
+          {
+            "frame": 789,
+            "x": 519.78159,
+            "y": 380.400257
+          },
+          {
+            "frame": 790,
+            "x": 514.109048,
+            "y": 386.656714
+          },
+          {
+            "frame": 791,
+            "x": 508.436505,
+            "y": 394.308171
+          },
+          {
+            "frame": 792,
+            "x": 502.763962,
+            "y": 403.354629
+          },
+          {
+            "frame": 793,
+            "x": 497.091419,
+            "y": 413.796086
+          },
+          {
+            "frame": 794,
+            "x": 491.418876,
+            "y": 425.632543
+          },
+          {
+            "frame": 795,
+            "x": 485.746333,
+            "y": 438.864
+          },
+          {
+            "frame": 796,
+            "x": 480.07379,
+            "y": 453.490457
+          }
+        ]
+      },
+      {
+        "trajectory_id": 7,
+        "source_tracklet": 12,
+        "successor_tracklet": 18,
+        "source_end_frame": 149,
+        "successor_start_frame": 166,
+        "gap_frames": 16,
+        "error_px": 358.561761,
+        "q90_gate_px": 507.2,
+        "normalized_error": 0.706944,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 150,
+            "x": 787.954071,
+            "y": 539.429857
+          },
+          {
+            "frame": 151,
+            "x": 787.261893,
+            "y": 515.8265
+          },
+          {
+            "frame": 152,
+            "x": 786.569714,
+            "y": 489.472595
+          },
+          {
+            "frame": 153,
+            "x": 785.877536,
+            "y": 460.368143
+          },
+          {
+            "frame": 154,
+            "x": 785.185357,
+            "y": 428.513143
+          },
+          {
+            "frame": 155,
+            "x": 784.493179,
+            "y": 393.907595
+          },
+          {
+            "frame": 156,
+            "x": 783.801,
+            "y": 356.5515
+          },
+          {
+            "frame": 157,
+            "x": 783.108821,
+            "y": 316.444857
+          },
+          {
+            "frame": 158,
+            "x": 782.416643,
+            "y": 273.587667
+          },
+          {
+            "frame": 159,
+            "x": 781.724464,
+            "y": 227.979929
+          },
+          {
+            "frame": 160,
+            "x": 781.032286,
+            "y": 179.621643
+          },
+          {
+            "frame": 161,
+            "x": 780.340107,
+            "y": 128.51281
+          },
+          {
+            "frame": 162,
+            "x": 779.647929,
+            "y": 74.653429
+          },
+          {
+            "frame": 163,
+            "x": 778.95575,
+            "y": 18.0435
+          },
+          {
+            "frame": 164,
+            "x": 778.263571,
+            "y": -41.316976
+          },
+          {
+            "frame": 165,
+            "x": 777.571393,
+            "y": -103.428
+          }
+        ]
+      },
+      {
+        "trajectory_id": 18,
+        "source_tracklet": 36,
+        "successor_tracklet": 42,
+        "source_end_frame": 578,
+        "successor_start_frame": 593,
+        "gap_frames": 14,
+        "error_px": 70.815058,
+        "q90_gate_px": 225.1,
+        "normalized_error": 0.314594,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 579,
+            "x": 488.933197,
+            "y": 444.927958
+          },
+          {
+            "frame": 580,
+            "x": 488.756224,
+            "y": 454.726573
+          },
+          {
+            "frame": 581,
+            "x": 488.57925,
+            "y": 464.615356
+          },
+          {
+            "frame": 582,
+            "x": 488.402276,
+            "y": 474.594307
+          },
+          {
+            "frame": 583,
+            "x": 488.225303,
+            "y": 484.663425
+          },
+          {
+            "frame": 584,
+            "x": 488.048329,
+            "y": 494.822711
+          },
+          {
+            "frame": 585,
+            "x": 487.871355,
+            "y": 505.072164
+          },
+          {
+            "frame": 586,
+            "x": 487.694382,
+            "y": 515.411785
+          },
+          {
+            "frame": 587,
+            "x": 487.517408,
+            "y": 525.841574
+          },
+          {
+            "frame": 588,
+            "x": 487.340434,
+            "y": 536.36153
+          },
+          {
+            "frame": 589,
+            "x": 487.163461,
+            "y": 546.971653
+          },
+          {
+            "frame": 590,
+            "x": 486.986487,
+            "y": 557.671945
+          },
+          {
+            "frame": 591,
+            "x": 486.809513,
+            "y": 568.462403
+          },
+          {
+            "frame": 592,
+            "x": 486.632539,
+            "y": 579.343029
+          }
+        ]
+      },
+      {
+        "trajectory_id": 23,
+        "source_tracklet": 41,
+        "successor_tracklet": 43,
+        "source_end_frame": 608,
+        "successor_start_frame": 621,
+        "gap_frames": 12,
+        "error_px": 8.230424,
+        "q90_gate_px": 225.1,
+        "normalized_error": 0.036563,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 609,
+            "x": 622.165903,
+            "y": 334.999938
+          },
+          {
+            "frame": 610,
+            "x": 621.856929,
+            "y": 334.001535
+          },
+          {
+            "frame": 611,
+            "x": 621.547955,
+            "y": 332.917531
+          },
+          {
+            "frame": 612,
+            "x": 621.238981,
+            "y": 331.747926
+          },
+          {
+            "frame": 613,
+            "x": 620.930007,
+            "y": 330.492722
+          },
+          {
+            "frame": 614,
+            "x": 620.621033,
+            "y": 329.151917
+          },
+          {
+            "frame": 615,
+            "x": 620.312059,
+            "y": 327.725511
+          },
+          {
+            "frame": 616,
+            "x": 620.003085,
+            "y": 326.213506
+          },
+          {
+            "frame": 617,
+            "x": 619.694111,
+            "y": 324.6159
+          },
+          {
+            "frame": 618,
+            "x": 619.385137,
+            "y": 322.932693
+          },
+          {
+            "frame": 619,
+            "x": 619.076163,
+            "y": 321.163887
+          },
+          {
+            "frame": 620,
+            "x": 618.767189,
+            "y": 319.30948
+          }
+        ]
+      },
+      {
+        "trajectory_id": 24,
+        "source_tracklet": 45,
+        "successor_tracklet": 46,
+        "source_end_frame": 670,
+        "successor_start_frame": 679,
+        "gap_frames": 8,
+        "error_px": 1.491456,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.010098,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 671,
+            "x": 608.707036,
+            "y": 393.635607
+          },
+          {
+            "frame": 672,
+            "x": 608.508571,
+            "y": 397.97194
+          },
+          {
+            "frame": 673,
+            "x": 608.310107,
+            "y": 402.42825
+          },
+          {
+            "frame": 674,
+            "x": 608.111643,
+            "y": 407.004536
+          },
+          {
+            "frame": 675,
+            "x": 607.913179,
+            "y": 411.700798
+          },
+          {
+            "frame": 676,
+            "x": 607.714714,
+            "y": 416.517036
+          },
+          {
+            "frame": 677,
+            "x": 607.51625,
+            "y": 421.45325
+          },
+          {
+            "frame": 678,
+            "x": 607.317786,
+            "y": 426.50944
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 28,
+        "successor_tracklet": 29,
+        "source_end_frame": 382,
+        "successor_start_frame": 391,
+        "gap_frames": 8,
+        "error_px": 3.859663,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.026132,
+        "hand_near": false,
+        "hand_side": null,
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 383,
+            "x": 642.444987,
+            "y": 18.085739
+          },
+          {
+            "frame": 384,
+            "x": 642.715553,
+            "y": 18.59311
+          },
+          {
+            "frame": 385,
+            "x": 642.986118,
+            "y": 19.200933
+          },
+          {
+            "frame": 386,
+            "x": 643.256684,
+            "y": 19.909208
+          },
+          {
+            "frame": 387,
+            "x": 643.52725,
+            "y": 20.717935
+          },
+          {
+            "frame": 388,
+            "x": 643.797816,
+            "y": 21.627114
+          },
+          {
+            "frame": 389,
+            "x": 644.068382,
+            "y": 22.636745
+          },
+          {
+            "frame": 390,
+            "x": 644.338947,
+            "y": 23.746828
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 23,
+        "successor_tracklet": 25,
+        "source_end_frame": 235,
+        "successor_start_frame": 243,
+        "gap_frames": 7,
+        "error_px": 3.126814,
+        "q90_gate_px": 147.7,
+        "normalized_error": 0.02117,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 236,
+            "x": 600.2195,
+            "y": 377.24175
+          },
+          {
+            "frame": 237,
+            "x": 599.7409,
+            "y": 384.84475
+          },
+          {
+            "frame": 238,
+            "x": 599.2623,
+            "y": 394.37525
+          },
+          {
+            "frame": 239,
+            "x": 598.7837,
+            "y": 405.83325
+          },
+          {
+            "frame": 240,
+            "x": 598.3051,
+            "y": 419.21875
+          },
+          {
+            "frame": 241,
+            "x": 597.8265,
+            "y": 434.53175
+          },
+          {
+            "frame": 242,
+            "x": 597.3479,
+            "y": 451.77225
+          }
+        ]
+      }
+    ]
+  },
+  "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+    "video": "youtube_reconstruction.mp4",
+    "fps": 59.94005994005994,
+    "width": 1280,
+    "height": 720,
+    "frame_count": 900,
+    "accepted_stitches": 17,
+    "long_gap_stitches": 16,
+    "trajectory_count": 23,
+    "events": [
+      {
+        "trajectory_id": 3,
+        "source_tracklet": 3,
+        "successor_tracklet": 6,
+        "source_end_frame": 22,
+        "successor_start_frame": 34,
+        "gap_frames": 11,
+        "error_px": 49.800837,
+        "q90_gate_px": 82.4,
+        "normalized_error": 0.604379,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 23,
+            "x": 664.591821,
+            "y": 436.296857
+          },
+          {
+            "frame": 24,
+            "x": 665.110893,
+            "y": 442.556357
+          },
+          {
+            "frame": 25,
+            "x": 665.629964,
+            "y": 447.853
+          },
+          {
+            "frame": 26,
+            "x": 666.149036,
+            "y": 452.186786
+          },
+          {
+            "frame": 27,
+            "x": 666.668107,
+            "y": 455.557714
+          },
+          {
+            "frame": 28,
+            "x": 667.187179,
+            "y": 457.965786
+          },
+          {
+            "frame": 29,
+            "x": 667.70625,
+            "y": 459.411
+          },
+          {
+            "frame": 30,
+            "x": 668.225321,
+            "y": 459.893357
+          },
+          {
+            "frame": 31,
+            "x": 668.744393,
+            "y": 459.412857
+          },
+          {
+            "frame": 32,
+            "x": 669.263464,
+            "y": 457.9695
+          },
+          {
+            "frame": 33,
+            "x": 669.782536,
+            "y": 455.563286
+          }
+        ]
+      },
+      {
+        "trajectory_id": 3,
+        "source_tracklet": 6,
+        "successor_tracklet": 9,
+        "source_end_frame": 97,
+        "successor_start_frame": 114,
+        "gap_frames": 16,
+        "error_px": 98.334386,
+        "q90_gate_px": 155.9,
+        "normalized_error": 0.630753,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 98,
+            "x": 541.327679,
+            "y": 464.224089
+          },
+          {
+            "frame": 99,
+            "x": 541.263774,
+            "y": 470.593875
+          },
+          {
+            "frame": 100,
+            "x": 541.199869,
+            "y": 475.950315
+          },
+          {
+            "frame": 101,
+            "x": 541.135964,
+            "y": 480.293411
+          },
+          {
+            "frame": 102,
+            "x": 541.07206,
+            "y": 483.623161
+          },
+          {
+            "frame": 103,
+            "x": 541.008155,
+            "y": 485.939565
+          },
+          {
+            "frame": 104,
+            "x": 540.94425,
+            "y": 487.242625
+          },
+          {
+            "frame": 105,
+            "x": 540.880345,
+            "y": 487.532339
+          },
+          {
+            "frame": 106,
+            "x": 540.81644,
+            "y": 486.808708
+          },
+          {
+            "frame": 107,
+            "x": 540.752536,
+            "y": 485.071732
+          },
+          {
+            "frame": 108,
+            "x": 540.688631,
+            "y": 482.321411
+          },
+          {
+            "frame": 109,
+            "x": 540.624726,
+            "y": 478.557744
+          },
+          {
+            "frame": 110,
+            "x": 540.560821,
+            "y": 473.780732
+          },
+          {
+            "frame": 111,
+            "x": 540.496917,
+            "y": 467.990375
+          },
+          {
+            "frame": 112,
+            "x": 540.433012,
+            "y": 461.186673
+          },
+          {
+            "frame": 113,
+            "x": 540.369107,
+            "y": 453.369625
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 5,
+        "successor_tracklet": 12,
+        "source_end_frame": 228,
+        "successor_start_frame": 255,
+        "gap_frames": 26,
+        "error_px": 35.6679,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.089528,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 229,
+            "x": 642.442164,
+            "y": 487.12835
+          },
+          {
+            "frame": 230,
+            "x": 641.040105,
+            "y": 491.183368
+          },
+          {
+            "frame": 231,
+            "x": 639.638045,
+            "y": 494.617673
+          },
+          {
+            "frame": 232,
+            "x": 638.235986,
+            "y": 497.431266
+          },
+          {
+            "frame": 233,
+            "x": 636.833926,
+            "y": 499.624145
+          },
+          {
+            "frame": 234,
+            "x": 635.431867,
+            "y": 501.196313
+          },
+          {
+            "frame": 235,
+            "x": 634.029807,
+            "y": 502.147767
+          },
+          {
+            "frame": 236,
+            "x": 632.627748,
+            "y": 502.478509
+          },
+          {
+            "frame": 237,
+            "x": 631.225688,
+            "y": 502.188538
+          },
+          {
+            "frame": 238,
+            "x": 629.823629,
+            "y": 501.277855
+          },
+          {
+            "frame": 239,
+            "x": 628.421569,
+            "y": 499.746459
+          },
+          {
+            "frame": 240,
+            "x": 627.01951,
+            "y": 497.59435
+          },
+          {
+            "frame": 241,
+            "x": 625.61745,
+            "y": 494.821529
+          },
+          {
+            "frame": 242,
+            "x": 624.215391,
+            "y": 491.427995
+          },
+          {
+            "frame": 243,
+            "x": 622.813331,
+            "y": 487.413748
+          },
+          {
+            "frame": 244,
+            "x": 621.411272,
+            "y": 482.778789
+          },
+          {
+            "frame": 245,
+            "x": 620.009212,
+            "y": 477.523118
+          },
+          {
+            "frame": 246,
+            "x": 618.607153,
+            "y": 471.646733
+          },
+          {
+            "frame": 247,
+            "x": 617.205093,
+            "y": 465.149636
+          },
+          {
+            "frame": 248,
+            "x": 615.803034,
+            "y": 458.031826
+          },
+          {
+            "frame": 249,
+            "x": 614.400974,
+            "y": 450.293304
+          },
+          {
+            "frame": 250,
+            "x": 612.998915,
+            "y": 441.934069
+          },
+          {
+            "frame": 251,
+            "x": 611.596855,
+            "y": 432.954122
+          },
+          {
+            "frame": 252,
+            "x": 610.194796,
+            "y": 423.353461
+          },
+          {
+            "frame": 253,
+            "x": 608.792736,
+            "y": 413.132089
+          },
+          {
+            "frame": 254,
+            "x": 607.390677,
+            "y": 402.290003
+          }
+        ]
+      },
+      {
+        "trajectory_id": 8,
+        "source_tracklet": 10,
+        "successor_tracklet": 13,
+        "source_end_frame": 238,
+        "successor_start_frame": 267,
+        "gap_frames": 28,
+        "error_px": 210.675245,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.528803,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 239,
+            "x": 551.110259,
+            "y": 468.821868
+          },
+          {
+            "frame": 240,
+            "x": 549.814173,
+            "y": 478.309864
+          },
+          {
+            "frame": 241,
+            "x": 548.518086,
+            "y": 487.399132
+          },
+          {
+            "frame": 242,
+            "x": 547.222,
+            "y": 496.089673
+          },
+          {
+            "frame": 243,
+            "x": 545.925914,
+            "y": 504.381487
+          },
+          {
+            "frame": 244,
+            "x": 544.629827,
+            "y": 512.274574
+          },
+          {
+            "frame": 245,
+            "x": 543.333741,
+            "y": 519.768933
+          },
+          {
+            "frame": 246,
+            "x": 542.037654,
+            "y": 526.864564
+          },
+          {
+            "frame": 247,
+            "x": 540.741568,
+            "y": 533.561469
+          },
+          {
+            "frame": 248,
+            "x": 539.445481,
+            "y": 539.859646
+          },
+          {
+            "frame": 249,
+            "x": 538.149395,
+            "y": 545.759095
+          },
+          {
+            "frame": 250,
+            "x": 536.853309,
+            "y": 551.259818
+          },
+          {
+            "frame": 251,
+            "x": 535.557222,
+            "y": 556.361813
+          },
+          {
+            "frame": 252,
+            "x": 534.261136,
+            "y": 561.065081
+          },
+          {
+            "frame": 253,
+            "x": 532.965049,
+            "y": 565.369621
+          },
+          {
+            "frame": 254,
+            "x": 531.668963,
+            "y": 569.275434
+          },
+          {
+            "frame": 255,
+            "x": 530.372877,
+            "y": 572.78252
+          },
+          {
+            "frame": 256,
+            "x": 529.07679,
+            "y": 575.890878
+          },
+          {
+            "frame": 257,
+            "x": 527.780704,
+            "y": 578.60051
+          },
+          {
+            "frame": 258,
+            "x": 526.484617,
+            "y": 580.911413
+          },
+          {
+            "frame": 259,
+            "x": 525.188531,
+            "y": 582.82359
+          },
+          {
+            "frame": 260,
+            "x": 523.892444,
+            "y": 584.337039
+          },
+          {
+            "frame": 261,
+            "x": 522.596358,
+            "y": 585.451761
+          },
+          {
+            "frame": 262,
+            "x": 521.300272,
+            "y": 586.167755
+          },
+          {
+            "frame": 263,
+            "x": 520.004185,
+            "y": 586.485023
+          },
+          {
+            "frame": 264,
+            "x": 518.708099,
+            "y": 586.403563
+          },
+          {
+            "frame": 265,
+            "x": 517.412012,
+            "y": 585.923375
+          },
+          {
+            "frame": 266,
+            "x": 516.115926,
+            "y": 585.04446
+          }
+        ]
+      },
+      {
+        "trajectory_id": 9,
+        "source_tracklet": 11,
+        "successor_tracklet": 15,
+        "source_end_frame": 299,
+        "successor_start_frame": 329,
+        "gap_frames": 29,
+        "error_px": 95.136557,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.238797,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 300,
+            "x": 543.716496,
+            "y": 480.986569
+          },
+          {
+            "frame": 301,
+            "x": 546.067519,
+            "y": 485.670193
+          },
+          {
+            "frame": 302,
+            "x": 548.418541,
+            "y": 489.856345
+          },
+          {
+            "frame": 303,
+            "x": 550.769564,
+            "y": 493.545022
+          },
+          {
+            "frame": 304,
+            "x": 553.120586,
+            "y": 496.736227
+          },
+          {
+            "frame": 305,
+            "x": 555.471609,
+            "y": 499.429958
+          },
+          {
+            "frame": 306,
+            "x": 557.822632,
+            "y": 501.626216
+          },
+          {
+            "frame": 307,
+            "x": 560.173654,
+            "y": 503.325
+          },
+          {
+            "frame": 308,
+            "x": 562.524677,
+            "y": 504.526311
+          },
+          {
+            "frame": 309,
+            "x": 564.875699,
+            "y": 505.230148
+          },
+          {
+            "frame": 310,
+            "x": 567.226722,
+            "y": 505.436513
+          },
+          {
+            "frame": 311,
+            "x": 569.577744,
+            "y": 505.145403
+          },
+          {
+            "frame": 312,
+            "x": 571.928767,
+            "y": 504.356821
+          },
+          {
+            "frame": 313,
+            "x": 574.279789,
+            "y": 503.070765
+          },
+          {
+            "frame": 314,
+            "x": 576.630812,
+            "y": 501.287235
+          },
+          {
+            "frame": 315,
+            "x": 578.981835,
+            "y": 499.006232
+          },
+          {
+            "frame": 316,
+            "x": 581.332857,
+            "y": 496.227756
+          },
+          {
+            "frame": 317,
+            "x": 583.68388,
+            "y": 492.951807
+          },
+          {
+            "frame": 318,
+            "x": 586.034902,
+            "y": 489.178384
+          },
+          {
+            "frame": 319,
+            "x": 588.385925,
+            "y": 484.907487
+          },
+          {
+            "frame": 320,
+            "x": 590.736947,
+            "y": 480.139118
+          },
+          {
+            "frame": 321,
+            "x": 593.08797,
+            "y": 474.873275
+          },
+          {
+            "frame": 322,
+            "x": 595.438992,
+            "y": 469.109958
+          },
+          {
+            "frame": 323,
+            "x": 597.790015,
+            "y": 462.849168
+          },
+          {
+            "frame": 324,
+            "x": 600.141038,
+            "y": 456.090905
+          },
+          {
+            "frame": 325,
+            "x": 602.49206,
+            "y": 448.835168
+          },
+          {
+            "frame": 326,
+            "x": 604.843083,
+            "y": 441.081958
+          },
+          {
+            "frame": 327,
+            "x": 607.194105,
+            "y": 432.831275
+          },
+          {
+            "frame": 328,
+            "x": 609.545128,
+            "y": 424.083118
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 12,
+        "successor_tracklet": 16,
+        "source_end_frame": 309,
+        "successor_start_frame": 339,
+        "gap_frames": 29,
+        "error_px": 114.049662,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.286269,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 310,
+            "x": 652.928786,
+            "y": 444.271292
+          },
+          {
+            "frame": 311,
+            "x": 653.382329,
+            "y": 450.819072
+          },
+          {
+            "frame": 312,
+            "x": 653.835873,
+            "y": 456.627229
+          },
+          {
+            "frame": 313,
+            "x": 654.289416,
+            "y": 461.695766
+          },
+          {
+            "frame": 314,
+            "x": 654.74296,
+            "y": 466.02468
+          },
+          {
+            "frame": 315,
+            "x": 655.196503,
+            "y": 469.613972
+          },
+          {
+            "frame": 316,
+            "x": 655.650047,
+            "y": 472.463643
+          },
+          {
+            "frame": 317,
+            "x": 656.10359,
+            "y": 474.573692
+          },
+          {
+            "frame": 318,
+            "x": 656.557134,
+            "y": 475.94412
+          },
+          {
+            "frame": 319,
+            "x": 657.010677,
+            "y": 476.574925
+          },
+          {
+            "frame": 320,
+            "x": 657.464221,
+            "y": 476.466109
+          },
+          {
+            "frame": 321,
+            "x": 657.917764,
+            "y": 475.617671
+          },
+          {
+            "frame": 322,
+            "x": 658.371308,
+            "y": 474.029611
+          },
+          {
+            "frame": 323,
+            "x": 658.824851,
+            "y": 471.70193
+          },
+          {
+            "frame": 324,
+            "x": 659.278395,
+            "y": 468.634626
+          },
+          {
+            "frame": 325,
+            "x": 659.731938,
+            "y": 464.827701
+          },
+          {
+            "frame": 326,
+            "x": 660.185482,
+            "y": 460.281154
+          },
+          {
+            "frame": 327,
+            "x": 660.639025,
+            "y": 454.994986
+          },
+          {
+            "frame": 328,
+            "x": 661.092569,
+            "y": 448.969196
+          },
+          {
+            "frame": 329,
+            "x": 661.546113,
+            "y": 442.203784
+          },
+          {
+            "frame": 330,
+            "x": 661.999656,
+            "y": 434.69875
+          },
+          {
+            "frame": 331,
+            "x": 662.4532,
+            "y": 426.454094
+          },
+          {
+            "frame": 332,
+            "x": 662.906743,
+            "y": 417.469817
+          },
+          {
+            "frame": 333,
+            "x": 663.360287,
+            "y": 407.745918
+          },
+          {
+            "frame": 334,
+            "x": 663.81383,
+            "y": 397.282397
+          },
+          {
+            "frame": 335,
+            "x": 664.267374,
+            "y": 386.079254
+          },
+          {
+            "frame": 336,
+            "x": 664.720917,
+            "y": 374.13649
+          },
+          {
+            "frame": 337,
+            "x": 665.174461,
+            "y": 361.454104
+          },
+          {
+            "frame": 338,
+            "x": 665.628004,
+            "y": 348.032096
+          }
+        ]
+      },
+      {
+        "trajectory_id": 4,
+        "source_tracklet": 4,
+        "successor_tracklet": 18,
+        "source_end_frame": 411,
+        "successor_start_frame": 420,
+        "gap_frames": 8,
+        "error_px": 44.058081,
+        "q90_gate_px": 47.4,
+        "normalized_error": 0.929495,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 412,
+            "x": 538.24825,
+            "y": 470.891214
+          },
+          {
+            "frame": 413,
+            "x": 538.95525,
+            "y": 476.353357
+          },
+          {
+            "frame": 414,
+            "x": 539.66225,
+            "y": 481.194762
+          },
+          {
+            "frame": 415,
+            "x": 540.36925,
+            "y": 485.415429
+          },
+          {
+            "frame": 416,
+            "x": 541.07625,
+            "y": 489.015357
+          },
+          {
+            "frame": 417,
+            "x": 541.78325,
+            "y": 491.994548
+          },
+          {
+            "frame": 418,
+            "x": 542.49025,
+            "y": 494.353
+          },
+          {
+            "frame": 419,
+            "x": 543.19725,
+            "y": 496.090714
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 16,
+        "successor_tracklet": 21,
+        "source_end_frame": 468,
+        "successor_start_frame": 482,
+        "gap_frames": 13,
+        "error_px": 54.92483,
+        "q90_gate_px": 82.4,
+        "normalized_error": 0.666563,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": false,
+        "prediction": [
+          {
+            "frame": 469,
+            "x": 536.102571,
+            "y": 468.75975
+          },
+          {
+            "frame": 470,
+            "x": 536.141143,
+            "y": 473.238607
+          },
+          {
+            "frame": 471,
+            "x": 536.179714,
+            "y": 476.544988
+          },
+          {
+            "frame": 472,
+            "x": 536.218286,
+            "y": 478.678893
+          },
+          {
+            "frame": 473,
+            "x": 536.256857,
+            "y": 479.640321
+          },
+          {
+            "frame": 474,
+            "x": 536.295429,
+            "y": 479.429274
+          },
+          {
+            "frame": 475,
+            "x": 536.334,
+            "y": 478.04575
+          },
+          {
+            "frame": 476,
+            "x": 536.372571,
+            "y": 475.48975
+          },
+          {
+            "frame": 477,
+            "x": 536.411143,
+            "y": 471.761274
+          },
+          {
+            "frame": 478,
+            "x": 536.449714,
+            "y": 466.860321
+          },
+          {
+            "frame": 479,
+            "x": 536.488286,
+            "y": 460.786893
+          },
+          {
+            "frame": 480,
+            "x": 536.526857,
+            "y": 453.540988
+          },
+          {
+            "frame": 481,
+            "x": 536.565429,
+            "y": 445.122607
+          }
+        ]
+      },
+      {
+        "trajectory_id": 11,
+        "source_tracklet": 17,
+        "successor_tracklet": 25,
+        "source_end_frame": 582,
+        "successor_start_frame": 606,
+        "gap_frames": 23,
+        "error_px": 151.220066,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.379568,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 583,
+            "x": 547.677931,
+            "y": 465.88705
+          },
+          {
+            "frame": 584,
+            "x": 546.716764,
+            "y": 475.091262
+          },
+          {
+            "frame": 585,
+            "x": 545.755596,
+            "y": 483.869109
+          },
+          {
+            "frame": 586,
+            "x": 544.794429,
+            "y": 492.220592
+          },
+          {
+            "frame": 587,
+            "x": 543.833261,
+            "y": 500.14571
+          },
+          {
+            "frame": 588,
+            "x": 542.872093,
+            "y": 507.644464
+          },
+          {
+            "frame": 589,
+            "x": 541.910926,
+            "y": 514.716853
+          },
+          {
+            "frame": 590,
+            "x": 540.949758,
+            "y": 521.362878
+          },
+          {
+            "frame": 591,
+            "x": 539.988591,
+            "y": 527.582538
+          },
+          {
+            "frame": 592,
+            "x": 539.027423,
+            "y": 533.375834
+          },
+          {
+            "frame": 593,
+            "x": 538.066256,
+            "y": 538.742765
+          },
+          {
+            "frame": 594,
+            "x": 537.105088,
+            "y": 543.683332
+          },
+          {
+            "frame": 595,
+            "x": 536.143921,
+            "y": 548.197534
+          },
+          {
+            "frame": 596,
+            "x": 535.182753,
+            "y": 552.285372
+          },
+          {
+            "frame": 597,
+            "x": 534.221586,
+            "y": 555.946845
+          },
+          {
+            "frame": 598,
+            "x": 533.260418,
+            "y": 559.181954
+          },
+          {
+            "frame": 599,
+            "x": 532.29925,
+            "y": 561.990698
+          },
+          {
+            "frame": 600,
+            "x": 531.338083,
+            "y": 564.373077
+          },
+          {
+            "frame": 601,
+            "x": 530.376915,
+            "y": 566.329092
+          },
+          {
+            "frame": 602,
+            "x": 529.415748,
+            "y": 567.858743
+          },
+          {
+            "frame": 603,
+            "x": 528.45458,
+            "y": 568.962029
+          },
+          {
+            "frame": 604,
+            "x": 527.493413,
+            "y": 569.638951
+          },
+          {
+            "frame": 605,
+            "x": 526.532245,
+            "y": 569.889508
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 22,
+        "successor_tracklet": 27,
+        "source_end_frame": 644,
+        "successor_start_frame": 670,
+        "gap_frames": 25,
+        "error_px": 74.668811,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.187422,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 645,
+            "x": 544.796143,
+            "y": 478.263393
+          },
+          {
+            "frame": 646,
+            "x": 547.143952,
+            "y": 483.433821
+          },
+          {
+            "frame": 647,
+            "x": 549.491762,
+            "y": 488.166036
+          },
+          {
+            "frame": 648,
+            "x": 551.839571,
+            "y": 492.460036
+          },
+          {
+            "frame": 649,
+            "x": 554.187381,
+            "y": 496.315821
+          },
+          {
+            "frame": 650,
+            "x": 556.53519,
+            "y": 499.733393
+          },
+          {
+            "frame": 651,
+            "x": 558.883,
+            "y": 502.71275
+          },
+          {
+            "frame": 652,
+            "x": 561.23081,
+            "y": 505.253893
+          },
+          {
+            "frame": 653,
+            "x": 563.578619,
+            "y": 507.356821
+          },
+          {
+            "frame": 654,
+            "x": 565.926429,
+            "y": 509.021536
+          },
+          {
+            "frame": 655,
+            "x": 568.274238,
+            "y": 510.248036
+          },
+          {
+            "frame": 656,
+            "x": 570.622048,
+            "y": 511.036321
+          },
+          {
+            "frame": 657,
+            "x": 572.969857,
+            "y": 511.386393
+          },
+          {
+            "frame": 658,
+            "x": 575.317667,
+            "y": 511.29825
+          },
+          {
+            "frame": 659,
+            "x": 577.665476,
+            "y": 510.771893
+          },
+          {
+            "frame": 660,
+            "x": 580.013286,
+            "y": 509.807321
+          },
+          {
+            "frame": 661,
+            "x": 582.361095,
+            "y": 508.404536
+          },
+          {
+            "frame": 662,
+            "x": 584.708905,
+            "y": 506.563536
+          },
+          {
+            "frame": 663,
+            "x": 587.056714,
+            "y": 504.284321
+          },
+          {
+            "frame": 664,
+            "x": 589.404524,
+            "y": 501.566893
+          },
+          {
+            "frame": 665,
+            "x": 591.752333,
+            "y": 498.41125
+          },
+          {
+            "frame": 666,
+            "x": 594.100143,
+            "y": 494.817393
+          },
+          {
+            "frame": 667,
+            "x": 596.447952,
+            "y": 490.785321
+          },
+          {
+            "frame": 668,
+            "x": 598.795762,
+            "y": 486.315036
+          },
+          {
+            "frame": 669,
+            "x": 601.143571,
+            "y": 481.406536
+          }
+        ]
+      },
+      {
+        "trajectory_id": 16,
+        "source_tracklet": 24,
+        "successor_tracklet": 28,
+        "source_end_frame": 653,
+        "successor_start_frame": 678,
+        "gap_frames": 24,
+        "error_px": 98.179813,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.246435,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 654,
+            "x": 647.683857,
+            "y": 435.094875
+          },
+          {
+            "frame": 655,
+            "x": 648.690881,
+            "y": 442.14278
+          },
+          {
+            "frame": 656,
+            "x": 649.697905,
+            "y": 448.367506
+          },
+          {
+            "frame": 657,
+            "x": 650.704929,
+            "y": 453.769054
+          },
+          {
+            "frame": 658,
+            "x": 651.711952,
+            "y": 458.347423
+          },
+          {
+            "frame": 659,
+            "x": 652.718976,
+            "y": 462.102613
+          },
+          {
+            "frame": 660,
+            "x": 653.726,
+            "y": 465.034625
+          },
+          {
+            "frame": 661,
+            "x": 654.733024,
+            "y": 467.143458
+          },
+          {
+            "frame": 662,
+            "x": 655.740048,
+            "y": 468.429113
+          },
+          {
+            "frame": 663,
+            "x": 656.747071,
+            "y": 468.891589
+          },
+          {
+            "frame": 664,
+            "x": 657.754095,
+            "y": 468.530887
+          },
+          {
+            "frame": 665,
+            "x": 658.761119,
+            "y": 467.347006
+          },
+          {
+            "frame": 666,
+            "x": 659.768143,
+            "y": 465.339946
+          },
+          {
+            "frame": 667,
+            "x": 660.775167,
+            "y": 462.509708
+          },
+          {
+            "frame": 668,
+            "x": 661.78219,
+            "y": 458.856292
+          },
+          {
+            "frame": 669,
+            "x": 662.789214,
+            "y": 454.379696
+          },
+          {
+            "frame": 670,
+            "x": 663.796238,
+            "y": 449.079923
+          },
+          {
+            "frame": 671,
+            "x": 664.803262,
+            "y": 442.95697
+          },
+          {
+            "frame": 672,
+            "x": 665.810286,
+            "y": 436.010839
+          },
+          {
+            "frame": 673,
+            "x": 666.81731,
+            "y": 428.24153
+          },
+          {
+            "frame": 674,
+            "x": 667.824333,
+            "y": 419.649042
+          },
+          {
+            "frame": 675,
+            "x": 668.831357,
+            "y": 410.233375
+          },
+          {
+            "frame": 676,
+            "x": 669.838381,
+            "y": 399.99453
+          },
+          {
+            "frame": 677,
+            "x": 670.845405,
+            "y": 388.932506
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 21,
+        "successor_tracklet": 30,
+        "source_end_frame": 693,
+        "successor_start_frame": 715,
+        "gap_frames": 21,
+        "error_px": 275.207064,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.690781,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 694,
+            "x": 619.778143,
+            "y": 475.367696
+          },
+          {
+            "frame": 695,
+            "x": 616.167036,
+            "y": 472.074435
+          },
+          {
+            "frame": 696,
+            "x": 612.555929,
+            "y": 467.409589
+          },
+          {
+            "frame": 697,
+            "x": 608.944821,
+            "y": 461.373161
+          },
+          {
+            "frame": 698,
+            "x": 605.333714,
+            "y": 453.965149
+          },
+          {
+            "frame": 699,
+            "x": 601.722607,
+            "y": 445.185554
+          },
+          {
+            "frame": 700,
+            "x": 598.1115,
+            "y": 435.034375
+          },
+          {
+            "frame": 701,
+            "x": 594.500393,
+            "y": 423.511613
+          },
+          {
+            "frame": 702,
+            "x": 590.889286,
+            "y": 410.617268
+          },
+          {
+            "frame": 703,
+            "x": 587.278179,
+            "y": 396.351339
+          },
+          {
+            "frame": 704,
+            "x": 583.667071,
+            "y": 380.713827
+          },
+          {
+            "frame": 705,
+            "x": 580.055964,
+            "y": 363.704732
+          },
+          {
+            "frame": 706,
+            "x": 576.444857,
+            "y": 345.324054
+          },
+          {
+            "frame": 707,
+            "x": 572.83375,
+            "y": 325.571792
+          },
+          {
+            "frame": 708,
+            "x": 569.222643,
+            "y": 304.447946
+          },
+          {
+            "frame": 709,
+            "x": 565.611536,
+            "y": 281.952518
+          },
+          {
+            "frame": 710,
+            "x": 562.000429,
+            "y": 258.085506
+          },
+          {
+            "frame": 711,
+            "x": 558.389321,
+            "y": 232.846911
+          },
+          {
+            "frame": 712,
+            "x": 554.778214,
+            "y": 206.236732
+          },
+          {
+            "frame": 713,
+            "x": 551.167107,
+            "y": 178.25497
+          },
+          {
+            "frame": 714,
+            "x": 547.556,
+            "y": 148.901625
+          }
+        ]
+      },
+      {
+        "trajectory_id": 4,
+        "source_tracklet": 18,
+        "successor_tracklet": 31,
+        "source_end_frame": 709,
+        "successor_start_frame": 731,
+        "gap_frames": 21,
+        "error_px": 182.900254,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.459087,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 710,
+            "x": 556.102059,
+            "y": 483.195624
+          },
+          {
+            "frame": 711,
+            "x": 558.192322,
+            "y": 479.72848
+          },
+          {
+            "frame": 712,
+            "x": 560.282585,
+            "y": 475.134112
+          },
+          {
+            "frame": 713,
+            "x": 562.372848,
+            "y": 469.412522
+          },
+          {
+            "frame": 714,
+            "x": 564.463111,
+            "y": 462.56371
+          },
+          {
+            "frame": 715,
+            "x": 566.553374,
+            "y": 454.587675
+          },
+          {
+            "frame": 716,
+            "x": 568.643637,
+            "y": 445.484418
+          },
+          {
+            "frame": 717,
+            "x": 570.7339,
+            "y": 435.253938
+          },
+          {
+            "frame": 718,
+            "x": 572.824163,
+            "y": 423.896236
+          },
+          {
+            "frame": 719,
+            "x": 574.914426,
+            "y": 411.411311
+          },
+          {
+            "frame": 720,
+            "x": 577.004689,
+            "y": 397.799164
+          },
+          {
+            "frame": 721,
+            "x": 579.094952,
+            "y": 383.059794
+          },
+          {
+            "frame": 722,
+            "x": 581.185216,
+            "y": 367.193202
+          },
+          {
+            "frame": 723,
+            "x": 583.275479,
+            "y": 350.199387
+          },
+          {
+            "frame": 724,
+            "x": 585.365742,
+            "y": 332.078349
+          },
+          {
+            "frame": 725,
+            "x": 587.456005,
+            "y": 312.83009
+          },
+          {
+            "frame": 726,
+            "x": 589.546268,
+            "y": 292.454607
+          },
+          {
+            "frame": 727,
+            "x": 591.636531,
+            "y": 270.951902
+          },
+          {
+            "frame": 728,
+            "x": 593.726794,
+            "y": 248.321975
+          },
+          {
+            "frame": 729,
+            "x": 595.817057,
+            "y": 224.564825
+          },
+          {
+            "frame": 730,
+            "x": 597.90732,
+            "y": 199.680453
+          }
+        ]
+      },
+      {
+        "trajectory_id": 17,
+        "source_tracklet": 26,
+        "successor_tracklet": 32,
+        "source_end_frame": 717,
+        "successor_start_frame": 743,
+        "gap_frames": 25,
+        "error_px": 78.409194,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.19681,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 718,
+            "x": 624.027804,
+            "y": 481.619213
+          },
+          {
+            "frame": 719,
+            "x": 623.969942,
+            "y": 486.522006
+          },
+          {
+            "frame": 720,
+            "x": 623.91208,
+            "y": 490.928601
+          },
+          {
+            "frame": 721,
+            "x": 623.854217,
+            "y": 494.838997
+          },
+          {
+            "frame": 722,
+            "x": 623.796355,
+            "y": 498.253195
+          },
+          {
+            "frame": 723,
+            "x": 623.738493,
+            "y": 501.171194
+          },
+          {
+            "frame": 724,
+            "x": 623.68063,
+            "y": 503.592994
+          },
+          {
+            "frame": 725,
+            "x": 623.622768,
+            "y": 505.518595
+          },
+          {
+            "frame": 726,
+            "x": 623.564906,
+            "y": 506.947998
+          },
+          {
+            "frame": 727,
+            "x": 623.507043,
+            "y": 507.881202
+          },
+          {
+            "frame": 728,
+            "x": 623.449181,
+            "y": 508.318208
+          },
+          {
+            "frame": 729,
+            "x": 623.391319,
+            "y": 508.259015
+          },
+          {
+            "frame": 730,
+            "x": 623.333457,
+            "y": 507.703623
+          },
+          {
+            "frame": 731,
+            "x": 623.275594,
+            "y": 506.652033
+          },
+          {
+            "frame": 732,
+            "x": 623.217732,
+            "y": 505.104243
+          },
+          {
+            "frame": 733,
+            "x": 623.15987,
+            "y": 503.060256
+          },
+          {
+            "frame": 734,
+            "x": 623.102007,
+            "y": 500.520069
+          },
+          {
+            "frame": 735,
+            "x": 623.044145,
+            "y": 497.483684
+          },
+          {
+            "frame": 736,
+            "x": 622.986283,
+            "y": 493.9511
+          },
+          {
+            "frame": 737,
+            "x": 622.92842,
+            "y": 489.922318
+          },
+          {
+            "frame": 738,
+            "x": 622.870558,
+            "y": 485.397337
+          },
+          {
+            "frame": 739,
+            "x": 622.812696,
+            "y": 480.376157
+          },
+          {
+            "frame": 740,
+            "x": 622.754833,
+            "y": 474.858779
+          },
+          {
+            "frame": 741,
+            "x": 622.696971,
+            "y": 468.845201
+          },
+          {
+            "frame": 742,
+            "x": 622.639109,
+            "y": 462.335426
+          }
+        ]
+      },
+      {
+        "trajectory_id": 11,
+        "source_tracklet": 25,
+        "successor_tracklet": 34,
+        "source_end_frame": 749,
+        "successor_start_frame": 769,
+        "gap_frames": 19,
+        "error_px": 38.117723,
+        "q90_gate_px": 155.9,
+        "normalized_error": 0.244501,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 750,
+            "x": 635.557772,
+            "y": 487.920932
+          },
+          {
+            "frame": 751,
+            "x": 633.62718,
+            "y": 492.81102
+          },
+          {
+            "frame": 752,
+            "x": 631.696588,
+            "y": 497.086675
+          },
+          {
+            "frame": 753,
+            "x": 629.765996,
+            "y": 500.747897
+          },
+          {
+            "frame": 754,
+            "x": 627.835404,
+            "y": 503.794685
+          },
+          {
+            "frame": 755,
+            "x": 625.904811,
+            "y": 506.227041
+          },
+          {
+            "frame": 756,
+            "x": 623.974219,
+            "y": 508.044964
+          },
+          {
+            "frame": 757,
+            "x": 622.043627,
+            "y": 509.248453
+          },
+          {
+            "frame": 758,
+            "x": 620.113035,
+            "y": 509.83751
+          },
+          {
+            "frame": 759,
+            "x": 618.182443,
+            "y": 509.812134
+          },
+          {
+            "frame": 760,
+            "x": 616.251851,
+            "y": 509.172324
+          },
+          {
+            "frame": 761,
+            "x": 614.321259,
+            "y": 507.918082
+          },
+          {
+            "frame": 762,
+            "x": 612.390667,
+            "y": 506.049407
+          },
+          {
+            "frame": 763,
+            "x": 610.460075,
+            "y": 503.566298
+          },
+          {
+            "frame": 764,
+            "x": 608.529483,
+            "y": 500.468757
+          },
+          {
+            "frame": 765,
+            "x": 606.598891,
+            "y": 496.756783
+          },
+          {
+            "frame": 766,
+            "x": 604.668299,
+            "y": 492.430375
+          },
+          {
+            "frame": 767,
+            "x": 602.737707,
+            "y": 487.489535
+          },
+          {
+            "frame": 768,
+            "x": 600.807115,
+            "y": 481.934261
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 30,
+        "successor_tracklet": 38,
+        "source_end_frame": 845,
+        "successor_start_frame": 869,
+        "gap_frames": 23,
+        "error_px": 57.222037,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.14363,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 846,
+            "x": 541.422964,
+            "y": 482.838875
+          },
+          {
+            "frame": 847,
+            "x": 543.018595,
+            "y": 486.050994
+          },
+          {
+            "frame": 848,
+            "x": 544.614226,
+            "y": 488.522482
+          },
+          {
+            "frame": 849,
+            "x": 546.209857,
+            "y": 490.253339
+          },
+          {
+            "frame": 850,
+            "x": 547.805488,
+            "y": 491.243565
+          },
+          {
+            "frame": 851,
+            "x": 549.401119,
+            "y": 491.493161
+          },
+          {
+            "frame": 852,
+            "x": 550.99675,
+            "y": 491.002125
+          },
+          {
+            "frame": 853,
+            "x": 552.592381,
+            "y": 489.770458
+          },
+          {
+            "frame": 854,
+            "x": 554.188012,
+            "y": 487.798161
+          },
+          {
+            "frame": 855,
+            "x": 555.783643,
+            "y": 485.085232
+          },
+          {
+            "frame": 856,
+            "x": 557.379274,
+            "y": 481.631673
+          },
+          {
+            "frame": 857,
+            "x": 558.974905,
+            "y": 477.437482
+          },
+          {
+            "frame": 858,
+            "x": 560.570536,
+            "y": 472.502661
+          },
+          {
+            "frame": 859,
+            "x": 562.166167,
+            "y": 466.827208
+          },
+          {
+            "frame": 860,
+            "x": 563.761798,
+            "y": 460.411125
+          },
+          {
+            "frame": 861,
+            "x": 565.357429,
+            "y": 453.254411
+          },
+          {
+            "frame": 862,
+            "x": 566.95306,
+            "y": 445.357065
+          },
+          {
+            "frame": 863,
+            "x": 568.54869,
+            "y": 436.719089
+          },
+          {
+            "frame": 864,
+            "x": 570.144321,
+            "y": 427.340482
+          },
+          {
+            "frame": 865,
+            "x": 571.739952,
+            "y": 417.221244
+          },
+          {
+            "frame": 866,
+            "x": 573.335583,
+            "y": 406.361375
+          },
+          {
+            "frame": 867,
+            "x": 574.931214,
+            "y": 394.760875
+          },
+          {
+            "frame": 868,
+            "x": 576.526845,
+            "y": 382.419744
+          }
+        ]
+      },
+      {
+        "trajectory_id": 20,
+        "source_tracklet": 35,
+        "successor_tracklet": 40,
+        "source_end_frame": 862,
+        "successor_start_frame": 883,
+        "gap_frames": 20,
+        "error_px": 10.417402,
+        "q90_gate_px": 155.9,
+        "normalized_error": 0.066821,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 863,
+            "x": 639.862681,
+            "y": 487.229316
+          },
+          {
+            "frame": 864,
+            "x": 637.380096,
+            "y": 490.044142
+          },
+          {
+            "frame": 865,
+            "x": 634.89751,
+            "y": 492.186679
+          },
+          {
+            "frame": 866,
+            "x": 632.414924,
+            "y": 493.656926
+          },
+          {
+            "frame": 867,
+            "x": 629.932339,
+            "y": 494.454885
+          },
+          {
+            "frame": 868,
+            "x": 627.449753,
+            "y": 494.580554
+          },
+          {
+            "frame": 869,
+            "x": 624.967168,
+            "y": 494.033933
+          },
+          {
+            "frame": 870,
+            "x": 622.484582,
+            "y": 492.815024
+          },
+          {
+            "frame": 871,
+            "x": 620.001996,
+            "y": 490.923825
+          },
+          {
+            "frame": 872,
+            "x": 617.519411,
+            "y": 488.360337
+          },
+          {
+            "frame": 873,
+            "x": 615.036825,
+            "y": 485.12456
+          },
+          {
+            "frame": 874,
+            "x": 612.55424,
+            "y": 481.216493
+          },
+          {
+            "frame": 875,
+            "x": 610.071654,
+            "y": 476.636137
+          },
+          {
+            "frame": 876,
+            "x": 607.589068,
+            "y": 471.383492
+          },
+          {
+            "frame": 877,
+            "x": 605.106483,
+            "y": 465.458557
+          },
+          {
+            "frame": 878,
+            "x": 602.623897,
+            "y": 458.861333
+          },
+          {
+            "frame": 879,
+            "x": 600.141312,
+            "y": 451.59182
+          },
+          {
+            "frame": 880,
+            "x": 597.658726,
+            "y": 443.650018
+          },
+          {
+            "frame": 881,
+            "x": 595.17614,
+            "y": 435.035927
+          },
+          {
+            "frame": 882,
+            "x": 592.693555,
+            "y": 425.749546
+          }
+        ]
+      }
+    ],
+    "contact_events": [
+      {
+        "trajectory_id": 9,
+        "source_tracklet": 11,
+        "successor_tracklet": 15,
+        "source_end_frame": 299,
+        "successor_start_frame": 329,
+        "gap_frames": 29,
+        "error_px": 95.136557,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.238797,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 300,
+            "x": 543.716496,
+            "y": 480.986569
+          },
+          {
+            "frame": 301,
+            "x": 546.067519,
+            "y": 485.670193
+          },
+          {
+            "frame": 302,
+            "x": 548.418541,
+            "y": 489.856345
+          },
+          {
+            "frame": 303,
+            "x": 550.769564,
+            "y": 493.545022
+          },
+          {
+            "frame": 304,
+            "x": 553.120586,
+            "y": 496.736227
+          },
+          {
+            "frame": 305,
+            "x": 555.471609,
+            "y": 499.429958
+          },
+          {
+            "frame": 306,
+            "x": 557.822632,
+            "y": 501.626216
+          },
+          {
+            "frame": 307,
+            "x": 560.173654,
+            "y": 503.325
+          },
+          {
+            "frame": 308,
+            "x": 562.524677,
+            "y": 504.526311
+          },
+          {
+            "frame": 309,
+            "x": 564.875699,
+            "y": 505.230148
+          },
+          {
+            "frame": 310,
+            "x": 567.226722,
+            "y": 505.436513
+          },
+          {
+            "frame": 311,
+            "x": 569.577744,
+            "y": 505.145403
+          },
+          {
+            "frame": 312,
+            "x": 571.928767,
+            "y": 504.356821
+          },
+          {
+            "frame": 313,
+            "x": 574.279789,
+            "y": 503.070765
+          },
+          {
+            "frame": 314,
+            "x": 576.630812,
+            "y": 501.287235
+          },
+          {
+            "frame": 315,
+            "x": 578.981835,
+            "y": 499.006232
+          },
+          {
+            "frame": 316,
+            "x": 581.332857,
+            "y": 496.227756
+          },
+          {
+            "frame": 317,
+            "x": 583.68388,
+            "y": 492.951807
+          },
+          {
+            "frame": 318,
+            "x": 586.034902,
+            "y": 489.178384
+          },
+          {
+            "frame": 319,
+            "x": 588.385925,
+            "y": 484.907487
+          },
+          {
+            "frame": 320,
+            "x": 590.736947,
+            "y": 480.139118
+          },
+          {
+            "frame": 321,
+            "x": 593.08797,
+            "y": 474.873275
+          },
+          {
+            "frame": 322,
+            "x": 595.438992,
+            "y": 469.109958
+          },
+          {
+            "frame": 323,
+            "x": 597.790015,
+            "y": 462.849168
+          },
+          {
+            "frame": 324,
+            "x": 600.141038,
+            "y": 456.090905
+          },
+          {
+            "frame": 325,
+            "x": 602.49206,
+            "y": 448.835168
+          },
+          {
+            "frame": 326,
+            "x": 604.843083,
+            "y": 441.081958
+          },
+          {
+            "frame": 327,
+            "x": 607.194105,
+            "y": 432.831275
+          },
+          {
+            "frame": 328,
+            "x": 609.545128,
+            "y": 424.083118
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 12,
+        "successor_tracklet": 16,
+        "source_end_frame": 309,
+        "successor_start_frame": 339,
+        "gap_frames": 29,
+        "error_px": 114.049662,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.286269,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 310,
+            "x": 652.928786,
+            "y": 444.271292
+          },
+          {
+            "frame": 311,
+            "x": 653.382329,
+            "y": 450.819072
+          },
+          {
+            "frame": 312,
+            "x": 653.835873,
+            "y": 456.627229
+          },
+          {
+            "frame": 313,
+            "x": 654.289416,
+            "y": 461.695766
+          },
+          {
+            "frame": 314,
+            "x": 654.74296,
+            "y": 466.02468
+          },
+          {
+            "frame": 315,
+            "x": 655.196503,
+            "y": 469.613972
+          },
+          {
+            "frame": 316,
+            "x": 655.650047,
+            "y": 472.463643
+          },
+          {
+            "frame": 317,
+            "x": 656.10359,
+            "y": 474.573692
+          },
+          {
+            "frame": 318,
+            "x": 656.557134,
+            "y": 475.94412
+          },
+          {
+            "frame": 319,
+            "x": 657.010677,
+            "y": 476.574925
+          },
+          {
+            "frame": 320,
+            "x": 657.464221,
+            "y": 476.466109
+          },
+          {
+            "frame": 321,
+            "x": 657.917764,
+            "y": 475.617671
+          },
+          {
+            "frame": 322,
+            "x": 658.371308,
+            "y": 474.029611
+          },
+          {
+            "frame": 323,
+            "x": 658.824851,
+            "y": 471.70193
+          },
+          {
+            "frame": 324,
+            "x": 659.278395,
+            "y": 468.634626
+          },
+          {
+            "frame": 325,
+            "x": 659.731938,
+            "y": 464.827701
+          },
+          {
+            "frame": 326,
+            "x": 660.185482,
+            "y": 460.281154
+          },
+          {
+            "frame": 327,
+            "x": 660.639025,
+            "y": 454.994986
+          },
+          {
+            "frame": 328,
+            "x": 661.092569,
+            "y": 448.969196
+          },
+          {
+            "frame": 329,
+            "x": 661.546113,
+            "y": 442.203784
+          },
+          {
+            "frame": 330,
+            "x": 661.999656,
+            "y": 434.69875
+          },
+          {
+            "frame": 331,
+            "x": 662.4532,
+            "y": 426.454094
+          },
+          {
+            "frame": 332,
+            "x": 662.906743,
+            "y": 417.469817
+          },
+          {
+            "frame": 333,
+            "x": 663.360287,
+            "y": 407.745918
+          },
+          {
+            "frame": 334,
+            "x": 663.81383,
+            "y": 397.282397
+          },
+          {
+            "frame": 335,
+            "x": 664.267374,
+            "y": 386.079254
+          },
+          {
+            "frame": 336,
+            "x": 664.720917,
+            "y": 374.13649
+          },
+          {
+            "frame": 337,
+            "x": 665.174461,
+            "y": 361.454104
+          },
+          {
+            "frame": 338,
+            "x": 665.628004,
+            "y": 348.032096
+          }
+        ]
+      },
+      {
+        "trajectory_id": 8,
+        "source_tracklet": 10,
+        "successor_tracklet": 13,
+        "source_end_frame": 238,
+        "successor_start_frame": 267,
+        "gap_frames": 28,
+        "error_px": 210.675245,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.528803,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 239,
+            "x": 551.110259,
+            "y": 468.821868
+          },
+          {
+            "frame": 240,
+            "x": 549.814173,
+            "y": 478.309864
+          },
+          {
+            "frame": 241,
+            "x": 548.518086,
+            "y": 487.399132
+          },
+          {
+            "frame": 242,
+            "x": 547.222,
+            "y": 496.089673
+          },
+          {
+            "frame": 243,
+            "x": 545.925914,
+            "y": 504.381487
+          },
+          {
+            "frame": 244,
+            "x": 544.629827,
+            "y": 512.274574
+          },
+          {
+            "frame": 245,
+            "x": 543.333741,
+            "y": 519.768933
+          },
+          {
+            "frame": 246,
+            "x": 542.037654,
+            "y": 526.864564
+          },
+          {
+            "frame": 247,
+            "x": 540.741568,
+            "y": 533.561469
+          },
+          {
+            "frame": 248,
+            "x": 539.445481,
+            "y": 539.859646
+          },
+          {
+            "frame": 249,
+            "x": 538.149395,
+            "y": 545.759095
+          },
+          {
+            "frame": 250,
+            "x": 536.853309,
+            "y": 551.259818
+          },
+          {
+            "frame": 251,
+            "x": 535.557222,
+            "y": 556.361813
+          },
+          {
+            "frame": 252,
+            "x": 534.261136,
+            "y": 561.065081
+          },
+          {
+            "frame": 253,
+            "x": 532.965049,
+            "y": 565.369621
+          },
+          {
+            "frame": 254,
+            "x": 531.668963,
+            "y": 569.275434
+          },
+          {
+            "frame": 255,
+            "x": 530.372877,
+            "y": 572.78252
+          },
+          {
+            "frame": 256,
+            "x": 529.07679,
+            "y": 575.890878
+          },
+          {
+            "frame": 257,
+            "x": 527.780704,
+            "y": 578.60051
+          },
+          {
+            "frame": 258,
+            "x": 526.484617,
+            "y": 580.911413
+          },
+          {
+            "frame": 259,
+            "x": 525.188531,
+            "y": 582.82359
+          },
+          {
+            "frame": 260,
+            "x": 523.892444,
+            "y": 584.337039
+          },
+          {
+            "frame": 261,
+            "x": 522.596358,
+            "y": 585.451761
+          },
+          {
+            "frame": 262,
+            "x": 521.300272,
+            "y": 586.167755
+          },
+          {
+            "frame": 263,
+            "x": 520.004185,
+            "y": 586.485023
+          },
+          {
+            "frame": 264,
+            "x": 518.708099,
+            "y": 586.403563
+          },
+          {
+            "frame": 265,
+            "x": 517.412012,
+            "y": 585.923375
+          },
+          {
+            "frame": 266,
+            "x": 516.115926,
+            "y": 585.04446
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 5,
+        "successor_tracklet": 12,
+        "source_end_frame": 228,
+        "successor_start_frame": 255,
+        "gap_frames": 26,
+        "error_px": 35.6679,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.089528,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 229,
+            "x": 642.442164,
+            "y": 487.12835
+          },
+          {
+            "frame": 230,
+            "x": 641.040105,
+            "y": 491.183368
+          },
+          {
+            "frame": 231,
+            "x": 639.638045,
+            "y": 494.617673
+          },
+          {
+            "frame": 232,
+            "x": 638.235986,
+            "y": 497.431266
+          },
+          {
+            "frame": 233,
+            "x": 636.833926,
+            "y": 499.624145
+          },
+          {
+            "frame": 234,
+            "x": 635.431867,
+            "y": 501.196313
+          },
+          {
+            "frame": 235,
+            "x": 634.029807,
+            "y": 502.147767
+          },
+          {
+            "frame": 236,
+            "x": 632.627748,
+            "y": 502.478509
+          },
+          {
+            "frame": 237,
+            "x": 631.225688,
+            "y": 502.188538
+          },
+          {
+            "frame": 238,
+            "x": 629.823629,
+            "y": 501.277855
+          },
+          {
+            "frame": 239,
+            "x": 628.421569,
+            "y": 499.746459
+          },
+          {
+            "frame": 240,
+            "x": 627.01951,
+            "y": 497.59435
+          },
+          {
+            "frame": 241,
+            "x": 625.61745,
+            "y": 494.821529
+          },
+          {
+            "frame": 242,
+            "x": 624.215391,
+            "y": 491.427995
+          },
+          {
+            "frame": 243,
+            "x": 622.813331,
+            "y": 487.413748
+          },
+          {
+            "frame": 244,
+            "x": 621.411272,
+            "y": 482.778789
+          },
+          {
+            "frame": 245,
+            "x": 620.009212,
+            "y": 477.523118
+          },
+          {
+            "frame": 246,
+            "x": 618.607153,
+            "y": 471.646733
+          },
+          {
+            "frame": 247,
+            "x": 617.205093,
+            "y": 465.149636
+          },
+          {
+            "frame": 248,
+            "x": 615.803034,
+            "y": 458.031826
+          },
+          {
+            "frame": 249,
+            "x": 614.400974,
+            "y": 450.293304
+          },
+          {
+            "frame": 250,
+            "x": 612.998915,
+            "y": 441.934069
+          },
+          {
+            "frame": 251,
+            "x": 611.596855,
+            "y": 432.954122
+          },
+          {
+            "frame": 252,
+            "x": 610.194796,
+            "y": 423.353461
+          },
+          {
+            "frame": 253,
+            "x": 608.792736,
+            "y": 413.132089
+          },
+          {
+            "frame": 254,
+            "x": 607.390677,
+            "y": 402.290003
+          }
+        ]
+      },
+      {
+        "trajectory_id": 14,
+        "source_tracklet": 22,
+        "successor_tracklet": 27,
+        "source_end_frame": 644,
+        "successor_start_frame": 670,
+        "gap_frames": 25,
+        "error_px": 74.668811,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.187422,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 645,
+            "x": 544.796143,
+            "y": 478.263393
+          },
+          {
+            "frame": 646,
+            "x": 547.143952,
+            "y": 483.433821
+          },
+          {
+            "frame": 647,
+            "x": 549.491762,
+            "y": 488.166036
+          },
+          {
+            "frame": 648,
+            "x": 551.839571,
+            "y": 492.460036
+          },
+          {
+            "frame": 649,
+            "x": 554.187381,
+            "y": 496.315821
+          },
+          {
+            "frame": 650,
+            "x": 556.53519,
+            "y": 499.733393
+          },
+          {
+            "frame": 651,
+            "x": 558.883,
+            "y": 502.71275
+          },
+          {
+            "frame": 652,
+            "x": 561.23081,
+            "y": 505.253893
+          },
+          {
+            "frame": 653,
+            "x": 563.578619,
+            "y": 507.356821
+          },
+          {
+            "frame": 654,
+            "x": 565.926429,
+            "y": 509.021536
+          },
+          {
+            "frame": 655,
+            "x": 568.274238,
+            "y": 510.248036
+          },
+          {
+            "frame": 656,
+            "x": 570.622048,
+            "y": 511.036321
+          },
+          {
+            "frame": 657,
+            "x": 572.969857,
+            "y": 511.386393
+          },
+          {
+            "frame": 658,
+            "x": 575.317667,
+            "y": 511.29825
+          },
+          {
+            "frame": 659,
+            "x": 577.665476,
+            "y": 510.771893
+          },
+          {
+            "frame": 660,
+            "x": 580.013286,
+            "y": 509.807321
+          },
+          {
+            "frame": 661,
+            "x": 582.361095,
+            "y": 508.404536
+          },
+          {
+            "frame": 662,
+            "x": 584.708905,
+            "y": 506.563536
+          },
+          {
+            "frame": 663,
+            "x": 587.056714,
+            "y": 504.284321
+          },
+          {
+            "frame": 664,
+            "x": 589.404524,
+            "y": 501.566893
+          },
+          {
+            "frame": 665,
+            "x": 591.752333,
+            "y": 498.41125
+          },
+          {
+            "frame": 666,
+            "x": 594.100143,
+            "y": 494.817393
+          },
+          {
+            "frame": 667,
+            "x": 596.447952,
+            "y": 490.785321
+          },
+          {
+            "frame": 668,
+            "x": 598.795762,
+            "y": 486.315036
+          },
+          {
+            "frame": 669,
+            "x": 601.143571,
+            "y": 481.406536
+          }
+        ]
+      },
+      {
+        "trajectory_id": 17,
+        "source_tracklet": 26,
+        "successor_tracklet": 32,
+        "source_end_frame": 717,
+        "successor_start_frame": 743,
+        "gap_frames": 25,
+        "error_px": 78.409194,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.19681,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 718,
+            "x": 624.027804,
+            "y": 481.619213
+          },
+          {
+            "frame": 719,
+            "x": 623.969942,
+            "y": 486.522006
+          },
+          {
+            "frame": 720,
+            "x": 623.91208,
+            "y": 490.928601
+          },
+          {
+            "frame": 721,
+            "x": 623.854217,
+            "y": 494.838997
+          },
+          {
+            "frame": 722,
+            "x": 623.796355,
+            "y": 498.253195
+          },
+          {
+            "frame": 723,
+            "x": 623.738493,
+            "y": 501.171194
+          },
+          {
+            "frame": 724,
+            "x": 623.68063,
+            "y": 503.592994
+          },
+          {
+            "frame": 725,
+            "x": 623.622768,
+            "y": 505.518595
+          },
+          {
+            "frame": 726,
+            "x": 623.564906,
+            "y": 506.947998
+          },
+          {
+            "frame": 727,
+            "x": 623.507043,
+            "y": 507.881202
+          },
+          {
+            "frame": 728,
+            "x": 623.449181,
+            "y": 508.318208
+          },
+          {
+            "frame": 729,
+            "x": 623.391319,
+            "y": 508.259015
+          },
+          {
+            "frame": 730,
+            "x": 623.333457,
+            "y": 507.703623
+          },
+          {
+            "frame": 731,
+            "x": 623.275594,
+            "y": 506.652033
+          },
+          {
+            "frame": 732,
+            "x": 623.217732,
+            "y": 505.104243
+          },
+          {
+            "frame": 733,
+            "x": 623.15987,
+            "y": 503.060256
+          },
+          {
+            "frame": 734,
+            "x": 623.102007,
+            "y": 500.520069
+          },
+          {
+            "frame": 735,
+            "x": 623.044145,
+            "y": 497.483684
+          },
+          {
+            "frame": 736,
+            "x": 622.986283,
+            "y": 493.9511
+          },
+          {
+            "frame": 737,
+            "x": 622.92842,
+            "y": 489.922318
+          },
+          {
+            "frame": 738,
+            "x": 622.870558,
+            "y": 485.397337
+          },
+          {
+            "frame": 739,
+            "x": 622.812696,
+            "y": 480.376157
+          },
+          {
+            "frame": 740,
+            "x": 622.754833,
+            "y": 474.858779
+          },
+          {
+            "frame": 741,
+            "x": 622.696971,
+            "y": 468.845201
+          },
+          {
+            "frame": 742,
+            "x": 622.639109,
+            "y": 462.335426
+          }
+        ]
+      },
+      {
+        "trajectory_id": 16,
+        "source_tracklet": 24,
+        "successor_tracklet": 28,
+        "source_end_frame": 653,
+        "successor_start_frame": 678,
+        "gap_frames": 24,
+        "error_px": 98.179813,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.246435,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 654,
+            "x": 647.683857,
+            "y": 435.094875
+          },
+          {
+            "frame": 655,
+            "x": 648.690881,
+            "y": 442.14278
+          },
+          {
+            "frame": 656,
+            "x": 649.697905,
+            "y": 448.367506
+          },
+          {
+            "frame": 657,
+            "x": 650.704929,
+            "y": 453.769054
+          },
+          {
+            "frame": 658,
+            "x": 651.711952,
+            "y": 458.347423
+          },
+          {
+            "frame": 659,
+            "x": 652.718976,
+            "y": 462.102613
+          },
+          {
+            "frame": 660,
+            "x": 653.726,
+            "y": 465.034625
+          },
+          {
+            "frame": 661,
+            "x": 654.733024,
+            "y": 467.143458
+          },
+          {
+            "frame": 662,
+            "x": 655.740048,
+            "y": 468.429113
+          },
+          {
+            "frame": 663,
+            "x": 656.747071,
+            "y": 468.891589
+          },
+          {
+            "frame": 664,
+            "x": 657.754095,
+            "y": 468.530887
+          },
+          {
+            "frame": 665,
+            "x": 658.761119,
+            "y": 467.347006
+          },
+          {
+            "frame": 666,
+            "x": 659.768143,
+            "y": 465.339946
+          },
+          {
+            "frame": 667,
+            "x": 660.775167,
+            "y": 462.509708
+          },
+          {
+            "frame": 668,
+            "x": 661.78219,
+            "y": 458.856292
+          },
+          {
+            "frame": 669,
+            "x": 662.789214,
+            "y": 454.379696
+          },
+          {
+            "frame": 670,
+            "x": 663.796238,
+            "y": 449.079923
+          },
+          {
+            "frame": 671,
+            "x": 664.803262,
+            "y": 442.95697
+          },
+          {
+            "frame": 672,
+            "x": 665.810286,
+            "y": 436.010839
+          },
+          {
+            "frame": 673,
+            "x": 666.81731,
+            "y": 428.24153
+          },
+          {
+            "frame": 674,
+            "x": 667.824333,
+            "y": 419.649042
+          },
+          {
+            "frame": 675,
+            "x": 668.831357,
+            "y": 410.233375
+          },
+          {
+            "frame": 676,
+            "x": 669.838381,
+            "y": 399.99453
+          },
+          {
+            "frame": 677,
+            "x": 670.845405,
+            "y": 388.932506
+          }
+        ]
+      },
+      {
+        "trajectory_id": 5,
+        "source_tracklet": 30,
+        "successor_tracklet": 38,
+        "source_end_frame": 845,
+        "successor_start_frame": 869,
+        "gap_frames": 23,
+        "error_px": 57.222037,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.14363,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 846,
+            "x": 541.422964,
+            "y": 482.838875
+          },
+          {
+            "frame": 847,
+            "x": 543.018595,
+            "y": 486.050994
+          },
+          {
+            "frame": 848,
+            "x": 544.614226,
+            "y": 488.522482
+          },
+          {
+            "frame": 849,
+            "x": 546.209857,
+            "y": 490.253339
+          },
+          {
+            "frame": 850,
+            "x": 547.805488,
+            "y": 491.243565
+          },
+          {
+            "frame": 851,
+            "x": 549.401119,
+            "y": 491.493161
+          },
+          {
+            "frame": 852,
+            "x": 550.99675,
+            "y": 491.002125
+          },
+          {
+            "frame": 853,
+            "x": 552.592381,
+            "y": 489.770458
+          },
+          {
+            "frame": 854,
+            "x": 554.188012,
+            "y": 487.798161
+          },
+          {
+            "frame": 855,
+            "x": 555.783643,
+            "y": 485.085232
+          },
+          {
+            "frame": 856,
+            "x": 557.379274,
+            "y": 481.631673
+          },
+          {
+            "frame": 857,
+            "x": 558.974905,
+            "y": 477.437482
+          },
+          {
+            "frame": 858,
+            "x": 560.570536,
+            "y": 472.502661
+          },
+          {
+            "frame": 859,
+            "x": 562.166167,
+            "y": 466.827208
+          },
+          {
+            "frame": 860,
+            "x": 563.761798,
+            "y": 460.411125
+          },
+          {
+            "frame": 861,
+            "x": 565.357429,
+            "y": 453.254411
+          },
+          {
+            "frame": 862,
+            "x": 566.95306,
+            "y": 445.357065
+          },
+          {
+            "frame": 863,
+            "x": 568.54869,
+            "y": 436.719089
+          },
+          {
+            "frame": 864,
+            "x": 570.144321,
+            "y": 427.340482
+          },
+          {
+            "frame": 865,
+            "x": 571.739952,
+            "y": 417.221244
+          },
+          {
+            "frame": 866,
+            "x": 573.335583,
+            "y": 406.361375
+          },
+          {
+            "frame": 867,
+            "x": 574.931214,
+            "y": 394.760875
+          },
+          {
+            "frame": 868,
+            "x": 576.526845,
+            "y": 382.419744
+          }
+        ]
+      },
+      {
+        "trajectory_id": 11,
+        "source_tracklet": 17,
+        "successor_tracklet": 25,
+        "source_end_frame": 582,
+        "successor_start_frame": 606,
+        "gap_frames": 23,
+        "error_px": 151.220066,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.379568,
+        "hand_near": true,
+        "hand_side": "left",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 583,
+            "x": 547.677931,
+            "y": 465.88705
+          },
+          {
+            "frame": 584,
+            "x": 546.716764,
+            "y": 475.091262
+          },
+          {
+            "frame": 585,
+            "x": 545.755596,
+            "y": 483.869109
+          },
+          {
+            "frame": 586,
+            "x": 544.794429,
+            "y": 492.220592
+          },
+          {
+            "frame": 587,
+            "x": 543.833261,
+            "y": 500.14571
+          },
+          {
+            "frame": 588,
+            "x": 542.872093,
+            "y": 507.644464
+          },
+          {
+            "frame": 589,
+            "x": 541.910926,
+            "y": 514.716853
+          },
+          {
+            "frame": 590,
+            "x": 540.949758,
+            "y": 521.362878
+          },
+          {
+            "frame": 591,
+            "x": 539.988591,
+            "y": 527.582538
+          },
+          {
+            "frame": 592,
+            "x": 539.027423,
+            "y": 533.375834
+          },
+          {
+            "frame": 593,
+            "x": 538.066256,
+            "y": 538.742765
+          },
+          {
+            "frame": 594,
+            "x": 537.105088,
+            "y": 543.683332
+          },
+          {
+            "frame": 595,
+            "x": 536.143921,
+            "y": 548.197534
+          },
+          {
+            "frame": 596,
+            "x": 535.182753,
+            "y": 552.285372
+          },
+          {
+            "frame": 597,
+            "x": 534.221586,
+            "y": 555.946845
+          },
+          {
+            "frame": 598,
+            "x": 533.260418,
+            "y": 559.181954
+          },
+          {
+            "frame": 599,
+            "x": 532.29925,
+            "y": 561.990698
+          },
+          {
+            "frame": 600,
+            "x": 531.338083,
+            "y": 564.373077
+          },
+          {
+            "frame": 601,
+            "x": 530.376915,
+            "y": 566.329092
+          },
+          {
+            "frame": 602,
+            "x": 529.415748,
+            "y": 567.858743
+          },
+          {
+            "frame": 603,
+            "x": 528.45458,
+            "y": 568.962029
+          },
+          {
+            "frame": 604,
+            "x": 527.493413,
+            "y": 569.638951
+          },
+          {
+            "frame": 605,
+            "x": 526.532245,
+            "y": 569.889508
+          }
+        ]
+      },
+      {
+        "trajectory_id": 4,
+        "source_tracklet": 18,
+        "successor_tracklet": 31,
+        "source_end_frame": 709,
+        "successor_start_frame": 731,
+        "gap_frames": 21,
+        "error_px": 182.900254,
+        "q90_gate_px": 398.4,
+        "normalized_error": 0.459087,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 710,
+            "x": 556.102059,
+            "y": 483.195624
+          },
+          {
+            "frame": 711,
+            "x": 558.192322,
+            "y": 479.72848
+          },
+          {
+            "frame": 712,
+            "x": 560.282585,
+            "y": 475.134112
+          },
+          {
+            "frame": 713,
+            "x": 562.372848,
+            "y": 469.412522
+          },
+          {
+            "frame": 714,
+            "x": 564.463111,
+            "y": 462.56371
+          },
+          {
+            "frame": 715,
+            "x": 566.553374,
+            "y": 454.587675
+          },
+          {
+            "frame": 716,
+            "x": 568.643637,
+            "y": 445.484418
+          },
+          {
+            "frame": 717,
+            "x": 570.7339,
+            "y": 435.253938
+          },
+          {
+            "frame": 718,
+            "x": 572.824163,
+            "y": 423.896236
+          },
+          {
+            "frame": 719,
+            "x": 574.914426,
+            "y": 411.411311
+          },
+          {
+            "frame": 720,
+            "x": 577.004689,
+            "y": 397.799164
+          },
+          {
+            "frame": 721,
+            "x": 579.094952,
+            "y": 383.059794
+          },
+          {
+            "frame": 722,
+            "x": 581.185216,
+            "y": 367.193202
+          },
+          {
+            "frame": 723,
+            "x": 583.275479,
+            "y": 350.199387
+          },
+          {
+            "frame": 724,
+            "x": 585.365742,
+            "y": 332.078349
+          },
+          {
+            "frame": 725,
+            "x": 587.456005,
+            "y": 312.83009
+          },
+          {
+            "frame": 726,
+            "x": 589.546268,
+            "y": 292.454607
+          },
+          {
+            "frame": 727,
+            "x": 591.636531,
+            "y": 270.951902
+          },
+          {
+            "frame": 728,
+            "x": 593.726794,
+            "y": 248.321975
+          },
+          {
+            "frame": 729,
+            "x": 595.817057,
+            "y": 224.564825
+          },
+          {
+            "frame": 730,
+            "x": 597.90732,
+            "y": 199.680453
+          }
+        ]
+      },
+      {
+        "trajectory_id": 20,
+        "source_tracklet": 35,
+        "successor_tracklet": 40,
+        "source_end_frame": 862,
+        "successor_start_frame": 883,
+        "gap_frames": 20,
+        "error_px": 10.417402,
+        "q90_gate_px": 155.9,
+        "normalized_error": 0.066821,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 863,
+            "x": 639.862681,
+            "y": 487.229316
+          },
+          {
+            "frame": 864,
+            "x": 637.380096,
+            "y": 490.044142
+          },
+          {
+            "frame": 865,
+            "x": 634.89751,
+            "y": 492.186679
+          },
+          {
+            "frame": 866,
+            "x": 632.414924,
+            "y": 493.656926
+          },
+          {
+            "frame": 867,
+            "x": 629.932339,
+            "y": 494.454885
+          },
+          {
+            "frame": 868,
+            "x": 627.449753,
+            "y": 494.580554
+          },
+          {
+            "frame": 869,
+            "x": 624.967168,
+            "y": 494.033933
+          },
+          {
+            "frame": 870,
+            "x": 622.484582,
+            "y": 492.815024
+          },
+          {
+            "frame": 871,
+            "x": 620.001996,
+            "y": 490.923825
+          },
+          {
+            "frame": 872,
+            "x": 617.519411,
+            "y": 488.360337
+          },
+          {
+            "frame": 873,
+            "x": 615.036825,
+            "y": 485.12456
+          },
+          {
+            "frame": 874,
+            "x": 612.55424,
+            "y": 481.216493
+          },
+          {
+            "frame": 875,
+            "x": 610.071654,
+            "y": 476.636137
+          },
+          {
+            "frame": 876,
+            "x": 607.589068,
+            "y": 471.383492
+          },
+          {
+            "frame": 877,
+            "x": 605.106483,
+            "y": 465.458557
+          },
+          {
+            "frame": 878,
+            "x": 602.623897,
+            "y": 458.861333
+          },
+          {
+            "frame": 879,
+            "x": 600.141312,
+            "y": 451.59182
+          },
+          {
+            "frame": 880,
+            "x": 597.658726,
+            "y": 443.650018
+          },
+          {
+            "frame": 881,
+            "x": 595.17614,
+            "y": 435.035927
+          },
+          {
+            "frame": 882,
+            "x": 592.693555,
+            "y": 425.749546
+          }
+        ]
+      },
+      {
+        "trajectory_id": 11,
+        "source_tracklet": 25,
+        "successor_tracklet": 34,
+        "source_end_frame": 749,
+        "successor_start_frame": 769,
+        "gap_frames": 19,
+        "error_px": 38.117723,
+        "q90_gate_px": 155.9,
+        "normalized_error": 0.244501,
+        "hand_near": true,
+        "hand_side": "right",
+        "accepted": true,
+        "new_vs_shipped": true,
+        "prediction": [
+          {
+            "frame": 750,
+            "x": 635.557772,
+            "y": 487.920932
+          },
+          {
+            "frame": 751,
+            "x": 633.62718,
+            "y": 492.81102
+          },
+          {
+            "frame": 752,
+            "x": 631.696588,
+            "y": 497.086675
+          },
+          {
+            "frame": 753,
+            "x": 629.765996,
+            "y": 500.747897
+          },
+          {
+            "frame": 754,
+            "x": 627.835404,
+            "y": 503.794685
+          },
+          {
+            "frame": 755,
+            "x": 625.904811,
+            "y": 506.227041
+          },
+          {
+            "frame": 756,
+            "x": 623.974219,
+            "y": 508.044964
+          },
+          {
+            "frame": 757,
+            "x": 622.043627,
+            "y": 509.248453
+          },
+          {
+            "frame": 758,
+            "x": 620.113035,
+            "y": 509.83751
+          },
+          {
+            "frame": 759,
+            "x": 618.182443,
+            "y": 509.812134
+          },
+          {
+            "frame": 760,
+            "x": 616.251851,
+            "y": 509.172324
+          },
+          {
+            "frame": 761,
+            "x": 614.321259,
+            "y": 507.918082
+          },
+          {
+            "frame": 762,
+            "x": 612.390667,
+            "y": 506.049407
+          },
+          {
+            "frame": 763,
+            "x": 610.460075,
+            "y": 503.566298
+          },
+          {
+            "frame": 764,
+            "x": 608.529483,
+            "y": 500.468757
+          },
+          {
+            "frame": 765,
+            "x": 606.598891,
+            "y": 496.756783
+          },
+          {
+            "frame": 766,
+            "x": 604.668299,
+            "y": 492.430375
+          },
+          {
+            "frame": 767,
+            "x": 602.737707,
+            "y": 487.489535
+          },
+          {
+            "frame": 768,
+            "x": 600.807115,
+            "y": 481.934261
+          }
+        ]
+      }
+    ]
+  }
+}
