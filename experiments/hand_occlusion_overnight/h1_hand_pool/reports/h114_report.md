@@ -220,6 +220,37 @@ re-thrown, but the detector's mid-hold dropout makes the endpoints
 appear far apart. A naive same-hand large-jump filter would
 incorrectly reject these.
 
+### BALLISTIC edges are different: 6/9 in-chain BALLISTIC edges have end_d > 200
+
+As a side observation, h7v3plus3 contains 9 BALLISTIC edges (mid-air
+predictions, not hand-classified). Of these, **6 have end_d > 200** (or
+start_d > 200):
+
+| Edge | sj | end_d | start_d | cross | label |
+|------|---:|------:|--------:|:-----:|:-----:|
+| identical 19→20 | 37.1 | 497.2 | 471.9 | True | correct |
+| identical 28→29 | 4.1 | 332.3 | 327.0 | False | correct |
+| identical 31→36 | 37.6 | 468.7 | 407.0 | True | correct |
+| identical 50→55 | 187.3 | 258.7 | n/a | False | correct |
+| identical 60→64 | 99.5 | 436.1 | 384.4 | True | correct |
+| identical 67→70 | 68.5 | 272.6 | 197.1 | False | correct |
+
+This is consistent with BALLISTIC edges being mid-air parabolic
+trajectories: the source's last detection and target's first detection
+are far from the assigned hand because the ball is on a parabolic arc,
+not at the hand. **This validates H112's design choice to restrict the
+filter to HAND_EDGE_TYPES (excluding BALLISTIC).** A hand-distance
+filter applied to BALLISTIC edges would drop 6/9 in-chain BALLISTIC
+edges (67% precision loss).
+
+Notably, 28→29 has sj=4.1 px in 4 frames (1 px/frame) — the ball is
+essentially stationary between t28 and t29, but the end_d=332 and
+start_d=327 show the ball is far from the assigned hand. This is a
+special case where the tracklet ended at a stationary point that
+wasn't the hand. The chain kept this as a BALLISTIC edge because the
+tracklet features suggest a real (if static) trajectory, but the
+large hand distance is a signal worth investigating in future work.
+
 ## Recommended operating point (unchanged from H112)
 
 ```
