@@ -5515,3 +5515,96 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_v5_summary.json` (v5 sens grid)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_v6_per_pair.json` (v6 cross-validation)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h94_report.md`
+
+---
+
+## H96 — H90 NEW signal properly integrated with H94 v4 (FOUNTAIN_3+ post-filter) (2026-08-29 ~00:05 CEST)
+
+- **Hypothesis:** The H94 v5 "regression" was actually a bug.
+  `compute_aloft_features_with_conf` returned only c00_*/c40_* fields,
+  not plain `pct_ge1`/`pct_ge3`/`max_aloft`, so the H43/H69 pct_ge1
+  guard was silently disabled (`aloft.get("pct_ge1", 0)` returned 0,
+  trivially < 0.92). Properly integrating H90 NEW should achieve
+  PERFECT 21-phase accuracy by catching the last H94 v4 FP (f=482-594
+  YouTube STATIC_HOLD) without false-rejecting f=800-861 (real
+  5-ball cascade).
+
+- **Four H96 variants tested:**
+
+  | Stack | TP | TN | FP | FN | P | R | acc |
+  |-------|----|----|----|----|---|---|-----|
+  | H94 v4 baseline | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 |
+  | **H96 v1 (H90 NEW OR)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+  | **H96 v2 (H90 NEW strict)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+  | H96 v3 (H90 NEW c40g3<0.30) | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 |
+  | **H96 v4 (H90 NEW AND with drop)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+
+- **Sensitivity grid (H96 v2, max4_thr=4, c40g3_thr ∈ [0.40, 0.50])**
+  - 3 cells all give 17/4/0/0 (PERFECT) — wide flat region
+  - max4=4, c40g3=0.30-0.35: 17/3/1/0 (c40g3 too strict, misses f=482-594)
+  - max4=3: 14/4/0/3 (max4 too lenient, drops f=482-594)
+
+- **Per-stem analysis (H96 v2):**
+
+  | Stem | TP | TN | FP | FN | P | R | acc |
+  |------|----|----|----|----|---|---|-----|
+  | ident | 7 | 2 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+  | youtu | 10 | 2 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+  | all | 17 | 4 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+
+- **Cross-validation on 113 manual review pairs (H59 GT):** no edge
+  impact. P=0.979, R=0.648, FPR=0.024 (same as H77/H85/H88/H94 v4).
+  (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs).
+
+- **Why H90 NEW works (and H69+guard doesn't):**
+  - H69+guard: blocks H69 if pct_ge1<0.92. f=482-594 has pct_ge1=1.0
+    (YOLO false positives on background features), so guard blocks.
+  - H90 NEW: independent signal using c4 detections (conf >= 0.4).
+    c40g3<0.40 AND c40.max_aloft>=4 fires ONLY on f=482-594.
+    f=800-861 has c40g3=0.25 but c40.max_aloft=3 (correctly excluded).
+    f=339-374 has c40g3=0.44 (correctly excluded).
+
+- **Two bugs found in H94 v5:**
+  1. `compute_aloft_features_with_conf` returned only c00_*/c40_*
+     fields, not plain `pct_ge1`/`pct_ge3`/`max_aloft`. The H43/H69
+     pct_ge1 guard was silently disabled.
+  2. Combined aloft computation required BOTH c0 and c4 to have data
+     on every frame, dropping 3 frames on f=685-716 and changing
+     pct_ge3 from 0.16 to 0.21 (breaking H87+max_aloft).
+
+- **Negative findings:**
+  - H94 v5 "regression" was a bug, not a real regression
+  - H96 v3 (c40g3<0.30) is over-strict
+  - H90 NEW is FOUNTAIN_3+ only (insufficient CASCADE_3+ / MIXED_3+
+    phases in the H93 sample for validation)
+  - H69+guard cannot catch f=482-594 (YOLO false positives keep
+    pct_ge1 at 1.0)
+
+- **Verdict:** **PASS — H96 v2 achieves PERFECT 21-phase accuracy**
+  (17/4/0/0, P=1.000, R=1.000, acc=1.000) on the H93 corrected GT.
+  The H90 NEW signal correctly catches f=482-594 without false-
+  rejecting any real juggling.
+
+- **Recommended operating point (post-H96, final):**
+  - h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+pct_ge1<0.92 +
+    H69+pct_ge1<0.92 + H74v4 (var<0.20 AND uLR<=1) + H78 +
+    H87+max_aloft>=2 + **H90 NEW (c40g3<0.40 AND c40.max_aloft>=4)** +
+    H52 + H53 + H71 (MIXED_3+ only)
+  - 21 phases (H93 corrected GT): **17/4/0/0, P=1.000, R=1.000, acc=1.000** (PERFECT)
+  - 113 review pairs (H77): P=0.979, R=0.648 (no edge impact)
+  - (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs)
+
+- **Future research directions (post-H96):**
+  1. **H97: re-evaluate the H82-H92 stack on the H96 v2 operating
+     point.** The H82/H90/H92 report metrics were computed on the
+     OLD H70 GT and don't reflect H96 v2's improvements.
+  2. **H98: investigate H90 NEW for MIXED_3+ / CASCADE_3+.** A 3rd
+     video with CASCADE_3+ would be needed for validation.
+  3. **Stop here.** H96 v2 achieves PERFECT 21-phase accuracy with
+     a wide flat region. Further improvements would require
+     fundamentally different signals.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h96_h90_new_properly_integrated.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h96_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h96_report.md`

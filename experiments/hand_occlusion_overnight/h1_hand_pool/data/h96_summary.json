@@ -1,0 +1,193 @@
+{
+  "H96_methodology": "H90 NEW properly integrated (BOTH v4 pct_ge1 AND c40 features); v1=OR, v2=only c40.max>=4, v3=c40g3<0.30, v4=AND with drop>0.20",
+  "h90_new_signals": {
+    "identical_balls_trick_000_018_631_669": {
+      "pct_ge1": 1.0,
+      "c00_pct_ge3": 0.2564102564102564,
+      "c00_max_aloft": 5,
+      "c40_pct_ge3": 0.20512820512820512,
+      "c40_max_aloft": 3,
+      "drop_pct_ge3": 0.051282051282051266
+    },
+    "identical_balls_trick_000_018_890_936": {
+      "pct_ge1": 1.0,
+      "c00_pct_ge3": 0.10869565217391304,
+      "c00_max_aloft": 4,
+      "c40_pct_ge3": 0.10256410256410256,
+      "c40_max_aloft": 3,
+      "drop_pct_ge3": 0.00613154960981048
+    },
+    "identical_balls_trick_000_018_977_1011": {
+      "pct_ge1": 0.8285714285714286,
+      "c00_pct_ge3": 0.02857142857142857,
+      "c00_max_aloft": 3,
+      "c40_pct_ge3": 0.03333333333333333,
+      "c40_max_aloft": 3,
+      "drop_pct_ge3": -0.004761904761904762
+    },
+    "identical_balls_trick_000_018_1029_1049": {
+      "pct_ge1": 1.0,
+      "c00_pct_ge3": 0.0,
+      "c00_max_aloft": 2,
+      "c40_pct_ge3": 0.0,
+      "c40_max_aloft": 2,
+      "drop_pct_ge3": 0.0
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_339_374": {
+      "pct_ge1": 1.0,
+      "c00_pct_ge3": 0.6111111111111112,
+      "c00_max_aloft": 4,
+      "c40_pct_ge3": 0.4411764705882353,
+      "c40_max_aloft": 3,
+      "drop_pct_ge3": 0.16993464052287588
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_482_594": {
+      "pct_ge1": 1.0,
+      "c00_pct_ge3": 0.6637168141592921,
+      "c00_max_aloft": 4,
+      "c40_pct_ge3": 0.36363636363636365,
+      "c40_max_aloft": 4,
+      "drop_pct_ge3": 0.3000804505229284
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_800_861": {
+      "pct_ge1": 0.9354838709677419,
+      "c00_pct_ge3": 0.5806451612903226,
+      "c00_max_aloft": 4,
+      "c40_pct_ge3": 0.24561403508771928,
+      "c40_max_aloft": 3,
+      "drop_pct_ge3": 0.33503112620260334
+    }
+  },
+  "stack_results": {
+    "H96 v1 (H94v4 + H90 NEW OR)": {
+      "combined": {
+        "TP": 17,
+        "TN": 4,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "ident": {
+        "TP": 7,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "youtu": {
+        "TP": 10,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      }
+    },
+    "H96 v2 (H90 NEW max>=4 only)": {
+      "combined": {
+        "TP": 17,
+        "TN": 4,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "ident": {
+        "TP": 7,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "youtu": {
+        "TP": 10,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      }
+    },
+    "H96 v3 (H90 NEW c40g3<0.30)": {
+      "combined": {
+        "TP": 17,
+        "TN": 3,
+        "FP": 1,
+        "FN": 0,
+        "P": 0.944,
+        "R": 1.0,
+        "acc": 0.952
+      },
+      "ident": {
+        "TP": 7,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "youtu": {
+        "TP": 10,
+        "TN": 1,
+        "FP": 1,
+        "FN": 0,
+        "P": 0.909,
+        "R": 1.0,
+        "acc": 0.917
+      }
+    },
+    "H96 v4 (H90 NEW AND)": {
+      "combined": {
+        "TP": 17,
+        "TN": 4,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "ident": {
+        "TP": 7,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      },
+      "youtu": {
+        "TP": 10,
+        "TN": 2,
+        "FP": 0,
+        "FN": 0,
+        "P": 1.0,
+        "R": 1.0,
+        "acc": 1.0
+      }
+    }
+  },
+  "operating_point": {
+    "name": "H96 v2 (H90 NEW with c40.max_aloft>=4 only, drop path removed)",
+    "rules": {
+      "FOUNTAIN_3+": "H43+guard (conf<0.55 AND pct_ge1<0.92) OR H69+guard (spec_conc<0.15 AND pct_ge1<0.92) OR H90_NEW_strict (c40g3<0.40 AND c40.max_aloft>=4) OR H74v4 (var<0.20 AND uLR<=1) OR H78 (mean_diff>10)",
+      "CASCADE_3+": "H87+max_aloft (pct_ge3<0.20 AND max_aloft>=2) OR H74v4 (var<0.20 AND uLR<=1)",
+      "MIXED_3+": "H71 (spec_conc<0.10)"
+    },
+    "thresholds": {
+      "c40_pct_ge3": 0.4,
+      "c40_max_aloft": 4,
+      "max_aloft_thr": 2,
+      "pct_ge1_thr": 0.92
+    }
+  }
+}

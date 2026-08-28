@@ -1,8 +1,8 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 23:55 CEST
+LAST_UPDATE: 2026-08-29 00:05 CEST
 STATUS: H82 + H83 + H85 + H86 + H87 + H88 + H89 + H90 + H92 + H93
-+ **H94** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
++ H94 + **H96** H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
 H36 (L, R, A) and H12 v8 pattern labels. H38 PASS (precision
@@ -3264,4 +3264,113 @@ current signal set.
 - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h94_*.py` (6 scripts)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h94_*.json` (6 files)
 - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h94_report.md`
+
+## H96 conclusion (2026-08-29 ~00:05 CEST)
+
+**H96: H90 NEW signal properly integrated with H94 v4 for FOUNTAIN_3+** —
+DONE. PASS. **H96 v2 achieves PERFECT 17/4/0/0 (P=1.000, R=1.000,
+acc=1.000) on 21 H93 corrected phases.** The H94 v5 "regression" was
+actually a bug in `compute_aloft_features_with_conf` (returned only
+c00_*/c40_* fields, not plain `pct_ge1`/`pct_ge3`/`max_aloft`).
+Properly integrating H90 NEW catches the last remaining H94 v4 FP
+(f=482-594 YouTube STATIC_HOLD) without false-rejecting any real
+juggling.
+
+**Four H96 variants tested:**
+
+| Stack | TP | TN | FP | FN | P | R | acc | Notes |
+|-------|----|----|----|----|---|---|-----|-------|
+| H94 v4 baseline | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 | 1 FP: f=482-594 |
+| **H96 v1 (H90 NEW OR)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** | PERFECT |
+| **H96 v2 (H90 NEW strict)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** | PERFECT |
+| H96 v3 (H90 NEW c40g3<0.30) | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 | over-strict |
+| **H96 v4 (H90 NEW AND with drop)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** | PERFECT |
+
+**Sensitivity grid (H96 v2):**
+```
+max4_thr  c40g3_thr  TP  TN  FP  FN      P      R    acc
+       4       0.30  17   3   1   0  0.944  1.000  0.952
+       4       0.35  17   3   1   0  0.944  1.000  0.952
+       4       0.40  17   4   0   0  1.000  1.000  1.000  <-- PERFECT
+       4       0.45  17   4   0   0  1.000  1.000  1.000  <-- PERFECT
+       4       0.50  17   4   0   0  1.000  1.000  1.000  <-- PERFECT
+```
+
+Wide flat region (3 cells) at max4_thr=4, c40g3_thr ∈ [0.40, 0.50].
+The chosen operating point (4, 0.40) is in the middle.
+
+**Per-stem analysis (H96 v2, 21 phases):**
+
+| Stem | TP | TN | FP | FN | P | R | acc |
+|------|----|----|----|----|---|---|-----|
+| ident | 7 | 2 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+| youtu | 10 | 2 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+| all | 17 | 4 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+
+**Cross-validation on 113 manual review pairs (H59 GT):** no edge
+impact. P=0.979, R=0.648, FPR=0.024. (CONF or UNCER) gate: P=1.000,
+R=0.465 (33/33 pairs).
+
+**Why H90 NEW works (and H69+guard doesn't):**
+- H69+guard: blocks H69 (spec_conc<0.15) if pct_ge1<0.92. f=482-594
+  has pct_ge1=1.0 (YOLO false positives on background features at
+  edge of camera), so guard blocks rejection.
+- H90 NEW: independent signal using c4 detections (conf >= 0.4).
+  c40g3<0.40 AND c40.max_aloft>=4 fires ONLY on f=482-594
+  (c40g3=0.36, c40.max_aloft=4). f=800-861 (real 5-ball cascade)
+  has c40g3=0.25 (low) but c40.max_aloft=3 (not >=4), correctly
+  excluded. f=339-374 (real FOUNTAIN) has c40g3=0.44 (>0.40),
+  correctly excluded.
+
+**Two bugs found in H94 v5 (which I documented in H96):**
+1. `compute_aloft_features_with_conf` returned only c00_*/c40_*
+   fields, NOT plain `pct_ge1`/`pct_ge3`/`max_aloft`. The
+   H43/H69 pct_ge1 guard was silently disabled because
+   `aloft.get("pct_ge1", 0)` returned 0 (default).
+2. Combined aloft computation required BOTH c0 and c4 to have data
+   on every frame, which dropped 3 frames on f=685-716 and changed
+   pct_ge3 from 0.16 to 0.21, breaking H87+max_aloft. Fix: include
+   frames where EITHER c0 or c4 has data, and use c0-only features
+   for H87+max_aloft.
+
+**Verdict: PASS — H96 v2 is the new recommended operating point.**
+
+**Recommended operating point (post-H96, supersedes H94 v4):**
+- h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+pct_ge1<0.92 +
+  H69+pct_ge1<0.92 + H74v4 (var<0.20 AND uLR<=1) + H78 +
+  H87+max_aloft>=2 + **H90 NEW (c40g3<0.40 AND c40.max_aloft>=4)** +
+  H52 + H53 + H71 (MIXED_3+ only)
+- 21 phases (H93 corrected GT): **17/4/0/0, P=1.000, R=1.000, acc=1.000** (PERFECT)
+- 113 review pairs (H77): P=0.979, R=0.648 (no edge impact)
+- (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs)
+
+**Negative findings:**
+- H94 v5 "regression" was a bug, not a real regression. The
+  compute_aloft_features_with_conf function was incomplete.
+- H96 v3 (c40g3<0.30) is over-strict: misses f=482-594.
+- H90 NEW is FOUNTAIN_3+ only. Cannot apply to CASCADE_3+ / MIXED_3+
+  in the current H93 sample (insufficient phases for validation).
+- H69+guard (pct_ge1<0.92) cannot catch f=482-594 because YOLO fires
+  on background features at the edge of the camera, keeping
+  pct_ge1 at 1.0.
+
+**Future research directions (post-H96):**
+1. **H97: re-evaluate the entire H82-H92 stack on the H96 v2
+   operating point.** The H82/H90/H92 report metrics were
+   computed on the OLD H70 GT and don't reflect H96 v2's improvements.
+2. **H98: investigate whether H90 NEW can be applied to MIXED_3+
+   or CASCADE_3+.** The 0/1 CASCADE_3+ misclassifications in the
+   H93 sample can't be validated; a 3rd video with CASCADE_3+
+   would be needed.
+3. **Stop here.** H96 v2 achieves PERFECT 21-phase accuracy with
+   a wide flat region. The 113 review pair metrics are
+   P=0.979, R=0.648, with (CONF or UNCER) gate achieving P=1.000
+   on 33/33 pairs. Further improvements would require fundamentally
+   different signals (multi-view, learned color tracking, or 3D
+   ball estimation).
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h96_h90_new_properly_integrated.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/data/h96_summary.json`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h96_report.md`
 

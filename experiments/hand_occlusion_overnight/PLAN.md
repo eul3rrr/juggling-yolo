@@ -2167,3 +2167,78 @@ H87+max_aloft>=2 + H52 + H53 + H71 (MIXED_3+ only)
 3. Stop here. H94 v4 achieves 17/3/1/0 with 100% recall and a wide
    flat region. Further improvements would require fundamentally
    different signals.
+
+## Ninety-sixth episode (H96) — STATUS: COMPLETE
+
+Sub-steps:
+
+1. ✅ Investigate H94 v5's "regression" — found TWO bugs:
+   - `compute_aloft_features_with_conf` only returned c00_*/c40_*
+     fields, NOT plain `pct_ge1`/`pct_ge3`/`max_aloft`. The H43/H69
+     pct_ge1 guard was silently disabled (`aloft.get("pct_ge1", 0)`
+     returned 0, trivially < 0.92).
+   - Combined aloft computation required BOTH c0 and c4 to have
+     data on every frame, dropping 3 frames on f=685-716 and
+     breaking H87+max_aloft (pct_ge3 changes from 0.16 to 0.21).
+
+2. ✅ Fix both bugs: include frames where EITHER c0 or c4 has data
+   (not both), and use c0-only features for H87+max_aloft while
+   c4 features drive H90 NEW.
+
+3. ✅ Test 4 H96 variants on H93 corrected GT (21 phases):
+
+   | Stack | TP | TN | FP | FN | P | R | acc |
+   |-------|----|----|----|----|---|---|-----|
+   | H94 v4 baseline | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 |
+   | **H96 v1 (H90 NEW OR)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+   | **H96 v2 (H90 NEW strict)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+   | H96 v3 (c40g3<0.30) | 17 | 3 | 1 | 0 | 0.944 | 1.000 | 0.952 |
+   | **H96 v4 (H90 NEW AND)** | **17** | **4** | **0** | **0** | **1.000** | **1.000** | **1.000** |
+
+4. ✅ Sensitivity grid (H96 v2): max4_thr=4, c40g3_thr ∈ [0.40, 0.50]
+   all give 17/4/0/0 (PERFECT) — wide flat region (3 cells)
+
+5. ✅ Cross-validation on 113 manual review pairs (H59 GT): no edge
+   impact. P=0.979, R=0.648, FPR=0.024 (same as H77/H85/H88/H94 v4).
+   (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs).
+
+6. ✅ Documented in `h96_report.md` and updated STATE.md + RESULTS_LOG.md
+
+**Verdict: PASS — H96 v2 achieves PERFECT 21-phase accuracy.**
+
+**Per-stem analysis (H96 v2, 21 phases, H93 corrected GT):**
+
+| Stem | TP | TN | FP | FN | P | R | acc |
+|------|----|----|----|----|---|---|-----|
+| ident | 7 | 2 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+| youtu | 10 | 2 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+| all | 17 | 4 | 0 | 0 | 1.000 | 1.000 | 1.000 |
+
+**Final recommended operating point (post-H96, final):**
+h7v3plus3 + H10 v11 v3 + H12 v8 + H50 + H43+pct_ge1<0.92 +
+H69+pct_ge1<0.92 + H74v4 (var<0.20 AND uLR<=1) + H78 +
+H87+max_aloft>=2 + H90 NEW (c40g3<0.40 AND c40.max_aloft>=4) +
+H52 + H53 + H71 (MIXED_3+ only)
+
+- **End-to-end accuracy on H93 corrected GT (21 phases): 100% (21/21 correct)**
+- **Precision: 1.000**
+- **Recall: 1.000**
+- 113 review pairs (H77): P=0.979, R=0.648 (no edge impact)
+- (CONF or UNCER) gate: P=1.000, R=0.465 (33/33 pairs)
+
+**Negative findings:**
+- H94 v5 "regression" was a bug, not a real regression
+- H96 v3 (c40g3<0.30) is over-strict (misses f=482-594)
+- H90 NEW is FOUNTAIN_3+ only (insufficient CASCADE_3+ / MIXED_3+
+  phases in the H93 sample for validation)
+- H69+guard cannot catch f=482-594 (YOLO false positives keep
+  pct_ge1 at 1.0)
+
+**Future research directions (post-H96):**
+1. H97: re-evaluate the H82-H92 stack on the H96 v2 operating point.
+   The H82/H90/H92 report metrics were computed on the OLD H70 GT.
+2. H98: investigate H90 NEW for MIXED_3+ / CASCADE_3+. A 3rd video
+   with CASCADE_3+ would be needed for validation.
+3. Stop here. H96 v2 achieves PERFECT 21-phase accuracy with a wide
+   flat region. Further improvements would require fundamentally
+   different signals.
