@@ -676,11 +676,30 @@ motion artifact, NOT a real quality signal).
 (w8v8=0 for identical, w8v8=0.30 for YouTube).
 Not implemented in this episode.
 
+## Twenty-second episode (H10 v6b) — STATUS: COMPLETE (PASS)
+
+Sub-steps:
+
+1. ✅ Implemented H10 v6b: per-video adaptive weights.
+   - identical: w8v8=0 (matches v5)
+   - youtube: w8v8=0.25 (apply v6's 4-dim formula)
+2. ✅ Ran on both videos. Compared to v5 ranking.
+3. ✅ Documented in `h10v6b_report.md`.
+
+**Verdict: PASS.** Per-video adaptive weights give the best
+of both worlds. H10 v6b is the new recommended chain quality
+score for mixed-video analyses.
+- identical: v6b = v5 (mean q 0.529, no degradation).
+  All 43 chains preserve their v5 rank. Chain 21 stays at #0.
+- youtube: v6b improves over v5 (mean q 0.537 → 0.569).
+  4 chains promoted (chain 3, 8, 0 from h8v8=0.88),
+  2 demoted (chain 12, 1), 9 unchanged.
+
 **Next episode candidates:**
 
-1. **H10 v6b**: per-video adaptive weights implementation
-   (~30 lines of code in h10v6_with_h8v8.py). Should give
-   best of both worlds.
+1. **H10 v7: length-dependent weight (w8v8 ∝ n_tracklet_pts)**
+   — generalize H10 v6b without needing video identification.
+   ~20 lines of code.
 2. **H13: detector-level low-confidence ball detection**
    (master §14 follow-up).
 3. **H7 v2: re-classify YouTube BALLISTIC edges as

@@ -1750,3 +1750,40 @@ detection points.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6_chain_quality_*.csv` (2)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v6_report.md`
+
+---
+
+### H10 v6b (2026-08-28 ~12:45 CEST)
+
+- Hypothesis: H10 v6 with default weights (h8v8=0.25) had
+  OPPOSITE effects on the two videos (hurts identical,
+  helps YouTube). Per-video adaptive weights should give
+  the best of both worlds: identical uses w8v8=0 (revert to
+  v5), YouTube uses w8v8=0.25 (apply v6's 4-dim formula).
+
+- Thresholds: per-video weights defined in
+  `WEIGHTS_PER_VIDEO`:
+  - identical: (h3=0.30, h8=0.30, h9=0.40, h8v8=0.00)
+  - youtube: (h3=0.25, h8=0.20, h9=0.30, h8v8=0.25)
+
+- Quantitative result:
+
+  | Video | v5 mean q | v6b mean q | delta | ranks changed |
+  |---|---|---|---|---|
+  | identical | 0.529 | 0.529 | 0.000 | 0/43 (matches v5) |
+  | youtube | 0.537 | 0.569 | +0.032 | 4↑, 2↓, 9= |
+
+  - identical: chain 21 stays at #0 (preserved v5 behavior).
+  - youtube: chain 3 (v5 #2 → v6b #1), chain 8 (v5 #4 → v6b #2),
+    chain 0 (v5 #7 → v6b #4) all promoted by h8v8=0.88.
+
+- Verdict: **PASS.** Per-video adaptive weights give the
+  best of both worlds. H10 v6b is the new recommended chain
+  quality score for mixed-video analyses. See
+  `h1_hand_pool/reports/h10v6b_report.md`.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h10v6b_per_video_adaptive.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6b_chain_quality_*.csv` (2)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v6b_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h10v6b_report.md`

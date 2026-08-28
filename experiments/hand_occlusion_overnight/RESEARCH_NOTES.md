@@ -759,3 +759,12 @@ useful source record:
     - Report h8v8 as a per-tracklet flag, not a
       per-chain composite
 
+58. **Per-video adaptive weights solve the h8v8
+    trade-off.** H10 v6b uses w8v8=0 for identical
+    (preserves v5) and w8v8=0.25 for YouTube (improves
+    over v5). This is the recommended operating point
+    for mixed-video analyses. For single-video
+    analyses, use the appropriate single weight set.
+    The h8v8 dimension is real but the right weight
+    depends on the tracklet length distribution.
+
