@@ -4847,3 +4847,60 @@ from misclassified.
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h75_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h75v2_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h75_report.md`
+
+### H76 (2026-08-28 ~22:30 CEST)
+
+- Hypothesis: The full h7v3plus3 + H10 v11 v3 + H12 v8 + H50 +
+  H70/H71/H75 v1 stack should achieve high precision/recall on the
+  19 H70 substantial phases (with H65/H71/H72/H73 ground truth).
+
+- Method: per-phase evaluation. For each H70 phase, compute filter
+  decisions and check against ground truth.
+
+- Quantitative result (19 phases):
+
+| Metric | Value |
+|--------|-------|
+| Real juggling | 15 |
+| Misclassified | 4 |
+| Kept | 16 |
+| Rejected | 3 |
+| **TP** | 14 |
+| **TN** | 2 |
+| **FP** | 2 |
+| **FN** | 1 |
+| **Real recall** | 14/15 = 93.3% |
+| **Misclass rejection** | 2/4 = 50.0% |
+| **Overall accuracy** | 16/19 = 84.2% |
+
+- Per-pattern breakdown:
+  - CASCADE_3+ (n=1): 0/1 correct (1 FP)
+  - FOUNTAIN_3+ (n=6): 4/6 correct (3 TP, 1 TN, 1 FP, 1 FN)
+  - MIXED_3+ (n=11): 11/11 correct (100% precision, 100% recall)
+  - MIXED_3+_UNCONFIRMED (n=1): 1/1 correct (1 TN)
+
+- Key findings:
+  - MIXED_3+ post-filter is PERFECT on H70 sample (11/11)
+  - FOUNTAIN_3+ post-filter is PARTIAL (4/6 correct)
+  - CASCADE_3+ is FUNDAMENTALLY LIMITED (0/1 in H76, 0/2 in H73)
+  - End-to-end accuracy 84.2% (all errors on FOUNTAIN/CASCADE)
+
+- H59 vs H76:
+  - H59 (chain-edge, 113 review pairs): P=0.981, R=0.718
+  - H76 (phase, 19 H70 phases): accuracy 84.2%
+  - Complementary evaluations: H59 chain edges, H76 phase labels
+
+- Negative findings:
+  - CASCADE_3+ has 0% precision on substantial phases
+  - f=890-936 (crossed-arm trick) not caught by any filter
+  - 1 FN: f=800-861 real CASCADE mislabeled as FOUNTAIN_3+
+
+- Verdict: **PASS (limited scope).** The full stack achieves 84.2%
+  accuracy on the H70 sample. MIXED_3+ is perfect. FOUNTAIN_3+
+  is partial. CASCADE_3+ is research-only. The H75 stack + H71 v1
+  is the final recommended operating point for downstream consumers.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h76_end_to_end_eval.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h76_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h76_report.md`

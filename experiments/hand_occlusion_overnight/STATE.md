@@ -2481,3 +2481,63 @@ For MIXED_3+ post-filter (unchanged from H71):
 3. H78: novel signals for MANIPULATION_TRICK / crossed-arm trick
 
 See `h1_hand_pool/reports/h75_report.md` for full analysis.
+
+## H76 conclusion (2026-08-28 ~22:30 CEST)
+
+**H76: end-to-end precision/recall on the 19-phase H70 sample** — DONE.
+PASS (limited scope). The full h7v3plus3 + H10 v11 v3 + H12 v8 + H50 +
+H70/H71/H75 v1 stack achieves 84.2% (16/19) accuracy on the H70 sample.
+
+**Aggregate results (19 phases, H65/H71/H72/H73 ground truth):**
+- Real juggling: 15, Misclassified: 4
+- TP (real kept): 14, TN (misclass rejected): 2
+- FP (misclass kept): 2, FN (real rejected): 1
+- **Real recall: 14/15 = 93.3%**
+- **Misclass rejection precision: 2/4 = 50.0%**
+- **Overall accuracy: 16/19 = 84.2%**
+
+**Per-pattern breakdown:**
+- CASCADE_3+ (n=1): 0/1 correct (1 FP — f=685-716 manipulation)
+- FOUNTAIN_3+ (n=6): 4/6 correct (3 TP, 1 TN, 1 FP, 1 FN)
+- MIXED_3+ (n=11): 11/11 correct (100% precision, 100% recall)
+- MIXED_3+_UNCONFIRMED (n=1): 1/1 correct (1 TN — f=2-71 startup)
+
+**Key findings:**
+
+1. **MIXED_3+ post-filter is perfect on H70 sample** (11/11 correct).
+   H71 v1 (spec_conc<0.10=REJECT) is well-calibrated.
+
+2. **FOUNTAIN_3+ post-filter is partial** (4/6 correct). 1 FN
+   (f=800-861 real CASCADE mislabeled as FOUNTAIN_3+) and 1 FP
+   (f=890-936 crossed-arm trick not caught by any filter).
+
+3. **CASCADE_3+ is fundamentally limited** (0/1 in H76, 0/2 in H73).
+   Treat as research signal.
+
+4. **End-to-end accuracy 84.2%.** All 3 errors are on FOUNTAIN_3+
+   / CASCADE_3+ phases. MIXED_3+ is 100% correct.
+
+**H59 vs H76 comparison:**
+- H59 (chain-edge level, 113 manual review pairs): precision 0.981,
+  recall 0.718
+- H76 (phase level, 19 H70 substantial phases): accuracy 84.2%
+  (precision 88%, recall 93%)
+- H59's higher precision is due to mostly mid-air edges
+- H76's higher recall is due to H71+H75 preserving most real juggling
+
+**Recommended operating point (post-H76, final):**
+- FOUNTAIN_3+: (H43 OR H69 OR H74)
+- CASCADE_3+: H74 alone (1/2 catches in H73 sample)
+- MIXED_3+: H71 v1 (100% precision on H70 sample)
+
+**Negative findings:**
+- CASCADE_3+ has 0% precision on substantial phases
+- f=890-936 (crossed-arm trick) not caught by any filter
+- 1 FN: f=800-861 real CASCADE mislabeled as FOUNTAIN_3+
+
+**Future research (post-H76):**
+1. H77: extend H76 to 113 manual review pairs (combined H59 + H76)
+2. H78: novel signals for crossed-arm trick detection
+3. H79: cross-video calibration of H69 spec_conc threshold
+
+See `h1_hand_pool/reports/h76_report.md` for full analysis.
