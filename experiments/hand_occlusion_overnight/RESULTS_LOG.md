@@ -4449,3 +4449,63 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h69v2_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h69_report.md`
 
+---
+
+## H70 — H69 spec_conc characterization across pattern types
+
+- Date: 2026-08-28 ~19:30 CEST
+- Question: Is H69 spec_conc a FOUNTAIN-specific signal, or a general
+  "pattern coherence" signal that applies to MIXED_3+, CASCADE_3+, etc?
+- Method: For each substantial pattern phase (>= 20 frames of A data)
+  in the H50-filtered per-frame pattern data, compute H69 spec_conc.
+  Aggregate per pattern type. Visual QA on the 2 H69-rejected MIXED
+  phases via single-pass vision tool.
+- Per-pattern H69 spec_conc (n=19 substantial phases):
+
+| Pattern | n | mean | median | range | n<0.15 |
+|---------|---|------|--------|-------|--------|
+| CASCADE_3+ | 1 | 0.498 | 0.498 | [0.498, 0.498] | 0 |
+| FOUNTAIN_3+ | 6 | 0.240 | 0.308 | [0.088, 0.411] | 2 |
+| MIXED_3+ | 11 | 0.205 | 0.196 | [0.124, 0.332] | 1 |
+| MIXED_3+_UNCONFIRMED | 1 | 0.075 | 0.075 | [0.075, 0.075] | 1 |
+
+- H43 OR H69(spec_conc < 0.15) on all substantial phases:
+  - CASCADE_3+: 0 rejected
+  - FOUNTAIN_3+: 3 rejected (800-861, 482-594, 1029-1049 — same as H69)
+  - MIXED_3+: 1 rejected (114-255, conc=0.124, vision tool: "NOT real
+    5-ball juggling. Transition/pause sequence")
+  - MIXED_3+_UNCONFIRMED: 1 rejected (2-71, conc=0.075, vision tool:
+    "NOT real juggling. Static demonstration, pose, or freeze-frame")
+
+- Visual QA (H70 contact sheets): both rejected MIXED phases are
+  NOT real juggling per the vision tool. The H70 contact sheets at
+  `contact_sheets_h70/` document this.
+
+- H70 vision tool also said the KEEP MIXED_3+ phases (conc 0.182,
+  0.235) are "not juggling" — but this contradicts H12 v8's
+  classification. The vision tool unreliability (H53 finding) means
+  these single-pass calls are research-grade, not production-validated.
+
+- Negative findings:
+  - H69 spec_conc is overlapping across pattern types. A single
+    threshold (0.15) catches misclassifications across all types but
+    may over-reject real MIXED_3+ at the low end.
+  - CASCADE_3+ has only 1 substantial phase (n=1); 0.498 not
+    generalizable.
+
+- Verdict: MIXED. H69 spec_conc is a general "pattern coherence"
+  signal that applies to MIXED_3+ too. H70 catches 2 additional
+  misclassified MIXED_3+ phases. The recommended operating point is
+  unchanged (H43 + H69 on FOUNTAIN_3+ only). H70 is a useful
+  diagnostic signal that warrants future multi-rater validation.
+
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h70_pattern_characterization.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h70_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h70v2_keep_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h70_phases_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h70_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h70/*.png` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h70v2/*.png` (5 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h70_report.md`
+

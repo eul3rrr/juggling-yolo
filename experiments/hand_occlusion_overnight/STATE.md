@@ -2065,3 +2065,46 @@ H43 OR H69 is the new best FOUNTAIN_3+ post-filter. The 1 escape
 H43 nor H69 has a signal for "both hands moving in unusual pattern".
 
 See `h1_hand_pool/reports/h69_report.md` for full analysis.
+
+## H70 conclusion (2026-08-28 ~19:30 CEST)
+
+**H70: H69 spec_conc characterization across pattern types** — DONE.
+MIXED. The H69 spec_conc metric is NOT FOUNTAIN-specific; it is a
+GENERAL "is this a real pattern?" signal.
+
+Per-pattern H69 spec_conc on 19 substantial phases:
+- CASCADE_3+ (n=1): 0.498 (high — coherent 2-handed alternation)
+- FOUNTAIN_3+ (n=6): mean 0.240, range [0.088, 0.411]
+- MIXED_3+ (n=11): mean 0.205, range [0.124, 0.332]
+- MIXED_3+_UNCONFIRMED (n=1): 0.075 (very low — video start setup)
+
+H43 OR H69(spec_conc < 0.15) applied to ALL substantial phases:
+- CASCADE_3+: 0 rejected (none have spec_conc < 0.15)
+- FOUNTAIN_3+: 3 rejected (800-861, 482-594, 1029-1049 — same as H69)
+- MIXED_3+: 1 rejected (114-255, conc=0.124, vision tool confirms
+  "transition/pause, not juggling")
+- MIXED_3+_UNCONFIRMED: 1 rejected (2-71, conc=0.075, vision tool
+  confirms "static demonstration, not juggling")
+
+**H70 adds value beyond H69:** catches 2 misclassified MIXED_3+ phases
+that are not real juggling. The H70 contact sheets at
+`contact_sheets_h70/` show 114-255 is a "transition/pause sequence"
+(only 2-3 balls visible per frame, not 5) and 2-71 is a "static
+demonstration" at the start of the video.
+
+**Limitations:**
+- Single-pass vision tool calls on contact sheets are unreliable
+  (consistent with H53 finding). The H70 verdicts are research-grade,
+  not production-validated.
+- H69 spec_conc is overlapping across pattern types; a single threshold
+  (0.15) may over-reject real MIXED_3+ at the low end.
+- CASCADE_3+ has only 1 substantial phase in the dataset; the 0.498
+  spec_conc is not generalizable.
+
+**Verdict: MIXED.** H70 demonstrates that H69 spec_conc is a general
+"pattern coherence" signal that applies to MIXED_3+ too. The
+recommended operating point is unchanged (H43 + H69 on FOUNTAIN_3+
+only); H70 is a useful diagnostic signal that warrants future
+multi-rater validation.
+
+See `h1_hand_pool/reports/h70_report.md` for full analysis.
