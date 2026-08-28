@@ -3804,3 +3804,52 @@ Per-chain statistics (chains with n_flights >= 1):
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h55v2_sensitivity_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h55/chain14_identical_h55v2.png`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h55_report.md`
+
+### H56 (2026-08-28 ~19:00 CEST)
+
+- Hypothesis: H55 v2's linear penalty over-penalizes chains with
+  mid-range g_cv (e.g., chain 30 with g_cv=0.417, visually confirmed
+  single-ball but demoted to LOW). A non-linear penalty with a
+  deadzone (no penalty below g_cv=0.5) and a linear ramp should
+  preserve low-CV chains while still penalizing high-CV chains.
+- Formulation:
+  ```
+  g_penalty = 0                                    if g_cv <= 0.5
+           = 0.30 * (g_cv - 0.5) / 0.5             if 0.5 < g_cv < 1.0
+           = 0.30                                  if g_cv >= 1.0
+  q_v11 = max(0, min(1, q_v10 - g_penalty))
+  ```
+- Quantitative result (d=0.5, r=1.0, w54=0.30, n_arcs>=3):
+  - Identical: 27 CONFIDENT (matches v10), 3 multi-tid CONFIDENT
+    (chain 20, chain 19, chain 7 NEW).
+  - YouTube: 5 CONFIDENT (matches v10), 1 multi-tid CONFIDENT (chain 6).
+  - chain 30 (g_cv=0.417, in deadzone) NOT over-penalized, preserved
+    as UNCERTAIN.
+  - chain 22 identical (g_cv=1.537) and chain 12 YouTube (g_cv=1.179)
+    still correctly demoted to LOW.
+- Sensitivity grid (15 cells: d x r): wide flat region. d=0.5-0.7
+  with r=1.0+ all give 27 CONFIDENT identical, 5 CONFIDENT YouTube.
+- Visual QA (3/3):
+  - chain 7 identical (g_cv=0.72, NEW CONFIDENT): TRUE single-ball
+    catch-throw with parabolic arc (H56 v1 contact sheet).
+  - chain 30 identical (g_cv=0.417, preserved UNCERTAIN): TRUE
+    single-ball (H11 v7 contact sheet).
+  - chain 12 YouTube (g_cv=1.179, demoted): MULTI_BALL_MERGE.
+- Negative finding: chain 14 (g_cv=1.089, n_arcs=2) escapes H56 v1
+  penalty because n_arcs<3. Known limitation; H55 v2 catches it.
+- Verdict: PASS — improves on H55 v2. Same precision, better recall.
+- Recommended operating point: h7v3plus3 + H10 v11 v3 (H56 v1,
+  deadzone=0.5, ramp_end=1.0, w54=0.30) + H12 v8 + H50 + H43 +
+  H52 + H53.
+- For strictest single-ball filtering: H10 v11 v3 + H11 v7 CONFIDENT.
+  Multi-tid CONFIDENT: 3 identical (chain 20, 19, 7) + 1 YouTube
+  (chain 6).
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h56_nonlinear_penalty.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h56_sensitivity.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h56_chain7_contact_sheet.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v3_nonlinear_w0.30_<stem>.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h10v11v3_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h56_sensitivity_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h55/chain7_identical_h56v1.png`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h56_report.md`

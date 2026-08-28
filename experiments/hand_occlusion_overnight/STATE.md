@@ -1315,13 +1315,76 @@ Multi-tid CONFIDENT: 2 identical (chain 20, chain 19) + 1 YouTube
 
 See `h1_hand_pool/reports/h55_report.md` for full analysis.
 
+## H56 conclusion
+
+**H56: H10 v11 v3 with non-linear g_cv penalty (deadzone + ramp)**
+— DONE. PASS — improves on H55 v2.
+
+**Hypothesis:** H55 v2's linear penalty over-penalizes chains with
+mid-range g_cv (e.g., chain 30 with g_cv=0.417, visually confirmed
+single-ball but demoted to LOW). A non-linear penalty with a
+deadzone (no penalty below g_cv=0.5) and a linear ramp (penalty
+scales linearly from 0 to w54 between g_cv=0.5 and g_cv=1.0) should
+preserve low-CV chains while still penalizing high-CV chains.
+
+**Formulation:**
+```
+g_penalty = 0                                    if g_cv <= DEADZONE
+         = w54 * (g_cv - DEADZONE) / (RAMP_END - DEADZONE)   if DEADZONE < g_cv < RAMP_END
+         = w54                                  if g_cv >= RAMP_END
+q_v11 = max(0, min(1, q_v10 - g_penalty))
+```
+
+**Operating point (default):** deadzone=0.5, ramp_end=1.0, w54=0.30,
+n_arcs_clean >= 3. Wide flat region of sensitivity grid.
+
+**Key results:**
+- **Identical**: 27 CONFIDENT (matches v10), 3 multi-tid CONFIDENT
+  (chain 20, chain 19, **chain 7** new). Chain 22 (g_cv=1.537)
+  still demoted to LOW.
+- **YouTube**: 5 CONFIDENT (matches v10), 1 multi-tid CONFIDENT
+  (chain 6, in deadzone). Chain 12 (g_cv=1.179) still demoted.
+- **chain 30** (g_cv=0.417, in deadzone): preserved as UNCERTAIN
+  (q11=q10=0.405). Not over-penalized as in H55 v2.
+
+**Visual QA (3/3):**
+- chain 7 identical (g_cv=0.72, NEW CONFIDENT): TRUE single-ball
+  catch-throw confirmed (H56 v1 contact sheet). Parabolic arc
+  visible. ✅
+- chain 30 identical (g_cv=0.417, preserved UNCERTAIN): TRUE
+  single-ball (H11 v7 contact sheet). ✅
+- chain 12 YouTube (g_cv=1.179, demoted): MULTI_BALL_MERGE
+  confirmed. ✅
+
+**Verdict: PASS — improves on H55 v2.** H56 v1 recovers the v10
+CONFIDENT count while still demoting the confirmed multi-ball-merge
+chains. H56 v1 is the new recommended chain quality score, replacing
+H10 v10 and H55 v2.
+
+**Negative finding:** chain 14 (g_cv=1.089, n_arcs_clean=2) escapes
+the H56 v1 penalty because n_arcs < 3. This is a known limitation
+of the n_arcs gate; H55 v2 catches it but at the cost of
+over-penalizing chain 30. Trade-off: H56 v1 has better recall on
+real single-balls, H55 v2 has better precision on small-sample
+chains.
+
+**Recommended operating point:** h7v3plus3 + H10 v11 v3 (H56 v1,
+deadzone=0.5, ramp_end=1.0, w54=0.30) + H12 v8 + H50 + H43 + H52 +
+H53.
+
+For strictest single-ball filtering: H10 v11 v3 + H11 v7 CONFIDENT.
+Multi-tid CONFIDENT: 3 identical (chain 20, chain 19, chain 7) +
+1 YouTube (chain 6).
+
+See `h1_hand_pool/reports/h56_report.md` for full analysis.
+
 ## Final summary
 
 The hand-occlusion overnight lab has produced a comprehensive,
-validated chain representation for both videos over 55 research
-episodes spanning ~14.5 hours. The final operating point is:
+validated chain representation for both videos over 56 research
+episodes spanning ~15 hours. The final operating point is:
 
-**h7v3plus3 + H10 v11 (H55 v2) + H12 v8 + H50 10-frame filter +
+**h7v3plus3 + H10 v11 v3 (H56 v1) + H12 v8 + H50 10-frame filter +
 H43 confidence filter + H52 physics corroboration + H53 multi-rater
 visual QA**
 
