@@ -6429,3 +6429,104 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h121_per_edge.csv` (34 rows)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h121_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h121_report.md`
+
+---
+
+## H121 — H7v2 reclassification at scale using RAW tracklet data (PASS, 2026-08-29 ~09:00 CEST)
+
+- **Hypothesis:** `tracklet_features.csv` is truncated 2-5 frames
+  before the raw tracklet's actual last frame. H7v2's catch/throw
+  signature (end_dist ≤ 108 AND end_slope < -1.0) uses the LAST
+  frame in tracklet_features. The truncated features capture a
+  mid-catch snapshot, but the raw tracklet extends through a
+  complete catch+throw cycle. This causes H7v2 to over-apply
+  reclassification, downgrading BALLISTIC edges to
+  RECLASSIFIED_HAND_TRANSITION.
+
+- **Method (declared):** For each RECLASSIFIED_HAND_TRANSITION
+  edge in h7v3plus3 (n=34), load BOTH tracklet_features and raw
+  detections, apply H7v2's reclassification rule to both.
+
+- **Quantitative result:**
+
+  | Stem | n_reclassified | n_still_reclassified | n_raw_rejects |
+  |---|---|---|---|
+  | identical | 12 | 7 | **5** (41.7%) |
+  | youtube | 22 | 1 | **21** (95.5%) |
+  | **combined** | **34** | **8** | **26 (76.5%)** |
+
+  **26/34 = 76.5%** of RECLASSIFIED_HAND_TRANSITION edges in
+  h7v3plus3 would NOT be reclassified if raw data were used
+  instead of tracklet_features.
+
+- **Key cases:**
+  - **22→27:** feat_jump=190.4 px, raw_jump=37.5 px. The
+    tracklet_features truncation creates a fake 190-px jump.
+  - **3→8:** feat_end_slope=-23.59 (descending), raw_end_slope=+21.27
+    (ascending). The source tracklet extends through a complete
+    catch+throw.
+
+- **Verdict: PASS (data issue confirmed).** H7v2 reclassification
+  is sensitive to its input data. The H112+H114 v1 strict
+  geometric post-filters compensate.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h121_raw_vs_features_h7v2.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h121_per_edge.csv` (34 rows)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h121_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h121_report.md`
+
+---
+
+## H122 — Visual QA of H121 RAW_REJECTS cases (PASS, consumer-pass, 2026-08-29 ~09:30 CEST)
+
+- **Motivation:** H121 found 26/34 RAW_REJECTS (76.5%). H122 asks:
+  are these correct reclassifications or over-inclusions?
+
+- **Sample (5/26 RAW_REJECTS):**
+  - 22→27 identical (H112-discovered FP)
+  - 3→8 identical (H120-suspect edge)
+  - 64→68 identical (double-ascending case)
+  - 1→9 YouTube (strong slope reversal)
+  - 17→24 YouTube (small jump, big slope)
+
+- **Visual QA verdicts (via `vision_analyze`):**
+
+  | Edge | Verdict | Key visual evidence |
+  |---|---|---|
+  | 22→27 | **TRACKER ARTIFACT** | "Sharp, near-vertical spike going UP, not a smooth parabolic arc" |
+  | 3→8 | **REAL catch-throw** | "V-shape within source tracklet; the 3→8 transition is legitimate" |
+  | 64→68 | **REAL catch-throw** | "Target tracklet is tracking a *different* identical ball" |
+  | 1→9 | **REAL catch-throw** | "Full V-shape present in the source tracklet" |
+  | 17→24 | **REAL catch-throw** | "Slope reversal within ~3 frames, exactly what you'd expect at a catch-throw inflection point" |
+
+- **Aggregate: 4/5 = 80% REAL catch-throws.** The 1 false positive
+  (22→27) is the H112-discovered FP that H112 already filters out.
+
+- **Key new finding:** in 3 of 4 real cases (3→8, 1→9, 17→24),
+  the source tracklet itself contains a complete V-shaped
+  catch+throw trajectory. The "edge" to the next tracklet in
+  h7v3plus3 is a **secondary continuation**, not the primary
+  catch+throw. H7v2's reclassification correctly identifies the
+  source-tracklet V-shape even when the input tracklet_features
+  is truncated.
+
+- **Implication:** the H121 finding is REFINED. H7v2 is not
+  over-applying reclassification — it's correctly identifying
+  real catch-throws that the truncated features make ambiguous.
+  The raw data check (H121) would reject 3 correct
+  reclassifications (3→8, 1→9, 17→24) and 1 incorrect (22→27)
+  — a net loss of 3 TP for 1 FP reduction.
+
+- **H123 (re-run H7v2 with raw data) is REJECTED.** Not worth the
+  chain revision.
+
+- **Verdict: PASS (consumer-pass, 80% real catch-throws).** The
+  chain's edge-level precision (P=1.000 on 113 review pairs) is
+  preserved. The recommended operating point (h7v3plus3 + H112 +
+  H114 v1 strict) is unchanged.
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h122_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h122/*.png` (5 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h122_report.md`

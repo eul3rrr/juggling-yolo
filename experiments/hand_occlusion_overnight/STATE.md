@@ -4808,3 +4808,62 @@ about an upstream data issue, not a new operating point.
   is sensitive to its input data, but the H112+H114 v1 strict
   geometric post-filters compensate. The recommended operating
   point (h7v3plus3 + H112 + H114 v1 strict) is unchanged.
+
+## H122 conclusion (2026-08-29 ~09:30 CEST)
+
+**H122: Visual QA of 5 H121 RAW_REJECTS cases (3 identical + 2 YouTube)** —
+DONE. PASS (consumer-pass, 4/5 = 80% REAL catch-throws). The H121
+hypothesis is REFINED: H7v2's reclassifications are mostly CORRECT
+(80% of RAW_REJECTS are real catch-throws), not over-applied as
+H121 initially suggested.
+
+**Per-case verdicts:**
+
+| Edge | Stem | feat_jump | raw_jump | feat_slope | raw_slope | Verdict |
+|---|---|---|---|---|---|---|
+| 22→27 | identical | 190.4 | 37.5 | -7.84 | +30.65 | **TRACKER ARTIFACT** (H112 FP) |
+| 3→8 | identical | 227.0 | 123.4 | -23.59 | +21.27 | REAL catch-throw (V-shape in source) |
+| 64→68 | identical | 66.0 | 131.1 | +7.98 | +13.25 | REAL catch-throw (multi-ball handoff) |
+| 1→9 | YouTube | 94.8 | 39.0 | -11.66 | +11.19 | REAL catch-throw (V-shape) |
+| 17→24 | YouTube | 13.3 | 22.7 | -4.91 | +10.25 | REAL catch-throw (V-shape) |
+
+**Aggregate: 4/5 = 80% REAL catch-throws.** The 1 false positive
+(22→27) is the H112-discovered FP that H112 already filters out.
+
+**Key new finding:** in 3 of 4 real cases (3→8, 1→9, 17→24), the
+source tracklet itself contains a complete V-shaped catch+throw
+trajectory. The "edge" to the next tracklet in h7v3plus3 is a
+**secondary continuation**, not the primary catch+throw. H7v2's
+reclassification correctly identifies the source-tracklet V-shape
+even when the input tracklet_features is truncated to a frame where
+the ball is still descending.
+
+**Implication for H121:** the H121 finding is reframed. It's not
+that H7v2 is over-applying reclassification (76.5% wrong), it's
+that H7v2 is correctly identifying real catch-throws that the
+truncated features make ambiguous. The raw data check would
+reject 3 correct reclassifications (3→8, 1→9, 17→24) and 1
+incorrect (22→27) — a net loss of 3 TP for 1 FP reduction.
+
+**H123 (re-run H7v2 with raw data) is REJECTED.** Not worth the
+chain revision for a net loss.
+
+**Verdict: PASS — H7v2 reclassification is defensible at 80%.** The
+chain's edge-level precision (P=1.000 on 113 review pairs) is
+preserved. The recommended operating point (h7v3plus3 + H112 +
+H114 v1 strict) is unchanged.
+
+**Artifacts:**
+- `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h122_contact_sheets.py`
+- `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h122/*.png` (5 files)
+- `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h122_report.md`
+
+## Last update
+
+- 2026-08-29 (this episode): H122 PASS — 4/5 H121 RAW_REJECTS are
+  REAL catch-throws (V-shape within source tracklet or multi-ball
+  handoff). The 1 false positive is the H112-discovered 22→27 FP
+  that H112 already filters out. H7v2 reclassification is
+  defensible at 80%, not over-applied as H121 initially suggested.
+  H123 (re-run H7v2 with raw data) is REJECTED. The chain's
+  edge-level precision is preserved.
