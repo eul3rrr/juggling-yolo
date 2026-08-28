@@ -1,7 +1,7 @@
 # Hand Occlusion Overnight Lab — State
 
-LAST_UPDATE: 2026-08-28 13:50 CEST
-STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + **H38**
+LAST_UPDATE: 2026-08-28 14:35 CEST
+STATUS: H30 + H31 + H32 + H33 + H34 + H35 + H36 + H37 + H38 + **H39**
 COMPLETE. H35 PASS (consumer-pass, no change). H36 PASS: per-frame
 hand-occupancy state machine produces closed juggling system. H37
 PASS (consumer-pass, validation): 80.7%/76.5% agreement between
@@ -11,7 +11,16 @@ YouTube CASCADE_3+ classifications that lack hand-occupancy
 support. The YouTube rejection is a tight 12-frame contiguous
 block at f=470-481 with H12 v8 confidence 0.639-0.646.
 Recommended operating point remains h7v3plus3 (H34 + H35 + H36
-+ H37 + H38). **H32 NEGATIVE**: per-chain
++ H37 + H38). **H39 NEGATIVE**: H12 v8 FOUNTAIN_3+ classification
+is fundamentally unreliable (only 30% accurate on 10 visual-QA'd
+phases — 4/10 MIXED, 1/10 CASCADE, 2/10 OTHER, 3/10 FOUNTAIN).
+H36 chain-driven state is too sparse to validate FOUNTAIN_3+
+because H36 only marks hand-occupancy at chain events, not
+continuous state. H39 v1 (frame-level) precision 20% (over-
+rejects 60% of real juggling). H39 v2 (phase-level) precision
+50% on small sample. The finding is real and important
+(H12 v8 over-classifies FOUNTAIN_3+) but H36 is not a reliable
+validator. **H32 NEGATIVE**: per-chain
 hand-alternation-based CASCADE/FOUNTAIN classification on h7v3plus2
 chains is fundamentally confounded by multi-ball merges. 5/7 visual-QA'd
 chains are MULTI_BALL_MERGE (precision of H32 CASCADE/FOUNTAIN
@@ -504,9 +513,34 @@ None. H16 + H17 v1 (PARTIAL PASS) committed in this episode.
 
 ## Next action
 
-H38 is complete (PASS, precision improvement, narrow scope).
-1/22 identical and 12/129 YouTube CASCADE_3+ classifications
-rejected due to lack of H36 hand-occupancy support.
+H39 is complete (NEGATIVE for H12 v8 FOUNTAIN_3+ post-filter).
+H12 v8 FOUNTAIN_3+ classification is fundamentally unreliable
+(only 30% accurate on visual QA). H36 is not a useful
+validator. A better fix would require a continuous hand-
+occupancy signal, which the chain-driven H36 doesn't provide.
+
+Recommended operating point remains h7v3plus3 (H34).
+
+Remaining research directions (priorities):
+1. **H40: continuous hand-occupancy signal.** Build a
+   per-frame hand-occupancy signal from the underlying
+   detector + pose data, not from chain events. This would
+   enable a proper FOUNTAIN_3+ post-filter (and likely
+   improve H12 v8 pattern inference). Approach:
+   - For each frame, check if any detected ball is within
+     the hand reach (108 px) of either wrist
+   - If yes, mark as hand-occupied (L=1 or R=1)
+   - This is a per-frame signal, not chain-driven
+2. **H41: H12 v9 with H40 signal.** Re-run H12 pattern
+   inference using the continuous hand-occupancy signal
+   instead of the chain-driven K=4 window. May produce
+   better CASCADE/FOUNTAIN classification.
+3. **H42: literature search for juggling-specific multi-ball
+   tracking.** The H17→H20→H31 chain and H32's finding that
+   the chain set is mostly multi-ball merges suggest that
+   we need fundamentally different signals (per-point color
+   tracking, multi-view 3D, learned color tracking) to
+   distinguish single balls from multi-ball merges.
 
 H37 is complete (PASS, consumer-pass, validation). H36 (L, R, A)
 state validates CASCADE_3+ but cannot disambiguate FOUNTAIN_3+.
@@ -692,6 +726,33 @@ preserved. Use H38 as a downstream consumer filter if
 precision matters more than recall.
 
 See `h1_hand_pool/reports/h38_report.md` for full analysis.
+
+## H39 conclusion
+
+H39 attempted the symmetric post-filter to H38: reject
+FOUNTAIN_3+ classifications where H36 has no hand-occupancy
+support. Visual QA on 10 FOUNTAIN_3+ phases revealed that
+H12 v8's FOUNTAIN_3+ classification is **only 30% accurate**:
+
+- 3/10 real FOUNTAIN
+- 4/10 MIXED (real juggling with hand-occupancy)
+- 1/10 CASCADE (real 5-ball cascade on YouTube f=339-374)
+- 2/10 OTHER (hold trick + 2-ball exercise)
+
+This is a real and important finding: H12 v8 over-classifies
+FOUNTAIN_3+ by ~70%. However, H36 is not a reliable validator
+because H36 only emits state changes at chain events, not at
+continuous hand-occupancy. The H39 v1 (frame-level) over-rejects
+60% of real juggling (precision 20%); H39 v2 (phase-level) is
+more conservative (precision 50% on 2 rejections).
+
+**H39 verdict: NEGATIVE.** Don't use H39 as a downstream filter.
+The H12 v8 FOUNTAIN_3+ classification should be left as-is with
+the caveat that it has ~70% error rate. A reliable filter would
+require a continuous hand-occupancy signal, which H36 doesn't
+provide.
+
+See `h1_hand_pool/reports/h39_report.md` for full analysis.
 
 ## Future research directions (post H34)
 

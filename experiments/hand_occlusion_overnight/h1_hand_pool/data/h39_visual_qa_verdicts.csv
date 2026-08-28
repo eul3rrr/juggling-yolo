@@ -1,0 +1,12 @@
+video,phase,n,hand_occ_h36,vision_verdict,hand_occ_vision,h39v1_decision,h39v2_decision,comment
+identical,f243-252,10,1,FOUNTAIN,left+right (both occupied in all frames),KEPT,KEPT,"Real FOUNTAIN — right-handed, hands both visible occupied"
+identical,f263-312,50,0,MIXED,left hand occupied in most frames,REJECTED,KEPT,Real juggling with hand-occupancy that H36 chain events miss
+identical,f411-449,39,0,MIXED,left hand occupied in 4/6 frames,REJECTED,REJECTED,Real juggling with hand-occupancy (left dominant)
+identical,f631-669,39,0,FOUNTAIN,left hand occupied in all frames,REJECTED,KEPT,Real left-hand FOUNTAIN — hand-occupancy visible
+identical,f685-716,32,0,FOUNTAIN,"left+right (both occupied, right=high, left=low)",REJECTED,KEPT,"Real right-handed FOUNTAIN — both hands visible, hands both occupied in all frames"
+identical,f733-766,34,1,QA_PENDING,QA pending,REJECTED,KEPT,Vision QA not completed (vision_analyze error); H36 has CATCH event at boundary
+identical,f860-871,12,0,MIXED,"left+right (crossed-arms juggling, both occupied)",REJECTED,KEPT,"Real crossed-arms juggling (MIXED/Mill's-Mess-like), not FOUNTAIN"
+identical,f977-1011,35,0,OTHER (hold trick),"left+right (both occupied, statue/columns pattern)",REJECTED,REJECTED,"Real hold/columns trick — both hands occupied throughout, not a flowing FOUNTAIN"
+identical,f1029-1050,22,1,OTHER (2-ball exercise),"right hand occupied, only 2 balls visible",REJECTED,KEPT,"2-ball exercise (n=2), not 3-ball FOUNTAIN. H12 v8 misclassification."
+youtube,f339-374,36,0,CASCADE,right hand occupied in 4/6 frames,REJECTED,KEPT,Real 5-ball CASCADE — H12 v8 misclassification
+youtube,f800-861,62,16,MIXED,"left+right (both occupied, asymmetric)",PARTIAL REJECT,KEPT,Real juggling with hand-occupancy — H12 v8 over-counts FOUNTAIN

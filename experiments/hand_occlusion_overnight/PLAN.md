@@ -1439,6 +1439,37 @@ classifications without hand-occupancy support. The
 improvement is small (1/22 identical, 12/129 YouTube) but
 real. Safe to apply as a downstream consumer filter.
 
+## H39 episode (2026-08-28 ~14:35) — FOUNTAIN_3+ post-filter
+
+Sub-steps:
+1. ✅ Read H37 crossref data. Identified that FOUNTAIN_3+
+   on identical has 1.7% hand-occupancy (5/288 frames)
+   versus CASCADE_3+ at 95%. Hypothesis: FOUNTAIN_3+
+   without hand-occupancy is an H12 v8 misclassification.
+2. ✅ H39 v1 (frame-level): reject FOUNTAIN_3+ where
+   H36 (L, R) = (0, 0). Result: 283/288 identical
+   FOUNTAIN_3+ rejected (98.3%), 94/110 YouTube (85.5%).
+3. ✅ H39 v2 (phase-level): reject FOUNTAIN_3+ phases
+   with zero H36 events. Result: 2 phases rejected on
+   identical (74 frames), 0 on YouTube.
+4. ✅ Rendered 11 contact sheets (9 identical + 2 YouTube)
+   and ran visual QA via `vision_analyze` on 10 phases
+   (1 had vision error).
+5. ✅ Visual QA findings: H12 v8 FOUNTAIN_3+ accuracy is
+   **30% (3/10)** — 4 MIXED, 1 CASCADE, 2 OTHER. H39 v1
+   precision 20% (over-rejects 60% of real juggling);
+   H39 v2 precision 50% on small sample.
+6. ✅ Documented in `h39_report.md` and updated
+   STATE/RESULTS_LOG/RESEARCH_NOTES.
+
+**H39 verdict: NEGATIVE.** H12 v8 FOUNTAIN_3+ is
+fundamentally unreliable (~70% over-classification), but
+H36 is not a reliable validator because it only marks
+chain-driven state, not continuous hand-occupancy. H39
+filters should not be used downstream. The underlying
+finding (H12 v8 over-classifies FOUNTAIN_3+ by 70%) is
+real and important.
+
 **Final state of the lab:**
 
 The h7v3plus3 chain set is now validated at FIVE levels:
@@ -1447,10 +1478,18 @@ The h7v3plus3 chain set is now validated at FIVE levels:
    ball ID.
 3. **Per-frame hand-occupancy (H36):** (L, R, A) state machine.
 4. **Pattern cross-reference (H37):** H36 vs H12 v8 validation.
-5. **Pattern post-filter (H38):** precision improvement.
+5. **Pattern post-filter (H38):** CASCADE_3+ precision improvement.
 
-The chain set is a complete, consistent, closed
-representation of the juggling routines in both videos.
+And one negative validation:
+6. **H39:** H12 v8 FOUNTAIN_3+ over-classifies by 70% but
+   H36 cannot validate it (sparse state). The chain set
+   is a complete, consistent, closed representation of
+   the juggling routines in both videos, but pattern
+   classifications should be consumed with awareness of
+   H39's findings.
+
 Further chain improvements would require fundamentally
 different signals (multi-view, learned color tracking,
-or 3D ball estimation).
+or 3D ball estimation). The next research direction
+(H40) is to build a continuous hand-occupancy signal
+from raw detector + pose data, not from chain events.

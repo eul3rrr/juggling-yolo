@@ -3104,11 +3104,70 @@ detection points.
 - Verdict: **PASS (precision improvement, narrow scope).** H38
   is a strict post-filter that rejects CASCADE_3+ classifications
   where H36 has no hand-occupancy support. The improvement is
-  small (1/22 identical, 12/129 YouTube) but real. Safe to apply
-  as a downstream consumer filter. See
+  small (1/22 identical, 12/129 YouTube) but real. H38 is
+  safe to apply as a downstream consumer filter. See
   `h1_hand_pool/reports/h38_report.md`.
 - Artifacts:
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h38_post_filter.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h38_summary.json`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h38_filtered_*.csv` (2 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h38_report.md`
+
+### H39 (2026-08-28 ~14:35 CEST)
+
+- Hypothesis: the symmetric question to H38 — does FOUNTAIN_3+
+  have hand-occupancy support from H36? If H12 v8 calls a frame
+  FOUNTAIN_3+ but H36 has no hand-occupancy, the FOUNTAIN_3+
+  classification may be a misclassification.
+- Two iterated implementations:
+  - v1 (frame-level): reject FOUNTAIN_3+ where H36 (L, R) = (0, 0)
+  - v2 (phase-level): reject FOUNTAIN_3+ phases with zero H36 events
+- Quantitative result:
+  - v1: identical 288/288 FOUNTAIN_3+ rejected (98.3%); YouTube
+    94/110 (85.5%). All 10 identical FOUNTAIN phases eliminated.
+  - v2: identical 74 frames rejected (2 phases); YouTube 0 rejected.
+- Visual QA on 10 FOUNTAIN_3+ phases (n>=10):
+  - **3/10 real FOUNTAIN** (f=243-252, f=631-669, f=685-716)
+  - 4/10 MIXED (real juggling with hand-occupancy visible)
+  - 1/10 CASCADE (f=339-374 YouTube — real 5-ball cascade!)
+  - 2/10 OTHER (f=977-1011 hold trick, f=1029-1050 2-ball exercise)
+- Visual QA verdicts on H39 filters:
+  - H39 v1 precision: **20% (2/10)** — over-rejects 60% of real juggling
+  - H39 v2 precision: **50% (1/2)** — over-rejects f=411-449 MIXED
+- H12 v8 FOUNTAIN_3+ classification accuracy: **30% (3/10)**
+  - This is a real and important finding: H12 v8 over-classifies
+    FOUNTAIN_3+ by ~70%
+- Negative findings:
+  - H36 chain-driven state is too sparse to validate FOUNTAIN_3+.
+    H36 only marks hand-occupancy at chain events; continuous
+    hand-occupancy is invisible to H36.
+  - H39 v1 over-rejects 6/10 real juggling phases because H36
+    reports no hand-occupancy during chain-event gaps.
+  - H39 v2 is more conservative but only 50% precise on small
+    sample. The 2 rejected phases are the worst visual
+    misclassifications (hold trick + MIXED) but the 8 KEPT
+    phases include a real CASCADE that H12 v8 misclassified.
+  - H12 v8 FOUNTAIN_3+ classification is fundamentally unreliable
+    on these videos. A reliable fix would require a continuous
+    hand-occupancy signal, not chain-driven.
+- Verdict: **NEGATIVE.** H39 v1 (frame-level) over-rejects 60% of
+  real juggling activity. H39 v2 (phase-level) is more
+  conservative but only 50% precise. Don't use H39 as a downstream
+  filter. The H12 v8 FOUNTAIN_3+ classification should be left
+  as-is with the caveat that it has ~70% error rate. The
+  underlying finding (H12 v8 over-classifies FOUNTAIN_3+ by 70%)
+  is real but H36 is not a reliable validator. See
+  `h1_hand_pool/reports/h39_report.md`.
+- Artifacts:
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h39_fountain_post_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h39v2_phase_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h39_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h39_visual_qa.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39v2_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39_contact_sheets.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39_visual_qa_verdicts.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39_filtered_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h39v2_filtered_*.csv` (2 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/*.png` (11 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h39_report.md`

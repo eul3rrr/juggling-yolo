@@ -1,0 +1,92 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_fountain_before": 288,
+      "n_fountain_rejected": 74,
+      "n_fountain_kept": 214,
+      "n_phases_total": 10,
+      "n_phases_rejected": 2,
+      "n_phases_kept": 8,
+      "rejected_phases": [
+        {
+          "start": 411,
+          "end": 449,
+          "n": 39
+        },
+        {
+          "start": 977,
+          "end": 1011,
+          "n": 35
+        }
+      ],
+      "kept_phases": [
+        {
+          "start": 243,
+          "end": 252,
+          "n": 10
+        },
+        {
+          "start": 263,
+          "end": 312,
+          "n": 50
+        },
+        {
+          "start": 631,
+          "end": 669,
+          "n": 39
+        },
+        {
+          "start": 685,
+          "end": 716,
+          "n": 32
+        },
+        {
+          "start": 733,
+          "end": 766,
+          "n": 34
+        },
+        {
+          "start": 775,
+          "end": 779,
+          "n": 5
+        },
+        {
+          "start": 860,
+          "end": 871,
+          "n": 12
+        },
+        {
+          "start": 1029,
+          "end": 1050,
+          "n": 22
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_fountain_before": 110,
+      "n_fountain_rejected": 0,
+      "n_fountain_kept": 110,
+      "n_phases_total": 3,
+      "n_phases_rejected": 0,
+      "n_phases_kept": 3,
+      "rejected_phases": [],
+      "kept_phases": [
+        {
+          "start": 339,
+          "end": 374,
+          "n": 36
+        },
+        {
+          "start": 701,
+          "end": 708,
+          "n": 8
+        },
+        {
+          "start": 800,
+          "end": 861,
+          "n": 62
+        }
+      ]
+    }
+  }
+}

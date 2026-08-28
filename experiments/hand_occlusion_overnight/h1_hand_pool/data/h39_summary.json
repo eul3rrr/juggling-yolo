@@ -1,0 +1,26 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_fountain_before": 288,
+      "n_fountain_rejected": 283,
+      "n_fountain_kept": 5,
+      "n_fountain_after": 5,
+      "pct_fountain_rejected": 98.3,
+      "n_fountain_phases_before": 10,
+      "n_fountain_phases_after": 0,
+      "n_cascade_rejected": 1,
+      "n_combined_rejected": 284
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_fountain_before": 110,
+      "n_fountain_rejected": 94,
+      "n_fountain_kept": 16,
+      "n_fountain_after": 16,
+      "pct_fountain_rejected": 85.5,
+      "n_fountain_phases_before": 3,
+      "n_fountain_phases_after": 2,
+      "n_cascade_rejected": 12,
+      "n_combined_rejected": 106
+    }
+  }
+}

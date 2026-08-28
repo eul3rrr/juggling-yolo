@@ -1220,3 +1220,43 @@ useful source record:
     per-frame level (e.g., counting distinct balls) is more
     reliable.
 
+## Cross-cutting insights from H39 (2026-08-28 ~14:35)
+
+32. **H12 v8 FOUNTAIN_3+ classification is fundamentally
+    unreliable.** Visual QA on 10 FOUNTAIN_3+ phases (n>=10)
+    found only 3 are real FOUNTAIN — 4 are MIXED, 1 is CASCADE,
+    2 are OTHER (hold trick + 2-ball exercise). H12 v8
+    over-classifies FOUNTAIN_3+ by ~70%. The underlying cause
+    is H12 v8's K=4 sliding window of chain events: when the
+    last 4 events are all same-hand, H12 v8 calls FOUNTAIN_3+
+    even when the visual pattern is CASCADE or MIXED.
+
+33. **H36 chain-driven state is too sparse to validate
+    FOUNTAIN_3+.** H36 only emits state changes at chain
+    events. Most FOUNTAIN_3+ phases span intervals between
+    chain events, where H36 reports HOLD state (0, 0, total)
+    even when the juggler's hands ARE occupied. H39 v1
+    (frame-level) over-rejects 6/10 real juggling phases
+    because H36 doesn't see the hand-occupancy during chain-
+    event gaps. H39 v2 (phase-level) is more conservative
+    but only 50% precise on small sample.
+
+34. **The h7v3plus3 chain set's FOUNTAIN_3+ classifications
+    should be considered suspect.** H38's CASCADE_3+
+    post-filter is more reliable because CASCADE_3+ HAS
+    hand-occupancy (per H37); FOUNTAIN_3+ doesn't have a
+    corresponding positive signal. The H12 v8 FOUNTAIN_3+
+    classification should be left as-is with the caveat
+    that it has ~70% error rate.
+
+35. **Continuous hand-occupancy signal is the missing
+    ingredient.** A per-frame signal that checks "is any
+    detected ball within hand reach (108 px) of either
+    wrist at this frame?" would enable:
+    - Reliable FOUNTAIN_3+ post-filter (FOUNTAIN requires
+      continuous hand-occupancy in ONE hand)
+    - Better H12 v8 pattern inference (continuous signal
+      not chain-driven)
+    - CASCADE/FOUNTAIN disambiguation on the late phase
+    This is the highest-priority next step (H40).
+

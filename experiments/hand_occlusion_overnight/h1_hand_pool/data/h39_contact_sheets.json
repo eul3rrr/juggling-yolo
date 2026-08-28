@@ -1,0 +1,190 @@
+{
+  "videos": {
+    "identical_balls_trick_000_018": {
+      "n_fountain_phases": 9,
+      "sheets": [
+        {
+          "phase_start": 243,
+          "phase_end": 252,
+          "n_frames": 10,
+          "mean_conf": 0.593,
+          "n_hand_occ_frames": 1,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f243-252_n10_handocc1.png",
+          "frames_picked": [
+            243,
+            244,
+            246,
+            248,
+            249,
+            252
+          ]
+        },
+        {
+          "phase_start": 263,
+          "phase_end": 312,
+          "n_frames": 50,
+          "mean_conf": 0.728,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f263-312_n50_handocc0.png",
+          "frames_picked": [
+            263,
+            271,
+            279,
+            288,
+            296,
+            312
+          ]
+        },
+        {
+          "phase_start": 411,
+          "phase_end": 449,
+          "n_frames": 39,
+          "mean_conf": 0.797,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f411-449_n39_handocc0.png",
+          "frames_picked": [
+            411,
+            417,
+            424,
+            430,
+            437,
+            449
+          ]
+        },
+        {
+          "phase_start": 631,
+          "phase_end": 669,
+          "n_frames": 39,
+          "mean_conf": 0.714,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f631-669_n39_handocc0.png",
+          "frames_picked": [
+            631,
+            637,
+            644,
+            650,
+            657,
+            669
+          ]
+        },
+        {
+          "phase_start": 685,
+          "phase_end": 716,
+          "n_frames": 32,
+          "mean_conf": 0.738,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f685-716_n32_handocc0.png",
+          "frames_picked": [
+            685,
+            690,
+            695,
+            701,
+            706,
+            716
+          ]
+        },
+        {
+          "phase_start": 733,
+          "phase_end": 766,
+          "n_frames": 34,
+          "mean_conf": 0.748,
+          "n_hand_occ_frames": 1,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f733-766_n34_handocc1.png",
+          "frames_picked": [
+            733,
+            738,
+            744,
+            750,
+            755,
+            766
+          ]
+        },
+        {
+          "phase_start": 860,
+          "phase_end": 871,
+          "n_frames": 12,
+          "mean_conf": 0.642,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f860-871_n12_handocc0.png",
+          "frames_picked": [
+            860,
+            862,
+            864,
+            866,
+            868,
+            871
+          ]
+        },
+        {
+          "phase_start": 977,
+          "phase_end": 1011,
+          "n_frames": 35,
+          "mean_conf": 0.565,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f977-1011_n35_handocc0.png",
+          "frames_picked": [
+            977,
+            982,
+            988,
+            994,
+            1000,
+            1011
+          ]
+        },
+        {
+          "phase_start": 1029,
+          "phase_end": 1050,
+          "n_frames": 22,
+          "mean_conf": 0.463,
+          "n_hand_occ_frames": 1,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_identical_balls_trick_000_018_f1029-1050_n22_handocc1.png",
+          "frames_picked": [
+            1029,
+            1032,
+            1036,
+            1040,
+            1043,
+            1050
+          ]
+        }
+      ]
+    },
+    "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+      "n_fountain_phases": 2,
+      "sheets": [
+        {
+          "phase_start": 339,
+          "phase_end": 374,
+          "n_frames": 36,
+          "mean_conf": 0.649,
+          "n_hand_occ_frames": 0,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f339-374_n36_handocc0.png",
+          "frames_picked": [
+            339,
+            345,
+            351,
+            357,
+            363,
+            374
+          ]
+        },
+        {
+          "phase_start": 800,
+          "phase_end": 861,
+          "n_frames": 62,
+          "mean_conf": 0.637,
+          "n_hand_occ_frames": 16,
+          "contact_sheet": "experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h39/fountain_phase_youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_f800-861_n62_handocc16.png",
+          "frames_picked": [
+            800,
+            810,
+            820,
+            831,
+            841,
+            861
+          ]
+        }
+      ]
+    }
+  }
+}
