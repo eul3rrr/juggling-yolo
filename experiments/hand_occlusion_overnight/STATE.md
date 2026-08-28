@@ -4048,6 +4048,14 @@ endpoint. Three equivalent implementations:
    stack is precision-optimized at 17/4/0/0. A 3rd video with H93-style
    GT is needed to test generalization of the 4-signal ensemble.
 
+- **H110 — H108 v1 consumer-facing module (CONSUMER-PASS)**:
+  - Packaged the H108 v1 stack as a single importable Python module
+    at `h1_hand_pool/scripts/h108_v1.py`.
+  - Exposes `load_h93_gt()`, `load_h108_per_phase()`, `load_h106_per_phase()`,
+    `classify_phase()`, and `h108_v1_stack()` for downstream consumers.
+  - Validated by re-running: PERFECT 17/4/0/0 on H93 corrected GT.
+  - See `h1_hand_pool/reports/h110_report.md`.
+
 ## Last update
 
 - 2026-08-29 ~05:00 CEST: H105 NEGATIVE (chain-event quality guard is
@@ -4061,3 +4069,9 @@ endpoint. Three equivalent implementations:
   H109 NEGATIVE honest finding (R4b is uniquely tied to f=2-71 signature;
   4 TNs have orthogonal signatures caught by 4 specific detectors).
   H108 v1 is the new recommended implementation.
+- 2026-08-28 ~22:50 CEST: H110 CONSUMER-PASS (H108 v1 packaged as
+  importable module with clean API). The lab has reached a natural
+  endpoint: h7v3plus3 + H96 v2 / H100 v4 / H106 v2 / H108 v1 stack
+  achieves 17/4/0/0 PERFECT on 21 H93 corrected phases. 3rd-video
+  generalization is the only remaining research direction, blocked
+  by data availability.
