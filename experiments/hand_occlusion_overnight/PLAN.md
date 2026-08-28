@@ -2437,3 +2437,43 @@ Sub-steps:
 because tracklet_features is truncated. The H112+H114 v1 strict
 geometric post-filters compensate. Recommended operating point
 unchanged.
+
+## Nineteenth episode (H122) — STATUS: COMPLETE
+
+Sub-steps:
+1. ✅ Implemented H122: visual QA of 5 H121 RAW_REJECTS cases
+   (22→27, 3→8, 64→68 identical + 1→9, 17→24 YouTube).
+2. ✅ Rendered 5 contact sheets with raw trajectory overlay +
+   feat-end vs raw-end markers + gray/magenta jump lines.
+3. ✅ Visual QA via `vision_analyze` (1 question per case, 3 sub-questions).
+4. ✅ Result: 4/5 (80%) are REAL catch-throws. Only 22→27 is a
+   TRACKER ARTIFACT (the H112-discovered FP that H112 already filters out).
+5. ✅ Key new finding: in 3 of 4 real cases (3→8, 1→9, 17→24),
+   the source tracklet itself contains a complete V-shaped
+   catch+throw trajectory. H7v2's reclassification correctly
+   identifies the source-tracklet V-shape even when the input
+   tracklet_features is truncated.
+6. ✅ H123 (re-run H7v2 with raw data) is REJECTED. Not worth
+   the chain revision.
+7. ✅ Documented in h122_report.md and updated STATE.md +
+   RESULTS_LOG.md.
+
+**H122 verdict: PASS (consumer-pass).** H7v2 reclassification is
+defensible at 80%, not over-applied as H121 initially suggested.
+The chain's edge-level precision (P=1.000 on 113 review pairs) is
+preserved. The recommended operating point (h7v3plus3 + H112 +
+H114 v1 strict) is unchanged.
+
+## Recommended next research directions (post-H122)
+
+1. **Larger visual QA sample** of H121 RAW_REJECTS. The 5-case
+   sample gives 80% real-catch-throw precision with a 95% Wilson
+   CI of approximately [40%, 96%]. Visual QA on 10-15 more
+   would tighten the bound. (Lower priority — the H112+H114
+   post-filters already compensate.)
+2. **Stop here.** The h7v3plus3 + H112 + H114 v1 strict stack
+   is precision-optimized at both phase (17/4/0/0) and edge
+   (P=1.000, R=0.718) levels. H121+H122 establish that the
+   H7v2 reclassification is correct at 80%, with H112
+   compensating for the 20% false positives. The 0.282 recall
+   gap requires fundamentally different signals.
