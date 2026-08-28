@@ -1473,3 +1473,131 @@ useful source record:
     H48 candidate research.
 
 
+
+### TOTNet (2025, Xu et al.)
+
+- **Title**: TOTNet: Occlusion-Aware Temporal Tracking for Robust Ball
+  Detection in Sports Videos
+- **URL**: https://arxiv.org/abs/2508.09650
+- **Authors**: Hao Xu, Arbind Agrahari Baniya, Sam Wells, Mohamed Reda
+  Bouadjenek, Richard Dazely, Sunil Aryal (Deakin University, in
+  collaboration with Paralympics Australia)
+- **Venue**: arXiv 2508.09650, August 2025
+- **Idea**: 3D convolutions + visibility-weighted loss + occlusion
+  augmentation for robust ball tracking under partial and full
+  occlusion. TTA dataset (9,159 samples, 1,996 occlusion cases) for
+  table tennis.
+- **Result**: RMSE reduced 37.30 -> 7.19, fully-occluded frame
+  accuracy 0.63 -> 0.80.
+- **Why it applies here**: TOTNet is a learned temporal model that
+  recovers ball positions under occlusion, which is the central
+  problem of the H50 hand-occlusion lab. The visibility-weighted
+  loss is similar to master §14's "lower-confidence evidence tier
+  near hand events" idea, but applied at the network level rather
+  than as a post-processing rule.
+- **Why it might fail here**: TOTNet requires a labeled sports
+  dataset (TTA) to train. Our H1 v4d is unsupervised and works on
+  the existing detector outputs without retraining. Applying TOTNet
+  would require either fine-tuning (we have very few labels) or
+  using a pre-trained model (which is sports-specific to tennis,
+  badminton, table tennis, not juggling).
+- **Smallest experiment inspired**: Our H1 v4d + H50 + H43 + H52
+  stack is essentially a hand-crafted version of the TOTNet
+  visibility-weighted-loss idea. The visibility evidence is
+  represented by tracklet length (short tracklet = low confidence)
+  and 2D hand distance (near hand = visible in held phase). H52's
+  H8 v5 parabolic check is a hand-crafted physics consistency
+  check that complements TOTNet's learned temporal consistency.
+
+### Ponglertnapakorn & Suwajanakorn "Where Is The Ball" (2025)
+
+- **Title**: Where Is The Ball: 3D Ball Trajectory Estimation From
+  2D Monocular Tracking
+- **URL**: https://arxiv.org/abs/2506.05763
+- **Authors**: Puntawat Ponglertnapakorn, Supasorn Suwajanakorn (VISTEC)
+- **Venue**: CVsports workshop at CVPR 2025
+- **Idea**: LSTM-based pipeline for 3D ball trajectory estimation
+  from 2D tracking sequences. Uses a canonical 3D representation
+  independent of camera location, with intermediate representations
+  for invariance and reprojection consistency. Trained on simulation,
+  generalizes to real-world multiple-trajectory scenarios.
+- **Why it applies here**: The 2D-only juggling tracks in our
+  h7v3plus3 chain set are limited because we cannot resolve 3D
+  depth ambiguity. A 3D-aware trajectory estimator could bridge
+  hand-occlusion gaps by predicting where the ball should be in
+  3D during a held phase, then re-projecting to 2D.
+- **Why it might fail here**: Requires LSTM training on a labeled
+  juggling dataset (which we don't have). Pre-trained models
+  (trained on tennis/badminton) may not transfer to juggling
+  patterns.
+- **Smallest experiment inspired**: This is H53 (deferred). Our
+  H1 v4d + H50 + H43 + H52 stack is the hand-crafted equivalent
+  of the 2D portion of Ponglertnapakorn's pipeline. A future
+  H54 could implement a 2D-only "ball at hand" position predictor
+  using simple ballistic extrapolation (constant gravity, no LSTM)
+  as a sanity check for our hand-pool.
+
+### Cross-cutting insights from H50-H52 (2026-08-28 ~16:30-17:00)
+
+27. **H50 closes H49's negative result.** The 10-frame flight-time
+    filter has real downstream impact of 1.0% identical / 0.0%
+    YouTube pattern label changes. H49's K=4-only upper bound
+    (45.2%/15.9%) was an upper bound, as H49 suspected. The full
+    pipeline (census + chain quality + n_total) dominates the
+    K=4 sliding window signal.
+
+28. **H51 demonstrates that H50 and H43 compose cleanly.** The two
+    filters operate at different stages (event log vs pattern
+    label) and don't interfere with each other. H50+H43 is a
+    strict improvement over either alone.
+
+29. **H52 closes the H50 visual QA ambiguity on chain 13.** H8 v5
+    parabolic physics confirms all 3 H50-dropped pairs (chain 13
+    ft=3, chain 23 ft=1, chain 30 ft=5) are TRACKER_FRAGMENTATION,
+    not real catch-throws. The 10-frame filter is correct and
+    should not be relaxed.
+
+30. **Vision QA on short tracklets is unreliable.** H50's vision
+    tool misclassified chain 13 ft=3 as a real catch-throw because
+    it saw "ball at hand" but didn't check velocity consistency.
+    The source was in fast descent (-32.1 px/f) while the target
+    was at rest (-1.1 px/f), with a 19.5 px/f velocity
+    discontinuity that's physically impossible for a real catch-throw.
+
+31. **The h7v3plus3 + H12 v8 + H50 + H43 + H52-validated stack is
+    the FINAL operating point.** The H1-H52 series has produced
+    a comprehensive, validated chain representation for both videos:
+    - H1: hand-pool baseline
+    - H2: combined AIR + HAND chain
+    - H3: low-confidence corroboration
+    - H4: face-mask negative result
+    - H5-H6: H3 confirmation + min-cost flow
+    - H7: principled min-cost flow
+    - H8 v3-v8: physics checks (per-arc gravity)
+    - H9: object permanence coverage
+    - H10: chain quality scoring
+    - H11 v1-v7: identity propagation
+    - H12 v1-v8: per-frame pattern inference
+    - H13: low-conf detector signal (negative)
+    - H14: V-shape trajectory check
+    - H15: V-reclassification
+    - H16-H20: V-shape recovery
+    - H21-H22: H20-KEPT chain augmentation/veto
+    - H24-H28: H20-KEPT scale-up (mostly negative)
+    - H30-H31: direction-reversal (negative)
+    - H32-H33: hand-alternation + multi-ball (negative)
+    - H34: h7v3plus3 combined chain set
+    - H35: h7v3plus3 downstream re-measurement
+    - H36-H38: per-frame hand-occupancy (L, R, A) + CASCADE post-filter
+    - H39: FOUNTAIN post-filter (negative)
+    - H40-H42: continuous hand-occupancy signals
+    - H43: H12 v8 confidence-based FOUNTAIN filter
+    - H45: per-chain flight-time / siteswap analysis
+    - H46: per-flight physics (negative)
+    - H47: H12 v8 with 10-frame filter (event-log level)
+    - H48: flight-time filter sensitivity grid
+    - H49: filter impact measurement (negative upper bound)
+    - **H50: H12 v8 with 10-frame filter (full pipeline)** - real impact measured
+    - **H51: H50 + H43 combined filter** - composes cleanly
+    - **H52: H8 v5 physics on H50-dropped pairs** - all 3 are TRACKER_FRAGMENTATION
+

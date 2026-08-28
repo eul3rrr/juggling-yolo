@@ -1201,3 +1201,16 @@ h7v3plus3 + H12 v8 + H50 10-frame filter + H43 confidence filter
 operating point.
 
 See `h1_hand_pool/reports/h52_report.md` for full analysis.
+
+## Final summary
+
+The hand-occlusion overnight lab has produced a comprehensive,
+validated chain representation for both videos over 52 research
+episodes spanning ~14 hours. The final operating point is:
+
+**h7v3plus3 + H12 v8 + H50 10-frame filter + H43 confidence
+filter + H52 physics corroboration**
+
+See `h1_hand_pool/reports/FINAL_SUMMARY.md` for a comprehensive
+overview of all 52 episodes, the strongest findings, the
+important negative findings, and the recommended operating point.
