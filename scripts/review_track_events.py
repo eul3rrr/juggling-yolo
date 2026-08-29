@@ -50,7 +50,7 @@ from typing import Iterable
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 VENV_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
-REVIEW_RENDER_VERSION = 2
+REVIEW_RENDER_VERSION = 3
 if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
 
@@ -74,16 +74,17 @@ CANDIDATE_FIELDS = (
     "candidate_rank",
 )
 LABEL_FIELDS = (
-    "video", "event_index", "primary_track_id", "primary_end_frame",
+    "video", "event_index", "event_key", "primary_track_id", "primary_end_frame",
     "primary_end_x", "primary_end_y",
-    "event_type", "hand", "continuation_status",
+    "event_type", "hand", "relation_direction", "continuation_status",
+    "selected_related_track_id", "selected_related_frame",
     "selected_continuation_track_id", "selected_continuation_start_frame",
     "nearby_candidate_track_ids",
     "existing_rank1_stitch_track_id",
     "review_clip_path", "notes",
 )
 MANIFEST_FIELDS = (
-    "event_index", "kind",
+    "event_index", "event_key", "kind", "relation_direction",
     "primary_track_id", "primary_first_frame", "primary_last_frame",
     "primary_end_frame", "primary_end_x", "primary_end_y",
     "nearby_candidate_track_ids",
@@ -274,6 +275,17 @@ class ReviewEvent:
     review_clip_last: int
     boundary: bool = False
 
+    @property
+    def event_key(self) -> str:
+        if self.kind == "existing_stitch" and self.existing_rank1_stitch:
+            return (f"existing_stitch:{self.primary.track_id}:"
+                    f"{self.primary_end_frame}:{self.existing_rank1_stitch[1]}")
+        return f"{self.kind}:{self.primary.track_id}:{self.primary_end_frame}"
+
+    @property
+    def relation_direction(self) -> str:
+        return "predecessor" if self.kind == "orphan_start" else "successor"
+
 
 def generate_events(
     tracks: dict[int, Track],
@@ -281,8 +293,9 @@ def generate_events(
     fps: float,
     frame_count: int,
     review_window_seconds: float = 1.0,
+    orphan_lookback_seconds: float = 4.5,
     boundary_seconds: float = 0.5,
-    include_existing_stitches: bool = True,
+    include_existing_stitches: bool = False,
     include_orphan_starts: bool = True,
 ) -> list[ReviewEvent]:
     """Generate review events for every track end and orphan start.
@@ -295,6 +308,7 @@ def generate_events(
     events: list[ReviewEvent] = []
     boundary_frames = max(1, int(round(boundary_seconds * fps)))
     review_window_frames = max(1, int(round(review_window_seconds * fps)))
+    orphan_lookback_frames = max(1, int(round(orphan_lookback_seconds * fps)))
 
     # 1. END events (one per observed-end track)
     end_tracks: list[Track] = []
@@ -382,9 +396,11 @@ def generate_events(
                     break
             if has_predecessor:
                 continue
-            # Genuinely orphan.
-            nearby = _nearby_starts(tracks, first.frame, review_window_frames,
-                                    exclude={tid})
+            # Genuinely orphan: show earlier possible predecessors, not even
+            # later starts. This is a human-review window, not a stitch gate.
+            nearby = _nearby_ends_before(tracks, first.frame,
+                                         orphan_lookback_frames,
+                                         exclude={tid})
             events.append(ReviewEvent(
                 event_index=-1,
                 kind="orphan_start",
@@ -423,6 +439,22 @@ def _nearby_starts(tracks: dict[int, Track], after_frame: int,
             starts.append((first.frame, track))
     starts.sort(key=lambda r: (r[0], r[1].track_id))
     return [t for _, t in starts]
+
+
+def _nearby_ends_before(tracks: dict[int, Track], before_frame: int,
+                        window_frames: int, exclude: set[int]) -> list[Track]:
+    endings: list[tuple[int, Track]] = []
+    for tid, track in tracks.items():
+        if tid in exclude:
+            continue
+        last = track.last_observed
+        if last is None:
+            continue
+        if 0 < before_frame - last.frame <= window_frames:
+            endings.append((last.frame, track))
+    # Most recent predecessor first: [1] is the closest earlier ending.
+    endings.sort(key=lambda r: (-r[0], r[1].track_id))
+    return [t for _, t in endings]
 
 
 def _rank1_stitch_for_source(stitches: dict[tuple[int, int], dict],
@@ -488,12 +520,50 @@ def _boxed_text(frame, text: str, anchor: tuple[int, int],
     cv2.putText(frame, text, (x, y), font, scale, (255, 255, 255), 1, cv2.LINE_AA)
 
 
+def _dashed_line(frame, a: tuple[int, int], b: tuple[int, int],
+                 color: tuple[int, int, int], thickness: int = 2) -> None:
+    length = math.hypot(b[0] - a[0], b[1] - a[1])
+    if length <= 0:
+        return
+    for start in range(0, int(length), 10):
+        end = min(start + 5, length)
+        p1 = (round(a[0] + (b[0] - a[0]) * start / length),
+              round(a[1] + (b[1] - a[1]) * start / length))
+        p2 = (round(a[0] + (b[0] - a[0]) * end / length),
+              round(a[1] + (b[1] - a[1]) * end / length))
+        cv2.line(frame, p1, p2, color, thickness, cv2.LINE_AA)
+
+
+def _draw_track(frame, track: Track, frame_index: int,
+                color: tuple[int, int, int], thickness: int,
+                radius: int) -> TrackObservation | None:
+    """Draw history and return a current row only when active this frame."""
+    rows = [o for o in track.all_sorted if o.frame <= frame_index][-30:]
+    for first, second in zip(rows, rows[1:]):
+        a = _point(first.center_x, first.center_y)
+        b = _point(second.center_x, second.center_y)
+        if first.is_observed and second.is_observed:
+            cv2.line(frame, a, b, color, thickness, cv2.LINE_AA)
+        else:
+            _dashed_line(frame, a, b, color, max(1, thickness - 1))
+    current = next((o for o in rows if o.frame == frame_index), None)
+    if current is not None:
+        pt = _point(current.center_x, current.center_y)
+        if current.is_observed:
+            cv2.circle(frame, pt, radius, color, -1, cv2.LINE_AA)
+        else:
+            cv2.circle(frame, pt, radius, color, 2, cv2.LINE_AA)
+    return current
+
+
 def render_clip(
     video: Path,
     output: Path,
     tracks: dict[int, Track],
     detections_by_frame: dict[int, list[dict]],
     event: ReviewEvent,
+    start_frame: int,
+    end_frame: int,
     fps: float,
     width: int,
     height: int,
@@ -508,16 +578,11 @@ def render_clip(
         cap.release(); writer.release()
         raise RuntimeError(f"Could not create clip: {output}")
 
-    primary_points = [(o.frame, o.center_x, o.center_y) for o in event.primary.all_sorted]
-    nearby_lookup = {
-        n.track_id: [(o.frame, o.center_x, o.center_y) for o in n.all_sorted]
-        for n in event.nearby_starts
-    }
     candidate_colors = _candidate_colors(len(event.nearby_starts))
 
     try:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, event.review_clip_first)
-        for frame_index in range(event.review_clip_first, event.review_clip_last + 1):
+        cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
+        for frame_index in range(start_frame, end_frame + 1):
             ok, frame = cap.read()
             if not ok:
                 break
@@ -529,33 +594,37 @@ def render_clip(
                     (round(det["x2"]), round(det["y2"])),
                     (180, 180, 180), 1, cv2.LINE_AA,
                 )
-            # PRIMARY trail
-            visible_primary = [(x, y) for f, x, y in primary_points
-                               if f <= frame_index][-30:]
-            for a, b in zip(visible_primary, visible_primary[1:]):
-                cv2.line(frame, _point(*a), _point(*b), (255, 80, 40), 4, cv2.LINE_AA)
-            if visible_primary:
-                cv2.circle(frame, _point(*visible_primary[-1]), 7, (255, 80, 40), -1, cv2.LINE_AA)
-                primary_pt = _point(*visible_primary[-1])
-                _boxed_text(frame, f"PRIMARY ID {event.primary.track_id}",
+            emphasized = {event.primary.track_id, *(t.track_id for t in event.nearby_starts)}
+            for track_id, context_track in tracks.items():
+                if track_id in emphasized:
+                    continue
+                current = _draw_track(frame, context_track, frame_index,
+                                      (135, 135, 135), 1, 4)
+                if current is not None:
+                    pt = _point(current.center_x, current.center_y)
+                    _text(frame, f"ID {track_id}", (pt[0] + 5, pt[1] - 5),
+                          (170, 170, 170), 0.36, 1, 2)
+
+            primary_current = _draw_track(frame, event.primary, frame_index,
+                                          (255, 80, 40), 4, 7)
+            if primary_current is not None:
+                primary_pt = _point(primary_current.center_x, primary_current.center_y)
+                primary_word = "NEW PRIMARY" if event.kind == "orphan_start" else "PRIMARY"
+                _boxed_text(frame, f"{primary_word} ID {event.primary.track_id}",
                             (primary_pt[0] + 10, primary_pt[1] - 10),
                             (255, 80, 40), 0.58)
             # NEARBY CANDIDATE trails + persistent spatial labels
             for idx, cand in enumerate(event.nearby_starts, start=1):
                 color = candidate_colors[idx - 1]
-                visible = [(x, y) for f, x, y in nearby_lookup[cand.track_id]
-                           if f <= frame_index][-30:]
-                for a, b in zip(visible, visible[1:]):
-                    cv2.line(frame, _point(*a), _point(*b), color, 4, cv2.LINE_AA)
-                if visible:
-                    cv2.circle(frame, _point(*visible[-1]), 7, color, -1, cv2.LINE_AA)
+                candidate_current = _draw_track(frame, cand, frame_index, color, 4, 7)
                 first = cand.first_observed
                 if first is not None and first.frame == frame_index:
                     pt = _point(first.center_x, first.center_y)
                     cv2.drawMarker(frame, pt, color, cv2.MARKER_STAR, 22, 3)
-                if visible:
-                    candidate_pt = _point(*visible[-1])
-                    _boxed_text(frame, f"[{idx}] ID {cand.track_id}",
+                if candidate_current is not None:
+                    candidate_pt = _point(candidate_current.center_x, candidate_current.center_y)
+                    prefix = "predecessor " if event.kind == "orphan_start" else ""
+                    _boxed_text(frame, f"{prefix}[{idx}] ID {cand.track_id}",
                                 (candidate_pt[0] + 10,
                                  candidate_pt[1] - 10 - (idx - 1) * 22),
                                 color, 0.55)
@@ -573,13 +642,17 @@ def render_clip(
                   f"FRAME={frame_index}  candidates={len(event.nearby_starts)}"
                   f"{stitch_str}",
                   (10, 22), (255, 255, 255), 0.55)
-            _text(frame, f"PRIMARY: ID {event.primary.track_id}",
+            primary_legend = ("NEW PRIMARY" if event.kind == "orphan_start" else "PRIMARY")
+            _text(frame, f"{primary_legend}: ID {event.primary.track_id}",
                   (10, 44), (255, 80, 40), 0.48)
             for idx, cand in enumerate(event.nearby_starts, start=1):
-                first = cand.first_observed
-                first_frame = first.frame if first is not None else "?"
-                _text(frame, f"[{idx}] ID {cand.track_id} @ frame {first_frame}",
+                endpoint = cand.last_observed if event.kind == "orphan_start" else cand.first_observed
+                endpoint_frame = endpoint.frame if endpoint is not None else "?"
+                relation_word = "predecessor" if event.kind == "orphan_start" else "future"
+                _text(frame, f"{relation_word} [{idx}] ID {cand.track_id} @ frame {endpoint_frame}",
                       (180, 44 + (idx - 1) * 22), candidate_colors[idx - 1], 0.45)
+            _text(frame, "OBSERVED: solid/filled   PREDICTED: dashed/hollow",
+                  (width - 430, 22), (220, 220, 220), 0.40)
             writer.write(frame)
     finally:
         cap.release(); writer.release()
@@ -618,6 +691,31 @@ def _read_labels(path: Path) -> dict[int, dict[str, str]]:
     return out
 
 
+def _labels_by_event_key(path: Path,
+                         events: list[ReviewEvent]) -> dict[str, dict[str, str]]:
+    """Load labels by stable identity; migrate old structural rows safely."""
+    if not path.is_file():
+        return {}
+    with path.open(newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    result: dict[str, dict[str, str]] = {}
+    for row in rows:
+        key = row.get("event_key", "")
+        if key:
+            result[key] = row
+            continue
+        matches = [ev for ev in events
+                   if str(ev.primary.track_id) == row.get("primary_track_id", "")
+                   and str(ev.primary_end_frame) == row.get("primary_end_frame", "")]
+        if len(matches) == 1:
+            result[matches[0].event_key] = row
+        elif row.get("event_type"):
+            print("WARNING: labeled legacy row could not be matched uniquely: "
+                  f"track={row.get('primary_track_id')} "
+                  f"frame={row.get('primary_end_frame')}", file=sys.stderr)
+    return result
+
+
 def write_labels(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
@@ -643,6 +741,11 @@ def _candidate_colors(n: int) -> list[tuple[int, int, int]]:
     return [palette[i % len(palette)] for i in range(n)]
 
 
+def _related_frame(event: ReviewEvent, track: Track) -> int | None:
+    endpoint = track.last_observed if event.kind == "orphan_start" else track.first_observed
+    return endpoint.frame if endpoint is not None else None
+
+
 def prepare(
     video: Path,
     tracklets_csv: Path,
@@ -651,6 +754,7 @@ def prepare(
     output_dir: Path,
     labels_csv: Path,
     review_window_seconds: float = 1.0,
+    orphan_lookback_seconds: float = 4.5,
     boundary_seconds: float = 0.5,
     pre_seconds: float = 1.0,
     post_seconds: float = 1.0,
@@ -664,13 +768,14 @@ def prepare(
     events = generate_events(
         tracks, stitches, fps, frames,
         review_window_seconds=review_window_seconds,
+        orphan_lookback_seconds=orphan_lookback_seconds,
         boundary_seconds=boundary_seconds,
     )
     print(f"Generated {len(events)} review events from {len(tracks)} tracks")
 
     manifest_rows: list[dict[str, str]] = []
     label_rows: list[dict[str, str]] = []
-    existing_labels = _read_labels(labels_csv)
+    existing_labels = _labels_by_event_key(labels_csv, events)
     n_end = sum(1 for e in events if e.kind == "end")
     n_orphan = sum(1 for e in events if e.kind == "orphan_start")
     n_existing = sum(1 for e in events if e.kind == "existing_stitch")
@@ -687,25 +792,29 @@ def prepare(
             suffix = f"existing-id{ev.primary.track_id}"
         filename = f"v{REVIEW_RENDER_VERSION}_{ev.event_index:05d}_{_safe(suffix)}.mp4"
         clip_path = output_dir / filename
+        related_frames = []
+        for related in ev.nearby_starts:
+            endpoint = (related.last_observed if ev.kind == "orphan_start"
+                        else related.first_observed)
+            if endpoint is not None:
+                related_frames.append(endpoint.frame)
+        anchor_frames = [ev.primary_end_frame, *related_frames]
+        first = max(0, min(anchor_frames) - max(1, int(round(pre_seconds * fps))))
+        last = min(frames - 1,
+                   max(anchor_frames) + max(1, int(round(post_seconds * fps))))
         if not clip_path.is_file() or clip_path.stat().st_size < 1000:
             render_clip(
                 video, clip_path, tracks, detections_by_frame,
-                ev, fps, width, height,
+                ev, first, last, fps, width, height,
             )
             rendered += 1
         else:
             reused += 1
-        # Re-compute clip window using pre/post overrides
-        first = max(0, ev.primary_end_frame - max(1, int(round(pre_seconds * fps))))
-        last_candidate_frame = ev.primary_end_frame
-        for cand in ev.nearby_starts:
-            first_obs = cand.first_observed
-            if first_obs is not None:
-                last_candidate_frame = max(last_candidate_frame, first_obs.frame)
-        last = min(frames - 1, last_candidate_frame + max(1, int(round(post_seconds * fps))))
         manifest_rows.append({
             "event_index": str(ev.event_index),
+            "event_key": ev.event_key,
             "kind": ev.kind,
+            "relation_direction": ev.relation_direction,
             "primary_track_id": str(ev.primary.track_id),
             "primary_first_frame": str(ev.primary.first_observed.frame
                                        if ev.primary.first_observed else ""),
@@ -716,23 +825,36 @@ def prepare(
             "primary_end_y": f"{ev.primary_end_y:.2f}",
             "nearby_candidate_track_ids": ",".join(str(c.track_id) for c in ev.nearby_starts),
             "nearby_starts_first_frames": ",".join(
-                str(c.first_observed.frame) for c in ev.nearby_starts
-                if c.first_observed is not None),
+                str(frame) for c in ev.nearby_starts
+                if (frame := _related_frame(ev, c)) is not None),
             "review_clip_path": _stored(clip_path),
             "review_clip_first_frame": str(first),
             "review_clip_last_frame": str(last),
         })
 
-        existing = existing_labels.get(ev.event_index, {})
+        existing = existing_labels.get(ev.event_key, {})
         label_rows.append({
             "video": _stored(video),
             "event_index": str(ev.event_index),
+            "event_key": ev.event_key,
             "primary_track_id": str(ev.primary.track_id),
             "primary_end_frame": str(ev.primary_end_frame),
             "primary_end_x": f"{ev.primary_end_x:.2f}",
             "primary_end_y": f"{ev.primary_end_y:.2f}",
             "event_type": existing.get("event_type", ""),
             "hand": existing.get("hand", ""),
+            "relation_direction": ev.relation_direction,
+            "continuation_status": (existing.get("continuation_status", "")
+                                    or _infer_cont_status(
+                                        existing.get("event_type", ""),
+                                        existing.get("hand", ""),
+                                        existing.get("selected_continuation_track_id", ""))),
+            "selected_related_track_id": (existing.get("selected_related_track_id", "")
+                                           or (existing.get("selected_continuation_track_id", "")
+                                               if ev.relation_direction == "successor" else "")),
+            "selected_related_frame": (existing.get("selected_related_frame", "")
+                                        or (existing.get("selected_continuation_start_frame", "")
+                                            if ev.relation_direction == "successor" else "")),
             "selected_continuation_track_id": existing.get("selected_continuation_track_id", ""),
             "selected_continuation_start_frame": existing.get("selected_continuation_start_frame", ""),
             "nearby_candidate_track_ids": ",".join(str(c.track_id) for c in ev.nearby_starts),
@@ -964,10 +1086,11 @@ async function fetchEvent(i) {
 }
 
 async function postLabel(payload) {
-  await fetch('/api/label', {
+  const response = await fetch('/api/label', {
     method: 'POST', headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(payload),
   });
+  return await response.json();
 }
 
 async function setIndex(i) {
@@ -1033,8 +1156,10 @@ function renderPending() {
   const needsCont = state.pendingEventType
     && REQUIRES_CONTINUATION.has(state.pendingEventType)
     && (needsHand ? state.pendingHand !== null : true);
+  const relationWord = currentEvent?.relation_direction === 'predecessor'
+    ? 'predecessor' : 'continuation';
   $('pending-continuation').textContent = needsCont
-    ? 'continuation: waiting — press 1..9 / 0 / ?'
+    ? `${relationWord}: waiting — press 1..9 / 0 / ?`
     : (state.pendingEventType === 'e' || state.pendingEventType === 'f'
         ? 'continuation: not applicable (event type ends here)'
         : 'continuation: not required for this event type');
@@ -1042,7 +1167,8 @@ function renderPending() {
   if (needsCont && nearby.length) {
     const lines = nearby.map((id, i) =>
       `  ${i + 1} -> ID ${id} @ frame ${starts[i] ?? '?'}`);
-    lines.unshift('candidates:');
+    lines.unshift(currentEvent?.relation_direction === 'predecessor'
+      ? 'possible predecessors:' : 'future candidates:');
     $('cand-map').textContent = lines.join('\\n');
   } else {
     $('cand-map').textContent = '';
@@ -1071,19 +1197,15 @@ function adjustPlaybackRate(direction) {
 
 async function saveAndAdvance(payload) {
   if (!currentEvent) return;
-  await postLabel({
+  const result = await postLabel({
     event_index: currentEvent.event_index,
     ...payload,
     notes: $('notes').value,
   });
   resetPending();
-  const fresh = await fetchState();
-  // The server updates its index to the first unsaved event; just reload
-  // whatever it returns (handles "skip" via explicit /api/next too).
-  if (payload._skip) {
-    await fetch('/api/next', {method: 'POST'});
-  }
-  await loadCurrent();
+  await fetchState();
+  state.index = Number.isInteger(result.next_index) ? result.next_index : state.index;
+  await setIndex(state.index);
 }
 
 async function commitSelection(contStatus, contTrackId, contStartFrame) {
@@ -1094,6 +1216,8 @@ async function commitSelection(contStatus, contTrackId, contStartFrame) {
     event_type: state.pendingEventType,
     hand: state.pendingHand || '',
     continuation_status: contStatus,
+    selected_related_track_id: contTrackId || '',
+    selected_related_frame: contStartFrame || '',
     selected_continuation_track_id: contTrackId || '',
     selected_continuation_start_frame: contStartFrame || '',
   };
@@ -1311,8 +1435,10 @@ def _validate_continuation(idx: int, payload: dict,
     frame must match the manifest's nearby candidates.
     """
     raw_status = (payload.get("continuation_status", "") or "").strip()
-    raw_track = (payload.get("selected_continuation_track_id", "") or "").strip()
-    raw_frame = (payload.get("selected_continuation_start_frame", "") or "").strip()
+    raw_track = (payload.get("selected_related_track_id", "")
+                 or payload.get("selected_continuation_track_id", "") or "").strip()
+    raw_frame = (payload.get("selected_related_frame", "")
+                 or payload.get("selected_continuation_start_frame", "") or "").strip()
     event_type = (payload.get("event_type", "") or "").strip()
     if event_type in ("e", "f"):
         return ("not_applicable", "", "")
@@ -1386,21 +1512,28 @@ class _State:
             rank1_dst = row.get("existing_rank1_stitch_track_id", "")
             existing = label_row.get("event_type", "")
             hand = label_row.get("hand", "")
+            relation = row.get("relation_direction", "successor")
+            saved_track = (label_row.get("selected_related_track_id", "")
+                           or label_row.get("selected_continuation_track_id", ""))
+            saved_frame = (label_row.get("selected_related_frame", "")
+                           or label_row.get("selected_continuation_start_frame", ""))
             cont_status = label_row.get("continuation_status", "") or _infer_cont_status(
-                existing, hand,
-                label_row.get("selected_continuation_track_id", ""))
+                existing, hand, saved_track)
             notes = label_row.get("notes", "")
             cont_choice = _format_cont_choice(
                 existing, hand, cont_status,
-                label_row.get("selected_continuation_track_id", ""),
-                label_row.get("selected_continuation_start_frame", ""))
+                saved_track, saved_frame)
+            if relation == "predecessor":
+                cont_choice = cont_choice.replace("continuation", "predecessor")
             kind_label = {"end": "TRACK END",
                           "orphan_start": "ORPHAN START",
                           "existing_stitch": "EXISTING STITCH"}.get(row.get("kind", ""), row.get("kind", ""))
         return {
             "event_index": i,
+            "event_key": row.get("event_key", ""),
             "kind": row.get("kind", ""),
             "kind_label": kind_label,
+            "relation_direction": relation,
             "primary_track_id": int(row.get("primary_track_id", "0")),
             "primary_end_frame": int(row.get("primary_end_frame", "0") or 0),
             "nearby_candidate_track_ids": nearby,
@@ -1415,12 +1548,12 @@ class _State:
             "saved_notes": notes,
         }
 
-    def save_label(self, payload: dict):
+    def save_label(self, payload: dict) -> int:
         idx = int(payload["event_index"])
         with self._lock:
             self._reload()
             if not (0 <= idx < len(self.events)):
-                return
+                return self.index
             event_type = payload.get("event_type", "") or ""
             hand = payload.get("hand", "") or ""
             cont_status, track_id, start_frame = _validate_continuation(
@@ -1429,8 +1562,13 @@ class _State:
             label_row["event_type"] = event_type
             label_row["hand"] = hand
             label_row["continuation_status"] = cont_status
-            label_row["selected_continuation_track_id"] = track_id
-            label_row["selected_continuation_start_frame"] = start_frame
+            relation = self.events[idx].get("relation_direction", "successor")
+            label_row["event_key"] = self.events[idx].get("event_key", "")
+            label_row["relation_direction"] = relation
+            label_row["selected_related_track_id"] = track_id
+            label_row["selected_related_frame"] = start_frame
+            label_row["selected_continuation_track_id"] = track_id if relation == "successor" else ""
+            label_row["selected_continuation_start_frame"] = start_frame if relation == "successor" else ""
             label_row["notes"] = payload.get("notes", "") or ""
             self.labels[idx] = label_row
             # Persist as a single CSV with one row per event_index, joined
@@ -1443,23 +1581,39 @@ class _State:
                     base = {
                         "video": ev.get("video", ""),
                         "event_index": str(i),
+                        "event_key": ev.get("event_key", ""),
                         "primary_track_id": ev.get("primary_track_id", ""),
                         "primary_end_frame": ev.get("primary_end_frame", ""),
                         "primary_end_x": ev.get("primary_end_x", ""),
                         "primary_end_y": ev.get("primary_end_y", ""),
                         "nearby_candidate_track_ids": ev.get("nearby_candidate_track_ids", ""),
+                        "relation_direction": ev.get("relation_direction", "successor"),
                         "existing_rank1_stitch_track_id": ev.get("existing_rank1_stitch_track_id", ""),
                         "review_clip_path": ev.get("review_clip_path", ""),
                     }
                     lr = self.labels.get(i, {})
                     base.update({k: lr.get(k, "") for k in (
-                        "event_type", "hand", "continuation_status",
+                        "event_type", "hand", "relation_direction", "continuation_status",
+                        "selected_related_track_id", "selected_related_frame",
                         "selected_continuation_track_id",
                         "selected_continuation_start_frame",
                         "notes",
                     )})
                     row: dict[str, str] = {k: str(base.get(k, "")) for k in LABEL_FIELDS}
                     writer.writerow(row)  # type: ignore[arg-type]
+            self.index = self.next_unfinished_after(idx, reload=False)
+            return self.index
+
+    def next_unfinished_after(self, completed_index: int,
+                              reload: bool = True) -> int:
+        if reload:
+            self._reload()
+        count = len(self.events)
+        for offset in range(1, count + 1):
+            candidate = (completed_index + offset) % count
+            if not self.labels.get(candidate, {}).get("event_type"):
+                return candidate
+        return completed_index
 
     def next_unsaved(self) -> int:
         with self._lock:
@@ -1524,13 +1678,51 @@ class ReviewerHandler(http.server.BaseHTTPRequestHandler):
             path = self._safe_path(value)
             if path is None:
                 self.send_response(404); self.end_headers(); return
-            data = path.read_bytes()
-            self.send_response(200)
+            file_size = path.stat().st_size
+            range_header = self.headers.get("Range", "")
+            start, end = 0, file_size - 1
+            status = 200
+            if range_header:
+                match = re.fullmatch(r"bytes=(\d*)-(\d*)", range_header.strip())
+                if not match:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{file_size}")
+                    self.end_headers(); return
+                start_text, end_text = match.groups()
+                if not start_text and not end_text:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{file_size}")
+                    self.end_headers(); return
+                if start_text:
+                    start = int(start_text)
+                    end = int(end_text) if end_text else file_size - 1
+                else:
+                    suffix = int(end_text)
+                    start = max(0, file_size - suffix)
+                    end = file_size - 1
+                if start >= file_size or start > end:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{file_size}")
+                    self.end_headers(); return
+                end = min(end, file_size - 1)
+                status = 206
+            length = end - start + 1
+            self.send_response(status)
             self.send_header("Content-Type", "video/mp4")
-            self.send_header("Content-Length", str(len(data)))
+            self.send_header("Content-Length", str(length))
             self.send_header("Accept-Ranges", "bytes")
+            if status == 206:
+                self.send_header("Content-Range", f"bytes {start}-{end}/{file_size}")
             self.end_headers()
-            self.wfile.write(data)
+            with path.open("rb") as media:
+                media.seek(start)
+                remaining = length
+                while remaining:
+                    chunk = media.read(min(64 * 1024, remaining))
+                    if not chunk:
+                        break
+                    self.wfile.write(chunk)
+                    remaining -= len(chunk)
             return
         if self.path.startswith("/api/state"):
             saved = sum(1 for i in range(len(self.state.events))
@@ -1562,8 +1754,8 @@ class ReviewerHandler(http.server.BaseHTTPRequestHandler):
         if self.path == "/api/label":
             if "event_index" not in payload:
                 self._json({"error": "event_index required"}, 400); return
-            self.state.save_label(payload)
-            self._json({"ok": True})
+            next_index = self.state.save_label(payload)
+            self._json({"ok": True, "next_index": next_index})
             return
         if self.path == "/api/next":
             i = self.state.next_unsaved()
@@ -1624,6 +1816,7 @@ def serve(args) -> int:
             output_dir,
             labels_csv,
             review_window_seconds=args.review_window,
+            orphan_lookback_seconds=args.orphan_lookback,
             boundary_seconds=args.boundary,
             pre_seconds=args.pre_seconds,
             post_seconds=args.post_seconds,
@@ -1648,6 +1841,7 @@ def serve(args) -> int:
                     output_dir,
                     labels_csv,
                     review_window_seconds=args.review_window,
+                    orphan_lookback_seconds=args.orphan_lookback,
                     boundary_seconds=args.boundary,
                     pre_seconds=args.pre_seconds,
                     post_seconds=args.post_seconds,
@@ -1720,6 +1914,8 @@ def parse_args() -> argparse.Namespace:
     common.add_argument("--labels-csv", type=Path,
                         default=PROJECT_ROOT / "detections" / "track_event_review_labels.csv")
     common.add_argument("--review-window", type=float, default=1.0)
+    common.add_argument("--orphan-lookback", type=float, default=4.5,
+                        help="Backward review window for orphan predecessors (default: 4.5 s; review only).")
     common.add_argument("--boundary", type=float, default=0.5)
     common.add_argument("--pre-seconds", type=float, default=1.0)
     common.add_argument("--post-seconds", type=float, default=1.0)
@@ -1748,6 +1944,7 @@ def main() -> int:
             args.output_dir.resolve(),
             args.labels_csv.resolve(),
             review_window_seconds=args.review_window,
+            orphan_lookback_seconds=args.orphan_lookback,
             boundary_seconds=args.boundary,
             pre_seconds=args.pre_seconds,
             post_seconds=args.post_seconds,

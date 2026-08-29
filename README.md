@@ -242,15 +242,18 @@ Events are derived from the **observed** frame of each track (the
 `observed == 1` rows in the Norfair CSV); trailing prediction-only rows
 are ignored.
 
-There are three event kinds:
+There are two review event kinds:
 
 - `end` — one per track's last observed frame
-- `orphan_start` — a track whose first observed frame has no plausible
-  predecessor within the configurable review window (~1.0 s). These are
-  the missing stitches the current stitcher does not cover.
-- `existing_stitch` — a track whose observed end was followed by a
-  rank-1 stitcher proposal with a real gap. Use this to audit the
-  stitcher's current decisions alongside the missing-stitch events.
+- `orphan_start` — a track whose first observed frame has no predecessor
+  ending within the normal 1.0-second END review window. The reviewer then
+  looks backward 4.5 seconds (configurable with `--orphan-lookback`) and
+  presents earlier ended tracks as numbered possible predecessors. This is
+  a human-review window, not a stitch gate.
+
+Rank-1 stitch information remains visible in END events. Redundant separate
+`existing_stitch` events are no longer added when the END event already
+covers the same break, candidate, and frames.
 
 ### One command, then open the printed URL on your laptop
 
@@ -268,7 +271,7 @@ yet, then starts a small local HTTP server.
 The terminal prints something like:
 
 ```
-Reviewer running (21 events).
+Reviewer running (19 events).
 
 Open on your laptop:
   http://100.x.y.z:43127
@@ -362,9 +365,13 @@ The labels CSV columns:
 
 | Column | Meaning |
 |--------|---------|
+| `event_key` | stable structural identity (`end:<id>:<frame>` or `orphan_start:<id>:<frame>`) |
 | `event_type` | one of `h`, `a`, `n`, `x`, `e`, `f`, `u`, or empty |
 | `hand` | for `h`: `left` / `right` / `unknown`; empty otherwise |
+| `relation_direction` | `successor` for END events; `predecessor` for ORPHAN START events |
 | `continuation_status` | `selected` / `none` / `ambiguous` / `not_applicable` |
+| `selected_related_track_id` | actual selected successor or predecessor ID |
+| `selected_related_frame` | first-observed successor frame or last-observed predecessor frame |
 | `selected_continuation_track_id` | the actual track id (when status is `selected`) |
 | `selected_continuation_start_frame` | the manifest's first observed frame for that track |
 | `notes` | free-form notes from the textarea |

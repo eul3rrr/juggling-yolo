@@ -65,5 +65,6 @@ tests/
 !tests/
 !tests/test_stitch_tracklets.py
 !tests/test_review_stitches.py
+!tests/test_review_track_events.py
 !tests/test_analyze_stitch_features.py
 !tests/test_compare_arms.py
