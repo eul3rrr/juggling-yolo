@@ -50,6 +50,7 @@ from typing import Iterable
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 VENV_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
+REVIEW_RENDER_VERSION = 2
 if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
 
@@ -462,13 +463,37 @@ def _text(frame, text: str, origin: tuple[int, int],
                 color, thickness, cv2.LINE_AA)
 
 
+def _boxed_text(frame, text: str, anchor: tuple[int, int],
+                color: tuple[int, int, int], scale: float = 0.55) -> None:
+    """Draw readable text spatially attached to a track point."""
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    (text_width, text_height), baseline = cv2.getTextSize(text, font, scale, 1)
+    x = max(2, min(anchor[0], frame.shape[1] - text_width - 8))
+    y = max(text_height + baseline + 2,
+            min(anchor[1], frame.shape[0] - 4))
+    pad = 4
+    cv2.rectangle(
+        frame,
+        (x - pad, y - text_height - baseline - pad),
+        (x + text_width + pad, y + baseline + pad),
+        (12, 12, 12), -1,
+    )
+    cv2.rectangle(
+        frame,
+        (x - pad, y - text_height - baseline - pad),
+        (x + text_width + pad, y + baseline + pad),
+        color, 1, cv2.LINE_AA,
+    )
+    cv2.putText(frame, text, (x, y), font, scale, color, 2, cv2.LINE_AA)
+    cv2.putText(frame, text, (x, y), font, scale, (255, 255, 255), 1, cv2.LINE_AA)
+
+
 def render_clip(
     video: Path,
     output: Path,
     tracks: dict[int, Track],
     detections_by_frame: dict[int, list[dict]],
     event: ReviewEvent,
-    candidate_colors: dict[int, tuple[int, int, int]],
     fps: float,
     width: int,
     height: int,
@@ -488,6 +513,7 @@ def render_clip(
         n.track_id: [(o.frame, o.center_x, o.center_y) for o in n.all_sorted]
         for n in event.nearby_starts
     }
+    candidate_colors = _candidate_colors(len(event.nearby_starts))
 
     try:
         cap.set(cv2.CAP_PROP_POS_FRAMES, event.review_clip_first)
@@ -510,17 +536,13 @@ def render_clip(
                 cv2.line(frame, _point(*a), _point(*b), (255, 80, 40), 4, cv2.LINE_AA)
             if visible_primary:
                 cv2.circle(frame, _point(*visible_primary[-1]), 7, (255, 80, 40), -1, cv2.LINE_AA)
-            # PRIMARY label
-            if primary_points and visible_primary:
-                first_frame = primary_points[0][0]
-                if first_frame == frame_index:
-                    _text(frame, f"PRIMARY START id={event.primary.track_id}",
-                          (_point(*visible_primary[-1])[0] + 8,
-                           max(20, _point(*visible_primary[-1])[1] - 8)),
-                          (255, 80, 40))
-            # NEARBY CANDIDATE trails + numbered labels on first appearance
+                primary_pt = _point(*visible_primary[-1])
+                _boxed_text(frame, f"PRIMARY ID {event.primary.track_id}",
+                            (primary_pt[0] + 10, primary_pt[1] - 10),
+                            (255, 80, 40), 0.58)
+            # NEARBY CANDIDATE trails + persistent spatial labels
             for idx, cand in enumerate(event.nearby_starts, start=1):
-                color = candidate_colors.get(cand.track_id, (220, 60, 220))
+                color = candidate_colors[idx - 1]
                 visible = [(x, y) for f, x, y in nearby_lookup[cand.track_id]
                            if f <= frame_index][-30:]
                 for a, b in zip(visible, visible[1:]):
@@ -531,10 +553,15 @@ def render_clip(
                 if first is not None and first.frame == frame_index:
                     pt = _point(first.center_x, first.center_y)
                     cv2.drawMarker(frame, pt, color, cv2.MARKER_STAR, 22, 3)
-                    _text(frame, f"[{idx}] id={cand.track_id}",
-                          (pt[0] + 10, max(24, pt[1] - 10)), color)
+                if visible:
+                    candidate_pt = _point(*visible[-1])
+                    _boxed_text(frame, f"[{idx}] ID {cand.track_id}",
+                                (candidate_pt[0] + 10,
+                                 candidate_pt[1] - 10 - (idx - 1) * 22),
+                                color, 0.55)
             # Header bar
-            cv2.rectangle(frame, (0, 0), (width, 56), (20, 20, 20), -1)
+            legend_height = 31 + 22 * len(event.nearby_starts)
+            cv2.rectangle(frame, (0, 0), (width, max(56, legend_height)), (20, 20, 20), -1)
             kind_label = {"end": "TRACK END",
                           "orphan_start": "ORPHAN START",
                           "existing_stitch": "EXISTING STITCH"}[event.kind]
@@ -546,10 +573,13 @@ def render_clip(
                   f"FRAME={frame_index}  candidates={len(event.nearby_starts)}"
                   f"{stitch_str}",
                   (10, 22), (255, 255, 255), 0.55)
-            mapping = "  ".join(f"[{i}] id={c.track_id}"
-                                for i, c in enumerate(event.nearby_starts, start=1))
-            _text(frame, f"NEARBY: {mapping}",
-                  (10, 44), (210, 210, 210), 0.45)
+            _text(frame, f"PRIMARY: ID {event.primary.track_id}",
+                  (10, 44), (255, 80, 40), 0.48)
+            for idx, cand in enumerate(event.nearby_starts, start=1):
+                first = cand.first_observed
+                first_frame = first.frame if first is not None else "?"
+                _text(frame, f"[{idx}] ID {cand.track_id} @ frame {first_frame}",
+                      (180, 44 + (idx - 1) * 22), candidate_colors[idx - 1], 0.45)
             writer.write(frame)
     finally:
         cap.release(); writer.release()
@@ -638,14 +668,6 @@ def prepare(
     )
     print(f"Generated {len(events)} review events from {len(tracks)} tracks")
 
-    colors_by_event = [
-        _candidate_colors(len(ev.nearby_starts)) for ev in events
-    ]
-    candidate_color_map = {}
-    for ev, colors in zip(events, colors_by_event):
-        for cand, color in zip(ev.nearby_starts, colors):
-            candidate_color_map[cand.track_id] = color
-
     manifest_rows: list[dict[str, str]] = []
     label_rows: list[dict[str, str]] = []
     existing_labels = _read_labels(labels_csv)
@@ -663,12 +685,12 @@ def prepare(
             suffix = f"orphan-start-id{ev.primary.track_id}-at-{ev.primary_end_frame}"
         else:
             suffix = f"existing-id{ev.primary.track_id}"
-        filename = f"{ev.event_index:05d}_{_safe(suffix)}.mp4"
+        filename = f"v{REVIEW_RENDER_VERSION}_{ev.event_index:05d}_{_safe(suffix)}.mp4"
         clip_path = output_dir / filename
         if not clip_path.is_file() or clip_path.stat().st_size < 1000:
             render_clip(
                 video, clip_path, tracks, detections_by_frame,
-                ev, candidate_color_map, fps, width, height,
+                ev, fps, width, height,
             )
             rendered += 1
         else:
@@ -1574,10 +1596,23 @@ def _bind_port(start: int = 43127, attempts: int = 20) -> int:
     raise RuntimeError(f"Could not bind any port in [{start}, {start + attempts})")
 
 
+def _manifest_needs_refresh(path: Path) -> bool:
+    """Return true when clips were rendered by an older overlay version."""
+    if not path.is_file():
+        return True
+    with path.open(newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return True
+    version_marker = f"v{REVIEW_RENDER_VERSION}_"
+    return any(version_marker not in row.get("review_clip_path", "") for row in rows)
+
+
 def serve(args) -> int:
     labels_csv = args.labels_csv.resolve()
     output_dir = args.output_dir.resolve()
-    if not labels_csv.exists() or args.rebuild:
+    manifest_path = output_dir / "manifest.csv"
+    if not labels_csv.exists() or args.rebuild or _manifest_needs_refresh(manifest_path):
         if args.rebuild:
             for p in output_dir.glob("*.mp4"):
                 p.unlink()
@@ -1596,7 +1631,7 @@ def serve(args) -> int:
     elif labels_csv.exists():
         # Re-prepare only if the labels CSV has fewer rows than the
         # manifest (events have been added since last prepare).
-        events_path = output_dir / "manifest.csv"
+        events_path = manifest_path
         if events_path.is_file():
             with events_path.open(newline="", encoding="utf-8") as f:
                 n_events = sum(1 for _ in csv.DictReader(f))
