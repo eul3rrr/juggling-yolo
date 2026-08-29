@@ -13,8 +13,35 @@ fine-tuning.
 - `scripts/detect_video.py`: streaming Python inference script
 - `scripts/track_video.py`: streaming generic tracking comparison script
 - `scripts/track_norfair.py`: Norfair center-point tracklet baseline using existing CSV detections
+- `scripts/stitch_tracklets.py`: rank constant-velocity matches between Norfair tracklets
+- `scripts/review_stitches.py`: manual review of proposed stitch candidates
+- `scripts/analyze_stitch_features.py`: descriptive feature analysis for reviewed stitches
+- `scripts/segment_video.py`: yolo26l-seg instance segmentation with mask/bbox/centroid export
+- `scripts/compare_arms.py`: detection / Norfair / stitch / mask-diagnostics comparison
+- `scripts/build_side_by_side.py`: synchronized side-by-side comparison MP4s
+- `scripts/build_contact_sheets.py`: PNG contact sheets for seg visual review
+- `scripts/measure_runtime.py`: model-only inference timing
+- `scripts/run_arm_triple.sh`: sequential runner for the three perception arms
 - `configs/`: ByteTrack and BoT-SORT tracker configurations
+- `reports/`: per-experiment reports and structured summaries
 - `.venv/`: isolated Python environment
+
+## Detector + segmentation capacity comparison
+
+Three arms are compared on the same two clips with the same downstream
+Norfair + stitch settings (distance_threshold=50, hit_counter_max=5,
+max_gap_frames=10):
+
+  A. yolo26s.pt — sports-ball detection, tracking point = bbox center
+  B. yolo26l.pt — sports-ball detection, tracking point = bbox center
+  C. yolo26l-seg.pt — instance segmentation, tracking point = instance
+     bbox center (mask centroid is computed and saved but is NOT the
+     tracking point)
+
+The full report is in
+`reports/detector_seg_comparison/REPORT.md`. Headline finding: promote
+`yolo26l` to the next core perception baseline; the segmentation model
+is not better than the plain large detector for this pipeline.
 
 ## Environment
 

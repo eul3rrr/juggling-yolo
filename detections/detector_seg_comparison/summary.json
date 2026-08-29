@@ -1,0 +1,583 @@
+{
+  "comparisons": {
+    "yolo26l_vs_yolo26l-seg": {
+      "abs_frame_count_difference_distribution": {
+        "0": 530,
+        "1": 313,
+        "2": 158,
+        "3+": 78
+      },
+      "frames_compared": 1079
+    },
+    "yolo26l_yt_vs_yolo26l-seg_yt": {
+      "abs_frame_count_difference_distribution": {
+        "0": 373,
+        "1": 405,
+        "2": 108,
+        "3+": 14
+      },
+      "frames_compared": 900
+    },
+    "yolo26s_vs_yolo26l": {
+      "abs_frame_count_difference_distribution": {
+        "0": 530,
+        "1": 357,
+        "2": 160,
+        "3+": 32
+      },
+      "frames_compared": 1079
+    },
+    "yolo26s_yt_vs_yolo26l_yt": {
+      "abs_frame_count_difference_distribution": {
+        "0": 366,
+        "1": 383,
+        "2": 119,
+        "3+": 32
+      },
+      "frames_compared": 900
+    }
+  },
+  "yolo26l": {
+    "detection": {
+      "confidence": {
+        "max": 0.935215,
+        "mean": 0.6879201482381531,
+        "median": 0.749314,
+        "min": 0.150328,
+        "n": 3292
+      },
+      "frame_count_distribution": {
+        "0": 0,
+        "1": 1,
+        "2": 24,
+        "3": 995,
+        "4+": 59
+      },
+      "frames_with_any_detection": 1079,
+      "mean_per_frame": 3.05097312326228,
+      "median_per_frame": 3,
+      "total_detections": 3292
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 886,
+        "mean": 236.92857142857142,
+        "median": 139.5,
+        "min": 2,
+        "n": 14,
+        "p25": 28.5,
+        "p75": 231.25
+      },
+      "n_track_rows": 3317,
+      "n_unique_track_ids": 14,
+      "observed_fraction": 0.9773892071148629,
+      "observed_per_track": {
+        "max": 886,
+        "mean": 236.92857142857142,
+        "median": 139.5,
+        "min": 2,
+        "n": 14,
+        "p25": 28.5,
+        "p75": 231.25
+      },
+      "observed_rows": 3242,
+      "predicted_rows": 75,
+      "short_tracks_le_10": 3,
+      "short_tracks_le_5": 3
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 1,
+          "1": 1,
+          "3": 1
+        },
+        "max": 3,
+        "mean": 1.3333333333333333,
+        "median": 1,
+        "min": 0
+      },
+      "n_candidates": 3,
+      "n_source_tracklets_with_candidates": 2,
+      "rank1_prediction_error": {
+        "max": 102.664459,
+        "mean": 51.406397999999996,
+        "median": 51.406397999999996,
+        "min": 0.148337,
+        "n": 2,
+        "p25": 25.777367499999997,
+        "p75": 77.03542850000001
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  },
+  "yolo26l-seg": {
+    "detection": {
+      "confidence": {
+        "max": 0.862835,
+        "mean": 0.4564636193757601,
+        "median": 0.457007,
+        "min": 0.150018,
+        "n": 2467
+      },
+      "frame_count_distribution": {
+        "0": 66,
+        "1": 151,
+        "2": 287,
+        "3": 559,
+        "4+": 16
+      },
+      "frames_with_any_detection": 1013,
+      "mean_per_frame": 2.435340572556762,
+      "median_per_frame": 3,
+      "total_detections": 2467
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32.csv",
+    "instances_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32_instances.csv",
+    "mask": {
+      "bbox_to_mask_centroid_distance_px": {
+        "max": 7.997729302745815,
+        "median": 1.6302760502442484,
+        "n": 2467,
+        "p75": 2.680115538195393,
+        "p90": 4.084337283605434
+      },
+      "invalid_centroid_rows": 0,
+      "mask_area": {
+        "max": 2699,
+        "mean": 1695.6278881232265,
+        "median": 1714,
+        "min": 252,
+        "n": 2467,
+        "p25": 1515.0,
+        "p75": 1915.5,
+        "p90": 2099.0
+      },
+      "valid_centroid_rows": 2467
+    },
+    "norfair": {
+      "lifespan": {
+        "max": 156,
+        "mean": 38.458333333333336,
+        "median": 23.0,
+        "min": 3,
+        "n": 72,
+        "p25": 13.75,
+        "p75": 53.5
+      },
+      "n_track_rows": 2769,
+      "n_unique_track_ids": 72,
+      "observed_fraction": 0.8057060310581438,
+      "observed_per_track": {
+        "max": 156,
+        "mean": 38.458333333333336,
+        "median": 23.0,
+        "min": 3,
+        "n": 72,
+        "p25": 13.75,
+        "p75": 53.5
+      },
+      "observed_rows": 2231,
+      "predicted_rows": 538,
+      "short_tracks_le_10": 14,
+      "short_tracks_le_5": 6
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 11,
+          "1": 8,
+          "10": 5,
+          "2": 13,
+          "3": 9,
+          "4": 7,
+          "5": 13,
+          "6": 9,
+          "7": 10,
+          "8": 6,
+          "9": 7
+        },
+        "max": 10,
+        "mean": 4.479591836734694,
+        "median": 5.0,
+        "min": 0
+      },
+      "n_candidates": 98,
+      "n_source_tracklets_with_candidates": 60,
+      "rank1_prediction_error": {
+        "max": 584.590737,
+        "mean": 148.57100344999998,
+        "median": 131.79719949999998,
+        "min": 8.617335,
+        "n": 60,
+        "p25": 65.6529615,
+        "p75": 182.43870400000003
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  },
+  "yolo26l-seg_yt": {
+    "detection": {
+      "confidence": {
+        "max": 0.873691,
+        "mean": 0.5215527385987261,
+        "median": 0.558698,
+        "min": 0.150102,
+        "n": 3925
+      },
+      "frame_count_distribution": {
+        "0": 0,
+        "1": 5,
+        "2": 14,
+        "3": 164,
+        "4+": 717
+      },
+      "frames_with_any_detection": 900,
+      "mean_per_frame": 4.361111111111111,
+      "median_per_frame": 4.0,
+      "total_detections": 3925
+    },
+    "detections_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l-seg_classes-32.csv",
+    "instances_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l-seg_classes-32_instances.csv",
+    "mask": {
+      "bbox_to_mask_centroid_distance_px": {
+        "max": 1.9059152656925362,
+        "median": 0.6922867902826643,
+        "n": 3925,
+        "p75": 0.9458160497686781,
+        "p90": 1.1559454960630298
+      },
+      "invalid_centroid_rows": 0,
+      "mask_area": {
+        "max": 508,
+        "mean": 356.3676433121019,
+        "median": 363,
+        "min": 93,
+        "n": 3925,
+        "p25": 335,
+        "p75": 383,
+        "p90": 403.0
+      },
+      "valid_centroid_rows": 3925
+    },
+    "norfair": {
+      "lifespan": {
+        "max": 220,
+        "mean": 83.46,
+        "median": 66.5,
+        "min": 4,
+        "n": 50,
+        "p25": 55.0,
+        "p75": 134.5
+      },
+      "n_track_rows": 4173,
+      "n_unique_track_ids": 50,
+      "observed_fraction": 0.8571770908219506,
+      "observed_per_track": {
+        "max": 220,
+        "mean": 83.46,
+        "median": 66.5,
+        "min": 4,
+        "n": 50,
+        "p25": 55.0,
+        "p75": 134.5
+      },
+      "observed_rows": 3577,
+      "predicted_rows": 596,
+      "short_tracks_le_10": 3,
+      "short_tracks_le_5": 2
+    },
+    "norfair_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l-seg_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 2,
+          "1": 4,
+          "10": 4,
+          "2": 2,
+          "3": 2,
+          "4": 7,
+          "5": 6,
+          "6": 4,
+          "7": 8,
+          "8": 4,
+          "9": 3
+        },
+        "max": 10,
+        "mean": 5.456521739130435,
+        "median": 5.5,
+        "min": 0
+      },
+      "n_candidates": 46,
+      "n_source_tracklets_with_candidates": 36,
+      "rank1_prediction_error": {
+        "max": 258.730928,
+        "mean": 131.12669716666667,
+        "median": 126.116144,
+        "min": 23.802826,
+        "n": 36,
+        "p25": 100.55119875,
+        "p75": 168.532312
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l-seg_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "youtube_clip"
+  },
+  "yolo26l_yt": {
+    "detection": {
+      "confidence": {
+        "max": 0.870307,
+        "mean": 0.5176555429417572,
+        "median": 0.543132,
+        "min": 0.150274,
+        "n": 4052
+      },
+      "frame_count_distribution": {
+        "0": 0,
+        "1": 0,
+        "2": 6,
+        "3": 114,
+        "4+": 780
+      },
+      "frames_with_any_detection": 900,
+      "mean_per_frame": 4.502222222222223,
+      "median_per_frame": 5.0,
+      "total_detections": 4052
+    },
+    "detections_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 355,
+        "mean": 99.02325581395348,
+        "median": 73,
+        "min": 4,
+        "n": 43,
+        "p25": 57.5,
+        "p75": 136.5
+      },
+      "n_track_rows": 4258,
+      "n_unique_track_ids": 43,
+      "observed_fraction": 0.881634570220761,
+      "observed_per_track": {
+        "max": 355,
+        "mean": 99.02325581395348,
+        "median": 73,
+        "min": 4,
+        "n": 43,
+        "p25": 57.5,
+        "p75": 136.5
+      },
+      "observed_rows": 3754,
+      "predicted_rows": 504,
+      "short_tracks_le_10": 3,
+      "short_tracks_le_5": 3
+    },
+    "norfair_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "1": 3,
+          "10": 4,
+          "2": 5,
+          "3": 7,
+          "4": 4,
+          "5": 2,
+          "6": 5,
+          "7": 2,
+          "8": 3,
+          "9": 3
+        },
+        "max": 10,
+        "mean": 5.131578947368421,
+        "median": 4.5,
+        "min": 1
+      },
+      "n_candidates": 38,
+      "n_source_tracklets_with_candidates": 30,
+      "rank1_prediction_error": {
+        "max": 231.087733,
+        "mean": 120.55928153333333,
+        "median": 104.931433,
+        "min": 19.405541,
+        "n": 30,
+        "p25": 87.57722975,
+        "p75": 173.41828225
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26l_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "youtube_clip"
+  },
+  "yolo26s": {
+    "detection": {
+      "confidence": {
+        "max": 0.921587,
+        "mean": 0.49253268143537166,
+        "median": 0.482155,
+        "min": 0.150041,
+        "n": 2731
+      },
+      "frame_count_distribution": {
+        "0": 17,
+        "1": 143,
+        "2": 272,
+        "3": 551,
+        "4+": 96
+      },
+      "frames_with_any_detection": 1062,
+      "mean_per_frame": 2.571563088512241,
+      "median_per_frame": 3.0,
+      "total_detections": 2731
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26s_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 175,
+        "mean": 54.388888888888886,
+        "median": 40.0,
+        "min": 2,
+        "n": 54,
+        "p25": 17.0,
+        "p75": 78.25
+      },
+      "n_track_rows": 2937,
+      "n_unique_track_ids": 54,
+      "observed_fraction": 0.8512087163772557,
+      "observed_per_track": {
+        "max": 175,
+        "mean": 54.388888888888886,
+        "median": 40.0,
+        "min": 2,
+        "n": 54,
+        "p25": 17.0,
+        "p75": 78.25
+      },
+      "observed_rows": 2500,
+      "predicted_rows": 437,
+      "short_tracks_le_10": 7,
+      "short_tracks_le_5": 1
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26s_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 3,
+          "1": 4,
+          "10": 1,
+          "2": 3,
+          "3": 10,
+          "4": 1,
+          "5": 5,
+          "6": 7,
+          "7": 5,
+          "8": 2,
+          "9": 2
+        },
+        "max": 10,
+        "mean": 4.4186046511627906,
+        "median": 5,
+        "min": 0
+      },
+      "n_candidates": 43,
+      "n_source_tracklets_with_candidates": 33,
+      "rank1_prediction_error": {
+        "max": 482.266274,
+        "mean": 141.6816274242424,
+        "median": 125.688842,
+        "min": 11.561754,
+        "n": 33,
+        "p25": 39.426645,
+        "p75": 200.065674
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26s_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  },
+  "yolo26s_yt": {
+    "detection": {
+      "confidence": {
+        "max": 0.889572,
+        "mean": 0.475903931076179,
+        "median": 0.482517,
+        "min": 0.150264,
+        "n": 4135
+      },
+      "frame_count_distribution": {
+        "0": 2,
+        "1": 7,
+        "2": 19,
+        "3": 71,
+        "4+": 801
+      },
+      "frames_with_any_detection": 898,
+      "mean_per_frame": 4.60467706013363,
+      "median_per_frame": 5.0,
+      "total_detections": 4135
+    },
+    "detections_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 415,
+        "mean": 108.475,
+        "median": 68.5,
+        "min": 4,
+        "n": 40,
+        "p25": 58.75,
+        "p75": 140.25
+      },
+      "n_track_rows": 4339,
+      "n_unique_track_ids": 40,
+      "observed_fraction": 0.8743950218944457,
+      "observed_per_track": {
+        "max": 415,
+        "mean": 108.475,
+        "median": 68.5,
+        "min": 4,
+        "n": 40,
+        "p25": 58.75,
+        "p75": 140.25
+      },
+      "observed_rows": 3794,
+      "predicted_rows": 545,
+      "short_tracks_le_10": 5,
+      "short_tracks_le_5": 2
+    },
+    "norfair_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 2,
+          "1": 2,
+          "2": 3,
+          "3": 3,
+          "4": 2,
+          "5": 6,
+          "6": 4,
+          "8": 4,
+          "9": 2
+        },
+        "max": 9,
+        "mean": 4.607142857142857,
+        "median": 5.0,
+        "min": 0
+      },
+      "n_candidates": 28,
+      "n_source_tracklets_with_candidates": 27,
+      "rank1_prediction_error": {
+        "max": 271.201954,
+        "mean": 121.68558681481481,
+        "median": 105.329669,
+        "min": 36.879147,
+        "n": 27,
+        "p25": 83.19255799999999,
+        "p75": 161.93201800000003
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090_yolo26s_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "youtube_clip"
+  }
+}
