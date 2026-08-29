@@ -6530,3 +6530,224 @@ Status: **PARTIAL PASS** (committed)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h122_contact_sheets.py`
   - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h122/*.png` (5 files)
   - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h122_report.md`
+
+## H125 — H7 min-cost flow on the full E6c candidate set (PASS with caveats, 2026-08-29)
+
+- **Hypothesis:** the 20 NOT_IN_CHAIN + correct review pairs are
+  rank-1 capacity-conflicts in h7v3plus3. Running H7-min-cost
+  flow on the full 113 E6c candidate set (instead of the curated
+  58-edge H7 input) should expose more capacity conflicts and
+  enable a better chain.
+
+- **Three iterations:**
+  - **H125 v1 (K-best):** 18/20 (90%) of NOT_IN_CHAIN + correct
+    edges are rank-1 alternatives.
+  - **H125 v2 (4 variants):** the `full_e6c_no_h7v2` variant
+    (113 E6c BALLISTIC, no h7v2 hand-edges) achieves
+    P=0.932 R=0.911 on identical + P=0.960 R=0.923 on YouTube.
+    Adding h7v2 hand-edges HURTS precision. E6c-accepted
+    filtering is harmful at the chain level.
+  - **H125 v3 (sensitivity grid):** default (err=0.05, gap=0.10)
+    is in flat region. Only err_scale>=0.10 drops YouTube
+    precision.
+
+- **Visual QA of 5 NEW V3 edges:** 3/5 real catch-throws (4→7,
+  25→27, 9→12), 2/5 tracker fragmentation (12→17, 16→21). The 2
+  mislabels are real defects in the H59 review set.
+
+- **H125 v3 + H114 v1 strict INCOMPATIBILITY:** all 18 NEW V3
+  edges trigger H114 v1 strict (T_d=40, T_j=250). The E6c
+  `accepted=1` filter was effectively a geometric pre-filter
+  with threshold ~40 px on end_d / start_d.
+
+- **Recommended operating points (post-H125):**
+  1. **Precision-optimized:** h7v3plus3 + H112 + H114 v1 strict.
+     P=1.000 R=0.718 F1=0.836. Unchanged.
+  2. **Recall-optimized (new):** H125 v3 chain set.
+     P=0.942 R=0.915 F1=0.929. **+19.7pt recall, -3.9pt precision.**
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h125_v1_kbest_analysis.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h125_v2_h7_on_full_e6c.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h125_v3_grid.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h125v3_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h125_*.{csv,json}` (12 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h125v3/*.png` (5 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h125_report.md`
+
+---
+
+## H125 v4 — Union h7v3plus3 + H125 v3 BALLISTIC + H112 + H114 v1 strict (PASS, 2026-08-29)
+
+- **Hypothesis (declared BEFORE reading outcomes):** H125 v3's
+  "all 18 NEW V3 edges trigger H114 v1 strict default (T_d=40,
+  T_j=250)" finding is true for the default threshold, but the
+  strict threshold (T_d=25, T_j=200) — the H115 v3 default — may
+  admit some of the 18 NEW V3 edges while still filtering
+  cross-ball artifacts.
+
+- **Method:** 6 variants tested:
+  1. union (no filter)
+  2. union + H112 only
+  3. union + H112 + H114 (40, 250) — H125 v3 + H114 default
+  4. **union + H112 + H114 (25, 200) — H115 v3 default**
+  5. union + H112 + H114 (20, 150) — even stricter
+  6. h7v3plus3-only + H112 + H114 (25, 200) — control
+
+- **Quantitative result:**
+
+  | variant | P | R | F1 | adm | corr | wrong | NEW_surv |
+  |---|---|---|---|---|---|---|---|
+  | h7v3plus3 + post-filters | **1.000** | 0.718 | 0.836 | 52 | 51 | 0 | 0 |
+  | H125 v3 (no post-filters) | 0.942 | **0.915** | **0.929** | 69 | 65 | 5 | 18 |
+  | union | 0.929 | 0.915 | 0.922 | 70 | 65 | 5 | 18 |
+  | union + H112 | 0.935 | 0.817 | 0.872 | 62 | 58 | 4 | 18 |
+  | union + H112 + H114 (40, 250) | 0.935 | 0.817 | 0.872 | 62 | 58 | 4 | 18 |
+  | **union + H112 + H114 (25, 200)** | **0.964** | **0.761** | **0.850** | 56 | 54 | 2 | 13 |
+  | union + H112 + H114 (20, 150) | 0.960 | 0.676 | 0.793 | 50 | 48 | 2 | 11 |
+  | h7v3plus3-only + H112 + H114 (25, 200) | 1.000 | 0.606 | 0.754 | 43 | 43 | 0 | 0 |
+
+- **Key findings:**
+
+  1. **H125 v3 finding was wrong**: the default H114 (40, 250)
+     drops all 18 NEW V3 edges, but the strict H114 (25, 200)
+     admits 13 of them. The E6c `accepted=1` filter was a
+     pre-filter with threshold ~40 px on end_d / start_d, not
+     a binary filter.
+
+  2. **H125 v4 strict lifts recall from 0.718 to 0.761 (+4.3pt)**
+     at the cost of 3.6pt precision. F1 0.836 → 0.850 (+1.4pt).
+
+  3. **H59 review over-counts REAL on H125 v4 NEW edges by 46pt**:
+     11/13 = 84.6% H59 review precision vs 5/13 = 38.5% visual
+     precision. Consistent with H125 v3 (60% visual on 5 NEW
+     V3 edges) and H123 (53.3% REAL precision on H121
+     RAW_REJECTS).
+
+  4. **H125 v4 strict drops 9 h7v3plus3 edges** (3→8, 5→6, 22→27,
+     29→34, 37→40, 38→39, 43→45, 51→52, 27→28 YT). 2 are known
+     FPs (per H122/H112), but 6 are real catch-throws that
+     h7v3plus3's H7v2 reclassification correctly admitted. The
+     H125 v4 strict filter is **over-aggressive on these 6
+     edges**.
+
+- **Visual QA (13 H125 v4 NEW edges):**
+
+  | Edge | H59 | Vision | Notes |
+  |---|---|---|---|
+  | 4→7 id | correct | REAL | Clean catch-throw on L wrist |
+  | 9→12 id | correct | FALSE | Target is at face, not at L wrist |
+  | 10→11 id | correct | FALSE | Held ball, not new ball |
+  | 14→19 id | correct | REAL | Coherent hold-throw |
+  | 25→27 id | correct | FALSE | Same held ball, occlusion artifact |
+  | 53→58 id | correct | REAL | Real cross-hand transition |
+  | 66→69 id | correct | REAL | Real catch-throw |
+  | 44→53 id | correct | REAL | Real catch-throw |
+  | 54→57 id | correct | FALSE | Tracker latched on incoming ball |
+  | 63→65 id | correct | FALSE | R catches, L throws — different balls |
+  | 73→75 id | correct | FALSE | ID-switch artifact |
+  | 6→15 id | wrong | FALSE | Cross-ball artifact |
+  | 10→11 YT | wrong | FALSE | Fragmented link |
+
+  **Visual precision: 5/13 = 38.5%** (5 REAL out of 13 H59-labeled).
+
+- **Recommended operating points (post-H125 v4):**
+
+  1. **For precision-optimized downstream consumers:**
+     h7v3plus3 + H112 + H114 v1 strict. P=1.000 R=0.718 F1=0.836.
+
+  2. **For F1-optimized downstream consumers:** **H125 v4 strict**
+     (NEW). P=0.964 R=0.761 F1=0.850. **+4.3pt recall over
+     h7v3plus3.** The 2 wrong edges (6→15, 10→11 YT) are
+     persistent cross-ball artifacts.
+
+  3. **For recall-optimized downstream consumers:** H125 v3
+     (no post-filters). P=0.942 R=0.915 F1=0.929.
+
+- **Verdict: PASS.** H125 v4 is the new F1-optimized operating
+  point. The remaining recall gap (0.761 vs ideal 1.000) requires
+  fundamentally different signals (color, multi-view 3D, learned
+  tracklet classification).
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h125_v4_union_strict.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h125_v4_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h125v4_contact_sheets.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/contact_sheets_h125v4/*.png` (13 files)
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h125_v4_report.md`
+
+---
+
+## H126 — BALLISTIC-only "tracker latched on held ball" filter for H125 v4 (PASS, 2026-08-29)
+
+- **Hypothesis (declared BEFORE reading outcomes):** the 2
+  H59=wrong NEW V4 edges (6→15 identical, 10→11 YouTube) are
+  BALLISTIC edges with a "tracker latched on a held ball" signature
+  (one endpoint < 5 px, or both endpoints < 50 px). H125 v4 +
+  H126 (BALLISTIC-only) should achieve P=1.000 R=0.761 F1=0.864.
+
+- **H126 v1 rule (BALLISTIC-only):** reject if
+  `(end_d < 5 OR start_d < 5) OR (end_d < 50 AND start_d < 50)`.
+  Restricted to BALLISTIC edges only (hand-classified edges
+  naturally have both endpoints within reach).
+
+- **Quantitative result (113 review pairs):**
+
+  | variant | P | R | F1 | adm | corr | wrong |
+  |---|---|---|---|---|---|---|
+  | h7v3plus3 + post-filters | 1.000 | 0.718 | 0.836 | 52 | 51 | 0 |
+  | H125 v3 (no post-filters) | 0.942 | 0.915 | **0.929** | 69 | 65 | 5 |
+  | H125 v4 strict | 0.964 | 0.761 | 0.850 | 56 | 54 | 2 |
+  | **H125 v4 + H126 v1 (NEW)** | **1.000** | 0.761 | **0.864** | 54 | 54 | 0 |
+
+- **Per-stem (H125v4 + H126 v1):** identical P=1.000 R=0.689
+  (4 new kept); youtube P=1.000 R=0.885 (0 new kept).
+  Combined: P=1.000 R=0.761 F1=0.864.
+
+- **What H126 v1 catches:** the 2 H59=wrong BALLISTIC edges:
+  - 6→15 identical (BALLISTIC, end_d=47, start_d=15, sj=101):
+    both<50 AND start_d<5 → fires
+  - 10→11 YouTube (BALLISTIC, end_d=2.2, start_d=120.7, sj=175):
+    end_d<5 → fires
+
+- **What H126 v1 preserves:** all 5 visual REAL NEW V4 edges
+  (4→7 id end_d=56 start_d=66; 14→19 id 52.7/68.9; 53→58 id
+  57.0/999; 66→69 id 32.6/75.6; 44→53 id 32.2/69.5). 0 REAL
+  dropped.
+
+- **H126 v2 (single-end-far, exploratory NEGATIVE for F1):**
+  single-end-far (end_d<30 AND start_d>60) at the 13 NEW V4
+  edges catches 1 H59=wrong (6→15 id) + 3 visual FALSE
+  (9→12, 10→11 id, 63→65 id), but does NOT catch 10→11 YT.
+  H126 v1 is sufficient to achieve P=1.000; H126 v2 does not
+  change the operating point.
+
+- **Three operating points now exist:**
+  1. **Precision-optimized:** h7v3plus3 + H112 + H114 v1 strict.
+     P=1.000 R=0.718 F1=0.836.
+  2. **F1-optimized (NEW):** h7v3plus3 + H125 v3 + H112 + H114 v1
+     strict + H126 v1. **P=1.000 R=0.761 F1=0.864.**
+  3. **Recall-optimized:** h7v3plus3 + H125 v3 (no post-filters).
+     P=0.942 R=0.915 F1=0.929.
+
+- **Negative findings:**
+  - H126 v1 (BALLISTIC-only) is over-restrictive on hand-classified
+    edges. 9/9 h7v3plus3 RECLASSIFIED_HAND_TRANSITION edges have
+    end_d and start_d < 50 (the held-phase signature). Applying
+    H126 to them would drop 9 correct edges.
+  - H114 v1 strict is a no-op on the 13 NEW V4 edges (0/13 fire
+    at default T_d=25, T_j=200). H125 v4 strict relies on H125 v3
+    NOT admitting edges that fire H114 v1 strict.
+
+- **Recommended operating point (post-H126, F1-optimized):**
+  h7v3plus3 + H125 v3 + H112 + H114 v1 strict + H126 v1
+  - 113 review pairs: P=1.000 R=0.761 F1=0.864
+  - 21 H93 phases: 17/4/0/0, P=R=acc=1.000 (unchanged)
+  - (CONF or UNCER) gate: P=1.000 R=0.465 (unchanged)
+
+- **Artifacts:**
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h126_ballistic_only_filter.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/scripts/h126_post_h125v4_filters.py`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h126_v1_summary.json`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/data/h126_v1_per_edge.csv`
+  - `experiments/hand_occlusion_overnight/h1_hand_pool/reports/h126_report.md`

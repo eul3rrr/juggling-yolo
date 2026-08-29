@@ -1,0 +1,491 @@
+{
+  "variants": {
+    "h7v3plus3_only": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 28,
+          "n_admitted_correct": 27,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 27,
+          "precision": 0.9642857142857143,
+          "recall": 0.6,
+          "F1": 0.7397260273972602
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 24,
+          "n_admitted_correct": 24,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 24,
+          "precision": 1.0,
+          "recall": 0.9230769230769231,
+          "F1": 0.9600000000000001
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [],
+          "new_dropped": [],
+          "h7v3plus3_dropped": []
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [],
+          "new_dropped": [],
+          "h7v3plus3_dropped": []
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 52,
+        "n_admitted_correct": 51,
+        "n_admitted_wrong": 1,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 51,
+        "precision": 0.9807692307692307,
+        "recall": 0.7183098591549296,
+        "F1": 0.8292682926829268
+      }
+    },
+    "h7v3plus3_post_filters": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 20,
+          "n_admitted_correct": 20,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 20,
+          "precision": 1.0,
+          "recall": 0.4444444444444444,
+          "F1": 0.6153846153846153
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 23,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 1.0,
+          "recall": 0.8846153846153846,
+          "F1": 0.9387755102040816
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              3,
+              8,
+              "h112_or_h114"
+            ],
+            [
+              5,
+              6,
+              "h112_or_h114"
+            ],
+            [
+              22,
+              27,
+              "h112_or_h114"
+            ],
+            [
+              29,
+              34,
+              "h112_or_h114"
+            ],
+            [
+              37,
+              40,
+              "h112_or_h114"
+            ],
+            [
+              38,
+              39,
+              "h112_or_h114"
+            ],
+            [
+              43,
+              45,
+              "h112_or_h114"
+            ],
+            [
+              51,
+              52,
+              "h112_or_h114"
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28,
+              "h112_or_h114"
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 43,
+        "n_admitted_correct": 43,
+        "n_admitted_wrong": 0,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 43,
+        "precision": 1.0,
+        "recall": 0.6056338028169014,
+        "F1": 0.7543859649122807
+      }
+    },
+    "h125v4_strict": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 32,
+          "n_admitted_correct": 31,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 31,
+          "precision": 0.96875,
+          "recall": 0.6888888888888889,
+          "F1": 0.8051948051948051
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 24,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 1,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 0.9583333333333334,
+          "recall": 0.8846153846153846,
+          "F1": 0.9199999999999999
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              6,
+              15
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              63,
+              65
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [
+            [
+              18,
+              21,
+              "h112_or_h114"
+            ],
+            [
+              15,
+              16,
+              "h112_or_h114"
+            ],
+            [
+              11,
+              13,
+              "h112_or_h114"
+            ],
+            [
+              12,
+              17,
+              "h112_or_h114"
+            ],
+            [
+              57,
+              63,
+              "h112_or_h114"
+            ]
+          ],
+          "h7v3plus3_dropped": [
+            [
+              3,
+              8,
+              "h112_or_h114"
+            ],
+            [
+              5,
+              6,
+              "h112_or_h114"
+            ],
+            [
+              22,
+              27,
+              "h112_or_h114"
+            ],
+            [
+              29,
+              34,
+              "h112_or_h114"
+            ],
+            [
+              37,
+              40,
+              "h112_or_h114"
+            ],
+            [
+              38,
+              39,
+              "h112_or_h114"
+            ],
+            [
+              43,
+              45,
+              "h112_or_h114"
+            ],
+            [
+              51,
+              52,
+              "h112_or_h114"
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [
+            [
+              10,
+              11
+            ]
+          ],
+          "new_dropped": [],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28,
+              "h112_or_h114"
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 56,
+        "n_admitted_correct": 54,
+        "n_admitted_wrong": 2,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 54,
+        "precision": 0.9642857142857143,
+        "recall": 0.7605633802816901,
+        "F1": 0.8503937007874016
+      }
+    },
+    "h125v4_h126_v1": {
+      "per_stem": {
+        "identical_balls_trick_000_018": {
+          "n_admitted_with_review_label": 31,
+          "n_admitted_correct": 31,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 45,
+          "n_correct_admitted": 31,
+          "precision": 1.0,
+          "recall": 0.6888888888888889,
+          "F1": 0.8157894736842105
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "n_admitted_with_review_label": 23,
+          "n_admitted_correct": 23,
+          "n_admitted_wrong": 0,
+          "n_correct_in_review": 26,
+          "n_correct_admitted": 23,
+          "precision": 1.0,
+          "recall": 0.8846153846153846,
+          "F1": 0.9387755102040816
+        }
+      },
+      "per_stem_surviving_new": {
+        "identical_balls_trick_000_018": {
+          "new_kept": [
+            [
+              25,
+              27
+            ],
+            [
+              9,
+              12
+            ],
+            [
+              66,
+              69
+            ],
+            [
+              53,
+              58
+            ],
+            [
+              54,
+              57
+            ],
+            [
+              10,
+              11
+            ],
+            [
+              44,
+              53
+            ],
+            [
+              14,
+              19
+            ],
+            [
+              4,
+              7
+            ],
+            [
+              63,
+              65
+            ],
+            [
+              73,
+              75
+            ]
+          ],
+          "new_dropped": [
+            [
+              18,
+              21,
+              "h112_or_h114"
+            ],
+            [
+              15,
+              16,
+              "h112_or_h114"
+            ],
+            [
+              11,
+              13,
+              "h112_or_h114"
+            ],
+            [
+              6,
+              15,
+              "h126"
+            ],
+            [
+              12,
+              17,
+              "h112_or_h114"
+            ],
+            [
+              57,
+              63,
+              "h112_or_h114"
+            ]
+          ],
+          "h7v3plus3_dropped": [
+            [
+              3,
+              8,
+              "h112_or_h114"
+            ],
+            [
+              5,
+              6,
+              "h112_or_h114"
+            ],
+            [
+              22,
+              27,
+              "h112_or_h114"
+            ],
+            [
+              29,
+              34,
+              "h112_or_h114"
+            ],
+            [
+              37,
+              40,
+              "h112_or_h114"
+            ],
+            [
+              38,
+              39,
+              "h112_or_h114"
+            ],
+            [
+              43,
+              45,
+              "h112_or_h114"
+            ],
+            [
+              51,
+              52,
+              "h112_or_h114"
+            ]
+          ]
+        },
+        "youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090": {
+          "new_kept": [],
+          "new_dropped": [
+            [
+              10,
+              11,
+              "h126"
+            ]
+          ],
+          "h7v3plus3_dropped": [
+            [
+              27,
+              28,
+              "h112_or_h114"
+            ]
+          ]
+        }
+      },
+      "combined": {
+        "n_admitted_with_review_label": 54,
+        "n_admitted_correct": 54,
+        "n_admitted_wrong": 0,
+        "n_correct_in_review": 71,
+        "n_correct_admitted": 54,
+        "precision": 1.0,
+        "recall": 0.7605633802816901,
+        "F1": 0.864
+      }
+    }
+  }
+}
