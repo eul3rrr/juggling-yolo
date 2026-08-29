@@ -280,33 +280,93 @@ until one is free and prints the actual selected port.
 
 ### Keyboard controls
 
+The reviewer is an explicit three-mode state machine: `viewing`,
+`choosing_hand`, `choosing_continuation`. Each mode only responds to
+its keys; other keys are ignored without side effects.
+
+#### Viewing mode
+
 | Key | Action |
 |-----|--------|
 | space | pause / play |
 | r | restart current clip |
 | ← / → | seek -1 s / +1 s |
-| h | HAND-MEDIATED BREAK (then `l` / `r` / `u` for hand) |
-| a | AIRBORNE BREAK |
-| n | NORFAIR ASSOCIATION FAILURE |
-| x | ID SWITCH / WRONG MERGE |
-| e | TRUE END |
-| f | FALSE-POSITIVE TRACK |
-| u | UNCLEAR / AMBIGUOUS |
-| s | SKIP for now |
-| 1..9 | pick numbered nearby continuation track |
-| 0 | no identifiable continuation |
-| ? | ambiguous continuation |
+| h | HAND-MEDIATED BREAK → enter `choosing_hand` |
+| a | AIRBORNE BREAK → enter `choosing_continuation` |
+| n | NORFAIR ASSOCIATION FAILURE → enter `choosing_continuation` |
+| x | ID SWITCH / WRONG MERGE → enter `choosing_continuation` |
+| e | TRUE END (save immediately, no continuation) |
+| f | FALSE-POSITIVE TRACK (save immediately, no continuation) |
+| u | UNCLEAR / AMBIGUOUS (save immediately) |
+| s | SKIP for now (no save, advance) |
+| ] | next event |
 | p | previous event |
 | q | quit safely (server stops) |
+| Esc | (no effect in viewing mode) |
 
-Mouse buttons exist as accessibility fallbacks; the primary workflow is
-keyboard-only.
+#### `choosing_hand` mode (after `h`)
+
+| Key | Action |
+|-----|--------|
+| l | hand = left → enter `choosing_continuation` |
+| r | hand = right → enter `choosing_continuation` |
+| u | hand = unknown → enter `choosing_continuation` |
+| Esc | cancel pending, return to viewing |
+| anything else | ignored (does NOT save) |
+
+`r` selects right hand here; video restart is suppressed.
+
+#### `choosing_continuation` mode (after `a` / `n` / `x`, or after the
+hand is set when starting with `h`)
+
+| Key | Action |
+|-----|--------|
+| 1..9 | pick numbered nearby candidate (saves immediately and advances) |
+| 0 | no identifiable continuation (saves and advances) |
+| ? | ambiguous continuation (saves and advances) |
+| Esc | cancel pending, return to viewing |
+| anything else | ignored |
+
+Pressing `1` saves the actual track id of candidate 1 — the displayed
+number is the candidate's index, not its track id. The visible
+candidate map (`1 → ID X @ frame Y`) is shown in the pending panel so
+you never have to memorize the mapping.
+
+Mouse buttons (next / prev / quit) exist as accessibility fallbacks;
+the primary workflow is keyboard-only.
+
+### Saved labels
+
+The labels CSV has a `continuation_status` field that captures whether
+the human selected a continuation, declined to choose, marked the
+choice ambiguous, or marked it not applicable. Allowed values:
+
+- `selected` — `selected_continuation_track_id` is filled with the real
+  track id
+- `none` — human pressed `0` or left the field empty
+- `ambiguous` — human pressed `?`
+- `not_applicable` — event type was `e` (true end) or `f`
+  (false-positive track), no continuation applies
+
+The server validates that any `selected` track id is actually present in
+that event's nearby-candidate list before writing the CSV.
 
 ### Output
 
 - Review clips (H.264 / yuv420p, browser-compatible): `outputs/track_event_review/`
 - Per-event CSV manifest: `outputs/track_event_review/manifest.csv`
 - Labels (one row per event, saved after every review): `detections/track_event_review_labels.csv`
+
+The labels CSV columns:
+
+| Column | Meaning |
+|--------|---------|
+| `event_type` | one of `h`, `a`, `n`, `x`, `e`, `f`, `u`, or empty |
+| `hand` | for `h`: `left` / `right` / `unknown`; empty otherwise |
+| `continuation_status` | `selected` / `none` / `ambiguous` / `not_applicable` |
+| `selected_continuation_track_id` | the actual track id (when status is `selected`) |
+| `selected_continuation_start_frame` | the manifest's first observed frame for that track |
+| `notes` | free-form notes from the textarea |
 
 Re-running the same `serve` command reuses the existing manifest + clips
 and resumes from the first unsaved event.

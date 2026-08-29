@@ -75,7 +75,7 @@ CANDIDATE_FIELDS = (
 LABEL_FIELDS = (
     "video", "event_index", "primary_track_id", "primary_end_frame",
     "primary_end_x", "primary_end_y",
-    "event_type", "hand",
+    "event_type", "hand", "continuation_status",
     "selected_continuation_track_id", "selected_continuation_start_frame",
     "nearby_candidate_track_ids",
     "existing_rank1_stitch_track_id",
@@ -736,13 +736,14 @@ def prepare(
 # ---------- server ----------
 
 INDEX_HTML = """<!DOCTYPE html>
-<html lang=\"en\"><head><meta charset=\"utf-8\">
+<html lang="en"><head><meta charset="utf-8">
 <title>Track-Lifecycle Reviewer</title>
 <style>
   :root {
     --bg: #0e1116; --panel: #161b22; --border: #30363d;
     --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff;
     --good: #3fb950; --warn: #d29922; --bad: #f85149;
+    --pending: #d29922;
   }
   html, body { margin:0; padding:0; background:var(--bg); color:var(--text);
     font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
@@ -772,41 +773,69 @@ INDEX_HTML = """<!DOCTYPE html>
     font-size: 13px; color: var(--muted); }
   .statusbar .pill { background:#0d1117; border:1px solid var(--border);
     padding: 2px 8px; border-radius: 10px; color: var(--text); }
+  .statusbar .pill.pending { border-color: var(--pending); color: var(--pending); }
+  .statusbar .pill.saved { border-color: var(--good); color: var(--good); }
   button { background:#21262d; color:var(--text); border:1px solid var(--border);
     border-radius: 4px; padding: 4px 10px; cursor:pointer; font-size: 13px; }
   button:hover { background:#30363d; }
   .legend { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .pending-panel { background:#1a1f2b; border:1px solid var(--pending);
+    border-radius: 6px; padding: 10px 12px; margin-top: 10px;
+    font-size: 13px; color: var(--pending); display:none; }
+  .pending-panel.active { display:block; }
+  .pending-panel h3 { margin:0 0 6px; font-size: 12px; color: var(--pending);
+    text-transform: uppercase; letter-spacing: .05em; }
+  .pending-panel .cand-map { font-family: ui-monospace, monospace; font-size: 12px;
+    color: var(--text); white-space: pre-wrap; line-height: 1.5; }
+  .saved-readout { background:#0d1117; border:1px solid var(--border);
+    border-radius: 6px; padding: 10px 12px; margin-top: 10px;
+    font-size: 13px; color: var(--good); display:none; }
+  .saved-readout.active { display:block; }
+  .saved-readout h3 { margin:0 0 6px; font-size: 12px; color: var(--good);
+    text-transform: uppercase; letter-spacing: .05em; }
 </style>
 </head><body>
-<div class=\"wrap\">
+<div class="wrap">
   <header>
     <div>
       <h1>Track-Lifecycle Reviewer</h1>
-      <div class=\"event-meta\" id=\"event-meta\">loading...</div>
+      <div class="event-meta" id="event-meta">loading...</div>
     </div>
-    <div class=\"progress\" id=\"progress\"></div>
+    <div class="progress" id="progress"></div>
   </header>
 
-  <div class=\"stage\">
-    <video id=\"clip\" autoplay muted loop playsinline></video>
-    <div class=\"statusbar\" style=\"margin-top:8px;\">
-      <span class=\"pill\" id=\"kind-pill\">kind: -</span>
-      <span class=\"pill\" id=\"primary-pill\">primary: -</span>
-      <span class=\"pill\" id=\"stitch-pill\">stitcher: -</span>
-      <span class=\"pill\" id=\"saved-pill\">label: blank</span>
+  <div class="stage">
+    <video id="clip" autoplay muted loop playsinline></video>
+    <div class="statusbar" style="margin-top:8px;">
+      <span class="pill" id="kind-pill">kind: -</span>
+      <span class="pill" id="primary-pill">primary: -</span>
+      <span class="pill" id="stitch-pill">stitcher: -</span>
+      <span class="pill" id="mode-pill">mode: viewing</span>
+      <span class="pill" id="saved-pill">label: blank</span>
+    </div>
+    <div class="pending-panel" id="pending-panel">
+      <h3>Pending classification (not yet saved)</h3>
+      <div id="pending-event-type">event type: -</div>
+      <div id="pending-hand">hand: -</div>
+      <div id="pending-continuation">continuation: -</div>
+      <div class="cand-map" id="cand-map"></div>
+    </div>
+    <div class="saved-readout" id="saved-readout">
+      <h3>Saved label</h3>
+      <div id="saved-content"></div>
     </div>
   </div>
 
-  <div class=\"stage\">
-    <div class=\"controls\">
-      <div class=\"ctrl-group\">
-        <h3>Playback</h3>
+  <div class="stage">
+    <div class="controls">
+      <div class="ctrl-group">
+        <h3>Playback (viewing)</h3>
         <kbd>space</kbd> pause / play &nbsp;
         <kbd>r</kbd> restart &nbsp;
         <kbd>&larr;</kbd> / <kbd>&rarr;</kbd> seek 1 s
       </div>
-      <div class=\"ctrl-group\">
-        <h3>Event type</h3>
+      <div class="ctrl-group">
+        <h3>Event type (viewing)</h3>
         <kbd>h</kbd> hand-mediated &nbsp;
         <kbd>a</kbd> airborne break &nbsp;
         <kbd>n</kbd> norfair fail &nbsp;
@@ -816,43 +845,70 @@ INDEX_HTML = """<!DOCTYPE html>
         <kbd>u</kbd> unclear &nbsp;
         <kbd>s</kbd> skip
       </div>
-      <div class=\"ctrl-group\">
-        <h3>Continuation</h3>
+      <div class="ctrl-group">
+        <h3>Hand (after h)</h3>
+        <kbd>l</kbd> left &nbsp;
+        <kbd>r</kbd> right &nbsp;
+        <kbd>u</kbd> unknown
+      </div>
+      <div class="ctrl-group">
+        <h3>Continuation (after h / a / n / x)</h3>
         <kbd>1</kbd>..<kbd>9</kbd> pick numbered nearby id &nbsp;
         <kbd>0</kbd> no continuation &nbsp;
         <kbd>?</kbd> ambiguous continuation
       </div>
-      <div class=\"ctrl-group\">
-        <h3>Navigation</h3>
-        <kbd>n</kbd> next (after typing <em>n</em> for norfair fails, the
-        same key acts as next; press <kbd>space</kbd> first to flush,
-        or use button)
-        <br>
-        <kbd>q</kbd> quit safely (also closes server)
-        <br>
-        <button id=\"next-btn\">next (n)</button>
-        <button id=\"prev-btn\">prev (p)</button>
-        <button id=\"quit-btn\">quit (q)</button>
+      <div class="ctrl-group">
+        <h3>Cancel / Navigation</h3>
+        <kbd>Esc</kbd> cancel pending &nbsp;
+        <kbd>p</kbd> previous event &nbsp;
+        <kbd>]</kbd> next event &nbsp;
+        <kbd>q</kbd> quit safely
       </div>
-    </div>
-    <div class=\"legend\">
-      Tip: typing <kbd>h</kbd> first prompts for a hand with
-      <kbd>l</kbd> / <kbd>r</kbd> / <kbd>u</kbd>.
     </div>
   </div>
 
-  <div class=\"stage\">
-    <h3 style=\"margin: 0 0 8px; font-size: 13px; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .05em;\">Notes</h3>
-    <textarea id=\"notes\" rows=\"3\" placeholder=\"free-form notes (optional)\"></textarea>
+  <div class="stage">
+    <h3 style="margin: 0 0 8px; font-size: 13px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .05em;">Notes</h3>
+    <textarea id="notes" rows="3" placeholder="free-form notes (optional)"></textarea>
   </div>
 </div>
 
 <script>
 const $ = (id) => document.getElementById(id);
 const clip = $('clip');
-const state = { index: 0, total: 0, saved: 0, pendingHand: false };
+
+// Explicit browser-side review state machine.
+// mode: "viewing" | "choosing_hand" | "choosing_continuation"
+// pendingEventType: single-letter event type code or null
+// pendingHand: "left" | "right" | "unknown" | null
+const state = {
+  index: 0, total: 0, saved: 0,
+  mode: 'viewing',
+  pendingEventType: null,
+  pendingHand: null,
+};
 let currentEvent = null;
+
+const EVENT_TYPE_LABELS = {
+  h: 'HAND-MEDIATED',
+  a: 'AIRBORNE BREAK',
+  n: 'NORFAIR ASSOCIATION FAILURE',
+  x: 'ID SWITCH / WRONG MERGE',
+  e: 'TRUE END',
+  f: 'FALSE-POSITIVE TRACK',
+  u: 'UNCLEAR / AMBIGUOUS',
+  s: 'SKIP',
+};
+const REQUIRES_HAND = new Set(['h']);
+const REQUIRES_CONTINUATION = new Set(['h', 'a', 'n', 'x']);
+
+function resetPending() {
+  state.mode = 'viewing';
+  state.pendingEventType = null;
+  state.pendingHand = null;
+  renderPending();
+}
 
 async function fetchState() {
   const r = await fetch('/api/state');
@@ -878,6 +934,7 @@ async function setIndex(i) {
   const ev = await fetchEvent(i);
   if (!ev) return;
   currentEvent = ev;
+  resetPending();
   clip.src = '/clip?path=' + encodeURIComponent(ev.review_clip_path);
   clip.loop = true;
   clip.play().catch(() => {});
@@ -893,32 +950,106 @@ async function setIndex(i) {
     ? `stitcher: rank1 ${ev.existing_rank1_stitch_source}->${ev.existing_rank1_stitch_track_id}`
     : 'stitcher: NONE';
   $('saved-pill').textContent = ev.saved_label
-    ? `label: ${ev.saved_label}${ev.saved_hand ? '/' + ev.saved_hand : ''}`
+    ? `label: ${EVENT_TYPE_LABELS[ev.saved_label] || ev.saved_label}`
     : 'label: blank';
   $('notes').value = ev.saved_notes || '';
-  state.pendingHand = false;
+  // Saved readout
+  const sr = $('saved-readout'); const sc = $('saved-content');
+  if (ev.saved_label) {
+    const lines = [];
+    lines.push(EVENT_TYPE_LABELS[ev.saved_label] || ev.saved_label);
+    if (ev.saved_hand) lines.push(`hand: ${ev.saved_hand}`);
+    if (ev.saved_continuation_choice) lines.push(ev.saved_continuation_choice);
+    sc.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+    sr.classList.add('active');
+  } else {
+    sr.classList.remove('active');
+  }
   document.title = `Reviewer ${ev.event_index + 1}/${state.total}`;
+  renderPending();
 }
 
-async function saveAndAdvance(eventType, hand, continuationId, ambig) {
+function renderPending() {
+  $('mode-pill').textContent = `mode: ${state.mode}`;
+  const pp = $('pending-panel');
+  const ev = currentEvent;
+  const nearby = ev ? ev.nearby_candidate_track_ids : [];
+  const starts = ev ? ev.nearby_starts_first_frames : [];
+  if (state.mode === 'viewing' && !state.pendingEventType) {
+    pp.classList.remove('active');
+    return;
+  }
+  pp.classList.add('active');
+  $('pending-event-type').textContent = state.pendingEventType
+    ? `event type: ${EVENT_TYPE_LABELS[state.pendingEventType]}`
+    : 'event type: - (choose an event type to begin)';
+  const needsHand = state.pendingEventType && REQUIRES_HAND.has(state.pendingEventType);
+  $('pending-hand').textContent = needsHand
+    ? (state.pendingHand
+        ? `hand: ${state.pendingHand}`
+        : 'hand: waiting — press L / R / U')
+    : 'hand: not applicable';
+  const needsCont = state.pendingEventType
+    && REQUIRES_CONTINUATION.has(state.pendingEventType)
+    && (needsHand ? state.pendingHand !== null : true);
+  $('pending-continuation').textContent = needsCont
+    ? 'continuation: waiting — press 1..9 / 0 / ?'
+    : (state.pendingEventType === 'e' || state.pendingEventType === 'f'
+        ? 'continuation: not applicable (event type ends here)'
+        : 'continuation: not required for this event type');
+  // Candidate map
+  if (needsCont && nearby.length) {
+    const lines = nearby.map((id, i) =>
+      `  ${i + 1} -> ID ${id} @ frame ${starts[i] ?? '?'}`);
+    lines.unshift('candidates:');
+    $('cand-map').textContent = lines.join('\n');
+  } else {
+    $('cand-map').textContent = '';
+  }
+}
+
+async function saveAndAdvance(payload) {
   if (!currentEvent) return;
   await postLabel({
     event_index: currentEvent.event_index,
-    event_type: eventType,
-    hand: hand || '',
-    selected_continuation_track_id: continuationId || '',
-    selected_continuation_start_frame: continuationId
-      ? (currentEvent.nearby_starts_first_frames[
-          parseInt(continuationId, 10) - 1] || '') : '',
+    ...payload,
     notes: $('notes').value,
   });
+  resetPending();
   const fresh = await fetchState();
-  if (fresh.index === currentEvent.event_index) {
+  // The server updates its index to the first unsaved event; just reload
+  // whatever it returns (handles "skip" via explicit /api/next too).
+  if (payload._skip) {
     await fetch('/api/next', {method: 'POST'});
-    await loadCurrent();
-  } else {
-    await loadCurrent();
   }
+  await loadCurrent();
+}
+
+async function commitSelection(contStatus, contTrackId, contStartFrame) {
+  if (!currentEvent || !state.pendingEventType) return;
+  // For event types that do NOT require continuation, the user still
+  // gets to choose one (per task spec) but we don't block on it.
+  const payload = {
+    event_type: state.pendingEventType,
+    hand: state.pendingHand || '',
+    continuation_status: contStatus,
+    selected_continuation_track_id: contTrackId || '',
+    selected_continuation_start_frame: contStartFrame || '',
+  };
+  await saveAndAdvance(payload);
+}
+
+async function commitDirect(eventType) {
+  // Used for e/f/u which don't require continuation.
+  if (!currentEvent) return;
+  const payload = {
+    event_type: eventType,
+    hand: '',
+    continuation_status: 'not_applicable',
+    selected_continuation_track_id: '',
+    selected_continuation_start_frame: '',
+  };
+  await saveAndAdvance(payload);
 }
 
 async function loadCurrent() {
@@ -930,55 +1061,211 @@ document.addEventListener('keydown', async (e) => {
   if (e.target && e.target.tagName === 'TEXTAREA') return;
   if (e.target && e.target.tagName === 'INPUT') return;
   const key = e.key;
-  if (key === ' ') { e.preventDefault();
-    if (clip.paused) clip.play(); else clip.pause(); return; }
-  if (key === 'r' || key === 'R') { clip.currentTime = 0; return; }
-  if (key === 'ArrowLeft')  { clip.currentTime = Math.max(0, clip.currentTime - 1); return; }
-  if (key === 'ArrowRight') { clip.currentTime = Math.min(clip.duration||0, clip.currentTime + 1); return; }
-  if (state.pendingHand && (key === 'l' || key === 'r' || key === 'u')) {
-    state.pendingHand = false;
-    await saveAndAdvance('h', {l:'left',r:'right',u:'unknown'}[key], '', '');
-    return;
-  }
-  if (key === 'h') { state.pendingHand = true; flash('press l/r/u for hand'); return; }
-  if (key === 'a' || key === 'n' || key === 'x' || key === 'e' || key === 'f' || key === 'u') {
-    await saveAndAdvance(key, '', '', '');
-    return;
-  }
-  if (key === 's') { await fetch('/api/next', {method:'POST'}); await loadCurrent(); return; }
-  if (key === 'q' || key === 'Q') { await fetch('/api/quit', {method:'POST'}); return; }
-  if (key === 'p' || key === 'P') { await fetch('/api/prev', {method:'POST'}); await loadCurrent(); return; }
-  if (/^[0-9]$/.test(key)) {
-    const idx = parseInt(key, 10);
-    if (idx === 0) { await saveAndAdvance('c', '', '', 'none'); return; }
-    if (idx >= 1 && idx <= (currentEvent?.nearby_candidate_track_ids||[]).length) {
-      await saveAndAdvance('c', '', idx, '');
+
+  // Mode-routing key handling. Each mode only responds to its keys.
+  if (state.mode === 'choosing_hand') {
+    // Hand selection mode: l/r/u complete the hand; Escape cancels.
+    if (key === 'Escape' || key === 'Esc') {
+      e.preventDefault();
+      resetPending();
       return;
     }
+    if (key === 'l' || key === 'r' || key === 'u') {
+      e.preventDefault();
+      state.pendingHand = ({l: 'left', r: 'right', u: 'unknown'})[key];
+      state.mode = 'choosing_continuation';
+      renderPending();
+      return;
+    }
+    // Otherwise ignore.
+    return;
   }
-  if (key === '?') { await saveAndAdvance('c', '', '', 'ambig'); return; }
-});
 
-function flash(msg) {
-  $('saved-pill').textContent = msg;
-  $('saved-pill').className = 'pill pending';
-  setTimeout(() => $('saved-pill').className = 'pill saved', 800);
-}
+  if (state.mode === 'choosing_continuation') {
+    // Continuation selection mode: 1..9 / 0 / ? complete the record;
+    // Escape cancels.
+    if (key === 'Escape' || key === 'Esc') {
+      e.preventDefault();
+      resetPending();
+      return;
+    }
+    const ev = currentEvent;
+    if (!ev) return;
+    if (/^[1-9]$/.test(key)) {
+      e.preventDefault();
+      const idx = parseInt(key, 10) - 1;
+      const tids = ev.nearby_candidate_track_ids || [];
+      const starts = ev.nearby_starts_first_frames || [];
+      if (idx >= 0 && idx < tids.length) {
+        await commitSelection('selected', String(tids[idx]), String(starts[idx] ?? ''));
+      } else {
+        // Out of range: treat as ambiguous for safety.
+        await commitSelection('ambiguous', '', '');
+      }
+      return;
+    }
+    if (key === '0') {
+      e.preventDefault();
+      await commitSelection('none', '', '');
+      return;
+    }
+    if (key === '?') {
+      e.preventDefault();
+      await commitSelection('ambiguous', '', '');
+      return;
+    }
+    // Other keys ignored while choosing continuation.
+    return;
+  }
+
+  // state.mode === 'viewing'
+  // Playback shortcuts (viewing mode only — they don't apply once we
+  // start a multi-step classification).
+  if (key === ' ') {
+    e.preventDefault();
+    if (clip.paused) clip.play(); else clip.pause();
+    return;
+  }
+  if (key === 'r' || key === 'R') {
+    clip.currentTime = 0;
+    return;
+  }
+  if (key === 'ArrowLeft') {
+    clip.currentTime = Math.max(0, clip.currentTime - 1);
+    return;
+  }
+  if (key === 'ArrowRight') {
+    clip.currentTime = Math.min(clip.duration || 0, clip.currentTime + 1);
+    return;
+  }
+
+  // Skip (advances without saving)
+  if (key === 's' || key === 'S') {
+    e.preventDefault();
+    await fetch('/api/next', {method: 'POST'});
+    await loadCurrent();
+    return;
+  }
+
+  // Navigation
+  if (key === 'p' || key === 'P') {
+    e.preventDefault();
+    await fetch('/api/prev', {method: 'POST'});
+    await loadCurrent();
+    return;
+  }
+  if (key === ']') {
+    e.preventDefault();
+    await fetch('/api/next', {method: 'POST'});
+    await loadCurrent();
+    return;
+  }
+  if (key === 'q' || key === 'Q') {
+    e.preventDefault();
+    await fetch('/api/quit', {method: 'POST'});
+    return;
+  }
+
+  // Event type selection (viewing mode only).
+  // e and f save immediately (no continuation, no hand).
+  if (key === 'e') { e.preventDefault(); await commitDirect('e'); return; }
+  if (key === 'f') { e.preventDefault(); await commitDirect('f'); return; }
+  // u: from viewing mode, save as unclear with continuation=none.
+  if (key === 'u') { e.preventDefault(); await commitDirect('u'); return; }
+  // h / a / n / x: enter multi-step classification.
+  if (key === 'h' || key === 'a' || key === 'n' || key === 'x') {
+    e.preventDefault();
+    state.pendingEventType = key;
+    state.mode = REQUIRES_HAND.has(key) ? 'choosing_hand' : 'choosing_continuation';
+    renderPending();
+    return;
+  }
+});
 
 $('next-btn').addEventListener('click', async () => {
-  await fetch('/api/next', {method:'POST'}); await loadCurrent();
+  await fetch('/api/next', {method: 'POST'}); await loadCurrent();
 });
 $('prev-btn').addEventListener('click', async () => {
-  await fetch('/api/prev', {method:'POST'}); await loadCurrent();
+  await fetch('/api/prev', {method: 'POST'}); await loadCurrent();
 });
 $('quit-btn').addEventListener('click', async () => {
-  await fetch('/api/quit', {method:'POST'});
+  await fetch('/api/quit', {method: 'POST'});
 });
 
 (async () => { await loadCurrent(); })();
 </script>
 </body></html>
 """
+
+
+def _infer_cont_status(event_type: str, hand: str, track_id: str) -> str:
+    """Backward-compat: if a CSV row pre-dates the continuation_status
+    field, infer what its value would be."""
+    if event_type in ("e", "f"):
+        return "not_applicable"
+    if track_id:
+        return "selected"
+    return "none"
+
+
+def _format_cont_choice(event_type: str, hand: str, cont_status: str,
+                         track_id: str, start_frame: str) -> str:
+    """Human-readable summary of the saved continuation choice."""
+    if not event_type:
+        return ""
+    if cont_status == "not_applicable" or event_type in ("e", "f"):
+        return "no continuation applicable"
+    if cont_status == "selected":
+        return (f"continuation → ID {track_id} @ frame {start_frame}" if track_id
+                else "continuation selected but ID missing")
+    if cont_status == "ambiguous":
+        return "continuation ambiguous"
+    if cont_status == "none":
+        return "no continuation chosen"
+    return ""
+
+
+def _validate_continuation(idx: int, payload: dict,
+                           events: list[dict]) -> tuple[str, str, str]:
+    """Validate the continuation fields against the event's manifest.
+
+    Returns (continuation_status, track_id, start_frame) to persist.
+    continuation_status is always one of {selected, none, ambiguous,
+    not_applicable}. When 'selected', the supplied track_id and start
+    frame must match the manifest's nearby candidates.
+    """
+    raw_status = (payload.get("continuation_status", "") or "").strip()
+    raw_track = (payload.get("selected_continuation_track_id", "") or "").strip()
+    raw_frame = (payload.get("selected_continuation_start_frame", "") or "").strip()
+    event_type = (payload.get("event_type", "") or "").strip()
+    if event_type in ("e", "f"):
+        return ("not_applicable", "", "")
+    allowed = {"selected", "none", "ambiguous", "not_applicable"}
+    status = raw_status if raw_status in allowed else "none"
+    if status != "selected":
+        return (status, "", "")
+    if not (0 <= idx < len(events)):
+        return ("none", "", "")
+    nearby_str = events[idx].get("nearby_candidate_track_ids", "") or ""
+    nearby = [int(x) for x in nearby_str.split(",") if x]
+    starts_str = events[idx].get("nearby_starts_first_frames", "") or ""
+    starts = [int(x) for x in starts_str.split(",") if x]
+    if not raw_track:
+        return ("none", "", "")
+    try:
+        track_id = int(raw_track)
+    except ValueError:
+        return ("none", "", "")
+    if track_id not in nearby:
+        return ("none", "", "")
+    try:
+        start_frame = int(raw_frame)
+    except ValueError:
+        start_frame = starts[nearby.index(track_id)] if nearby else 0
+    expected_start = starts[nearby.index(track_id)] if nearby else 0
+    if expected_start and start_frame != expected_start:
+        start_frame = expected_start
+    return ("selected", str(track_id), str(start_frame))
 
 
 class _State:
@@ -1023,7 +1310,14 @@ class _State:
             rank1_dst = row.get("existing_rank1_stitch_track_id", "")
             existing = label_row.get("event_type", "")
             hand = label_row.get("hand", "")
+            cont_status = label_row.get("continuation_status", "") or _infer_cont_status(
+                existing, hand,
+                label_row.get("selected_continuation_track_id", ""))
             notes = label_row.get("notes", "")
+            cont_choice = _format_cont_choice(
+                existing, hand, cont_status,
+                label_row.get("selected_continuation_track_id", ""),
+                label_row.get("selected_continuation_start_frame", ""))
             kind_label = {"end": "TRACK END",
                           "orphan_start": "ORPHAN START",
                           "existing_stitch": "EXISTING STITCH"}.get(row.get("kind", ""), row.get("kind", ""))
@@ -1040,6 +1334,8 @@ class _State:
             "review_clip_path": row.get("review_clip_path", ""),
             "saved_label": existing,
             "saved_hand": hand,
+            "saved_continuation_status": cont_status,
+            "saved_continuation_choice": cont_choice,
             "saved_notes": notes,
         }
 
@@ -1049,13 +1345,16 @@ class _State:
             self._reload()
             if not (0 <= idx < len(self.events)):
                 return
+            event_type = payload.get("event_type", "") or ""
+            hand = payload.get("hand", "") or ""
+            cont_status, track_id, start_frame = _validate_continuation(
+                idx, payload, self.events)
             label_row = self.labels.get(idx, {})
-            label_row["event_type"] = payload.get("event_type", "") or ""
-            label_row["hand"] = payload.get("hand", "") or ""
-            label_row["selected_continuation_track_id"] = (
-                payload.get("selected_continuation_track_id", "") or "")
-            label_row["selected_continuation_start_frame"] = (
-                payload.get("selected_continuation_start_frame", "") or "")
+            label_row["event_type"] = event_type
+            label_row["hand"] = hand
+            label_row["continuation_status"] = cont_status
+            label_row["selected_continuation_track_id"] = track_id
+            label_row["selected_continuation_start_frame"] = start_frame
             label_row["notes"] = payload.get("notes", "") or ""
             self.labels[idx] = label_row
             # Persist as a single CSV with one row per event_index, joined
@@ -1078,19 +1377,19 @@ class _State:
                     }
                     lr = self.labels.get(i, {})
                     base.update({k: lr.get(k, "") for k in (
-                        "event_type", "hand",
+                        "event_type", "hand", "continuation_status",
                         "selected_continuation_track_id",
                         "selected_continuation_start_frame",
                         "notes",
                     )})
                     row: dict[str, str] = {k: str(base.get(k, "")) for k in LABEL_FIELDS}
-                    writer.writerow(row)
+                    writer.writerow(row)  # type: ignore[arg-type]
 
     def next_unsaved(self) -> int:
         with self._lock:
             self._reload()
-            for i, ev in enumerate(self.events):
-                if not ev.get("event_type"):
+            for i in range(len(self.events)):
+                if not self.labels.get(i, {}).get("event_type"):
                     return i
             return max(0, len(self.events) - 1)
 
