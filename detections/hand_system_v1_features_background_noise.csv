@@ -1,0 +1,7 @@
+category,event_kind,track_id,frame,n_ball_points_used,nearest_hand,left_distance_px,left_distance_normalized,left_distance_slope_px_per_frame,left_radial_relative_velocity,left_n_hand_points_used,right_distance_px,right_distance_normalized,right_distance_slope_px_per_frame,right_radial_relative_velocity,right_n_hand_points_used
+background_noise,orphan_start,7,465,5,right,+665.14,+4.00,+1.69,+1.80,5,+611.58,+3.68,+0.59,+0.59,5
+background_noise,orphan_start,8,467,5,right,+631.46,+3.78,+3.45,+3.67,5,+574.09,+3.43,+0.40,+0.41,5
+background_noise,end,8,486,5,right,+634.61,+3.78,+0.31,+0.31,5,+559.75,+3.33,-1.21,-1.21,5
+background_noise,end,9,495,0,—,—,—,—,—,—,—,—,—,—,—
+background_noise,end,7,498,5,right,+674.47,+3.98,+0.80,+0.80,5,+584.52,+3.45,-1.40,-1.40,5
+background_noise,end,12,936,0,—,—,—,—,—,—,—,—,—,—,—
