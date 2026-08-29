@@ -289,8 +289,9 @@ its keys; other keys are ignored without side effects.
 | Key | Action |
 |-----|--------|
 | space | pause / play |
-| r | restart current clip |
+| r | restart current clip (keeps selected playback speed) |
 | ← / → | seek -1 s / +1 s |
+| - / = | slower / faster playback (0.25x / 0.5x / 0.75x / 1.0x / 1.5x / 2.0x) |
 | h | HAND-MEDIATED BREAK → enter `choosing_hand` |
 | a | AIRBORNE BREAK → enter `choosing_continuation` |
 | n | NORFAIR ASSOCIATION FAILURE → enter `choosing_continuation` |

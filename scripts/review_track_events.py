@@ -832,7 +832,19 @@ INDEX_HTML = """<!DOCTYPE html>
         <h3>Playback (viewing)</h3>
         <kbd>space</kbd> pause / play &nbsp;
         <kbd>r</kbd> restart &nbsp;
-        <kbd>&larr;</kbd> / <kbd>&rarr;</kbd> seek 1 s
+        <kbd>&larr;</kbd> / <kbd>&rarr;</kbd> seek 1 s &nbsp;
+        <kbd>-</kbd> / <kbd>=</kbd> slower / faster
+        <br>
+        <label for="speed-select">Speed:</label>
+        <select id="speed-select" aria-label="Playback speed">
+          <option value="0.25">0.25x</option>
+          <option value="0.5">0.5x</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1.0x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2.0x</option>
+        </select>
+        <span id="speed-display">Speed: 1.0x</span>
       </div>
       <div class="ctrl-group">
         <h3>Event type (viewing)</h3>
@@ -891,8 +903,10 @@ const state = {
   mode: 'viewing',
   pendingEventType: null,
   pendingHand: null,
+  playbackRate: 1.0,
 };
 let currentEvent = null;
+const PLAYBACK_RATES = [0.25, 0.5, 0.75, 1.0, 1.5, 2.0];
 
 const EVENT_TYPE_LABELS = {
   h: 'HAND-MEDIATED',
@@ -940,6 +954,7 @@ async function setIndex(i) {
   currentEvent = ev;
   resetPending();
   clip.src = '/clip?path=' + encodeURIComponent(ev.review_clip_path);
+  clip.playbackRate = state.playbackRate;
   clip.loop = true;
   clip.play().catch(() => {});
   $('event-meta').textContent =
@@ -1012,6 +1027,26 @@ function renderPending() {
   }
 }
 
+function updatePlaybackRate(rate) {
+  const clamped = Math.max(PLAYBACK_RATES[0],
+                          Math.min(PLAYBACK_RATES[PLAYBACK_RATES.length - 1], rate));
+  const nearest = PLAYBACK_RATES.reduce((best, candidate) =>
+    Math.abs(candidate - clamped) < Math.abs(best - clamped) ? candidate : best);
+  state.playbackRate = nearest;
+  clip.playbackRate = state.playbackRate;
+  const selector = $('speed-select');
+  if (selector) selector.value = String(state.playbackRate);
+  const display = $('speed-display');
+  if (display) display.textContent = `Speed: ${state.playbackRate}x`;
+}
+
+function adjustPlaybackRate(direction) {
+  const currentIndex = PLAYBACK_RATES.indexOf(state.playbackRate);
+  const index = currentIndex < 0 ? PLAYBACK_RATES.indexOf(1.0) : currentIndex;
+  const nextIndex = direction === 'slower' ? index - 1 : index + 1;
+  updatePlaybackRate(PLAYBACK_RATES[Math.max(0, Math.min(PLAYBACK_RATES.length - 1, nextIndex))]);
+}
+
 async function saveAndAdvance(payload) {
   if (!currentEvent) return;
   await postLabel({
@@ -1065,6 +1100,13 @@ document.addEventListener('keydown', async (e) => {
   if (e.target && e.target.tagName === 'TEXTAREA') return;
   if (e.target && e.target.tagName === 'INPUT') return;
   const key = e.key;
+
+  // Playback speed is independent of review classification state.
+  if (key === '-' || key === '=') {
+    e.preventDefault();
+    adjustPlaybackRate(key === '-' ? 'slower' : 'faster');
+    return;
+  }
 
   // Mode-routing key handling. Each mode only responds to its keys.
   if (state.mode === 'choosing_hand') {
@@ -1197,6 +1239,11 @@ if (prevButton) prevButton.addEventListener('click', async () => {
 const quitButton = $('quit-btn');
 if (quitButton) quitButton.addEventListener('click', async () => {
  await fetch('/api/quit', {method: 'POST'});
+});
+
+const speedSelect = $('speed-select');
+if (speedSelect) speedSelect.addEventListener('change', () => {
+  updatePlaybackRate(parseFloat(speedSelect.value));
 });
 
 (async () => { await loadCurrent(); })();
