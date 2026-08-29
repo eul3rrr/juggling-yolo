@@ -1,0 +1,1 @@
+overlay_data.json is generated from the frozen E6c, h7v3pure, h7v3plus3, H125-v3 proposal, tracklet feature, and Norfair detection CSV artifacts. demo_manifest.json is the curated review queue and UI metadata. No generated JSON should be interpreted as permanent physical-ball identity.
