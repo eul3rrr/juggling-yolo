@@ -1,22 +1,21 @@
-video,event_index,primary_track_id,primary_end_frame,primary_end_x,primary_end_y,event_type,hand,continuation_status,selected_continuation_track_id,selected_continuation_start_frame,nearby_candidate_track_ids,existing_rank1_stitch_track_id,review_clip_path,notes
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,0,3,149,583.13,560.81,,,,,,4,,outputs/track_event_review/00000_end-id3-at-149.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,1,4,217,629.49,399.19,,,,,,"5,6",6,outputs/track_event_review/00001_end-id4-at-217.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,2,4,217,629.49,399.19,,,,,,"6,5",6,outputs/track_event_review/00002_existing-id4.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,3,1,219,500.83,548.11,,,,,,"5,6",,outputs/track_event_review/00003_end-id1-at-219.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,4,7,465,57.86,679.95,,,,,,"8,9",,outputs/track_event_review/00004_orphan-start-id7-at-465.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,5,8,467,94.84,672.66,,,,,,9,,outputs/track_event_review/00005_orphan-start-id8-at-467.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,6,8,486,94.82,672.58,,,,,,9,9,outputs/track_event_review/00006_end-id8-at-486.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,7,8,486,94.82,672.58,,,,,,9,9,outputs/track_event_review/00007_existing-id8.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,8,9,495,94.79,672.62,,,,,,,,outputs/track_event_review/00008_end-id9-at-495.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,9,7,498,57.58,680.05,,,,,,,,outputs/track_event_review/00009_end-id7-at-498.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,10,5,841,518.69,521.02,,,,,,"10,11",,outputs/track_event_review/00010_end-id5-at-841.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,11,2,882,678.25,615.12,,,,,,"11,12",,outputs/track_event_review/00011_end-id2-at-882.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,12,12,936,57.81,678.96,,,,,,13,,outputs/track_event_review/00012_end-id12-at-936.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,13,6,950,730.38,632.21,,,,,,13,,outputs/track_event_review/00013_end-id6-at-950.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,14,1,2,553.16,346.50,,,,,,,,outputs/track_event_review/00014_orphan-start-id1-at-2.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,15,2,2,714.14,392.10,,,,,,,,outputs/track_event_review/00015_orphan-start-id2-at-2.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,16,3,2,612.07,441.11,,,,,,,,outputs/track_event_review/00016_orphan-start-id3-at-2.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,17,10,1074,535.04,639.96,,,,,,14,,outputs/track_event_review/00017_end-id10-at-1074.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,18,11,1078,745.67,446.87,,,,,,,,outputs/track_event_review/00018_end-id11-at-1078.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,19,13,1078,709.62,318.84,,,,,,,,outputs/track_event_review/00019_end-id13-at-1078.mp4,
-/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/videos/identical_balls_trick_000_018.mp4,20,14,1078,535.38,530.98,,,,,,,,outputs/track_event_review/00020_end-id14-at-1078.mp4,
+video,event_index,event_key,primary_track_id,primary_end_frame,primary_end_x,primary_end_y,event_type,hand,relation_direction,continuation_status,selected_related_track_id,selected_related_frame,selected_continuation_track_id,selected_continuation_start_frame,nearby_candidate_track_ids,existing_rank1_stitch_track_id,review_clip_path,notes
+,0,end:3:149,3,149,583.13,560.81,h,right,successor,selected,4,152,4,152,4,,outputs/track_event_review/v3_00000_end-id3-at-149.mp4,
+,1,end:4:217,4,217,629.49,399.19,h,right,successor,selected,6,224,6,224,"5,6",,outputs/track_event_review/v3_00001_end-id4-at-217.mp4,
+,2,end:1:219,1,219,500.83,548.11,h,left,successor,selected,5,223,5,223,"5,6",,outputs/track_event_review/v3_00002_end-id1-at-219.mp4,this is a cross arm catch-throw. and im giving it like im seeing from her side the hands side. this video has a bunch of cross arm stuff.
+,3,orphan_start:7:465,7,465,57.86,679.95,u,,predecessor,not_applicable,,,,,"1,4",,outputs/track_event_review/v3_00003_orphan-start-id7-at-465.mp4,"this is a very freak case of the detector seeing a juggling ball in the background for a moment it comes and goes. so im gonna say unclear.
+"
+,4,orphan_start:8:467,8,467,94.84,672.66,u,,predecessor,not_applicable,,,,,"1,4",,outputs/track_event_review/v3_00004_orphan-start-id8-at-467.mp4,similar to last one
+,5,end:8:486,8,486,94.82,672.58,u,,successor,not_applicable,,,,,9,,outputs/track_event_review/v3_00005_end-id8-at-486.mp4,same as the last. 
+,6,end:9:495,9,495,94.79,672.62,u,,successor,not_applicable,,,,,,,outputs/track_event_review/v3_00006_end-id9-at-495.mp4,same as the last
+,7,end:7:498,7,498,57.58,680.05,u,,successor,not_applicable,,,,,,,outputs/track_event_review/v3_00007_end-id7-at-498.mp4,same as the last so unclear
+,8,end:5:841,5,841,518.69,521.02,h,left,successor,selected,10,845,10,845,"10,11",,outputs/track_event_review/v3_00008_end-id5-at-841.mp4,cross arm catch again
+,9,end:2:882,2,882,678.25,615.12,h,left,successor,selected,11,885,11,885,"11,12",,outputs/track_event_review/v3_00009_end-id2-at-882.mp4,
+,10,end:12:936,12,936,57.81,678.96,u,,successor,not_applicable,,,,,13,,outputs/track_event_review/v3_00010_end-id12-at-936.mp4,same as the other uncertains.
+,11,end:6:950,6,950,730.38,632.21,h,left,successor,selected,13,953,13,953,13,,outputs/track_event_review/v3_00011_end-id6-at-950.mp4,its less about the hand covering the ball but more  about it changing its speed and direction. either way its because of a throw by hand.
+,12,orphan_start:1:2,1,2,553.16,346.50,e,,predecessor,not_applicable,,,,,,,outputs/track_event_review/v3_00012_orphan-start-id1-at-2.mp4,its the beginning of the clip so i put in true end
+,13,orphan_start:2:2,2,2,714.14,392.10,e,,predecessor,not_applicable,,,,,,,outputs/track_event_review/v3_00013_orphan-start-id2-at-2.mp4,same as before
+,14,orphan_start:3:2,3,2,612.07,441.11,e,,predecessor,not_applicable,,,,,,,outputs/track_event_review/v3_00014_orphan-start-id3-at-2.mp4,same as the last
+,15,end:10:1074,10,1074,535.04,639.96,h,right,successor,selected,14,1077,14,1077,14,,outputs/track_event_review/v3_00015_end-id10-at-1074.mp4,again i think its in the change of motion more than occlusion.
+,16,end:11:1078,11,1078,745.67,446.87,u,,successor,not_applicable,,,,,,,outputs/track_event_review/v3_00016_end-id11-at-1078.mp4,i dont see a track end in the clip maybe it was cut wrong.
+,17,end:13:1078,13,1078,709.62,318.84,u,,successor,not_applicable,,,,,,,outputs/track_event_review/v3_00017_end-id13-at-1078.mp4,again i dont see a track end. maybe the video ends when the track ends?
+,18,end:14:1078,14,1078,535.38,530.98,u,,successor,not_applicable,,,,,,,outputs/track_event_review/v3_00018_end-id14-at-1078.mp4,again i dont really understand much from the way the video was cut. a ball appears and then the clip ends.
