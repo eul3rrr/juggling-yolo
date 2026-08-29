@@ -229,3 +229,84 @@ labels, and the full pose skeleton/keypoints. Override the location with
 
 Use `--include-labeled` to revisit completed rows, `--start-index` to begin at
 an item, or `--only-video` to filter the combined labels file.
+
+## Review track-lifecycle events (browser-based)
+
+The capacity comparison revealed that even yolo26l on the clean studio clip
+still has ~14 Norfair track IDs. Before re-tuning stitching, this reviewer
+exposes every track end (and every orphan start that the current stitcher
+misses) for manual classification. It is a diagnostic tool only — it does
+not modify the detector, Norfair, or stitcher.
+
+Events are derived from the **observed** frame of each track (the
+`observed == 1` rows in the Norfair CSV); trailing prediction-only rows
+are ignored.
+
+There are three event kinds:
+
+- `end` — one per track's last observed frame
+- `orphan_start` — a track whose first observed frame has no plausible
+  predecessor within the configurable review window (~1.0 s). These are
+  the missing stitches the current stitcher does not cover.
+- `existing_stitch` — a track whose observed end was followed by a
+  rank-1 stitcher proposal with a real gap. Use this to audit the
+  stitcher's current decisions alongside the missing-stitch events.
+
+### One command, then open the printed URL on your laptop
+
+```bash
+./.venv/bin/python scripts/review_track_events.py serve \
+  --video videos/identical_balls_trick_000_018.mp4 \
+  --tracklets detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv \
+  --detections detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32.csv \
+  --stitches detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5_stitches.csv
+```
+
+The tool prepares the manifest + H.264 review clips if they don't exist
+yet, then starts a small local HTTP server.
+
+The terminal prints something like:
+
+```
+Reviewer running (21 events).
+
+Open on your laptop:
+  http://100.x.y.z:43127
+```
+
+If Tailscale is not detected it binds to localhost only and prints an
+SSH-tunnel command instead. The server tries ports 43127, 43128, ...
+until one is free and prints the actual selected port.
+
+### Keyboard controls
+
+| Key | Action |
+|-----|--------|
+| space | pause / play |
+| r | restart current clip |
+| ← / → | seek -1 s / +1 s |
+| h | HAND-MEDIATED BREAK (then `l` / `r` / `u` for hand) |
+| a | AIRBORNE BREAK |
+| n | NORFAIR ASSOCIATION FAILURE |
+| x | ID SWITCH / WRONG MERGE |
+| e | TRUE END |
+| f | FALSE-POSITIVE TRACK |
+| u | UNCLEAR / AMBIGUOUS |
+| s | SKIP for now |
+| 1..9 | pick numbered nearby continuation track |
+| 0 | no identifiable continuation |
+| ? | ambiguous continuation |
+| p | previous event |
+| q | quit safely (server stops) |
+
+Mouse buttons exist as accessibility fallbacks; the primary workflow is
+keyboard-only.
+
+### Output
+
+- Review clips (H.264 / yuv420p, browser-compatible): `outputs/track_event_review/`
+- Per-event CSV manifest: `outputs/track_event_review/manifest.csv`
+- Labels (one row per event, saved after every review): `detections/track_event_review_labels.csv`
+
+Re-running the same `serve` command reuses the existing manifest + clips
+and resumes from the first unsaved event.

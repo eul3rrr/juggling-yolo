@@ -9,6 +9,7 @@ scripts/*
 !scripts/track_norfair.py
 !scripts/stitch_tracklets.py
 !scripts/review_stitches.py
+!scripts/review_track_events.py
 !scripts/analyze_stitch_features.py
 !scripts/segment_video.py
 !scripts/compare_arms.py
@@ -39,10 +40,10 @@ outputs/*
 !outputs/detector_seg_comparison/contact_sheets/
 !outputs/detector_seg_comparison/contact_sheets/*.png
 !outputs/detector_seg_comparison/threshold_sweep/
-!outputs/detector_seg_comparison/threshold_sweep/*_overlay.mp4
-!outputs/detector_seg_comparison/threshold_sweep/*_vs_*.mp4
 !outputs/detector_seg_comparison/threshold_sweep/contact_sheets/
 !outputs/detector_seg_comparison/threshold_sweep/contact_sheets/*.png
+!outputs/track_event_review/
+!outputs/track_event_review/manifest.csv
 !detections/
 detections/*
 !detections/.gitkeep
