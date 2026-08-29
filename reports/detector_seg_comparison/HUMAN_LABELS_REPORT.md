@@ -56,10 +56,12 @@ here for the report.
 | event_key            | track | end frame | type | hand | cont | notes |
 |----------------------|-------|-----------|------|------|------|-------|
 | `end:3:149`          | 3     | 149       | h    | right | ID 4 | (legitimate cross-arm catch-throw, original "pink one" label) |
+| `end:4:217`          | 4     | 217       | h    | right | ID 6 | (legitimate catch-throw, the rank-1 stitch candidate) |
 | `end:1:219`          | 1     | 219       | h    | left  | ID 5 | "cross arm catch-throw … hands side" |
 | `end:8:486`          | 8     | 486       | u    | —     | n/a  | "same as the last" — background-detector false positive (see below) |
 | `end:9:495`          | 9     | 495       | u    | —     | n/a  | "same as the last" — same root cause as `end:8:486` |
 | `end:7:498`          | 7     | 498       | u    | —     | n/a  | "same as the last so unclear" — same root cause |
+| `end:2:882`          | 2     | 882       | h    | left  | ID 11 | (legitimate hand-mediated transition) |
 | `end:5:841`          | 5     | 841       | h    | left  | ID 10 | "cross arm catch again" |
 | `end:6:950`          | 6     | 950       | h    | left  | ID 13 | "less about the hand covering the ball but more about it changing its speed and direction" |
 | `end:12:936`         | 12    | 936       | u    | —     | n/a  | "same as the other uncertains" — same root cause as the 486/495/498 set |

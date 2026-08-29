@@ -50,7 +50,7 @@ from typing import Iterable
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 VENV_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
-REVIEW_RENDER_VERSION = 3
+REVIEW_RENDER_VERSION = 4
 if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
 
@@ -84,7 +84,7 @@ LABEL_FIELDS = (
     "review_clip_path", "notes",
 )
 MANIFEST_FIELDS = (
-    "event_index", "event_key", "kind", "relation_direction",
+    "event_index", "event_key", "kind", "relation_direction", "boundary",
     "primary_track_id", "primary_first_frame", "primary_last_frame",
     "primary_end_frame", "primary_end_x", "primary_end_y",
     "nearby_candidate_track_ids",
@@ -556,6 +556,158 @@ def _draw_track(frame, track: Track, frame_index: int,
     return current
 
 
+# ---------------------------------------------------------------------------
+# Hand overlay (v1B)
+# ---------------------------------------------------------------------------
+
+# Late import so the reviewer module is importable without hand_features
+# (which has no other heavy deps) being present. ``hand_overlay`` itself
+# loads ``hand_features`` by file path, so this works in the venv even
+# when ``scripts/`` is not on sys.path.
+def _import_hand_overlay():
+    import importlib.util as _il
+    from pathlib import Path as _P
+    _spec = _il.spec_from_file_location(
+        "hand_overlay", _P(__file__).resolve().parent / "hand_overlay.py")
+    assert _spec is not None and _spec.loader is not None
+    _mod = _il.module_from_spec(_spec)
+    # Register in sys.modules so that @dataclass inside hand_overlay
+    # (e.g. HandMetrics) can be introspected at instantiation time.
+    # Without this, Python 3.14's dataclasses._is_type raises
+    # AttributeError: 'NoneType' object has no attribute '__dict__'
+    # when it does sys.modules.get(cls.__module__).
+    sys.modules.setdefault("hand_overlay", _mod)
+    _spec.loader.exec_module(_mod)
+    return _mod
+
+
+_HAND_LEFT_COLOR = (90, 200, 255)   # cyan-ish, distinct from candidates
+_HAND_RIGHT_COLOR = (255, 200, 90)  # amber
+_HAND_ARM_COLOR = (160, 160, 160)
+_HAND_CONNECTOR_COLOR = (255, 255, 255)
+
+
+def _draw_hand_skeleton(frame, person) -> None:
+    """Draw shoulder→elbow→wrist lines + L/R wrist markers.
+
+    Skips keypoints that are missing rather than interpolating.
+    """
+    pairs = [
+        (person.left_shoulder, person.left_elbow, person.left_wrist, "L",
+         _HAND_LEFT_COLOR, person.left_shoulder_conf, person.left_elbow_conf,
+         person.left_wrist_conf),
+        (person.right_shoulder, person.right_elbow, person.right_wrist, "R",
+         _HAND_RIGHT_COLOR, person.right_shoulder_conf, person.right_elbow_conf,
+         person.right_wrist_conf),
+    ]
+    for shoulder, elbow, wrist, label, color, c_shoulder, c_elbow, c_wrist in pairs:
+        # Arm segments. We only draw segments whose two endpoints are
+        # both present.  This means a brief single-frame drop in any
+        # keypoint does NOT visually interpolate across the gap.
+        if (shoulder is not None and elbow is not None
+                and c_shoulder is not None and c_elbow is not None):
+            cv2.line(frame, _point(*shoulder), _point(*elbow),
+                     _HAND_ARM_COLOR, 1, cv2.LINE_AA)
+        if (elbow is not None and wrist is not None
+                and c_elbow is not None and c_wrist is not None):
+            cv2.line(frame, _point(*elbow), _point(*wrist),
+                     color, 2, cv2.LINE_AA)
+        if wrist is not None and c_wrist is not None:
+            pt = _point(*wrist)
+            cv2.circle(frame, pt, 6, color, 2, cv2.LINE_AA)
+            cv2.putText(frame, label, (pt[0] + 8, pt[1] - 8),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 1, cv2.LINE_AA)
+
+
+def _draw_ball_to_hand_connector(frame, ball_xy, hand_xy, color
+                                 ) -> None:
+    """Subtle dashed line from the ball to the relevant hand."""
+    if ball_xy is None or hand_xy is None:
+        return
+    _dashed_line(frame, _point(*ball_xy), _point(*hand_xy), color, 1)
+
+
+def _format_metric(value) -> str:
+    """Mirror of :func:`hand_overlay.format_hand_metric` for use in
+    bake-on text overlays (the server already exposes structured values
+    to the browser, but a quick in-frame text readout is also useful)."""
+    if value is None:
+        return "—"
+    try:
+        f = float(value)
+    except (TypeError, ValueError):
+        return "—"
+    if not math.isfinite(f):
+        return "—"
+    return f"{f:+.1f}"
+
+
+def _format_distance(value) -> str:
+    if value is None:
+        return "—"
+    try:
+        f = float(value)
+    except (TypeError, ValueError):
+        return "—"
+    if not math.isfinite(f):
+        return "—"
+    return f"{f:.1f} px"
+
+
+def _draw_event_hand_panel(frame, event, frame_index, hand_features) -> None:
+    """Draw a compact panel in the bottom-right showing hand features."""
+    if hand_features is None:
+        return
+    width = frame.shape[1]
+    panel_x = width - 360
+    panel_y = max(70, frame.shape[0] - 130)
+    # Translucent backdrop
+    overlay = frame.copy()
+    cv2.rectangle(overlay, (panel_x - 8, panel_y - 8),
+                  (width - 8, frame.shape[0] - 8), (20, 20, 20), -1)
+    cv2.addWeighted(overlay, 0.55, frame, 0.45, 0, frame)
+    _text(frame, "HAND FEATURES (v1A)", (panel_x, panel_y + 14),
+          (255, 255, 255), 0.42)
+    src = hand_features.get("source", {})
+    src_nearest = src.get("nearest") or "?"
+    src_color = (_HAND_LEFT_COLOR if src_nearest == "left"
+                 else _HAND_RIGHT_COLOR if src_nearest == "right"
+                 else (200, 200, 200))
+    src_metrics = (src.get(src_nearest) if src_nearest in ("left", "right")
+                   else None) or {}
+    _text(frame,
+          f"PRIMARY -> {src_nearest.upper() if src_nearest != '?' else '?'}",
+          (panel_x, panel_y + 32), src_color, 0.42)
+    _text(frame,
+          f"dist {_format_distance(src_metrics.get('distance_px'))}"
+          f"   n={src_metrics.get('n_points', 0)}",
+          (panel_x, panel_y + 50), (220, 220, 220), 0.36)
+    _text(frame,
+          f"d' {_format_metric(src_metrics.get('distance_slope_px_per_frame'))}"
+          f"   {_format_metric(src_metrics.get('radial_relative_velocity'))} rad",
+          (panel_x, panel_y + 66),
+          (180, 255, 180) if (src_metrics.get('distance_slope_px_per_frame') or 0) < 0
+          else (255, 180, 180) if (src_metrics.get('distance_slope_px_per_frame') or 0) > 0
+          else (220, 220, 220),
+          0.36)
+    for idx, cand in enumerate(hand_features.get("candidates", []), start=1):
+        cands_nearest = cand.get("nearest") or "?"
+        cands_color = (_HAND_LEFT_COLOR if cands_nearest == "left"
+                       else _HAND_RIGHT_COLOR if cands_nearest == "right"
+                       else (200, 200, 200))
+        cand_metrics = (cand.get(cands_nearest) if cands_nearest in ("left", "right")
+                        else None) or {}
+        prefix = "predecessor" if event.kind == "orphan_start" else "future"
+        label = f"[{cand.get('index', idx)}] ID {cand.get('track_id')} <- {cands_nearest.upper() if cands_nearest != '?' else '?'}"
+        _text(frame, label, (panel_x, panel_y + 84 + (idx - 1) * 18),
+              cands_color, 0.38)
+        sub = (f"d' {_format_metric(cand_metrics.get('distance_slope_px_per_frame'))}"
+               f"   {_format_metric(cand_metrics.get('radial_relative_velocity'))} rad"
+               f"   n={cand_metrics.get('n_points', 0)}")
+        _text(frame, sub, (panel_x, panel_y + 96 + (idx - 1) * 18),
+              (200, 200, 200), 0.32)
+
+
 def render_clip(
     video: Path,
     output: Path,
@@ -567,6 +719,8 @@ def render_clip(
     fps: float,
     width: int,
     height: int,
+    hands_by_frame: dict | None = None,
+    hand_features: dict | None = None,
 ) -> None:
     cap = cv2.VideoCapture(str(video))
     if not cap.isOpened():
@@ -628,6 +782,33 @@ def render_clip(
                                 (candidate_pt[0] + 10,
                                  candidate_pt[1] - 10 - (idx - 1) * 22),
                                 color, 0.55)
+            # Hand overlay (v1B). Drawn BEFORE the header bar so the
+            # header always wins z-order.
+            if hands_by_frame is not None:
+                persons = hands_by_frame.get(frame_index, [])
+                if persons:
+                    _draw_hand_skeleton(frame, persons[0])
+                    if hand_features is not None:
+                        src = hand_features.get("source", {})
+                        anchor_xy = None
+                        primary_current = next(
+                            (o for o in event.primary.all_sorted
+                             if o.frame == frame_index), None)
+                        if primary_current is not None:
+                            anchor_xy = (primary_current.center_x,
+                                         primary_current.center_y)
+                        nearest = src.get("nearest")
+                        if nearest and anchor_xy is not None:
+                            hand_xy = None
+                            for person in persons:
+                                hand_xy = (person.left_wrist if nearest == "left"
+                                           else person.right_wrist)
+                                if hand_xy is not None:
+                                    break
+                            color = (_HAND_LEFT_COLOR if nearest == "left"
+                                     else _HAND_RIGHT_COLOR)
+                            _draw_ball_to_hand_connector(
+                                frame, anchor_xy, hand_xy, color)
             # Header bar
             legend_height = 31 + 22 * len(event.nearby_starts)
             cv2.rectangle(frame, (0, 0), (width, max(56, legend_height)), (20, 20, 20), -1)
@@ -653,6 +834,9 @@ def render_clip(
                       (180, 44 + (idx - 1) * 22), candidate_colors[idx - 1], 0.45)
             _text(frame, "OBSERVED: solid/filled   PREDICTED: dashed/hollow",
                   (width - 430, 22), (220, 220, 220), 0.40)
+            if hand_features is not None:
+                _draw_event_hand_panel(frame, event, frame_index,
+                                       hand_features)
             writer.write(frame)
     finally:
         cap.release(); writer.release()
@@ -757,7 +941,8 @@ def prepare(
     orphan_lookback_seconds: float = 4.5,
     boundary_seconds: float = 0.5,
     pre_seconds: float = 1.0,
-    post_seconds: float = 1.0,
+    post_seconds: float = 2.0,
+    hands_csv: Path | None = None,
 ) -> tuple[Path, int, int, int]:
     output_dir.mkdir(parents=True, exist_ok=True)
     tracks = load_tracklets(tracklets_csv)
@@ -772,6 +957,31 @@ def prepare(
         boundary_seconds=boundary_seconds,
     )
     print(f"Generated {len(events)} review events from {len(tracks)} tracks")
+
+    # Hand overlay (v1B). Loaded once, used for both the bake-on overlay
+    # and the per-event feature dict that the browser renders.
+    hands_by_frame: dict | None = None
+    hand_features_by_event: dict[int, dict | None] = {}
+    if hands_csv is not None:
+        hand_overlay_mod = _import_hand_overlay()
+        hands_by_frame = hand_overlay_mod.load_hands_by_frame(hands_csv)
+        if not hands_by_frame:
+            print(f"WARNING: --hands {hands_csv} produced no hand rows; "
+                  f"rendering without hand overlay.")
+            hands_by_frame = None
+        else:
+            print(f"Loaded {sum(len(v) for v in hands_by_frame.values())} "
+                  f"hand rows from {hands_csv}")
+            for ev in events:
+                try:
+                    hand_features_by_event[ev.event_index] = (
+                        hand_overlay_mod.event_hand_features(ev, hands_by_frame))
+                except Exception as exc:  # noqa: BLE001
+                    # We never want a hand-overlay bug to break clip
+                    # rendering; the overlay is supplementary.
+                    print(f"WARNING: hand features for event "
+                          f"{ev.event_key} failed: {exc!r}", file=sys.stderr)
+                    hand_features_by_event[ev.event_index] = None
 
     manifest_rows: list[dict[str, str]] = []
     label_rows: list[dict[str, str]] = []
@@ -806,6 +1016,8 @@ def prepare(
             render_clip(
                 video, clip_path, tracks, detections_by_frame,
                 ev, first, last, fps, width, height,
+                hands_by_frame=hands_by_frame,
+                hand_features=hand_features_by_event.get(ev.event_index),
             )
             rendered += 1
         else:
@@ -815,6 +1027,7 @@ def prepare(
             "event_key": ev.event_key,
             "kind": ev.kind,
             "relation_direction": ev.relation_direction,
+            "boundary": "1" if ev.boundary else "0",
             "primary_track_id": str(ev.primary.track_id),
             "primary_first_frame": str(ev.primary.first_observed.frame
                                        if ev.primary.first_observed else ""),
@@ -937,6 +1150,31 @@ INDEX_HTML = """<!DOCTYPE html>
   .saved-readout.active { display:block; }
   .saved-readout h3 { margin:0 0 6px; font-size: 12px; color: var(--good);
     text-transform: uppercase; letter-spacing: .05em; }
+  .statusbar .pill.boundary { background:#3a2400; border-color: var(--warn);
+    color: var(--warn); font-weight: 600; }
+  .boundary-banner { background:#3a2400; border:1px solid var(--warn);
+    color: var(--warn); border-radius: 6px; padding: 10px 12px;
+    margin-top: 10px; font-size: 13px; }
+  .boundary-banner kbd { background:#21262d; border:1px solid var(--warn);
+    color: var(--warn); }
+  .hand-panel { background:#0d1117; border:1px solid var(--border);
+    border-radius: 6px; padding: 10px 12px; margin-top: 10px; font-size: 13px; }
+  .hand-panel h3 { margin:0 0 6px; font-size: 12px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: .05em; }
+  .hand-panel .hand-source, .hand-panel .hand-candidates { margin: 4px 0; }
+  .hand-panel .hand-row { display: grid;
+    grid-template-columns: 200px 80px 110px 110px 80px;
+    gap: 6px 10px; align-items: baseline; font-family: ui-monospace, monospace;
+    font-size: 12px; padding: 2px 0; }
+  .hand-panel .hand-row.header { color: var(--muted); font-size: 11px;
+    text-transform: uppercase; letter-spacing: .05em; }
+  .hand-panel .hand-row .closing { color: var(--good); }
+  .hand-panel .hand-row .separating { color: var(--bad); }
+  .hand-panel .hand-row .insufficient { color: var(--warn); font-style: italic; }
+  .hand-panel .hand-legend { color: var(--muted); font-size: 11px;
+    margin-top: 6px; line-height: 1.4; }
+  .hand-panel .hand-legend code { color: var(--text); background:#21262d;
+    padding: 1px 4px; border-radius: 3px; }
 </style>
 </head><body>
 <div class="wrap">
@@ -956,6 +1194,14 @@ INDEX_HTML = """<!DOCTYPE html>
       <span class="pill" id="stitch-pill">stitcher: -</span>
       <span class="pill" id="mode-pill">mode: viewing</span>
       <span class="pill" id="saved-pill">label: blank</span>
+      <span class="pill boundary" id="boundary-pill" style="display:none;">BOUNDARY</span>
+    </div>
+    <div class="boundary-banner" id="boundary-banner" style="display:none;">
+      <strong>BOUNDARY EVENT</strong> &mdash; this event is at the start or
+      end of the source video. The visible clip window may not show enough
+      context to classify it as a normal track failure. Consider pressing
+      <kbd>e</kbd> (true end) for events already present at frame 0, or
+      use <kbd>u</kbd> (unclear) if the visible window is too short.
     </div>
     <div class="pending-panel" id="pending-panel">
       <h3>Pending classification (not yet saved)</h3>
@@ -967,6 +1213,20 @@ INDEX_HTML = """<!DOCTYPE html>
     <div class="saved-readout" id="saved-readout">
       <h3>Saved label</h3>
       <div id="saved-content"></div>
+    </div>
+    <div class="hand-panel" id="hand-panel" style="display:none;">
+      <h3>Hand features (v1A)</h3>
+      <div id="hand-source"></div>
+      <div class="hand-candidates" id="hand-candidates"></div>
+      <div class="hand-legend">
+        L = anatomical left wrist, R = anatomical right wrist
+        (anatomical, not screen position). d' is the least-squares
+        slope of ball-to-hand distance over the last/first 5
+        observed ball points. Negative = CLOSING, positive =
+        SEPARATING. <code>radial</code> is the radial component of
+        (v_ball &minus; v_hand) along the unit hand-to-ball vector.
+        Missing values are <code>—</code>, never zero.
+      </div>
     </div>
   </div>
 
@@ -1116,6 +1376,15 @@ async function setIndex(i) {
   $('saved-pill').textContent = ev.saved_label
     ? `label: ${EVENT_TYPE_LABELS[ev.saved_label] || ev.saved_label}`
     : 'label: blank';
+  const bp = $('boundary-pill');
+  const bb = $('boundary-banner');
+  if (ev.boundary) {
+    bp.style.display = 'inline-block';
+    bb.style.display = 'block';
+  } else {
+    bp.style.display = 'none';
+    bb.style.display = 'none';
+  }
   $('notes').value = ev.saved_notes || '';
   // Saved readout
   const sr = $('saved-readout'); const sc = $('saved-content');
@@ -1131,6 +1400,100 @@ async function setIndex(i) {
   }
   document.title = `Reviewer ${ev.event_index + 1}/${state.total}`;
   renderPending();
+  renderHandPanel(ev);
+}
+
+function fmtSigned(value) {
+  if (value === null || value === undefined) return '—';
+  const f = Number(value);
+  if (!Number.isFinite(f)) return '—';
+  return (f >= 0 ? '+' : '') + f.toFixed(1);
+}
+function fmtUnsigned(value, suffix) {
+  if (value === null || value === undefined) return '—';
+  const f = Number(value);
+  if (!Number.isFinite(f)) return '—';
+  return f.toFixed(1) + (suffix || '');
+}
+function trendClass(slope) {
+  if (slope === null || slope === undefined) return '';
+  const f = Number(slope);
+  if (!Number.isFinite(f)) return '';
+  if (f < -0.5) return 'closing';
+  if (f > 0.5) return 'separating';
+  return '';
+}
+function trendLabel(slope) {
+  if (slope === null || slope === undefined) return '—';
+  const f = Number(slope);
+  if (!Number.isFinite(f)) return '—';
+  if (f < -0.5) return 'CLOSING';
+  if (f > 0.5) return 'SEPARATING';
+  return 'STABLE';
+}
+
+function renderHandPanel(ev) {
+  const panel = $('hand-panel');
+  if (!ev.hand_features) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  const src = ev.hand_features.source || {};
+  const srcNearest = src.nearest || '?';
+  const srcMetrics = (srcNearest === 'left' || srcNearest === 'right')
+    ? (src[srcNearest] || {}) : {};
+  const nPts = srcMetrics.n_points || 0;
+  const insufficient = nPts < 2;
+  const srcRow = (kind) => {
+    const cls = insufficient ? 'insufficient' : trendClass(srcMetrics.distance_slope_px_per_frame);
+    const label = insufficient ? `INSUFFICIENT (n=${nPts})` : trendLabel(srcMetrics.distance_slope_px_per_frame);
+    const arrow = srcNearest === 'left' ? '→ L' : srcNearest === 'right' ? '→ R' : '→ ?';
+    return `<div class="hand-row ${cls}">
+      <span><b>PRIMARY</b> id=${ev.primary_track_id} ${arrow}</span>
+      <span>${fmtUnsigned(srcMetrics.distance_px, ' px')}</span>
+      <span>d' ${fmtSigned(srcMetrics.distance_slope_px_per_frame)}</span>
+      <span>radial ${fmtSigned(srcMetrics.radial_relative_velocity)}</span>
+      <span>${label} (n=${nPts})</span>
+    </div>`;
+  };
+  $('hand-source').innerHTML = `
+    <div class="hand-row header">
+      <span>PRIMARY → nearest hand</span>
+      <span>distance</span>
+      <span>slope d'</span>
+      <span>radial v</span>
+      <span>trend (n)</span>
+    </div>
+    ${srcRow('primary')}`;
+
+  const cands = ev.hand_features.candidates || [];
+  let candHTML = '';
+  if (cands.length) {
+    candHTML += `<div class="hand-row header" style="margin-top:8px;">
+      <span>${ev.kind === 'orphan_start' ? 'predecessor candidates' : 'successor candidates'}</span>
+      <span>distance</span>
+      <span>slope d'</span>
+      <span>radial v</span>
+      <span>trend (n)</span>
+    </div>`;
+    for (const c of cands) {
+      const cn = c.nearest || '?';
+      const cm = (cn === 'left' || cn === 'right') ? (c[cn] || {}) : {};
+      const cn_pts = cm.n_points || 0;
+      const c_insufficient = cn_pts < 2;
+      const cls = c_insufficient ? 'insufficient' : trendClass(cm.distance_slope_px_per_frame);
+      const label = c_insufficient ? `INSUFFICIENT (n=${cn_pts})` : trendLabel(cm.distance_slope_px_per_frame);
+      const arrow = cn === 'left' ? '← L' : cn === 'right' ? '← R' : '← ?';
+      candHTML += `<div class="hand-row ${cls}">
+        <span><b>[${c.index}]</b> ID ${c.track_id} ${arrow}</span>
+        <span>${fmtUnsigned(cm.distance_px, ' px')}</span>
+        <span>d' ${fmtSigned(cm.distance_slope_px_per_frame)}</span>
+        <span>radial ${fmtSigned(cm.radial_relative_velocity)}</span>
+        <span>${label} (n=${cn_pts})</span>
+      </div>`;
+    }
+  } else {
+    candHTML = `<div class="hand-row"><span>(no candidates)</span></div>`;
+  }
+  $('hand-candidates').innerHTML = candHTML;
 }
 
 function renderPending() {
@@ -1472,7 +1835,9 @@ def _validate_continuation(idx: int, payload: dict,
 
 class _State:
     def __init__(self, events_path: Path, labels_path: Path,
-                 clip_root: Path, port: int, host: str, url: str):
+                 clip_root: Path, port: int, host: str, url: str,
+                 tracks: dict | None = None,
+                 hands_by_frame: dict | None = None):
         self.events_path = events_path
         self.labels_path = labels_path
         self.clip_root = clip_root.resolve()
@@ -1483,6 +1848,10 @@ class _State:
         self.labels: dict[int, dict[str, str]] = {}
         self.index: int = 0
         self._lock = threading.Lock()
+        self._tracks = tracks
+        self._hands_by_frame = hands_by_frame
+        self._hand_overlay_mod = (_import_hand_overlay()
+                                  if hands_by_frame is not None else None)
         self._reload()
         # Skip already-saved labels so resume picks the first unsaved row.
         for i in range(len(self.events)):
@@ -1528,12 +1897,21 @@ class _State:
             kind_label = {"end": "TRACK END",
                           "orphan_start": "ORPHAN START",
                           "existing_stitch": "EXISTING STITCH"}.get(row.get("kind", ""), row.get("kind", ""))
+            boundary = row.get("boundary", "0") == "1"
+            hand_features: dict | None = None
+            if (self._tracks is not None
+                    and self._hands_by_frame is not None
+                    and self._hand_overlay_mod is not None):
+                hand_features = self._build_hand_features(
+                    row, self._tracks, self._hands_by_frame,
+                    self._hand_overlay_mod)
         return {
             "event_index": i,
             "event_key": row.get("event_key", ""),
             "kind": row.get("kind", ""),
             "kind_label": kind_label,
             "relation_direction": relation,
+            "boundary": boundary,
             "primary_track_id": int(row.get("primary_track_id", "0")),
             "primary_end_frame": int(row.get("primary_end_frame", "0") or 0),
             "nearby_candidate_track_ids": nearby,
@@ -1546,7 +1924,29 @@ class _State:
             "saved_continuation_status": cont_status,
             "saved_continuation_choice": cont_choice,
             "saved_notes": notes,
+            "hand_features": hand_features,
         }
+
+    @staticmethod
+    def _build_hand_features(row, tracks, hands, hand_overlay_mod) -> dict | None:
+        """Build the per-event hand-features dict for the browser."""
+        try:
+            primary_id = int(row.get("primary_track_id", "0") or 0)
+        except ValueError:
+            return None
+        primary_track = tracks.get(primary_id)
+        if primary_track is None:
+            return None
+        nearby_ids = [int(x) for x in row.get("nearby_candidate_track_ids", "").split(",") if x]
+        candidate_tracks = [tracks.get(tid) for tid in nearby_ids]
+        candidate_tracks = [c for c in candidate_tracks if c is not None]
+        # Build a ReviewEvent-shaped object the hand_overlay module
+        # understands. The fields it reads are: primary, nearby_starts, kind.
+        synthetic = type("R", (), {})()
+        synthetic.primary = primary_track
+        synthetic.nearby_starts = candidate_tracks
+        synthetic.kind = row.get("kind", "end")
+        return hand_overlay_mod.event_hand_features(synthetic, hands)
 
     def save_label(self, payload: dict) -> int:
         idx = int(payload["event_index"])
@@ -1820,6 +2220,7 @@ def serve(args) -> int:
             boundary_seconds=args.boundary,
             pre_seconds=args.pre_seconds,
             post_seconds=args.post_seconds,
+            hands_csv=args.hands,
         )
     elif labels_csv.exists():
         # Re-prepare only if the labels CSV has fewer rows than the
@@ -1845,6 +2246,7 @@ def serve(args) -> int:
                     boundary_seconds=args.boundary,
                     pre_seconds=args.pre_seconds,
                     post_seconds=args.post_seconds,
+                    hands_csv=args.hands,
                 )
 
     tailscale_ip = _tailscale_ipv4()
@@ -1856,6 +2258,21 @@ def serve(args) -> int:
     else:
         host = "127.0.0.1"
 
+    # Load tracks + hands for the live hand-features endpoint. These are
+    # used only by /api/event when --hands is provided. Track loading is
+    # cheap; hand loading is cheap too. Doing it here means the
+    # reviewer can serve the v1B features without re-rendering clips.
+    server_tracks = None
+    server_hands = None
+    if args.hands is not None:
+        server_tracks = load_tracklets(args.tracklets.resolve())
+        hand_overlay_mod = _import_hand_overlay()
+        server_hands = hand_overlay_mod.load_hands_by_frame(args.hands)
+        if not server_hands:
+            print(f"WARNING: --hands {args.hands} produced no hand rows; "
+                  f"live hand-features disabled.")
+            server_hands = None
+
     state = _State(
         events_path=output_dir / "manifest.csv",
         labels_path=labels_csv,
@@ -1863,6 +2280,8 @@ def serve(args) -> int:
         port=port,
         host=host,
         url=f"http://{host}:{port}",
+        tracks=server_tracks,
+        hands_by_frame=server_hands,
     )
 
     class _ThreadingHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
@@ -1918,8 +2337,15 @@ def parse_args() -> argparse.Namespace:
                         help="Backward review window for orphan predecessors (default: 4.5 s; review only).")
     common.add_argument("--boundary", type=float, default=0.5)
     common.add_argument("--pre-seconds", type=float, default=1.0)
-    common.add_argument("--post-seconds", type=float, default=1.0)
+    common.add_argument("--post-seconds", type=float, default=2.0)
     common.add_argument("--rebuild", action="store_true")
+    common.add_argument("--hands", type=Path, default=None,
+                        help="Optional per-frame hand CSV produced by "
+                             "scripts/extract_hands.py. When provided, the "
+                             "reviewer overlays anatomical left/right hands and "
+                             "exposes the v1A hand features in the UI. The "
+                             "reviewer remains fully functional without this "
+                             "argument.")
 
     prep = sub.add_parser("prepare", parents=[common], help="Generate events + clips only")
     serve_p = sub.add_parser("serve", parents=[common], help="Generate (if needed) and serve")
@@ -1948,6 +2374,7 @@ def main() -> int:
             boundary_seconds=args.boundary,
             pre_seconds=args.pre_seconds,
             post_seconds=args.post_seconds,
+            hands_csv=args.hands,
         )
         print(f"Wrote {labels_csv}")
         print(f"Counts: end={n_end} orphan_start={n_orphan} existing_stitch={n_existing}")

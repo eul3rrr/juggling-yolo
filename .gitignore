@@ -21,6 +21,7 @@ scripts/*
 !scripts/render_detections.py
 !scripts/threshold_introduced_contact_sheet.py
 !scripts/hand_features.py
+!scripts/hand_overlay.py
 !scripts/extract_hands.py
 !scripts/diagnose_hand_transitions.py
 !scripts/run_arm_triple.sh
@@ -70,5 +71,7 @@ tests/
 !tests/test_review_stitches.py
 !tests/test_review_track_events.py
 !tests/test_hand_features.py
+!tests/test_hand_overlay.py
+!tests/test_review_track_events_v1b.py
 !tests/test_analyze_stitch_features.py
 !tests/test_compare_arms.py
