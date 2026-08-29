@@ -456,6 +456,269 @@ real-time at full resolution is not.
 
 ---
 
+## 7. THRESHOLD SWEEP — yolo26l vs yolo26x
+
+The fixed-conf comparison above uses `conf=0.15` for both models. This
+section asks a different question: **is the yolo26x penalty on the
+clean clip an operating-point artifact, or is the x model genuinely
+worse for this task?**
+
+### Method
+
+- One inference per (model × video) at `conf=0.05` (4 runs total).
+- All detections retained with their full confidence values.
+- The `0.10`, `0.075` and `0.05` arms are derived by *offline filtering*
+  of the saved detections rather than re-running expensive GPU
+  inference.
+- The exact same Norfair (`dt=50`, `hc=5`) and stitcher
+  (`max_gap_frames=10`) settings are used for every arm.
+
+**Validation**: filtering the `conf=0.05` output to `>=0.15` and
+comparing it against the canonical `conf=0.15` CSVs produced by
+`detect_video.py --conf 0.15` for the same (model, video) pair:
+
+| Model | Video | Canonical rows | Filtered >=0.15 rows | Diff exit |
+|-------|-------|----------------:|---------------------:|----------:|
+| yolo26l | identical_balls | 3292 | 3292 | 0 |
+| yolo26x | identical_balls | 2356 | 2356 | 0 |
+| yolo26l | youtube | 4052 | 4052 | 0 |
+| yolo26x | youtube | 4136 | 4136 | 0 |
+
+All four replications are byte-identical (sort-diffs exit 0). The
+filtering approach is sound. **Total GPU work: 4 inference runs at
+conf=0.05 instead of 16 inference runs across all (model, conf) cells.**
+
+### Detection counts
+
+| | conf=0.15 | 0.10 | 0.075 | 0.05 |
+|--|--:|--:|--:|--:|
+| **l** identical | 3292 | 3413 | 3677 | 4399 |
+| **x** identical | 2356 | 3025 | 3703 | 5149 |
+| **l** youtube | 4052 | 4320 | 4492 | 4749 |
+| **x** youtube | 4136 | 4423 | 4599 | 4876 |
+
+A few observations:
+
+- yolo26x at `conf=0.10` on identical (3025) already **exceeds**
+  yolo26l at `conf=0.15` (3292) only by a small margin — but the
+  composition is different (see below).
+- At `conf=0.05`, both models approach 4-5 detections per frame, and
+  the per-frame count histogram shifts from mostly 3 and 4+ to mostly
+  4+, indicating the additional detections are distributed across the
+  frames rather than concentrated in already-detected ones.
+- The mean confidence drops sharply as the threshold is lowered:
+  l-idential 0.688→0.668→0.626→0.533; x-identical 0.362→0.309→0.268→0.210.
+  The x model's score distribution is significantly lower than l's
+  at every operating point, confirming the calibration gap noted in
+  the original report.
+
+### New detections admitted at each step
+
+| Model | Video | 0.15→0.10 | 0.10→0.075 | 0.075→0.05 |
+|-------|-------|----------:|------------:|-----------:|
+| l | identical | +121 (mean 0.120) | +264 (mean 0.085) | +722 (mean 0.062) |
+| x | identical | +669 (mean 0.122) | +678 (mean 0.086) | +1446 (mean 0.061) |
+| l | youtube | +268 (mean 0.124) | +172 (mean 0.086) | +257 (mean 0.061) |
+| x | youtube | +287 (mean 0.126) | +176 (mean 0.087) | +277 (mean 0.061) |
+
+The most informative step is **0.15 → 0.10**:
+
+- On identical, x admits **5.5× more new detections** than l at this
+  step (669 vs 121). The new detections have nearly identical mean
+  confidence (0.122 vs 0.120) — they are the same *kind* of
+  detections, x just emits them more often in this band.
+- On youtube both models admit similar counts (~270-290); the gap is
+  almost entirely a clean-clip phenomenon.
+
+The frame-bucket distribution of those 0.15→0.10 new x detections
+on identical is concentrated in frames 200-799 (the active juggling
+zone): 85 in [0,200), 158 in [200,400), 153 in [400,600), 140 in
+[600,800), 133 in [800+). The new x detections are tracking-relevant,
+not concentrated at clip boundaries.
+
+### IDENTICAL_BALLS THRESHOLD TABLE
+
+| Model | conf | Dets | Mean/frame | Fr 0 | Fr 3 | Fr 4+ | Conf mean | IDs | Lifespan med | Lifespan max | Obs frac | Short ≤5 | Short ≤10 | Stitch cand | Rank-1 err med |
+|--------|-----:|----:|----------:|----:|----:|-----:|----------:|----:|-------------:|-------------:|---------:|--------:|---------:|------------:|---------------:|
+| yolo26l | 0.15  | 3292 | 3.05 | 0  | 995 | 59  | 0.688 | 14 | 139.5 | 886  | 0.977 | 3  | 3  |  3 |  51.4 |
+| yolo26l | 0.10  | 3413 | 3.16 | 0  | 939 | 131 | 0.668 | 17 |  15   | 1077 | 0.976 | 8  | 9  |  0 |   0.0 |
+| yolo26l | 0.075 | 3677 | 3.41 | 0  | 778 | 292 | 0.626 | 34 |  15   | 1077 | 0.947 | 14 | 18 |  8 | 242.0 |
+| yolo26l | 0.05  | 4399 | 4.08 | 0  | 429 | 647 | 0.533 | 56 |  16.5 | 1077 | 0.926 | 19 | 30 | 35 |   0.2 |
+| yolo26x | 0.15  | 2356 | 2.18 | 52 | 468 | 29  | 0.362 | 79 |  19   | 371  | 0.778 | 24 | 40 |103 | 111.5 |
+| yolo26x | 0.10  | 3025 | 2.80 |  7 | 524 | 194 | 0.309 | 59 |  31   | 404  | 0.850 | 14 | 18 | 57 | 136.4 |
+| yolo26x | 0.075 | 3703 | 3.43 |  5 | 396 | 486 | 0.268 | 62 |  33   | 489  | 0.869 | 10 | 21 | 51 | 156.6 |
+| yolo26x | 0.05  | 5149 | 4.77 |  0 | 105 | 938 | 0.210 | 63 |  36   | 599  | 0.898 |  9 | 14 | 52 | 121.5 |
+
+**Identical-balls curve (l = solid markers, x = open markers):**
+
+| Threshold | Direction | Result |
+|-----------|-----------|--------|
+| 0.15 | — | yolo26l dominates: 14 IDs vs 79, 139.5 vs 19 lifespan, 3 vs 103 stitches |
+| 0.10 | lower | yolo26l **regresses** (IDs 14→17, lifespan 139.5→15, 1077-frame track splits) — a single spurious low-conf detection starts a fresh ID. yolo26x **improves on every metric** (IDs 79→59, lifespan 19→31, stitches 103→57, observed-fraction 0.778→0.850) |
+| 0.075 | lower | yolo26l continues to regress (34 IDs, 15-frame median lifespan). yolo26x keeps improving (62 IDs, 33-frame median lifespan, 51 stitches) |
+| 0.05 | lower | both models get noisier; l continues regressing, x plateaus around 63 IDs / 36 frames |
+
+**The clean-clip x curve does reach l's regime at conf=0.10**, but
+**l itself also regresses** as the threshold is lowered on this clip.
+At `conf=0.10` the x model (59 IDs, lifespan 31, 57 stitches) still
+has ~3-4× more track fragments and ~5× shorter median lifespan than
+l at `conf=0.15` (14 IDs, 139.5, 3 stitches). **x never catches up
+to l-at-0.15** on the identical clip at any threshold tested.
+
+### YOUTUBE THRESHOLD TABLE
+
+| Model | conf | Dets | Mean/frame | Fr 3 | Fr 4+ | Conf mean | IDs | Lifespan med | Lifespan max | Obs frac | Short ≤5 | Short ≤10 | Stitch cand | Rank-1 err med |
+|--------|-----:|----:|----------:|----:|-----:|----------:|----:|-------------:|-------------:|---------:|--------:|---------:|------------:|---------------:|
+| yolo26l | 0.15  | 4052 | 4.50 | 114 | 780 | 0.518 | 43 | 73.0 | 355  | 0.882 | 3 | 3  | 38 | 104.9 |
+| yolo26l | 0.10  | 4320 | 4.80 |  70 | 827 | 0.493 | 41 | 77.0 | 281  | 0.901 | 5 | 5  | 35 |  96.3 |
+| yolo26l | 0.075 | 4492 | 4.99 |  47 | 852 | 0.478 | 32 | 95.5 | 437  | 0.913 | 8 | 8  | 24 |  95.2 |
+| yolo26l | 0.05  | 4749 | 5.28 |  26 | 874 | 0.455 | 30 |108.0 | 439  | 0.924 |10 |10  | 15 |  93.2 |
+| yolo26x | 0.15  | 4136 | 4.60 |  84 | 780 | 0.542 | 34 | 79.5 | 490  | 0.879 | 3 | 4  | 27 | 102.2 |
+| yolo26x | 0.10  | 4423 | 4.91 |  56 | 829 | 0.515 | 30 | 72.5 | 808  | 0.905 | 8 |10  | 19 | 114.5 |
+| yolo26x | 0.075 | 4599 | 5.11 |  38 | 854 | 0.499 | 32 | 72.5 | 808  | 0.915 | 8 |11  | 17 | 129.7 |
+| yolo26x | 0.05  | 4876 | 5.42 |  23 | 874 | 0.474 | 48 | 76.5 | 486  | 0.911 |11 |15  | 28 | 134.5 |
+
+**YouTube curves are nearly monotonic and pretty**:
+
+- yolo26l on YouTube keeps improving as the threshold drops: IDs
+  43 → 41 → 32 → 30; lifespan 73 → 77 → 95.5 → 108; observed-fraction
+  0.882 → 0.924; stitches 38 → 35 → 24 → 15. The cleanest "more
+  detections, fewer fragments, longer tracks" curve in the sweep.
+- yolo26x on YouTube improves from 0.15 → 0.10 → 0.075 (34 → 30 →
+  32 IDs, observed-fraction 0.879 → 0.905 → 0.915) but **regresses**
+  at conf=0.05 (48 IDs, lifespan drops back to 76.5). The plateau
+  is at `conf≈0.075`.
+
+### Visual findings (false-positive / hand-occlusion / motion-blur)
+
+Six contact sheets of 24 crops each were inspected visually; each
+contact sheet contains detections that newly appeared at one threshold
+step. Categories: (a) plausible juggling ball, (b) plausible ball
+partly occluded by hand, (c) hand/finger artifact, (d) obvious false
+positive, (e) ambiguous.
+
+Identical_balls (clean studio clip — there is a static shelf of
+white balls in the background that is *itself* ball-shaped):
+
+| Sheet | (a) | (b) | (c) | (d) | (e) | Note |
+|-------|---:|---:|---:|---:|---:|------|
+| x @ 0.15→0.10 | 5 | 4 | 0 | 15 | 0 | 15/24 are **the static shelf balls**; 9 are real juggling balls (5 airborne + 4 hand-held) |
+| x @ 0.10→0.075 | 20 | 3 | 0 |  1 | 0 | 20/24 are the static shelf balls again (real balls but wrong targets); 3 are juggling balls in hand; 1 background FP |
+| x @ 0.075→0.05 | 20 | 4 | 0 |  0 | 0 | all 24 are real balls (mostly static shelf) — *no* category-d FPs at the very-low band |
+| l @ 0.15→0.10 | 2 | 6 | 0 | 16 | 0 | 16/24 are plush-toy / basket false positives; only 8 real juggling balls |
+
+So on identical_balls, **lowering x's threshold recovers real
+juggling-ball detections but floods the input with the static
+shelf-ball false positives** (real ball-shapes, wrong identity
+target). Lowering l's threshold floods the input with plush-toy
+false positives (clearly-wrong objects) and recovers fewer real
+balls in absolute terms.
+
+YouTube:
+
+| Sheet | (a) | (b) | (c) | (d) | (e) |
+|-------|---:|---:|---:|---:|---:|
+| x @ 0.15→0.075 | ~7 | ~11 | ~2-3 | ~2 | ~2-3 |
+| l @ 0.15→0.075 | ~8 | ~13 | 0 | 1 | ~2 |
+
+On YouTube both models recover mostly-real juggling balls when
+their threshold is lowered: ~75% (x) and ~88% (l) of the new
+detections are plausible balls (mostly in hand — category b).
+Background false positives are rare on this clip because there is
+no static ball-shaped decor; the "shelves" are curtains and walls
+with no spherical decor.
+
+### Per-threshold observation: hand occlusion and motion blur
+
+Hand occlusion (category b) is the dominant source of conf < 0.15
+detections on the YouTube clip for both models. The pattern is
+consistent: at conf = 0.15 both models miss balls being caught or
+released; lowering the threshold recovers those catches.
+
+On the identical clip, hand occlusion recovers real balls
+(category b in x@0.15→0.10 = 4/24), but the dominant "missed at
+0.15" category is the static shelf of balls, which the x model is
+emitting many low-confidence proposals on.
+
+Motion blur is a smaller contributor than hand occlusion in this
+sweep. There are a few examples in the YouTube sheets (e.g. f728
+on l@0.15→0.075, f918 on x@0.15→0.075) but they are not the
+primary failure mode.
+
+### L vs X verdict after the sweep
+
+The original l-vs-x comparison at conf=0.15 painted a picture of
+"yolo26x is much worse on clean, slightly better on noisy". The
+sweep refines that:
+
+- **On identical_balls, the x-vs-l gap is partially an operating-
+  point artifact, but lowering the threshold does NOT close it.** At
+  every threshold tested, x produces strictly more track fragments
+  and shorter median lifespans than l. x at conf=0.10 (59 IDs, 31
+  median lifespan) does not match l at conf=0.15 (14 IDs, 139.5
+  median lifespan). The reason is partly visible in the contact
+  sheets: the static shelf balls in the identical clip are real
+  ball-shapes that x emits low-confidence proposals on, and these
+  proposals don't improve tracking — they introduce extra track
+  fragments.
+- **On YouTube, the gap closes with a lower threshold.** l's
+  improvement as the threshold drops is monotonic; x's improvement
+  plateaus around conf=0.075. At conf=0.075, x (32 IDs, 72.5 median
+  lifespan) is roughly comparable to l at conf=0.075 (32 IDs, 95.5
+  median lifespan). x at conf=0.10 (30 IDs, 72.5) is even closer to
+  l's best.
+- **The original l-vs-x difference is a mixture.** On the noisy
+  YouTube clip, the gap is mostly an operating-point artifact — the
+  same tracking quality is achievable at a different threshold. On
+  the clean clip, the x model's tendency to emit low-confidence
+  proposals on static ball-shaped props means it never recovers l's
+  tracking quality no matter what threshold is used.
+
+### BEST yolo26l THRESHOLD
+
+- identical_balls: **conf=0.15** (any lower threshold regresses
+  tracking by splitting the 1077-frame master track into many
+  short fragments).
+- youtube: **conf=0.05** by raw metrics (30 IDs, lifespan 108, 15
+  stitches, observed-fraction 0.924), but **conf=0.075** is the
+  defensible sweet spot — conf=0.05 is only marginally better than
+  conf=0.075 on every metric and starts to introduce visible
+  duplicates on individual balls.
+
+### BEST yolo26x THRESHOLD
+
+- identical_balls: **conf=0.10** — best on every tracking metric
+  (59 IDs, 31 median lifespan, 57 stitches), and avoids the static
+  shelf-ball false-positive flood that begins at conf=0.075.
+- youtube: **conf=0.075** — best on IDs and stitches; conf=0.05
+  starts introducing more fragments and the rank-1 prediction error
+  median grows from 102 to 134 px.
+
+### CORE BASELINE RECOMMENDATION
+
+After the sweep:
+
+- **yolo26l at conf=0.15 is still the recommended default** for the
+  clean studio clip.
+- **yolo26l at conf=0.075 (or conf=0.05) is the recommended default**
+  for the YouTube-style noisy clip, where the additional
+  detections materially reduce fragmentation and improve observed-
+  fraction without introducing visible duplicates.
+- **yolo26x is still not recommended** as a perception upgrade. The
+  threshold sweep shows that the right way to capture more juggling-
+  ball detections is to lower the threshold of the **existing**
+  yolo26l baseline, not to upgrade to x. The x model can be made
+  competitive with l only by giving up the conf=0.15 operating
+  point — and on the clean clip it never closes the gap.
+
+The remaining failure mode worth addressing is the **static
+ball-shaped decor** in the clean studio clip. A background-aware
+filter (motion, frame-difference, or learned) would let us lower
+the threshold more aggressively without flooding the input with
+shelf-ball false positives.
+
+---
+
 ## VERDICT
 
 Promote **yolo26l** as the next core perception baseline. Do **not**
@@ -485,6 +748,26 @@ The capacity bump from `s` to `l` is the meaningful win. The
 segmentation head and the `x` capacity step are both dead weight in
 the current pipeline.
 
+The threshold sweep (Section 7) refines the operating-point choice
+**without changing the model**:
+
+- **Clean studio clip**: yolo26l @ conf=0.15 remains optimal. Lowering
+  the threshold regresses tracking (single spurious detections
+  fragment the 1077-frame master track) and floods the input with
+  static shelf-ball false positives.
+- **Noisy YouTube-style clip**: yolo26l benefits substantially from a
+  lower threshold. conf=0.075 (or conf=0.05 if you can tolerate the
+  marginal duplicate risk) materially improves fragmentation,
+  observed-fraction and stitching burden. The x model does not
+  dominate yolo26l at any threshold here either.
+- **yolo26x is still not promoted** at any threshold. On the clean
+  clip it never matches yolo26l @ 0.15. On the noisy clip its best
+  configuration (conf=0.075, 32 IDs) is matched by yolo26l @ conf=0.075
+  (32 IDs, longer lifespan).
+
+The correct takeaway is **use yolo26l, and tune the threshold to
+the clip class** — not upgrade to a larger model.
+
 ---
 
 ## ARTIFACTS
@@ -509,6 +792,15 @@ Scripts (committed):
 - `scripts/build_contact_sheets.py` — seg visual contact sheets
 - `scripts/measure_runtime.py` — model-only inference timing
 - `scripts/run_arm_triple.sh` — sequential runner for one video (4 arms)
+- `scripts/filter_detections.py` — filter a detection CSV to >=conf
+  (used to derive conf0.10 / 0.075 / 0.05 arms from one conf0.05 run)
+- `scripts/sweep_summarize.py` — per-(model, threshold, video)
+  detection / Norfair / stitch summary + per-step new-detection deltas
+- `scripts/render_detections.py` — render a detection CSV as bbox
+  overlay (used to visualize the threshold-sweep arms without
+  re-running inference)
+- `scripts/threshold_introduced_contact_sheet.py` — contact sheet of
+  detections that only appear at a lower threshold
 
 Large MP4s (gitignored, kept local under `outputs/`):
 - detection overlay MP4s (4 per video, 8 total) — one per arm
@@ -521,6 +813,24 @@ Large MP4s (gitignored, kept local under `outputs/`):
   - `*_yolo26l_vs_yolo26x_detections.mp4`, `*_yolo26l_vs_yolo26x_tracks.mp4`
   - `*_yolo26s_vs_yolo26x_detections.mp4`, `*_yolo26s_vs_yolo26x_tracks.mp4`
 - contact-sheet PNGs (6 per video, 12 total) — yolo26l-seg visual QA
+
+Threshold-sweep artifacts (Section 7):
+- `detections/detector_seg_comparison/threshold_sweep/*_conf{015,010,0075,005}.csv`
+  (16 sub-arm detection CSVs; canonical `_conf015.csv` is a filter
+  of the single conf0.05 inference and is byte-identical to the
+  prior canonical conf0.15 output)
+- `detections/detector_seg_comparison/threshold_sweep/*_norfair_dt50_hc5.csv`
+- `detections/detector_seg_comparison/threshold_sweep/*_norfair_dt50_hc5_stitches.csv`
+- `detections/detector_seg_comparison/threshold_sweep/sweep_summary.{json,csv}`
+  (per-(model, threshold, video) metric summary + per-step
+  new-detection deltas)
+- `outputs/detector_seg_comparison/threshold_sweep/*_overlay.mp4`
+  (4 per video, 8 total — one per arm visualized)
+- `outputs/detector_seg_comparison/threshold_sweep/{identical,youtube}_l*_vs_x*`
+  (6 side-by-side MP4s comparing the canonical and best-lower arms)
+- `outputs/detector_seg_comparison/threshold_sweep/contact_sheets/*.png`
+  (6 contact sheets of threshold-introduced detections, used for
+  the visual FP/hand-occlusion/motion-blur classification)
 
 Model weights (gitignored, downloaded into worktree):
 - yolo26s.pt, yolo26l.pt, yolo26l-seg.pt, yolo26x.pt

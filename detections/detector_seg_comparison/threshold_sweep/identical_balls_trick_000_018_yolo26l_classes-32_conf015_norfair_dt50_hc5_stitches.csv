@@ -1,0 +1,4 @@
+source_tracklet,candidate_tracklet,gap_frames,predicted_x,predicted_y,candidate_start_x,candidate_start_y,prediction_error,source_end_frame,candidate_start_frame,end_velocity_x,end_velocity_y,candidate_rank
+4,6,1,555.664000,320.716000,611.215000,407.053000,102.664459,222,224,-10.547000,-11.211000,1
+4,5,0,566.211000,331.927000,482.482000,568.030000,250.509824,222,223,-10.547000,-11.211000,2
+8,9,3,94.800000,672.473000,94.790000,672.621000,0.148337,491,495,-0.002000,-0.012000,1
