@@ -863,6 +863,10 @@ INDEX_HTML = """<!DOCTYPE html>
         <kbd>p</kbd> previous event &nbsp;
         <kbd>]</kbd> next event &nbsp;
         <kbd>q</kbd> quit safely
+        <br>
+        <button id="next-btn">next (])</button>
+        <button id="prev-btn">previous (p)</button>
+        <button id="quit-btn">quit (q)</button>
       </div>
     </div>
   </div>
@@ -1002,7 +1006,7 @@ function renderPending() {
     const lines = nearby.map((id, i) =>
       `  ${i + 1} -> ID ${id} @ frame ${starts[i] ?? '?'}`);
     lines.unshift('candidates:');
-    $('cand-map').textContent = lines.join('\n');
+    $('cand-map').textContent = lines.join('\\n');
   } else {
     $('cand-map').textContent = '';
   }
@@ -1182,14 +1186,17 @@ document.addEventListener('keydown', async (e) => {
   }
 });
 
-$('next-btn').addEventListener('click', async () => {
-  await fetch('/api/next', {method: 'POST'}); await loadCurrent();
+const nextButton = $('next-btn');
+if (nextButton) nextButton.addEventListener('click', async () => {
+ await fetch('/api/next', {method: 'POST'}); await loadCurrent();
 });
-$('prev-btn').addEventListener('click', async () => {
-  await fetch('/api/prev', {method: 'POST'}); await loadCurrent();
+const prevButton = $('prev-btn');
+if (prevButton) prevButton.addEventListener('click', async () => {
+ await fetch('/api/prev', {method: 'POST'}); await loadCurrent();
 });
-$('quit-btn').addEventListener('click', async () => {
-  await fetch('/api/quit', {method: 'POST'});
+const quitButton = $('quit-btn');
+if (quitButton) quitButton.addEventListener('click', async () => {
+ await fetch('/api/quit', {method: 'POST'});
 });
 
 (async () => { await loadCurrent(); })();
