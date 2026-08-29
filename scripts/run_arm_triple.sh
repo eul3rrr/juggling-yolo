@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
-# Run the three perception arms on a single video in sequence.
+# Run the perception arms on a single video in sequence.
 # Usage: run_arm_triple.sh <video_path>
 #
+# Arms:
+#   A. yolo26s    — sports-ball detection, bbox center
+#   B. yolo26l    — sports-ball detection, bbox center
+#   C. yolo26l-seg — instance segmentation, instance bbox center
+#                    (mask centroid is a diagnostic only)
+#   D. yolo26x    — sports-ball detection, bbox center (extra-capacity check)
+#
 # Outputs (all under the project root):
-#   outputs/<video>_<model>_classes-32.mp4          detection overlay
+#   outputs/<video>_<model>_classes-32.mp4                          detection overlay
 #   outputs/detector_seg_comparison/<video>_<model>_classes-32_overlay.mp4  seg overlay
-#   detections/<video>_<model>_classes-32.csv       minimal detection CSV
-#   detections/<video>_<model>_classes-32_instances.csv  instance + mask CSV (seg only)
+#   detections/<video>_<model>_classes-32.csv                       minimal detection CSV
+#   detections/<video>_<model>_classes-32_instances.csv             instance + mask CSV (seg only)
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -37,4 +44,11 @@ echo "=== ARM C: yolo26l-seg ==="
     --output-dir outputs/detector_seg_comparison/ \
     --detections-dir detections/detector_seg_comparison/
 
-echo "DONE triple for $STEM"
+echo "=== ARM D: yolo26x ==="
+./.venv/bin/python scripts/detect_video.py "$VIDEO" \
+    --model yolo26x.pt --conf "$CONF" --imgsz "$IMGSZ" \
+    --classes 32 --device "$DEVICE" \
+    --output-dir outputs/detector_seg_comparison/ \
+    --detections-dir detections/detector_seg_comparison/
+
+echo "DONE quadruple for $STEM"

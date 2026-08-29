@@ -1,0 +1,394 @@
+{
+  "comparisons": {
+    "yolo26l_vs_yolo26l-seg": {
+      "abs_frame_count_difference_distribution": {
+        "0": 530,
+        "1": 313,
+        "2": 158,
+        "3+": 78
+      },
+      "frames_compared": 1079
+    },
+    "yolo26l_vs_yolo26x": {
+      "abs_frame_count_difference_distribution": {
+        "0": 460,
+        "1": 325,
+        "2": 239,
+        "3+": 55
+      },
+      "frames_compared": 1079
+    },
+    "yolo26s_vs_yolo26l": {
+      "abs_frame_count_difference_distribution": {
+        "0": 530,
+        "1": 357,
+        "2": 160,
+        "3+": 32
+      },
+      "frames_compared": 1079
+    },
+    "yolo26s_vs_yolo26x": {
+      "abs_frame_count_difference_distribution": {
+        "0": 423,
+        "1": 463,
+        "2": 140,
+        "3+": 50
+      },
+      "frames_compared": 1076
+    }
+  },
+  "yolo26l": {
+    "detection": {
+      "confidence": {
+        "max": 0.935215,
+        "mean": 0.6879201482381531,
+        "median": 0.749314,
+        "min": 0.150328,
+        "n": 3292
+      },
+      "frame_count_distribution": {
+        "0": 0,
+        "1": 1,
+        "2": 24,
+        "3": 995,
+        "4+": 59
+      },
+      "frames_with_any_detection": 1079,
+      "mean_per_frame": 3.05097312326228,
+      "median_per_frame": 3,
+      "total_detections": 3292
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 886,
+        "mean": 236.92857142857142,
+        "median": 139.5,
+        "min": 2,
+        "n": 14,
+        "p25": 28.5,
+        "p75": 231.25
+      },
+      "n_track_rows": 3317,
+      "n_unique_track_ids": 14,
+      "observed_fraction": 0.9773892071148629,
+      "observed_per_track": {
+        "max": 886,
+        "mean": 236.92857142857142,
+        "median": 139.5,
+        "min": 2,
+        "n": 14,
+        "p25": 28.5,
+        "p75": 231.25
+      },
+      "observed_rows": 3242,
+      "predicted_rows": 75,
+      "short_tracks_le_10": 3,
+      "short_tracks_le_5": 3
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 1,
+          "1": 1,
+          "3": 1
+        },
+        "max": 3,
+        "mean": 1.3333333333333333,
+        "median": 1,
+        "min": 0
+      },
+      "n_candidates": 3,
+      "n_source_tracklets_with_candidates": 2,
+      "rank1_prediction_error": {
+        "max": 102.664459,
+        "mean": 51.406397999999996,
+        "median": 51.406397999999996,
+        "min": 0.148337,
+        "n": 2,
+        "p25": 25.777367499999997,
+        "p75": 77.03542850000001
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  },
+  "yolo26l-seg": {
+    "detection": {
+      "confidence": {
+        "max": 0.862835,
+        "mean": 0.4564636193757601,
+        "median": 0.457007,
+        "min": 0.150018,
+        "n": 2467
+      },
+      "frame_count_distribution": {
+        "0": 66,
+        "1": 151,
+        "2": 287,
+        "3": 559,
+        "4+": 16
+      },
+      "frames_with_any_detection": 1013,
+      "mean_per_frame": 2.435340572556762,
+      "median_per_frame": 3,
+      "total_detections": 2467
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32.csv",
+    "instances_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32_instances.csv",
+    "mask": {
+      "bbox_to_mask_centroid_distance_px": {
+        "max": 7.997729302745815,
+        "median": 1.6302760502442484,
+        "n": 2467,
+        "p75": 2.680115538195393,
+        "p90": 4.084337283605434
+      },
+      "invalid_centroid_rows": 0,
+      "mask_area": {
+        "max": 2699,
+        "mean": 1695.6278881232265,
+        "median": 1714,
+        "min": 252,
+        "n": 2467,
+        "p25": 1515.0,
+        "p75": 1915.5,
+        "p90": 2099.0
+      },
+      "valid_centroid_rows": 2467
+    },
+    "norfair": {
+      "lifespan": {
+        "max": 156,
+        "mean": 38.458333333333336,
+        "median": 23.0,
+        "min": 3,
+        "n": 72,
+        "p25": 13.75,
+        "p75": 53.5
+      },
+      "n_track_rows": 2769,
+      "n_unique_track_ids": 72,
+      "observed_fraction": 0.8057060310581438,
+      "observed_per_track": {
+        "max": 156,
+        "mean": 38.458333333333336,
+        "median": 23.0,
+        "min": 3,
+        "n": 72,
+        "p25": 13.75,
+        "p75": 53.5
+      },
+      "observed_rows": 2231,
+      "predicted_rows": 538,
+      "short_tracks_le_10": 14,
+      "short_tracks_le_5": 6
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 11,
+          "1": 8,
+          "10": 5,
+          "2": 13,
+          "3": 9,
+          "4": 7,
+          "5": 13,
+          "6": 9,
+          "7": 10,
+          "8": 6,
+          "9": 7
+        },
+        "max": 10,
+        "mean": 4.479591836734694,
+        "median": 5.0,
+        "min": 0
+      },
+      "n_candidates": 98,
+      "n_source_tracklets_with_candidates": 60,
+      "rank1_prediction_error": {
+        "max": 584.590737,
+        "mean": 148.57100344999998,
+        "median": 131.79719949999998,
+        "min": 8.617335,
+        "n": 60,
+        "p25": 65.6529615,
+        "p75": 182.43870400000003
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l-seg_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  },
+  "yolo26s": {
+    "detection": {
+      "confidence": {
+        "max": 0.921587,
+        "mean": 0.49253268143537166,
+        "median": 0.482155,
+        "min": 0.150041,
+        "n": 2731
+      },
+      "frame_count_distribution": {
+        "0": 17,
+        "1": 143,
+        "2": 272,
+        "3": 551,
+        "4+": 96
+      },
+      "frames_with_any_detection": 1062,
+      "mean_per_frame": 2.571563088512241,
+      "median_per_frame": 3.0,
+      "total_detections": 2731
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26s_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 175,
+        "mean": 54.388888888888886,
+        "median": 40.0,
+        "min": 2,
+        "n": 54,
+        "p25": 17.0,
+        "p75": 78.25
+      },
+      "n_track_rows": 2937,
+      "n_unique_track_ids": 54,
+      "observed_fraction": 0.8512087163772557,
+      "observed_per_track": {
+        "max": 175,
+        "mean": 54.388888888888886,
+        "median": 40.0,
+        "min": 2,
+        "n": 54,
+        "p25": 17.0,
+        "p75": 78.25
+      },
+      "observed_rows": 2500,
+      "predicted_rows": 437,
+      "short_tracks_le_10": 7,
+      "short_tracks_le_5": 1
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26s_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 3,
+          "1": 4,
+          "10": 1,
+          "2": 3,
+          "3": 10,
+          "4": 1,
+          "5": 5,
+          "6": 7,
+          "7": 5,
+          "8": 2,
+          "9": 2
+        },
+        "max": 10,
+        "mean": 4.4186046511627906,
+        "median": 5,
+        "min": 0
+      },
+      "n_candidates": 43,
+      "n_source_tracklets_with_candidates": 33,
+      "rank1_prediction_error": {
+        "max": 482.266274,
+        "mean": 141.6816274242424,
+        "median": 125.688842,
+        "min": 11.561754,
+        "n": 33,
+        "p25": 39.426645,
+        "p75": 200.065674
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26s_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  },
+  "yolo26x": {
+    "detection": {
+      "confidence": {
+        "max": 0.852537,
+        "mean": 0.3617380101867572,
+        "median": 0.32856549999999995,
+        "min": 0.150379,
+        "n": 2356
+      },
+      "frame_count_distribution": {
+        "0": 52,
+        "1": 224,
+        "2": 306,
+        "3": 468,
+        "4+": 29
+      },
+      "frames_with_any_detection": 1027,
+      "mean_per_frame": 2.294060370009737,
+      "median_per_frame": 2,
+      "total_detections": 2356
+    },
+    "detections_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26x_classes-32.csv",
+    "norfair": {
+      "lifespan": {
+        "max": 371,
+        "mean": 34.139240506329116,
+        "median": 19,
+        "min": 3,
+        "n": 79,
+        "p25": 7.0,
+        "p75": 44.0
+      },
+      "n_track_rows": 2697,
+      "n_unique_track_ids": 79,
+      "observed_fraction": 0.7775305895439377,
+      "observed_per_track": {
+        "max": 371,
+        "mean": 34.139240506329116,
+        "median": 19,
+        "min": 3,
+        "n": 79,
+        "p25": 7.0,
+        "p75": 44.0
+      },
+      "observed_rows": 2097,
+      "predicted_rows": 600,
+      "short_tracks_le_10": 23,
+      "short_tracks_le_5": 11
+    },
+    "norfair_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26x_classes-32_norfair_dt50_hc5.csv",
+    "stitch": {
+      "gap_distribution": {
+        "by_value": {
+          "0": 13,
+          "1": 13,
+          "10": 8,
+          "2": 16,
+          "3": 8,
+          "4": 10,
+          "5": 10,
+          "6": 7,
+          "7": 1,
+          "8": 2,
+          "9": 15
+        },
+        "max": 10,
+        "mean": 4.262135922330097,
+        "median": 4,
+        "min": 0
+      },
+      "n_candidates": 103,
+      "n_source_tracklets_with_candidates": 61,
+      "rank1_prediction_error": {
+        "max": 637.260373,
+        "mean": 161.55530790163937,
+        "median": 111.49798,
+        "min": 0.024083,
+        "n": 61,
+        "p25": 74.505233,
+        "p75": 212.275749
+      }
+    },
+    "stitch_csv": "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26x_classes-32_norfair_dt50_hc5_stitches.csv",
+    "video_name": "identical_balls"
+  }
+}

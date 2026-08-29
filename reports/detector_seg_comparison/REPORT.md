@@ -287,6 +287,108 @@ that delivers the capacity improvement**. yolo26l-seg costs roughly the
 same as yolo26l in time and a bit more in memory, but does not deliver
 the capacity improvement — in fact it delivers a regression.
 
+## 6. CAPACITY EFFECT — yolo26l vs yolo26x (arm D)
+
+The `x` model is the next capacity step above `l` (about 2.5x parameter
+count). It is asked: does that translate into more or better downstream
+tracks?
+
+The headline answer is **no — and the data shows the larger model is
+actively worse than `l` on the cleanest clip, while essentially tied on
+the noisy clip.**
+
+### identical_balls
+
+- Total detections: 3292 (l) → **2356 (x)** — a 28% drop
+- Mean confidence: 0.688 (l) → **0.362 (x)** — almost half
+- Median confidence: 0.749 (l) → **0.329 (x)** — a striking fall
+- Frames with 0 detections: 0 (l) → **52 (x)** — `x` is now missing balls
+  on 5% of frames where `l` was perfect
+- Frames with exactly 3 detections (the ground-truth ball count for
+  this clip): 995 (l) → 468 (x)
+- Unique Norfair track IDs: 14 (l) → **79 (x)** — 5.6x more fragments
+- Median Norfair track observed-frames: 139.5 (l) → **19 (x)** — 7x shorter
+- Observed-fraction: 0.977 (l) → 0.778 (x)
+- Short tracks (≤5): 3 (l) → 11 (x); (≤10): 3 (l) → 23 (x)
+- Stitch candidates: 3 (l) → **103 (x)**; sources needing candidates:
+  2 (l) → 61 (x)
+- Rank-1 prediction error median: 51.4 (l) → 111.5 (x)
+
+The `x` model on the clean studio clip behaves like a worse detector
+than `s` in every respect except the longest single track length (371
+vs 175 / 886). The simplest explanation is that `x` over-thinks the
+clean clip and emits low-confidence bbox proposals that don't make it
+through Norfair's distance/hit-counter matching, fragmenting the tracks.
+The very low mean confidence (0.362) is the smoking gun: when the
+model is unsure, the bbox lands in the CSV but the tracker cannot
+build a coherent tracklet out of weakly-supported observations.
+
+### youtube
+
+- Total detections: 4052 (l) → 4136 (x) — within ~2% (noise)
+- Mean confidence: 0.518 (l) → 0.542 (x) — slightly higher
+- Median confidence: 0.543 (l) → 0.571 (x) — slightly higher
+- Frames with 0 detections: 0 (l) → 3 (x) — essentially flat
+- Unique Norfair track IDs: 43 (l) → **34 (x)** — 21% fewer fragments
+- Median Norfair track observed-frames: 73 (l) → **79.5 (x)** — 9% longer
+- Longest single track: 355 (l) → **490 (x)** — 38% longer
+- Short tracks (≤5): 3 (l) → 0 (x); (≤10): 3 (l) → 3 (x)
+- Observed-fraction: 0.882 (l) → 0.879 (x) — flat
+- Stitch candidates: 38 (l) → 27 (x); sources needing candidates:
+  30 (l) → 23 (x)
+- Rank-1 prediction error median: 104.9 (l) → 102.2 (x) — flat
+
+On the YouTube clip `x` is the **best of the four arms**: lowest
+fragment count, longest tracks, no tracks shorter than 5 frames, and the
+lowest stitch count. The capacity bump pays off here in the way the
+previous report predicted it would not — but only here.
+
+### Per-frame count agreement
+
+The framewise diff table tells a consistent story:
+
+- `l` vs `x` on identical: only 460/1079 frames (43%) agree; 294 of
+  the disagreeing frames differ by 2+ balls. `x` is detecting a
+  genuinely different (and worse-supported) set of balls.
+- `l` vs `x` on YouTube: 388/900 frames (43%) agree; the disagreement
+  is concentrated in the ±1 and ±2 buckets, consistent with `x`
+  agreeing with `l` most of the time and only occasionally emitting
+  a different number of balls.
+
+### Cost
+
+- yolo26x: 18.4–20.4 effective FPS, 447.3 MB peak GPU memory
+- yolo26l:  34.3–35.4 effective FPS, 262.6 MB peak GPU memory
+- yolo26x is **about 1.7x slower and uses 1.7x more memory** than
+  yolo26l on this hardware
+
+The extra compute is roughly in line with the parameter-count
+ratio. The memory peak (~447 MB) leaves plenty of headroom on the
+RTX 3060's 6 GB, but the inference time is now slow enough that
+offline vid_stride=1 is still comfortable but anything approaching
+real-time at full resolution is not.
+
+### What this means
+
+- The clean studio clip is **calibrated to yolo26l**: the `l` model is
+  already at ceiling performance on it, and going to `x` costs recall
+  without buying anything. The `s → l` jump was a capacity bottleneck
+  being removed; the `l → x` jump tries to remove a bottleneck that
+  is no longer there.
+- The YouTube clip is **not** bottlenecked by detection — adding
+  capacity turns into incremental improvements (longer tracks, fewer
+  fragments) but the absolute gains are small and the model is
+  operating in a regime where the additional precision of `x` can
+  help.
+- yolo26x is **strictly dominated** on this evidence: it is never the
+  best of the four arms, it ties or loses on every downstream metric
+  on the cleanest clip, and its only win (YouTube) is modest.
+- The behavior on identical (mean conf halved, track count 5.6x,
+  stitches 30x) is strong evidence that the clean clip is also a
+  regime where the detector head is over-confident at `l` and the
+  extra capacity of `x` does not translate into better bbox
+  proposals — it actually appears to *hurt* calibration.
+
 ---
 
 ## ANSWERS TO THE FINAL QUESTIONS
@@ -341,22 +443,47 @@ the capacity improvement — in fact it delivers a regression.
    the YouTube-style clip; the upgrade to `l` is justified primarily by
    the substantial clean-clip gain.
 
+8. **Is yolo26x (the next capacity step above `l`) worth promoting?**
+   No. On the clean studio clip it is **strictly worse** than yolo26l
+   on every downstream metric — 28% fewer detections, mean confidence
+   nearly halved, 5.6x more Norfair fragments, 7x shorter median
+   tracks, 30x more stitch candidates. On the YouTube clip it is
+   slightly the best of the four arms, but the gain over yolo26l is
+   modest (34 vs 43 IDs, 79.5 vs 73 frame median lifespan, 0 vs 3
+   sub-5-frame tracks) and the cost is ~1.7x slower and ~1.7x more
+   memory. yolo26x is **dominated** — there is no clip where it is
+   the best choice in a way that justifies the cost.
+
 ---
 
 ## VERDICT
 
 Promote **yolo26l** as the next core perception baseline. Do **not**
-promote yolo26l-seg. The segmentation model does not improve detection
-recall, does not improve Norfair tracklet quality, and does not reduce
-the need for stitching. Its visual outputs are reasonable and its masks
-are ball-shaped and stable, but its empirical effect on the existing
-Norfair + stitch pipeline is a regression across both clips.
+promote yolo26l-seg. Do **not** promote yolo26x.
+
+- yolo26l is the cheapest model that delivers the meaningful clean-clip
+  capacity improvement (4x fewer track fragments, 3.5x longer median
+  lifespan) without regressing on the noisy clip.
+- yolo26l-seg adds a segmentation head that does not improve detection
+  recall, does not improve Norfair tracklet quality, and does not reduce
+  the need for stitching. Its visual outputs are reasonable and its
+  masks are ball-shaped and stable, but its empirical effect on the
+  existing Norfair + stitch pipeline is a regression across both clips.
+  The seg head is dead weight in the current pipeline because the
+  downstream tracker uses the bbox center, not the mask centroid, and
+  because the seg head's strictness costs recall on the exact cases
+  (hand occlusion, motion blur) where we would most want help.
+- yolo26x is the next capacity step above `l` and it is **strictly
+  dominated** on both clips: it loses to `l` everywhere on the clean
+  clip and barely ties or modestly wins on the noisy clip at 1.7x the
+  cost. The capacity benefit was already extracted by `l` on the
+  clean clip; on the noisy clip the bottleneck is not detection
+  capacity, so the additional parameters do not translate into
+  better tracking.
 
 The capacity bump from `s` to `l` is the meaningful win. The
-segmentation head is dead weight in the current pipeline because the
-downstream tracker uses the bbox center, not the mask centroid, and
-because the seg head's strictness costs recall on the exact cases (hand
-occlusion, motion blur) where we would most want help.
+segmentation head and the `x` capacity step are both dead weight in
+the current pipeline.
 
 ---
 
@@ -364,11 +491,16 @@ occlusion, motion blur) where we would most want help.
 
 CSVs (small, committed):
 - `detections/detector_seg_comparison/*_yolo26s_classes-32.csv` and friends
+- `detections/detector_seg_comparison/*_yolo26l_classes-32.csv` and friends
+- `detections/detector_seg_comparison/*_yolo26l-seg_classes-32.csv` and friends
+- `detections/detector_seg_comparison/*_yolo26x_classes-32.csv` and friends
 - `detections/detector_seg_comparison/*_norfair_dt50_hc5.csv`
 - `detections/detector_seg_comparison/*_norfair_dt50_hc5_stitches.csv`
-- `detections/detector_seg_comparison/identical_balls_..._instances.csv`
-- `detections/detector_seg_comparison/summary.json` (full structured comparison)
-- `detections/detector_seg_comparison/summary.csv` (flat per-arm table)
+- `detections/detector_seg_comparison/*_instances.csv` (seg arm only)
+- `detections/detector_seg_comparison/identical_summary.json` /
+  `youtube_summary.json` (full structured comparison, 4 arms)
+- `detections/detector_seg_comparison/identical_summary.csv` /
+  `youtube_summary.csv` (flat per-arm table)
 
 Scripts (committed):
 - `scripts/segment_video.py` — seg arm perception + overlay MP4
@@ -376,15 +508,19 @@ Scripts (committed):
 - `scripts/build_side_by_side.py` — synchronized compare MP4s
 - `scripts/build_contact_sheets.py` — seg visual contact sheets
 - `scripts/measure_runtime.py` — model-only inference timing
-- `scripts/run_arm_triple.sh` — sequential runner for one video
+- `scripts/run_arm_triple.sh` — sequential runner for one video (4 arms)
 
 Large MP4s (gitignored, kept local under `outputs/`):
-- detection overlay MP4s (3 per video)
-- seg overlay MP4s (1 per video)
-- Norfair annotated MP4s (3 per video)
-- stitch annotated MP4s (3 per video)
-- side-by-side comparison MP4s (4 per video, 8 total)
-- contact-sheet PNGs (6 per video, 12 total)
+- detection overlay MP4s (4 per video, 8 total) — one per arm
+- seg overlay MP4s (1 per video) — yolo26l-seg
+- Norfair annotated MP4s (4 per video, 8 total) — one per arm
+- stitch annotated MP4s (4 per video, 8 total) — one per arm
+- side-by-side comparison MP4s:
+  - `*_yolo26s_vs_yolo26l_detections.mp4`, `*_yolo26s_vs_yolo26l_tracks.mp4`
+  - `*_yolo26l_vs_yolo26l-seg_segmentation.mp4`
+  - `*_yolo26l_vs_yolo26x_detections.mp4`, `*_yolo26l_vs_yolo26x_tracks.mp4`
+  - `*_yolo26s_vs_yolo26x_detections.mp4`, `*_yolo26s_vs_yolo26x_tracks.mp4`
+- contact-sheet PNGs (6 per video, 12 total) — yolo26l-seg visual QA
 
 Model weights (gitignored, downloaded into worktree):
-- yolo26s.pt, yolo26l.pt, yolo26l-seg.pt
+- yolo26s.pt, yolo26l.pt, yolo26l-seg.pt, yolo26x.pt
