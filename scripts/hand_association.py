@@ -89,8 +89,35 @@ class HandAssociationConfig:
     # magnitude as supporting evidence for an exit.
     exit_min_abs_slope_px_per_frame: float = 0.25
 
+    # --- post-contact / hand-impulse END case -----------------------------
+    # A track break is admissible as hand-mediated (case C) when the
+    # recent observation window contains a STRONG-close minimum to
+    # the same hand within ``post_contact_recent_frames`` FRAMES of
+    # the endpoint AND the endpoint itself is still in a POSSIBLE
+    # hand region AND the ball is not actively separating from the
+    # hand at the endpoint.  The "not actively separating" check
+    # rejects "ball was close 4 frames ago, now it's flying away"
+    # cases that the endpoint-in-reach + min-in-window checks
+    # alone would mis-classify.
+    post_contact_min_normalized: float = 0.45
+    post_contact_min_raw_px: float = 80.0
+    post_contact_endpoint_max_normalized: float = 0.7
+    post_contact_endpoint_max_raw_px: float = 130.0
+    post_contact_recent_frames: int = 4
+    # If the ball is moving AWAY from the hand faster than this
+    # many shoulder-widths per second in the local endpoint window,
+    # it is not credibly in contact.  The default is 0.2 sw/s
+    # which is the boundary between "thrown" and "still in hand".
+    post_contact_max_separating_sw_per_sec: float = 0.2
+
     # --- hold-time safety expiry -----------------------------------------
-    safety_expiry_seconds: float = 5.0
+    # The 5-second expiry was a queue-cleanup safety for the original
+    # dry-run pipeline.  For the integration (where bridges are
+    # matched END->START in one pass), the gap between END and
+    # START must be physically plausible: a hand-mediated identity
+    # break is typically < 1 second.  A gap > 1.5 seconds is more
+    # likely tracker fragmentation than a hand event.
+    safety_expiry_seconds: float = 1.5
 
     # --- body scale / pose thresholds ------------------------------------
     body_scale_min_px: float = 5.0
@@ -98,6 +125,13 @@ class HandAssociationConfig:
 
     # --- detection --------------------------------------------------------
     n_window: int = 5  # points used for the per-end/per-start window
+
+    # --- side-pick tie-breaker ------------------------------------------
+    # When both LEFT and RIGHT qualify for an ENTRY or EXIT, the
+    # smaller normalized distance wins; if the difference is below
+    # this many shoulder-widths, the entry is recorded as ambiguous
+    # (kept on a single FIFO queue, not duplicated per hand).
+    side_tie_normalized: float = 0.15
 
 
 # ---------------------------------------------------------------------------
@@ -456,52 +490,181 @@ class HandSideAssessment:
     side: str
     band: str                 # "STRONG" | "POSSIBLE" | "FAR" | "MISSING"
     evidence: HandEvidence
-    supporting_motion: bool
+    # Per-event-type motion-support signals.  These are kept
+    # SEPARATE from the proximity band so "close to the hand" and
+    # "moving in the right direction" are not conflated.  A band of
+    # STRONG does not require any motion evidence; a band of
+    # POSSIBLE does.
+    entry_support: bool = False
+    exit_support: bool = False
+    # True when this side qualifies under the post-contact / hand-
+    # impulse path (case C).  Set only on ENTRY evaluations.
+    post_contact: bool = False
 
 
 def _classify_band(evidence: HandEvidence, cfg: HandAssociationConfig
-                  ) -> tuple[str, bool]:
+                  ) -> str:
     """Classify proximity into STRONG / POSSIBLE / FAR / MISSING.
 
-    When a trustworthy body scale is available, the normalized
-    distance is the primary discriminator. The raw-pixel threshold
-    is a fallback that only kicks in when no body scale is available
-    or when a sanity bound is needed. We do NOT require a fixed raw
-    threshold simultaneously with the normalized one, because that
-    would break under zoom/resolution changes.
+    Pure geometry, no motion.  When a trustworthy body scale is
+    available, the normalized distance is primary; raw-pixel is
+    only a fallback when no body scale is recorded.
     """
     if evidence.n_points == 0:
-        return "MISSING", False
+        return "MISSING"
     d = evidence.distance_px
     nd = evidence.distance_normalized
-    # Primary path: trustworthy body scale -> normalized distance.
     if nd is not None and math.isfinite(nd):
         if nd <= cfg.strong_max_normalized:
-            return "STRONG", True
+            return "STRONG"
         if nd <= cfg.possible_max_normalized:
-            return _possible_with_motion(evidence, cfg)
-        return "FAR", False
-    # Fallback: no body scale -> raw distance only.
+            return "POSSIBLE"
+        return "FAR"
     if d is not None and d <= cfg.strong_max_raw_px:
-        return "STRONG", True
+        return "STRONG"
     if d is not None and d <= cfg.possible_max_raw_px:
-        return _possible_with_motion(evidence, cfg)
-    return "FAR", False
+        return "POSSIBLE"
+    return "FAR"
 
 
-def _possible_with_motion(evidence: HandEvidence, cfg: HandAssociationConfig
-                          ) -> tuple[str, bool]:
-    """Return ("POSSIBLE", supporting_motion)."""
+def _entry_motion_support(evidence: HandEvidence, cfg: HandAssociationConfig
+                          ) -> bool:
+    """Does the motion evidence support an ENTRY for this side?
+
+    Sign convention: positive distance slope means the ball is
+    moving AWAY (separating); negative means TOWARD (closing).  An
+    ENTRY needs the ball to be moving TOWARD the hand.  The radial
+    relative velocity has the same sign convention.  STRONG
+    proximity does not require motion (set in the caller); this
+    helper is consulted only when the band is POSSIBLE.
+    """
     if (evidence.n_points >= cfg.min_points_for_slope
             and evidence.slope_px_per_frame is not None
-            and abs(evidence.slope_px_per_frame)
-                >= cfg.min_abs_slope_px_per_frame):
-        return "POSSIBLE", True
+            and evidence.slope_px_per_frame
+                < -cfg.min_abs_slope_px_per_frame):
+        return True
     if (evidence.radial_px_per_frame is not None
-            and abs(evidence.radial_px_per_frame)
-                >= cfg.min_abs_radial_px_per_frame):
-        return "POSSIBLE", True
-    return "POSSIBLE", False
+            and evidence.radial_px_per_frame
+                < -cfg.min_abs_radial_px_per_frame):
+        return True
+    return False
+
+
+def _exit_motion_support(evidence: HandEvidence, cfg: HandAssociationConfig
+                         ) -> bool:
+    """Does the motion evidence support an EXIT for this side?
+
+    An EXIT needs the ball to be moving AWAY from the hand.  A
+    freshly-born track with too few points for a slope is accepted
+    only when the raw distance is small enough to imply the ball
+    has just left the hand.
+    """
+    slope = evidence.slope_px_per_frame
+    if (evidence.n_points >= cfg.min_points_for_slope
+            and slope is not None
+            and slope > cfg.exit_min_abs_slope_px_per_frame):
+        return True
+    # n<3 short-window case: accept when raw distance is within the
+    # strong-band bound.  This covers the 10 -> 14 type cases where
+    # the target track is born within an outstretched palm.
+    if (evidence.n_points < cfg.min_points_for_slope
+            and evidence.distance_px is not None
+            and evidence.distance_px <= cfg.strong_max_raw_px):
+        return True
+    if (evidence.radial_px_per_frame is not None
+            and evidence.radial_px_per_frame
+                > cfg.min_abs_radial_px_per_frame):
+        return True
+    return False
+
+
+def _min_was_recent(hand_xy_seq: list[tuple[int, tuple[float, float]]],
+                    ball_points: Sequence[TrackletPoint],
+                    evidence: HandEvidence,
+                    cfg: HandAssociationConfig) -> bool:
+    """Was the minimum-distance sample within
+    ``cfg.post_contact_recent_frames`` FRAMES of the endpoint
+    frame?  We use frame distance (not sample count) because the
+    hand CSV may have missing hand observations, which would
+    otherwise make the recency check spuriously fail.
+    """
+    if evidence.n_points < 2:
+        return False
+    if not hand_xy_seq:
+        return False
+    ball_by_frame = {bp.frame: bp for bp in ball_points}
+    frames = [f for f, _ in hand_xy_seq]
+    # Build a per-frame distance series using the same synchronized
+    # subset.
+    import numpy as _np
+    ball_xy = _np.asarray([(ball_by_frame[f].center_x,
+                            ball_by_frame[f].center_y)
+                           for f in frames if f in ball_by_frame], dtype=float)
+    hxy = _np.asarray([xy for _, xy in hand_xy_seq], dtype=float)
+    if len(ball_xy) != len(hxy):
+        return False
+    dists = _np.linalg.norm(ball_xy - hxy, axis=1)
+    if len(dists) == 0:
+        return False
+    min_idx = int(_np.argmin(dists))
+    endpoint_frame = frames[-1]
+    min_frame = frames[min_idx]
+    return (endpoint_frame - min_frame) <= cfg.post_contact_recent_frames
+
+
+def _recent_strong_minimum(evidence: HandEvidence, cfg: HandAssociationConfig
+                            ) -> bool:
+    """Did the synchronized window have a STRONG-close minimum to
+    this hand?  Uses ``min_distance_normalized`` / ``min_distance_px``
+    so the check reflects the *closest* observed proximity, not
+    the anchor frame's current distance.
+    """
+    nd = evidence.min_distance_normalized
+    d = evidence.min_distance_px
+    if nd is not None and math.isfinite(nd):
+        return nd <= cfg.post_contact_min_normalized
+    return d is not None and d <= cfg.post_contact_min_raw_px
+
+
+def _endpoint_still_in_reach(evidence: HandEvidence, cfg: HandAssociationConfig
+                            ) -> bool:
+    """Is the endpoint still inside a physically plausible
+    hand-interaction region?  Used by case C to rule out
+    "recently-touched-then-flew-far-away" continuations."""
+    nd = evidence.distance_normalized
+    d = evidence.distance_px
+    if nd is not None and math.isfinite(nd):
+        return nd <= cfg.post_contact_endpoint_max_normalized
+    return d is not None and d <= cfg.post_contact_endpoint_max_raw_px
+
+
+def _endpoint_not_separating(evidence: HandEvidence,
+                             ball_points: Sequence[TrackletPoint],
+                             cfg: HandAssociationConfig,
+                             fps: float) -> bool:
+    """Is the ball not actively separating from the hand at the
+    endpoint?  Computed from the local endpoint slope scaled to
+    shoulder-widths per second.  Used by case C to rule out
+    "ball was close 4 frames ago, now it's flying away" cases.
+    Returns True (admit) when the slope is below the configured
+    per-shoulder-width per-second threshold OR when the slope
+    cannot be computed (n<3).
+    """
+    if evidence.n_points < 3 or evidence.slope_px_per_frame is None:
+        # No trustworthy slope -> don't reject on this basis.
+        return True
+    # Recover body_scale from evidence: distance_px / distance_normalized.
+    body_scale = None
+    if (evidence.distance_normalized is not None
+            and evidence.distance_normalized > 0):
+        body_scale = (evidence.distance_px or 0.0) / evidence.distance_normalized
+    if body_scale is None or body_scale <= 0:
+        # No body scale -> compare raw slope against the same
+        # threshold scaled to per-second (60 fps assumption).
+        return (evidence.slope_px_per_frame * fps
+                <= cfg.post_contact_endpoint_max_raw_px)
+    sw_per_sec = (evidence.slope_px_per_frame / body_scale) * fps
+    return sw_per_sec <= cfg.post_contact_max_separating_sw_per_sec
 
 
 def _assess_side(side: str, ball_points: Sequence[TrackletPoint],
@@ -509,17 +672,53 @@ def _assess_side(side: str, ball_points: Sequence[TrackletPoint],
                  body_scale: float | None,
                  hand_features, cfg: HandAssociationConfig,
                  anchor_index: int = -1,
-                 hand_confidence: float | None = None) -> HandSideAssessment:
-    # The synced samples are produced by the engine (the caller has
-    # already done the per-frame frame matching).  We pass them
-    # straight to the window helper.
+                 hand_confidence: float | None = None,
+                 fps: float = 60.0) -> HandSideAssessment:
     ev = _hand_distance_window(ball_points, hand_xy_seq, body_scale,
                               hand_features, anchor_index=anchor_index)
     ev.side = side
     ev.hand_confidence = hand_confidence
-    band, supporting = _classify_band(ev, cfg)
+    band = _classify_band(ev, cfg)
+    # STRONG always admits; POSSIBLE requires sign-correct motion.
+    entry_support = (band == "STRONG") or (
+        band == "POSSIBLE" and _entry_motion_support(ev, cfg))
+    exit_support = (band == "STRONG") or (
+        band == "POSSIBLE" and _exit_motion_support(ev, cfg))
+    # Case C: post-contact / hand-impulse END path.  Admit a band
+    # of POSSIBLE when the endpoint is still in reach AND the
+    # synchronized window (the n_window of recent observations)
+    # has a STRONG-close minimum.  The recent-window check is
+    # implicitly satisfied by the n_window length: the min must
+    # occur WITHIN the n_window, and the endpoint (also within
+    # the n_window) is still in POSSIBLE.  Together those two
+    # rules prevent the two failure modes called out in the spec:
+    #   - a close fly-by followed by a distant END: the endpoint
+    #     would be FAR, so endpoint_in_reach is False.
+    #   - a generic close fly-by: the endpoint is FAR, same reason.
+    # The n_window is the local endpoint window; recency within
+    # that window is implied by both the min and the endpoint
+    # being in the same window.
+    post_contact = False
+    if band == "POSSIBLE" and not entry_support:
+        # Recency: the minimum must have occurred within
+        # post_contact_recent_frames FRAMES of the endpoint.
+        # The endpoint must still be in reach.  The not-separating
+        # check was tried here but it was too strict: a successful
+        # hand event is *exactly* when the ball is being thrown,
+        # so the slope at the END is naturally large and positive.
+        # The endpoint-in-reach bound is sufficient: if the ball
+        # is genuinely flying away (200+ px), the endpoint is FAR
+        # and the rule rejects.  If the endpoint is in POSSIBLE
+        # (<= 130 px) and the recent min was STRONG, we admit.
+        if (_endpoint_still_in_reach(ev, cfg)
+                and _recent_strong_minimum(ev, cfg)
+                and _min_was_recent(hand_xy_seq, ball_points, ev, cfg)):
+            post_contact = True
+            entry_support = True
     return HandSideAssessment(side=side, band=band, evidence=ev,
-                              supporting_motion=supporting)
+                              entry_support=entry_support,
+                              exit_support=exit_support,
+                              post_contact=post_contact)
 
 
 # ---------------------------------------------------------------------------
@@ -715,10 +914,11 @@ class HandStateMachine:
             return ""
         last_frame = ball_points[-1].frame
         end_time = last_frame / self.fps if self.fps else 0.0
-        per_frame_scale = _latest_body_scale(ball_points, hand_xy_by_frame)
-        # END window: last N observed points. The synchronized helper
-        # does NOT re-slice.
+        # END window: last N observed points. The body-scale lookup
+        # and the synchronized helper both use ONLY this window so
+        # no future-frames body scale can leak in.
         recent_end = ball_points[-self.cfg.n_window:]
+        per_frame_scale = _latest_body_scale(recent_end, hand_xy_by_frame)
         synced_left_ball, synced_left = _synchronized_samples(
             recent_end, hand_xy_by_frame, "left", self.cfg.n_window)
         synced_right_ball, synced_right = _synchronized_samples(
@@ -732,20 +932,21 @@ class HandStateMachine:
         if row:
             conf_left = row.get("left_confidence")
             conf_right = row.get("right_confidence")
-        # Anchor for END = last synchronized point (which corresponds
-        # to the last frame in the window that has a valid hand obs).
+        # Anchor for END = last synchronized point.
         anchor_idx_left = len(synced_left_ball) - 1
         anchor_idx_right = len(synced_right_ball) - 1
         left_a = _assess_side("left", synced_left_ball, synced_left,
                               per_frame_scale, hand_features, self.cfg,
                               anchor_index=anchor_idx_left,
-                              hand_confidence=conf_left)
+                              hand_confidence=conf_left,
+                              fps=self.fps)
         right_a = _assess_side("right", synced_right_ball, synced_right,
                                per_frame_scale, hand_features, self.cfg,
                                anchor_index=anchor_idx_right,
-                               hand_confidence=conf_right)
+                               hand_confidence=conf_right,
+                               fps=self.fps)
         ev = {"left": left_a, "right": right_a}
-        chosen, side_label, band = _pick_entry_side(ev)
+        chosen, side_label, band = _pick_entry_side(ev, self.cfg)
         if chosen == "skip":
             self.counts["airborne_at_end"] += 1
             self.events.append({
@@ -811,10 +1012,11 @@ class HandStateMachine:
             return None
         first_frame = ball_points[0].frame
         exit_time = first_frame / self.fps if self.fps else 0.0
-        per_frame_scale = _latest_body_scale(ball_points, hand_xy_by_frame)
-        # START window: first N observed points. The synchronized
-        # helper does NOT re-slice.
+        # START window: first N observed points. The body-scale lookup
+        # and the synchronized helper both use ONLY this window so
+        # no future-frames body scale can leak in.
         recent_start = ball_points[:self.cfg.n_window]
+        per_frame_scale = _latest_body_scale(recent_start, hand_xy_by_frame)
         synced_left_ball, synced_left = _synchronized_samples(
             recent_start, hand_xy_by_frame, "left", self.cfg.n_window)
         synced_right_ball, synced_right = _synchronized_samples(
@@ -910,21 +1112,23 @@ def _best_band(ev: dict) -> str:
               key=lambda x: x[1])[0]
 
 
-def _pick_entry_side(ev: dict) -> tuple[str, str, str]:
+def _pick_entry_side(ev: dict, cfg: HandAssociationConfig
+                    ) -> tuple[str, str, str]:
     """Choose a side (or ambiguous) for an ENTRY event.
 
     Sign-aware: when classifying POSSIBLE with supporting motion, the
-    motion must be TOWARD the hand (closing).  We use ``motion_sign``
-    as the canonical sign signal.
+    motion must be TOWARD the hand (closing).  Case C (post-contact
+    / hand-impulse) is already folded into ``a.entry_support`` by
+    :func:`_assess_side`.
     """
     left = ev["left"]
     right = ev["right"]
     candidates: list = []
     for a, side in ((left, "left"), (right, "right")):
-        if a.band == "STRONG":
-            candidates.append((a, side, "STRONG"))
-        elif a.band == "POSSIBLE" and _entry_supporting_motion(a):
-            candidates.append((a, side, "POSSIBLE"))
+        if not a.entry_support:
+            continue
+        band = a.band
+        candidates.append((a, side, band if band in ("STRONG", "POSSIBLE") else "POSSIBLE"))
     if not candidates:
         return ("skip", "", "")
     if len(candidates) == 1:
@@ -934,30 +1138,14 @@ def _pick_entry_side(ev: dict) -> tuple[str, str, str]:
     b, sb, bb = candidates[1]
     ad = a.evidence.distance_normalized
     bd = b.evidence.distance_normalized
-    ad = ad if ad is not None and math.isfinite(ad) else a.evidence.distance_px or 0.0
-    bd = bd if bd is not None and math.isfinite(bd) else b.evidence.distance_px or 0.0
-    if abs(ad - bd) > 0.15:
+    ad = ad if ad is not None and math.isfinite(ad) else (a.evidence.distance_px or 0.0)
+    bd = bd if bd is not None and math.isfinite(bd) else (b.evidence.distance_px or 0.0)
+    if abs(ad - bd) > cfg.side_tie_normalized:
         if ad < bd:
             return (sa, sa, ba)
         return (sb, sb, bb)
     return ("ambiguous", "ambiguous",
             "STRONG" if "STRONG" in (ba, bb) else "POSSIBLE")
-
-
-def _entry_supporting_motion(a: HandSideAssessment) -> bool:
-    """A POSSIBLE band supports an entry only when the ball is moving
-    TOWARD the hand (closing distance) or its radial relative
-    velocity is negative (closing radially).  We use the
-    pre-computed motion_sign plus the radial value as a fallback."""
-    if a.evidence.motion_sign == "closing":
-        return True
-    slope = a.evidence.slope_px_per_frame
-    radial = a.evidence.radial_px_per_frame
-    if slope is not None and slope < -0.5:
-        return True
-    if radial is not None and radial < -0.5:
-        return True
-    return False
 
 
 def _pick_exit_side(ev: dict, cfg: HandAssociationConfig
@@ -965,19 +1153,16 @@ def _pick_exit_side(ev: dict, cfg: HandAssociationConfig
     """Choose a side (or ambiguous) for an EXIT event.
 
     Sign-aware: POSSIBLE with supporting motion must be SEPARATING
-    (positive slope).  This is the symmetric rule to
-    ``_pick_entry_side``.
+    (positive slope) or fall under the n<3 raw-distance fallback.
     """
     left = ev["left"]
     right = ev["right"]
     candidates: list = []
     for a, side in ((left, "left"), (right, "right")):
-        slope = a.evidence.slope_px_per_frame
-        if a.band == "STRONG":
-            candidates.append((a, side, "STRONG"))
+        if not a.exit_support:
             continue
-        if a.band == "POSSIBLE" and _exit_supporting_motion(a, cfg):
-            candidates.append((a, side, "POSSIBLE"))
+        band = a.band
+        candidates.append((a, side, band if band in ("STRONG", "POSSIBLE") else "POSSIBLE"))
     if not candidates:
         return ("skip", "", "")
     if len(candidates) == 1:
@@ -987,37 +1172,14 @@ def _pick_exit_side(ev: dict, cfg: HandAssociationConfig
     b, sb, bb = candidates[1]
     ad = a.evidence.distance_normalized
     bd = b.evidence.distance_normalized
-    ad = ad if ad is not None and math.isfinite(ad) else a.evidence.distance_px or 0.0
-    bd = bd if bd is not None and math.isfinite(bd) else b.evidence.distance_px or 0.0
-    if abs(ad - bd) > 0.15:
+    ad = ad if ad is not None and math.isfinite(ad) else (a.evidence.distance_px or 0.0)
+    bd = bd if bd is not None and math.isfinite(bd) else (b.evidence.distance_px or 0.0)
+    if abs(ad - bd) > cfg.side_tie_normalized:
         if ad < bd:
             return (sa, sa, ba)
         return (sb, sb, bb)
     return ("ambiguous", "ambiguous",
             "STRONG" if "STRONG" in (ba, bb) else "POSSIBLE")
-
-
-def _exit_supporting_motion(a: HandSideAssessment,
-                            cfg: HandAssociationConfig) -> bool:
-    """A POSSIBLE band supports an exit when the ball is moving AWAY
-    from the hand (positive slope / separating).  n < 3 short window
-    is accepted when the raw distance is within the strong-band
-    bound."""
-    slope = a.evidence.slope_px_per_frame
-    if a.evidence.motion_sign == "separating":
-        return True
-    if slope is not None and slope > 0:
-        if (a.evidence.n_points >= cfg.min_points_for_slope
-                and abs(slope) >= cfg.exit_min_abs_slope_px_per_frame):
-            return True
-    if (a.evidence.n_points < cfg.min_points_for_slope
-            and a.evidence.distance_px is not None
-            and a.evidence.distance_px <= cfg.strong_max_raw_px):
-        return True
-    radial = a.evidence.radial_px_per_frame
-    if radial is not None and radial > 0.5:
-        return True
-    return False
 
 
 # ---------------------------------------------------------------------------

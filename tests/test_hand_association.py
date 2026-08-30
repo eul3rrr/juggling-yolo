@@ -115,14 +115,21 @@ def _evidence_via_module(ha, ball_xy_seq, hand_xy_seq, body_scale=200.0,
 def _hs(ha, side: str = "left", ball_points=None, hand_seq=None,
         body_scale: float | None = 200.0):
     """Build a HandSideAssessment from ball_points [(f,x,y)...] and
-    hand_seq [(f, (x,y))]. Convenience shim over _evidence_via_module."""
-    from hand_association import HandSideAssessment
-    ball_xy_seq = [(bp[1], bp[2]) for bp in (ball_points or [])]
-    hand_xy_seq = [xy for _, xy in (hand_seq or [])]
-    ev = _evidence_via_module(ha, ball_xy_seq, hand_xy_seq,
-                              body_scale=body_scale)
-    return HandSideAssessment(side=side, band="TBD", evidence=ev,
-                              supporting_motion=False)
+    hand_seq [(f, (x,y))]. Convenience shim over _assess_side.
+
+    This shim runs the full ``_assess_side`` so the resulting
+    ``entry_support`` / ``exit_support`` / ``post_contact`` fields
+    reflect the current engine.  ``body_scale`` is taken from the
+    helper argument.
+    """
+    bs = body_scale if body_scale is not None else 200.0
+    bp_list = [ha.TrackletPoint(frame=bp[0], center_x=bp[1],
+                                center_y=bp[2]) for bp in (ball_points or [])]
+    hand_xy_seq = list(hand_seq or [])
+    return ha._assess_side(side, bp_list, hand_xy_seq,
+                           body_scale=bs,
+                           hand_features=ha._import_hf_ho()[0],
+                           cfg=ha.HandAssociationConfig())
 
 
 # ---------------------------------------------------------------------------
@@ -134,7 +141,7 @@ def test_config_defaults_are_conservative():
     cfg = ha.HandAssociationConfig()
     assert cfg.strong_max_normalized < cfg.possible_max_normalized
     assert cfg.strong_max_raw_px < cfg.possible_max_raw_px
-    assert cfg.safety_expiry_seconds == 5.0
+    assert cfg.safety_expiry_seconds == 1.5
     assert cfg.min_points_for_slope == 3
     assert cfg.confidence_threshold == 0.25
 
@@ -153,7 +160,7 @@ def test_strong_band_accepted_on_proximity_alone():
     hand_seq = [(0, _hand_xy(30, 0)), (1, _hand_xy(31, 0))]
     a = _hs(ha, side="left", ball_points=ball, hand_seq=hand_seq,
             body_scale=200.0)
-    band, _ = ha._classify_band(a.evidence, cfg)
+    band = ha._classify_band(a.evidence, cfg)
     assert band == "STRONG"
 
 
@@ -161,22 +168,24 @@ def test_possible_band_requires_supporting_motion():
     ha = load_ha()
     cfg = ha.HandAssociationConfig()
     # 100 px -> normalized 0.5 -> in POSSIBLE.
-    # Slope is 0 (stable) -> supporting_motion False.
+    # Slope is 0 (stable) -> entry_support / exit_support False.
     ball = [_tracklet(f, 0, 0) for f in range(0, 6)]
     hand_seq = [(f, _hand_xy(100, 0)) for f in range(0, 6)]
     a = _hs(ha, side="left", ball_points=ball, hand_seq=hand_seq,
             body_scale=200.0)
-    band, supporting = ha._classify_band(a.evidence, cfg)
+    band = ha._classify_band(a.evidence, cfg)
     assert band == "POSSIBLE"
-    assert not supporting
+    assert not a.entry_support
+    assert not a.exit_support
     # Now bias the slope to be positive: hand moves away from ball.
     # 100 -> 110 px; within POSSIBLE_max_raw_px = 130.
     hand_seq = [(f, _hand_xy(100 + 2 * f, 0)) for f in range(0, 6)]
     a2 = _hs(ha, side="left", ball_points=ball, hand_seq=hand_seq,
              body_scale=200.0)
-    band2, supporting2 = ha._classify_band(a2.evidence, cfg)
+    band2 = ha._classify_band(a2.evidence, cfg)
     assert band2 == "POSSIBLE"
-    assert supporting2
+    assert a2.exit_support  # separating motion supports an exit
+    assert not a2.entry_support  # but not an entry (positive slope)
 
 
 def test_far_band_cannot_be_rescued_by_derivative():
@@ -191,7 +200,7 @@ def test_far_band_cannot_be_rescued_by_derivative():
     hand_seq = [(f, _hand_xy(500, 0)) for f in range(0, 6)]
     a = _hs(ha, side="left", ball_points=ball, hand_seq=hand_seq,
             body_scale=200.0)
-    band, _ = ha._classify_band(a.evidence, cfg)
+    band = ha._classify_band(a.evidence, cfg)
     assert band == "FAR"
 
 
@@ -208,7 +217,7 @@ def test_far_event_with_strong_closing_slope_is_still_far():
     hand_seq = [(f, _hand_xy(1000 - 190 * f, 0)) for f in range(0, 6)]
     a = _hs(ha, side="left", ball_points=ball, hand_seq=hand_seq,
             body_scale=200.0)
-    band, _ = ha._classify_band(a.evidence, cfg)
+    band = ha._classify_band(a.evidence, cfg)
     # Anchor frame = last = distance 50 px; that is STRONG on the
     # anchor itself. The test for "stuck far away even though
     # derivative looks promising" is captured by test_far_band_*
@@ -721,8 +730,13 @@ def test_engine_state_machine_zero_synchronized_observations_is_airborne():
 
 def test_entry_motion_must_be_toward_hand():
     """END with POSSIBLE proximity + closing motion (negative slope)
-    must support an entry. Separating motion (positive slope) must
-    NOT support an entry."""
+    must support an entry. Separating motion (positive slope)
+    also supports an entry under the post-contact / hand-impulse
+    path when the ball was recently in close contact with the
+    hand and the endpoint is still in reach.  We test the
+    fly-by / strictly-separating case (endpoint FAR) is rejected
+    separately.
+    """
     ha = load_ha()
     cfg = ha.HandAssociationConfig()
     # Setup 1: ball moves AWAY (positive slope) at POSSIBLE.
@@ -764,9 +778,9 @@ def test_entry_motion_must_be_toward_hand():
     side = sm.evaluate_end(track_id=1, ball_points=ball,
                            hand_xy_by_frame=hands, frame_index=4,
                            hand_features=ha._import_hf_ho()[0])
-    # Separating motion: should be AIRBORNE (entry side rejects
-    # positive motion as supporting evidence).
-    assert side == "", f"expected AIRBORNE, got {side!r}"
+    # Post-contact path: min at frame 0 (4 samples before endpoint)
+    # is STRONG, endpoint is in POSSIBLE -> admit.
+    assert side == "right", f"expected right (post-contact), got {side!r}"
     # Setup 2: ball moves TOWARD (negative slope) at POSSIBLE.
     # x = 0, 20, 40, 60, 80 -> distances 100, 80, 60, 40, 20.
     # Slope: -20/frame -> closing.
@@ -776,7 +790,7 @@ def test_entry_motion_must_be_toward_hand():
     side2 = sm2.evaluate_end(track_id=2, ball_points=ball2,
                             hand_xy_by_frame=hands, frame_index=4,
                             hand_features=ha._import_hf_ho()[0])
-    # Closing motion: entry supported.
+    # Closing motion: entry supported (case B).
     assert side2 in ("right", "ambiguous"), f"expected right or ambiguous, got {side2!r}"
 
 
@@ -1070,3 +1084,301 @@ def test_highest_person_confidence_wins_when_multiple_poses_present(
     # Person 0 (higher confidence) should win, so coords stay at 500.
     assert rows[0]["right"] == (500.0, 500.0)
     assert rows[0]["right_confidence"] == 0.95
+
+
+# ---------------------------------------------------------------------------
+# Run 2 fix 1A: body scale windowing.
+# ---------------------------------------------------------------------------
+
+def test_start_body_scale_uses_only_start_window():
+    """evaluate_start must use only the first n_window points when
+    looking up body scale.  A pose entry recorded for a future
+    frame must NOT leak into a START evaluation.
+    """
+    ha = load_ha()
+    sm = _eng()
+    # Ball at frames 0..4 (the START window).  After frame 4 the
+    # tracklet does not exist -- the hand CSV carries a future
+    # body_scale of 600 (an obvious outlier) that must not leak.
+    pts = [ha.TrackletPoint(frame=f, center_x=100.0, center_y=400.0)
+           for f in range(0, 5)]
+    hands = {}
+    for f in range(0, 5):
+        # Strong-normalized distance 0.20 during the START window
+        # (body_scale 200 -> dist 40 / 200 = 0.20).
+        hands[f] = {"left": None, "right": (60.0, 400.0),
+                    "body_scale": 200.0}
+    # Future frames with a wildly different body scale.
+    for f in range(5, 50):
+        hands[f] = {"left": None, "right": (60.0, 400.0),
+                    "body_scale": 600.0}
+    # The START of track 1 at frame 0.
+    assoc = sm.evaluate_start(track_id=1, ball_points=pts,
+                              hand_xy_by_frame=hands,
+                              frame_index=0,
+                              hand_features=ha._import_hf_ho()[0])
+    # The 0.20 normalized distance is in STRONG band, so the exit
+    # is admitted.  The crucial thing is that the body scale used
+    # was 200 (from the START window), NOT 600 (which would
+    # require a much larger raw distance to qualify as STRONG).
+    assert assoc is not None
+    assert assoc.hand == "right"
+
+
+def test_end_body_scale_uses_only_end_window():
+    """evaluate_end must use only the last n_window points when
+    looking up body scale.  A pose entry recorded for a past frame
+    must NOT leak into an END evaluation.
+    """
+    ha = load_ha()
+    sm = _eng()
+    # Past frames with a wildly different body scale.
+    hands = {}
+    for f in range(0, 5):
+        hands[f] = {"left": None, "right": (60.0, 400.0),
+                    "body_scale": 600.0}
+    # Ball at frames 5..9 (the END window).  body_scale here is
+    # 200.
+    pts = [ha.TrackletPoint(frame=f, center_x=100.0, center_y=400.0)
+           for f in range(5, 10)]
+    for f in range(5, 10):
+        hands[f] = {"left": None, "right": (60.0, 400.0),
+                    "body_scale": 200.0}
+    # The END of track 1 at frame 9.
+    side = sm.evaluate_end(track_id=1, ball_points=pts,
+                           hand_xy_by_frame=hands,
+                           frame_index=9,
+                           hand_features=ha._import_hf_ho()[0])
+    # STRONG band (40/200 = 0.20) is admitted.
+    assert side == "right"
+
+
+# ---------------------------------------------------------------------------
+# Run 2 fix 1B: post-contact / hand-impulse END case.
+# ---------------------------------------------------------------------------
+
+def test_post_contact_strong_min_and_endpoint_still_in_reach_admits_entry():
+    """Case C: a POSSIBLE endpoint with a recent STRONG-close
+    minimum to the same hand admits an entry.  This is the
+    post-contact / hand-impulse path.  The recent minimum
+    requirement is what keeps the rule from admitting a fly-by.
+    """
+    ha = load_ha()
+    cfg = ha.HandAssociationConfig()
+    # Ball: 0 px (STRONG), 10 px (STRONG), 20 px (STRONG),
+    # 40 px (POSSIBLE), 60 px (POSSIBLE).
+    # Hand: stationary at (50, 0).  body_scale 200.
+    ball = [ha.TrackletPoint(frame=f,
+                             center_x=(50.0 - 50.0,
+                                       40.0, 30.0, 10.0, -10.0)[f],
+                             center_y=0.0) for f in range(0, 5)]
+    # Distances: 50, 10, 20, 40, 60.  All visible.
+    hands = {f: {"left": None, "right": (50.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    sm = _eng()
+    side = sm.evaluate_end(track_id=1, ball_points=ball,
+                           hand_xy_by_frame=hands,
+                           frame_index=4,
+                           hand_features=ha._import_hf_ho()[0])
+    # The endpoint is in POSSIBLE (0.30) and the recent minimum
+    # was STRONG (0.05 at frame 1).  Case C admits a hand entry.
+    assert side == "right"
+
+
+def test_close_flyby_then_distant_end_remains_airborne():
+    """A close pass followed by a clearly distant continuation is
+    NOT a hand interaction.  Case C requires BOTH a recent strong
+    minimum AND the endpoint still in reach; a fly-by that is
+    already 200 px away at the endpoint has neither.
+    """
+    ha = load_ha()
+    sm = _eng()
+    # Ball: 0 px, 200 px.  Then it accelerates away.
+    # Frames: 0, 1, 2, 3, 4 at x = 100, 100, 200, 300, 400.
+    # Hand: stationary at (100, 0).  body_scale 200.
+    # Distances: 0, 0, 100, 200, 300.  Anchor 300 -> FAR.
+    ball = [ha.TrackletPoint(frame=f, center_x=100.0 + 100.0 * f,
+                             center_y=0.0) for f in range(0, 5)]
+    hands = {f: {"left": None, "right": (100.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    side = sm.evaluate_end(track_id=1, ball_points=ball,
+                           hand_xy_by_frame=hands,
+                           frame_index=4,
+                           hand_features=ha._import_hf_ho()[0])
+    # Endpoint is FAR (1.5 shoulder widths) and the recent minimum
+    # was at frame 0 (4 frames ago).  The recency + endpoint bound
+    # working together reject this as a hand event.
+    assert side == ""
+
+
+def test_always_far_remains_airborne_under_post_contact_rule():
+    """Even with the post-contact path enabled, an always-far
+    ball is never admitted.
+    """
+    ha = load_ha()
+    sm = _eng()
+    ball = [ha.TrackletPoint(frame=f, center_x=500.0, center_y=0.0)
+            for f in range(0, 5)]
+    hands = {f: {"left": None, "right": (0.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    side = sm.evaluate_end(track_id=1, ball_points=ball,
+                           hand_xy_by_frame=hands,
+                           frame_index=4,
+                           hand_features=ha._import_hf_ho()[0])
+    assert side == ""
+
+
+def test_post_contact_does_not_fire_when_endpoint_is_far():
+    """If the endpoint is FAR (above POSSIBLE) the post-contact
+    path does NOT admit the entry, even if the min is STRONG.
+    The endpoint-still-in-reach bound is the safety against
+    "ball passed close several frames ago and is now far" fly-bys.
+    """
+    ha = load_ha()
+    sm = _eng()
+    # Close at frame 0, then progressively farther: distances
+    # 0, 50, 100, 130, 150.  Anchor 150 -> FAR (0.75 normalized).
+    ball = [ha.TrackletPoint(frame=f, center_x=100.0 + 50.0 * f,
+                             center_y=0.0) for f in range(0, 5)]
+    hands = {f: {"left": None, "right": (100.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    side = sm.evaluate_end(track_id=1, ball_points=ball,
+                           hand_xy_by_frame=hands,
+                           frame_index=4,
+                           hand_features=ha._import_hf_ho()[0])
+    assert side == ""
+
+
+def test_post_contact_does_not_fire_when_minimum_is_not_in_strong_band():
+    """If the min is in POSSIBLE (not STRONG), the post-contact
+    path does NOT fire.  The recent STRONG-contact requirement
+    is the safety against a brief POSSIBLE fly-by being treated
+    as a hand interaction.
+    """
+    ha = load_ha()
+    sm = _eng()
+    # All distances in POSSIBLE (0.5 normalized).  No STRONG min.
+    ball = [ha.TrackletPoint(frame=f, center_x=10.0, center_y=0.0)
+            for f in range(0, 5)]
+    hands = {f: {"left": None, "right": (110.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    side = sm.evaluate_end(track_id=1, ball_points=ball,
+                           hand_xy_by_frame=hands,
+                           frame_index=4,
+                           hand_features=ha._import_hf_ho()[0])
+    assert side == ""
+
+
+# ---------------------------------------------------------------------------
+# Refactored evidence semantics: separate proximity_band / entry_support /
+# exit_support / post_contact fields, no hard-coded 0.5 / 0.15.
+# ---------------------------------------------------------------------------
+
+def test_assess_side_sets_entry_support_independently_of_exit_support():
+    """A band may support an entry but not an exit, or vice-versa.
+    The two flags must NOT be coupled.  Exception: under the
+    post-contact / hand-impulse path (case C), a POSSIBLE band
+    may also admit an entry even when the ball is separating, as
+    long as the endpoint is in reach and the recent min was
+    STRONG.  When that path fires, entry_support becomes True
+    even though the motion is separating.  This test uses a
+    SETUP THAT DOES NOT TRIGGER case C by ensuring the recent
+    min is NOT STRONG (all distances in POSSIBLE band).
+    """
+    ha = load_ha()
+    cfg = ha.HandAssociationConfig()
+    # Ball x = 100, 110, 120, 130, 140.  Distances 100, 110, 120,
+    # 130, 140.  Min is 100 (0.50 normalized).  With
+    # post_contact_min_normalized=0.45 the min is NOT STRONG, so
+    # case C does not fire and the only entry_support signal is
+    # the closing-motion check.
+    ball = [ha.TrackletPoint(frame=f, center_x=100.0 + 10.0 * f,
+                             center_y=0.0) for f in range(0, 5)]
+    hands = {f: {"left": None, "right": (0.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    a = ha._assess_side("right", ball,
+                        [(f, (0.0, 0.0)) for f in range(0, 5)],
+                        body_scale=200.0,
+                        hand_features=ha._import_hf_ho()[0],
+                        cfg=cfg, anchor_index=-1)
+    assert a.band == "POSSIBLE"
+    # Separating motion: exit supports, entry does not.
+    assert a.exit_support
+    assert not a.entry_support
+
+
+def test_pick_entry_side_uses_entry_support_flag():
+    """When a side has STRONG band but no entry_support, the
+    picker must NOT include it as a candidate.  (Sanity check that
+    the refactored picker is reading the new flag, not the old
+    ``supporting_motion`` field.)
+    """
+    ha = load_ha()
+    cfg = ha.HandAssociationConfig()
+    # Both hands have STRONG band on a moving target with separating
+    # motion.  STRONG is enough to admit; we expect both sides
+    # chosen, but the PICKER uses entry_support.
+    ball = [ha.TrackletPoint(frame=f, center_x=50.0, center_y=0.0)
+            for f in range(0, 5)]
+    hands = {f: {"left": (0.0, 0.0), "right": (100.0, 0.0),
+                 "body_scale": 200.0} for f in range(0, 5)}
+    a_left = ha._assess_side("left", ball,
+                             [(f, (0.0, 0.0)) for f in range(0, 5)],
+                             body_scale=200.0,
+                             hand_features=ha._import_hf_ho()[0],
+                             cfg=cfg, anchor_index=-1)
+    a_right = ha._assess_side("right", ball,
+                              [(f, (100.0, 0.0)) for f in range(0, 5)],
+                              body_scale=200.0,
+                              hand_features=ha._import_hf_ho()[0],
+                              cfg=cfg, anchor_index=-1)
+    # Both STRONG; both should support entry regardless of motion.
+    assert a_left.band == "STRONG"
+    assert a_right.band == "STRONG"
+    assert a_left.entry_support
+    assert a_right.entry_support
+    # The pick is ambiguous because both hands are equidistant.
+    chosen, side_label, band = ha._pick_entry_side(
+        {"left": a_left, "right": a_right}, cfg)
+    assert chosen == "ambiguous"
+
+
+def test_pick_side_uses_config_tie_threshold():
+    """The 0.15 tie threshold is configurable via
+    HandAssociationConfig.side_tie_normalized.
+    """
+    ha = load_ha()
+    cfg = ha.HandAssociationConfig()
+    # Left at (0, 0): distance 50 px, normalized 0.25 (STRONG).
+    # Right at (40, 0): distance 10 px, normalized 0.05 (STRONG).
+    # Right is closer -> right wins with the default 0.15 threshold.
+    ball = [ha.TrackletPoint(frame=f, center_x=50.0, center_y=0.0)
+            for f in range(0, 5)]
+    a_left = ha._assess_side("left", ball,
+                             [(f, (0.0, 0.0)) for f in range(0, 5)],
+                             body_scale=200.0,
+                             hand_features=ha._import_hf_ho()[0],
+                             cfg=cfg, anchor_index=-1)
+    a_right = ha._assess_side("right", ball,
+                              [(f, (40.0, 0.0)) for f in range(0, 5)],
+                              body_scale=200.0,
+                              hand_features=ha._import_hf_ho()[0],
+                              cfg=cfg, anchor_index=-1)
+    # left: 50/200 = 0.25 (STRONG).  right: 10/200 = 0.05 (STRONG).
+    chosen, side_label, band = ha._pick_entry_side(
+        {"left": a_left, "right": a_right}, cfg)
+    assert chosen == "right"
+    # Now tweak the cfg: lower the threshold to force ambiguous.
+    # (Picking the closer one when the difference is larger than
+    # the threshold is the documented behavior, so the threshold
+    # values here must be set accordingly.)
+    cfg2 = ha.HandAssociationConfig(side_tie_normalized=0.10)
+    chosen2, _, _ = ha._pick_entry_side(
+        {"left": a_left, "right": a_right}, cfg2)
+    # 0.25 - 0.05 = 0.20 > 0.10 -> right still wins.
+    assert chosen2 == "right"
+    cfg3 = ha.HandAssociationConfig(side_tie_normalized=0.30)
+    chosen3, _, _ = ha._pick_entry_side(
+        {"left": a_left, "right": a_right}, cfg3)
+    # 0.20 < 0.30 -> ambiguous.
+    assert chosen3 == "ambiguous"

@@ -24,6 +24,9 @@ scripts/*
 !scripts/hand_overlay.py
 !scripts/hand_association.py
 !scripts/dry_run_hand_association.py
+!scripts/identity_repair.py
+!scripts/render_identity_repair_video.py
+!scripts/render_human_reference_short.py
 !scripts/extract_hands.py
 !scripts/diagnose_hand_transitions.py
 !scripts/run_arm_triple.sh
@@ -75,6 +78,7 @@ tests/
 !tests/test_hand_features.py
 !tests/test_hand_overlay.py
 !tests/test_hand_association.py
+!tests/test_identity_repair.py
 !tests/test_review_track_events_v1b.py
 !tests/test_analyze_stitch_features.py
 !tests/test_compare_arms.py
