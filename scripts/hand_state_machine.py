@@ -7,7 +7,7 @@ import csv
 from dataclasses import dataclass
 from pathlib import Path
 
-from hand_events import HandEvent, load_logical_events
+from hand_events import HandEvent
 
 
 @dataclass(frozen=True)
