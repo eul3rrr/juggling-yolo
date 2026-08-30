@@ -1,0 +1,249 @@
+# AfNIkaVQNY4 frozen hand-system validation manifest
+
+Diagnostic only; no correctness grading. All seven clips processed as one frozen batch.
+
+| Clip | Source interval | Duration (s) | FPS | Frames | observed IDs | HAND_ENTRY | HAND_EXIT | NON_HAND_END | NON_HAND_START | ambiguous | accepted | unmatched exits | unresolved entries | censored | max pending | max LEFT | max RIGHT | max hold (s) | holds >1s |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| AfNIkaVQNY4_01_0018_0020 | 00:18–00:20 | 2.019 | 59.940 | 121 | 9 | 6 | 6 | 3 | 3 | 0 | 4 | 2 | 2 | 5 | 2 | 1 | 1 | 0.184 | 0 |
+| AfNIkaVQNY4_02_0027_0030 | 00:27–00:30 | 3.019 | 59.940 | 180 | 20 | 12 | 10 | 8 | 10 | 7 | 8 | 2 | 4 | 4 | 4 | 3 | 3 | 1.001 | 1 |
+| AfNIkaVQNY4_03_0031_0034 | 00:31–00:34 | 3.019 | 59.940 | 180 | 18 | 14 | 15 | 4 | 3 | 0 | 13 | 2 | 1 | 6 | 2 | 1 | 1 | 0.250 | 0 |
+| AfNIkaVQNY4_04_0037_0044 | 00:37–00:44 | 7.024 | 59.940 | 421 | 53 | 42 | 26 | 11 | 27 | 0 | 25 | 1 | 17 | 6 | 17 | 8 | 9 | 2.553 | 17 |
+| AfNIkaVQNY4_05_0048_0053 | 00:48–00:53 | 5.021 | 59.940 | 300 | 19 | 12 | 12 | 7 | 7 | 2 | 10 | 2 | 2 | 4 | 3 | 2 | 3 | 2.219 | 1 |
+| AfNIkaVQNY4_06_0058_0102 | 00:58–01:02 | 4.021 | 59.940 | 241 | 25 | 16 | 17 | 9 | 8 | 0 | 14 | 3 | 2 | 2 | 3 | 2 | 1 | 0.934 | 0 |
+| AfNIkaVQNY4_07_0117_0123 | 01:17–01:23 | 6.022 | 59.940 | 360 | 41 | 19 | 17 | 22 | 24 | 2 | 13 | 4 | 6 | 6 | 7 | 4 | 3 | 1.552 | 2 |
+
+## Exact input mappings
+
+- 00:18–00:20: `videos/AfNIkaVQNY4/01_0018_0020.mp4`
+- 00:27–00:30: `videos/AfNIkaVQNY4/02_0027_0030.mp4`
+- 00:31–00:34: `videos/AfNIkaVQNY4/03_0031_0034.mp4`
+- 00:37–00:44: `videos/AfNIkaVQNY4/04_0037_0044.mp4`
+- 00:48–00:53: `videos/AfNIkaVQNY4/05_0048_0053.mp4`
+- 00:58–01:02: `videos/AfNIkaVQNY4/06_0058_0102.mp4`
+- 01:17–01:23: `videos/AfNIkaVQNY4/07_0117_0123.mp4`
+
+## Accepted associations
+
+### AfNIkaVQNY4_01_0018_0020 (00:18–00:20)
+- T3 -> T4: 27 -> 36, LEFT, gap 8, FIFO
+- T1 -> T5: 37 -> 40, RIGHT, gap 2, FIFO
+- T4 -> T7: 60 -> 71, LEFT, gap 10, FIFO
+- T7 -> T8: 93 -> 102, LEFT, gap 8, FIFO
+### AfNIkaVQNY4_02_0027_0030 (00:27–00:30)
+- T2 -> T4: 8 -> 13, RIGHT, gap 4, FIFO
+- T3 -> T5: 17 -> 20, LEFT, gap 2, FIFO
+- T5 -> T8: 35 -> 52, LEFT, gap 16, FIFO_AMBIGUOUS_SOURCE_RESOLVED
+- T8 -> T9: 77 -> 80, LEFT, gap 2, FIFO
+- T4 -> T10: 22 -> 82, RIGHT, gap 59, FIFO
+- T9 -> T12: 83 -> 99, LEFT, gap 15, FIFO_AMBIGUOUS_EXIT_RESOLVED
+- T10 -> T14: 97 -> 113, RIGHT, gap 15, FIFO_AMBIGUOUS_SOURCE_RESOLVED
+- T12 -> T16: 99 -> 147, LEFT, gap 47, FIFO_AMBIGUOUS_SOURCE_RESOLVED
+### AfNIkaVQNY4_03_0031_0034 (00:31–00:34)
+- T1 -> T4: 18 -> 20, LEFT, gap 1, FIFO
+- T2 -> T5: 21 -> 24, RIGHT, gap 2, FIFO
+- T3 -> T6: 40 -> 43, RIGHT, gap 2, FIFO
+- T6 -> T7: 47 -> 54, RIGHT, gap 6, FIFO
+- T5 -> T9: 66 -> 81, RIGHT, gap 14, FIFO
+- T7 -> T11: 89 -> 94, LEFT, gap 4, FIFO
+- T11 -> T12: 99 -> 102, LEFT, gap 2, FIFO
+- T10 -> T13: 118 -> 121, LEFT, gap 2, FIFO
+- T9 -> T14: 119 -> 122, RIGHT, gap 2, FIFO
+- T12 -> T15: 140 -> 143, RIGHT, gap 2, FIFO
+- T15 -> T16: 148 -> 152, RIGHT, gap 3, FIFO
+- T13 -> T17: 166 -> 169, LEFT, gap 2, FIFO
+- T14 -> T18: 164 -> 177, RIGHT, gap 12, FIFO
+### AfNIkaVQNY4_04_0037_0044 (00:37–00:44)
+- T2 -> T5: 25 -> 28, RIGHT, gap 2, FIFO
+- T1 -> T6: 45 -> 48, LEFT, gap 2, FIFO
+- T5 -> T11: 45 -> 88, RIGHT, gap 42, FIFO
+- T6 -> T12: 51 -> 96, LEFT, gap 44, FIFO
+- T8 -> T14: 84 -> 113, RIGHT, gap 28, FIFO
+- T4 -> T15: 62 -> 124, LEFT, gap 61, FIFO
+- T10 -> T16: 80 -> 132, LEFT, gap 51, FIFO
+- T11 -> T19: 91 -> 166, RIGHT, gap 74, FIFO
+- T12 -> T20: 121 -> 170, LEFT, gap 48, FIFO
+- T15 -> T22: 129 -> 173, LEFT, gap 43, FIFO
+- T13 -> T25: 140 -> 204, LEFT, gap 63, FIFO
+- T9 -> T30: 102 -> 242, RIGHT, gap 139, FIFO
+- T20 -> T31: 170 -> 248, LEFT, gap 77, FIFO
+- T14 -> T33: 123 -> 265, RIGHT, gap 141, FIFO
+- T22 -> T34: 196 -> 283, LEFT, gap 86, FIFO
+- T17 -> T35: 159 -> 289, RIGHT, gap 129, FIFO
+- T19 -> T39: 167 -> 319, RIGHT, gap 151, FIFO
+- T25 -> T40: 209 -> 326, LEFT, gap 116, FIFO
+- T16 -> T41: 178 -> 328, RIGHT, gap 149, FIFO
+- T23 -> T42: 217 -> 338, LEFT, gap 120, FIFO
+- T24 -> T43: 199 -> 345, RIGHT, gap 145, FIFO
+- T29 -> T45: 235 -> 363, LEFT, gap 127, FIFO
+- T27 -> T47: 236 -> 370, RIGHT, gap 133, FIFO
+- T30 -> T49: 244 -> 397, RIGHT, gap 152, FIFO
+- T31 -> T50: 276 -> 404, LEFT, gap 127, FIFO
+### AfNIkaVQNY4_05_0048_0053 (00:48–00:53)
+- T3 -> T4: 7 -> 27, RIGHT, gap 19, FIFO
+- T1 -> T7: 32 -> 73, LEFT, gap 40, FIFO
+- T2 -> T8: 24 -> 82, RIGHT, gap 57, FIFO
+- T5 -> T9: 67 -> 97, RIGHT, gap 29, FIFO
+- T7 -> T10: 74 -> 115, LEFT, gap 40, FIFO
+- T10 -> T12: 136 -> 159, RIGHT, gap 22, FIFO
+- T6 -> T15: 160 -> 208, RIGHT, gap 47, FIFO_AMBIGUOUS_SOURCE_RESOLVED
+- T13 -> T16: 203 -> 223, RIGHT, gap 19, FIFO
+- T9 -> T17: 107 -> 240, LEFT, gap 132, FIFO
+- T15 -> T19: 263 -> 287, RIGHT, gap 23, FIFO
+### AfNIkaVQNY4_06_0058_0102 (00:58–01:02)
+- T2 -> T4: 20 -> 25, RIGHT, gap 4, FIFO
+- T4 -> T5: 25 -> 28, RIGHT, gap 2, FIFO
+- T5 -> T7: 33 -> 37, RIGHT, gap 3, FIFO
+- T1 -> T8: 23 -> 59, LEFT, gap 35, FIFO
+- T3 -> T9: 48 -> 68, RIGHT, gap 19, FIFO
+- T6 -> T10: 43 -> 84, LEFT, gap 40, FIFO
+- T7 -> T12: 69 -> 106, RIGHT, gap 36, FIFO
+- T12 -> T14: 113 -> 118, RIGHT, gap 4, FIFO
+- T14 -> T15: 126 -> 130, RIGHT, gap 3, FIFO
+- T10 -> T17: 115 -> 154, LEFT, gap 38, FIFO
+- T13 -> T18: 138 -> 156, RIGHT, gap 17, FIFO
+- T19 -> T20: 172 -> 178, LEFT, gap 5, FIFO
+- T18 -> T22: 184 -> 202, LEFT, gap 17, FIFO
+- T15 -> T23: 162 -> 218, RIGHT, gap 55, FIFO
+### AfNIkaVQNY4_07_0117_0123 (01:17–01:23)
+- T7 -> T12: 32 -> 81, LEFT, gap 48, FIFO_AMBIGUOUS_EXIT_RESOLVED
+- T6 -> T13: 88 -> 93, RIGHT, gap 4, FIFO
+- T3 -> T14: 60 -> 108, LEFT, gap 47, FIFO
+- T15 -> T16: 129 -> 132, LEFT, gap 2, FIFO
+- T12 -> T17: 102 -> 141, RIGHT, gap 38, FIFO
+- T14 -> T21: 158 -> 160, LEFT, gap 1, FIFO
+- T21 -> T23: 160 -> 165, LEFT, gap 4, FIFO
+- T16 -> T24: 161 -> 168, LEFT, gap 6, FIFO
+- T13 -> T29: 128 -> 221, RIGHT, gap 92, FIFO_AMBIGUOUS_EXIT_RESOLVED
+- T22 -> T30: 173 -> 231, RIGHT, gap 57, FIFO
+- T23 -> T31: 165 -> 232, LEFT, gap 66, FIFO
+- T24 -> T33: 227 -> 280, RIGHT, gap 52, FIFO
+- T30 -> T38: 268 -> 320, RIGHT, gap 51, FIFO
+
+## Interior unmatched HAND_EXIT events
+
+### AfNIkaVQNY4_01_0018_0020
+- T3 @ 6: NO_COMPATIBLE_PENDING_SOURCE
+### AfNIkaVQNY4_02_0027_0030
+- T17 @ 155: NO_COMPATIBLE_PENDING_SOURCE
+### AfNIkaVQNY4_03_0031_0034
+- none
+### AfNIkaVQNY4_04_0037_0044
+- none
+### AfNIkaVQNY4_05_0048_0053
+- T3 @ 6: NO_COMPATIBLE_PENDING_SOURCE
+- T18 @ 243: NO_COMPATIBLE_PENDING_SOURCE
+### AfNIkaVQNY4_06_0058_0102
+- T3 @ 18: NO_COMPATIBLE_PENDING_SOURCE
+- T13 @ 113: NO_COMPATIBLE_PENDING_SOURCE
+- T19 @ 172: NO_COMPATIBLE_PENDING_SOURCE
+### AfNIkaVQNY4_07_0117_0123
+- T6 @ 19: NO_COMPATIBLE_PENDING_SOURCE
+- T10 @ 60: NO_COMPATIBLE_PENDING_SOURCE
+
+## Interior unresolved HAND_ENTRY events
+
+### AfNIkaVQNY4_01_0018_0020
+- none
+### AfNIkaVQNY4_02_0027_0030
+- T16 @ 156: UNRESOLVED_PENDING_ENTRY
+- T17 @ 165: UNRESOLVED_PENDING_ENTRY
+### AfNIkaVQNY4_03_0031_0034
+- none
+### AfNIkaVQNY4_04_0037_0044
+- T26 @ 253: UNRESOLVED_PENDING_ENTRY
+- T33 @ 277: UNRESOLVED_PENDING_ENTRY
+- T34 @ 283: UNRESOLVED_PENDING_ENTRY
+- T32 @ 294: UNRESOLVED_PENDING_ENTRY
+- T35 @ 313: UNRESOLVED_PENDING_ENTRY
+- T38 @ 315: UNRESOLVED_PENDING_ENTRY
+- T39 @ 323: UNRESOLVED_PENDING_ENTRY
+- T36 @ 333: UNRESOLVED_PENDING_ENTRY
+- T42 @ 354: UNRESOLVED_PENDING_ENTRY
+- T43 @ 355: UNRESOLVED_PENDING_ENTRY
+- T45 @ 363: UNRESOLVED_PENDING_ENTRY
+- T41 @ 373: UNRESOLVED_PENDING_ENTRY
+- T48 @ 391: UNRESOLVED_PENDING_ENTRY
+- T47 @ 394: UNRESOLVED_PENDING_ENTRY
+- T49 @ 400: UNRESOLVED_PENDING_ENTRY
+- T46 @ 410: UNRESOLVED_PENDING_ENTRY
+### AfNIkaVQNY4_05_0048_0053
+- T16 @ 232: UNRESOLVED_PENDING_ENTRY
+- T18 @ 291: UNRESOLVED_PENDING_ENTRY
+### AfNIkaVQNY4_06_0058_0102
+- T20 @ 207: UNRESOLVED_PENDING_ENTRY
+- T23 @ 218: UNRESOLVED_PENDING_ENTRY
+### AfNIkaVQNY4_07_0117_0123
+- T20 @ 171: UNRESOLVED_PENDING_ENTRY
+- T28 @ 214: UNRESOLVED_PENDING_ENTRY
+- T33 @ 285: UNRESOLVED_PENDING_ENTRY
+- T25 @ 299: UNRESOLVED_PENDING_ENTRY
+- T32 @ 313: UNRESOLVED_PENDING_ENTRY
+- T37 @ 317: UNRESOLVED_PENDING_ENTRY
+
+## Ambiguous events
+
+### AfNIkaVQNY4_01_0018_0020
+- none
+### AfNIkaVQNY4_02_0027_0030
+- HAND_ENTRY T5 @ 35: {LEFT,RIGHT}
+- HAND_ENTRY T10 @ 97: {LEFT,RIGHT}
+- HAND_ENTRY T12 @ 99: {LEFT,RIGHT}
+- HAND_EXIT T12 @ 99: {LEFT,RIGHT}
+- HAND_EXIT T17 @ 155: {LEFT,RIGHT}
+- HAND_ENTRY T16 @ 156: {LEFT,RIGHT}
+- HAND_ENTRY T17 @ 165: {LEFT,RIGHT}
+### AfNIkaVQNY4_03_0031_0034
+- none
+### AfNIkaVQNY4_04_0037_0044
+- none
+### AfNIkaVQNY4_05_0048_0053
+- HAND_ENTRY T6 @ 160: {LEFT,RIGHT}
+- HAND_ENTRY T18 @ 291: {LEFT,RIGHT}
+### AfNIkaVQNY4_06_0058_0102
+- none
+### AfNIkaVQNY4_07_0117_0123
+- HAND_EXIT T12 @ 81: {LEFT,RIGHT}
+- HAND_EXIT T29 @ 221: {LEFT,RIGHT}
+
+## Boundary-censored events
+
+### AfNIkaVQNY4_01_0018_0020
+- NON_HAND_START T1 @ 2: start=1, end=0
+- HAND_EXIT T2 @ 2: start=1, end=0
+- HAND_ENTRY T2 @ 120: start=0, end=1
+- NON_HAND_END T8 @ 120: start=0, end=1
+- HAND_ENTRY T9 @ 120: start=0, end=1
+### AfNIkaVQNY4_02_0027_0030
+- HAND_EXIT T1 @ 2: start=1, end=0
+- NON_HAND_START T2 @ 2: start=1, end=0
+- HAND_ENTRY T15 @ 179: start=0, end=1
+- HAND_ENTRY T20 @ 179: start=0, end=1
+### AfNIkaVQNY4_03_0031_0034
+- HAND_EXIT T1 @ 2: start=1, end=0
+- NON_HAND_START T2 @ 2: start=1, end=0
+- HAND_EXIT T3 @ 2: start=1, end=0
+- NON_HAND_END T16 @ 179: start=0, end=1
+- NON_HAND_END T17 @ 179: start=0, end=1
+- HAND_ENTRY T18 @ 179: start=0, end=1
+### AfNIkaVQNY4_04_0037_0044
+- HAND_EXIT T1 @ 17: start=1, end=0
+- NON_HAND_START T2 @ 17: start=1, end=0
+- NON_HAND_END T3 @ 17: start=1, end=0
+- NON_HAND_START T3 @ 17: start=1, end=0
+- NON_HAND_END T50 @ 420: start=0, end=1
+- HAND_ENTRY T53 @ 420: start=0, end=1
+### AfNIkaVQNY4_05_0048_0053
+- NON_HAND_START T1 @ 2: start=1, end=0
+- NON_HAND_START T2 @ 2: start=1, end=0
+- NON_HAND_END T17 @ 299: start=0, end=1
+- NON_HAND_END T19 @ 299: start=0, end=1
+### AfNIkaVQNY4_06_0058_0102
+- NON_HAND_START T1 @ 2: start=1, end=0
+- NON_HAND_END T25 @ 240: start=0, end=1
+### AfNIkaVQNY4_07_0117_0123
+- HAND_EXIT T1 @ 2: start=1, end=0
+- HAND_EXIT T2 @ 2: start=1, end=0
+- NON_HAND_END T36 @ 359: start=0, end=1
+- NON_HAND_END T38 @ 359: start=0, end=1
+- NON_HAND_END T41 @ 359: start=0, end=1
+- NON_HAND_START T41 @ 359: start=0, end=1

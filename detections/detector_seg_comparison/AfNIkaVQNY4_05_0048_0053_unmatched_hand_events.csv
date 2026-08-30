@@ -1,0 +1,5 @@
+track_id,boundary_type,boundary_frame,event_type,eligible_hand_set,preferred_hand,ambiguous,hand_evidence,video_start_boundary,video_end_boundary,reason
+3,START,6,HAND_EXIT,{RIGHT},RIGHT,0,1,0,0,NO_COMPATIBLE_PENDING_SOURCE
+18,START,243,HAND_EXIT,{RIGHT},RIGHT,0,1,0,0,NO_COMPATIBLE_PENDING_SOURCE
+16,END,232,HAND_ENTRY,{LEFT},LEFT,0,1,0,0,UNRESOLVED_PENDING_ENTRY
+18,END,291,HAND_ENTRY,"{LEFT,RIGHT}",,1,1,0,0,UNRESOLVED_PENDING_ENTRY

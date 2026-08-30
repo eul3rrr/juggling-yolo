@@ -1,0 +1,5 @@
+source_track_id,target_track_id,source_end_frame,target_start_frame,gap_frames,hold_seconds,association_type,resolved_hand,hand_ambiguous,source_eligible_hand_set,target_eligible_hand_set,source_preferred_hand,target_preferred_hand,source_ambiguous,target_ambiguous,match_rule
+3,4,27,36,8,0.15015000000015016,HAND,LEFT,False,{LEFT},{LEFT},LEFT,LEFT,False,False,FIFO
+1,5,37,40,2,0.050050000000050054,HAND,RIGHT,False,{RIGHT},{RIGHT},RIGHT,RIGHT,False,False,FIFO
+4,7,60,71,10,0.18351666666685018,HAND,LEFT,False,{LEFT},{LEFT},LEFT,LEFT,False,False,FIFO
+7,8,93,102,8,0.15015000000015016,HAND,LEFT,False,{LEFT},{LEFT},LEFT,LEFT,False,False,FIFO

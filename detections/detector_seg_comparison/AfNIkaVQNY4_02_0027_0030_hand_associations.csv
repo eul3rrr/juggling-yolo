@@ -1,0 +1,9 @@
+source_track_id,target_track_id,source_end_frame,target_start_frame,gap_frames,hold_seconds,association_type,resolved_hand,hand_ambiguous,source_eligible_hand_set,target_eligible_hand_set,source_preferred_hand,target_preferred_hand,source_ambiguous,target_ambiguous,match_rule
+2,4,8,13,4,0.08341666666675009,HAND,RIGHT,False,{RIGHT},{RIGHT},RIGHT,RIGHT,False,False,FIFO
+3,5,17,20,2,0.050050000000050054,HAND,LEFT,False,{LEFT},{LEFT},LEFT,LEFT,False,False,FIFO
+5,8,35,52,16,0.2836166666669503,HAND,LEFT,False,"{LEFT,RIGHT}",{LEFT},,LEFT,True,False,FIFO_AMBIGUOUS_SOURCE_RESOLVED
+8,9,77,80,2,0.050050000000050054,HAND,LEFT,False,{LEFT},{LEFT},LEFT,LEFT,False,False,FIFO
+4,10,22,82,59,1.001000000001001,HAND,RIGHT,False,{RIGHT},{RIGHT},RIGHT,RIGHT,False,False,FIFO
+9,12,83,99,15,0.26693333333360025,HAND,LEFT,False,{LEFT},"{LEFT,RIGHT}",LEFT,,False,True,FIFO_AMBIGUOUS_EXIT_RESOLVED
+10,14,97,113,15,0.26693333333360025,HAND,RIGHT,False,"{LEFT,RIGHT}",{RIGHT},,RIGHT,True,False,FIFO_AMBIGUOUS_SOURCE_RESOLVED
+12,16,99,147,47,0.8008000000008009,HAND,LEFT,False,"{LEFT,RIGHT}",{LEFT},,LEFT,True,False,FIFO_AMBIGUOUS_SOURCE_RESOLVED
