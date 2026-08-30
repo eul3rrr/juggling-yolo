@@ -124,8 +124,11 @@ def main() -> None:
     for e in events:
         print(f"{e.boundary_frame:4d}  {e.event_type:<15} T{e.track_id:<2} {_hand_label(e)}")
     print(f"counts: HAND_ENTRY={sum(e.event_type == 'HAND_ENTRY' for e in events)} HAND_EXIT={sum(e.event_type == 'HAND_EXIT' for e in events)} NON_HAND_END={sum(e.event_type == 'NON_HAND_END' for e in events)} NON_HAND_START={sum(e.event_type == 'NON_HAND_START' for e in events)} ambiguous={sum(e.ambiguous for e in events)}")
+    known = [(3,149,4,152,"RIGHT"),(4,217,6,224,"RIGHT"),(1,219,5,223,"LEFT"),(5,841,10,845,"LEFT"),(2,882,11,885,"LEFT"),(6,950,13,953,"LEFT"),(10,1074,14,1077,"RIGHT")]
+    if not all(any(e.track_id == src and e.boundary_type == "END" and e.boundary_frame == end for e in events) and any(e.track_id == dst and e.boundary_type == "START" and e.boundary_frame == start for e in events) for src, end, dst, start, _ in known):
+        return
     print("human transition diagnostic:")
-    for src, end, dst, start, hand in [(3,149,4,152,"RIGHT"),(4,217,6,224,"RIGHT"),(1,219,5,223,"LEFT"),(5,841,10,845,"LEFT"),(2,882,11,885,"LEFT"),(6,950,13,953,"LEFT"),(10,1074,14,1077,"RIGHT")]:
+    for src, end, dst, start, hand in known:
         se = next(e for e in events if e.track_id == src and e.boundary_type == "END" and e.boundary_frame == end)
         te = next(e for e in events if e.track_id == dst and e.boundary_type == "START" and e.boundary_frame == start)
         print(f"{src} END {end} -> {dst} START {start} expected {hand}: {se.event_type}/{_hand_label(se)} -> {te.event_type}/{_hand_label(te)}")
