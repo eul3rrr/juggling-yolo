@@ -47,6 +47,10 @@ class BoundaryAssessment:
     ambiguous: bool
 
 
+CONFIG = ha.HandAssociationConfig()
+HAND_FEATURES, _ = ha._import_hf_ho()
+
+
 def load_observed_tracklets(path: Path) -> dict[int, list[BoundaryPoint]]:
     out: dict[int, list[BoundaryPoint]] = {}
     with path.open(newline="", encoding="utf-8") as f:
@@ -62,34 +66,87 @@ def load_observed_tracklets(path: Path) -> dict[int, list[BoundaryPoint]]:
     return out
 
 
-def _motion_label(assessment: ha.HandSideAssessment) -> tuple[str, float | None]:
-    evidence = assessment.evidence
+def _proximity(evidence: ha.HandEvidence) -> str:
+    """Use normalized distance first; raw pixel distance is fallback only."""
+    if evidence.distance_normalized is not None:
+        if evidence.distance_normalized <= CONFIG.strong_max_normalized:
+            return "VERY_NEAR"
+        if evidence.distance_normalized <= CONFIG.possible_max_normalized:
+            return "POSSIBLE"
+        return "FAR"
+    if evidence.distance_px is not None:
+        if evidence.distance_px <= CONFIG.strong_max_raw_px:
+            return "VERY_NEAR"
+        if evidence.distance_px <= CONFIG.possible_max_raw_px:
+            return "POSSIBLE"
+    return "FAR"
+
+
+def _motion_label(evidence: ha.HandEvidence) -> tuple[str, float | None]:
     signed = evidence.slope_px_per_frame
     if signed is None:
         signed = evidence.radial_px_per_frame
     if evidence.n_points < 3 or signed is None:
         return "INSUFFICIENT", signed
-    if signed < -0.5:
+    if signed < -CONFIG.min_abs_slope_px_per_frame:
         return "APPROACHING", signed
-    if signed > 0.5:
+    if signed > CONFIG.exit_min_abs_slope_px_per_frame:
         return "SEPARATING", signed
     return "NEUTRAL", signed
 
 
-def _reason(boundary_type: str, assessment: ha.HandSideAssessment, motion: str) -> str:
-    if assessment.post_contact:
-        return "possible + recent very_near (post_contact)"
-    if assessment.band == "STRONG":
-        return "very_near"
-    if assessment.band == "POSSIBLE" and assessment.entry_support and boundary_type == "END":
-        return "possible + approaching"
-    if assessment.band == "POSSIBLE" and assessment.exit_support and boundary_type == "START":
-        return "possible + separating"
-    if assessment.band == "FAR":
-        return "far"
-    if motion == "INSUFFICIENT":
-        return "insufficient motion"
-    return assessment.band.lower()
+def _assess_side(boundary_type: str, ball_points: list[ha.TrackletPoint], hand_xy: dict,
+                 scale: float | None, side: str) -> HandBoundaryAssessment:
+    key = side.lower()
+    synced_ball, synced_hand = ha._synchronized_samples(ball_points, hand_xy, key, 5)
+    evidence = ha._hand_distance_window(
+        synced_ball, synced_hand, scale, HAND_FEATURES,
+        anchor_index=(0 if boundary_type == "START" else len(synced_ball) - 1),
+    )
+    proximity = _proximity(evidence)
+    motion, signed = _motion_label(evidence)
+    very_near_recent = (
+        evidence.min_distance_normalized is not None
+        and evidence.min_distance_normalized <= CONFIG.strong_max_normalized
+    ) or (
+        evidence.min_distance_normalized is None
+        and evidence.min_distance_px is not None
+        and evidence.min_distance_px <= CONFIG.strong_max_raw_px
+    )
+    recent_contact = (
+        boundary_type == "END"
+        and proximity == "POSSIBLE"
+        and very_near_recent
+        and evidence.n_points > 0
+    )
+    if boundary_type == "END":
+        hand_evidence = proximity == "VERY_NEAR" or (
+            proximity == "POSSIBLE" and (motion == "APPROACHING" or recent_contact)
+        )
+    else:
+        hand_evidence = proximity == "VERY_NEAR" or (
+            proximity == "POSSIBLE" and motion == "SEPARATING"
+        )
+    post_contact = recent_contact
+    if proximity == "VERY_NEAR":
+        reason = "very_near"
+    elif boundary_type == "END" and recent_contact:
+        reason = "possible + recent very_near (post_contact)"
+    elif boundary_type == "END" and proximity == "POSSIBLE" and motion == "APPROACHING":
+        reason = "possible + approaching"
+    elif boundary_type == "START" and proximity == "POSSIBLE" and motion == "SEPARATING":
+        reason = "possible + separating"
+    elif proximity == "FAR":
+        reason = "far"
+    elif motion == "INSUFFICIENT":
+        reason = "insufficient motion"
+    else:
+        reason = proximity.lower()
+    return HandBoundaryAssessment(
+        proximity, evidence.distance_px, evidence.min_distance_px,
+        evidence.distance_normalized, evidence.min_distance_normalized,
+        evidence.n_points, motion, signed, hand_evidence, post_contact, reason,
+    )
 
 
 def assess_boundary(track_id: int, boundary_type: str, points: list[BoundaryPoint], hands_by_frame: dict) -> BoundaryAssessment:
@@ -100,30 +157,8 @@ def assess_boundary(track_id: int, boundary_type: str, points: list[BoundaryPoin
     window = points[:5] if boundary_type == "START" else points[-5:]
     ha_points = [ha.TrackletPoint(p.frame, p.x, p.y) for p in window]
     scale = ha._latest_body_scale(ha_points, hands_by_frame)
-    results: dict[str, HandBoundaryAssessment] = {}
-    for side in ("LEFT", "RIGHT"):
-        key = side.lower()
-        ball, wrist = ha._synchronized_samples(ha_points, hands_by_frame, key, 5)
-        side_assessment = ha._assess_side(
-            key, ball, wrist, scale, ha._import_hf_ho()[0], ha.HandAssociationConfig(),
-            anchor_index=(0 if boundary_type == "START" else len(ball) - 1),
-            hand_confidence=(hands_by_frame.get(window[0 if boundary_type == "START" else -1].frame, {})
-                             .get(f"{key}_confidence")),
-        )
-        motion, signed = _motion_label(side_assessment)
-        results[side] = HandBoundaryAssessment(
-            proximity={"STRONG": "VERY_NEAR", "POSSIBLE": "POSSIBLE", "FAR": "FAR", "MISSING": "FAR"}[side_assessment.band],
-            endpoint_distance_px=side_assessment.evidence.distance_px,
-            recent_min_distance_px=side_assessment.evidence.min_distance_px,
-            endpoint_distance_normalized=side_assessment.evidence.distance_normalized,
-            recent_min_distance_normalized=side_assessment.evidence.min_distance_normalized,
-            n_synchronized=side_assessment.evidence.n_points,
-            motion=motion,
-            signed_trend=signed,
-            hand_evidence=(side_assessment.entry_support if boundary_type == "END" else side_assessment.exit_support),
-            post_contact=side_assessment.post_contact,
-            reason=_reason(boundary_type, side_assessment, motion),
-        )
+    results = {side: _assess_side(boundary_type, ha_points, hands_by_frame, scale, side)
+               for side in ("LEFT", "RIGHT")}
     eligible = tuple(side for side in ("LEFT", "RIGHT") if results[side].hand_evidence)
     preferred = None
     ambiguous = False
@@ -133,26 +168,19 @@ def assess_boundary(track_id: int, boundary_type: str, points: list[BoundaryPoin
         a, b = (results[s] for s in eligible)
         da = a.endpoint_distance_normalized if a.endpoint_distance_normalized is not None else a.endpoint_distance_px
         db = b.endpoint_distance_normalized if b.endpoint_distance_normalized is not None else b.endpoint_distance_px
-        if da is None or db is None:
-            ambiguous = True
-        elif abs(da - db) <= (ha.HandAssociationConfig().side_tie_normalized if a.endpoint_distance_normalized is not None and b.endpoint_distance_normalized is not None else 15.0):
+        tie = CONFIG.side_tie_normalized if a.endpoint_distance_normalized is not None and b.endpoint_distance_normalized is not None else 15.0
+        if da is None or db is None or abs(da - db) <= tie:
             ambiguous = True
         else:
             preferred = eligible[0] if da < db else eligible[1]
-        if ambiguous:
-            preferred = None
-    return BoundaryAssessment(track_id, boundary_type, points[0 if boundary_type == "START" else -1].frame,
-                              points[0 if boundary_type == "START" else -1].x,
-                              points[0 if boundary_type == "START" else -1].y,
+    point = points[0 if boundary_type == "START" else -1]
+    return BoundaryAssessment(track_id, boundary_type, point.frame, point.x, point.y,
                               results, eligible, preferred, ambiguous)
 
 
 def assess_all(tracklets: dict[int, list[BoundaryPoint]], hands_by_frame: dict) -> list[BoundaryAssessment]:
-    out = []
-    for tid in sorted(tracklets):
-        for kind in ("START", "END"):
-            out.append(assess_boundary(tid, kind, tracklets[tid], hands_by_frame))
-    return out
+    return [assess_boundary(tid, kind, tracklets[tid], hands_by_frame)
+            for tid in sorted(tracklets) for kind in ("START", "END")]
 
 
 def write_csv(assessments: list[BoundaryAssessment], path: Path) -> None:
@@ -192,8 +220,7 @@ def main() -> None:
     p.add_argument("--output-csv", type=Path, required=True)
     args = p.parse_args()
     tracklets = load_observed_tracklets(args.tracklets)
-    cfg = ha.HandAssociationConfig()
-    hands_by_frame = ha._load_hands_by_frame(args.hands, cfg.confidence_threshold)
+    hands_by_frame = ha._load_hands_by_frame(args.hands, CONFIG.confidence_threshold)
     assessments = assess_all(tracklets, hands_by_frame)
     args.output_csv.parent.mkdir(parents=True, exist_ok=True)
     write_csv(assessments, args.output_csv)

@@ -85,3 +85,42 @@ def test_only_observed_rows_are_loaded(tmp_path):
     path.write_text("frame,time_seconds,track_id,confidence,center_x,center_y,observed\n1,0,1,1,0,0,1\n2,0,1,1,9,9,0\n3,0,1,1,1,1,1\n")
     loaded = hb.load_observed_tracklets(path)
     assert [p.frame for p in loaded[1]] == [1, 3]
+
+
+def test_possible_end_with_two_samples_and_negative_radial_is_not_evidence(monkeypatch):
+    monkeypatch.setattr(hb.ha, "_hand_distance_window", lambda *args, **kwargs: hb.ha.HandEvidence(
+        "left", 60.0, 0.6, 50.0, 0.5, None, -10.0, 2, None, "insufficient"))
+    b = hb.assess_boundary(1, "END", pts([1, 2], xs=[70, 60]), hands([1, 2], left=(0, 0), scale=100))
+    assert b.hand_results["LEFT"].proximity == "POSSIBLE"
+    assert b.hand_results["LEFT"].motion == "INSUFFICIENT"
+    assert b.hand_results["LEFT"].hand_evidence is False
+
+
+def test_possible_start_with_two_samples_and_positive_radial_is_not_evidence(monkeypatch):
+    monkeypatch.setattr(hb.ha, "_hand_distance_window", lambda *args, **kwargs: hb.ha.HandEvidence(
+        "left", 60.0, 0.6, 50.0, 0.5, None, 10.0, 2, None, "insufficient"))
+    b = hb.assess_boundary(1, "START", pts([1, 2], xs=[60, 70]), hands([1, 2], left=(0, 0), scale=100))
+    assert b.hand_results["LEFT"].proximity == "POSSIBLE"
+    assert b.hand_results["LEFT"].motion == "INSUFFICIENT"
+    assert b.hand_results["LEFT"].hand_evidence is False
+
+
+def test_start_never_has_post_contact_or_post_contact_reason():
+    b = hb.assess_boundary(1, "START", pts([1,2,3,4,5], ys=[60,50,40,20,100]), hands([1,2,3,4,5], left=(0,0), scale=200))
+    assert all(not r.post_contact for r in b.hand_results.values())
+    assert all("post_contact" not in r.reason for r in b.hand_results.values())
+
+
+def test_recent_contact_uses_ordinary_strong_threshold():
+    p = pts([1,2,3,4,5], ys=[30,20,10,5,70])
+    b = hb.assess_boundary(1, "END", p, hands([1,2,3,4,5], left=(0,0), scale=100))
+    assert b.hand_results["LEFT"].recent_min_distance_normalized == 0.05
+    assert b.hand_results["LEFT"].hand_evidence is True
+    assert b.hand_results["LEFT"].post_contact is True
+
+
+def test_normalized_proximity_does_not_fall_back_to_raw_strong():
+    b = hb.assess_boundary(1, "END", pts([1,2,3], xs=[50,50,50]), hands([1,2,3], left=(0,0), scale=100))
+    assert b.hand_results["LEFT"].endpoint_distance_px == 50
+    assert b.hand_results["LEFT"].endpoint_distance_normalized == 0.5
+    assert b.hand_results["LEFT"].proximity == "POSSIBLE"
