@@ -57,3 +57,16 @@ def test_video_end_pending_reason_rendering():
 def test_ffmpeg_command_uses_browser_encoding():
     cmd = rs.ffmpeg_command(1280, 720, 59.94, Path("out.mp4"))
     assert "libx264" in cmd and "yuv420p" in cmd and "+faststart" in cmd
+
+
+def test_canonical_association_components_match_display_hids():
+    root = Path(__file__).resolve().parents[1]
+    with (root / "detections/detector_seg_comparison/identical_balls_trick_000_018_hand_associations.csv").open(newline="") as f:
+        rows = list(__import__("csv").DictReader(f))
+    with (root / "detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv").open(newline="") as f:
+        ids = sorted({int(r["track_id"]) for r in __import__("csv").DictReader(f) if r.get("observed") == "1"})
+    display_ids = rs.assign_display_ids(rs._pairs(rows), ids)
+    assert all(display_ids[int(r["source_track_id"])] == display_ids[int(r["target_track_id"])] for r in rows)
+    actual = {frozenset(t for t, hid in display_ids.items() if hid == value) for value in set(display_ids.values())}
+    # Compare non-singleton connected components, not individual edges.
+    assert {c for c in actual if len(c) > 1} == {frozenset({1, 5, 10}), frozenset({2, 11}), frozenset({3, 4, 6, 13})}
