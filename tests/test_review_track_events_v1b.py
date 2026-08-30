@@ -278,3 +278,93 @@ def test_to_public_event_boundary_true_is_propagated(tmp_path):
                      clip_root=tmp_path, port=0, host="127.0.0.1", url="")
     pub = state.to_public_event(0)
     assert pub["boundary"] is True
+
+
+# ---------------------------------------------------------------------------
+# Trend-evidence semantics: n_points < 3 must force INSUFFICIENT (n=N)
+# ---------------------------------------------------------------------------
+
+def test_insufficient_threshold_is_three_not_two(tmp_path):
+    """Regression: 10 -> 14 has only 2 observed points. The reviewer
+    must classify that as INSUFFICIENT (n=2), not CLOSING, so the
+    human is not misled by a two-frame distance difference.
+
+    This is the single rule the small correction pass introduced.
+    """
+    r = load_reviewer()
+    import importlib.util
+    import types
+    from pathlib import Path as _P
+    _spec = importlib.util.spec_from_file_location(
+        "hand_overlay", _P(__file__).resolve().parent.parent / "scripts" / "hand_overlay.py")
+    assert _spec is not None and _spec.loader is not None
+    hand_overlay = importlib.util.module_from_spec(_spec)
+    sys.modules.setdefault("hand_overlay", hand_overlay)
+    _spec.loader.exec_module(hand_overlay)
+    hands_csv = tmp_path / "hands.csv"
+    hands_csv.write_text(
+        "frame,person_index,left_wrist_x,left_wrist_y,left_wrist_confidence,"
+        "left_wrist_x_smooth,left_wrist_y_smooth,"
+        "right_wrist_x,right_wrist_y,right_wrist_confidence,"
+        "right_wrist_x_smooth,right_wrist_y_smooth,"
+        "left_elbow_x,left_elbow_y,left_elbow_confidence,"
+        "left_elbow_x_smooth,left_elbow_y_smooth,"
+        "right_elbow_x,right_elbow_y,right_elbow_confidence,"
+        "right_elbow_x_smooth,right_elbow_y_smooth,"
+        "left_shoulder_x,left_shoulder_y,left_shoulder_confidence,"
+        "left_shoulder_x_smooth,left_shoulder_y_smooth,"
+        "right_shoulder_x,right_shoulder_y,right_shoulder_confidence,"
+        "right_shoulder_x_smooth,right_shoulder_y_smooth,body_scale_shoulder_px\n"
+        "1077,0,,,,,,,800,400,0.9,800,400,,,,,,,,,,,,,,,,,,,,,,,\n"
+        "1078,0,,,,,,,300,400,0.9,300,400,,,,,,,,,,,,,,,,,,,,,,,\n"
+    )
+    hands = hand_overlay.load_hands_by_frame(hands_csv)
+    obs_primary = [r.TrackObservation(frame=1074, center_x=535.0, center_y=640.0,
+                                      confidence=1.0, observed=1)]
+    obs_candidate = [
+        r.TrackObservation(frame=1077, center_x=800.0, center_y=400.0,
+                           confidence=1.0, observed=1),
+        r.TrackObservation(frame=1078, center_x=300.0, center_y=400.0,
+                           confidence=1.0, observed=1),
+    ]
+    primary = r.Track(track_id=10, observations=obs_primary)
+    candidate = r.Track(track_id=14, observations=obs_candidate)
+    ev = types.SimpleNamespace(primary=primary, nearby_starts=[candidate],
+                               kind="end")
+    out = hand_overlay.event_hand_features(ev, hands=hands)
+    # The candidate has 2 observed points -> INSUFFICIENT (n=2),
+    # not CLOSING, even though the raw slope is a strong negative
+    # (the ball moved 500 px in 1 frame).
+    right = out["candidates"][0]["right"]
+    assert right["n_points"] == 2
+    assert right["distance_slope_px_per_frame"] is not None
+    # The numeric slope must still be a large negative number for
+    # diagnostics, NOT silently set to None.
+    assert right["distance_slope_px_per_frame"] < -100
+    assert right["trend_label"] == "INSUFFICIENT (n=2)"
+
+
+def test_trend_color_for_label_is_neutral_palette():
+    """CLOSING and SEPARATING must not be coloured green/red (which
+    would imply good/bad). INSUFFICIENT keeps the cautionary amber."""
+    r = load_reviewer()
+    closing = r._trend_color_for_label("CLOSING")
+    separating = r._trend_color_for_label("SEPARATING")
+    insufficient = r._trend_color_for_label("INSUFFICIENT (n=2)")
+    stable = r._trend_color_for_label("STABLE")
+    # CLOSING and SEPARATING must be visually distinct.
+    assert closing != separating
+    # Sanity: the new palette is cyan for CLOSING and amber for
+    # SEPARATING, not green / red. Channel-ordering is BGR.
+    assert closing[0] < closing[2]      # closing = cyan -> B<G<R
+    assert separating[2] < separating[0]  # separating = amber -> B<G>R
+    # INSUFFICIENT is the cautionary variant.
+    assert insufficient != closing and insufficient != separating
+    # STABLE is the neutral grey.
+    assert stable == (200, 200, 200)
+
+
+def test_trend_color_for_label_returns_neutral_for_unknown():
+    r = load_reviewer()
+    assert r._trend_color_for_label("—") == (220, 220, 220)
+    assert r._trend_color_for_label("UNKNOWN") == (220, 220, 220)

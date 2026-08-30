@@ -219,15 +219,15 @@ def _body_scale_at(hands: dict[int, list[PersonHandRow]],
 
 @dataclass
 class HandMetrics:
-    """Per-(event-side, anatomical-hand) feature bundle."""
-    hand: str
+    """Features for a track END or START against a single anatomical hand."""
+    hand: str                   # "left" or "right"
     distance_px: float | None
     distance_normalized: float | None
     distance_slope_px_per_frame: float | None
     radial_relative_velocity: float | None
     n_points: int
     hand_confidence: float | None
-    trend_label: str  # "CLOSING" | "SEPARATING" | "STABLE" | "—"
+    trend_label: str  # "INSUFFICIENT (n=N)" | "CLOSING" | "SEPARATING" | "STABLE" | "—"
 
     def as_dict(self) -> dict:
         return asdict(self)
@@ -310,17 +310,32 @@ def compute_hand_metrics(ball_samples: list[_BallSample],
             radial_relative_velocity=feats.radial_relative_velocity,
             n_points=feats.n_distance_points,
             hand_confidence=feats.hand_confidence,
-            trend_label=_trend_label(feats.distance_slope_px_per_frame),
+            trend_label=_trend_label(feats.distance_slope_px_per_frame,
+                                      feats.n_distance_points),
         )
     return out
 
 
-def _trend_label(slope: float | None) -> str:
-    if slope is None:
+def _trend_label(slope: float | None, n_points: int = 0) -> str:
+    """Decide the human-readable trend class for a slope.
+
+    Sample-count policy: a two-point least-squares slope is
+    mathematically a two-frame difference, which we explicitly do
+    not want to treat as reliable trend evidence. The threshold is
+    therefore ``n_points < 3`` => ``"INSUFFICIENT (n=N)"``,
+    regardless of the numeric slope. The raw slope is still
+    available to the caller via ``distance_slope_px_per_frame`` and
+    is rendered numerically; only the *categorical trend evidence*
+    is suppressed.
+    """
+    if slope is None or not math.isfinite(float(slope)):
         return "—"
-    if slope < -0.5:
+    if n_points < 3:
+        return f"INSUFFICIENT (n={int(n_points)})"
+    s = float(slope)
+    if s < -0.5:
         return "CLOSING"
-    if slope > 0.5:
+    if s > 0.5:
         return "SEPARATING"
     return "STABLE"
 

@@ -52,10 +52,87 @@ def test_format_hand_metric_decimals_respected():
 def test_trend_labels_match_sign_convention():
     ho = load_overlay()
     assert ho._trend_label(None) == "—"
-    assert ho._trend_label(-5.0) == "CLOSING"
-    assert ho._trend_label(+5.0) == "SEPARATING"
-    assert ho._trend_label(0.1) == "STABLE"
-    assert ho._trend_label(-0.1) == "STABLE"
+    assert ho._trend_label(float("nan")) == "—"
+    # Sample-count policy: a two-point slope is a two-frame
+    # difference, which we do NOT trust as a trend. n_points < 3
+    # must produce INSUFFICIENT (n=N) regardless of the sign.
+    assert ho._trend_label(-5.0, n_points=2) == "INSUFFICIENT (n=2)"
+    assert ho._trend_label(+5.0, n_points=2) == "INSUFFICIENT (n=2)"
+    # n_points == 3 is the first value we treat as a real slope.
+    assert ho._trend_label(-5.0, n_points=3) == "CLOSING"
+    assert ho._trend_label(+5.0, n_points=3) == "SEPARATING"
+    assert ho._trend_label(0.1, n_points=3) == "STABLE"
+    assert ho._trend_label(-0.1, n_points=3) == "STABLE"
+    # Larger samples keep the sign-based class.
+    assert ho._trend_label(-5.0, n_points=5) == "CLOSING"
+    assert ho._trend_label(+5.0, n_points=5) == "SEPARATING"
+
+
+def test_trend_label_preserves_raw_slope_for_n2():
+    """Regression: a 2-point distance slope is still returned to the
+    caller via ``distance_slope_px_per_frame`` for diagnostics, but the
+    trend_label must be INSUFFICIENT (n=2), not CLOSING/SEPARATING."""
+    ho = load_overlay()
+    slope = -19.395129065352812
+    metrics = ho.HandMetrics(
+        hand="right", distance_px=7.32, distance_normalized=0.04,
+        distance_slope_px_per_frame=slope,
+        radial_relative_velocity=3.68, n_points=2,
+        hand_confidence=0.98,
+        trend_label=ho._trend_label(slope, n_points=2),
+    )
+    assert metrics.distance_slope_px_per_frame == slope
+    assert metrics.n_points == 2
+    assert metrics.trend_label == "INSUFFICIENT (n=2)"
+
+
+def test_hand_metrics_n2_forced_to_insufficient_even_when_slope_would_be_closing():
+    """The compute_hand_metrics path must produce INSUFFICIENT (n=2)
+    for the 10 -> 14 case (candidate with only 2 observed points
+    straddling the last frame of the video)."""
+    ho = load_overlay()
+    # Synthetic event: primary at frame 0,1; candidate ID 14 at
+    # frame 1077, 1078 with strong leftward motion (raw slope ~ -1000).
+    # We need a synthetic event with a Track with only 2 observed
+    # points.
+    import types
+    cand_obs = [types.SimpleNamespace(frame=1077, center_x=900.0, center_y=400.0,
+                                      is_observed=True),
+                types.SimpleNamespace(frame=1078, center_x=10.0, center_y=400.0,
+                                      is_observed=True)]
+    cand = types.SimpleNamespace(track_id=14, all_sorted=cand_obs)
+    primary = types.SimpleNamespace(
+        track_id=10, all_sorted=[types.SimpleNamespace(frame=1074, center_x=535.0,
+                                                         center_y=640.0,
+                                                         is_observed=True)])
+    ev = types.SimpleNamespace(primary=primary, nearby_starts=[cand], kind="end")
+    # Hand stationary at (500, 400) for the two candidate frames.
+    hands = {1077: [ho.PersonHandRow(
+        frame=1077, person_index=0,
+        left_wrist=None, left_wrist_conf=None,
+        right_wrist=(500.0, 400.0), right_wrist_conf=0.9,
+        left_elbow=None, left_elbow_conf=None,
+        right_elbow=None, right_elbow_conf=None,
+        left_shoulder=None, left_shoulder_conf=None,
+        right_shoulder=None, right_shoulder_conf=None,
+        body_scale=None,
+    )], 1078: [ho.PersonHandRow(
+        frame=1078, person_index=0,
+        left_wrist=None, left_wrist_conf=None,
+        right_wrist=(500.0, 400.0), right_wrist_conf=0.9,
+        left_elbow=None, left_elbow_conf=None,
+        right_elbow=None, right_elbow_conf=None,
+        left_shoulder=None, left_shoulder_conf=None,
+        right_shoulder=None, right_shoulder_conf=None,
+        body_scale=None,
+    )]}
+    out = ho.event_hand_features(ev, hands=hands)
+    cand_metrics = out["candidates"][0]["right"]
+    assert cand_metrics["n_points"] == 2
+    # The raw slope is still numeric (and would normally be a strong
+    # CLOSING signal), but the trend evidence must be suppressed.
+    assert cand_metrics["distance_slope_px_per_frame"] is not None
+    assert cand_metrics["trend_label"] == "INSUFFICIENT (n=2)"
 
 
 # ---------------------------------------------------------------------------
@@ -233,8 +310,14 @@ def test_event_hand_features_end_event_picks_correct_sides():
     # so left=~450, right=~200. Nearest is right.
     assert out["candidates"][0]["nearest"] == "right"
     cand_right = out["candidates"][0]["right"]
-    # Ball is moving 400 -> 500, hand at 300. Separating.
-    assert cand_right["trend_label"] == "SEPARATING"
+    # Ball is moving 400 -> 500, hand at 300. The raw slope is a
+    # positive value (SEPARATING-sign), but the candidate only
+    # has 2 observed points so the trend evidence is suppressed
+    # to INSUFFICIENT (n=2) per the n_points < 3 policy. The raw
+    # numeric slope is still visible for diagnostics.
+    assert cand_right["n_points"] == 2
+    assert cand_right["distance_slope_px_per_frame"] > 0
+    assert cand_right["trend_label"] == "INSUFFICIENT (n=2)"
 
 
 # ---------------------------------------------------------------------------

@@ -586,6 +586,27 @@ _HAND_RIGHT_COLOR = (255, 200, 90)  # amber
 _HAND_ARM_COLOR = (160, 160, 160)
 _HAND_CONNECTOR_COLOR = (255, 255, 255)
 
+# Trend-evidence colors. Visually distinct but semantically neutral:
+# a CLOSING source and a SEPARATING successor are both expected, so
+# neither is styled as "good" or "bad". INSUFFICIENT keeps the
+# cautionary amber and italic styling.
+_TREND_CLOSING_COLOR = _HAND_LEFT_COLOR    # cyan
+_TREND_SEPARATING_COLOR = _HAND_RIGHT_COLOR  # amber
+_TREND_STABLE_COLOR = (200, 200, 200)
+_TREND_INSUFFICIENT_COLOR = (210, 150, 60)  # cautionary amber
+
+
+def _trend_color_for_label(trend_label: str) -> tuple[int, int, int]:
+    if trend_label == "CLOSING":
+        return _TREND_CLOSING_COLOR
+    if trend_label == "SEPARATING":
+        return _TREND_SEPARATING_COLOR
+    if trend_label == "STABLE":
+        return _TREND_STABLE_COLOR
+    if trend_label.startswith("INSUFFICIENT"):
+        return _TREND_INSUFFICIENT_COLOR
+    return (220, 220, 220)
+
 
 def _draw_hand_skeleton(frame, person) -> None:
     """Draw shoulder→elbow→wrist lines + L/R wrist markers.
@@ -655,7 +676,14 @@ def _format_distance(value) -> str:
 
 
 def _draw_event_hand_panel(frame, event, frame_index, hand_features) -> None:
-    """Draw a compact panel in the bottom-right showing hand features."""
+    """Draw a compact panel in the bottom-right showing hand features.
+
+    Trend-evidence styling is semantically neutral: cyan for CLOSING,
+    amber for SEPARATING, gray for STABLE, cautionary amber for
+    INSUFFICIENT. The raw numeric slope is always rendered so the
+    human can see the actual measurement even when n_points is too
+    small for a reliable trend class.
+    """
     if hand_features is None:
         return
     width = frame.shape[1]
@@ -675,6 +703,7 @@ def _draw_event_hand_panel(frame, event, frame_index, hand_features) -> None:
                  else (200, 200, 200))
     src_metrics = (src.get(src_nearest) if src_nearest in ("left", "right")
                    else None) or {}
+    src_label = str(src_metrics.get("trend_label", "—"))
     _text(frame,
           f"PRIMARY -> {src_nearest.upper() if src_nearest != '?' else '?'}",
           (panel_x, panel_y + 32), src_color, 0.42)
@@ -685,11 +714,9 @@ def _draw_event_hand_panel(frame, event, frame_index, hand_features) -> None:
     _text(frame,
           f"d' {_format_metric(src_metrics.get('distance_slope_px_per_frame'))}"
           f"   {_format_metric(src_metrics.get('radial_relative_velocity'))} rad",
-          (panel_x, panel_y + 66),
-          (180, 255, 180) if (src_metrics.get('distance_slope_px_per_frame') or 0) < 0
-          else (255, 180, 180) if (src_metrics.get('distance_slope_px_per_frame') or 0) > 0
-          else (220, 220, 220),
-          0.36)
+          (panel_x, panel_y + 66), _trend_color_for_label(src_label), 0.36)
+    _text(frame, f"trend: {src_label}", (panel_x, panel_y + 82),
+          _trend_color_for_label(src_label), 0.36)
     for idx, cand in enumerate(hand_features.get("candidates", []), start=1):
         cands_nearest = cand.get("nearest") or "?"
         cands_color = (_HAND_LEFT_COLOR if cands_nearest == "left"
@@ -697,15 +724,18 @@ def _draw_event_hand_panel(frame, event, frame_index, hand_features) -> None:
                        else (200, 200, 200))
         cand_metrics = (cand.get(cands_nearest) if cands_nearest in ("left", "right")
                         else None) or {}
-        prefix = "predecessor" if event.kind == "orphan_start" else "future"
+        cand_label = str(cand_metrics.get("trend_label", "—"))
         label = f"[{cand.get('index', idx)}] ID {cand.get('track_id')} <- {cands_nearest.upper() if cands_nearest != '?' else '?'}"
-        _text(frame, label, (panel_x, panel_y + 84 + (idx - 1) * 18),
+        _text(frame, label, (panel_x, panel_y + 100 + (idx - 1) * 32),
               cands_color, 0.38)
         sub = (f"d' {_format_metric(cand_metrics.get('distance_slope_px_per_frame'))}"
                f"   {_format_metric(cand_metrics.get('radial_relative_velocity'))} rad"
                f"   n={cand_metrics.get('n_points', 0)}")
-        _text(frame, sub, (panel_x, panel_y + 96 + (idx - 1) * 18),
-              (200, 200, 200), 0.32)
+        _text(frame, sub, (panel_x, panel_y + 112 + (idx - 1) * 32),
+              _trend_color_for_label(cand_label), 0.32)
+        _text(frame, f"trend: {cand_label}",
+              (panel_x, panel_y + 124 + (idx - 1) * 32),
+              _trend_color_for_label(cand_label), 0.32)
 
 
 def render_clip(
@@ -1168,8 +1198,13 @@ INDEX_HTML = """<!DOCTYPE html>
     font-size: 12px; padding: 2px 0; }
   .hand-panel .hand-row.header { color: var(--muted); font-size: 11px;
     text-transform: uppercase; letter-spacing: .05em; }
-  .hand-panel .hand-row .closing { color: var(--good); }
-  .hand-panel .hand-row .separating { color: var(--bad); }
+  /* CLOSING / SEPARATING are visually distinct but semantically
+     neutral — neither should imply "good" or "bad" because a CLOSING
+     source and a SEPARATING successor are both expected. INSUFFICIENT
+     keeps the cautionary amber and italic styling. */
+  .hand-panel .hand-row .closing { color: #5ac8ff; }
+  .hand-panel .hand-row .separating { color: #ffc85a; }
+  .hand-panel .hand-row .stable { color: #c8c8c8; }
   .hand-panel .hand-row .insufficient { color: var(--warn); font-style: italic; }
   .hand-panel .hand-legend { color: var(--muted); font-size: 11px;
     margin-top: 6px; line-height: 1.4; }
@@ -1221,10 +1256,15 @@ INDEX_HTML = """<!DOCTYPE html>
       <div class="hand-legend">
         L = anatomical left wrist, R = anatomical right wrist
         (anatomical, not screen position). d' is the least-squares
-        slope of ball-to-hand distance over the last/first 5
-        observed ball points. Negative = CLOSING, positive =
-        SEPARATING. <code>radial</code> is the radial component of
+        slope of ball-to-hand distance over the last/first observed
+        ball points. Negative = CLOSING, positive = SEPARATING, near
+        zero = STABLE. <code>radial</code> is the radial component of
         (v_ball &minus; v_hand) along the unit hand-to-ball vector.
+        Trend classes require <code>n_points &gt;= 3</code>; with fewer
+        points the row is marked <code>INSUFFICIENT (n=N)</code> and
+        the raw numeric slope is still shown for diagnostics. CLOSING
+        vs SEPARATING styling is visually distinct but
+        semantically neutral &mdash; neither implies good or bad.
         Missing values are <code>—</code>, never zero.
       </div>
     </div>
@@ -1415,18 +1455,26 @@ function fmtUnsigned(value, suffix) {
   if (!Number.isFinite(f)) return '—';
   return f.toFixed(1) + (suffix || '');
 }
-function trendClass(slope) {
+function trendClass(slope, nPoints) {
+  // Semantically neutral: cyan for CLOSING, amber for SEPARATING, gray
+  // for STABLE. The combined INSUFFICIENT/CLOSING/SEPARATING/label
+  // decision lives in trendLabel() so the colour class can never
+  // disagree with the label.
   if (slope === null || slope === undefined) return '';
   const f = Number(slope);
   if (!Number.isFinite(f)) return '';
+  if (nPoints !== undefined && Number(nPoints) < 3) return 'insufficient';
   if (f < -0.5) return 'closing';
   if (f > 0.5) return 'separating';
-  return '';
+  return 'stable';
 }
-function trendLabel(slope) {
+function trendLabel(slope, nPoints) {
   if (slope === null || slope === undefined) return '—';
   const f = Number(slope);
   if (!Number.isFinite(f)) return '—';
+  if (nPoints !== undefined && Number(nPoints) < 3) {
+    return `INSUFFICIENT (n=${Number(nPoints)})`;
+  }
   if (f < -0.5) return 'CLOSING';
   if (f > 0.5) return 'SEPARATING';
   return 'STABLE';
@@ -1441,10 +1489,9 @@ function renderHandPanel(ev) {
   const srcMetrics = (srcNearest === 'left' || srcNearest === 'right')
     ? (src[srcNearest] || {}) : {};
   const nPts = srcMetrics.n_points || 0;
-  const insufficient = nPts < 2;
   const srcRow = (kind) => {
-    const cls = insufficient ? 'insufficient' : trendClass(srcMetrics.distance_slope_px_per_frame);
-    const label = insufficient ? `INSUFFICIENT (n=${nPts})` : trendLabel(srcMetrics.distance_slope_px_per_frame);
+    const cls = trendClass(srcMetrics.distance_slope_px_per_frame, nPts);
+    const label = trendLabel(srcMetrics.distance_slope_px_per_frame, nPts);
     const arrow = srcNearest === 'left' ? '→ L' : srcNearest === 'right' ? '→ R' : '→ ?';
     return `<div class="hand-row ${cls}">
       <span><b>PRIMARY</b> id=${ev.primary_track_id} ${arrow}</span>
@@ -1478,9 +1525,8 @@ function renderHandPanel(ev) {
       const cn = c.nearest || '?';
       const cm = (cn === 'left' || cn === 'right') ? (c[cn] || {}) : {};
       const cn_pts = cm.n_points || 0;
-      const c_insufficient = cn_pts < 2;
-      const cls = c_insufficient ? 'insufficient' : trendClass(cm.distance_slope_px_per_frame);
-      const label = c_insufficient ? `INSUFFICIENT (n=${cn_pts})` : trendLabel(cm.distance_slope_px_per_frame);
+      const cls = trendClass(cm.distance_slope_px_per_frame, cn_pts);
+      const label = trendLabel(cm.distance_slope_px_per_frame, cn_pts);
       const arrow = cn === 'left' ? '← L' : cn === 'right' ? '← R' : '← ?';
       candHTML += `<div class="hand-row ${cls}">
         <span><b>[${c.index}]</b> ID ${c.track_id} ${arrow}</span>
