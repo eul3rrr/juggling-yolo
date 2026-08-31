@@ -1,0 +1,9 @@
+norfair==2.3.0
+numpy==1.26.4
+opencv-python==4.11.0.86
+PyYAML==6.0.3
+scipy==1.17.1
+ultralytics==8.4.123
+
+# Test dependency
+pytest==9.1.1

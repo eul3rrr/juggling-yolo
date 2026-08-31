@@ -1,10 +1,10 @@
-# Overnight Session State (updated continuously)
+# Overnight Research Snapshot
 
-LAST_UPDATE: 2026-08-26 08:07 CEST
-SESSION_ID: 20260826_061301_ccfd81
+This experiment series is complete and archived. It is no longer an active
+session queue. See `RESULTS_LOG.md` for methods, measurements, negative results,
+and artifact paths.
 
-## Status: E1-E11 + E8 family COMPLETE -> E15 detector headroom probe, then
-## E12 integration run + E13 siteswap validation, then final REPORT.md
+## Final status
 
 ## Key results so far (details in RESULTS_LOG.md)
 - E1: ballistic scoring bal8 small real gain (top1 95.8->97.2%); Kalman filter no better.
@@ -35,8 +35,9 @@ observed-only points + bal8 scoring + per-video q90(gap) calibration +
 gap-normalized costs + successor assignment + CA Norfair motion model +
 raw-center export. Precision-first: 0 wrong accepts on labeled videos.
 
-## Remaining queue
-- E15: detector headroom (low-conf/high-imgsz rerun on dropout frames).
-- E12: integration run (full recommended config end-to-end, render chains).
-- E13: siteswap validation (flight-time histogram should show period-3 cascade).
-- REPORT.md: consolidated what-worked/what-didnt for the user.
+## Follow-up work
+
+E15/E15b detector-headroom findings are included in this baseline. The planned
+E12 end-to-end integration and E13 siteswap validation were not completed here.
+Later hand-occlusion, detector-capacity, and review-tool investigations live on
+their dedicated repository branches.

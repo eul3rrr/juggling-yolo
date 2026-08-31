@@ -1,40 +1,32 @@
-# Keep this repository intentionally minimal.
-*
-!.gitignore
-!README.md
-!scripts/
-scripts/*
-!scripts/detect_video.py
-!scripts/track_video.py
-!scripts/track_norfair.py
-!scripts/stitch_tracklets.py
-!scripts/review_stitches.py
-!scripts/analyze_stitch_features.py
-!configs/
-configs/*
-!configs/bytetrack.yaml
-!configs/botsort.yaml
-!configs/botsort_reid.yaml
-!videos/
+# Python environments, caches, and tooling
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local models and source media
+*.pt
 videos/*
 !videos/.gitkeep
-!outputs/
+
+# Generated videos and review clips; keep compact review manifests.
 outputs/*
 !outputs/.gitkeep
 !outputs/stitch_review/
 !outputs/stitch_review/*/
 !outputs/stitch_review/*/*.csv
 !outputs/stitch_review/*/*.json
-!detections/
-detections/*
-!detections/.gitkeep
-!detections/*.csv
-!detections/*.json
-!detections/*.md
-*.pt
-.venv/
-tests/
-!tests/
-!tests/test_stitch_tracklets.py
-!tests/test_review_stitches.py
-!tests/test_analyze_stitch_features.py
+outputs/stitch_review/**/*.mp4
+
+# Regenerable experiment media and local overnight-run state
+experiments/**/STOP
+experiments/**/watchdog.log
+experiments/**/.watchdog.lock/
+experiments/**/reports/**/*.mp4
+experiments/overnight/data/legacy_csv/
+experiments/overnight/data/e8/*.csv
+
+# Accidental Hermes session exports
+20??????_??????_??????
