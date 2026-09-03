@@ -38,6 +38,8 @@ def create_app() -> FastAPI:
     app.state.recording = None
     app.state.detector = None
     app.state.tracker = None
+    app.state.inference_error = None
+    app.state.inference_device = None
 
     @app.get("/")
     async def index():
@@ -53,7 +55,19 @@ def create_app() -> FastAPI:
 
     @app.get("/api/health")
     async def health():
-        return {"ok": True, "running": app.state.running, "config": app.state.config}
+        cuda_available = False
+        cuda_name = None
+        try:
+            import torch
+            cuda_available = bool(torch.cuda.is_available())
+            if cuda_available:
+                cuda_name = torch.cuda.get_device_name(0)
+        except Exception as exc:
+            app.state.inference_error = f"CUDA probe failed: {exc}"
+        return {"ok": True, "running": app.state.running, "config": app.state.config,
+                "cuda_available": cuda_available, "cuda_device": cuda_name,
+                "inference_device": app.state.inference_device,
+                "inference_error": app.state.inference_error}
 
     @app.post("/api/start")
     async def start(config: dict):
@@ -61,6 +75,8 @@ def create_app() -> FastAPI:
         app.state.config = config
         app.state.detector = None
         app.state.tracker = None
+        app.state.inference_error = None
+        app.state.inference_device = None
         app.state.replay = _load_replay(config.get("video_path")) if config.get("source", "video") == "video" else None
         if config.get("record"):
             session_dir = ROOT / "outputs" / "live_sessions" / datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -154,23 +170,42 @@ def _frame_state(app, source, frame, frame_id, started):
                       (time.perf_counter() - started) * 1000, tracks=tracks,
                       hands=hands, proximity=proximity, pending=pending,
                       events_recent=recent_events, bridges_recent=recent_bridges,
-                      counts={"visible_tracks": len(tracks), "display_hids": len({t.get("hid", t.get("track_id")) for t in tracks}), "pending": len(pending)})
+                      counts={"visible_tracks": len(tracks), "display_hids": len({t.get("hid", t.get("track_id")) for t in tracks}), "pending": len(pending)},
+                      runtime={"device": app.state.inference_device or "not initialized",
+                               "model": cfg.get("model", "yolo26m.pt"),
+                               "cuda": app.state.inference_device not in (None, "cpu"),
+                               "inference_error": app.state.inference_error})
 
 
 def _infer_tracks(app, frame):
     """Lazy webcam detector/tracker using the live low-latency model."""
     if app.state.detector is None:
         try:
+            import torch
             from ultralytics import YOLO
             from norfair import Tracker
             # The offline experiment remains yolo26l; webcam mode uses the
             # smaller medium checkpoint to reduce end-to-end lag. Ultralytics
             # downloads it on first use if it is not already in the worktree.
-            app.state.detector = YOLO(str(ROOT / "yolo26m.pt"))
+            requested = str(app.state.config.get("device", "auto"))
+            device = requested if requested != "auto" else ("0" if torch.cuda.is_available() else "cpu")
+            model_ref = Path(str(app.state.config.get("model", "yolo26m.pt")))
+            model_path = model_ref if model_ref.is_absolute() else ROOT / model_ref
+            if not model_path.is_file():
+                raise FileNotFoundError(f"model checkpoint does not exist: {model_path}")
+            app.state.detector = YOLO(str(model_path))
+            app.state.inference_device = device
             app.state.tracker = Tracker(distance_function="euclidean", distance_threshold=50, hit_counter_max=5)
-        except Exception:
+        except Exception as exc:
+            app.state.inference_error = f"Live inference initialization failed: {exc}"
             return []
-    result = app.state.detector.predict(frame, classes=[32], conf=0.15, imgsz=960, verbose=False)[0]
+    try:
+        result = app.state.detector.predict(frame, classes=[32], conf=0.15, imgsz=960,
+                                             device=app.state.inference_device,
+                                             verbose=False)[0]
+    except Exception as exc:
+        app.state.inference_error = f"Live inference failed: {exc}"
+        return []
     detections = []
     from norfair import Detection
     for xyxy, conf in zip(result.boxes.xyxy.cpu().numpy(), result.boxes.conf.cpu().numpy()):

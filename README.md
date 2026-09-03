@@ -350,6 +350,28 @@ choice ambiguous, or marked it not applicable. Allowed values:
 - `none` — human pressed `0` or left the field empty
 - `ambiguous` — human pressed `?`
 - `not_applicable` — event type was `e` (true end) or `f`
+
+## Web live tracker with CUDA
+
+Start the browser UI from the project root:
+
+```bash
+./.venv/bin/python scripts/live_app.py --device auto --model yolo26m.pt
+```
+
+Choose `Webcam`, camera `0`, and `auto (CUDA if available)` in the UI. Use
+`CUDA 0` to require the first NVIDIA GPU, or `CPU` for a deliberate fallback.
+The live diagnostics panel reports the resolved device, model, CUDA status,
+processing FPS, and any inference error. The server also exposes the same probe
+at `http://127.0.0.1:8000/api/health`.
+
+The model checkpoint must exist in the repository (the default `yolo26m.pt` is
+included). Verify the environment before starting:
+
+```bash
+nvidia-smi
+./.venv/bin/python -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device_name(0))"
+```
   (false-positive track), no continuation applies
 
 The server validates that any `selected` track id is actually present in
@@ -393,8 +415,8 @@ restart/pause/stop, webcam index selection, Clean/Research/Raw overlay
 presets, and per-overlay switches. Webcam capture is owned by OpenCV (no
 browser camera permission); it requests 1280x720 at 60 FPS, but the actual
 resolution and observed FPS are reported because hardware may differ.
-Webcam inference uses `yolo26m.pt` to reduce live latency; Ultralytics
-downloads the checkpoint on first webcam use if it is not already present.
+Webcam inference uses the selected local checkpoint (default `yolo26m.pt`)
+to reduce live latency and passes the selected device explicitly to Ultralytics.
 
 HID is the current hand-system display identity, not a final physical-ball
 identity. Live boundary decisions are provisional while delayed track-end

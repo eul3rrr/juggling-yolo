@@ -22,6 +22,7 @@ class FrameState:
     events_recent: list[dict[str, Any]] = field(default_factory=list)
     bridges_recent: list[dict[str, Any]] = field(default_factory=list)
     counts: dict[str, int] = field(default_factory=dict)
+    runtime: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
     type: str = "frame"
     version: int = 1
