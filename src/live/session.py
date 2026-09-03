@@ -158,12 +158,15 @@ def _frame_state(app, source, frame, frame_id, started):
 
 
 def _infer_tracks(app, frame):
-    """Lazy webcam detector/tracker using the frozen live defaults."""
+    """Lazy webcam detector/tracker using the live low-latency model."""
     if app.state.detector is None:
         try:
             from ultralytics import YOLO
             from norfair import Tracker
-            app.state.detector = YOLO(str(ROOT / "yolo26l.pt"))
+            # The offline experiment remains yolo26l; webcam mode uses the
+            # smaller medium checkpoint to reduce end-to-end lag. Ultralytics
+            # downloads it on first use if it is not already in the worktree.
+            app.state.detector = YOLO(str(ROOT / "yolo26m.pt"))
             app.state.tracker = Tracker(distance_function="euclidean", distance_threshold=50, hit_counter_max=5)
         except Exception:
             return []

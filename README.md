@@ -393,6 +393,8 @@ restart/pause/stop, webcam index selection, Clean/Research/Raw overlay
 presets, and per-overlay switches. Webcam capture is owned by OpenCV (no
 browser camera permission); it requests 1280x720 at 60 FPS, but the actual
 resolution and observed FPS are reported because hardware may differ.
+Webcam inference uses `yolo26m.pt` to reduce live latency; Ultralytics
+downloads the checkpoint on first webcam use if it is not already present.
 
 HID is the current hand-system display identity, not a final physical-ball
 identity. Live boundary decisions are provisional while delayed track-end
