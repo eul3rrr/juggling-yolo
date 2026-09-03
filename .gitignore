@@ -29,6 +29,14 @@ scripts/*
 !scripts/render_human_reference_short.py
 !scripts/extract_hands.py
 !scripts/diagnose_hand_transitions.py
+!scripts/live_app.py
+!src/
+!src/live/
+!src/live/*.py
+!web/
+!web/live/
+!web/live/*
+!requirements-live.txt
 !scripts/run_arm_triple.sh
 !configs/
 configs/*
@@ -82,3 +90,4 @@ tests/
 !tests/test_review_track_events_v1b.py
 !tests/test_analyze_stitch_features.py
 !tests/test_compare_arms.py
+!tests/test_live_core.py

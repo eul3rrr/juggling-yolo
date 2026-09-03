@@ -378,3 +378,31 @@ The labels CSV columns:
 
 Re-running the same `serve` command reuses the existing manifest + clips
 and resumes from the first unsaved event.
+
+## Juggling Tracker Live UI V1
+
+Install the small web-app dependency set into the existing environment with
+`./.venv/bin/python -m pip install -r requirements-live.txt`, then run:
+
+```bash
+./.venv/bin/python scripts/live_app.py --video videos/identical_balls_trick_000_018.mp4
+```
+
+Open the printed localhost URL. The controls support prerecorded replay,
+restart/pause/stop, webcam index selection, Clean/Research/Raw overlay
+presets, and per-overlay switches. Webcam capture is owned by OpenCV (no
+browser camera permission); it requests 1280x720 at 60 FPS, but the actual
+resolution and observed FPS are reported because hardware may differ.
+
+HID is the current hand-system display identity, not a final physical-ball
+identity. Live boundary decisions are provisional while delayed track-end
+information arrives; END uses the final observed point, not the later
+discovery frame. Proximity zones use the existing hand classifier's
+normalized/raw fallback thresholds. Dashed hand bridges are identity
+annotations, not physical trajectories. Body-occlusion and airborne
+stitching are deliberately not implemented in V1.
+
+Recorded sessions are stored under `outputs/live_sessions/YYYYMMDD_HHMMSS/`
+with the unannotated `source.mp4` and `live_state.jsonl` when recording is
+enabled. The V1 exporter is intentionally extensible; additional canonical
+CSV writers can be added without changing the WebSocket protocol.
