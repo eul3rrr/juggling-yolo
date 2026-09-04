@@ -15,12 +15,12 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
 try:
-    from .engine import DisplayHIDMap, load_canonical_rows
+    from .engine import DisplayHIDMap, LiveTrackletStore, load_canonical_rows
     from .protocol import FrameState, serialize_frame_state
     from .sources import OpenCVSource, SourceOpenError
 except ImportError:  # direct test/module loading
     sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from engine import DisplayHIDMap, load_canonical_rows
+    from engine import DisplayHIDMap, LiveTrackletStore, load_canonical_rows
     from protocol import FrameState, serialize_frame_state
     from sources import OpenCVSource, SourceOpenError
 
@@ -40,6 +40,8 @@ def create_app() -> FastAPI:
     app.state.tracker = None
     app.state.inference_error = None
     app.state.inference_device = None
+    app.state.pose_model = None
+    app.state.live_store = None
 
     @app.get("/")
     async def index():
@@ -77,6 +79,8 @@ def create_app() -> FastAPI:
         app.state.tracker = None
         app.state.inference_error = None
         app.state.inference_device = None
+        app.state.pose_model = None
+        app.state.live_store = None
         app.state.replay = _load_replay(config.get("video_path")) if config.get("source", "video") == "video" else None
         if config.get("record"):
             session_dir = ROOT / "outputs" / "live_sessions" / datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -138,21 +142,42 @@ def create_app() -> FastAPI:
 
 def _frame_state(app, source, frame, frame_id, started):
     tracks = []
+    detections = []
+    live = None
     cfg = app.state.config
     replay = app.state.replay
     if replay:
         tracks = replay["frames"].get(frame_id, [])
     else:
-        rows = cfg.get("track_rows", {})
-        tracks = list(rows.get(str(frame_id), rows.get(frame_id, [])))
-        if not tracks and cfg.get("source") == "webcam":
-            tracks = _infer_tracks(app, frame)
+        if cfg.get("source") == "webcam":
+            live = _infer_tracks(app, frame)
+            tracks = live["tracks"]
+            detections = live["detections"]
+            if app.state.live_store is None:
+                app.state.live_store = LiveTrackletStore(source.info.fps or 60.0)
+            app.state.live_store.observe(frame_id, tracks, live["hands"])
+            app.state.live_store.close_terminated(live["terminated"], frame_id)
+            for track in tracks:
+                state = app.state.live_store.tracklets.get(track["track_id"])
+                if state:
+                    track["hid"] = app.state.live_store.display_hids.hid_for(track["track_id"])
+                    track["observed_trail"] = [{"frame": p.frame, "x": p.x, "y": p.y} for p in state.recent_observed_points]
+        else:
+            rows = cfg.get("track_rows", {})
+            tracks = list(rows.get(str(frame_id), rows.get(frame_id, [])))
     recent_events = []
     recent_bridges = []
     if replay:
         recent_events = [e for e in replay["events"] if e["frame"] <= frame_id][-50:]
         recent_bridges = [b for b in replay["bridges"] if b["target_start_frame"] <= frame_id][-5:]
-    hands = replay["hands"].get(frame_id, {}) if replay else {}
+    elif app.state.live_store:
+        store = app.state.live_store
+        recent_events = [{"frame": e.boundary_frame, "track_id": e.track_id, "event_type": e.event_type,
+                          "hand": e.preferred_hand or e.eligible_hand_set, "x": float(e.boundary_x), "y": float(e.boundary_y),
+                          "evidence": e.evidence_reason} for e in store.known_events if e.boundary_frame <= frame_id][-50:]
+        recent_bridges = [b for b in store.bridges if b["target_start_frame"] <= frame_id
+                          and frame_id - b["target_start_frame"] <= max(1, source.info.fps * .5)]
+    hands = replay["hands"].get(frame_id, {}) if replay else (live["hands"] if live else {})
     pending = []
     if replay:
         for event in replay["events"]:
@@ -160,21 +185,30 @@ def _frame_state(app, source, frame, frame_id, started):
                 continue
             if not any(b["source_track_id"] == event["track_id"] and b["target_start_frame"] <= frame_id for b in replay["bridges"]):
                 pending.append({"track_id": event["track_id"], "hid": replay["mapping"].get(event["track_id"]), "hand": event["hand"], "age_seconds": round((frame_id-event["frame"])/max(source.info.fps, 1), 2), "position": None})
+    elif app.state.live_store:
+        pending = app.state.live_store.pending(frame_id)
     proximity = {}
+    from hand_association import HandAssociationConfig
+    hand_cfg = HandAssociationConfig()
     for side, wrist in hands.items():
         if not isinstance(wrist, dict) or wrist.get("x") is None: continue
         scale = wrist.get("body_scale")
-        proximity[side] = {"x": wrist["x"], "y": wrist["y"], "very_near_radius": .35*scale if scale else 60, "possible_radius": .7*scale if scale else 130, "body_scale": scale}
+        proximity[side] = {"x": wrist["x"], "y": wrist["y"],
+                           "very_near_radius": hand_cfg.strong_max_normalized * scale if scale else hand_cfg.strong_max_raw_px,
+                           "possible_radius": hand_cfg.possible_max_normalized * scale if scale else hand_cfg.possible_max_raw_px,
+                           "body_scale": scale, "radius_mode": "normalized" if scale else "raw"}
     return FrameState(frame_id, frame.shape[1], frame.shape[0], source.info.fps,
                       1.0 / max(time.perf_counter() - started, 1e-6),
-                      (time.perf_counter() - started) * 1000, tracks=tracks,
+                      (time.perf_counter() - started) * 1000, detections=detections, tracks=tracks,
                       hands=hands, proximity=proximity, pending=pending,
                       events_recent=recent_events, bridges_recent=recent_bridges,
                       counts={"visible_tracks": len(tracks), "display_hids": len({t.get("hid", t.get("track_id")) for t in tracks}), "pending": len(pending)},
                       runtime={"device": app.state.inference_device or "not initialized",
                                "model": cfg.get("model", "yolo26l.pt"),
                                "cuda": app.state.inference_device not in (None, "cpu"),
-                               "inference_error": app.state.inference_error})
+                               "inference_error": app.state.inference_error,
+                               "thresholds": {"very_near": hand_cfg.strong_max_normalized,
+                                              "possible": hand_cfg.possible_max_normalized}})
 
 
 def _infer_tracks(app, frame):
@@ -184,9 +218,6 @@ def _infer_tracks(app, frame):
             import torch
             from ultralytics import YOLO
             from norfair import Tracker
-            # The offline experiment remains yolo26l; webcam mode uses the
-            # smaller medium checkpoint to reduce end-to-end lag. Ultralytics
-            # downloads it on first use if it is not already in the worktree.
             requested = str(app.state.config.get("device", "auto"))
             device = requested if requested != "auto" else ("0" if torch.cuda.is_available() else "cpu")
             model_ref = Path(str(app.state.config.get("model", "yolo26l.pt")))
@@ -198,26 +229,63 @@ def _infer_tracks(app, frame):
             app.state.tracker = Tracker(distance_function="euclidean", distance_threshold=50, hit_counter_max=5)
         except Exception as exc:
             app.state.inference_error = f"Live inference initialization failed: {exc}"
-            return []
+            return {"tracks": [], "detections": [], "hands": {}, "terminated": set()}
     try:
         result = app.state.detector.predict(frame, classes=[32], conf=0.15, imgsz=960,
                                              device=app.state.inference_device,
                                              verbose=False)[0]
     except Exception as exc:
         app.state.inference_error = f"Live inference failed: {exc}"
-        return []
+        return {"tracks": [], "detections": [], "hands": {}, "terminated": set()}
     detections = []
     from norfair import Detection
     for xyxy, conf in zip(result.boxes.xyxy.cpu().numpy(), result.boxes.conf.cpu().numpy()):
         x1, y1, x2, y2 = xyxy
-        detections.append(Detection(np.array([[(x1+x2)/2, (y1+y2)/2]], dtype=np.float32), scores=np.array([conf], dtype=np.float32)))
+        detections.append({"x1": float(x1), "y1": float(y1), "x2": float(x2), "y2": float(y2), "confidence": float(conf)})
+    norfair_detections = [Detection(np.array([[(d["x1"] + d["x2"]) / 2, (d["y1"] + d["y2"]) / 2]], dtype=np.float32), scores=np.array([d["confidence"]], dtype=np.float32)) for d in detections]
+    before_ids = {int(t.id) for t in app.state.tracker.tracked_objects if t.id is not None}
+    updated = app.state.tracker.update(norfair_detections)
+    after_ids = {int(t.id) for t in app.state.tracker.tracked_objects if t.id is not None}
     tracks = []
-    for track in app.state.tracker.update(detections):
+    for track in updated:
         if track.id is None or track.last_detection is None:
             continue
         x, y = (float(v) for v in np.asarray(track.estimate)[0])
-        tracks.append({"track_id": int(track.id), "x": x, "y": y, "confidence": float(np.asarray(track.last_detection.scores).reshape(-1)[0])})
-    return tracks
+        tracks.append({"track_id": int(track.id), "x": x, "y": y,
+                       "confidence": float(np.asarray(track.last_detection.scores).reshape(-1)[0]),
+                       "observed": any(track.last_detection is detection for detection in norfair_detections)})
+    try:
+        hands = _infer_pose(app, frame)
+    except Exception as exc:
+        app.state.inference_error = f"Live pose inference failed: {exc}"
+        hands = {}
+    return {"tracks": tracks, "detections": detections, "hands": hands,
+            "terminated": before_ids - after_ids}
+
+
+def _infer_pose(app, frame):
+    """Run the existing COCO pose model and preserve anatomical keypoint sides."""
+    if app.state.pose_model is None:
+        from ultralytics import YOLO
+        model_path = ROOT / str(app.state.config.get("pose_model", "yolo26s-pose.pt"))
+        app.state.pose_model = YOLO(str(model_path))
+    result = app.state.pose_model.predict(frame, conf=.25, imgsz=640,
+                                           device=app.state.inference_device,
+                                           verbose=False)[0]
+    if result.keypoints is None or result.keypoints.data is None or len(result.keypoints.data) == 0:
+        return {}
+    data = result.keypoints.data.detach().cpu().numpy()
+    person_conf = result.boxes.conf.detach().cpu().numpy() if result.boxes is not None else np.zeros(len(data))
+    person = data[int(np.argmax(person_conf)) if len(person_conf) else 0]
+    out = {}
+    for side, index in (("LEFT", 9), ("RIGHT", 10)):
+        if person.shape[0] > index and person[index, 2] >= .25:
+            out[side] = {"x": float(person[index, 0]), "y": float(person[index, 1]), "confidence": float(person[index, 2])}
+    if person.shape[0] > 6 and person[5, 2] >= .25 and person[6, 2] >= .25:
+        scale = float(np.hypot(person[5, 0] - person[6, 0], person[5, 1] - person[6, 1]))
+        for value in out.values():
+            value["body_scale"] = scale
+    return out
 
 
 async def _stop(app):
@@ -261,7 +329,17 @@ def _load_replay(video_path):
     if assoc_path.is_file():
         with assoc_path.open(newline="", encoding="utf-8") as f:
             for row in csv.DictReader(f):
-                bridges.append({"source_track_id": int(row["source_track_id"]), "target_track_id": int(row["target_track_id"]), "source_end_frame": int(row["source_end_frame"]), "target_start_frame": int(row["target_start_frame"]), "hand": row.get("resolved_hand", "")})
+                source_id = int(row["source_track_id"])
+                target_id = int(row["target_track_id"])
+                source_points = by_frame.get(int(row["source_end_frame"]), [])
+                target_points = by_frame.get(int(row["target_start_frame"]), [])
+                source = next((p for p in source_points if p["track_id"] == source_id), None)
+                target = next((p for p in target_points if p["track_id"] == target_id), None)
+                bridges.append({"source_track_id": source_id, "target_track_id": target_id,
+                                "source_end_frame": int(row["source_end_frame"]), "target_start_frame": int(row["target_start_frame"]),
+                                "source_x": source["x"] if source else None, "source_y": source["y"] if source else None,
+                                "target_x": target["x"] if target else None, "target_y": target["y"] if target else None,
+                                "hand": row.get("resolved_hand", "")})
     hands = defaultdict(dict)
     hands_path = ROOT / "detections" / f"{path.stem}_yolo26s-pose-hands.csv"
     if hands_path.is_file():
