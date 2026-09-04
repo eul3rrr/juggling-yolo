@@ -172,7 +172,7 @@ def _frame_state(app, source, frame, frame_id, started):
                       events_recent=recent_events, bridges_recent=recent_bridges,
                       counts={"visible_tracks": len(tracks), "display_hids": len({t.get("hid", t.get("track_id")) for t in tracks}), "pending": len(pending)},
                       runtime={"device": app.state.inference_device or "not initialized",
-                               "model": cfg.get("model", "yolo26m.pt"),
+                               "model": cfg.get("model", "yolo26l.pt"),
                                "cuda": app.state.inference_device not in (None, "cpu"),
                                "inference_error": app.state.inference_error})
 
@@ -189,7 +189,7 @@ def _infer_tracks(app, frame):
             # downloads it on first use if it is not already in the worktree.
             requested = str(app.state.config.get("device", "auto"))
             device = requested if requested != "auto" else ("0" if torch.cuda.is_available() else "cpu")
-            model_ref = Path(str(app.state.config.get("model", "yolo26m.pt")))
+            model_ref = Path(str(app.state.config.get("model", "yolo26l.pt")))
             model_path = model_ref if model_ref.is_absolute() else ROOT / model_ref
             if not model_path.is_file():
                 raise FileNotFoundError(f"model checkpoint does not exist: {model_path}")
