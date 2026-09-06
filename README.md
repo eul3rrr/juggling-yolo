@@ -154,6 +154,28 @@ Every executable in `scripts/` also locates the project `.venv` when run directl
 
 The test suite covers CSV contracts, observed/predicted semantics, stitch ranking, review-state behavior, feature analysis, tracker configuration, and direct CLI execution.
 
+## Demo site
+
+The recruiter-facing static demo is intended for GitHub Pages at
+https://eul3rrr.github.io/juggling-yolo/. It becomes available after Pages is
+enabled for the repository; no public deployment is claimed here.
+
+Regenerate the three site videos and their poster images from the canonical
+source clip and existing CSV artifacts:
+
+```bash
+.venv/bin/python scripts/render_demo_videos.py
+```
+
+Preview the site locally without a build step:
+
+```bash
+python3 -m http.server 8000 --directory docs
+```
+
+The renderer accepts `--video`, `--detections`, `--tracklets`, `--pose`,
+`--associations`, `--events`, `--state-trace`, and `--output-dir` overrides.
+
 ## Scope and limitations
 
 - The repository currently targets offline analysis of short juggling clips.

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A recruiter-facing demo of persistent ball identity reconstruction from juggling video.">
+  <title>Juggling Motion Analysis</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='22' fill='%2365d4e4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="wordmark" href="./">JMA<span>/</span>01</a>
+      <nav aria-label="Primary navigation">
+        <a href="#problem">Problem</a>
+        <a href="#demos">Demos</a>
+        <a href="#status">Status</a>
+        <a href="https://github.com/eul3rrr/juggling-yolo">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Work in progress</p>
+        <h1 id="hero-title">Juggling<br><em>Motion Analysis</em></h1>
+        <p class="lede">Recovering persistent ball identities from ordinary juggling video.</p>
+        <p class="tech-line">Computer Vision <span aria-hidden="true">·</span> Multi-Object Tracking <span aria-hidden="true">·</span> Temporal Reasoning</p>
+        <p class="stack">Python <span aria-hidden="true">·</span> YOLO <span aria-hidden="true">·</span> Norfair</p>
+        <a class="button" href="https://github.com/eul3rrr/juggling-yolo">View on GitHub <span aria-hidden="true">-&gt;</span></a>
+      </div>
+      <figure class="hero-media media-frame">
+        <video muted loop playsinline controls preload="metadata" poster="assets/demo-reconstructed-identity.jpg" aria-label="Reconstructed ball identities over a juggling video">
+          <source src="assets/demo-reconstructed-identity.mp4" type="video/mp4">
+        </video>
+        <figcaption><span>Canonical clip / 18.0 s</span><span>03 / reconstructed identity</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="section shell" id="problem" aria-labelledby="problem-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">01 / THE PROBLEM</p>
+        <div><h2 id="problem-title">A detector sees moments.<br>Analysis needs <em>continuity.</em></h2>
+        <p>Frame-based detection and local tracking are good at answering “what is here now?” Hands, occlusion, blur, and low confidence still split one physical ball into short local tracklets.</p></div>
+      </div>
+      <div class="fragment-story" aria-label="A fragmented local track sequence">
+        <div class="fragment"><strong>T1</strong><small>local tracklet</small></div>
+        <div class="gap"><span></span><small>hand / gap</small></div>
+        <div class="fragment"><strong>T5</strong><small>local tracklet</small></div>
+        <div class="gap"><span></span><small>occlusion</small></div>
+        <div class="fragment"><strong>T10</strong><small>local tracklet</small></div>
+      </div>
+      <p class="callout">Goal: turn short observations into a longer-lived reconstructed identity, while keeping the evidence and uncertainty visible.</p>
+    </section>
+
+    <section class="section section-rule shell" aria-labelledby="pipeline-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">02 / PIPELINE</p>
+        <div><h2 id="pipeline-title">From pixels to persistent<br><em>trajectories.</em></h2>
+        <p>A staged pipeline makes the boundary between implemented reasoning and experimental work explicit.</p></div>
+      </div>
+      <div class="pipeline" role="list" aria-label="Analysis pipeline">
+        <div class="pipeline-step" role="listitem"><span>01</span><b>VIDEO</b></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step done" role="listitem"><span>02</span><b>YOLO<br>detections</b><small>implemented</small></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step done" role="listitem"><span>03</span><b>NORFAIR<br>local T#</b><small>implemented</small></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step done" role="listitem"><span>04</span><b>START/END<br>boundary</b><small>implemented</small></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step done" role="listitem"><span>05</span><b>HAND<br>reasoning</b><small>implemented</small></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step next" role="listitem"><span>06</span><b>AIRBORNE / BODY<br>reasoning</b><small>experimental / planned</small></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step done" role="listitem"><span>07</span><b>IDENTITY<br>repair</b><small>hand repair implemented</small></div><i aria-hidden="true">-&gt;</i>
+        <div class="pipeline-step" role="listitem"><span>08</span><b>PERSISTENT<br>trajectories</b></div>
+      </div>
+      <div class="scope-notes"><span><b>Implemented</b> detection, local tracking, hand pose, hand boundary classification, hand repair</span><span><b>Experimental / next</b> airborne stitching</span><span><b>Planned</b> body occlusion</span></div>
+    </section>
+
+    <section class="section section-rule shell" id="demos" aria-labelledby="demos-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">03 / THREE VIEWS</p>
+        <div><h2 id="demos-title">From detections to<br>persistent <em>identity.</em></h2>
+        <p>Every video is rendered from the same 720p source frames and timing. The overlays change; the evidence does not.</p></div>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-number">01</div>
+          <div class="demo-heading"><h3>Detection &amp; local tracking</h3><p>YOLO boxes and Norfair local T# labels expose the fragmentation baseline. Each local tracklet keeps its own color.</p></div>
+          <figure class="media-frame"><video muted loop playsinline controls preload="metadata" poster="assets/demo-local-tracking.jpg" aria-label="YOLO detections and local Norfair tracklets"><source src="assets/demo-local-tracking.mp4" type="video/mp4"></video></figure>
+          <div class="legend"><span class="legend-item"><i class="swatch line blue"></i>observed trail</span><span class="legend-item"><i class="swatch box"></i>YOLO box + confidence</span><span class="legend-item">T# = local tracklet</span></div>
+        </article>
+        <article class="demo-card">
+          <div class="demo-number">02</div>
+          <div class="demo-heading"><h3>Hand-aware stitching</h3><p>Wrist markers and authoritative pending state make a hand boundary legible. Accepted associations connect raw fragments with a graphical bridge.</p></div>
+          <figure class="media-frame"><video muted loop playsinline controls preload="metadata" poster="assets/demo-hand-stitching.jpg" aria-label="Hand-aware identity associations with curved dashed bridges"><source src="assets/demo-hand-stitching.mp4" type="video/mp4"></video></figure>
+          <div class="legend"><span class="legend-item"><i class="swatch line blue"></i>observed trail</span><span class="legend-item"><i class="swatch dashed"></i>HAND association</span><span class="legend-item"><i class="swatch ring"></i>L/R wrist</span></div>
+        </article>
+        <article class="demo-card featured-demo">
+          <div class="demo-number">03</div>
+          <div class="demo-heading"><h3>Reconstructed identity</h3><p>Accepted linked fragments share one stable HID and component color. Clean observed-only trails show the result without diagnostic noise.</p></div>
+          <figure class="media-frame"><video muted loop playsinline controls preload="metadata" poster="assets/demo-reconstructed-identity.jpg" aria-label="Stable reconstructed HID labels over observed ball trails"><source src="assets/demo-reconstructed-identity.mp4" type="video/mp4"></video></figure>
+          <div class="legend"><span class="legend-item"><i class="swatch line cyan"></i>observed trail</span><span class="legend-item"><i class="swatch label"></i>stable HID / component</span></div>
+        </article>
+      </div>
+      <p class="bridge-note"><i class="swatch dashed"></i> Dashed bridge = identity association, not estimated trajectory.</p>
+    </section>
+
+    <section class="section section-rule shell" aria-labelledby="hand-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">04 / HAND BOUNDARY</p>
+        <div><h2 id="hand-title">Repairing identity<br>through a <em>hand.</em></h2>
+        <p>Approach and separation events provide a compact compatibility signal. A pending token is attached to a wrist only when one anatomical hand is known; no hidden ball position is invented.</p></div>
+      </div>
+      <div class="hand-flow" aria-label="Hand-mediated identity repair flow">
+        <div class="flow-node"><span class="ball-icon" aria-hidden="true"></span><b>ball approaches</b><small>observed T3</small></div><div class="flow-arrow" aria-hidden="true">-&gt;</div>
+        <div class="flow-node event-node"><b>HAND_ENTRY</b><small>boundary event</small></div><div class="flow-arrow" aria-hidden="true">-&gt;</div>
+        <div class="flow-node pending-node"><b>pending</b><small>T3 : RIGHT</small></div><div class="flow-arrow" aria-hidden="true">-&gt;</div>
+        <div class="flow-node event-node"><b>HAND_EXIT</b><small>compatible start</small></div><div class="flow-arrow" aria-hidden="true">-&gt;</div>
+        <div class="flow-node resolved-node"><b>same HID</b><small>T4 joins component</small></div>
+      </div>
+      <div class="formula-row"><code>d_hand(t) = distance(ball, wrist) / body scale</code><span>Entry is approaching; exit is separating. Together with hand compatibility and FIFO state, this supports a cautious association decision.</span></div>
+    </section>
+
+    <section class="section section-rule shell" aria-labelledby="identity-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">05 / IDENTITY MODEL</p>
+        <div><h2 id="identity-title">A HID is a reconstructed<br><em>component.</em></h2>
+        <p>HID means current reconstructed identity under the implemented hand-repair subsystem, not ground truth. The mapping is deterministic from the accepted links.</p></div>
+      </div>
+      <div class="identity-diagram" role="img" aria-label="Raw tracklets T1 T5 and T10 are joined into HID 1 across hand occlusions">
+        <div class="diagram-side"><span>raw local tracklets</span><b class="diagram-track">T1</b><b class="diagram-track">T5</b><b class="diagram-track">T10</b></div>
+        <div class="diagram-middle"><span>hand occlusion</span><i class="diagram-dash"></i><i class="diagram-dash"></i><i class="diagram-dash"></i></div>
+        <div class="diagram-side final"><span>reconstructed identity</span><b class="diagram-hid">HID 1</b><small>one stable component color</small></div>
+      </div>
+    </section>
+
+    <section class="section section-rule shell" id="status" aria-labelledby="status-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">06 / CURRENT STATUS</p>
+        <div><h2 id="status-title">Evidence before <em>claims.</em></h2>
+        <p>A compact status snapshot of what this demo actually exercises.</p></div>
+      </div>
+      <ul class="checklist">
+        <li><span aria-hidden="true">[x]</span> YOLO detection</li>
+        <li><span aria-hidden="true">[x]</span> Norfair tracking</li>
+        <li><span aria-hidden="true">[x]</span> pose / wrist extraction</li>
+        <li><span aria-hidden="true">[x]</span> START/END boundary reasoning</li>
+        <li><span aria-hidden="true">[x]</span> hand entry/exit classification</li>
+        <li><span aria-hidden="true">[x]</span> pending-hand state</li>
+        <li><span aria-hidden="true">[x]</span> hand-mediated association</li>
+        <li><span aria-hidden="true">[x]</span> reconstructed HID visualization</li>
+      </ul>
+      <p class="caveat"><b>Interpretation note:</b> HID is the current reconstructed identity under the implemented hand-repair subsystem.</p>
+    </section>
+
+    <section class="section section-rule shell" aria-labelledby="next-title">
+      <div class="section-intro split-intro">
+        <p class="section-index">07 / NEXT STEPS</p>
+        <div><h2 id="next-title">Where the research<br>goes <em>next.</em></h2>
+        <p>The current hand path is one repair mechanism, not the finished juggling model.</p></div>
+      </div>
+      <div class="roadmap-flow" aria-label="Project trajectory from persistent trajectories to machine-readable juggling patterns">
+        <b>persistent ball trajectories</b><i aria-hidden="true">-&gt;</i>
+        <b>throw / catch events</b><i aria-hidden="true">-&gt;</i>
+        <b>siteswap inference</b><i aria-hidden="true">-&gt;</i>
+        <b>JML encoding</b><i aria-hidden="true">-&gt;</i>
+        <b>machine-readable patterns</b>
+      </div>
+      <div class="next-grid">
+        <div><span>01</span><h3>Airborne repair</h3><p>Use motion and ballistic evidence to connect fragments outside the hand. Experimental, not shown here as a prediction.</p></div>
+        <div><span>02</span><h3>Body occlusion</h3><p>Handle torso and limb occlusions with explicit body-aware evidence instead of silently interpolating.</p></div>
+        <div><span>03</span><h3>Siteswap inference</h3><p>Infer throw structure and juggling pattern notation from reconstructed trajectories and explicit throw/catch events.</p></div>
+        <div><span>04</span><h3>JML encoding</h3><p>Encode inferred sequences in Juggling Markup Language (JML), a machine-readable format for juggling patterns.</p></div>
+        <div><span>05</span><h3>Live prototype</h3><p>A webcam path exists as a separate prototype and active development path; it is not exercised or presented as complete in this offline demo.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner"><span>Juggling Motion Analysis / static research demo</span><a href="https://github.com/eul3rrr/juggling-yolo">github.com/eul3rrr/juggling-yolo <span aria-hidden="true">-&gt;</span></a></div>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
