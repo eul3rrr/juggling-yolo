@@ -32,8 +32,8 @@ DEFAULT_ASSOCIATIONS = PROJECT_ROOT / "detections/demo/identical_balls_trick_000
 DEFAULT_EVENTS = PROJECT_ROOT / "detections/demo/identical_balls_trick_000_018_hand_events.csv"
 DEFAULT_STATE_TRACE = PROJECT_ROOT / "detections/demo/identical_balls_trick_000_018_hand_state_trace.csv"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "docs/assets"
-GIF_START_FRAME = 120
-GIF_END_FRAME = 600
+GIF_START_FRAME = 0
+GIF_END_FRAME = 240
 GIF_FPS = 10
 GIF_WIDTH = 560
 

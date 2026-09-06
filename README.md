@@ -304,7 +304,7 @@ To regenerate only the inline GIF previews from the existing MP4s without rerend
 
 The renderer uses the existing detector, tracklet, pose, event, and association artifacts. It does not run inference. The site-era assets remain under `docs/assets/`, but the GitHub README is the primary project presentation.
 
-The inline GIF previews use a shared 8-second interval from source frames 120–599 at 10 fps and 560px width. The full-resolution MP4s remain the linked downloads.
+The inline GIF previews use a shared 4-second interval from source frames 0–239 at 10 fps and 560px width. The full-resolution MP4s remain the linked downloads.
 
 The renderer accepts `--video`, `--detections`, `--tracklets`, `--pose`, `--associations`, `--events`, `--state-trace`, and `--output-dir` overrides, making it straightforward to replace the canonical clip and its matching processed artifacts later.
 
