@@ -32,6 +32,10 @@ DEFAULT_ASSOCIATIONS = PROJECT_ROOT / "detections/demo/identical_balls_trick_000
 DEFAULT_EVENTS = PROJECT_ROOT / "detections/demo/identical_balls_trick_000_018_hand_events.csv"
 DEFAULT_STATE_TRACE = PROJECT_ROOT / "detections/demo/identical_balls_trick_000_018_hand_state_trace.csv"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "docs/assets"
+GIF_START_FRAME = 120
+GIF_END_FRAME = 600
+GIF_FPS = 10
+GIF_WIDTH = 560
 
 TRAIL_LENGTH = 30
 BRIDGE_WINDOW = 30
@@ -336,6 +340,33 @@ def ffmpeg_command(output: Path, width: int, height: int, fps: float, crf: int =
     ]
 
 
+def gif_ffmpeg_command(
+    input_path: Path,
+    output: Path,
+    start_frame: int = GIF_START_FRAME,
+    end_frame: int = GIF_END_FRAME,
+    fps: int = GIF_FPS,
+    width: int = GIF_WIDTH,
+    ffmpeg: str = "ffmpeg",
+) -> list[str]:
+    """Build a deterministic, palette-optimized inline README GIF command."""
+    if start_frame < 0 or end_frame <= start_frame:
+        raise ValueError("GIF frame interval must be non-empty and nonnegative")
+    if fps <= 0 or width <= 0:
+        raise ValueError("GIF FPS and width must be positive")
+    trimmed = f"trim=start_frame={start_frame}:end_frame={end_frame},setpts=PTS-STARTPTS"
+    visual = f"{trimmed},fps={fps},scale={width}:-2:flags=lanczos"
+    filter_graph = (
+        f"[0:v]{visual},split[s0][s1];"
+        "[s0]palettegen=max_colors=256:stats_mode=diff[p];"
+        "[s1][p]paletteuse=dither=sierra2_4a"
+    )
+    return [
+        ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(input_path),
+        "-filter_complex", filter_graph, "-an", "-loop", "0", str(output),
+    ]
+
+
 def _color(index: int, total: int, saturation: float = 0.72, value: float = 0.94) -> tuple[int, int, int]:
     red, green, blue = colorsys.hsv_to_rgb((index * 0.61803398875) % 1.0, saturation, value)
     return round(blue * 255), round(green * 255), round(red * 255)
@@ -493,7 +524,44 @@ def _metadata(video: Path) -> tuple[float, int, int, int]:
     return fps, width, height, count
 
 
+def render_gifs(
+    output_dir: Path,
+    ffmpeg: str = "ffmpeg",
+    start_frame: int = GIF_START_FRAME,
+    end_frame: int = GIF_END_FRAME,
+    fps: int = GIF_FPS,
+    width: int = GIF_WIDTH,
+) -> None:
+    """Create synchronized, palette-optimized GIF previews from the MP4s."""
+    mp4s = {
+        "local": output_dir / "demo-local-tracking.mp4",
+        "hand": output_dir / "demo-hand-stitching.mp4",
+        "identity": output_dir / "demo-reconstructed-identity.mp4",
+    }
+    missing = [str(path) for path in mp4s.values() if not path.is_file()]
+    if missing:
+        raise FileNotFoundError("Cannot create GIFs; missing MP4: " + ", ".join(missing))
+    metadata = [_metadata(path) for path in mp4s.values()]
+    if len({(round(item[0], 6), item[1], item[2], item[3]) for item in metadata}) != 1:
+        raise ValueError("The three MP4 inputs do not have matching timing or dimensions")
+    frame_count = metadata[0][3]
+    if not 0 <= start_frame < end_frame <= frame_count:
+        raise ValueError(f"GIF interval must satisfy 0 <= start < end <= {frame_count}")
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for mode, input_path in mp4s.items():
+        output = output_dir / f"demo-{('local-tracking' if mode == 'local' else 'hand-stitching' if mode == 'hand' else 'reconstructed-identity')}.gif"
+        subprocess.run(
+            gif_ffmpeg_command(input_path, output, start_frame, end_frame, fps, width, ffmpeg),
+            check=True,
+        )
+        print(f"{output}: {output.stat().st_size / 1024 / 1024:.2f} MiB")
+    print(f"GIF interval: frames {start_frame}-{end_frame - 1} ({(end_frame - start_frame) / metadata[0][0]:.3f}s source, {fps} fps output, {width}px wide)")
+
+
 def render(args: argparse.Namespace) -> None:
+    if args.gif_only:
+        render_gifs(args.output_dir, args.ffmpeg, args.gif_start_frame, args.gif_end_frame, args.gif_fps, args.gif_width)
+        return
     paths = [args.video, args.detections, args.tracklets, args.pose, args.associations, args.events, args.state_trace]
     missing = [str(path) for path in paths if not path.is_file()]
     if missing:
@@ -555,6 +623,7 @@ def render(args: argparse.Namespace) -> None:
     print(f"Accepted hand associations: {len(associations)}; reconstructed HIDs: {len(set(hid_mapping.values()))}")
     for path in (*outputs.values(), *posters.values()):
         print(f"{path}: {path.stat().st_size / 1024 / 1024:.2f} MiB")
+    render_gifs(args.output_dir, args.ffmpeg, args.gif_start_frame, args.gif_end_frame, args.gif_fps, args.gif_width)
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -569,6 +638,11 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--ffmpeg", default="ffmpeg")
     parser.add_argument("--crf", type=int, default=23)
+    parser.add_argument("--gif-only", action="store_true", help="Create GIF previews from existing demo MP4s without rerendering them")
+    parser.add_argument("--gif-start-frame", type=int, default=GIF_START_FRAME)
+    parser.add_argument("--gif-end-frame", type=int, default=GIF_END_FRAME)
+    parser.add_argument("--gif-fps", type=int, default=GIF_FPS)
+    parser.add_argument("--gif-width", type=int, default=GIF_WIDTH)
     args = parser.parse_args(argv)
     if args.crf < 0 or args.crf > 51:
         parser.error("--crf must be between 0 and 51")

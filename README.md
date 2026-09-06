@@ -12,9 +12,11 @@ This project builds a computer-vision pipeline that starts with YOLO detections 
 
 The three videos below use the **same juggling clip with the same timing**. Each stage adds another layer of reasoning so the effect of the identity-repair pipeline can be compared directly.
 
+Click any preview for the full-quality MP4.
+
 ### 1. Detection and local tracking
 
-[![Detection and local tracking](docs/assets/demo-local-tracking.jpg)](docs/assets/demo-local-tracking.mp4)
+[![Detection and local tracking](docs/assets/demo-local-tracking.gif)](docs/assets/demo-local-tracking.mp4)
 
 YOLO detects the balls frame by frame, while Norfair groups those detections into local tracklets (`T#`). These IDs are intentionally local: when a ball disappears during a catch or detector dropout, the same physical ball can later return under a different track ID.
 
@@ -24,7 +26,7 @@ This is the fragmentation problem the rest of the pipeline tries to repair.
 
 ### 2. Hand-aware identity stitching
 
-[![Hand-aware identity stitching](docs/assets/demo-hand-stitching.jpg)](docs/assets/demo-hand-stitching.mp4)
+[![Hand-aware identity stitching](docs/assets/demo-hand-stitching.gif)](docs/assets/demo-hand-stitching.mp4)
 
 Track START and END boundaries are compared with anatomical wrist position and relative motion. A track that disappears into a hand can remain pending until a compatible track emerges from that hand.
 
@@ -36,7 +38,7 @@ The **thick dashed curved bridges** show accepted identity associations between 
 
 ### 3. Reconstructed identity
 
-[![Reconstructed identity](docs/assets/demo-reconstructed-identity.jpg)](docs/assets/demo-reconstructed-identity.mp4)
+[![Reconstructed identity](docs/assets/demo-reconstructed-identity.gif)](docs/assets/demo-reconstructed-identity.mp4)
 
 Accepted hand-mediated associations connect fragmented local tracklets into longer-lived reconstructed identities (`HID#`). Local track IDs may change, while the displayed HID and color persist across repaired hand occlusions.
 
@@ -294,7 +296,15 @@ The three comparison videos above are generated reproducibly from the canonical 
 .venv/bin/python scripts/render_demo_videos.py
 ```
 
+To regenerate only the inline GIF previews from the existing MP4s without rerendering them:
+
+```bash
+.venv/bin/python scripts/render_demo_videos.py --gif-only
+```
+
 The renderer uses the existing detector, tracklet, pose, event, and association artifacts. It does not run inference. The site-era assets remain under `docs/assets/`, but the GitHub README is the primary project presentation.
+
+The inline GIF previews use a shared 8-second interval from source frames 120–599 at 10 fps and 560px width. The full-resolution MP4s remain the linked downloads.
 
 The renderer accepts `--video`, `--detections`, `--tracklets`, `--pose`, `--associations`, `--events`, `--state-trace`, and `--output-dir` overrides, making it straightforward to replace the canonical clip and its matching processed artifacts later.
 

@@ -96,3 +96,16 @@ def test_cli_rejects_invalid_crf():
     module = load_script()
     with pytest.raises(SystemExit):
         module.parse_args(["--crf", "52"])
+
+
+def test_gif_command_uses_shared_interval_and_palette_optimization(tmp_path: Path):
+    module = load_script()
+    command = module.gif_ffmpeg_command(
+        tmp_path / "demo.mp4", tmp_path / "demo.gif", 120, 600, 10, 560
+    )
+    graph = command[command.index("-filter_complex") + 1]
+    assert "trim=start_frame=120:end_frame=600" in graph
+    assert "fps=10" in graph
+    assert "scale=560:-2" in graph
+    assert "palettegen" in graph and "paletteuse" in graph
+    assert command[command.index("-loop") + 1] == "0"
