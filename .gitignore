@@ -28,5 +28,13 @@ experiments/**/reports/**/*.mp4
 experiments/overnight/data/legacy_csv/
 experiments/overnight/data/e8/*.csv
 
+# Historical archive: the same generated files remain unversioned after relocation.
+archive/**/STOP
+archive/**/watchdog.log
+archive/**/.watchdog.lock/
+archive/**/reports/**/*.mp4
+archive/overnight/data/legacy_csv/
+archive/overnight/data/e8/*.csv
+
 # Accidental Hermes session exports
 /20??????_??????_??????

@@ -1,0 +1,131 @@
+{
+  "snapshot": "hand-demo-v1",
+  "media_commit": "3eabefe236f6304cc0cad3834ed513561b792719",
+  "preview_commit": "933abfb6648af4fd25cb8cfcee1c9c75284ab0c9",
+  "gif_interval": {
+    "start_frame": 0,
+    "end_frame_exclusive": 240,
+    "fps": 10,
+    "width": 560,
+    "height": 316
+  },
+  "source": {
+    "path": "videos/identical_balls_trick_000_018.mp4",
+    "bytes": 3819207,
+    "sha256": "59138e9387cf27a75798d163a15b86e039511e5e8f0608e5c5243610a4a256db",
+    "distributed": false
+  },
+  "files": [
+    {
+      "path": "detections/demo/identical_balls_trick_000_018_hand_associations.csv",
+      "bytes": 876,
+      "sha256": "2bf9e3512322ce14adac6a830a952734a009cfd1b10beb584c95753f14ee97e4"
+    },
+    {
+      "path": "detections/demo/identical_balls_trick_000_018_hand_events.csv",
+      "bytes": 3500,
+      "sha256": "9fdb297f1da0715be4ff79a78b57e072edae0d9cd559e59c2bad98109e6c75e2"
+    },
+    {
+      "path": "detections/demo/identical_balls_trick_000_018_hand_state_trace.csv",
+      "bytes": 1148,
+      "sha256": "8d6e7de04807d1d845b816ddd12c385f659f339703604fd8f2518649304f1398"
+    },
+    {
+      "path": "detections/demo/identical_balls_trick_000_018_yolo26l_classes-32.csv",
+      "bytes": 441301,
+      "sha256": "54b9f7c3a0d06c0de586b652ea62a9fab9f3842d87013baf67f9de0e0047bff0"
+    },
+    {
+      "path": "detections/demo/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv",
+      "bytes": 140883,
+      "sha256": "daa7905eac1ec6bc9b96c4c9ea791fbbc4673d0b3a6533b771a39798a066569b"
+    },
+    {
+      "path": "detections/identical_balls_trick_000_018_yolo26s-pose.csv",
+      "bytes": 138273,
+      "sha256": "0d273faf9bd68c1f9e543405fb902dd05c5d25a26fca66f39c544cf2531211fc"
+    },
+    {
+      "path": "docs/assets/demo-hand-stitching.gif",
+      "bytes": 3228222,
+      "sha256": "5b2b63f9846bf0a2e77af073f876a7c75e7c606dfe8e5dd31ed84febfe3eeb3d"
+    },
+    {
+      "path": "docs/assets/demo-hand-stitching.jpg",
+      "bytes": 107400,
+      "sha256": "bf134f13dc064b23c8c804891ef5027d3d24f3ba03de6f8c3e926a412a1b6997"
+    },
+    {
+      "path": "docs/assets/demo-hand-stitching.mp4",
+      "bytes": 3065221,
+      "sha256": "fa1a9fd50686ce23eea219ca18f80efa1c4f9bbfe2045dc8504f9cd7e39da0e8"
+    },
+    {
+      "path": "docs/assets/demo-local-tracking.gif",
+      "bytes": 3294288,
+      "sha256": "da8a2185057af66c46391404f9cc12dad8e37563abb77c6fec3ee10680d89ece"
+    },
+    {
+      "path": "docs/assets/demo-local-tracking.jpg",
+      "bytes": 109901,
+      "sha256": "97cab47bdbb8ffdd3bbb178da169b1163a4e1d0719f8677fdf7e0578099be11e"
+    },
+    {
+      "path": "docs/assets/demo-local-tracking.mp4",
+      "bytes": 3370194,
+      "sha256": "f881f03daed0f39c2c1baa99d6308d651136e308cb39426012ab67d817dbc2bc"
+    },
+    {
+      "path": "docs/assets/demo-reconstructed-identity.gif",
+      "bytes": 3209488,
+      "sha256": "a30e88af94ba305f8b05541e2cd44b44fed027aaffdd849ec21065efb2f9742d"
+    },
+    {
+      "path": "docs/assets/demo-reconstructed-identity.jpg",
+      "bytes": 107375,
+      "sha256": "347b79f8064fad68f94ee237c86e649d091c93aa50612509122e4e65d37282ab"
+    },
+    {
+      "path": "docs/assets/demo-reconstructed-identity.mp4",
+      "bytes": 2919839,
+      "sha256": "77b8539f7a872c7b29e3b23e435aa760f0c56faef3cbd75913e4072185464f7c"
+    },
+    {
+      "path": "tests/fixtures/demo_hand/identical_balls_trick_000_018_yolo26s-pose-hands.csv",
+      "bytes": 426562,
+      "sha256": "5ddb7d426e934f4f7bc288969c8d93a54be582a0a630d0ab54343f5ac5a8f843"
+    },
+    {
+      "path": "scripts/hand_association.py",
+      "bytes": 59990,
+      "sha256": "1e5364be1758dfbd50eb87962eebbf5d81ed724b38eb9ede342b4aee55e83bea"
+    },
+    {
+      "path": "scripts/hand_boundaries.py",
+      "bytes": 10351,
+      "sha256": "b4695feb44fafa8bcaf0a286220fb184e6c963395e5c5e675193492680d45877"
+    },
+    {
+      "path": "scripts/hand_events.py",
+      "bytes": 7232,
+      "sha256": "3f9cdb0ce44f6a5c445d2be05c1bd3ec816554c0e167854b6d55aa8cd7f02cee"
+    },
+    {
+      "path": "scripts/hand_features.py",
+      "bytes": 14249,
+      "sha256": "267231ae9af30cee97d3f7aaee0a617943b4a2d030860e10f4889c261fa85280"
+    },
+    {
+      "path": "scripts/hand_overlay.py",
+      "bytes": 17212,
+      "sha256": "d5378a0f0f886771e21d0e53ef060851edcf4bc3ab1a87388e50e85d14133110"
+    },
+    {
+      "path": "scripts/hand_state_machine.py",
+      "bytes": 10230,
+      "sha256": "b6aa2d7092010329a94c76e05aa8400b360d6a334f954716d5a6d89f64951709"
+    }
+  ],
+  "producer_source_commit": "232555bdf4d2e1a3ebedd35851285ca07097ea45"
+}

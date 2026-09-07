@@ -1,321 +1,112 @@
 # Juggling Ball Identity Tracking
 
-Detecting, tracking, and reconstructing persistent ball identities from ordinary juggling video.
+Recovering ball identities when juggling detections disappear during catches and occlusions.
 
-A frame-by-frame detector can find a juggling ball, and a short-term tracker can follow it for a while. The harder problem is preserving **which physical ball is which** when detections disappear during catches, hand occlusions, motion blur, or other short gaps.
+YOLO finds balls frame by frame. Norfair follows them locally. This project adds hand-aware reasoning to reconnect track fragments that belong to the same ball.
 
-This project builds a computer-vision pipeline that starts with YOLO detections and Norfair tracklets, reasons about track boundaries near the juggler's hands, and reconnects compatible fragments into longer-lived reconstructed identities.
+**Python · YOLO · Norfair · Pose estimation · Multi-object tracking**
 
-**Python · YOLO · Norfair · Pose Estimation · Multi-Object Tracking · Temporal Reasoning**
+[How it works](#how-it-works) · [Run it](#run-the-frozen-demo) · [Code guide](scripts/README.md) · [Snapshot details](docs/DEMO.md)
 
-## Demo: from detections to persistent identity
+## Demo: one clip, three stages
 
-The three videos below use the **same juggling clip with the same timing**. Each stage adds another layer of reasoning so the effect of the identity-repair pipeline can be compared directly.
-
-Click any preview for the full-quality MP4.
+These previews show the **same four seconds**, with different overlays. Click any preview for the full-quality, 18-second MP4. GitHub plays the GIFs independently; their source frames match, but browser playback is not synchronized.
 
 ### 1. Detection and local tracking
 
 [![Detection and local tracking](docs/assets/demo-local-tracking.gif)](docs/assets/demo-local-tracking.mp4)
 
-YOLO detects the balls frame by frame, while Norfair groups those detections into local tracklets (`T#`). These IDs are intentionally local: when a ball disappears during a catch or detector dropout, the same physical ball can later return under a different track ID.
-
-This is the fragmentation problem the rest of the pipeline tries to repair.
-
-**Overlay:** YOLO detections · Norfair track IDs · observed track trails
+Boxes show YOLO detections. Colors and `T#` labels show Norfair's local tracklets. Watch a track end at the hand and a new ID appear: a detector gap can split one physical ball into several local identities.
 
 ### 2. Hand-aware identity stitching
 
 [![Hand-aware identity stitching](docs/assets/demo-hand-stitching.gif)](docs/assets/demo-hand-stitching.mp4)
 
-Track START and END boundaries are compared with anatomical wrist position and relative motion. A track that disappears into a hand can remain pending until a compatible track emerges from that hand.
+Wrist markers provide context for the track boundaries. Near the end of the preview, the yellow bridges show accepted links such as `T1 → T5` and `T4 → T6`.
 
-The **thick dashed curved bridges** show accepted identity associations between local tracklets.
-
-*The dashed bridge represents an identity association, not an estimated physical trajectory through the hand.*
-
-**Overlay:** Norfair tracklets · wrists · pending hand state · accepted hand stitches
+**Dashed bridge = identity association, not estimated trajectory.** A pending-hand token records an identity associated with a hand; it does not locate an invisible ball.
 
 ### 3. Reconstructed identity
 
 [![Reconstructed identity](docs/assets/demo-reconstructed-identity.gif)](docs/assets/demo-reconstructed-identity.mp4)
 
-Accepted hand-mediated associations connect fragmented local tracklets into longer-lived reconstructed identities (`HID#`). Local track IDs may change, while the displayed HID and color persist across repaired hand occlusions.
+Linked fragments share a color and `HID#`. For example, `T1 → T5 → T10` shares one reconstructed identity across the full clip. The preview shows the first of those repairs; the MP4 shows the longer sequence.
 
-`HID` is the current reconstructed identity under the implemented repair system; it should not be interpreted as ground-truth identity in every possible failure case.
+The frozen clip contains **14 local tracklets, 6 accepted hand links, and 8 reconstructed identity groups**. These are artifact counts, not an accuracy score: unresolved fragments remain, and HID is not guaranteed ground truth.
 
-**Overlay:** reconstructed HID · persistent identity color · clean observed trails
-
-## Why identity repair?
-
-One physical ball may appear to the tracker as:
+## How it works
 
 ```text
-T1 ──────────┐
-             │ hand / detection gap
-             └──── T5 ──────────┐
-                                │ another gap
-                                └──── T10
-
-After identity repair:
-
-T1 → T5 → T10
-      ↓
-     HID1
+Video → YOLO detections → Norfair local tracklets
+                              ↓
+Pose / wrists ────────→ START / END boundaries
+                              ↓
+                     Hand entry / exit events
+                              ↓
+                     Pending-hand association
+                              ↓
+                     Reconstructed identities
 ```
 
-YOLO answers “is there a ball here?” and Norfair provides useful short-term continuity. The identity-repair layer addresses a different question: **do two separated tracklets represent the same physical ball?**
-
-## Pipeline
-
-```text
-Video
-  ↓
-YOLO ball detections
-  ↓
-Norfair local tracklets (T#)
-  ↓
-Observed START / END boundaries
-  ↓
-Cause reasoning
-  ├── hand interaction
-  ├── airborne gap        [next]
-  └── body occlusion      [planned]
-  ↓
-Tracklet associations
-  ↓
-Reconstructed identities (HID#)
-  ↓
-Persistent trajectories / juggling events
-```
-
-The current clean identity-repair path focuses on **hand-mediated fragmentation**. Ball-track boundaries are evaluated against pose-derived wrist locations, normalized body scale, and local motion. Compatible hand-entry and hand-exit events are associated by a small state machine, after which connected tracklets share a reconstructed HID.
-
-## Hand-aware identity repair
-
-```text
-ball approaches wrist
-        ↓
-    HAND_ENTRY
-        ↓
-identity remains pending
-       in hand
-        ↓
-     HAND_EXIT
-        ↓
- same HID continues
-```
-
-A useful geometric feature is the ball-to-hand distance normalized by body scale:
+Track endings near and approaching a wrist are candidate hand entries. New tracks near and separating from a wrist are candidate exits. A hand-state machine associates compatible events; connected tracklets then share an HID.
 
 ```text
 normalized hand distance = distance(ball, wrist) / body scale
+
+Local identities:       T1 ─── gap ─── T5 ─── gap ─── T10
+Reconstructed identity:               HID1
 ```
 
-Track endings near and approaching a wrist become candidate hand entries. New tracklets near and separating from a wrist become candidate hand exits. Hand associations deliberately do **not** require a ballistic trajectory while the ball is hidden in a hand.
+The hand layer uses the hand interaction rather than assuming a ballistic path through a catch. The renderer retains observed trails and draws association bridges separately.
 
-## Current status
+## Run the frozen demo
 
-### Implemented
+This is a fixed demonstration checkpoint while the broader project continues. The media, canonical CSVs, and matching hand-repair implementation are preserved together. No webcam is required.
 
-- YOLO sports-ball detection
-- Norfair local center-point tracking
-- observed vs. predicted tracker-state separation
-- pose / anatomical wrist extraction
-- START and END boundary reasoning
-- hand-entry and hand-exit classification
-- pending hand-identity state
-- hand-mediated tracklet association
-- reconstructed HID visualization
-- reproducible diagnostic/demo rendering
+- **Watch:** use the previews above or open the linked MP4s.
+- **Reproduce the hand decisions:** follow [hand-repair reproduction](docs/HAND_REPRODUCTION.md). It uses committed tracklet and pose CSVs without detector inference or source footage.
+- **Render the videos:** see [demo inputs and rendering](docs/DEMO.md). This requires the original local clip.
+- **Install dependencies:** see [setup](docs/SETUP.md).
 
-### Experimental / planned
-
-- airborne identity repair with ballistic motion
-- explicit body-occlusion reasoning
-- detector adaptation for difficult near-hand frames
-- live webcam tracking interface
-
-## Next steps
-
-```text
-persistent ball identities
-          ↓
-throw / catch event extraction
-          ↓
-siteswap inference
-          ↓
-JML encoding
-          ↓
-machine-readable juggling patterns
-```
-
-### Airborne identity repair
-
-Reconnect tracklets interrupted away from the hands using motion and ballistic consistency, while keeping hand-mediated and airborne evidence conceptually separate.
-
-### Body occlusion
-
-Recognize disappearances and reappearances caused by the juggler's body instead of forcing them into hand or airborne explanations.
-
-### Siteswap inference
-
-Use reconstructed trajectories and throw/catch events to infer siteswap structure from video.
-
-### JML encoding
-
-Encode inferred juggling sequences in Juggling Markup Language (JML), providing a machine-readable representation that can be consumed by compatible juggling software and later analysis tools.
-
-### Live analysis
-
-A browser-based live webcam interface has been prototyped, but offline correctness and identity reconstruction remain the current priority.
-
-## Repository layout
-
-- `scripts/` — runnable detection, tracking, review, analysis, reconstruction, and demo-rendering tools
-- `configs/` — ByteTrack and BoT-SORT configurations
-- `tests/` — unit and CLI smoke tests
-- `detections/` — reproducible CSV/JSON/Markdown research inputs and results
-- `experiments/overnight/` — experiment code, reports, and compact result artifacts
-- `videos/` — local input videos (ignored by Git)
-- `outputs/` — generated videos and review clips (ignored except compact manifests)
-- `docs/assets/` — site-era poster images and browser-ready comparison videos used by the README demos
-
-Model weights, source videos, caches, and generated MP4 files outside `docs/assets/` are intentionally not versioned.
-
-## Setup
-
-Python 3.14 was used for the current environment. Create a virtual environment and install a PyTorch build appropriate for your machine. For the CUDA 13.0 setup used during development:
+Reproduce and check the frozen hand decisions without inference or video:
 
 ```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install --upgrade pip setuptools wheel
-.venv/bin/python -m pip install torch torchvision \
-  --index-url https://download.pytorch.org/whl/cu130
-.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python scripts/reproduce_demo_hand.py --output-dir "$(mktemp -d)"
 ```
 
-CPU-only and other CUDA installations should use the matching command from the [PyTorch installation guide](https://pytorch.org/get-started/locally/) before installing `requirements.txt`.
-
-Place input clips in `videos/`. The examples below use:
-
-- `videos/identical_balls_trick_000_018.mp4`
-- `videos/youtube_juggling_for_data_analysis_eh1I3SlZn48_075_090.mp4`
-
-## Quick start
-
-### Detect sports balls
-
-COCO class 32 is `sports ball`:
-
-```bash
-.venv/bin/python scripts/detect_video.py \
-  videos/identical_balls_trick_000_018.mp4 \
-  --model yolo26s.pt --conf 0.15 --imgsz 960 \
-  --classes 32 --device auto
-```
-
-`--device auto` selects GPU 0 when CUDA is available and otherwise uses CPU. Detection CSVs contain frame/time, class, confidence, bounding-box, center, width, and height values in original-video pixels.
-
-### Compare generic trackers
-
-```bash
-.venv/bin/python scripts/track_video.py \
-  videos/identical_balls_trick_000_018.mp4 \
-  --model yolo26s.pt --conf 0.15 --imgsz 960 --classes 32 \
-  --tracker configs/bytetrack.yaml --tracker-label bytetrack --device auto
-```
-
-Use `configs/botsort.yaml` or `configs/botsort_reid.yaml` for the other baselines. Their IDs are local tracklets, not guaranteed permanent ball identities.
-
-### Build Norfair tracklets
-
-```bash
-.venv/bin/python scripts/track_norfair.py \
-  videos/identical_balls_trick_000_018.mp4 \
-  detections/identical_balls_trick_000_018_yolo26s_classes-32.csv \
-  --distance-threshold 50 --hit-counter-max 5
-```
-
-The output distinguishes observed detector matches from predicted Norfair states. Downstream experiments use observed points when fitting trajectories.
-
-### Rank and review candidate stitches
-
-```bash
-.venv/bin/python scripts/stitch_tracklets.py \
-  videos/identical_balls_trick_000_018.mp4 \
-  detections/identical_balls_trick_000_018_norfair_dt50_hc5.csv \
-  --max-gap-frames 10
-
-.venv/bin/python scripts/review_stitches.py prepare \
-  videos/identical_balls_trick_000_018.mp4 \
-  detections/identical_balls_trick_000_018_norfair_dt50_hc5.csv \
-  detections/identical_balls_trick_000_018_norfair_dt50_hc5_stitches.csv
-
-.venv/bin/python scripts/review_stitches.py review \
-  detections/stitch_review_labels.csv
-```
-
-The review player loops the current clip until a decision is made. Controls are `c` (correct), `w` (wrong), `u` (unclear), `s` (skip), and `q` (quit). Existing labels are preserved when review assets are regenerated.
-
-### Analyze reviewed hypotheses
-
-Generate pose detections, then enrich the reviewed labels:
-
-```bash
-.venv/bin/python scripts/analyze_stitch_features.py pose \
-  videos/identical_balls_trick_000_018.mp4 \
-  --model yolo26s-pose.pt
-
-.venv/bin/python scripts/analyze_stitch_features.py enrich \
-  detections/stitch_review_labels.csv \
-  --output-csv detections/stitch_review_features.csv \
-  --summary-json detections/stitch_review_feature_summary.json
-```
-
-The trajectory model is `x=a+b*t`, `y=c+d*t+e*t²`. These features are descriptive and do not automatically alter tracklets or acceptance thresholds.
-
-Every executable in `scripts/` also locates the project `.venv` when run directly. Use `--help` on any command for its complete argument list.
-
-## Tests
-
-```bash
-.venv/bin/python -m pytest -q
-```
-
-The test suite covers CSV contracts, observed/predicted semantics, stitch ranking, review-state behavior, feature analysis, tracker configuration, direct CLI execution, and demo-renderer invariants.
-
-## Demo assets
-
-The three comparison videos above are generated reproducibly from the canonical clip:
-
-```bash
-.venv/bin/python scripts/render_demo_videos.py
-```
-
-To regenerate only the inline GIF previews from the existing MP4s without rerendering them:
+To recreate only the GIF previews from the committed MP4s:
 
 ```bash
 .venv/bin/python scripts/render_demo_videos.py --gif-only
 ```
 
-The renderer uses the existing detector, tracklet, pose, event, and association artifacts. It does not run inference. The site-era assets remain under `docs/assets/`, but the GitHub README is the primary project presentation.
+Run tests from the repository root:
 
-The inline GIF previews use a shared 4-second interval from source frames 0–239 at 10 fps and 560px width. The full-resolution MP4s remain the linked downloads.
+```bash
+.venv/bin/python -m pytest -q
+```
 
-The renderer accepts `--video`, `--detections`, `--tracklets`, `--pose`, `--associations`, `--events`, `--state-trace`, and `--output-dir` overrides, making it straightforward to replace the canonical clip and its matching processed artifacts later.
+## Read the code
 
-## Research history
+| Location | Purpose |
+| --- | --- |
+| [scripts/](scripts/README.md) | Detection, tracking, hand repair, and rendering entry points |
+| [tests/](tests/) | Pipeline contracts and frozen-demo regression tests |
+| [detections/demo/](detections/demo/) | Canonical detector, tracklet, and hand-repair artifacts |
+| [docs/](docs/README.md) | Setup, reproduction, and media documentation |
+| [archive/](archive/README.md) | Historical experiments and negative results; not the demo pipeline |
 
-Earlier experiments explored ballistic wide-gap stitching, global one-to-one assignment, alternative motion models, detector headroom, and hand-state heuristics. Positive and negative results are intentionally preserved so failed approaches are not repeatedly rediscovered.
+The [code guide](scripts/README.md) separates the current demo path from older review tools. Historical experiments remain available, but are not prerequisites for the demo.
 
-See [`experiments/overnight/RESULTS_LOG.md`](experiments/overnight/RESULTS_LOG.md) for the detailed experiment record.
+## Scope and next steps
 
-## Scope and limitations
+The snapshot covers offline detection, local tracking, wrist extraction, hand-boundary reasoning, pending-hand state, and reconstructed identity visualization. False detections, ambiguous catches, and unresolved fragments remain limitations. The demo is illustrative, not a benchmark of general tracking accuracy.
 
-- The repository currently targets offline analysis of short juggling clips.
-- COCO sports-ball detections include false positives and often weaken near hands.
-- Tracklet stitching proposes or renders associations; it does not establish physical ball identity as ground truth.
-- The current HID is a reconstructed identity under the implemented hand-repair subsystem, not a universal guarantee across every failure case.
-- Airborne repair, body-occlusion reasoning, siteswap inference, and JML encoding are not complete.
-- The experiment reports include negative results intentionally so failed approaches are not repeated.
+Further work is separate from this checkpoint:
+
+- Airborne repair using ballistic consistency.
+- Body-occlusion reasoning.
+- Throw/catch event extraction and siteswap inference.
+- Juggling Markup Language (JML) encoding for machine-readable patterns.
+
+A separate live-webcam prototype is a development path, not part of this demo.
