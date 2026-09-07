@@ -108,12 +108,9 @@ identity remains pending
 
 A useful geometric feature is the ball-to-hand distance normalized by body scale:
 
-$$
-d_{\text{hand}}(t)
-=
-\frac{\|p_{\text{ball}}(t)-p_{\text{wrist}}(t)\|}
-{\text{body scale}}
-$$
+```text
+normalized hand distance = distance(ball, wrist) / body scale
+```
 
 Track endings near and approaching a wrist become candidate hand entries. New tracklets near and separating from a wrist become candidate hand exits. Hand associations deliberately do **not** require a ballistic trajectory while the ball is hidden in a hand.
 
