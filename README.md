@@ -5,6 +5,14 @@ juggling videos. It includes frame-local detection and generic tracker compariso
 there is no custom association, physics, HSV filtering, hand events, training, or
 fine-tuning.
 
+## Local ball-dataset annotation
+
+Development tool: [annotation guide](docs/ANNOTATION_TOOL.md). Mine existing track
+ENDs, orphan STARTs, accepted links, and ordinary controls; annotate every visible
+ball in a local browser; export completed full-frame, one-class YOLO labels with
+survey/provenance metadata. No inference or training is run. Dataset splits must
+later be assigned by source/video, never randomly by adjacent frames.
+
 ## Layout
 
 - `videos/`: short input videos
