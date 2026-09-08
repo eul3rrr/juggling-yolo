@@ -91,3 +91,20 @@ tests/
 !tests/test_analyze_stitch_features.py
 !tests/test_compare_arms.py
 !tests/test_live_core.py
+
+# Local annotation tool source; generated workspaces remain private/untracked.
+!scripts/annotate_juggling_balls.py
+!src/annotation/
+!src/annotation/*.py
+!web/annotation/
+!web/annotation/*.html
+!web/annotation/*.css
+!web/annotation/*.js
+!tests/test_annotation_*.py
+!docs/
+!docs/ANNOTATION_TOOL.md
+/datasets/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+__pycache__/
