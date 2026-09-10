@@ -12,11 +12,12 @@ Development infrastructure for a later detection fine-tuning dataset. This tool 
 
 ## Run
 
-Use the existing project virtual environment (OpenCV is the only non-stdlib runtime dependency needed here). Commands are run from the repository root.
+Use the existing project virtual environment (OpenCV is the only non-stdlib runtime dependency needed here). Commands are run from the repository root. LosslessCut keeps the original video: its CSV is read as segment provenance and no cut videos are generated.
 
 ```bash
 .venv/bin/python scripts/annotate_juggling_balls.py mine \
   --video videos/identical_balls_trick_000_018.mp4 \
+  --segments videos/identical_balls_trick_000_018.mp4.csv \
   --tracklets detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv \
   --detections detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32.csv \
   --links detections/detector_seg_comparison/identical_balls_trick_000_018_hand_associations.csv \
@@ -31,12 +32,22 @@ Open `http://127.0.0.1:43128`. Quit the server with Ctrl-C; rerun the serve comm
 
 Repeat `mine` with another video's actual paths and the **same workspace**. Optional `--source-group session-or-juggler-name` preserves recording-level grouping for a future split. Without it, the video content hash is the source group. `--links`, `--hands`, and `--detections` are optional. A detections file should contain the existing **ball-only** predictions, not person/other-class detections. No canonical filename is hard-coded.
 
+For a folder of collected sources, first inspect all matching pairs and their parsed ranges:
+
+```bash
+.venv/bin/python scripts/annotate_juggling_balls.py discover \
+  --source-dir ~/Downloads/juggling_videos
+```
+
+Pairing is exact: `foo.mp4` uses `foo.mp4.csv`. Supported video extensions are mp4, mov, mkv, avi, and webm. CSV headers are case-insensitive `Start,End,Name`; labels are retained. Empty/undefined trailing end rows are ignored, malformed or non-positive ranges are rejected, and ranges are clamped to the measured video duration during `mine`.
+
 Source identity is SHA-256 of the video bytes. Stable item identity combines that identity and the zero-based source frame. Repeating identical mining inputs does not duplicate frames, replace labels, or resurrect deleted boxes. Input paths/hashes and metadata are pinned: if you change inputs for an already-mined video, use a new workspace rather than silently rewriting an annotated snapshot. Keep source videos at their recorded paths and unchanged while annotating/exporting.
 
 Loopback is the default. For SSH use a tunnel, for example `ssh -N -L 43128:127.0.0.1:43128 user@host`. `--host` permits explicit private-network binding; it is never automatically exposed. There is no authentication: do not expose this server to an untrusted network.
 
 ## Mining and provenance
 
+0. Only frames whose absolute source timestamp is inside a selected segment are eligible. A small 0.1-second margin suppresses artifacts at segment edges. Accepted links are used only when both observed endpoints belong to the same segment; no event, interpolation, ordinary control, or context frame crosses a segment boundary. Every item stores segment index/start/end/label and the CSV fingerprint.
 1. Accepted linked transitions have first priority. The adapter consumes the current hand association CSV columns `source_track_id`, `target_track_id`, `source_end_frame`, `target_start_frame`, and `association_type`. All columns are preserved. Optional `accepted=false` rows are excluded. Ranked candidate/stitch proposal CSVs are rejected: rank 1 does not mean accepted.
 2. Every observed track END and orphan START follows. The existing `review_track_events.py` loaders and event generator are reused unchanged. START/END refer to first/last **observed** rows, not predicted lifespan. An orphan has no other observed END in the preceding reviewer window (one second); this preserves reviewer semantics rather than inventing a new association rule.
 3. Ordinary controls come from continuous observed portions, away from all START/END boundaries. Selection is deterministic and spaced by at least a quarter second. The target is 30% ordinary images, capped by available suitable frames; short or fragmented clips may provide less. Add longer ordinary source recordings rather than filling a quota with adjacent near-duplicates.
@@ -59,12 +70,13 @@ Progress/category navigation uses exclusive priority groups (linked / unresolved
 
 | Field | Values and meaning |
 | --- | --- |
-| Hand overlap | `none`: no visible hand pixels overlap the physical silhouette; `slight`: small overlap, most ball visible; `moderate`: substantial overlap but clearly identifiable; `heavy`: mostly hand-covered with some genuine ball pixels remaining. This measures overlap, **not proximity**. |
+| Occluder | `none`, `hand`, `body`, `other_object`, `mixed`. Do not use `other_ball`; overlapping balls are annotated as separate ordinary boxes. |
+| Occlusion | `none`, `slight`, `moderate`, `heavy`, describing meaningful non-ball coverage. |
 | Visibility | `clear`: full/almost-full ball; `partial`: part visible; `tiny_fragment`: very little surface but real visible evidence. Independent of occluder, so body occlusion can be partial with no hand overlap. |
 | Motion blur | `none`, `mild`, `strong`, by visual judgment. |
 | Annotation confidence | `certain`, `uncertain`. |
 
-`Ordinary clear ball` sets none / clear / none / certain. Each final box remains class `juggling_ball`. Source detector confidence and original box are immutable audit data, not survey defaults or human truth.
+`Ordinary clear ball` sets `occluder=none`, `occlusion=none`, `visibility=clear`, `motion_blur=none`, `annotation_confidence=certain`. Each final box remains class `juggling_ball`. Source detector confidence and original box are immutable audit data, not survey defaults or human truth.
 
 ## Persistence and export
 

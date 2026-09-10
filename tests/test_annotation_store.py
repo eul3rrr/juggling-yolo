@@ -15,7 +15,7 @@ def test_annotation_roundtrip_and_resume(tmp_path):
     s, source, item = fixture_store(tmp_path)
     data = s.get(s.items()[0]['id'])
     box = data['boxes'][0]
-    box.update(hand_overlap='none', visibility='clear', motion_blur='none', annotation_confidence='certain')
+    box.update(occluder='none', occlusion='none', visibility='clear', motion_blur='none', annotation_confidence='certain')
     manual = dict(box, id='manual1', annotation_source='manual', prediction_id=None, x1=50, x2=70)
     data.update(boxes=[box, manual], status='completed', focus_status='visible', focus_box_id=box['id'], all_visible_confirmed=True)
     s.save(data['id'], data)

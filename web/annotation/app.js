@@ -1,7 +1,7 @@
 'use strict';
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
 const surveys={
-  hand_overlap:['none','slight','moderate','heavy'],visibility:['clear','partial','tiny_fragment'],motion_blur:['none','mild','strong'],annotation_confidence:['certain','uncertain']
+  occluder:['none','hand','body','other_object','mixed'],occlusion:['none','slight','moderate','heavy'],visibility:['clear','partial','tiny_fragment'],motion_blur:['none','mild','strong'],annotation_confidence:['certain','uncertain']
 };
 const state={
   items:[],item:null,selected:null,dirty:false,hints:true,mode:'select',drag:null,busy:false,category:''
@@ -66,7 +66,9 @@ function message(text){
     $('focus').disabled=d.priority===2;
     for(const o of $('focus').options)o.disabled=d.priority===2?o.value!=='not_applicable':o.value==='not_applicable';
     $('filmstrip').replaceChildren();
-    const frames=[...new Set([-8,-4,-2,0,2,4,8].map(x=>Math.max(0,Math.min(s.frame_count-1,d.frame+Math.round(x*s.fps/60)))))];
+    const seg=d.segment;
+    const bounds=seg?[Math.max(0,Math.ceil(seg.start*s.fps)),Math.min(s.frame_count,Math.ceil(seg.end*s.fps))]:[0,s.frame_count];
+    const frames=[...new Set([-8,-4,-2,0,2,4,8].map(x=>Math.max(bounds[0],Math.min(bounds[1]-1,d.frame+Math.round(x*s.fps/60)))) )];
     for(const t of frames){
       const b=document.createElement('button');
       b.className=t===d.frame?'target':'';
@@ -272,7 +274,7 @@ function remove(){
   const b=selected();
   if(b){
     Object.assign(b,{
-      hand_overlap:'none',visibility:'clear',motion_blur:'none',annotation_confidence:'certain'
+      occluder:'none',occlusion:'none',visibility:'clear',motion_blur:'none',annotation_confidence:'certain'
     });
     changed();
     render();

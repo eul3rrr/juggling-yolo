@@ -63,3 +63,30 @@ def test_temporal_sampling():
     assert boundary_frames(0, 30, 10) == [0, 1, 2, 3, 4, 8]
     assert gap_frames(10, 15, 60) == [11, 12, 13, 14]
     assert gap_frames(10, 50, 60) == [11, 12, 20, 30, 40, 48, 49]
+
+def test_losslesscut_segments_pair_and_filter():
+    from src.annotation.segments import parse_losslesscut_csv, pair_video_segments, segment_for_frame
+    import pathlib
+    csv_path = pathlib.Path('segments.csv')
+    csv_path.write_text('Start,End,Name\n0.5,1.5,clean\n2,undefined,unfinished\n')
+    segments = parse_losslesscut_csv(csv_path, duration=3.0)
+    assert [(s.index, s.start, s.end, s.label) for s in segments] == [(0, .5, 1.5, 'clean')]
+    assert segment_for_frame(30, 30, segments).index == 0
+    assert segment_for_frame(45, 30, segments) is None
+    video = csv_path.with_name('clip.mp4'); video.write_bytes(b'')
+    csv_path.rename(video.with_name('clip.mp4.csv'))
+    assert pair_video_segments(video)[0] == video
+
+def test_segment_aware_mining_does_not_create_boundary_events_or_cross_context():
+    from scripts.review_track_events import Track, TrackObservation
+    from src.annotation.mining import mine_candidates
+    from src.annotation.segments import Segment
+    def track(tid, frames):
+        return Track(tid, [TrackObservation(f, 30 + f, 50, .8, 1) for f in frames])
+    tracks = {1: track(1, range(0, 30)), 2: track(2, range(40, 80))}
+    segs = [Segment(0, 0, 1.0, 'a'), Segment(1, 1.333, 2.6, 'b')]
+    items = mine_candidates(tracks, [{'source_track_id': 1, 'target_track_id': 2, 'association_type': 'HAND'}], 30, 90, 320, 240, segments=segs)
+    assert all(0 <= i['frame'] < 30 or 40 <= i['frame'] < 78 for i in items)
+    assert not any(i['frame'] in (29, 30, 39, 40) for i in items)
+    assert not any('segment_boundary' in r for i in items for r in i['reasons'])
+    assert all(i['segment']['index'] == 0 if i['frame'] < 30 else i['segment']['index'] == 1 for i in items)

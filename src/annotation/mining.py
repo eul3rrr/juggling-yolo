@@ -2,6 +2,7 @@
 import csv
 import math
 from scripts.review_track_events import generate_events
+from .segments import segment_for_frame
 
 def load_links(path):
     """Canonical hand associations contain only accepted relations, not candidates."""
@@ -64,21 +65,28 @@ def crop_geometry(point, width, height, pose=None):
         return [left, top, left + cw, top + ch]
     return [max(0, math.floor(min((p[0] for p in points)) - mx)), max(0, math.floor(min((p[1] for p in points)) - my)), min(width, math.ceil(max((p[0] for p in points)) + mx)), min(height, math.ceil(max((p[1] for p in points)) + my))]
 
-def mine_candidates(tracks, links, fps, count, width, height, poses=None):
+def mine_candidates(tracks, links, fps, count, width, height, poses=None, segments=None):
     if not math.isfinite(fps) or fps <= 0 or count <= 0:
         raise ValueError('Invalid video metadata')
     poses = poses or {}
+    segments = segments or []
+    segment_by_frame = {f: segment_for_frame(f, fps, segments) for f in range(count)} if segments else {}
     items = {}
 
     def add(frame, reason, priority, event, point):
         if not 0 <= frame < count:
+            return
+        segment = segment_by_frame.get(frame) if segments else None
+        if segments and segment is None:
+            return
+        if segments and any(abs(frame - edge) <= max(1, round(0.1 * fps)) for edge in (round(segment.start * fps), round(segment.end * fps))):
             return
         prov = dict(event)
         prov['distance_from_end'] = frame - event['end_frame'] if event.get('end_frame') is not None else None
         prov['distance_from_start'] = frame - event['start_frame'] if event.get('start_frame') is not None else None
         prov['inside_gap'] = bool(event.get('accepted_link') and event['end_frame'] < frame < event['start_frame'])
         if frame not in items:
-            items[frame] = dict(frame=frame, timestamp=frame / fps, priority=priority, reasons=[], provenance=[], focus_point=list(point), crop=crop_geometry(point, width, height, poses.get(frame)), boxes=[])
+            items[frame] = dict(frame=frame, timestamp=frame / fps, priority=priority, reasons=[], provenance=[], focus_point=list(point), crop=crop_geometry(point, width, height, poses.get(frame)), boxes=[], segment=segment.as_dict() if segment else None)
         item = items[frame]
         if priority < item['priority']:
             item.update(priority=priority, focus_point=list(point), crop=crop_geometry(point, width, height, poses.get(frame)))
@@ -93,6 +101,8 @@ def mine_candidates(tracks, links, fps, count, width, height, poses=None):
         a, b = (tracks[src].last_observed, tracks[dst].first_observed)
         if a is None or b is None or a.frame >= b.frame:
             raise ValueError('Link needs observed, forward boundaries')
+        if segments and (segment_for_frame(a.frame, fps, segments) is None or segment_for_frame(b.frame, fps, segments) is None or segment_for_frame(a.frame, fps, segments).index != segment_for_frame(b.frame, fps, segments).index):
+            continue
         for key, actual in (('source_end_frame', a.frame), ('target_start_frame', b.frame)):
             if row.get(key) not in (None, '') and int(row[key]) != actual:
                 raise ValueError('Link boundary disagrees with observed tracklets')
@@ -111,7 +121,7 @@ def mine_candidates(tracks, links, fps, count, width, height, poses=None):
     for tid, tr in sorted(tracks.items()):
         observed = {o.frame: o for o in tr.observed}
         for f, o in sorted(observed.items()):
-            if f in items or not 0 <= f < count or any((abs(f - b) <= margin for b in boundaries)):
+            if f in items or not 0 <= f < count or (segments and segment_by_frame.get(f) is None) or any((abs(f - b) <= margin for b in boundaries)):
                 continue
             if all((t in observed for t in range(f - margin, f + margin + 1))):
                 eligible.setdefault(f, (tid, o))

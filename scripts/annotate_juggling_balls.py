@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.review_track_events import load_tracklets, load_detections, _video_meta
 from src.annotation.mining import mine_candidates, load_links, load_pose
+from src.annotation.segments import parse_losslesscut_csv, pair_video_segments, discover_pairs
 from src.annotation.store import Store
 from src.annotation.server import make_server
 from src.annotation.export import export_yolo
@@ -23,6 +24,7 @@ def main():
     mine = sub.add_parser('mine', help='Mine existing CSVs without inference')
     for flag in ('video', 'tracklets'):
         mine.add_argument('--' + flag, type=Path, required=True)
+    mine.add_argument('--segments', type=Path, help='LosslessCut CSV; defaults to <video>.csv')
     for flag in ('detections', 'links', 'hands'):
         mine.add_argument('--' + flag, type=Path)
     mine.add_argument('--source-group', help='Recording/session/juggler group for future leakage-safe splits')
@@ -31,9 +33,19 @@ def main():
     serve.add_argument('--port', type=int, default=43128)
     export = sub.add_parser('export-yolo', help='Completed full frames only; unassigned, never random frame splits')
     export.add_argument('--output', type=Path, required=True)
+    discover = sub.add_parser('discover', help='List videos with matching LosslessCut CSV files')
+    discover.add_argument('--source-dir', type=Path, required=True)
     for p in (mine, serve, export):
         p.add_argument('--workspace', type=Path, required=True)
     args = parser.parse_args()
+    if args.command == 'discover':
+        for video, csv_path in discover_pairs(args.source_dir):
+            try:
+                segments = parse_losslesscut_csv(csv_path)
+                print(json.dumps(dict(video=str(video), segments=str(csv_path), count=len(segments), ranges=[s.as_dict() for s in segments])))
+            except ValueError as exc:
+                print(json.dumps(dict(video=str(video), segments=str(csv_path), error=str(exc))))
+        return 0
     store = Store(args.workspace)
     if args.command == 'mine':
         for key in ('video', 'tracklets', 'detections', 'links', 'hands'):
@@ -42,8 +54,13 @@ def main():
                 parser.error(f'Missing {key}: {p}')
         fps, count, width, height = _video_meta(args.video)
         video_hash = digest(args.video)
-        source = dict(source_key=video_hash, video_path=str(args.video.resolve()), fps=fps, frame_count=count, width=width, height=height, source_group=args.source_group or video_hash, inputs={k: dict(path=str(getattr(args, k).resolve()), sha256=digest(getattr(args, k))) for k in ('tracklets', 'detections', 'links', 'hands') if getattr(args, k)})
-        candidates = mine_candidates(load_tracklets(args.tracklets), load_links(args.links), fps, count, width, height, load_pose(args.hands))
+        _, segment_path = pair_video_segments(args.video, args.segments)
+        segments = parse_losslesscut_csv(segment_path, duration=count / fps)
+        segment_hash = digest(segment_path)
+        source_key = video_hash + ':' + segment_hash
+        source = dict(source_key=source_key, video_path=str(args.video.resolve()), fps=fps, frame_count=count, width=width, height=height, source_group=args.source_group or video_hash, segments=[s.as_dict() for s in segments], inputs={k: dict(path=str(getattr(args, k).resolve()), sha256=digest(getattr(args, k))) for k in ('tracklets', 'detections', 'links', 'hands') if getattr(args, k)})
+        source['inputs']['segments'] = dict(path=str(segment_path.resolve()), sha256=segment_hash)
+        candidates = mine_candidates(load_tracklets(args.tracklets), load_links(args.links), fps, count, width, height, load_pose(args.hands), segments=segments)
         detections = load_detections(args.detections) if args.detections else {}
         store.mine(source, candidates, detections)
         counts = {name: sum((i['priority'] == p for i in candidates)) for p, name in enumerate(('linked_gap', 'unresolved_boundary', 'ordinary'))}

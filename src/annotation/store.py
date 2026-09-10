@@ -5,7 +5,7 @@ import math
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
-SURVEY = dict(hand_overlap=['none', 'slight', 'moderate', 'heavy'], visibility=['clear', 'partial', 'tiny_fragment'], motion_blur=['none', 'mild', 'strong'], annotation_confidence=['certain', 'uncertain'])
+SURVEY = dict(occluder=['none', 'hand', 'body', 'other_object', 'mixed'], occlusion=['none', 'slight', 'moderate', 'heavy'], visibility=['clear', 'partial', 'tiny_fragment'], motion_blur=['none', 'mild', 'strong'], annotation_confidence=['certain', 'uncertain'])
 
 def stable_id(value):
     return hashlib.sha256(value.encode()).hexdigest()[:24]
@@ -56,7 +56,7 @@ class Store:
                     x1, y1, x2, y2 = coords
                     if not all((math.isfinite(v) for v in coords)) or not (0 <= x1 < x2 <= source['width'] and 0 <= y1 < y2 <= source['height']):
                         continue
-                    b = dict(id=pid, x1=x1, y1=y1, x2=x2, y2=y2, class_name='juggling_ball', annotation_source='preannotation', prediction_id=pid, source_detector_box=coords, source_detector_confidence=pred['confidence'], **{key: '' for key in SURVEY})
+                    b = dict(id=pid, x1=x1, y1=y1, x2=x2, y2=y2, class_name='juggling_ball', annotation_source='preannotation', prediction_id=pid, source_detector_box=coords, source_detector_confidence=pred['confidence'], prediction_status='retained', **{key: '' for key in SURVEY})
                     c.execute('INSERT INTO boxes VALUES (?,?,?)', (pid, iid, encoded(b)))
 
     def items(self):
@@ -76,7 +76,12 @@ class Store:
         data['source'] = json.loads(c.execute('SELECT data FROM sources WHERE id=?', (row['source_id'],)).fetchone()['data'])
         data['boxes'] = [json.loads(r['data']) for r in c.execute('SELECT data FROM boxes WHERE item_id=? ORDER BY id', (iid,))]
         kept = {b.get('prediction_id') for b in data['boxes']}
-        data['predictions'] = [dict(json.loads(r['data']), deleted=r['id'] not in kept) for r in c.execute('SELECT * FROM predictions WHERE item_id=? ORDER BY id', (iid,))]
+        data['predictions'] = []
+        for r in c.execute('SELECT * FROM predictions WHERE item_id=? ORDER BY id', (iid,)):
+            prediction = json.loads(r['data'])
+            box = next((b for b in data['boxes'] if b.get('prediction_id') == r['id']), None)
+            edited = bool(box and [box['x1'], box['y1'], box['x2'], box['y2']] != prediction['box'])
+            data['predictions'].append(dict(prediction, deleted=box is None, retained=box is not None, edited=edited, status='deleted' if box is None else ('edited' if edited else 'retained')))
         return data
 
     def save(self, iid, payload):
@@ -114,7 +119,10 @@ class Store:
                 if pid:
                     used_predictions.add(pid)
                 pred = predictions.get(pid)
-                boxes.append(dict(id=bid, x1=x1, y1=y1, x2=x2, y2=y2, class_name='juggling_ball', **survey, annotation_source='preannotation' if pred else 'manual', prediction_id=pid if pred else None, source_detector_confidence=pred['confidence'] if pred else None, source_detector_box=pred['box'] if pred else None))
+                prediction_status = None
+                if pred:
+                    prediction_status = 'retained' if [x1, y1, x2, y2] == pred['box'] else 'edited'
+                boxes.append(dict(id=bid, x1=x1, y1=y1, x2=x2, y2=y2, class_name='juggling_ball', **survey, annotation_source='preannotation' if pred else 'manual', prediction_id=pid if pred else None, prediction_status=prediction_status, source_detector_confidence=pred['confidence'] if pred else None, source_detector_box=pred['box'] if pred else None))
             if status == 'completed' and focus == 'visible' and (not boxes):
                 raise ValueError('A visible focus ball requires a ball box; otherwise choose uncertain or no visible evidence')
             focus_box = payload.get('focus_box_id') or None

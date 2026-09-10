@@ -9,7 +9,7 @@ def test_export_full_frames(tmp_path):
     d = s.get(s.items()[0]['id'])
     assert export_yolo(s, tmp_path / 'empty', frame_reader=lambda *args: None) == 0
     b = d['boxes'][0]
-    b.update(hand_overlap='heavy', visibility='partial', motion_blur='strong', annotation_confidence='uncertain')
+    b.update(occluder='hand', occlusion='heavy', visibility='partial', motion_blur='strong', annotation_confidence='uncertain')
     d['boxes'].append(dict(b, id='manual-second', prediction_id=None, annotation_source='manual', x1=50, x2=70))
     d.update(status='completed', focus_status='visible', focus_box_id=b['id'], all_visible_confirmed=True)
     s.save(d['id'], d)
@@ -21,7 +21,7 @@ def test_export_full_frames(tmp_path):
     assert line[5] == '0'
     assert len(next((out / 'labels').rglob('*.txt')).read_text().splitlines()) == 2
     meta = json.loads((out / 'metadata.jsonl').read_text())
-    assert len(meta['boxes']) == 2 and meta['boxes'][0]['hand_overlap'] == 'heavy' and meta['provenance']
+    assert len(meta['boxes']) == 2 and meta['boxes'][0]['occluder'] == 'hand' and meta['boxes'][0]['occlusion'] == 'heavy' and meta['provenance']
     assert meta['source']['source_group'] == 'session1' and meta['split'] == 'unassigned'
     assert meta['focus_box_id'] == b['id'] and meta['predictions']
     assert 'train:' not in (out / 'data.yaml').read_text()
