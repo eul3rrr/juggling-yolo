@@ -90,6 +90,7 @@ tests/
 !tests/test_review_track_events_v1b.py
 !tests/test_analyze_stitch_features.py
 !tests/test_compare_arms.py
+!tests/test_segment_preprocessing.py
 !tests/test_live_core.py
 
 # Local annotation tool source; generated workspaces remain private/untracked.

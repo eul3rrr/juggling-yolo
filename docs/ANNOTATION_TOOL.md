@@ -41,6 +41,35 @@ For a folder of collected sources, first inspect all matching pairs and their pa
 
 Pairing is exact: `foo.mp4` uses `foo.mp4.csv`. Supported video extensions are mp4, mov, mkv, avi, and webm. CSV headers are case-insensitive `Start,End,Name`; labels are retained. Empty/undefined trailing end rows are ignored, malformed or non-positive ranges are rejected, and ranges are clamped to the measured video duration during `mine`.
 
+Prepare all discovered sources with the existing detector and Norfair scripts, without creating cut videos:
+
+```bash
+.venv/bin/python scripts/annotate_juggling_balls.py prepare \
+  --source-dir ~/Downloads/juggling_videos \
+  --output-root datasets/juggling_ball_v1/preprocessing
+```
+
+Preparation uses `yolo26s.pt`, COCO class 32, confidence 0.15, image size 960, Norfair distance threshold 50, and hit-counter-max 15 by default. It runs YOLO only on selected frames and gives Norfair a fresh tracker for every selected segment. Outputs are `<safe-video-name>-<video-sha>/detections.csv`, `tracklets.csv`, and `manifest.json`. Matching manifests are reported as `already prepared`; changed inputs/configuration require `--force`, which only replaces that generated source directory.
+
+For one source, the equivalent explicit commands are:
+
+```bash
+.venv/bin/python scripts/detect_video.py \
+  ~/Downloads/juggling_videos/foo.mp4 \
+  --segments ~/Downloads/juggling_videos/foo.mp4.csv \
+  --model yolo26s.pt --conf 0.15 --imgsz 960 --classes 32 --device auto \
+  --no-output-video --output-csv datasets/juggling_ball_v1/preprocessing/foo/detections.csv
+
+.venv/bin/python scripts/track_norfair.py \
+  ~/Downloads/juggling_videos/foo.mp4 \
+  datasets/juggling_ball_v1/preprocessing/foo/detections.csv \
+  --segments ~/Downloads/juggling_videos/foo.mp4.csv \
+  --distance-threshold 50 --hit-counter-max 15 \
+  --no-output-video --output-csv datasets/juggling_ball_v1/preprocessing/foo/tracklets.csv
+```
+
+Then mine using the generated `tracklets.csv` and `detections.csv` paths. The detector/tracker CSVs retain absolute source frame numbers and timestamps, so they can be supplied directly to `mine`.
+
 Source identity is SHA-256 of the video bytes. Stable item identity combines that identity and the zero-based source frame. Repeating identical mining inputs does not duplicate frames, replace labels, or resurrect deleted boxes. Input paths/hashes and metadata are pinned: if you change inputs for an already-mined video, use a new workspace rather than silently rewriting an annotated snapshot. Keep source videos at their recorded paths and unchanged while annotating/exporting.
 
 Loopback is the default. For SSH use a tunnel, for example `ssh -N -L 43128:127.0.0.1:43128 user@host`. `--host` permits explicit private-network binding; it is never automatically exposed. There is no authentication: do not expose this server to an untrusted network.

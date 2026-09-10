@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT))
 VENV_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
 if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
@@ -20,6 +21,8 @@ if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
 import cv2
 import numpy as np
 from norfair import Detection, Tracker
+from src.annotation.segments import parse_losslesscut_csv, pair_video_segments
+from src.annotation.preprocessing import track_selected_detections, iter_selected_frames, selected_frame_ranges
 
 CSV_FIELDS = ["frame", "time_seconds", "track_id", "confidence", "center_x", "center_y", "observed"]
 REQUIRED_DETECTION_FIELDS = ("frame", "confidence", "center_x", "center_y")
@@ -40,6 +43,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("input_video", type=Path)
     parser.add_argument("detections_csv", type=Path)
+    parser.add_argument("--segments", type=Path, default=None, help="LosslessCut CSV restricting tracking to independent ranges")
+    parser.add_argument("--no-output-video", action="store_true", help="Write track CSV only")
     parser.add_argument(
         "--distance-threshold",
         type=float,
@@ -182,6 +187,44 @@ def _track_rows(tracks, frame_index: int, fps: float, current_detections=None):
         }, (round(center_x), round(center_y))
 
 
+def _run_segment_tracking(input_video, detections, segments, fps, width, height,
+                          frame_count, out_csv, out_video, distance_threshold,
+                          hit_counter_max):
+    rows = list(track_selected_detections(
+        detections, fps, frame_count, segments,
+        lambda: Tracker(distance_function="euclidean", distance_threshold=distance_threshold,
+                        hit_counter_max=hit_counter_max),
+        convert_detections=to_norfair_detections,
+    ))
+    by_frame = defaultdict(list)
+    for row in rows:
+        by_frame[row["frame"]].append(row)
+    writer = None
+    if out_video is not None:
+        writer = cv2.VideoWriter(str(out_video), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
+        if not writer.isOpened():
+            raise RuntimeError(f"Could not create annotated video: {out_video}")
+    try:
+        with out_csv.open("w", newline="", encoding="utf-8") as csv_file:
+            csv_writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS, lineterminator="\n")
+            csv_writer.writeheader()
+            for row in rows:
+                csv_writer.writerow(row)
+            if writer is not None:
+                for frame_index, frame in iter_selected_frames(input_video, fps, frame_count, segments):
+                    for row in by_frame.get(frame_index, []):
+                        center = (round(float(row["center_x"])), round(float(row["center_y"])))
+                        cv2.circle(frame, center, 4, (0, 220, 0), -1, cv2.LINE_AA)
+                        cv2.putText(frame, f"id {row['track_id']} {row['confidence']}",
+                                    (center[0] + 6, max(18, center[1] - 6)),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.55, (0, 220, 0), 2, cv2.LINE_AA)
+                    writer.write(frame)
+    finally:
+        if writer is not None:
+            writer.release()
+    return len(rows), sum(end - start for start, end in selected_frame_ranges(fps, frame_count, segments))
+
+
 def main() -> None:
     args = parse_args()
     input_video = args.input_video.resolve()
@@ -193,9 +236,14 @@ def main() -> None:
 
     fps, width, height, video_frame_count = video_metadata(input_video)
     detections = load_detections(detections_csv, expected_video_name=input_video.name)
-    out_video = (args.output_video or PROJECT_ROOT / "outputs" / f"{input_video.stem}_norfair.mp4").resolve()
+    segments = None
+    if args.segments:
+        _, segment_path = pair_video_segments(input_video, args.segments)
+        segments = parse_losslesscut_csv(segment_path, duration=video_frame_count / fps)
+    out_video = None if args.no_output_video else (args.output_video or PROJECT_ROOT / "outputs" / f"{input_video.stem}_norfair.mp4").resolve()
     out_csv = (args.output_csv or PROJECT_ROOT / "detections" / f"{input_video.stem}_norfair.csv").resolve()
-    out_video.parent.mkdir(parents=True, exist_ok=True)
+    if out_video is not None:
+        out_video.parent.mkdir(parents=True, exist_ok=True)
     out_csv.parent.mkdir(parents=True, exist_ok=True)
     invalid_frames = [frame for frame in detections if frame >= video_frame_count]
     if invalid_frames:
@@ -204,6 +252,18 @@ def main() -> None:
             f"{video_frame_count} frames (zero-based)"
         )
 
+    if segments is not None:
+        row_count, processed_frames = _run_segment_tracking(
+            input_video, detections, segments, fps, width, height, video_frame_count,
+            out_csv, out_video, args.distance_threshold, args.hit_counter_max,
+        )
+        print(f"Frames processed: {processed_frames}")
+        print(f"Track rows written: {row_count}")
+        if out_video is not None:
+            print(f"Annotated video: {out_video}")
+        print(f"Track CSV: {out_csv}")
+        print("Each selected segment was tracked with a fresh Norfair tracker; IDs were remapped globally.")
+        return
     tracker = Tracker(
         distance_function="euclidean",
         distance_threshold=args.distance_threshold,
@@ -211,10 +271,10 @@ def main() -> None:
     )
     trails: dict[int, deque[tuple[int, int]]] = defaultdict(lambda: deque(maxlen=TRAIL_LENGTH))
     capture = cv2.VideoCapture(str(input_video))
-    writer = cv2.VideoWriter(str(out_video), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
+    writer = None if out_video is None else cv2.VideoWriter(str(out_video), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
     if not capture.isOpened():
         raise RuntimeError(f"Could not open input video: {input_video}")
-    if not writer.isOpened():
+    if writer is not None and not writer.isOpened():
         capture.release()
         raise RuntimeError(f"Could not create annotated video: {out_video}")
 
@@ -249,18 +309,21 @@ def main() -> None:
                     )
                     csv_writer.writerow(output_row)
                     row_count += 1
-                writer.write(frame)
+                if writer is not None:
+                    writer.write(frame)
                 frame_count += 1
     finally:
         capture.release()
-        writer.release()
+        if writer is not None:
+            writer.release()
     if frame_count != video_frame_count:
         raise RuntimeError(
             f"Video ended after {frame_count} frames, but metadata reported {video_frame_count}"
         )
     print(f"Frames processed: {frame_count}")
     print(f"Track rows written: {row_count}")
-    print(f"Annotated video: {out_video}")
+    if out_video is not None:
+        print(f"Annotated video: {out_video}")
     print(f"Track CSV: {out_csv}")
     print("CSV points are current Norfair estimates; observed=1 marks a track matched to a YOLO detection on that frame.")
 

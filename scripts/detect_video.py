@@ -11,14 +11,18 @@ import sys
 from collections import Counter
 from pathlib import Path
 
+
 # When invoked directly (./detect_video.py), the shebang initially selects the
 # system Python. Re-execute with this experiment's isolated environment before
 # importing third-party dependencies.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT))
 VENV_PYTHON = PROJECT_ROOT / ".venv" / "bin" / "python"
 if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
 
+from src.annotation.segments import parse_losslesscut_csv, pair_video_segments
+from src.annotation.preprocessing import iter_selected_frames
 import cv2
 import torch
 from ultralytics import YOLO
@@ -46,6 +50,9 @@ def parse_args() -> argparse.Namespace:
         description="Run YOLO detection (not tracking) on every video frame."
     )
     parser.add_argument("input_video", type=Path)
+    parser.add_argument("--segments", type=Path, default=None, help="LosslessCut CSV; defaults to <video>.csv when provided explicitly")
+    parser.add_argument("--no-output-video", action="store_true", help="Write detections CSV only")
+    parser.add_argument("--output-csv", type=Path, default=None)
     parser.add_argument("--model", default="yolo26s.pt")
     parser.add_argument("--conf", type=float, default=0.15)
     parser.add_argument("--imgsz", type=int, default=960)
@@ -80,19 +87,20 @@ def safe_tag(value: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "-", value).strip("-")
 
 
-def video_metadata(path: Path) -> tuple[float, int, int]:
+def video_metadata(path: Path) -> tuple[float, int, int, int]:
     capture = cv2.VideoCapture(str(path))
     if not capture.isOpened():
         raise RuntimeError(f"Could not open input video: {path}")
     fps = float(capture.get(cv2.CAP_PROP_FPS))
     width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
     capture.release()
-    if fps <= 0 or width <= 0 or height <= 0:
+    if fps <= 0 or width <= 0 or height <= 0 or frame_count <= 0:
         raise RuntimeError(
             f"Invalid video metadata: fps={fps}, width={width}, height={height}"
         )
-    return fps, width, height
+    return fps, width, height, frame_count
 
 
 def main() -> None:
@@ -118,10 +126,15 @@ def main() -> None:
     )
     model_tag = safe_tag(Path(args.model).stem)
     run_tag = f"{input_video.stem}_{model_tag}_{class_tag}"
-    annotated_path = args.output_dir / f"{run_tag}.mp4"
-    csv_path = args.detections_dir / f"{run_tag}.csv"
+    annotated_path = None if args.no_output_video else args.output_dir / f"{run_tag}.mp4"
+    csv_path = (args.output_csv or args.detections_dir / f"{run_tag}.csv").resolve()
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
 
-    fps, width, height = video_metadata(input_video)
+    fps, width, height, source_frame_count = video_metadata(input_video)
+    segments = None
+    if args.segments:
+        _, segment_path = pair_video_segments(input_video, args.segments)
+        segments = parse_losslesscut_csv(segment_path, duration=source_frame_count / fps)
     model = YOLO(model_reference)
     if model.task != "detect":
         raise ValueError(
@@ -138,80 +151,60 @@ def main() -> None:
         f"classes={args.classes}, vid_stride=1"
     )
 
-    writer = cv2.VideoWriter(
-        str(annotated_path),
-        cv2.VideoWriter_fourcc(*"mp4v"),
-        fps,
-        (width, height),
-    )
-    if not writer.isOpened():
-        raise RuntimeError(f"Could not create annotated video: {annotated_path}")
+    writer = None
+    if annotated_path is not None:
+        writer = cv2.VideoWriter(str(annotated_path), cv2.VideoWriter_fourcc(*"mp4v"), fps, (width, height))
+        if not writer.isOpened():
+            raise RuntimeError(f"Could not create annotated video: {annotated_path}")
 
     frame_count = 0
     detection_count = 0
     class_counts: Counter[str] = Counter()
+
+    def consume_result(result, frame_index):
+        nonlocal detection_count
+        plotted = result.plot(boxes=True, labels=True, conf=True)
+        if plotted.shape[1] != width or plotted.shape[0] != height:
+            plotted = cv2.resize(plotted, (width, height))
+        if writer is not None:
+            writer.write(plotted)
+        names = result.names
+        boxes = result.boxes
+        if boxes is not None:
+            xyxy = boxes.xyxy.detach().cpu().tolist()
+            confidences = boxes.conf.detach().cpu().tolist()
+            class_ids = boxes.cls.detach().cpu().to(torch.int64).tolist()
+            for coordinates, confidence, class_id in zip(xyxy, confidences, class_ids, strict=True):
+                x1, y1, x2, y2 = (float(value) for value in coordinates)
+                class_name = str(names[int(class_id)])
+                csv_writer.writerow({"video": input_video.name, "frame": frame_index, "time_seconds": f"{frame_index / fps:.6f}", "class_id": int(class_id), "class_name": class_name, "confidence": f"{float(confidence):.6f}", "x1": f"{x1:.3f}", "y1": f"{y1:.3f}", "x2": f"{x2:.3f}", "y2": f"{y2:.3f}", "center_x": f"{(x1 + x2) / 2.0:.3f}", "center_y": f"{(y1 + y2) / 2.0:.3f}", "width": f"{x2 - x1:.3f}", "height": f"{y2 - y1:.3f}"})
+                detection_count += 1
+                class_counts[class_name] += 1
 
     try:
         with csv_path.open("w", newline="", encoding="utf-8") as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS)
             csv_writer.writeheader()
 
-            results = model.predict(
-                source=str(input_video),
-                stream=True,
-                conf=args.conf,
-                imgsz=args.imgsz,
-                classes=args.classes,
-                device=device,
-                vid_stride=1,
-                save=False,
-                verbose=False,
-            )
-            for frame_index, result in enumerate(results):
-                plotted = result.plot(boxes=True, labels=True, conf=True)
-                if plotted.shape[1] != width or plotted.shape[0] != height:
-                    plotted = cv2.resize(plotted, (width, height))
-                writer.write(plotted)
-
-                names = result.names
-                boxes = result.boxes
-                if boxes is not None:
-                    xyxy = boxes.xyxy.detach().cpu().tolist()
-                    confidences = boxes.conf.detach().cpu().tolist()
-                    class_ids = boxes.cls.detach().cpu().to(torch.int64).tolist()
-                    for coordinates, confidence, class_id in zip(
-                        xyxy, confidences, class_ids, strict=True
-                    ):
-                        x1, y1, x2, y2 = (float(value) for value in coordinates)
-                        class_name = str(names[int(class_id)])
-                        csv_writer.writerow(
-                            {
-                                "video": input_video.name,
-                                "frame": frame_index,
-                                "time_seconds": f"{frame_index / fps:.6f}",
-                                "class_id": int(class_id),
-                                "class_name": class_name,
-                                "confidence": f"{float(confidence):.6f}",
-                                "x1": f"{x1:.3f}",
-                                "y1": f"{y1:.3f}",
-                                "x2": f"{x2:.3f}",
-                                "y2": f"{y2:.3f}",
-                                "center_x": f"{(x1 + x2) / 2.0:.3f}",
-                                "center_y": f"{(y1 + y2) / 2.0:.3f}",
-                                "width": f"{x2 - x1:.3f}",
-                                "height": f"{y2 - y1:.3f}",
-                            }
-                        )
-                        detection_count += 1
-                        class_counts[class_name] += 1
-                frame_count += 1
+            if segments is None:
+                results = model.predict(source=str(input_video), stream=True, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=device, vid_stride=1, save=False, verbose=False)
+                for frame_index, result in enumerate(results):
+                    consume_result(result, frame_index)
+                    frame_count += 1
+            else:
+                for frame_index, image in iter_selected_frames(input_video, fps, source_frame_count, segments):
+                    result = model.predict(source=image, stream=False, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=device, save=False, verbose=False)[0]
+                    consume_result(result, frame_index)
+                    frame_count += 1
     finally:
-        writer.release()
+        if writer is not None:
+            writer.release()
 
     print(f"Frames processed: {frame_count}")
     print(f"Detections written: {detection_count}")
     print(f"Class counts: {dict(class_counts.most_common())}")
-    print(f"Annotated video: {annotated_path.resolve()}")
+    if annotated_path is not None:
+        print(f"Annotated video: {annotated_path.resolve()}")
     print(f"Detection CSV: {csv_path.resolve()}")
 
 

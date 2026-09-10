@@ -80,6 +80,12 @@ def discover_pairs(source_dir):
             pairs.append((video, csv_path))
     return pairs
 
+def discover_video_files(source_dir):
+    root = Path(source_dir).expanduser()
+    if not root.is_dir():
+        raise FileNotFoundError(f'Source directory not found: {root}')
+    return sorted(p for p in root.iterdir() if p.is_file() and p.suffix.lower() in {'.mp4', '.mov', '.mkv', '.avi', '.webm'})
+
 def segment_for_frame(frame, fps, segments):
     timestamp = frame / fps
     return next((s for s in segments if s.start <= timestamp < s.end), None)

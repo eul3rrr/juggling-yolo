@@ -3,13 +3,15 @@
 import argparse
 import hashlib
 import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.review_track_events import load_tracklets, load_detections, _video_meta
 from src.annotation.mining import mine_candidates, load_links, load_pose
-from src.annotation.segments import parse_losslesscut_csv, pair_video_segments, discover_pairs
+from src.annotation.segments import parse_losslesscut_csv, pair_video_segments, discover_pairs, discover_video_files
 from src.annotation.store import Store
 from src.annotation.server import make_server
 from src.annotation.export import export_yolo
@@ -17,6 +19,57 @@ from src.annotation.export import export_yolo
 def digest(path):
     with path.open('rb') as f:
         return hashlib.file_digest(f, 'sha256').hexdigest()
+
+def safe_name(value):
+    return ''.join(c if c.isalnum() or c in '._-' else '-' for c in value).strip('-')
+
+def prepare_sources(args):
+    root = args.output_root.expanduser().resolve()
+    root.mkdir(parents=True, exist_ok=True)
+    try:
+        tool_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    except (OSError, subprocess.CalledProcessError):
+        tool_commit = 'unknown'
+    failures = 0
+    prepared = skipped = 0
+    for video, segment_path in discover_pairs(args.source_dir):
+        out = None
+        try:
+            fps, count, width, height = _video_meta(video)
+            segments = parse_losslesscut_csv(segment_path, duration=count / fps)
+            video_sha = digest(video)
+            segment_sha = digest(segment_path)
+            source_id = safe_name(video.stem) + '-' + video_sha[:12]
+            out = root / source_id
+            config = dict(model=args.model, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=args.device, distance_threshold=args.distance_threshold, hit_counter_max=args.hit_counter_max)
+            expected = dict(video_path=str(video.resolve()), video_sha256=video_sha, segments_path=str(segment_path.resolve()), segments_sha256=segment_sha, segments=[s.as_dict() for s in segments], config=config, tool_commit=tool_commit)
+            manifest_path = out / 'manifest.json'
+            if not args.force and manifest_path.is_file() and (out / 'detections.csv').is_file() and (out / 'tracklets.csv').is_file():
+                existing = json.loads(manifest_path.read_text())
+                if all(existing.get(k) == v for k, v in expected.items()):
+                    print(f'{video.name}: already prepared')
+                    skipped += 1
+                    continue
+                raise ValueError('existing preprocessing manifest differs; rerun with --force')
+            if out.exists() and not args.force:
+                raise ValueError('preprocessing output exists without a matching manifest; rerun with --force')
+            if args.force and out.exists():
+                shutil.rmtree(out)
+            out.mkdir(parents=True, exist_ok=True)
+            detections = out / 'detections.csv'
+            tracklets = out / 'tracklets.csv'
+            base = [sys.executable]
+            subprocess.run(base + [str(ROOT / 'scripts/detect_video.py'), str(video), '--segments', str(segment_path), '--model', args.model, '--conf', str(args.conf), '--imgsz', str(args.imgsz), '--classes', *map(str, args.classes), '--device', args.device, '--no-output-video', '--output-csv', str(detections)], check=True, capture_output=True, text=True)
+            subprocess.run(base + [str(ROOT / 'scripts/track_norfair.py'), str(video), str(detections), '--segments', str(segment_path), '--distance-threshold', str(args.distance_threshold), '--hit-counter-max', str(args.hit_counter_max), '--no-output-video', '--output-csv', str(tracklets)], check=True, capture_output=True, text=True)
+            manifest = dict(expected, outputs={'detections': str(detections), 'tracklets': str(tracklets)})
+            manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
+            print(f'{video.name}: prepared -> {out}')
+            prepared += 1
+        except Exception as exc:
+            failures += 1
+            print(f'{video.name}: FAILED: {exc}')
+    print(f'Preparation summary: prepared={prepared} already_prepared={skipped} failed={failures}')
+    return 1 if failures else 0
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -35,17 +88,35 @@ def main():
     export.add_argument('--output', type=Path, required=True)
     discover = sub.add_parser('discover', help='List videos with matching LosslessCut CSV files')
     discover.add_argument('--source-dir', type=Path, required=True)
+    prepare = sub.add_parser('prepare', help='Run segment-aware detector and Norfair preprocessing for a folder')
+    prepare.add_argument('--source-dir', type=Path, required=True)
+    prepare.add_argument('--output-root', type=Path, default=Path('datasets/juggling_ball_v1/preprocessing'))
+    prepare.add_argument('--model', default='yolo26s.pt')
+    prepare.add_argument('--conf', type=float, default=0.15)
+    prepare.add_argument('--imgsz', type=int, default=960)
+    prepare.add_argument('--classes', type=int, nargs='+', default=[32])
+    prepare.add_argument('--device', default='auto')
+    prepare.add_argument('--distance-threshold', type=float, default=50)
+    prepare.add_argument('--hit-counter-max', type=int, default=15)
+    prepare.add_argument('--force', action='store_true')
     for p in (mine, serve, export):
         p.add_argument('--workspace', type=Path, required=True)
     args = parser.parse_args()
     if args.command == 'discover':
-        for video, csv_path in discover_pairs(args.source_dir):
+        pairs = {video for video, _ in discover_pairs(args.source_dir)}
+        for video in discover_video_files(args.source_dir):
+            csv_path = Path(str(video) + '.csv')
+            if video not in pairs:
+                print(json.dumps(dict(video=str(video), error=f'Missing exact matching CSV: {csv_path}')))
+                continue
             try:
                 segments = parse_losslesscut_csv(csv_path)
                 print(json.dumps(dict(video=str(video), segments=str(csv_path), count=len(segments), ranges=[s.as_dict() for s in segments])))
             except ValueError as exc:
                 print(json.dumps(dict(video=str(video), segments=str(csv_path), error=str(exc))))
         return 0
+    if args.command == 'prepare':
+        return prepare_sources(args)
     store = Store(args.workspace)
     if args.command == 'mine':
         for key in ('video', 'tracklets', 'detections', 'links', 'hands'):
