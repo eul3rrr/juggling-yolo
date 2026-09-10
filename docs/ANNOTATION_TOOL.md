@@ -46,10 +46,11 @@ Prepare all discovered sources with the existing detector and Norfair scripts, w
 ```bash
 .venv/bin/python scripts/annotate_juggling_balls.py prepare \
   --source-dir ~/Downloads/juggling_videos \
-  --output-root datasets/juggling_ball_v1/preprocessing
+  --output-root datasets/juggling_ball_v1/preprocessing \
+  --batch-size 32
 ```
 
-Preparation uses `yolo26s.pt`, COCO class 32, confidence 0.15, image size 960, Norfair distance threshold 50, and hit-counter-max 15 by default. It runs YOLO only on selected frames and gives Norfair a fresh tracker for every selected segment. Outputs are `<safe-video-name>-<video-sha>/detections.csv`, `tracklets.csv`, and `manifest.json`. Matching manifests are reported as `already prepared`; changed inputs/configuration require `--force`, which only replaces that generated source directory.
+Preparation uses `yolo26s.pt`, COCO class 32, confidence 0.15, image size 960, detector batch size 32, Norfair distance threshold 50, and hit-counter-max 15 by default. It runs bounded-memory YOLO batches only on selected frames and gives Norfair a fresh tracker for every selected segment. Outputs are `<safe-video-name>-<video-sha>/detections.csv`, `tracklets.csv`, and `manifest.json`. Batch size is recorded in the manifest. Matching manifests are reported as `already prepared`; changed inputs/configuration require `--force`, which only replaces that generated source directory.
 
 For one source, the equivalent explicit commands are:
 
@@ -57,7 +58,7 @@ For one source, the equivalent explicit commands are:
 .venv/bin/python scripts/detect_video.py \
   ~/Downloads/juggling_videos/foo.mp4 \
   --segments ~/Downloads/juggling_videos/foo.mp4.csv \
-  --model yolo26s.pt --conf 0.15 --imgsz 960 --classes 32 --device auto \
+  --model yolo26s.pt --conf 0.15 --imgsz 960 --classes 32 --device auto --batch-size 32 \
   --no-output-video --output-csv datasets/juggling_ball_v1/preprocessing/foo/detections.csv
 
 .venv/bin/python scripts/track_norfair.py \

@@ -24,6 +24,8 @@ def safe_name(value):
     return ''.join(c if c.isalnum() or c in '._-' else '-' for c in value).strip('-')
 
 def prepare_sources(args):
+    if args.batch_size <= 0:
+        raise ValueError('--batch-size must be positive')
     root = args.output_root.expanduser().resolve()
     root.mkdir(parents=True, exist_ok=True)
     try:
@@ -41,7 +43,7 @@ def prepare_sources(args):
             segment_sha = digest(segment_path)
             source_id = safe_name(video.stem) + '-' + video_sha[:12]
             out = root / source_id
-            config = dict(model=args.model, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=args.device, distance_threshold=args.distance_threshold, hit_counter_max=args.hit_counter_max)
+            config = dict(model=args.model, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=args.device, batch_size=args.batch_size, distance_threshold=args.distance_threshold, hit_counter_max=args.hit_counter_max)
             expected = dict(video_path=str(video.resolve()), video_sha256=video_sha, segments_path=str(segment_path.resolve()), segments_sha256=segment_sha, segments=[s.as_dict() for s in segments], config=config, tool_commit=tool_commit)
             manifest_path = out / 'manifest.json'
             if not args.force and manifest_path.is_file() and (out / 'detections.csv').is_file() and (out / 'tracklets.csv').is_file():
@@ -59,7 +61,7 @@ def prepare_sources(args):
             detections = out / 'detections.csv'
             tracklets = out / 'tracklets.csv'
             base = [sys.executable]
-            subprocess.run(base + [str(ROOT / 'scripts/detect_video.py'), str(video), '--segments', str(segment_path), '--model', args.model, '--conf', str(args.conf), '--imgsz', str(args.imgsz), '--classes', *map(str, args.classes), '--device', args.device, '--no-output-video', '--output-csv', str(detections)], check=True, capture_output=True, text=True)
+            subprocess.run(base + [str(ROOT / 'scripts/detect_video.py'), str(video), '--segments', str(segment_path), '--model', args.model, '--conf', str(args.conf), '--imgsz', str(args.imgsz), '--classes', *map(str, args.classes), '--device', args.device, '--batch-size', str(args.batch_size), '--no-output-video', '--output-csv', str(detections)], check=True, capture_output=True, text=True)
             subprocess.run(base + [str(ROOT / 'scripts/track_norfair.py'), str(video), str(detections), '--segments', str(segment_path), '--distance-threshold', str(args.distance_threshold), '--hit-counter-max', str(args.hit_counter_max), '--no-output-video', '--output-csv', str(tracklets)], check=True, capture_output=True, text=True)
             manifest = dict(expected, outputs={'detections': str(detections), 'tracklets': str(tracklets)})
             manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
@@ -96,6 +98,7 @@ def main():
     prepare.add_argument('--imgsz', type=int, default=960)
     prepare.add_argument('--classes', type=int, nargs='+', default=[32])
     prepare.add_argument('--device', default='auto')
+    prepare.add_argument('--batch-size', type=int, default=32)
     prepare.add_argument('--distance-threshold', type=float, default=50)
     prepare.add_argument('--hit-counter-max', type=int, default=15)
     prepare.add_argument('--force', action='store_true')

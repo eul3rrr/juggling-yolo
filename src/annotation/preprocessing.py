@@ -34,6 +34,30 @@ def iter_selected_frames(video, fps, frame_count, segments):
         capture.release()
 
 
+def batched_frames(frames, batch_size):
+    """Bounded-memory batches of absolute frame IDs and corresponding images."""
+    if batch_size <= 0:
+        raise ValueError('batch_size must be positive')
+    indices, images = [], []
+    for frame_index, image in frames:
+        indices.append(frame_index)
+        images.append(image)
+        if len(images) == batch_size:
+            yield indices, images
+            indices, images = [], []
+    if images:
+        yield indices, images
+
+
+def infer_frame_batches(model, frames, batch_size, predict_kwargs):
+    """Yield model results paired with the absolute frame IDs in input order."""
+    for indices, images in batched_frames(frames, batch_size):
+        results = list(model.predict(source=images, **predict_kwargs))
+        if len(results) != len(indices):
+            raise RuntimeError(f'YOLO returned {len(results)} results for {len(indices)} frames')
+        yield from zip(indices, results, strict=True)
+
+
 def _row_for_track(track, frame, fps, current_detections):
     if getattr(track, 'is_initializing', False) or getattr(track, 'id', None) is None:
         return None

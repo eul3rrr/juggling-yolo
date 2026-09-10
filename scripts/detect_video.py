@@ -22,7 +22,7 @@ if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
 
 from src.annotation.segments import parse_losslesscut_csv, pair_video_segments
-from src.annotation.preprocessing import iter_selected_frames
+from src.annotation.preprocessing import iter_selected_frames, infer_frame_batches, selected_frame_ranges
 import cv2
 import torch
 from ultralytics import YOLO
@@ -53,6 +53,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--segments", type=Path, default=None, help="LosslessCut CSV; defaults to <video>.csv when provided explicitly")
     parser.add_argument("--no-output-video", action="store_true", help="Write detections CSV only")
     parser.add_argument("--output-csv", type=Path, default=None)
+    parser.add_argument("--batch-size", type=int, default=32, help="Selected-frame inference batch size (default: 32)")
     parser.add_argument("--model", default="yolo26s.pt")
     parser.add_argument("--conf", type=float, default=0.15)
     parser.add_argument("--imgsz", type=int, default=960)
@@ -103,6 +104,30 @@ def video_metadata(path: Path) -> tuple[float, int, int, int]:
     return fps, width, height, frame_count
 
 
+def consume_result(result, frame_index, writer, csv_writer, input_video, fps, width, height, class_counts=None):
+    """Write one absolute-frame result; render only when a video writer exists."""
+    if writer is not None:
+        plotted = result.plot(boxes=True, labels=True, conf=True)
+        if plotted.shape[1] != width or plotted.shape[0] != height:
+            plotted = cv2.resize(plotted, (width, height))
+        writer.write(plotted)
+    written = 0
+    names = result.names
+    boxes = result.boxes
+    if boxes is not None:
+        xyxy = boxes.xyxy.detach().cpu().tolist()
+        confidences = boxes.conf.detach().cpu().tolist()
+        class_ids = boxes.cls.detach().cpu().to(torch.int64).tolist()
+        for coordinates, confidence, class_id in zip(xyxy, confidences, class_ids, strict=True):
+            x1, y1, x2, y2 = (float(value) for value in coordinates)
+            class_name = str(names[int(class_id)])
+            csv_writer.writerow({"video": input_video.name, "frame": frame_index, "time_seconds": f"{frame_index / fps:.6f}", "class_id": int(class_id), "class_name": class_name, "confidence": f"{float(confidence):.6f}", "x1": f"{x1:.3f}", "y1": f"{y1:.3f}", "x2": f"{x2:.3f}", "y2": f"{y2:.3f}", "center_x": f"{(x1 + x2) / 2.0:.3f}", "center_y": f"{(y1 + y2) / 2.0:.3f}", "width": f"{x2 - x1:.3f}", "height": f"{y2 - y1:.3f}"})
+            written += 1
+            if class_counts is not None:
+                class_counts[class_name] += 1
+    return written
+
+
 def main() -> None:
     args = parse_args()
     input_video = args.input_video.resolve()
@@ -112,6 +137,8 @@ def main() -> None:
         raise ValueError("--conf must be between 0 and 1")
     if args.imgsz <= 0:
         raise ValueError("--imgsz must be positive")
+    if args.batch_size <= 0:
+        raise ValueError("--batch-size must be positive")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     args.detections_dir.mkdir(parents=True, exist_ok=True)
@@ -148,7 +175,7 @@ def main() -> None:
         print(f"CUDA device: {torch.cuda.get_device_name(0)}")
     print(
         f"Settings: conf={args.conf}, imgsz={args.imgsz}, "
-        f"classes={args.classes}, vid_stride=1"
+        f"classes={args.classes}, vid_stride=1, batch_size={args.batch_size}"
     )
 
     writer = None
@@ -161,26 +188,6 @@ def main() -> None:
     detection_count = 0
     class_counts: Counter[str] = Counter()
 
-    def consume_result(result, frame_index):
-        nonlocal detection_count
-        plotted = result.plot(boxes=True, labels=True, conf=True)
-        if plotted.shape[1] != width or plotted.shape[0] != height:
-            plotted = cv2.resize(plotted, (width, height))
-        if writer is not None:
-            writer.write(plotted)
-        names = result.names
-        boxes = result.boxes
-        if boxes is not None:
-            xyxy = boxes.xyxy.detach().cpu().tolist()
-            confidences = boxes.conf.detach().cpu().tolist()
-            class_ids = boxes.cls.detach().cpu().to(torch.int64).tolist()
-            for coordinates, confidence, class_id in zip(xyxy, confidences, class_ids, strict=True):
-                x1, y1, x2, y2 = (float(value) for value in coordinates)
-                class_name = str(names[int(class_id)])
-                csv_writer.writerow({"video": input_video.name, "frame": frame_index, "time_seconds": f"{frame_index / fps:.6f}", "class_id": int(class_id), "class_name": class_name, "confidence": f"{float(confidence):.6f}", "x1": f"{x1:.3f}", "y1": f"{y1:.3f}", "x2": f"{x2:.3f}", "y2": f"{y2:.3f}", "center_x": f"{(x1 + x2) / 2.0:.3f}", "center_y": f"{(y1 + y2) / 2.0:.3f}", "width": f"{x2 - x1:.3f}", "height": f"{y2 - y1:.3f}"})
-                detection_count += 1
-                class_counts[class_name] += 1
-
     try:
         with csv_path.open("w", newline="", encoding="utf-8") as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS)
@@ -189,13 +196,17 @@ def main() -> None:
             if segments is None:
                 results = model.predict(source=str(input_video), stream=True, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=device, vid_stride=1, save=False, verbose=False)
                 for frame_index, result in enumerate(results):
-                    consume_result(result, frame_index)
+                    detection_count += consume_result(result, frame_index, writer, csv_writer, input_video, fps, width, height, class_counts)
                     frame_count += 1
             else:
-                for frame_index, image in iter_selected_frames(input_video, fps, source_frame_count, segments):
-                    result = model.predict(source=image, stream=False, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=device, save=False, verbose=False)[0]
-                    consume_result(result, frame_index)
+                total_selected = sum(end - start for start, end in selected_frame_ranges(fps, source_frame_count, segments))
+                frames = iter_selected_frames(input_video, fps, source_frame_count, segments)
+                kwargs = dict(stream=False, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=device, save=False, verbose=False)
+                for frame_index, result in infer_frame_batches(model, frames, args.batch_size, kwargs):
+                    detection_count += consume_result(result, frame_index, writer, csv_writer, input_video, fps, width, height, class_counts)
                     frame_count += 1
+                    if frame_count % 1000 == 0 or frame_count == total_selected:
+                        print(f"{input_video.name}: processed {frame_count} / {total_selected} selected frames")
     finally:
         if writer is not None:
             writer.release()
