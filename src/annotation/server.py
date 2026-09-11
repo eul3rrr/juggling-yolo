@@ -59,7 +59,7 @@ def make_server(store, host='127.0.0.1', port=43128):
                     crop = q.get('crop', ['0'])[0] == '1'
                     self.send(jpeg(iid, frame, crop), 'image/jpeg')
                     return
-                assets = {'/': 'index.html', '/app.js': 'app.js', '/styles.css': 'styles.css'}
+                assets = {'/': 'index.html', '/app.js': 'app.js', '/fast_accept.js': 'fast_accept.js', '/styles.css': 'styles.css'}
                 if parsed.path in assets:
                     path = WEB / assets[parsed.path]
                     self.send(path.read_bytes(), mimetypes.guess_type(path)[0] or 'text/plain')

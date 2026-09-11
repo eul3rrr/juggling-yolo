@@ -13,6 +13,7 @@ function setBusy(value){
 }
 function message(text){
   $('message').textContent=text;
+  $('footerMessage').textContent=text;
 } async function api(path,body){
   const r=await fetch(path,body?{
     method:'POST',headers:{
@@ -230,12 +231,12 @@ function remove(){
   const list=filtered(),idx=list.findIndex(i=>i.id===state.item?.id),next=list[idx+delta];
   if(next)await load(next.id);
   else message('End of this category. No automatic wrap or advance.');
-} async function save(status,next=false){
+} async function save(status,next=false,item=state.item){
   if(!state.item||state.busy||state.drag)return;
   setBusy(true);
   try{
     const payload={
-      ...state.item,status
+      ...item,status
     };
     state.item=await api('/api/save',payload);
     state.dirty=false;
@@ -327,6 +328,7 @@ $('zoom').onchange=()=>{
 $('prev').onclick=()=>navigate(-1);
 $('next').onclick=()=>navigate(1);
 $('save').onclick=()=>save('pending');
+$('fastAccept').onclick=()=>FastAccept.runFastAccept({item:state.item,dirty:state.dirty,save,message});
 $('complete').onclick=()=>save('completed',true);
 $('skip').onclick=()=>save('skipped',true);
 $('closeContext').onclick=()=>$('contextDialog').close();
@@ -346,7 +348,7 @@ document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)||e.target.isContentEditable)return;
   const key=e.key.toLowerCase();
   const actions={
-    n:()=>navigate(1),arrowright:()=>navigate(1),p:()=>navigate(-1),arrowleft:()=>navigate(-1),a:()=>$('add').click(),delete:remove,backspace:remove,enter:()=>save('completed',true),h:()=>$('hints').click(),escape:cancel
+    n:()=>navigate(1),arrowright:()=>navigate(1),p:()=>navigate(-1),arrowleft:()=>navigate(-1),a:()=>$('add').click(),delete:remove,backspace:remove,enter:()=>save('completed',true),g:()=>$('fastAccept').click(),h:()=>$('hints').click(),escape:cancel
   };
   if(actions[key]){
     e.preventDefault();
