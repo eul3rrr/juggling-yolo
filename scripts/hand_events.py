@@ -40,8 +40,12 @@ def _logical_group(rows: list[dict[str, str]]) -> dict[tuple[str, int, int], dic
     return grouped
 
 
-def _truth(value: str | None) -> bool:
-    return value == "1"
+def _truth(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int):
+        return value == 1
+    return isinstance(value, str) and value == "1"
 
 
 def _event_from_rows(key, side_rows, frame_min: int, frame_max: int) -> HandEvent:

@@ -3,6 +3,7 @@ import csv
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+import hand_boundaries as hb
 import hand_events as he
 
 
@@ -25,6 +26,22 @@ def write_rows(path, data):
         w=csv.DictWriter(f, fieldnames=fields); w.writeheader(); w.writerows(data)
 
 
+def assessment(kind, *, ambiguous=False, post_contact=False):
+    left = hb.HandBoundaryAssessment(
+        "VERY_NEAR", 10.0, 10.0, 0.1, 0.1, 5, "APPROACHING", -1.0,
+        True, post_contact, "very_near",
+    )
+    right = hb.HandBoundaryAssessment(
+        "FAR", 100.0, 100.0, 1.0, 1.0, 5, "NEUTRAL", 0.0,
+        ambiguous, False, "far",
+    )
+    eligible = ("LEFT", "RIGHT") if ambiguous else ("LEFT",)
+    return hb.BoundaryAssessment(
+        2, kind, 882, 1.0, 2.0, {"LEFT": left, "RIGHT": right},
+        eligible, None if ambiguous else "LEFT", ambiguous,
+    )
+
+
 def test_end_with_hand_evidence_is_entry(tmp_path):
     p=tmp_path/"a.csv"; write_rows(p, rows("END"))
     e=he.load_logical_events(p, 2, 1078)[0]
@@ -34,6 +51,46 @@ def test_end_with_hand_evidence_is_entry(tmp_path):
 def test_start_with_hand_evidence_is_exit(tmp_path):
     p=tmp_path/"a.csv"; write_rows(p, rows("START"))
     assert he.load_logical_events(p, 2, 1078)[0].event_type == "HAND_EXIT"
+
+
+def test_assessment_rows_integer_evidence_creates_entry_and_exit():
+    data = hb.assessment_rows([assessment("END"), assessment("START")])
+
+    events = he.logical_events_from_rows(data, 2, 1078)
+
+    assert [event.event_type for event in events] == ["HAND_ENTRY", "HAND_EXIT"]
+
+
+def test_assessment_rows_integer_ambiguous_and_post_contact_are_preserved():
+    ambiguous_data = hb.assessment_rows([assessment("END", ambiguous=True)])
+    post_contact_data = hb.assessment_rows([assessment("END", post_contact=True)])
+
+    ambiguous_event = he.logical_events_from_rows(ambiguous_data, 2, 1078)[0]
+    post_contact_event = he.logical_events_from_rows(post_contact_data, 2, 1078)[0]
+
+    assert ambiguous_event.ambiguous is True
+    assert post_contact_event.post_contact is True
+
+
+def test_direct_boolean_flags_are_supported():
+    ambiguous_data = rows("END", evidence=True, ambiguous=True)
+    post_contact_data = rows("END", evidence=True, ambiguous=False)
+    post_contact_data[0]["post_contact"] = True
+
+    ambiguous_event = he.logical_events_from_rows(ambiguous_data, 2, 1078)[0]
+    post_contact_event = he.logical_events_from_rows(post_contact_data, 2, 1078)[0]
+
+    assert ambiguous_event.event_type == "HAND_ENTRY"
+    assert ambiguous_event.ambiguous is True
+    assert post_contact_event.post_contact is True
+
+
+def test_csv_zero_and_one_strings_remain_compatible():
+    event = he.logical_events_from_rows(rows("END", "1", ambiguous="0"), 2, 1078)[0]
+
+    assert event.event_type == "HAND_ENTRY"
+    assert event.ambiguous is False
+    assert event.post_contact is False
 
 
 def test_no_evidence_maps_to_non_hand_events(tmp_path):
