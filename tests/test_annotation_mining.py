@@ -14,7 +14,7 @@ def test_mine_and_crop():
     assert items == mine_candidates(tracks, links, 60, 180, 320, 240)
     assert len({i['frame'] for i in items}) == len(items)
     assert items[0]['priority'] == 0
-    transition = next((i for i in items if i['frame'] == 62))
+    transition = next((i for i in items if i['frame'] == 61))
     assert {'linked_gap', 'track_end'} <= set(transition['reasons'])
     assert any((p['inside_gap'] for p in transition['provenance']))
     assert transition['boxes'] == []
@@ -58,8 +58,11 @@ def test_fps_gap_and_bounds():
     assert gap_frames(10, 17, 30) == list(range(11, 17))
 
 def test_temporal_sampling():
-    from src.annotation.mining import boundary_frames, gap_frames
+    from src.annotation.mining import boundary_frames, gap_frames, unresolved_boundary_frames
     assert boundary_frames(20, 60, 100) == [5, 11, 14, 16, 18, 19, 20, 21, 22, 24, 26, 29, 35]
+    assert unresolved_boundary_frames(20, 60, 100) == [16, 19, 20, 21, 24]
+    assert unresolved_boundary_frames(100, 30, 200) == [98, 100, 102]
+    assert unresolved_boundary_frames(0, 60, 3) == [0, 1]
     assert boundary_frames(0, 30, 10) == [0, 1, 2, 3, 4, 8]
     assert gap_frames(10, 15, 60) == [11, 12, 13, 14]
     assert gap_frames(10, 50, 60) == [11, 12, 20, 30, 40, 48, 49]
@@ -90,3 +93,49 @@ def test_segment_aware_mining_does_not_create_boundary_events_or_cross_context()
     assert not any(i['frame'] in (29, 30, 39, 40) for i in items)
     assert not any('segment_boundary' in r for i in items for r in i['reasons'])
     assert all(i['segment']['index'] == 0 if i['frame'] < 30 else i['segment']['index'] == 1 for i in items)
+
+
+def test_unresolved_events_near_segment_edges_are_discarded_but_interior_events_are_sparse():
+    from scripts.review_track_events import Track, TrackObservation
+    from src.annotation.mining import mine_candidates
+    from src.annotation.segments import Segment
+
+    def track(tid, frames):
+        return Track(tid, [TrackObservation(f, 30 + f, 50, .8, 1) for f in frames])
+
+    tracks = {
+        1: track(1, range(0, 61)),      # START at edge; END interior at 60
+        2: track(2, range(30, 120)),    # START interior at 30; END at edge
+    }
+    items = mine_candidates(
+        tracks, [], 60, 120, 320, 240,
+        segments=[Segment(0, 0, 2.0, 'selected')],
+    )
+    unresolved = [
+        (item['frame'], provenance['kind'],
+         provenance.get('end_frame') or provenance.get('start_frame'))
+        for item in items for provenance in item['provenance']
+        if provenance['kind'] in {'track_end', 'orphan_start'}
+    ]
+    assert {(kind, boundary) for _, kind, boundary in unresolved} == {
+        ('track_end', 60), ('orphan_start', 30),
+    }
+    assert {frame for frame, kind, _ in unresolved if kind == 'track_end'} == {56, 59, 60, 61, 64}
+    assert {frame for frame, kind, _ in unresolved if kind == 'orphan_start'} == {26, 29, 30, 31, 34}
+    assert all(0 <= frame < 120 for frame, _, _ in unresolved)
+
+
+def test_linked_gap_keeps_dense_boundary_and_gap_sampling():
+    from scripts.review_track_events import Track, TrackObservation
+    from src.annotation.mining import boundary_frames, gap_frames, mine_candidates
+
+    def track(tid, frames):
+        return Track(tid, [TrackObservation(f, f, 50, .8, 1) for f in frames])
+
+    tracks = {1: track(1, range(10, 41)), 2: track(2, range(50, 91))}
+    links = [{'source_track_id': 1, 'target_track_id': 2, 'association_type': 'HAND'}]
+    items = mine_candidates(tracks, links, 60, 120, 320, 240)
+    linked = {item['frame'] for item in items if 'linked_gap' in item['reasons']}
+    expected = set(boundary_frames(40, 60, 120) + boundary_frames(50, 60, 120) + gap_frames(40, 50, 60))
+    assert linked == expected
+    assert len(linked) > 5

@@ -2,7 +2,7 @@
 import csv
 import math
 from scripts.review_track_events import generate_events
-from .segments import segment_for_frame
+from .segments import segment_for_frame, segment_frame_bounds
 
 def load_links(path):
     """Canonical hand associations contain only accepted relations, not candidates."""
@@ -112,8 +112,11 @@ def mine_candidates(tracks, links, fps, count, width, height, poses=None, segmen
             add(t, 'linked_gap', 0, ev, point)
     for e in generate_events(tracks, {}, fps, count):
         kind = 'track_end' if e.kind == 'end' else 'orphan_start'
+        if segments and unresolved_event_near_segment_edge(
+                e.primary_end_frame, fps, count, segments):
+            continue
         ev = dict(event_key=e.event_key, kind=kind, focus_track_id=e.primary.track_id, related_track_id=None, end_frame=e.primary_end_frame if kind == 'track_end' else None, start_frame=e.primary_end_frame if kind == 'orphan_start' else None, accepted_link=None)
-        for t in boundary_frames(e.primary_end_frame, fps, count):
+        for t in unresolved_boundary_frames(e.primary_end_frame, fps, count):
             add(t, kind, 1, ev, (e.primary_end_x, e.primary_end_y))
     boundaries = [o.frame for tr in tracks.values() for o in (tr.first_observed, tr.last_observed) if o]
     margin = max(1, round(0.25 * fps))
@@ -139,6 +142,19 @@ def mine_candidates(tracks, links, fps, count, width, height, poses=None, segmen
 def boundary_frames(frame, fps, count):
     offsets = [-15, -9, -6, -4, -2, -1, 0, 1, 2, 4, 6, 9, 15]
     return sorted({frame + round(x * fps / 60) for x in offsets if 0 <= frame + round(x * fps / 60) < count})
+
+def unresolved_boundary_frames(frame, fps, count):
+    offsets = [-4, -1, 0, 1, 4]
+    return sorted({frame + round(x * fps / 60) for x in offsets
+                   if 0 <= frame + round(x * fps / 60) < count})
+
+def unresolved_event_near_segment_edge(frame, fps, count, segments):
+    margin = max(1, round(0.2 * fps))
+    for segment in segments:
+        start, end = segment_frame_bounds(segment, fps, count)
+        if start <= frame < end:
+            return min(abs(frame - start), abs(frame - end)) <= margin
+    return False
 
 def gap_frames(end, start, fps):
     if start - end - 1 <= round(0.2 * fps):
