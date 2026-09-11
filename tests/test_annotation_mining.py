@@ -95,6 +95,19 @@ def test_segment_aware_mining_does_not_create_boundary_events_or_cross_context()
     assert all(i['segment']['index'] == 0 if i['frame'] < 30 else i['segment']['index'] == 1 for i in items)
 
 
+def test_unresolved_segment_edge_margin_is_inclusive_at_start_and_exclusive_end():
+    from src.annotation.mining import unresolved_event_near_segment_edge
+    from src.annotation.segments import Segment
+
+    segments = [Segment(0, 0, 2.0, 'selected')]
+    assert unresolved_event_near_segment_edge(0, 60, 180, segments)
+    assert unresolved_event_near_segment_edge(12, 60, 180, segments)
+    assert not unresolved_event_near_segment_edge(13, 60, 180, segments)
+    assert not unresolved_event_near_segment_edge(107, 60, 180, segments)
+    assert unresolved_event_near_segment_edge(108, 60, 180, segments)
+    assert unresolved_event_near_segment_edge(120, 60, 180, segments)
+
+
 def test_unresolved_events_near_segment_edges_are_discarded_but_interior_events_are_sparse():
     from scripts.review_track_events import Track, TrackObservation
     from src.annotation.mining import mine_candidates

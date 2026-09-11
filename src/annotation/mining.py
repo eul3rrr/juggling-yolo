@@ -152,8 +152,8 @@ def unresolved_event_near_segment_edge(frame, fps, count, segments):
     margin = max(1, round(0.2 * fps))
     for segment in segments:
         start, end = segment_frame_bounds(segment, fps, count)
-        if start <= frame < end:
-            return min(abs(frame - start), abs(frame - end)) <= margin
+        if min(abs(frame - start), abs(frame - end)) <= margin:
+            return True
     return False
 
 def gap_frames(end, start, fps):
