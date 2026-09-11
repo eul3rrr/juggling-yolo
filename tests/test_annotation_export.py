@@ -36,10 +36,33 @@ def test_skipped_and_pending_excluded_zero_boxes_exported(tmp_path):
     s.mine(source, [dict(item, frame=11), dict(item, frame=12)], {})
     ids = {i['frame']:i['id'] for i in s.items()}
     d=s.get(ids[11]); d['status']='skipped'; s.save(d['id'],d)
-    d=s.get(ids[12]); d.update(status='completed',focus_status='no_visible_evidence',all_visible_confirmed=True)
+    d=s.get(ids[12]); d.update(status='completed',focus_status='',all_visible_confirmed=False)
     s.save(d['id'],d)
     output=tmp_path/'output'
     assert export_yolo(s,output,frame_reader=lambda *args:np.zeros((240,320,3),dtype=np.uint8)) == 1
     assert next((output/'labels').rglob('*.txt')).read_text() == ''
     meta=json.loads((output/'metadata.jsonl').read_text())
     assert meta['frame']==12 and meta['boxes']==[]
+
+
+def test_export_completed_edited_deleted_and_manual_boxes_without_optional_metadata(tmp_path):
+    import numpy as np
+    from src.annotation.export import export_yolo
+    s, source, item = fixture_store(tmp_path / 'workspace')
+    s.mine(source, [dict(item, frame=11)], {11: [
+        dict(x1=80, y1=90, x2=100, y2=110, confidence=0.7),
+        dict(x1=120, y1=130, x2=140, y2=150, confidence=0.6),
+    ]})
+    iid = next(i['id'] for i in s.items() if i['frame'] == 11)
+    d = s.get(iid)
+    edited = d['boxes'][0]
+    edited['x1'] += 5
+    manual = dict(edited, id='manual', prediction_id=None, x1=180, x2=200)
+    d.update(boxes=[edited, manual], status='completed', focus_status='', focus_box_id=None)
+    saved = s.save(iid, d)
+    assert saved['predictions'][0]['edited'] is True
+    assert saved['predictions'][1]['deleted'] is True
+    assert saved['boxes'][1]['annotation_source'] == 'manual'
+    output = tmp_path / 'output-with-optional-metadata-empty'
+    assert export_yolo(s, output, frame_reader=lambda *args: np.zeros((240, 320, 3), dtype=np.uint8)) == 1
+    assert len(next((output / 'labels').rglob('*.txt')).read_text().splitlines()) == 2

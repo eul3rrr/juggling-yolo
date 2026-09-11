@@ -4,16 +4,15 @@ const surveys={
   occluder:['none','hand','body','other_object','mixed'],occlusion:['none','slight','moderate','heavy'],visibility:['clear','partial','tiny_fragment'],motion_blur:['none','mild','strong'],annotation_confidence:['certain','uncertain']
 };
 const state={
-  items:[],item:null,selected:null,dirty:false,hints:true,mode:'select',drag:null,busy:false,category:''
+  items:[],item:null,selected:null,dirty:false,mode:'select',drag:null,busy:false,category:''
 };
 const clone=x=>JSON.parse(JSON.stringify(x));
 function setBusy(value){
   state.busy=value;
-  for(const node of document.querySelectorAll('main,nav,footer,body>section')) node.inert=value;
+  for(const node of document.querySelectorAll('main,nav,details')) node.inert=value;
 }
 function message(text){
   $('message').textContent=text;
-  $('footerMessage').textContent=text;
 } async function api(path,body){
   const r=await fetch(path,body?{
     method:'POST',headers:{
@@ -38,7 +37,9 @@ function message(text){
 } async function refresh(){
   const d=await api('/api/items');
   state.items=d.items;
-  $('progress').textContent=Object.entries(d.counts).map(([p,c])=>`${['Linked gaps','Unresolved boundaries','Ordinary controls'][p]}: ${c.completed||0} completed / ${c.pending||0} pending / ${c.skipped||0} skipped`).join(' | ');
+  const completed=state.items.filter(i=>i.status==='completed').length;
+  const remaining=state.items.filter(i=>i.status==='pending').length;
+  $('progress').textContent=`${completed} completed · ${remaining} remaining`;
   const j=$('jump');
   j.replaceChildren();
   for(const i of filtered()){
@@ -60,7 +61,7 @@ function message(text){
     $('raw').setAttribute('href',frameURL(d.frame));
     $('raw').setAttribute('width',s.width);
     $('raw').setAttribute('height',s.height);
-    $('crop').src=frameURL(d.frame,true);
+
     $('focus').value=d.focus_status;
     $('notes').value=d.notes;
     $('completeCheck').checked=d.all_visible_confirmed;
@@ -85,7 +86,7 @@ function message(text){
       $('filmstrip').append(b);
     }render();
     $('jump').value=id;
-    message('Loaded · Save draft preserves incomplete work; Save & Next completes.');
+    message('Check every visible ball, fix boxes if needed, then Accept & Next.');
   }catch(e){
     message(e.message);
   }finally{
@@ -101,32 +102,27 @@ function message(text){
   const d=state.item,g=$('overlays');
   g.replaceChildren();
   $('mode').textContent=state.mode==='add'?'Drag to draw a missing ball':'Select / move / resize';
-  $('hints').textContent=state.hints?'Hide hints (H)':'Show hints (H)';
-  $('guidance').textContent=state.hints?d.provenance.map(p=>`${p.event_key} · ${p.kind} · END Δ${p.distance_from_end??'—'} · START Δ${p.distance_from_start??'—'}${p.inside_gap?' · gap':''}`).join(' | '):'Hints hidden: raw pixels only; editing disabled until hints are shown.';
-  if(state.hints){
-    for(const b of d.boxes){
-      const active=b.id===state.selected,complete=Object.keys(surveys).every(k=>b[k]),focus=b.id===d.focus_box_id;
-      const color=focus?'#ff66ff':active?'#66ffff':complete?'#66ff66':'#ffca66';
+  $('guidance').textContent=d.provenance.map(p=>`${p.event_key} · ${p.kind} · END Δ${p.distance_from_end??'—'} · START Δ${p.distance_from_start??'—'}${p.inside_gap?' · gap':''}`).join(' | ');
+  const transform=$('canvas').getScreenCTM();
+  const unitX=transform?.a?1/Math.abs(transform.a):1,unitY=transform?.d?1/Math.abs(transform.d):1;
+  for(const b of d.boxes){
+      const active=b.id===state.selected,color=active?'#63edff':'#55e58a';
       const rect=svg('rect',{
-        x:b.x1,y:b.y1,width:b.x2-b.x1,height:b.y2-b.y1,fill:'transparent',stroke:color,'stroke-width':2,'vector-effect':'non-scaling-stroke','data-id':b.id
+        x:b.x1,y:b.y1,width:b.x2-b.x1,height:b.y2-b.y1,fill:'transparent',stroke:color,'stroke-width':3,'vector-effect':'non-scaling-stroke','data-id':b.id,class:'box'
       });
       g.append(rect);
       const text=svg('text',{
         x:b.x1,y:Math.max(14,b.y1-5),fill:color,'font-size':14,'paint-order':'stroke',stroke:'#000','stroke-width':2,'pointer-events':'none'
       });
-      text.textContent=`${shortId(b)}${focus?' FOCUS':''} ${complete?'✓':'survey?'}`;
+      text.textContent=shortId(b);
       g.append(text);
       if(active){
-        for(const [handle,x,y]of [['nw',b.x1,b.y1],['ne',b.x2,b.y1],['sw',b.x1,b.y2],['se',b.x2,b.y2]])g.append(svg('rect',{
-          x:x-5,y:y-5,width:10,height:10,fill:color,'data-id':b.id,'data-handle':handle
-        }));
+        const points=[['nw',b.x1,b.y1],['n',(b.x1+b.x2)/2,b.y1],['ne',b.x2,b.y1],['e',b.x2,(b.y1+b.y2)/2],['se',b.x2,b.y2],['s',(b.x1+b.x2)/2,b.y2],['sw',b.x1,b.y2],['w',b.x1,(b.y1+b.y2)/2]];
+        for(const [handle,x,y]of points){
+          g.append(svg('rect',{x:x-15*unitX,y:y-15*unitY,width:30*unitX,height:30*unitY,fill:'transparent','data-id':b.id,'data-handle':handle,class:'handle-hit'}));
+          g.append(svg('rect',{x:x-5*unitX,y:y-5*unitY,width:10*unitX,height:10*unitY,fill:color,stroke:'#071014','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
+        }
       }
-    } if(d.priority!==2){
-      const [x,y]=d.focus_point;
-      g.append(svg('circle',{
-        cx:x,cy:y,r:22,fill:'none',stroke:'#ddd','stroke-dasharray':'5 5','pointer-events':'none'
-      }));
-    }
   } $('boxlist').replaceChildren();
   for(const b of d.boxes){
     const el=document.createElement('button');
@@ -156,7 +152,7 @@ function message(text){
     x:Math.max(0,Math.min(s.width,p.x)),y:Math.max(0,Math.min(s.height,p.y))
   };
 } $('canvas').addEventListener('pointerdown',e=>{
-  if(!state.item||state.busy||!state.hints||e.button!==0)return;
+  if(!state.item||state.busy||e.button!==0)return;
   e.preventDefault();
   $('canvas').focus();
   const p=point(e),id=e.target.getAttribute('data-id'),handle=e.target.getAttribute('data-handle');
@@ -168,12 +164,12 @@ function message(text){
     });
     state.selected=id;
     state.drag={
-      type:'draw',p,before,dirty
+      type:'draw',p,before,dirty,pointerId:e.pointerId
     };
   }else if(id){
     state.selected=id;
     state.drag={
-      type:handle||'move',p,box:clone(selected()),before,dirty
+      type:handle||'move',p,box:clone(selected()),before,dirty,pointerId:e.pointerId
     };
   }else{
     state.selected=null;
@@ -182,7 +178,7 @@ function message(text){
 });
 $('canvas').addEventListener('pointermove',e=>{
   const d=state.drag,b=selected();
-  if(!d||!b)return;
+  if(!d||!b||d.pointerId!==e.pointerId)return;
   const p=point(e),s=state.item.source;
   if(d.type==='draw'){
     b.x1=Math.min(d.p.x,p.x);
@@ -208,8 +204,8 @@ function cancel(){
   state.mode='select';
   render();
 } $('canvas').addEventListener('pointercancel',cancel);
-$('canvas').addEventListener('pointerup',()=>{
-  if(!state.drag)return;
+$('canvas').addEventListener('pointerup',e=>{
+  if(!state.drag||state.drag.pointerId!==e.pointerId)return;
   const b=selected();
   if(b.x2-b.x1<1||b.y2-b.y1<1){
     cancel();
@@ -311,25 +307,22 @@ $('completeCheck').onchange=()=>{
 };
 $('add').onclick=()=>{
   if(state.item){
-    state.hints=true;
     state.mode='add';
     render();
+    $('canvas').focus();
   }
 };
 $('delete').onclick=remove;
-$('hints').onclick=()=>{
-  cancel();
-  state.hints=!state.hints;
-  render();
-};
 $('zoom').onchange=()=>{
   $('canvas').style.width=(Number($('zoom').value)*100)+'%';
 };
 $('prev').onclick=()=>navigate(-1);
 $('next').onclick=()=>navigate(1);
+$('reload').onclick=()=>{
+  if(state.item&&(!state.dirty||confirm('Discard edits and reload this frame?')))load(state.item.id,true);
+};
 $('save').onclick=()=>save('pending');
-$('fastAccept').onclick=()=>FastAccept.runFastAccept({item:state.item,dirty:state.dirty,save,message});
-$('complete').onclick=()=>save('completed',true);
+$('fastAccept').onclick=()=>FastAccept.runAccept({item:state.item,save});
 $('skip').onclick=()=>save('skipped',true);
 $('closeContext').onclick=()=>$('contextDialog').close();
 $('jump').onchange=()=>load($('jump').value);
@@ -348,7 +341,7 @@ document.addEventListener('keydown',e=>{
   if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(e.target.tagName)||e.target.isContentEditable)return;
   const key=e.key.toLowerCase();
   const actions={
-    n:()=>navigate(1),arrowright:()=>navigate(1),p:()=>navigate(-1),arrowleft:()=>navigate(-1),a:()=>$('add').click(),delete:remove,backspace:remove,enter:()=>save('completed',true),g:()=>$('fastAccept').click(),h:()=>$('hints').click(),escape:cancel
+    n:()=>navigate(1),arrowright:()=>navigate(1),p:()=>navigate(-1),arrowleft:()=>navigate(-1),a:()=>$('add').click(),delete:remove,backspace:remove,enter:()=>$('fastAccept').click(),g:()=>$('fastAccept').click(),escape:cancel
   };
   if(actions[key]){
     e.preventDefault();

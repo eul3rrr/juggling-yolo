@@ -94,9 +94,9 @@ class Store:
             if status not in ('pending', 'completed', 'skipped'):
                 raise ValueError('Invalid status')
             focus = payload.get('focus_status', '')
-            allowed = ('not_applicable',) if old['priority'] == 2 else ('', 'visible', 'no_visible_evidence', 'uncertain')
-            if focus not in allowed or (status == 'completed' and (not focus)):
-                raise ValueError('Select focus status')
+            allowed = ('', 'not_applicable') if old['priority'] == 2 else ('', 'visible', 'no_visible_evidence', 'uncertain')
+            if focus not in allowed:
+                raise ValueError('Invalid focus status')
             boxes = []
             ids = set()
             used_predictions = set()
@@ -111,8 +111,8 @@ class Store:
                 if not all((math.isfinite(v) for v in coords)) or not (0 <= x1 < x2 <= old['source']['width'] and 0 <= y1 < y2 <= old['source']['height']):
                     raise ValueError('Box must have positive area inside full frame')
                 survey = {k: raw.get(k, '') for k in SURVEY}
-                if any((v not in SURVEY[k] and (v != '' or status == 'completed') for k, v in survey.items())):
-                    raise ValueError('Complete the survey for every ball')
+                if any((v != '' and v not in SURVEY[k] for k, v in survey.items())):
+                    raise ValueError('Invalid survey value')
                 pid = raw.get('prediction_id')
                 if pid and (pid not in predictions or pid in used_predictions):
                     raise ValueError('Invalid detector prediction relation')
@@ -123,13 +123,9 @@ class Store:
                 if pred:
                     prediction_status = 'retained' if [x1, y1, x2, y2] == pred['box'] else 'edited'
                 boxes.append(dict(id=bid, x1=x1, y1=y1, x2=x2, y2=y2, class_name='juggling_ball', **survey, annotation_source='preannotation' if pred else 'manual', prediction_id=pid if pred else None, prediction_status=prediction_status, source_detector_confidence=pred['confidence'] if pred else None, source_detector_box=pred['box'] if pred else None))
-            if status == 'completed' and focus == 'visible' and (not boxes):
-                raise ValueError('A visible focus ball requires a ball box; otherwise choose uncertain or no visible evidence')
             focus_box = payload.get('focus_box_id') or None
             if focus_box and (focus != 'visible' or focus_box not in ids):
                 raise ValueError('Invalid focus box')
-            if status == 'completed' and payload.get('all_visible_confirmed') is not True:
-                raise ValueError('Confirm that all visible balls are annotated')
             data = {k: old[k] for k in ('frame', 'timestamp', 'priority', 'reasons', 'provenance', 'crop', 'focus_point')}
             data.update(focus_status=focus, focus_box_id=focus_box, notes=str(payload.get('notes', ''))[:10000], all_visible_confirmed=payload.get('all_visible_confirmed') is True)
             c.execute('UPDATE items SET status=?,data=?,revision=revision+1 WHERE id=?', (status, encoded(data), iid))

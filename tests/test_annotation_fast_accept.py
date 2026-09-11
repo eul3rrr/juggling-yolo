@@ -5,138 +5,97 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / "web" / "annotation" / "fast_accept.js"
+APP = ROOT / "web" / "annotation" / "app.js"
+HTML = ROOT / "web" / "annotation" / "index.html"
+CSS = ROOT / "web" / "annotation" / "styles.css"
 
 
-def run_fast_accept_js(body: str):
+def run_accept_js(body: str):
     script = f"""
-const {{ inferFocusBox, prepareFastAccept, runFastAccept }} = require({json.dumps(str(MODULE))});
+const {{ prepareAccept, runAccept }} = require({json.dumps(str(MODULE))});
 (async () => {{
 {body}
 }})().catch(error => {{ console.error(error); process.exit(1); }});
 """
     completed = subprocess.run(
-        ["node", "-e", script],
-        check=True,
-        capture_output=True,
-        text=True,
+        ["node", "-e", script], check=True, capture_output=True, text=True
     )
     return json.loads(completed.stdout)
 
 
-def test_one_containing_box_is_selected():
-    result = run_fast_accept_js("""
-const result = inferFocusBox([15, 15], [
-  {id: 'far', x1: 30, y1: 30, x2: 40, y2: 40},
-  {id: 'hit', x1: 10, y1: 10, x2: 20, y2: 20},
-]);
-console.log(JSON.stringify(result));
-""")
-    assert result == {"ok": True, "boxId": "hit"}
-
-
-def test_zero_boxes_cannot_infer_visible_focus():
-    result = run_fast_accept_js("""
-console.log(JSON.stringify(inferFocusBox([15, 15], [])));
-""")
-    assert result["ok"] is False
-    assert "no unambiguous focus box" in result["error"]
-
-
-def test_overlapping_containing_boxes_are_ambiguous():
-    result = run_fast_accept_js("""
-console.log(JSON.stringify(inferFocusBox([15, 15], [
-  {id: 'a', x1: 10, y1: 10, x2: 20, y2: 20},
-  {id: 'b', x1: 12, y1: 12, x2: 22, y2: 22},
-])));
-""")
-    assert result["ok"] is False
-    assert "multiple candidate focus boxes" in result["error"]
-
-
-def test_ordinary_control_prepares_every_box_and_confirmation():
-    result = run_fast_accept_js("""
+def test_accept_untouched_frame_preserves_boxes_and_optional_metadata():
+    result = run_accept_js("""
 const item = {
-  priority: 2,
+  priority: 0,
   focus_status: '',
-  focus_box_id: 'old',
+  focus_box_id: null,
+  boxes: [{id:'a',x1:1,y1:2,x2:3,y2:4,visibility:''}],
   all_visible_confirmed: false,
-  boxes: [
-    {id: 'a', x1: 1, y1: 2, x2: 3, y2: 4, occluder: ''},
-    {id: 'b', x1: 5, y1: 6, x2: 7, y2: 8, visibility: 'partial'},
-  ],
 };
-const beforeGeometry = item.boxes.map(({x1,y1,x2,y2}) => [x1,y1,x2,y2]);
-const result = prepareFastAccept(item, false);
-console.log(JSON.stringify({result, beforeGeometry}));
+const prepared = prepareAccept(item);
+console.log(JSON.stringify({prepared, unchanged: item.all_visible_confirmed === false}));
 """)
-    prepared = result["result"]["item"]
-    assert prepared["focus_status"] == "not_applicable"
-    assert prepared["focus_box_id"] is None
-    assert prepared["all_visible_confirmed"] is True
-    assert [[b[k] for k in ("x1", "y1", "x2", "y2")] for b in prepared["boxes"]] == result["beforeGeometry"]
-    for box in prepared["boxes"]:
-        assert box | {
-            "occluder": "none",
-            "occlusion": "none",
-            "visibility": "clear",
-            "motion_blur": "none",
-            "annotation_confidence": "certain",
-        } == box
-
-
-def test_zero_box_ordinary_control_is_valid():
-    result = run_fast_accept_js("""
-console.log(JSON.stringify(prepareFastAccept({priority: 2, boxes: [], all_visible_confirmed: false}, false)));
-""")
-    assert result["ok"] is True
-    assert result["item"]["boxes"] == []
-    assert result["item"]["all_visible_confirmed"] is True
-
-
-def test_dirty_frame_refuses_without_mutating_item():
-    result = run_fast_accept_js("""
-const item = {priority: 2, boxes: [{id: 'a', visibility: 'partial'}], all_visible_confirmed: false};
-const before = JSON.stringify(item);
-const result = prepareFastAccept(item, true);
-console.log(JSON.stringify({result, unchanged: before === JSON.stringify(item)}));
-""")
-    assert result["result"]["ok"] is False
-    assert "unsaved edits" in result["result"]["error"]
+    assert result["prepared"]["boxes"][0]["visibility"] == ""
+    assert result["prepared"]["focus_status"] == ""
+    assert result["prepared"]["all_visible_confirmed"] is True
     assert result["unchanged"] is True
 
 
-def test_success_saves_completed_and_advances():
-    result = run_fast_accept_js("""
-const calls = [];
-const messages = [];
-const ok = await runFastAccept({
-  item: {priority: 2, boxes: []},
-  dirty: false,
-  save: async (...args) => calls.push(args),
-  message: text => messages.push(text),
-});
-console.log(JSON.stringify({ok, calls, messages}));
+def test_accept_dirty_edited_frame_saves_completed_and_advances():
+    result = run_accept_js("""
+const item = {id:'i',revision:2,boxes:[{id:'a',x1:9,y1:2,x2:30,y2:40}],all_visible_confirmed:false};
+const calls=[];
+const ok=await runAccept({item,save:async (...args)=>calls.push(args)});
+console.log(JSON.stringify({ok,calls}));
 """)
     assert result["ok"] is True
     assert result["calls"][0][0:2] == ["completed", True]
+    assert result["calls"][0][2]["boxes"][0]["x1"] == 9
     assert result["calls"][0][2]["all_visible_confirmed"] is True
 
 
-def test_failed_focus_inference_does_not_save_or_mutate():
-    result = run_fast_accept_js("""
-const item = {priority: 1, focus_point: [50, 50], boxes: [{id: 'a', x1: 0, y1: 0, x2: 10, y2: 10}]};
-const before = JSON.stringify(item);
-let saves = 0;
-const messages = [];
-const ok = await runFastAccept({
-  item,
-  dirty: false,
-  save: async () => { saves += 1; },
-  message: text => messages.push(text),
-});
-console.log(JSON.stringify({ok, saves, messages, unchanged: before === JSON.stringify(item)}));
+def test_accept_zero_box_frame():
+    result = run_accept_js("""
+console.log(JSON.stringify(prepareAccept({boxes:[],all_visible_confirmed:false,focus_status:''})));
 """)
-    assert result["ok"] is False
-    assert result["saves"] == 0
-    assert result["unchanged"] is True
-    assert "manual focus review" in result["messages"][0]
+    assert result["boxes"] == []
+    assert result["all_visible_confirmed"] is True
+
+
+def test_pointer_editor_is_pen_touch_mouse_neutral():
+    app = APP.read_text()
+    assert "pointerdown" in app
+    assert "pointermove" in app
+    assert "pointerup" in app
+    assert "setPointerCapture" in app
+    assert "mousedown" not in app
+    assert "mousemove" not in app
+    assert "pointerType" not in app  # no pen/touch/mouse filtering or branching
+
+
+def test_normal_ui_requires_no_focus_or_survey_interaction():
+    html = HTML.read_text()
+    normal, advanced = html.split('<details id="advanced">', 1)
+    for hidden_term in ("focus ball", "linked gaps", "unresolved boundaries", "survey", "occluder", "motion blur"):
+        assert hidden_term not in normal.lower()
+    assert 'id="fastAccept"' in normal
+    assert 'Accept &amp; Next (G)' in normal
+    assert 'id="survey"' in advanced
+    assert 'id="focus"' in advanced
+
+
+def test_resize_handles_use_svg_transform_for_css_sized_touch_targets():
+    app = APP.read_text()
+    assert "getScreenCTM()" in app
+    assert "1/Math.abs(transform.a)" in app
+    assert "1/Math.abs(transform.d)" in app
+    assert "30*unitX" in app and "30*unitY" in app
+
+
+def test_tablet_editor_disables_touch_gestures_without_disabling_page_scroll():
+    css = CSS.read_text()
+    assert "#canvas" in css
+    canvas_rule = css.split("#canvas", 1)[1].split("}", 1)[0]
+    assert "touch-action:none" in canvas_rule
+    assert "user-select:none" in canvas_rule
+    assert "body{touch-action:none" not in css

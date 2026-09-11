@@ -32,25 +32,40 @@ def test_annotation_roundtrip_and_resume(tmp_path):
     with pytest.raises(ValueError):
         s.save(data['id'], saved)
 
-def test_visible_requires_at_least_one_box(tmp_path):
+def test_completed_visible_focus_metadata_is_optional_even_without_boxes(tmp_path):
     s, _, _ = fixture_store(tmp_path)
     d = s.get(s.items()[0]['id'])
-    d.update(boxes=[], status='completed', focus_status='visible', all_visible_confirmed=True)
-    with pytest.raises(ValueError):
-        s.save(d['id'], d)
+    d.update(boxes=[], status='completed', focus_status='visible')
+    saved = s.save(d['id'], d)
+    assert saved['status'] == 'completed' and saved['boxes'] == []
 
 def test_completion_validation(tmp_path):
     s, _, _ = fixture_store(tmp_path)
     d = s.get(s.items()[0]['id'])
-    d.update(status='completed', focus_status='uncertain', all_visible_confirmed=True)
-    with pytest.raises(ValueError):
-        s.save(d['id'], d)
+    d.update(status='completed', focus_status='', all_visible_confirmed=False)
+    saved = s.save(d['id'], d)
+    assert saved['focus_status'] == ''
+    assert saved['boxes'][0]['visibility'] == ''
+    assert saved['all_visible_confirmed'] is False
+    d = saved
     d['boxes'] = []
-    s.save(d['id'], d)
+    d = s.save(d['id'], d)
     d = s.get(d['id'])
     d['focus_box_id'] = 'absent'
     d['focus_status'] = 'visible'
     with pytest.raises(ValueError):
+        s.save(d['id'], d)
+
+
+def test_completed_optional_metadata_still_rejects_invalid_values(tmp_path):
+    s, _, _ = fixture_store(tmp_path)
+    d = s.get(s.items()[0]['id'])
+    d.update(status='completed', focus_status='invented')
+    with pytest.raises(ValueError, match='focus status'):
+        s.save(d['id'], d)
+    d['focus_status'] = ''
+    d['boxes'][0]['visibility'] = 'invented'
+    with pytest.raises(ValueError, match='survey'):
         s.save(d['id'], d)
 
 
