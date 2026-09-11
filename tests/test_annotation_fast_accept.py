@@ -77,6 +77,12 @@ console.log(JSON.stringify({fit:viewport.fitViewBox(1920,1080),start:viewport.st
     assert result["picked"]["viewBox"] == {"x": 0, "y": 0, "width": 480, "height": 270}
 
 
+def test_labels_are_hidden_while_adding_but_restored_in_select_mode():
+    app = APP.read_text()
+    assert "if(state.mode==='select')" in app
+    assert "text.textContent=shortId(b)" in app
+
+
 def test_viewport_workflow_is_wired_without_css_canvas_zoom():
     app = APP.read_text()
     html = HTML.read_text()

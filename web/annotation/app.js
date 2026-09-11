@@ -122,11 +122,13 @@ function message(text){
         x:b.x1,y:b.y1,width:b.x2-b.x1,height:b.y2-b.y1,fill:'transparent',stroke:color,'stroke-width':3,'vector-effect':'non-scaling-stroke','data-id':b.id,class:'box'
       });
       g.append(rect);
-      const text=svg('text',{
-        x:b.x1,y:Math.max(14,b.y1-5),fill:color,'font-size':14,'paint-order':'stroke',stroke:'#000','stroke-width':2,'pointer-events':'none'
-      });
-      text.textContent=shortId(b);
-      g.append(text);
+      if(state.mode==='select'){
+        const text=svg('text',{
+          x:b.x1,y:Math.max(14,b.y1-5),fill:color,'font-size':14,'paint-order':'stroke',stroke:'#000','stroke-width':2,'pointer-events':'none'
+        });
+        text.textContent=shortId(b);
+        g.append(text);
+      }
       if(active){
         const points=[['nw',b.x1,b.y1],['n',(b.x1+b.x2)/2,b.y1],['ne',b.x2,b.y1],['e',b.x2,(b.y1+b.y2)/2],['se',b.x2,b.y2],['s',(b.x1+b.x2)/2,b.y2],['sw',b.x1,b.y2],['w',b.x1,(b.y1+b.y2)/2]];
         for(const [handle,x,y]of points){
