@@ -19,6 +19,7 @@ def parse_args():
     parser.add_argument("--export", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--val-fraction", type=float, default=0.18)
+    parser.add_argument("--seed", type=int, default=1337)
     parser.add_argument("--expected-source", help="Required substring in the sole source filename")
     return parser.parse_args()
 
@@ -38,7 +39,7 @@ def main():
     source = next(iter(sources))
     if args.expected_source and args.expected_source.lower() not in source.lower():
         raise ValueError(f"Training source {source!r} does not contain {args.expected_source!r}")
-    assigned = split_records_by_segment(records, args.val_fraction)
+    assigned = split_records_by_segment(records, args.val_fraction, seed=args.seed)
     for split in ("train", "val"):
         (output / "images" / split).mkdir(parents=True)
         (output / "labels" / split).mkdir(parents=True)
@@ -71,6 +72,7 @@ def main():
         "total_boxes": sum(len(row["boxes"]) for row in assigned),
         "zero_box_images": sum(not row["boxes"] for row in assigned),
         "val_fraction_target": args.val_fraction,
+        "split_seed": args.seed,
         "splits": {
             split: {
                 "images": split_counts[split],
@@ -81,7 +83,7 @@ def main():
     }
     (output / "split_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     (output / "data.yaml").write_text(
-        f"path: {json.dumps(str(output))}\ntrain: images/train\nval: images/val\nnames:\n  0: juggling_ball\n"
+        "path: .\ntrain: images/train\nval: images/val\nnames:\n  0: juggling_ball\n"
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
 

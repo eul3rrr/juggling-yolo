@@ -43,6 +43,19 @@ def test_segment_split_is_deterministic_balanced_and_has_no_leakage():
     assert 15 <= val_count <= 25
 
 
+def test_segment_split_accepts_a_fixed_seed():
+    from src.annotation.benchmark import split_records_by_segment
+
+    records = [
+        {"id": f"f{segment}-{index}", "segment": {"index": segment}}
+        for segment, count in enumerate((7, 6, 5, 4))
+        for index in range(count)
+    ]
+    first = split_records_by_segment(records, val_fraction=0.2, seed=1337)
+    second = split_records_by_segment(records, val_fraction=0.2, seed=1337)
+    assert first == second
+
+
 def _track(track_id, frames):
     from scripts.review_track_events import Track, TrackObservation
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
+import random
 from statistics import mean, median
 
 from scripts.review_track_events import generate_events
@@ -42,7 +43,8 @@ def _segment_key(record: dict) -> tuple:
     return (int(segment["index"]),)
 
 
-def split_records_by_segment(records: list[dict], val_fraction: float = 0.18) -> list[dict]:
+def split_records_by_segment(records: list[dict], val_fraction: float = 0.18,
+                             seed: int | None = None) -> list[dict]:
     """Assign complete segments to a deterministic count-balanced train/val split."""
     if not 0 < val_fraction < 1:
         raise ValueError("val_fraction must be between zero and one")
@@ -53,7 +55,11 @@ def split_records_by_segment(records: list[dict], val_fraction: float = 0.18) ->
         raise ValueError("At least two annotated segments are required for a leakage-safe split")
     # Subset-sum over segment image counts.  Values store lexicographically stable keys.
     choices: dict[int, tuple[tuple, ...]] = {0: ()}
-    for key, count in sorted(groups.items()):
+    group_keys = sorted(groups)
+    if seed is not None:
+        random.Random(seed).shuffle(group_keys)
+    for key in group_keys:
+        count = groups[key]
         additions = {total + count: selected + (key,) for total, selected in choices.items()}
         for total, selected in additions.items():
             choices.setdefault(total, selected)
