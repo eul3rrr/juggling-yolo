@@ -4,9 +4,19 @@ const surveys={
   occluder:['none','hand','body','other_object','mixed'],occlusion:['none','slight','moderate','heavy'],visibility:['clear','partial','tiny_fragment'],motion_blur:['none','mild','strong'],annotation_confidence:['certain','uncertain']
 };
 const state={
-  items:[],item:null,selected:null,dirty:false,mode:'select',drag:null,busy:false,category:''
+  items:[],item:null,selected:null,dirty:false,mode:'select',addStage:null,drag:null,busy:false,category:''
 };
 const clone=x=>JSON.parse(JSON.stringify(x));
+function fit(){
+  if(!state.item)return;
+  const s=state.item.source;
+  $('canvas').setAttribute('viewBox',Object.values(AnnotationViewport.fitViewBox(s.width,s.height)).join(' '));
+}
+function zoomTo(point){
+  const s=state.item.source;
+  const box=AnnotationViewport.zoomViewBox(s.width,s.height,point.x,point.y,4);
+  $('canvas').setAttribute('viewBox',Object.values(box).join(' '));
+}
 function setBusy(value){
   state.busy=value;
   for(const node of document.querySelectorAll('main,nav,details')) node.inert=value;
@@ -53,11 +63,12 @@ function message(text){
     state.item=await api('/api/item?id='+id);
     state.selected=null;
     state.mode='select';
+    state.addStage=null;
     state.drag=null;
     state.dirty=false;
     const d=state.item,s=d.source;
     $('source').textContent=`${s.video_path} · frame ${d.frame} · ${d.timestamp.toFixed(3)} s · ${s.fps.toFixed(3)} FPS · ${d.status}`;
-    $('canvas').setAttribute('viewBox',`0 0 ${s.width} ${s.height}`);
+    fit();
     $('raw').setAttribute('href',frameURL(d.frame));
     $('raw').setAttribute('width',s.width);
     $('raw').setAttribute('height',s.height);
@@ -101,7 +112,7 @@ function message(text){
   if(!state.item)return;
   const d=state.item,g=$('overlays');
   g.replaceChildren();
-  $('mode').textContent=state.mode==='add'?'Drag to draw a missing ball':'Select / move / resize';
+  $('mode').textContent=state.mode!=='add'?'Select / move / resize':state.addStage==='pick-center'?'Tap near the missing ball':'Drag to draw the missing ball';
   $('guidance').textContent=d.provenance.map(p=>`${p.event_key} · ${p.kind} · END Δ${p.distance_from_end??'—'} · START Δ${p.distance_from_start??'—'}${p.inside_gap?' · gap':''}`).join(' | ');
   const transform=$('canvas').getScreenCTM();
   const unitX=transform?.a?1/Math.abs(transform.a):1,unitY=transform?.d?1/Math.abs(transform.d):1;
@@ -158,6 +169,13 @@ function message(text){
   const p=point(e),id=e.target.getAttribute('data-id'),handle=e.target.getAttribute('data-handle');
   const before=clone(state.item.boxes),dirty=state.dirty;
   if(state.mode==='add'){
+    if(state.addStage==='pick-center'){
+      zoomTo(p);
+      state.addStage='draw';
+      render();
+      message('Drag to draw the missing ball');
+      return;
+    }
     const id=AnnotationHelpers.newManualBoxId(state.item.boxes);
     state.item.boxes.push({
       id,x1:p.x,y1:p.y,x2:p.x,y2:p.y,annotation_source:'manual',prediction_id:null,...Object.fromEntries(Object.keys(surveys).map(k=>[k,'']))
@@ -202,6 +220,8 @@ function cancel(){
     state.dirty=state.drag.dirty;
   }state.drag=null;
   state.mode='select';
+  state.addStage=null;
+  fit();
   render();
 } $('canvas').addEventListener('pointercancel',cancel);
 $('canvas').addEventListener('pointerup',e=>{
@@ -212,6 +232,8 @@ $('canvas').addEventListener('pointerup',e=>{
     return;
   }state.drag=null;
   state.mode='select';
+  state.addStage=null;
+  fit();
   changed();
   render();
 });
@@ -307,14 +329,16 @@ $('completeCheck').onchange=()=>{
 };
 $('add').onclick=()=>{
   if(state.item){
-    state.mode='add';
+    Object.assign(state,AnnotationViewport.startAdd());
     render();
     $('canvas').focus();
+    message('Tap near the missing ball');
   }
 };
 $('delete').onclick=remove;
-$('zoom').onchange=()=>{
-  $('canvas').style.width=(Number($('zoom').value)*100)+'%';
+$('fit').onclick=()=>{
+  fit();
+  render();
 };
 $('prev').onclick=()=>navigate(-1);
 $('next').onclick=()=>navigate(1);

@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / "web" / "annotation" / "fast_accept.js"
 HELPERS = ROOT / "web" / "annotation" / "annotation_helpers.js"
+VIEWPORT = ROOT / "web" / "annotation" / "annotation_viewport.js"
 APP = ROOT / "web" / "annotation" / "app.js"
 HTML = ROOT / "web" / "annotation" / "index.html"
 CSS = ROOT / "web" / "annotation" / "styles.css"
@@ -33,6 +34,58 @@ const {{ newManualBoxId }} = require({json.dumps(str(HELPERS))});
         ["node", "-e", script], check=True, capture_output=True, text=True
     )
     return json.loads(completed.stdout)
+
+
+def run_viewport_js(body: str):
+    script = f"""
+const viewport = require({json.dumps(str(VIEWPORT))});
+{body}
+"""
+    completed = subprocess.run(
+        ["node", "-e", script], check=True, capture_output=True, text=True
+    )
+    return json.loads(completed.stdout)
+
+
+def test_zoom_viewbox_centers_at_four_x_and_clamps_all_edges():
+    result = run_viewport_js("""
+const values = [
+  viewport.zoomViewBox(1920, 1080, 960, 540, 4),
+  viewport.zoomViewBox(1920, 1080, 0, 0, 4),
+  viewport.zoomViewBox(1920, 1080, 1920, 540, 4),
+  viewport.zoomViewBox(1920, 1080, 960, 1080, 4),
+];
+console.log(JSON.stringify(values));
+""")
+    assert result == [
+        {"x": 720, "y": 405, "width": 480, "height": 270},
+        {"x": 0, "y": 0, "width": 480, "height": 270},
+        {"x": 1440, "y": 405, "width": 480, "height": 270},
+        {"x": 720, "y": 810, "width": 480, "height": 270},
+    ]
+
+
+def test_fit_and_add_stage_state_are_explicit():
+    result = run_viewport_js("""
+const picked = viewport.pickAddCenter(1920, 1080, [12, 34], 4);
+console.log(JSON.stringify({fit:viewport.fitViewBox(1920,1080),start:viewport.startAdd(),picked}));
+""")
+    assert result["fit"] == {"x": 0, "y": 0, "width": 1920, "height": 1080}
+    assert result["start"] == {"mode": "add", "addStage": "pick-center"}
+    assert result["picked"]["mode"] == "add"
+    assert result["picked"]["addStage"] == "draw"
+    assert result["picked"]["viewBox"] == {"x": 0, "y": 0, "width": 480, "height": 270}
+
+
+def test_viewport_workflow_is_wired_without_css_canvas_zoom():
+    app = APP.read_text()
+    html = HTML.read_text()
+    assert "AnnotationViewport.zoomViewBox" in app
+    assert "addStage==='pick-center'" in app
+    assert "viewBox" in app
+    assert "canvas.style.width" not in app
+    assert 'id="fit"' in html
+    assert 'src="/annotation_viewport.js"' in html
 
 
 def test_manual_box_ids_are_unique_within_item_and_fill_first_gap():
