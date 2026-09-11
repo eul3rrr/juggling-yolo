@@ -34,6 +34,30 @@ def iter_selected_frames(video, fps, frame_count, segments):
         capture.release()
 
 
+def iter_selected_segment_frames(video, fps, frame_count, segments):
+    """Yield ``(segment_index, absolute_frame, image)`` for selected frames.
+
+    The segment marker is deliberately part of the stream so consumers can
+    reset temporal state without ever inferring a frame from a gap.
+    """
+    capture = cv2.VideoCapture(str(Path(video)))
+    if not capture.isOpened():
+        raise RuntimeError(f'Could not open input video: {video}')
+    try:
+        for segment_index, (start, end) in enumerate(
+                selected_frame_ranges(fps, frame_count, segments)):
+            capture.set(cv2.CAP_PROP_POS_FRAMES, start)
+            frame_index = start
+            while frame_index < end:
+                ok, image = capture.read()
+                if not ok:
+                    raise RuntimeError(f'Could not decode source frame {frame_index}')
+                yield segment_index, frame_index, image
+                frame_index += 1
+    finally:
+        capture.release()
+
+
 def batched_frames(frames, batch_size):
     """Bounded-memory batches of absolute frame IDs and corresponding images."""
     if batch_size <= 0:
@@ -56,6 +80,51 @@ def infer_frame_batches(model, frames, batch_size, predict_kwargs):
         if len(results) != len(indices):
             raise RuntimeError(f'YOLO returned {len(results)} results for {len(indices)} frames')
         yield from zip(indices, results, strict=True)
+
+
+def infer_segmented_frame_batches(model, frames, batch_size, predict_kwargs):
+    """Infer selected frames in bounded batches that never cross segments.
+
+    ``frames`` yields ``(segment_index, absolute_frame, image)``. Results are
+    returned with both identifiers unchanged, preserving source coordinates.
+    """
+    if batch_size <= 0:
+        raise ValueError('batch_size must be positive')
+    segment = None
+    indices, images = [], []
+
+    def flush():
+        if not images:
+            return []
+        results = list(model.predict(source=images, **predict_kwargs))
+        if len(results) != len(indices):
+            raise RuntimeError(
+                f'YOLO returned {len(results)} results for {len(indices)} frames')
+        return [(segment, frame, result)
+                for frame, result in zip(indices, results, strict=True)]
+
+    for segment_index, frame_index, image in frames:
+        if segment is not None and segment_index != segment:
+            yield from flush()
+            indices, images = [], []
+        segment = segment_index
+        indices.append(frame_index)
+        images.append(image)
+        if len(images) == batch_size:
+            yield from flush()
+            indices, images = [], []
+    yield from flush()
+
+
+def resolve_device(requested: str) -> str:
+    """Resolve ``auto`` once, using the same CUDA convention everywhere."""
+    if requested != 'auto':
+        return requested
+    try:
+        import torch
+        return '0' if torch.cuda.is_available() else 'cpu'
+    except ImportError:
+        return 'cpu'
 
 
 def _row_for_track(track, frame, fps, current_detections):

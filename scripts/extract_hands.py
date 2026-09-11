@@ -39,7 +39,16 @@ import numpy as np
 from ultralytics import YOLO
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+
+from src.annotation.preprocessing import (
+    infer_segmented_frame_batches,
+    iter_selected_segment_frames,
+    resolve_device,
+    selected_frame_ranges,
+)
+from src.annotation.segments import parse_losslesscut_csv, pair_video_segments
 import hand_features  # noqa: E402
 
 # COCO-17 keypoint indices
@@ -89,13 +98,7 @@ class PersonFrame:
 # ---------------------------------------------------------------------------
 
 def _resolve_device(value: str) -> str:
-    if value and value != "auto":
-        return value
-    try:
-        import torch
-        return "0" if torch.cuda.is_available() else "cpu"
-    except ImportError:
-        return "cpu"
+    return resolve_device(value)
 
 
 def _parse_video(video: Path) -> tuple[float, int, int]:
@@ -163,6 +166,61 @@ def _infer_pose(video: Path, model_path: str, device: str, imgsz: int,
     return per_frame
 
 
+def _persons_from_result(result, frame_index: int,
+                         max_persons: int) -> list[PersonFrame]:
+    persons: list[PersonFrame] = []
+    keypoints = result.keypoints
+    if keypoints is not None and keypoints.data is not None:
+        data = keypoints.data.detach().cpu().numpy()
+        person_conf = (
+            result.boxes.conf.detach().cpu().numpy()
+            if result.boxes is not None and result.boxes.conf is not None
+            else np.full(len(data), np.nan, dtype=float)
+        )
+        for person_index, person in enumerate(data):
+            kps: dict[int, tuple[float, float, float | None]] = {}
+            for kp_index in _TRACKED_KEYPOINTS:
+                if kp_index >= person.shape[0]:
+                    continue
+                x, y, c = person[kp_index]
+                kps[kp_index] = (
+                    float(x), float(y),
+                    float(c) if math.isfinite(float(c)) else None,
+                )
+            pc = (
+                float(person_conf[person_index])
+                if person_index < len(person_conf)
+                and math.isfinite(float(person_conf[person_index]))
+                else None
+            )
+            persons.append(PersonFrame(
+                frame=frame_index, person_index=person_index,
+                person_confidence=pc, keypoints=kps,
+            ))
+    return _select_main_persons(persons, max_persons)
+
+
+def infer_selected_pose(video: Path, fps: float, frame_count: int,
+                        segments, model_path: str, device: str, imgsz: int,
+                        conf: float, max_persons: int, batch_size: int = 32):
+    """Yield raw pose rows only for selected absolute source frames.
+
+    Batches are segment-local, so downstream temporal smoothing can reset at
+    every LosslessCut segment. The generator retains only one inference batch.
+    """
+    model = YOLO(model_path)
+    if model.task != "pose":
+        raise ValueError(
+            f"Expected a pose checkpoint, but {model_path!r} has task {model.task!r}")
+    frames = iter_selected_segment_frames(video, fps, frame_count, segments)
+    kwargs = dict(stream=False, conf=conf, imgsz=imgsz, device=device,
+                  save=False, verbose=False)
+    for segment_index, frame_index, result in infer_segmented_frame_batches(
+            model, frames, batch_size, kwargs):
+        yield segment_index, frame_index, _persons_from_result(
+            result, frame_index, max_persons)
+
+
 # ---------------------------------------------------------------------------
 # Smoothing + CSV write
 # ---------------------------------------------------------------------------
@@ -211,6 +269,106 @@ def _smooth_per_keypoint(per_frame: list[list[PersonFrame]],
     return out
 
 
+def _smooth_selected_frames(raw_frames, window: int = 5,
+                            confidence_threshold: float = .25):
+    """Apply centered smoothing online, with a bounded segment-local buffer."""
+    if window <= 0:
+        raise ValueError("window must be positive")
+    if window % 2 == 0:
+        window -= 1
+    half = window // 2
+    buffer = []
+    history = []
+    current_segment = None
+    started = False
+    last_output_frame = None
+
+    def apply(context, center_index):
+        center = context[center_index][2]
+        max_persons = max((len(row[2]) for row in context), default=0)
+        smoothed: dict[tuple[int, int], tuple[float, float] | None] = {}
+        for slot in range(max_persons):
+            for keypoint in _TRACKED_KEYPOINTS:
+                values = []
+                confs = []
+                for _, _, persons in context:
+                    if slot < len(persons) and keypoint in persons[slot].keypoints:
+                        x, y, confidence = persons[slot].keypoints[keypoint]
+                        values.append(x)
+                        confs.append(confidence)
+                    else:
+                        values.append(None)
+                        confs.append(None)
+                smoothed_values = hand_features.smooth_series(
+                    values, window=window, min_confidence=confs,
+                    confidence_threshold=confidence_threshold)
+                value = smoothed_values[center_index]
+                smoothed[(slot, keypoint)] = (
+                    (float(value), float(value)) if value is not None else None)
+                # x/y are smoothed independently; recompute y below.
+                y_values = []
+                for _, _, persons in context:
+                    if slot < len(persons) and keypoint in persons[slot].keypoints:
+                        y_values.append(persons[slot].keypoints[keypoint][1])
+                    else:
+                        y_values.append(None)
+                sy = hand_features.smooth_series(
+                    y_values, window=window, min_confidence=confs,
+                    confidence_threshold=confidence_threshold)[center_index]
+                smoothed[(slot, keypoint)] = (
+                    (float(value), float(sy))
+                    if value is not None and sy is not None else None
+                )
+        for slot, person in enumerate(center):
+            person.smoothed_keypoints = {
+                keypoint: smoothed[(slot, keypoint)]
+                for keypoint in _TRACKED_KEYPOINTS
+            }
+        return context[center_index]
+
+    def flush_segment():
+        nonlocal last_output_frame
+        if not buffer:
+            return
+        context = history + buffer
+        if not started:
+            indices = range(len(buffer))
+        else:
+            indices = (index for index in range(len(buffer))
+                       if context[len(history) + index][1] > last_output_frame)
+        for index in indices:
+            row = apply(context, len(history) + index)
+            last_output_frame = row[1]
+            yield row
+
+    for frame in raw_frames:
+        segment = frame[0]
+        if current_segment is not None and segment != current_segment:
+            yield from flush_segment()
+            buffer.clear()
+            history.clear()
+            started = False
+            last_output_frame = None
+        current_segment = segment
+        buffer.append(frame)
+        if len(buffer) == window:
+            if not started:
+                for index in range(half + 1):
+                    row = apply(buffer, index)
+                    last_output_frame = row[1]
+                    yield row
+                started = True
+            else:
+                row = apply(buffer, half)
+                last_output_frame = row[1]
+                yield row
+            history.append(buffer.pop(0))
+            if len(history) > half:
+                history.pop(0)
+    if buffer:
+        yield from flush_segment()
+
+
 def _body_scale_for_frame(left_shoulder_xy: tuple[float, float] | None,
                           right_shoulder_xy: tuple[float, float] | None) -> float | None:
     if left_shoulder_xy is None or right_shoulder_xy is None:
@@ -228,6 +386,42 @@ def _stored(video: Path) -> str:
         return str(video.resolve())
 
 
+def _person_row(video: Path, fps: float, frame_index: int,
+                person: PersonFrame, slot: int,
+                smoothed: dict[int, tuple[float, float] | None] | None = None,
+                ) -> dict[str, str]:
+    row: dict[str, str] = {
+        "video": _stored(video),
+        "frame": str(frame_index),
+        "time_seconds": f"{frame_index / fps:.6f}" if fps > 0 else "",
+        "person_index": str(person.person_index),
+        "person_confidence": (
+            f"{person.person_confidence:.6f}"
+            if person.person_confidence is not None else ""
+        ),
+    }
+    l_shoulder = person.keypoints.get(LEFT_SHOULDER)
+    r_shoulder = person.keypoints.get(RIGHT_SHOULDER)
+    scale = _body_scale_for_frame(
+        (l_shoulder[0], l_shoulder[1]) if l_shoulder else None,
+        (r_shoulder[0], r_shoulder[1]) if r_shoulder else None,
+    )
+    row["body_scale_shoulder_px"] = f"{scale:.3f}" if scale is not None else ""
+    smoothed = smoothed or getattr(person, "smoothed_keypoints", {})
+    for kp in _TRACKED_KEYPOINTS:
+        raw = person.keypoints.get(kp)
+        smooth = smoothed.get(kp)
+        base = KEYPOINT_NAMES[kp]
+        row[f"{base}_x"] = f"{raw[0]:.3f}" if raw is not None else ""
+        row[f"{base}_y"] = f"{raw[1]:.3f}" if raw is not None else ""
+        row[f"{base}_confidence"] = (
+            f"{raw[2]:.6f}" if raw is not None and raw[2] is not None else ""
+        )
+        row[f"{base}_x_smooth"] = f"{smooth[0]:.3f}" if smooth else ""
+        row[f"{base}_y_smooth"] = f"{smooth[1]:.3f}" if smooth else ""
+    return row
+
+
 def write_csv(per_frame: list[list[PersonFrame]], video: Path, fps: float,
               output_csv: Path, confidence_threshold: float, window: int) -> int:
     smoothed_per_kp = {
@@ -241,50 +435,32 @@ def write_csv(per_frame: list[list[PersonFrame]], video: Path, fps: float,
         writer.writeheader()
         for frame_index, persons in enumerate(per_frame):
             for slot, person in enumerate(persons):
-                row: dict[str, str] = {
-                    "video": _stored(video),
-                    "frame": str(frame_index),
-                    "time_seconds": f"{frame_index / fps:.6f}" if fps > 0 else "",
-                    "person_index": str(person.person_index),
-                    "person_confidence": (
-                        f"{person.person_confidence:.6f}"
-                        if person.person_confidence is not None else ""
-                    ),
+                smooth = {
+                    kp: (smoothed_per_kp[kp][slot][frame_index]
+                         if slot < len(smoothed_per_kp[kp]) else None)
+                    for kp in _TRACKED_KEYPOINTS
                 }
-                l_shoulder = person.keypoints.get(LEFT_SHOULDER)
-                r_shoulder = person.keypoints.get(RIGHT_SHOULDER)
-                scale = _body_scale_for_frame(
-                    (l_shoulder[0], l_shoulder[1]) if l_shoulder else None,
-                    (r_shoulder[0], r_shoulder[1]) if r_shoulder else None,
-                )
-                row["body_scale_shoulder_px"] = (
-                    f"{scale:.3f}" if scale is not None else ""
-                )
-                for kp in _TRACKED_KEYPOINTS:
-                    raw = person.keypoints.get(kp)
-                    smooth = (
-                        smoothed_per_kp[kp][slot][frame_index]
-                        if slot < len(smoothed_per_kp[kp]) else None
-                    )
-                    base = KEYPOINT_NAMES[kp]
-                    if raw is not None:
-                        x, y, c = raw
-                        row[f"{base}_x"] = f"{x:.3f}"
-                        row[f"{base}_y"] = f"{y:.3f}"
-                        row[f"{base}_confidence"] = (
-                            f"{c:.6f}" if c is not None else ""
-                        )
-                    else:
-                        row[f"{base}_x"] = ""
-                        row[f"{base}_y"] = ""
-                        row[f"{base}_confidence"] = ""
-                    if smooth is not None:
-                        row[f"{base}_x_smooth"] = f"{smooth[0]:.3f}"
-                        row[f"{base}_y_smooth"] = f"{smooth[1]:.3f}"
-                    else:
-                        row[f"{base}_x_smooth"] = ""
-                        row[f"{base}_y_smooth"] = ""
-                writer.writerow(row)
+                writer.writerow(_person_row(video, fps, frame_index, person,
+                                             slot, smooth))
+                rows_written += 1
+    return rows_written
+
+
+def write_selected_csv(pose_frames, video: Path, fps: float,
+                       output_csv: Path, confidence_threshold: float,
+                       window: int) -> int:
+    """Write selected pose rows without retaining a complete video."""
+    rows_written = 0
+    output_csv.parent.mkdir(parents=True, exist_ok=True)
+    with output_csv.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=HANDS_FIELDS,
+                                lineterminator="\n")
+        writer.writeheader()
+        for segment, frame_index, persons in _smooth_selected_frames(
+                pose_frames, window, confidence_threshold):
+            for slot, person in enumerate(persons):
+                writer.writerow(_person_row(video, fps, frame_index, person,
+                                             slot))
                 rows_written += 1
     return rows_written
 
@@ -304,6 +480,9 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--conf", type=float, default=0.25)
     parser.add_argument("--device", type=str, default="auto")
+    parser.add_argument("--segments", type=Path, default=None,
+                        help="LosslessCut CSV restricting pose inference")
+    parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument(
         "--confidence-threshold", type=float, default=DEFAULT_CONFIDENCE_THRESHOLD,
         help="Pose keypoints with confidence below this value are treated as missing.",
@@ -331,17 +510,44 @@ def main() -> int:
     print(f"Device: {device}  imgsz={args.imgsz}  conf={args.conf}")
     print(f"Smoothing: window={args.smoothing_window}  "
           f"confidence_threshold={args.confidence_threshold}")
-    per_frame = _infer_pose(
-        video, args.model, device, args.imgsz, args.conf, args.max_persons_per_frame,
-    )
+    model_reference = args.model
+    project_model = PROJECT_ROOT / args.model
+    if not Path(args.model).is_absolute() and project_model.is_file():
+        model_reference = str(project_model)
     output_csv = args.output_csv
     if output_csv is None:
         output_csv = PROJECT_ROOT / "detections" / f"{video.stem}_yolo26s-pose-hands.csv"
-    rows = write_csv(
-        per_frame, video, fps, output_csv,
-        args.confidence_threshold, args.smoothing_window,
-    )
-    print(f"Pose frames: {len(per_frame)}")
+    if args.batch_size <= 0:
+        raise ValueError("--batch-size must be positive")
+    if args.segments is None:
+        per_frame = _infer_pose(
+            video, model_reference, device, args.imgsz, args.conf,
+            args.max_persons_per_frame,
+        )
+        rows = write_csv(
+            per_frame, video, fps, output_csv,
+            args.confidence_threshold, args.smoothing_window,
+        )
+        pose_frames = len(per_frame)
+    else:
+        _, segment_path = pair_video_segments(video, args.segments)
+        capture = cv2.VideoCapture(str(video))
+        frame_count = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+        capture.release()
+        segments = parse_losslesscut_csv(segment_path,
+                                         duration=frame_count / fps)
+        pose_stream = infer_selected_pose(
+            video, fps, frame_count, segments, model_reference, device,
+            args.imgsz, args.conf, args.max_persons_per_frame,
+            args.batch_size,
+        )
+        rows = write_selected_csv(
+            pose_stream, video, fps, output_csv,
+            args.confidence_threshold, args.smoothing_window,
+        )
+        pose_frames = sum(end - start for start, end in
+                          selected_frame_ranges(fps, frame_count, segments))
+    print(f"Pose frames: {pose_frames}")
     print(f"Pose rows:   {rows}")
     print(f"Output CSV:  {output_csv}")
     return 0

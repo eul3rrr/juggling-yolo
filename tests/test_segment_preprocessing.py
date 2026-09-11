@@ -87,11 +87,24 @@ def test_folder_prepare_manifest_and_idempotent_skip(tmp_path, monkeypatch):
         output = Path(command[command.index('--output-csv') + 1])
         output.write_text('header\n')
     monkeypatch.setattr(cli.subprocess, 'run', fake_run)
-    args = argparse.Namespace(source_dir=tmp_path, output_root=tmp_path / 'out', model='yolo26s.pt', conf=.15, imgsz=960, classes=[32], device='auto', batch_size=32, distance_threshold=50, hit_counter_max=15, force=False)
+    def fake_hand_artifacts(**kwargs):
+        output = kwargs['output_dir']
+        names = ('hand_assessments', 'hand_events', 'hand_associations',
+                 'unmatched_hand_events', 'hand_state_trace')
+        for name in names:
+            (output / f'{name}.csv').write_text('header\n')
+        return {name: output / f'{name}.csv' for name in names}
+    monkeypatch.setattr(cli, 'build_hand_artifacts', fake_hand_artifacts)
+    args = argparse.Namespace(source_dir=tmp_path, output_root=tmp_path / 'out', model='yolo26s.pt', conf=.15, imgsz=960, classes=[32], device='auto', batch_size=32, distance_threshold=50, hit_counter_max=15, force=False, pose_model='yolo26s-pose.pt', pose_imgsz=640, pose_conf=.25)
     assert cli.prepare_sources(args) == 0
     manifest = (tmp_path / 'out').joinpath('foo-video-hash/manifest.json')
-    assert len(calls) == 2 and manifest.is_file()
+    assert len(calls) == 3 and manifest.is_file()
     assert __import__('json').loads(manifest.read_text())['config']['batch_size'] == 32
     assert '--batch-size' in calls[0]
     assert cli.prepare_sources(args) == 0
-    assert len(calls) == 2
+    assert len(calls) == 3
+    sentinel = manifest.parent / 'human-notes.keep'
+    sentinel.write_text('preserve me')
+    args.force = True
+    assert cli.prepare_sources(args) == 0
+    assert sentinel.read_text() == 'preserve me'

@@ -3,7 +3,6 @@
 import argparse
 import hashlib
 import json
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -12,9 +11,11 @@ sys.path.insert(0, str(ROOT))
 from scripts.review_track_events import load_tracklets, load_detections, _video_meta
 from src.annotation.mining import mine_candidates, load_links, load_pose
 from src.annotation.segments import parse_losslesscut_csv, pair_video_segments, discover_pairs, discover_video_files
+from src.annotation.preprocessing import resolve_device
 from src.annotation.store import Store
 from src.annotation.server import make_server
 from src.annotation.export import export_yolo
+from scripts.hand_preprocessing import build_hand_artifacts, hand_config_manifest
 
 def digest(path):
     with path.open('rb') as f:
@@ -43,10 +44,34 @@ def prepare_sources(args):
             segment_sha = digest(segment_path)
             source_id = safe_name(video.stem) + '-' + video_sha[:12]
             out = root / source_id
-            config = dict(model=args.model, conf=args.conf, imgsz=args.imgsz, classes=args.classes, device=args.device, batch_size=args.batch_size, distance_threshold=args.distance_threshold, hit_counter_max=args.hit_counter_max)
-            expected = dict(video_path=str(video.resolve()), video_sha256=video_sha, segments_path=str(segment_path.resolve()), segments_sha256=segment_sha, segments=[s.as_dict() for s in segments], config=config, tool_commit=tool_commit)
+            pose_model = getattr(args, 'pose_model', 'yolo26s-pose.pt')
+            pose_imgsz = getattr(args, 'pose_imgsz', 640)
+            pose_conf = getattr(args, 'pose_conf', 0.25)
+            resolved_device = resolve_device(args.device)
+            hand_config = hand_config_manifest()
+            artifact_names = (
+                'detections', 'tracklets', 'hands', 'hand_assessments',
+                'hand_events', 'hand_associations', 'unmatched_hand_events',
+                'hand_state_trace',
+            )
+            config = dict(
+                model=args.model, conf=args.conf, imgsz=args.imgsz,
+                classes=args.classes, device=args.device,
+                resolved_device=resolved_device, batch_size=args.batch_size,
+                distance_threshold=args.distance_threshold,
+                hit_counter_max=args.hit_counter_max,
+                pose_model=pose_model, pose_imgsz=pose_imgsz,
+                pose_conf=pose_conf, hand_association=hand_config,
+            )
+            expected = dict(video_path=str(video.resolve()), video_sha256=video_sha,
+                            segments_path=str(segment_path.resolve()),
+                            segments_sha256=segment_sha,
+                            segments=[s.as_dict() for s in segments],
+                            config=config, artifacts=list(artifact_names),
+                            tool_commit=tool_commit)
             manifest_path = out / 'manifest.json'
-            if not args.force and manifest_path.is_file() and (out / 'detections.csv').is_file() and (out / 'tracklets.csv').is_file():
+            artifact_paths = {name: out / f'{name}.csv' for name in artifact_names}
+            if not args.force and manifest_path.is_file() and all(path.is_file() for path in artifact_paths.values()):
                 existing = json.loads(manifest_path.read_text())
                 if all(existing.get(k) == v for k, v in expected.items()):
                     print(f'{video.name}: already prepared')
@@ -56,14 +81,26 @@ def prepare_sources(args):
             if out.exists() and not args.force:
                 raise ValueError('preprocessing output exists without a matching manifest; rerun with --force')
             if args.force and out.exists():
-                shutil.rmtree(out)
+                if out.is_symlink():
+                    raise ValueError('refusing --force on a symlinked preprocessing directory')
+                for path in (*artifact_paths.values(), manifest_path):
+                    path.unlink(missing_ok=True)
             out.mkdir(parents=True, exist_ok=True)
             detections = out / 'detections.csv'
             tracklets = out / 'tracklets.csv'
             base = [sys.executable]
-            subprocess.run(base + [str(ROOT / 'scripts/detect_video.py'), str(video), '--segments', str(segment_path), '--model', args.model, '--conf', str(args.conf), '--imgsz', str(args.imgsz), '--classes', *map(str, args.classes), '--device', args.device, '--batch-size', str(args.batch_size), '--no-output-video', '--output-csv', str(detections)], check=True, capture_output=True, text=True)
+            subprocess.run(base + [str(ROOT / 'scripts/detect_video.py'), str(video), '--segments', str(segment_path), '--model', args.model, '--conf', str(args.conf), '--imgsz', str(args.imgsz), '--classes', *map(str, args.classes), '--device', resolved_device, '--batch-size', str(args.batch_size), '--no-output-video', '--output-csv', str(detections)], check=True, capture_output=True, text=True)
             subprocess.run(base + [str(ROOT / 'scripts/track_norfair.py'), str(video), str(detections), '--segments', str(segment_path), '--distance-threshold', str(args.distance_threshold), '--hit-counter-max', str(args.hit_counter_max), '--no-output-video', '--output-csv', str(tracklets)], check=True, capture_output=True, text=True)
-            manifest = dict(expected, outputs={'detections': str(detections), 'tracklets': str(tracklets)})
+            hands = out / 'hands.csv'
+            subprocess.run(base + [str(ROOT / 'scripts/extract_hands.py'), str(video), '--segments', str(segment_path), '--model', pose_model, '--imgsz', str(pose_imgsz), '--conf', str(pose_conf), '--device', resolved_device, '--batch-size', str(args.batch_size), '--output-csv', str(hands)], check=True, capture_output=True, text=True)
+            hand_outputs = build_hand_artifacts(
+                tracklets_path=tracklets, hands_path=hands, segments=segments,
+                fps=fps, frame_count=count, output_dir=out,
+            )
+            hand_outputs.setdefault('hands', hands)
+            outputs = {'detections': detections, 'tracklets': tracklets,
+                       **hand_outputs}
+            manifest = dict(expected, outputs={k: str(v) for k, v in outputs.items()})
             manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
             print(f'{video.name}: prepared -> {out}')
             prepared += 1
@@ -101,6 +138,9 @@ def main():
     prepare.add_argument('--batch-size', type=int, default=32)
     prepare.add_argument('--distance-threshold', type=float, default=50)
     prepare.add_argument('--hit-counter-max', type=int, default=15)
+    prepare.add_argument('--pose-model', default='yolo26s-pose.pt')
+    prepare.add_argument('--pose-imgsz', type=int, default=640)
+    prepare.add_argument('--pose-conf', type=float, default=0.25)
     prepare.add_argument('--force', action='store_true')
     for p in (mine, serve, export):
         p.add_argument('--workspace', type=Path, required=True)

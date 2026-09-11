@@ -95,6 +95,7 @@ tests/
 
 # Local annotation tool source; generated workspaces remain private/untracked.
 !scripts/annotate_juggling_balls.py
+!scripts/hand_preprocessing.py
 !src/annotation/
 !src/annotation/*.py
 !web/annotation/
@@ -102,6 +103,7 @@ tests/
 !web/annotation/*.css
 !web/annotation/*.js
 !tests/test_annotation_*.py
+!tests/test_hand_preprocessing_integration.py
 !docs/
 !docs/ANNOTATION_TOOL.md
 /datasets/

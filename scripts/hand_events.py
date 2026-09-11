@@ -78,6 +78,12 @@ def _event_from_rows(key, side_rows, frame_min: int, frame_max: int) -> HandEven
 def load_logical_events(path: Path, frame_min: int, frame_max: int) -> list[HandEvent]:
     with path.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
+    return logical_events_from_rows(rows, frame_min, frame_max)
+
+
+def logical_events_from_rows(rows: list[dict[str, str]], frame_min: int,
+                             frame_max: int) -> list[HandEvent]:
+    """Convert boundary rows without creating an intermediate CSV."""
     grouped = _logical_group(rows)
     return [_event_from_rows(key, grouped[key], frame_min, frame_max) for key in sorted(grouped, key=lambda k: (k[2], k[1], k[0]))]
 

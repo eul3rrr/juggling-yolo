@@ -22,7 +22,7 @@ if sys.prefix == sys.base_prefix and VENV_PYTHON.is_file():
     os.execv(str(VENV_PYTHON), [str(VENV_PYTHON), *sys.argv])
 
 from src.annotation.segments import parse_losslesscut_csv, pair_video_segments
-from src.annotation.preprocessing import iter_selected_frames, infer_frame_batches, selected_frame_ranges
+from src.annotation.preprocessing import iter_selected_frames, infer_frame_batches, selected_frame_ranges, resolve_device as _resolve_device
 import cv2
 import torch
 from ultralytics import YOLO
@@ -79,9 +79,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def resolve_device(requested: str) -> str:
-    if requested != "auto":
-        return requested
-    return "0" if torch.cuda.is_available() else "cpu"
+    return _resolve_device(requested)
 
 
 def safe_tag(value: str) -> str:

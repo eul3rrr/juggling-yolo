@@ -184,29 +184,39 @@ def assess_all(tracklets: dict[int, list[BoundaryPoint]], hands_by_frame: dict) 
 
 
 def write_csv(assessments: list[BoundaryAssessment], path: Path) -> None:
-    fields = ["track_id", "boundary_type", "boundary_frame", "boundary_x", "boundary_y", "hand",
+    fields = assessment_fields()
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
+        w.writeheader()
+        w.writerows(assessment_rows(assessments))
+
+
+def assessment_fields() -> list[str]:
+    return ["track_id", "boundary_type", "boundary_frame", "boundary_x", "boundary_y", "hand",
               "endpoint_distance_px", "recent_min_distance_px", "endpoint_distance_normalized",
               "recent_min_distance_normalized", "n_synchronized_samples", "motion", "signed_trend",
               "proximity_band", "hand_evidence", "post_contact", "eligible_hand_set", "preferred_hand",
               "ambiguous", "evidence_reason"]
-    with path.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
-        w.writeheader()
-        for a in assessments:
-            for side, r in a.hand_results.items():
-                w.writerow({"track_id": a.track_id, "boundary_type": a.boundary_type,
-                            "boundary_frame": a.boundary_frame, "boundary_x": f"{a.boundary_x:.6f}",
-                            "boundary_y": f"{a.boundary_y:.6f}", "hand": side,
-                            "endpoint_distance_px": _fmt(r.endpoint_distance_px),
-                            "recent_min_distance_px": _fmt(r.recent_min_distance_px),
-                            "endpoint_distance_normalized": _fmt(r.endpoint_distance_normalized),
-                            "recent_min_distance_normalized": _fmt(r.recent_min_distance_normalized),
-                            "n_synchronized_samples": r.n_synchronized, "motion": r.motion,
-                            "signed_trend": _fmt(r.signed_trend), "proximity_band": r.proximity,
-                            "hand_evidence": int(r.hand_evidence), "post_contact": int(r.post_contact),
-                            "eligible_hand_set": "{" + ",".join(a.eligible_hands) + "}",
-                            "preferred_hand": a.preferred_hand or "", "ambiguous": int(a.ambiguous),
-                            "evidence_reason": r.reason})
+
+
+def assessment_rows(assessments: list[BoundaryAssessment]) -> list[dict[str, object]]:
+    rows = []
+    for a in assessments:
+        for side, r in a.hand_results.items():
+            rows.append({"track_id": a.track_id, "boundary_type": a.boundary_type,
+                         "boundary_frame": a.boundary_frame, "boundary_x": f"{a.boundary_x:.6f}",
+                         "boundary_y": f"{a.boundary_y:.6f}", "hand": side,
+                         "endpoint_distance_px": _fmt(r.endpoint_distance_px),
+                         "recent_min_distance_px": _fmt(r.recent_min_distance_px),
+                         "endpoint_distance_normalized": _fmt(r.endpoint_distance_normalized),
+                         "recent_min_distance_normalized": _fmt(r.recent_min_distance_normalized),
+                         "n_synchronized_samples": r.n_synchronized, "motion": r.motion,
+                         "signed_trend": _fmt(r.signed_trend), "proximity_band": r.proximity,
+                         "hand_evidence": int(r.hand_evidence), "post_contact": int(r.post_contact),
+                         "eligible_hand_set": "{" + ",".join(a.eligible_hands) + "}",
+                         "preferred_hand": a.preferred_hand or "", "ambiguous": int(a.ambiguous),
+                         "evidence_reason": r.reason})
+    return rows
 
 
 def _fmt(v):

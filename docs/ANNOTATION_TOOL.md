@@ -50,7 +50,41 @@ Prepare all discovered sources with the existing detector and Norfair scripts, w
   --batch-size 32
 ```
 
-Preparation uses `yolo26s.pt`, COCO class 32, confidence 0.15, image size 960, detector batch size 32, Norfair distance threshold 50, and hit-counter-max 15 by default. It runs bounded-memory YOLO batches only on selected frames and gives Norfair a fresh tracker for every selected segment. Outputs are `<safe-video-name>-<video-sha>/detections.csv`, `tracklets.csv`, and `manifest.json`. Batch size is recorded in the manifest. Matching manifests are reported as `already prepared`; changed inputs/configuration require `--force`, which only replaces that generated source directory.
+Preparation uses `yolo26s.pt`, COCO class 32, confidence 0.15, image size 960, detector batch size 32, Norfair distance threshold 50, and hit-counter-max 15 by default. It runs bounded-memory YOLO batches only on selected frames and gives Norfair a fresh tracker for every selected segment. Outputs are `<safe-video-name>-<video-sha>/detections.csv`, `tracklets.csv`, and `manifest.json`. Batch size is recorded in the manifest. Matching manifests are reported as `already prepared`; changed inputs/configuration require `--force`, which replaces only the known generated preprocessing artifacts in that source directory and preserves unrelated files.
+
+Preparation also runs selected-frame pose extraction and segment-local hand recovery. The small pose settings are explicit:
+
+```bash
+.venv/bin/python scripts/annotate_juggling_balls.py prepare \
+  --source-dir ~/Downloads/juggling_videos \
+  --output-root datasets/juggling_ball_v1/preprocessing \
+  --pose-model yolo26s-pose.pt --pose-imgsz 640 --pose-conf 0.25 \
+  --device auto --batch-size 32
+```
+
+`auto` resolves once to CUDA device `0` when CUDA is available, otherwise `cpu`; the resolved value is passed to detector and pose inference and recorded with the requested value. Pose inference opens the original source, seeks each selected half-open range, writes absolute source `frame` values, and never infers excluded frames. Its centered median buffer is bounded by the smoothing window and reset at every selected segment. The hand boundary, event, and FIFO state are also newly initialized per segment, so a link cannot cross a LosslessCut gap.
+
+Each prepared directory contains these artifacts:
+
+```text
+detections.csv                 # existing detector schema; absolute frame
+tracklets.csv                  # existing Norfair schema; absolute frame + observed
+hands.csv                      # pose schema below; selected frames only
+hand_assessments.csv           # existing hand_boundaries assessment schema
+hand_events.csv                # existing hand_events logical-event schema
+hand_associations.csv          # canonical accepted links schema below
+unmatched_hand_events.csv      # FIFO diagnostic schema
+hand_state_trace.csv           # FIFO transition trace schema
+manifest.json                  # source/segment hashes, settings, artifact list
+```
+
+`hands.csv` preserves the historical `*_yolo26s-pose-hands.csv` header exactly:
+`video,frame,time_seconds,person_index,person_confidence,body_scale_shoulder_px`, followed for each of `left_shoulder,right_shoulder,left_elbow,right_elbow,left_wrist,right_wrist` by `x,y,confidence,x_smooth,y_smooth`. Raw and smoothed coordinates are pixel coordinates; `frame` is zero-based and absolute in the source video. It has one row per selected-frame/person detection and may have no row when pose detects no person.
+
+`hand_associations.csv` preserves the historical accepted-link header exactly:
+`source_track_id,target_track_id,source_end_frame,target_start_frame,gap_frames,hold_seconds,association_type,resolved_hand,hand_ambiguous,source_eligible_hand_set,target_eligible_hand_set,source_preferred_hand,target_preferred_hand,source_ambiguous,target_ambiguous,match_rule`. Each row is one accepted same-segment FIFO `HAND` relation from the source track's observed END to the target track's observed START. IDs are the globally unique IDs already emitted by `tracklets.csv`; they are not chain IDs, candidate ranks, or screen-side labels. There are no rows for rejected/unmatched events. `hand_events.csv`, `unmatched_hand_events.csv`, and `hand_state_trace.csv` retain the diagnostic decisions.
+
+The manifest invalidates the cache when source or LosslessCut bytes, segment ranges, detector settings, pose model/settings/device, hand-association version/configuration, or the required artifact set changes. Without `--force`, a mismatch fails rather than deleting anything. `--force` removes only the matching generated source directory under `--output-root`; it never removes the annotation workspace, SQLite database, source video, or LosslessCut CSV. If a throwaway candidate annotation workspace must be discarded, stop the server, inspect the absolute path, and explicitly remove only that directory, for example `rm -rf -- datasets/juggling_ball_v1/candidate-smoke`; never point cleanup at `datasets/juggling_ball_v1` itself.
 
 For one source, the equivalent explicit commands are:
 
@@ -70,6 +104,19 @@ For one source, the equivalent explicit commands are:
 ```
 
 Then mine using the generated `tracklets.csv` and `detections.csv` paths. The detector/tracker CSVs retain absolute source frame numbers and timestamps, so they can be supplied directly to `mine`.
+
+After preparation, mining remains a separate explicit command and does not run during `prepare`:
+
+```bash
+.venv/bin/python scripts/annotate_juggling_balls.py mine \
+  --video ~/Downloads/juggling_videos/foo.mp4 \
+  --segments ~/Downloads/juggling_videos/foo.mp4.csv \
+  --tracklets datasets/juggling_ball_v1/preprocessing/foo-VIDEO_SHA/tracklets.csv \
+  --detections datasets/juggling_ball_v1/preprocessing/foo-VIDEO_SHA/detections.csv \
+  --hands datasets/juggling_ball_v1/preprocessing/foo-VIDEO_SHA/hands.csv \
+  --links datasets/juggling_ball_v1/preprocessing/foo-VIDEO_SHA/hand_associations.csv \
+  --workspace datasets/juggling_ball_v1
+```
 
 Source identity is SHA-256 of the video bytes. Stable item identity combines that identity and the zero-based source frame. Repeating identical mining inputs does not duplicate frames, replace labels, or resurrect deleted boxes. Input paths/hashes and metadata are pinned: if you change inputs for an already-mined video, use a new workspace rather than silently rewriting an annotated snapshot. Keep source videos at their recorded paths and unchanged while annotating/exporting.
 
