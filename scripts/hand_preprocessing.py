@@ -64,8 +64,6 @@ def build_hand_artifacts(tracklets_path: Path, hands_path: Path, segments,
     """
     cfg = cfg or ha.HandAssociationConfig()
     tracklets = hb.load_observed_tracklets(tracklets_path)
-    hands_by_frame = ha._load_hands_by_frame(hands_path,
-                                             cfg.confidence_threshold)
     assessments = []
     segment_events = []
     if frame_count is None:
@@ -81,6 +79,8 @@ def build_hand_artifacts(tracklets_path: Path, hands_path: Path, segments,
         selected_tracklets = {
             tid: points for tid, points in selected_tracklets.items() if points
         }
+        hands_by_frame = ha._load_hands_by_frame(
+            hands_path, cfg.confidence_threshold, segment_index=segment_index)
         segment_assessments = hb.assess_all(selected_tracklets,
                                             hands_by_frame)
         assessments.extend(segment_assessments)

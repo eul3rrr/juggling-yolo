@@ -211,7 +211,8 @@ def _load_chains(tracklets: dict[int, list[TrackletPoint]],
     return out
 
 
-def _parse_hand_csv(path: Path, confidence_threshold: float
+def _parse_hand_csv(path: Path, confidence_threshold: float,
+                    segment_index: int | None = None
                     ) -> tuple[dict[int, list[PersonHandRow]], int]:
     """Parse the hands CSV into ``{frame: [PersonHandRow, ...]}`` and
     return the number of frames that contain more than one pose row
@@ -221,6 +222,9 @@ def _parse_hand_csv(path: Path, confidence_threshold: float
     by_frame: dict[int, list[PersonHandRow]] = defaultdict(list)
     with path.open(newline="", encoding="utf-8") as f:
         for row in csv.DictReader(f):
+            if segment_index is not None and row.get("segment_index") not in (
+                    None, "", str(segment_index)):
+                continue
             try:
                 fr = int(float(row.get("frame", "nan")))
             except (KeyError, ValueError):
@@ -326,7 +330,8 @@ def _select_dominant_person(rows: list[PersonHandRow]) -> PersonHandRow | None:
     ))
 
 
-def _load_hands_by_frame(path: Path, confidence_threshold: float = 0.25
+def _load_hands_by_frame(path: Path, confidence_threshold: float = 0.25,
+                         segment_index: int | None = None
                          ) -> dict[int, dict]:
     """Per-frame hands keyed by anatomical side.
 
@@ -340,7 +345,7 @@ def _load_hands_by_frame(path: Path, confidence_threshold: float = 0.25
     a single frame, the dominant-person selection policy (see
     :func:`_select_dominant_person`) is applied.
     """
-    raw, _ = _parse_hand_csv(path, confidence_threshold)
+    raw, _ = _parse_hand_csv(path, confidence_threshold, segment_index)
     out: dict[int, dict] = {}
     for fr, rows in raw.items():
         chosen = _select_dominant_person(rows)

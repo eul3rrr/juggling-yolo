@@ -24,6 +24,18 @@ def digest(path):
 def safe_name(value):
     return ''.join(c if c.isalnum() or c in '._-' else '-' for c in value).strip('-')
 
+def artifact_fingerprints(paths):
+    return {name: {'sha256': digest(path), 'size': path.stat().st_size}
+            for name, path in paths.items()}
+
+def model_fingerprint(reference):
+    path = Path(reference).expanduser()
+    if not path.is_absolute():
+        path = ROOT / path
+    return ({'reference': reference, 'path': str(path.resolve()),
+             'sha256': digest(path), 'size': path.stat().st_size}
+            if path.is_file() else {'reference': reference})
+
 def prepare_sources(args):
     if args.batch_size <= 0:
         raise ValueError('--batch-size must be positive')
@@ -60,7 +72,9 @@ def prepare_sources(args):
                 resolved_device=resolved_device, batch_size=args.batch_size,
                 distance_threshold=args.distance_threshold,
                 hit_counter_max=args.hit_counter_max,
-                pose_model=pose_model, pose_imgsz=pose_imgsz,
+                pose_model=pose_model,
+                pose_model_fingerprint=model_fingerprint(pose_model),
+                pose_imgsz=pose_imgsz,
                 pose_conf=pose_conf, hand_association=hand_config,
             )
             expected = dict(video_path=str(video.resolve()), video_sha256=video_sha,
@@ -73,11 +87,12 @@ def prepare_sources(args):
             artifact_paths = {name: out / f'{name}.csv' for name in artifact_names}
             if not args.force and manifest_path.is_file() and all(path.is_file() for path in artifact_paths.values()):
                 existing = json.loads(manifest_path.read_text())
-                if all(existing.get(k) == v for k, v in expected.items()):
+                if (all(existing.get(k) == v for k, v in expected.items())
+                        and existing.get('output_fingerprints') == artifact_fingerprints(artifact_paths)):
                     print(f'{video.name}: already prepared')
                     skipped += 1
                     continue
-                raise ValueError('existing preprocessing manifest differs; rerun with --force')
+                raise ValueError('existing preprocessing manifest or artifacts differ; rerun with --force')
             if out.exists() and not args.force:
                 raise ValueError('preprocessing output exists without a matching manifest; rerun with --force')
             if args.force and out.exists():
@@ -100,7 +115,11 @@ def prepare_sources(args):
             hand_outputs.setdefault('hands', hands)
             outputs = {'detections': detections, 'tracklets': tracklets,
                        **hand_outputs}
-            manifest = dict(expected, outputs={k: str(v) for k, v in outputs.items()})
+            manifest = dict(
+                expected,
+                outputs={k: str(v) for k, v in outputs.items()},
+                output_fingerprints=artifact_fingerprints(artifact_paths),
+            )
             manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
             print(f'{video.name}: prepared -> {out}')
             prepared += 1

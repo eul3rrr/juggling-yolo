@@ -82,7 +82,7 @@ _TRACKED_KEYPOINTS = (
 )
 HANDS_FIELDS = _FIELDS_TOP + tuple(
     f"{KEYPOINT_NAMES[k]}_{field}" for k in _TRACKED_KEYPOINTS for field in _FIELDS_PER_KP
-)
+) + ("segment_index",)
 
 
 @dataclass
@@ -389,12 +389,14 @@ def _stored(video: Path) -> str:
 def _person_row(video: Path, fps: float, frame_index: int,
                 person: PersonFrame, slot: int,
                 smoothed: dict[int, tuple[float, float] | None] | None = None,
+                segment_index: int | None = None,
                 ) -> dict[str, str]:
     row: dict[str, str] = {
         "video": _stored(video),
         "frame": str(frame_index),
         "time_seconds": f"{frame_index / fps:.6f}" if fps > 0 else "",
         "person_index": str(person.person_index),
+        "segment_index": "" if segment_index is None else str(segment_index),
         "person_confidence": (
             f"{person.person_confidence:.6f}"
             if person.person_confidence is not None else ""
@@ -460,7 +462,7 @@ def write_selected_csv(pose_frames, video: Path, fps: float,
                 pose_frames, window, confidence_threshold):
             for slot, person in enumerate(persons):
                 writer.writerow(_person_row(video, fps, frame_index, person,
-                                             slot))
+                                             slot, segment_index=segment))
                 rows_written += 1
     return rows_written
 

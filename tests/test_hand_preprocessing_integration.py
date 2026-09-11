@@ -36,6 +36,20 @@ def test_segmented_pose_batches_preserve_absolute_frames_and_never_cross_segment
     ]
 
 
+def test_segment_index_disambiguates_overlapping_pose_frames(tmp_path):
+    from scripts import hand_association as ha
+
+    hands = tmp_path / "hands.csv"
+    hands.write_text(
+        "frame,person_index,person_confidence,left_wrist_x_smooth,left_wrist_y_smooth,"
+        "left_wrist_confidence,segment_index\n"
+        "10,0,.9,1,2,.9,0\n"
+        "10,0,.9,9,8,.9,1\n"
+    )
+    assert ha._load_hands_by_frame(hands, segment_index=0)[10]["left"] == (1.0, 2.0)
+    assert ha._load_hands_by_frame(hands, segment_index=1)[10]["left"] == (9.0, 8.0)
+
+
 def test_selected_pose_smoothing_resets_at_each_segment():
     from scripts.extract_hands import PersonFrame, _smooth_selected_frames
 
@@ -128,9 +142,14 @@ def test_prepare_writes_hand_artifacts_and_manifest_includes_hand_config(tmp_pat
             output.write_text("header\n")
 
     monkeypatch.setattr(cli.subprocess, "run", fake_run)
-    monkeypatch.setattr(cli, "build_hand_artifacts", lambda **kwargs: {
-        "hand_associations": kwargs["output_dir"] / "hand_associations.csv",
-    })
+    def fake_build_hand_artifacts(**kwargs):
+        output_dir = kwargs["output_dir"]
+        names = ("hand_assessments", "hand_events", "hand_associations",
+                 "unmatched_hand_events", "hand_state_trace")
+        for name in names:
+            (output_dir / f"{name}.csv").write_text("header\n")
+        return {name: output_dir / f"{name}.csv" for name in names}
+    monkeypatch.setattr(cli, "build_hand_artifacts", fake_build_hand_artifacts)
     args = argparse.Namespace(
         source_dir=tmp_path, output_root=tmp_path / "out", model="yolo26s.pt",
         conf=.15, imgsz=960, classes=[32], device="auto", batch_size=8,
@@ -160,7 +179,14 @@ def test_hand_config_change_requires_force_in_prepare(tmp_path, monkeypatch):
         Path(command[command.index("--output-csv") + 1]).parent.mkdir(parents=True, exist_ok=True),
         Path(command[command.index("--output-csv") + 1]).write_text("header\n"),
     ))
-    monkeypatch.setattr(cli, "build_hand_artifacts", lambda **kwargs: {})
+    def fake_build(**kwargs):
+        output_dir = kwargs["output_dir"]
+        names = ("hand_assessments", "hand_events", "hand_associations",
+                 "unmatched_hand_events", "hand_state_trace")
+        for name in names:
+            (output_dir / f"{name}.csv").write_text("header\n")
+        return {name: output_dir / f"{name}.csv" for name in names}
+    monkeypatch.setattr(cli, "build_hand_artifacts", fake_build)
     base = dict(source_dir=tmp_path, output_root=tmp_path / "out", model="yolo26s.pt",
                 conf=.15, imgsz=960, classes=[32], device="auto", batch_size=8,
                 distance_threshold=50, hit_counter_max=15, force=False,

@@ -103,6 +103,8 @@ def test_folder_prepare_manifest_and_idempotent_skip(tmp_path, monkeypatch):
     assert '--batch-size' in calls[0]
     assert cli.prepare_sources(args) == 0
     assert len(calls) == 3
+    (manifest.parent / 'hands.csv').write_text('corrupted\n')
+    assert cli.prepare_sources(args) == 1
     sentinel = manifest.parent / 'human-notes.keep'
     sentinel.write_text('preserve me')
     args.force = True
