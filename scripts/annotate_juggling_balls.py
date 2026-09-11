@@ -36,6 +36,12 @@ def model_fingerprint(reference):
              'sha256': digest(path), 'size': path.stat().st_size}
             if path.is_file() else {'reference': reference})
 
+def remove_generated_artifacts(out, artifact_paths, manifest_path):
+    if out.is_symlink():
+        raise ValueError('refusing --force on a symlinked preprocessing directory')
+    for path in (*artifact_paths.values(), manifest_path):
+        path.unlink(missing_ok=True)
+
 def prepare_sources(args):
     if args.batch_size <= 0:
         raise ValueError('--batch-size must be positive')
@@ -96,10 +102,7 @@ def prepare_sources(args):
             if out.exists() and not args.force:
                 raise ValueError('preprocessing output exists without a matching manifest; rerun with --force')
             if args.force and out.exists():
-                if out.is_symlink():
-                    raise ValueError('refusing --force on a symlinked preprocessing directory')
-                for path in (*artifact_paths.values(), manifest_path):
-                    path.unlink(missing_ok=True)
+                remove_generated_artifacts(out, artifact_paths, manifest_path)
             out.mkdir(parents=True, exist_ok=True)
             detections = out / 'detections.csv'
             tracklets = out / 'tracklets.csv'

@@ -110,3 +110,16 @@ def test_folder_prepare_manifest_and_idempotent_skip(tmp_path, monkeypatch):
     args.force = True
     assert cli.prepare_sources(args) == 0
     assert sentinel.read_text() == 'preserve me'
+
+
+def test_force_cleanup_rejects_symlinked_preprocessing_directory(tmp_path):
+    import scripts.annotate_juggling_balls as cli
+    target = tmp_path / 'unrelated'
+    target.mkdir()
+    sentinel = target / 'keep.txt'
+    sentinel.write_text('preserve me')
+    link = tmp_path / 'computed-source-id'
+    link.symlink_to(target, target_is_directory=True)
+    with __import__('pytest').raises(ValueError, match='symlinked'):
+        cli.remove_generated_artifacts(link, {'hands': link / 'hands.csv'}, link / 'manifest.json')
+    assert sentinel.read_text() == 'preserve me'

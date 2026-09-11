@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import dataclasses
 import sys
-from collections import defaultdict
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]

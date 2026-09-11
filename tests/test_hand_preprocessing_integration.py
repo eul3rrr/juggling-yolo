@@ -5,8 +5,6 @@ import csv
 import json
 from pathlib import Path
 
-import pytest
-
 from src.annotation.preprocessing import infer_segmented_frame_batches
 from src.annotation.segments import Segment
 
