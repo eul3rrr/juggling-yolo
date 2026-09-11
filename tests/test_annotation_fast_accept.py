@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / "web" / "annotation" / "fast_accept.js"
+HELPERS = ROOT / "web" / "annotation" / "annotation_helpers.js"
 APP = ROOT / "web" / "annotation" / "app.js"
 HTML = ROOT / "web" / "annotation" / "index.html"
 CSS = ROOT / "web" / "annotation" / "styles.css"
@@ -21,6 +22,36 @@ const {{ prepareAccept, runAccept }} = require({json.dumps(str(MODULE))});
         ["node", "-e", script], check=True, capture_output=True, text=True
     )
     return json.loads(completed.stdout)
+
+
+def run_helpers_js(body: str):
+    script = f"""
+const {{ newManualBoxId }} = require({json.dumps(str(HELPERS))});
+{body}
+"""
+    completed = subprocess.run(
+        ["node", "-e", script], check=True, capture_output=True, text=True
+    )
+    return json.loads(completed.stdout)
+
+
+def test_manual_box_ids_are_unique_within_item_and_fill_first_gap():
+    result = run_helpers_js("""
+const boxes = [{id:'manual-1'}, {id:'detector-a'}, {id:'manual-3'}];
+const first = newManualBoxId(boxes);
+boxes.push({id:first});
+const second = newManualBoxId(boxes);
+console.log(JSON.stringify({first,second}));
+""")
+    assert result == {"first": "manual-2", "second": "manual-4"}
+
+
+def test_basic_annotation_has_no_secure_context_uuid_dependency():
+    app = APP.read_text()
+    helpers = HELPERS.read_text()
+    assert "crypto.randomUUID" not in app
+    assert "crypto.randomUUID" not in helpers
+    assert "AnnotationHelpers.newManualBoxId(state.item.boxes)" in app
 
 
 def test_accept_untouched_frame_preserves_boxes_and_optional_metadata():

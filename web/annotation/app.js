@@ -158,7 +158,7 @@ function message(text){
   const p=point(e),id=e.target.getAttribute('data-id'),handle=e.target.getAttribute('data-handle');
   const before=clone(state.item.boxes),dirty=state.dirty;
   if(state.mode==='add'){
-    const id='manual-'+crypto.randomUUID();
+    const id=AnnotationHelpers.newManualBoxId(state.item.boxes);
     state.item.boxes.push({
       id,x1:p.x,y1:p.y,x2:p.x,y2:p.y,annotation_source:'manual',prediction_id:null,...Object.fromEntries(Object.keys(surveys).map(k=>[k,'']))
     });
