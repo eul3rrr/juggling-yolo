@@ -82,6 +82,7 @@ def build(args):
     summary = {"arms": benchmark["summaries"], "hard_frame_selection_counts": dict(selection_counts),
                "total_union_hard_frames": len(benchmark["frames"])}
     (output / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
+    (output / "benchmark_summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     viewer_data = {"video": str(video), "fps": fps, "width": width, "height": height,
                    "frames": benchmark["frames"], "events": benchmark["events"]}
     (viewer / "data.json").write_text(json.dumps(viewer_data, separators=(",", ":")))

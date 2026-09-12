@@ -123,9 +123,9 @@ def classify_provenance(provenance: list[dict]) -> str:
     if arms == {"baseline", "finetuned"}:
         return "both"
     if arms == {"baseline"}:
-        return "baseline-only"
+        return "baseline_only"
     if arms == {"finetuned"}:
-        return "finetuned-only"
+        return "finetuned_only"
     raise ValueError(f"Invalid provenance arms: {sorted(arms)}")
 
 

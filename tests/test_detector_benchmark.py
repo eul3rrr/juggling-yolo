@@ -93,6 +93,24 @@ def test_union_frames_deduplicate_and_preserve_both_arm_provenance():
     assert {entry["model_arm"] for entry in overlap["provenance"]} == {"baseline", "finetuned"}
 
 
+def test_provenance_categories_use_stable_filter_labels():
+    from src.annotation.benchmark import classify_provenance
+
+    assert classify_provenance([{"model_arm": "baseline"}]) == "baseline_only"
+    assert classify_provenance([{"model_arm": "finetuned"}]) == "finetuned_only"
+    assert classify_provenance([{"model_arm": "baseline"}, {"model_arm": "finetuned"}]) == "both"
+
+
+def test_union_preserves_one_arm_provenance_categories():
+    from src.annotation.benchmark import build_union_frames, classify_provenance
+
+    baseline = [{"model_arm": "baseline", "event_key": "end:1:20", "event_kind": "track_end", "event_frame": 20}]
+    finetuned = [{"model_arm": "finetuned", "event_key": "start:2:60", "event_kind": "orphan_start", "event_frame": 60}]
+    frames = build_union_frames(baseline, finetuned, fps=60, frame_count=100)
+    assert classify_provenance(next(row["provenance"] for row in frames if row["frame"] == 20)) == "baseline_only"
+    assert classify_provenance(next(row["provenance"] for row in frames if row["frame"] == 60)) == "finetuned_only"
+
+
 def test_summary_uses_one_shared_selected_duration():
     from src.annotation.benchmark import summarize_arm
 
