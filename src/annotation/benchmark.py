@@ -118,6 +118,37 @@ def build_union_frames(baseline_events: list[dict], finetuned_events: list[dict]
             for frame, provenance in sorted(by_frame.items())]
 
 
+def classify_multi_provenance(provenance: list[dict], all_arms: dict) -> str:
+    """Return a stable category for any subset of arms in a union frame."""
+    present = sorted({row["model_arm"] for row in provenance})
+    known = set(all_arms)
+    if not present or not set(present) <= known:
+        raise ValueError(f"Invalid provenance arms: {present}")
+    if set(present) == known:
+        return "all"
+    if len(present) == 1:
+        return f"{present[0]}_only"
+    return "+".join(present)
+
+
+def build_union_frames_multi(events_by_arm: dict[str, list[dict]], fps: float,
+                             frame_count: int) -> list[dict]:
+    """Union unresolved neighborhoods across an arbitrary number of arms."""
+    by_frame: dict[int, list[dict]] = {}
+    for arm in sorted(events_by_arm):
+        for event in events_by_arm[arm]:
+            for frame in unresolved_boundary_frames(event["event_frame"], fps, frame_count):
+                provenance = {key: event[key] for key in
+                              ("model_arm", "event_key", "event_kind", "event_frame")}
+                if provenance not in by_frame.setdefault(frame, []):
+                    by_frame[frame].append(provenance)
+    return [{
+        "frame": frame,
+        "provenance": sorted(provenance, key=lambda row: tuple(row.values())),
+        "selection": classify_multi_provenance(provenance, events_by_arm),
+    } for frame, provenance in sorted(by_frame.items())]
+
+
 def classify_provenance(provenance: list[dict]) -> str:
     arms = {row["model_arm"] for row in provenance}
     if arms == {"baseline", "finetuned"}:

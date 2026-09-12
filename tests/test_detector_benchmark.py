@@ -111,6 +111,20 @@ def test_union_preserves_one_arm_provenance_categories():
     assert classify_provenance(next(row["provenance"] for row in frames if row["frame"] == 60)) == "finetuned_only"
 
 
+def test_multi_arm_union_preserves_three_arm_provenance():
+    from src.annotation.benchmark import build_union_frames_multi, classify_multi_provenance
+
+    events = {
+        "baseline": [{"model_arm": "baseline", "event_key": "b:20", "event_kind": "track_end", "event_frame": 20}],
+        "full": [{"model_arm": "full", "event_key": "f:40", "event_kind": "orphan_start", "event_frame": 40}],
+        "freeze10": [{"model_arm": "freeze10", "event_key": "z:60", "event_kind": "track_end", "event_frame": 60}],
+    }
+    frames = build_union_frames_multi(events, fps=60, frame_count=100)
+    assert classify_multi_provenance(next(row["provenance"] for row in frames if row["frame"] == 20), events) == "baseline_only"
+    assert classify_multi_provenance(next(row["provenance"] for row in frames if row["frame"] == 40), events) == "full_only"
+    assert classify_multi_provenance(next(row["provenance"] for row in frames if row["frame"] == 60), events) == "freeze10_only"
+
+
 def test_summary_uses_one_shared_selected_duration():
     from src.annotation.benchmark import summarize_arm
 
