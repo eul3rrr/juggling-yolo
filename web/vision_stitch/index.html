@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vision-stitch review</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <h1>Vision-stitch review <span id="videoName"></span></h1>
+  <div class="meta">
+    <span id="position">–</span>
+    <span id="labelled">labelled 0</span>
+    <span id="agreement">vision vs you: –</span>
+  </div>
+  <nav class="controls">
+    <button id="prev">← Previous event</button>
+    <button id="next">Next event →</button>
+    <label>Decision
+      <select id="filterDecision">
+        <option value="all">All</option>
+        <option value="stitch">Model said stitch</option>
+        <option value="none">Model said none</option>
+        <option value="uncertain">Model said uncertain</option>
+        <option value="unjudged">Not judged yet</option>
+      </select>
+    </label>
+    <label>Agreement with CV
+      <select id="filterAgreement">
+        <option value="all">All</option>
+        <option value="same">Same candidate</option>
+        <option value="different">Different candidate</option>
+      </select>
+    </label>
+    <label>Min confidence
+      <select id="filterConfidence">
+        <option value="0">0</option>
+        <option value="0.5">0.5</option>
+        <option value="0.8">0.8</option>
+        <option value="0.95">0.95</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="filterUnlabelled"> unlabelled only</label>
+  </nav>
+</header>
+
+<main>
+  <section class="evidence">
+    <h2>What the model saw <small>(ball-centred crops and one context frame, in order)</small></h2>
+    <div id="images" class="images"></div>
+  </section>
+
+  <section class="verdict">
+    <h2>Model verdict</h2>
+    <div id="verdictBox" class="box"></div>
+
+    <h2>Geometric comparison</h2>
+    <div id="cvBox" class="box"></div>
+    <table id="candidates" class="candidates"></table>
+
+    <h2>Your label</h2>
+    <div class="labelrow">
+      <button data-label="correct" class="good">c · Correct</button>
+      <button data-label="wrong" class="bad">w · Wrong</button>
+      <button data-label="unclear" class="meh">u · Unclear</button>
+      <button id="skip" class="neutral">s · Skip</button>
+    </div>
+    <textarea id="note" placeholder="optional note (saved with the label)"></textarea>
+    <div id="savedState" class="saved"></div>
+  </section>
+</main>
+
+<footer class="player">
+  <button id="play">▶ play / pause (space)</button>
+  <button id="stepBack">← step</button>
+  <button id="stepFwd">step →</button>
+  <button id="restart">restart (r)</button>
+  <input type="range" id="scrub" min="0" max="0" value="0">
+  <span id="frameInfo">–</span>
+  <canvas id="stage" width="960" height="540"></canvas>
+  <div class="help">c correct · w wrong · u unclear · s skip · n/p next/prev · space play · ←/→ step · r restart.
+    The clip keeps repeating inside its window; it never advances on its own.</div>
+</footer>
+<script src="/app.js"></script>
+</body>
+</html>

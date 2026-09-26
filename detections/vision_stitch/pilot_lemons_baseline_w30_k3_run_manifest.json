@@ -1,0 +1,50 @@
+{
+  "created_at": "2026-09-26T00:08:39.529511+00:00",
+  "event_count": 20,
+  "evidence_built": 20,
+  "evidence_config": {
+    "candidate_offsets": [
+      0,
+      6,
+      18
+    ],
+    "context_width": 1008,
+    "crop_h": 340,
+    "crop_out_w": 620,
+    "crop_w": 440,
+    "jpeg_quality": 84,
+    "lost_offset": 3,
+    "pre_offsets": [
+      -30,
+      -15,
+      -5,
+      0
+    ],
+    "ring_radius": 48,
+    "trail_points": 20
+  },
+  "evidence_reused": 0,
+  "fps": 59.94005994005994,
+  "frame_count": 16369,
+  "git_commit": "4a38f3452caedda233b4c1c41d4956840de06ff1",
+  "height": 1080,
+  "prompt_version": "v1",
+  "segments": "/home/it-admin/Downloads/juggling_videos/lemons - wes peden.mp4.csv",
+  "stats": {
+    "ends_with_candidates": 384,
+    "ends_without_candidates": 109,
+    "excluded_segment_edge": 10,
+    "filtered_to": 20,
+    "segment_count": 28,
+    "top_k": 3,
+    "total_ends": 493,
+    "window_frames": 30
+  },
+  "top_k": 3,
+  "tracklets": "/home/it-admin/.hermes/profiles/juggling-tracker/workspace/juggling-yolo/datasets/juggling_ball_v1/experiments/heptad-finetune-v1-verified/benchmark/lemons/baseline/tracklets.csv",
+  "tracklets_sha256": "4dc361bd91e327333b01b6affd3525c5892b9cd5dd9015e01ef30d3dc5300db9",
+  "video": "/home/it-admin/Downloads/juggling_videos/lemons - wes peden.mp4",
+  "video_sha256": "7e45e48452a777a016232a88e321a23b506a0c0202b9ec6234fec6e23378e98f",
+  "width": 1920,
+  "window_frames": 30
+}

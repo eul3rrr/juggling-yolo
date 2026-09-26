@@ -359,6 +359,60 @@ choice ambiguous, or marked it not applicable. Allowed values:
 - `ambiguous` — human pressed `?`
 - `not_applicable` — event type was `e` (true end) or `f`
 
+## Vision-LLM tracklet stitching judge (evaluation tooling)
+
+An isolated experiment: instead of relying on geometry, show a vision model the frames
+around a tracklet END plus the frames where later tracklets start, and ask it which
+successor (if any) is the same physical ball. A local review UI then lets a human label
+whether each verdict was right.
+
+Nothing here changes the detector, Norfair, the stitcher, or any identity layer; the tool
+consumes existing tracklet CSVs and video frames only.
+
+```bash
+# 1. build END -> candidate events and the exact images the model will see
+.venv/bin/python scripts/vision_stitch_judge.py prepare \
+  --video "/path/to/lemons - wes peden.mp4" \
+  --tracklets datasets/juggling_ball_v1/experiments/heptad-finetune-v1-verified/benchmark/lemons/baseline/tracklets.csv \
+  --out-root outputs/vision_stitch/lemons_baseline_w30_k3 --window 30 --top-k 3
+
+# 2. one model call per event (resumable; already-judged events are skipped)
+.venv/bin/python scripts/vision_stitch_judge.py judge \
+  --events-root outputs/vision_stitch/lemons_baseline_w30_k3/events \
+  --results-root outputs/vision_stitch/lemons_baseline_w30_k3/results --concurrency 6
+
+# 3. review it: evidence images, model verdict, and c/w/u labels
+.venv/bin/python scripts/vision_stitch_judge.py serve \
+  --events-root outputs/vision_stitch/lemons_baseline_w30_k3/events \
+  --results-root outputs/vision_stitch/lemons_baseline_w30_k3/results \
+  --video "/path/to/lemons - wes peden.mp4" \
+  --labels detections/vision_stitch/vision_stitch_review_labels.csv
+
+# 4. agreement statistics + markdown report
+.venv/bin/python scripts/vision_stitch_judge.py summary \
+  --events-root outputs/vision_stitch/lemons_baseline_w30_k3/events \
+  --results-root outputs/vision_stitch/lemons_baseline_w30_k3/results \
+  --labels detections/vision_stitch/vision_stitch_review_labels.csv \
+  --output reports/vision_stitch/VISION_STITCH_REPORT.md
+```
+
+Design notes:
+
+- One event = one tracklet END (last `observed == 1` frame). Candidates are tracklets that
+  start later, in the same LosslessCut segment, within `--window` frames, ranked by the same
+  constant-velocity prediction the stitcher uses; the top `--top-k` go to the model. ENDs
+  within `--edge-margin` (default 0.2 s) of a segment edge are dropped: those are cut
+  artefacts, not lost balls.
+- Evidence per event: four ball-centred pre-loss crops, one crop at/after the loss, three
+  crops per candidate, and one full context frame with rings, labels and observed trails.
+  Every image carries its own timestamp in the prompt text and in an on-image info bar.
+- `deepseek/deepseek-v4.1-flash` is a heavy reasoner: with ~15 images it can spend more than
+  6000 tokens thinking and return nothing when the budget runs out, so `max_tokens` defaults
+  to 16000 and `reasoning.effort` is pinned to `low`. Verdicts that arrive empty or malformed
+  are stored with `parse_ok=false` and re-judged on the next run.
+- The review UI shows the model verdict next to the geometric rank-1 and never auto-advances;
+  labels (`correct` / `wrong` / `unclear`) are written per event as soon as they are made.
+
 ## Web live tracker with CUDA
 
 Start the browser UI from the project root:
