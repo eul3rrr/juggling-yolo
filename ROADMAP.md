@@ -21,8 +21,9 @@ an experiment ends, so the conclusion is not lost with the branch.
   different use.
 - **Vision model as stitch judge.** Show a vision model the frames around a tracklet
   end and the candidate successors and ask which is the same ball. A 20-event pilot
-  exists (`scripts/vision_stitch_judge.py`) but none of its verdicts were checked
-  against a human, so its accuracy is unknown.
+  was built but none of its verdicts were checked against a human, so its accuracy is
+  unknown. The code was removed from the tree until this is picked up again; it is in
+  history at the tag `archive/vision-stitch-judge`.
 - **Detector fine-tune for domain shift.** Teach the detector what a juggling ball
   looks like when clearly visible (small, blurred, non-sports-ball appearance), with
   frames from several videos. The annotation tool and training scripts exist.

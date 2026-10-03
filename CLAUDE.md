@@ -15,7 +15,3 @@ Ball detection, tracking and identity repair for juggling videos (Ultralytics YO
 - Main clone: this folder, branch `feature/juggling-ball-annotation-v1` (the newest work; `main` is behind).
 - Worktrees: `../juggling-yolo-detector-seg-comparison`, `../juggling-yolo-hand-occlusion-night`. They share this clone's `.git` and `.venv`.
 - No branch has been merged into `main` yet.
-
-## Known loose ends
-
-- `src/vision_stitch/judge.py` looks up an OpenRouter key in the Hermes `juggling-tracker` profile, which has been archived to `~/.hermes/archive/`.
