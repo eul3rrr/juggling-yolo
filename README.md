@@ -1,9 +1,12 @@
 # Juggling YOLO Detection Experiment
 
-This isolated experiment evaluates a pretrained Ultralytics YOLO26 COCO model on
-juggling videos. It includes frame-local detection and generic tracker comparisons;
-there is no custom association, physics, HSV filtering, hand events, training, or
-fine-tuning.
+This project detects and tracks balls in juggling videos with a pretrained
+Ultralytics YOLO26 COCO model and repairs ball identity across occlusions. It began
+as frame-local detection and generic tracker comparisons; later stages add Norfair
+tracklets, stitching, hand-aware identity repair, a live UI, a local annotation tool,
+and a global identity stage (see "Ball identities" below). The detector is the stock
+`yolo26l` COCO model: a fine-tune on annotated HEPTAD frames was tried and abandoned,
+and only its tooling remains in the repo.
 
 ## Local ball-dataset annotation
 
@@ -22,6 +25,8 @@ later be assigned by source/video, never randomly by adjacent frames.
 - `scripts/track_video.py`: streaming generic tracking comparison script
 - `scripts/track_norfair.py`: Norfair center-point tracklet baseline using existing CSV detections
 - `scripts/stitch_tracklets.py`: rank constant-velocity matches between Norfair tracklets
+- `scripts/track_identities.py`: N ball identities with flight / held / hidden state
+- `scripts/render_ball_states.py`: review video for the identity stage
 - `scripts/review_stitches.py`: manual review of proposed stitch candidates
 - `scripts/analyze_stitch_features.py`: descriptive feature analysis for reviewed stitches
 - `scripts/segment_video.py`: yolo26l-seg instance segmentation with mask/bbox/centroid export
@@ -412,6 +417,63 @@ Design notes:
   are stored with `parse_ok=false` and re-judged on the next run.
 - The review UI shows the model verdict next to the geometric rank-1 and never auto-advances;
   labels (`correct` / `wrong` / `unclear`) are written per event as soon as they are made.
+
+## Ball identities: N balls, each airborne, held or hidden
+
+`scripts/track_identities.py` turns Norfair tracklets into at most N ball identities
+per LosslessCut segment and gives every ball a state on every frame. It replaces
+"airborne stitch, then hand repair" with one global solve and does not modify the
+detector, Norfair, the stitcher or the hand modules.
+
+```bash
+.venv/bin/python scripts/track_identities.py \
+  --tracklets detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv \
+  --hands detections/identical_balls_trick_000_018_yolo26s-pose-hands.csv \
+  --video videos/identical_balls_trick_000_018.mp4 \
+  --output-dir outputs/identity_tracking/identical_balls
+
+.venv/bin/python scripts/render_ball_states.py \
+  --video videos/identical_balls_trick_000_018.mp4 \
+  --identity-dir outputs/identity_tracking/identical_balls \
+  --tracklets detections/detector_seg_comparison/identical_balls_trick_000_018_yolo26l_classes-32_norfair_dt50_hc5.csv
+```
+
+Add `--segments "<video>.csv"` for a LosslessCut video (tracklets are never linked
+across a cut) and `--only-segment N` to work on some segments. The ball count is
+estimated per segment; override it with `--balls N` or `--balls-in-segment INDEX=N`.
+
+How it decides:
+
+- **Observed points only.** A tracklet ends at its last real detection, not at the end
+  of Norfair's coasting tail.
+- **Gravity from the footage.** Free-flight windows give the vertical acceleration in
+  px/frame^2, which also fixes the image scale in metres. It is tracked over time,
+  because a clip can drop into slow motion inside one segment.
+- **Flight or held.** A point is airborne when a short window around it follows a
+  parabola with the local gravity; otherwise the ball is being carried, by the nearest
+  wrist within reach.
+- **Links** between tracklets, cheapest first: `flight` (one arc joins both ends),
+  `near` (a brief dropout while carried), `hand` (ends in a hand, restarts from the same
+  hand), `hidden` (nothing explains the gap). Hand evidence at a tracklet end comes from
+  `hand_boundaries.assess_boundary`, from the ball being carried there, or from the
+  flight arc extended until it reaches a wrist.
+- **At most N paths.** A min-cost flow picks the identities; every tracklet is used at
+  most once, so one ball can never be observed twice in a frame. A loose end and a loose
+  start are joined by a hidden link when every other ball is accounted for.
+
+Outputs in `--output-dir`:
+
+| File | Content |
+|------|---------|
+| `ball_states.csv` | one row per ball per frame: `state` (`AIRBORNE`/`HELD`/`HIDDEN`), `hand`, position and where it came from (`detection`/`predicted`/`interpolated`/`wrist`) |
+| `chain_mapping.csv` | `track_id,chain_id`, the schema `identity_repair.py` and the renderers already read |
+| `links.csv` | every chosen link with its kind, hand, cost and timestamp |
+| `dropped_tracklets.csv` | tracklets no identity took (`unassigned`) or that never move and are never near a hand (`clutter`) |
+| `summary.json` | per segment: ball count and its source, gravity, link counts |
+
+The command also prints a "look here first" list: hidden links, then the costliest
+others. Those are the moments most likely to be wrong. Costs live in `LinkCostConfig`
+(`src/tracking/links.py`) and have so far been set by eye on three videos.
 
 ## Web live tracker with CUDA
 

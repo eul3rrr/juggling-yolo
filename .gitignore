@@ -123,6 +123,13 @@ tests/
 !detections/vision_stitch/*.md
 !reports/vision_stitch/
 !reports/vision_stitch/*.md
+
+# Identity stage: ballistic links, fixed ball count, flight/held state.
+!scripts/track_identities.py
+!scripts/render_ball_states.py
+!src/tracking/
+!src/tracking/*.py
+!tests/test_tracking_*.py
 /datasets/
 *.sqlite3
 *.sqlite3-wal
