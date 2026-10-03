@@ -129,7 +129,14 @@ tests/
 !scripts/render_ball_states.py
 !src/tracking/
 !src/tracking/*.py
+!scripts/review_identities.py
+!web/identity_review/
+!web/identity_review/*.html
+!web/identity_review/*.css
+!web/identity_review/*.js
 !tests/test_tracking_*.py
+!reports/identity_tracking/
+!reports/identity_tracking/*.md
 /datasets/
 *.sqlite3
 *.sqlite3-wal

@@ -27,6 +27,7 @@ later be assigned by source/video, never randomly by adjacent frames.
 - `scripts/stitch_tracklets.py`: rank constant-velocity matches between Norfair tracklets
 - `scripts/track_identities.py`: N ball identities with flight / held / hidden state
 - `scripts/render_ball_states.py`: review video for the identity stage
+- `scripts/review_identities.py`: local review site for the identity stage (video, timeline, link labels)
 - `scripts/review_stitches.py`: manual review of proposed stitch candidates
 - `scripts/analyze_stitch_features.py`: descriptive feature analysis for reviewed stitches
 - `scripts/segment_video.py`: yolo26l-seg instance segmentation with mask/bbox/centroid export
@@ -473,7 +474,23 @@ Outputs in `--output-dir`:
 
 The command also prints a "look here first" list: hidden links, then the costliest
 others. Those are the moments most likely to be wrong. Costs live in `LinkCostConfig`
-(`src/tracking/links.py`) and have so far been set by eye on three videos.
+(`src/tracking/links.py`) and have so far been set by eye on three videos; see
+`reports/identity_tracking/IDENTITY_STAGE_REPORT.md`.
+
+### Review site
+
+```bash
+.venv/bin/python scripts/review_identities.py --identity-dir outputs/identity_tracking/identical_balls
+```
+
+Open the printed URL (Tailscale IP when available, otherwise localhost with an SSH
+tunnel hint). The page shows the rendered review video, a per-ball state timeline for
+the current segment (click to seek; hatched = held, pale = flight predicted, dark =
+hidden, ▲ = link), the per-segment summary, and the link list with hidden links first.
+Selecting a link seeks to 0.8 s before it. Keys: `space` play, `← →` ±0.5 s, `, .` one
+frame, `j k` next/previous link, `r` replay the link, `c w u` label it correct / wrong /
+unclear (saved at once to `<identity-dir>/review_labels.csv`, with the note box), `1 2 3`
+playback speed.
 
 ## Web live tracker with CUDA
 

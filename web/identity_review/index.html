@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ball identity review</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <div class="title-row">
+    <h1>Ball identity review <span id="videoName"></span></h1>
+    <div class="meta">
+      <span id="statSegments">–</span>
+      <span id="statLinks">–</span>
+      <span id="statLabels">–</span>
+    </div>
+  </div>
+  <nav class="controls">
+    <label>Segment <select id="segmentSelect"></select></label>
+    <span class="group" id="speedGroup">
+      <button data-speed="0.25">¼×</button>
+      <button data-speed="0.5">½×</button>
+      <button data-speed="1" class="active">1×</button>
+    </span>
+    <span class="group">
+      <button id="stepBack" title=",">◀ frame</button>
+      <button id="playPause" title="space">play / pause</button>
+      <button id="stepFwd" title=".">frame ▶</button>
+    </span>
+    <span class="hint">space play · ← → ±0.5 s · , . frame · j k next/prev link · r replay link · c w u label</span>
+  </nav>
+</header>
+
+<main>
+  <section class="player">
+    <video id="video" src="/video" preload="auto" playsinline></video>
+    <div class="readout">
+      <span id="position">–</span>
+      <span id="segmentInfo"></span>
+    </div>
+    <h2>Ball states <small>click to seek · solid = detected · pale = flight predicted · hatched = held · dark = hidden · ▲ = link</small></h2>
+    <canvas id="timeline" height="10"></canvas>
+    <div id="legend" class="legend"></div>
+    <h2>Segment summary</h2>
+    <table id="segmentTable" class="summary"></table>
+  </section>
+
+  <section class="links">
+    <h2>Links <small>hidden first, then by cost · the likeliest mistakes are at the top</small></h2>
+    <div class="filters">
+      <label>Kind
+        <select id="filterKind">
+          <option value="all">All</option>
+          <option value="hidden">hidden</option>
+          <option value="hand">hand</option>
+          <option value="flight">flight</option>
+          <option value="near">near</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="filterSegment"> this segment only</label>
+      <label class="check"><input type="checkbox" id="filterUnlabelled"> unlabelled only</label>
+    </div>
+    <div id="current" class="current"></div>
+    <ol id="linkList" class="link-list"></ol>
+  </section>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
