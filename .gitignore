@@ -3,6 +3,7 @@
 !.gitignore
 !README.md
 !CLAUDE.md
+!ROADMAP.md
 !scripts/
 scripts/*
 !scripts/detect_video.py
