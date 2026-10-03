@@ -37,7 +37,7 @@ def test_readme_has_three_gif_to_mp4_links():
 
 
 def test_current_documentation_relative_links_resolve():
-    docs = [ROOT / "README.md", ROOT / "scripts/README.md", ROOT / "archive/README.md"]
+    docs = [ROOT / "README.md", ROOT / "scripts/README.md"]
     docs += list((ROOT / "docs").glob("*.md"))
     for path in docs:
         text = path.read_text()

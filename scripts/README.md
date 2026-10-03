@@ -32,7 +32,7 @@ These remain available for research and compatibility, but are not additional st
 - [analyze_stitch_features.py](analyze_stitch_features.py) (`enrich`): feature analysis of reviewed hypotheses.
 - [reconstruct_stitched_video.py](reconstruct_stitched_video.py): earlier reconstruction visualization.
 
-Their commands are in [baseline usage](../docs/BASELINES.md). Exploratory implementations and their reports are in [the research archive](../archive/README.md), separate from the demonstrated hand pipeline.
+Their commands are in [baseline usage](../docs/BASELINES.md).
 
 ## Development boundary
 

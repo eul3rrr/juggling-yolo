@@ -94,9 +94,9 @@ Run tests from the repository root:
 | [tests/](tests/) | Pipeline contracts and frozen-demo regression tests |
 | [detections/demo/](detections/demo/) | Canonical detector, tracklet, and hand-repair artifacts |
 | [docs/](docs/README.md) | Setup, reproduction, and media documentation |
-| [archive/](archive/README.md) | Historical experiments and negative results; not the demo pipeline |
+| [reports/](reports/) | What each experiment found |
 
-The [code guide](scripts/README.md) separates the current demo path from older review tools. Historical experiments remain available, but are not prerequisites for the demo.
+The [code guide](scripts/README.md) separates the current demo path from older review tools. Early overnight experiments were removed from the tree; they remain in history at the tag `archive/first-overnight-run`.
 
 ## Beyond the demo
 

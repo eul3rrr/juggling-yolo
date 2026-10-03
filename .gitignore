@@ -31,9 +31,5 @@ outputs/track_event_review/*
 !outputs/detector_seg_comparison/
 outputs/detector_seg_comparison/**/*.mp4
 
-# Local-only folders
-/archive/
-/experiments/
-
 # Accidental Hermes session exports
 /20??????_??????_??????
